@@ -1,12 +1,10 @@
-# Me ajude a Estruturar a ideia abaixo, criando um plano de implementacao.
-
 # Contexto 
 	Empresa Setes a desenvolvedora e mantenedora do sistema tambem será cliente do proprio sistema
 
 # Objetivo
 	Reorganizar a base setes_central para usar a tabela tb_institution ao inves de tenants criando os campos necessarios em tb_instituiton 
 	Padronizar as outras tabelas para iniciar com tb_ na base setes_central
-	Criar Interface de Supersuser para Cadastrar:
+	Ajustar os bancos dados para dar suporte a criacao da Interface-UI de Supersuser para Iniciar os cadastros:
 		1º Cadastrar clientes que devem estar com referencias nas duas bases: 
 			1.1 setes_Central
 					tenants - Levar estrutura para tb_institution e remover tenants
@@ -21,10 +19,7 @@
 			Um unico cadastro de cliente deve registrar uma entity que sera ao mesmo tempo Customer e institution e tenant			
 			
 		2º - Depois de cadastrar o cliente vamos cadastrar o usuario para permitir que o cliente faca o login
-			
-			
-	Por que teremos modulos para registrar pedidos e efetuar cobrancas.
-	A mesma tela que cria o cliente deve criar o cliente base setes_setes tambem ter acesso a base setes_central para criar os tenant
+					
 	
 # Workflow da processo
 	## Fazer o login por uma tela unica em que a setes como qualquer cliente tera acesso.
@@ -508,7 +503,28 @@
 # Importate o Detalhamento de cada cadastro sera feito em momento oportuno de forma individual com tudo o que e necessario.
   Neste momento precisamos da estrutura para dar suporte 
 
-## 1. Stack e Versões
+
+## 2. Estruturas de Objetos
+		Referencias  de objetos 
+	ObjetoEntity
+		model:
+			tb_entity - Identifica o nome e apelido
+			tb_company ou tb_person - Identifica a pessoa juridica ou fisica num cadastro unico geral 
+			tb_address - Controlas mutiplos enderecos de cada entidade
+			tb_entity_has_mailing - Ligacao entre entidade e email
+				tb_mailing - Emails ligados a entidade
+				
+					tb_entity - Identifica o nome e apelido
+					tb_company ou tb_person - Identifica a pessoa juridica ou fisica num cadastro unico geral 
+					tb_address - Controlas mutiplos enderecos de cada entidade
+
+
+					tenants - Levar estrutura para tb_institution e remover tenants
+					tb_entity - Identifica o nome e apelido
+					tb_company ou tb_person - Identifica a pessoa juridica ou fisica num cadastro unico geral 
+					tb_address - Controlas mutiplos enderecos de cada entidade
+					tb_institution  - Controla as licencas - e sera usado para indexar operacoes do cliente
+## 3. Stack e Versões
 
 | Tecnologia | Versão mínima |
 |---|---|

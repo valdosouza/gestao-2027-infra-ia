@@ -13,7 +13,7 @@
 📍 `D:\Gestao2027\Infra-IA\INDICE_CENTRAL.md`
 
 Mapa completo de:
-- 4 projetos ativos (setes-api, setes-sync, database, integration)
+- 4 projetos ativos (setes-api, setes-sync, setes-app, sincronizador)
 - 10 skills prontas
 - 2 agentes especializados
 - 20+ documentos de referência

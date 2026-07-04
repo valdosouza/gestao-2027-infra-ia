@@ -96,6 +96,8 @@ D:\Gestao2027\Infra-IA/
 - `01-DESACOPLAMENTO.md` — Status da arquitetura
 - `02-VALIDACAO.md` — Testes de validação
 - `03-SWAGGER.md` — Documentação de endpoints
+- `04-AUTH-MULTI-INSTITUTION.md` — Login unificado, JWT institutionId, módulo auth ⭐ NOVO
+- `prompt_fase2_gerenciamento_central.md` — Prompt Fase 2 fechado (21 decisões arquiteturais) ⭐ NOVO
 
 **Skills (4):**
 1. `setup-setes-api.md` — Setup inicial (~15 min)
@@ -163,9 +165,23 @@ D:\Gestao2027\Infra-IA/
 ### **Database** (MySQL Multi-tenant)
 **Função**: Setup e gerenciamento de schemas por cliente
 
-**Skills (2):**
+**Documentação:**
+- `PADROES_BANCO.md` — Padrões permanentes: herança por PK, tb_, setes_<schema>, IDs pela aplicação, central × schema ⭐ NOVO
+
+**Skills (3):**
 1. `setup-mysql-multitenant.md` — Setup inicial BD (~30 min)
 2. `novo-tenant.md` — Adicionar novo cliente (~5 min)
+3. `revisar-ddl.md` — Checklist antes de executar qualquer DDL (~15 min) ⭐ NOVO
+
+**Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql` (central, seed, schema cliente, cleanup, sync)
+
+---
+
+### **Skills Genéricas** (qualquer projeto)
+
+**Skills (2):**
+1. `skills-genericas/refinar-prompt-arquitetura.md` — Transformar rascunho de ideias em prompt executável via rodadas de decisão numeradas ⭐ NOVO
+2. `skills-genericas/atualizar-infra-ia.md` — COMO reter conhecimento: o que salvar, onde cada tipo entra, cadeia INDICE→CLAUDE.md→memória ⭐ NOVO
 
 ---
 
@@ -212,6 +228,23 @@ D:\Gestao2027\Infra-IA/
 2. (5 min, pronto!)
 ```
 
+### "Quero criar/alterar tabelas no banco"
+```
+1. Leia: database/PADROES_BANCO.md (padrões da casa)
+2. Escreva o DDL seguindo os padrões
+3. Rode: database/skills/revisar-ddl.md (checklist)
+4. Valide com sqlglot antes de executar
+```
+**Tempo**: ~30 min
+
+### "Tenho um rascunho de ideias e quero virar um prompt de fase"
+```
+1. Leia: skills-genericas/refinar-prompt-arquitetura.md
+2. Rodadas: organizar → questões numeradas → decisões registradas
+3. Fechamento: entregáveis citando o nº das decisões
+```
+**Tempo**: 2-5 rodadas (modelo: setes-api/prompt_fase2_gerenciamento_central.md)
+
 ---
 
 ## 🤖 Agentes Disponíveis
@@ -249,6 +282,7 @@ D:\Gestao2027\Infra-IA/
 1. ✅ Gerou novo conhecimento?
 2. ✅ Vale a pena documentar/criar skill?
 3. ✅ Vale a pena criar agente reutilizável?
+4. ✅ **Siga o processo**: `skills-genericas/atualizar-infra-ia.md` (onde salvar + cadeia de atualização)
 
 ### Criando Novo Recurso
 1. **Skill simples** (~30 min) → arquivo .md em `<projeto>/skills/`
@@ -277,6 +311,7 @@ D:\Gestao2027\Infra-IA/
 |------|-------|--------|
 | 2026-07-04 | Índice central criado | 1.0 |
 | 2026-07-04 | Agente Delphi→TS documentado | 1.0 |
+| 2026-07-04 | Fase 2 (Gerenciamento Central): prompt fechado, PADROES_BANCO, skills revisar-ddl e refinar-prompt-arquitetura, doc auth multi-institution | 1.1 |
 | — | — | — |
 
 ---
