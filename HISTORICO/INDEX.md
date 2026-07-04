@@ -48,6 +48,16 @@ Diagrama da arquitetura no meio do processo.
 
 ---
 
+### 4. **04_RASCUNHO_GERENCIAMENTO_CENTRAL.txt**
+**Data**: 2026-07-04
+**Conteúdo**: Rascunho original da Fase 2 (Gerenciamento Central)
+
+**Status**: ❌ Superado — refinado em 5 rodadas de decisão até virar `../setes-api/prompt_fase2_gerenciamento_central.md` (21 decisões)
+
+**Quando usar**: Exemplo de "antes" do método `../skills-genericas/refinar-prompt-arquitetura.md`
+
+---
+
 ## 🔄 Evolução do Projeto
 
 ```

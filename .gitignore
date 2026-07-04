@@ -1,0 +1,172 @@
+# ============================================================================
+# GESTÃO 2027 - GITIGNORE PARA DADOS SENSÍVEIS
+# ============================================================================
+# Este arquivo contém regras para proteger dados sensíveis (API keys,
+# tokens, secrets, credenciais) de serem acidentalmente commitados.
+#
+# Data de criação: 2026-07-04
+# Atualizado por: Busca de dados sensíveis em Infra-IA
+# ============================================================================
+
+# FIREBASE - CRÍTICO
+# ------------------
+firebase_options.dart
+google-services.json
+GoogleService-Info.plist
+ios/Runner/GoogleService-Info.plist
+android/app/google-services.json
+lib/firebase_options.dart
+**/firebase_options.dart
+**/google-services.json
+
+# VARIÁVEIS DE AMBIENTE - CRÍTICO
+# --------------------------------
+.env
+.env.local
+.env.*.local
+.env.example.local
+.env.development.local
+.env.production.local
+.env.test.local
+.env.staging.local
+.env.*.secret
+
+# CHAVES PRIVADAS - CRÍTICO
+# --------------------------
+*.pem
+*.key
+*.pk8
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.crt
+*.der
+*.cert
+.ssh/
+ssh_keys/
+private_keys/
+
+# SECRETS E CREDENCIAIS - CRÍTICO
+# --------------------------------
+*secret*
+*credential*
+*token*
+*password*
+*auth*
+*.secrets
+credentials.json
+service-account*.json
+service_account_key.json
+
+# CONFIGURAÇÕES COM DADOS SENSÍVEIS
+# ----------------------------------
+.aws/
+.azure/
+.gcp/
+config/secrets.*
+secrets/
+secrets.json
+config.secrets.json
+appsettings.secrets.json
+settings.local.json
+
+# BANCO DE DADOS COM CREDENCIAIS
+# --------------------------------
+*.sql.enc
+*.db.enc
+database.yml
+database.xml
+connections.json
+db_config.json
+
+# ARQUIVOS DE BACKUP COM CREDENCIAIS
+# ------------------------------------
+*.backup
+*.bak
+*.sql.bak
+*.zip.enc
+*.tar.gz.enc
+
+# LOGS COM POSSÍVEIS EXPOSIÇÕES
+# ------------------------------
+logs/*secret*
+logs/*password*
+logs/*token*
+logs/*key*
+
+# DOCUMENTAÇÃO COM EXEMPLOS DE CREDENCIAIS
+# -----------------------------------------
+docs/*api*key*.md
+docs/*secret*.md
+examples/*credential*.ts
+examples/*secret*.js
+
+# ARQUIVOS FLUTTER/DART COM CONFIG
+# ----------------------------------
+**/pubspec.lock
+**/build/
+**/ios/Runner/GeneratedPluginRegistrant.swift
+**/android/.gradle/
+**/android/local.properties
+
+# NODE.JS / NPM
+# -------------
+node_modules/
+npm-debug.log
+yarn-error.log
+.npmrc
+.yarnrc
+package-lock.json.backup
+
+# PYTHON
+# ------
+.env.vault
+.venv/
+venv/
+.python-version
+pipenv_secrets.txt
+
+# TYPESCRIPT / JAVASCRIPT
+# -----------------------
+.env.ts
+.env.js
+secrets.ts
+secrets.js
+config.secrets.ts
+config.secrets.js
+
+# IDE SECRETS
+# -----------
+.vscode/launch.json
+.idea/runConfigurations/
+launch.json
+*.sublime-workspace
+
+# SISTEMA DE ARQUIVOS
+# --------------------
+.DS_Store
+Thumbs.db
+.env.swp
+*~
+
+# ============================================================================
+# OBSERVAÇÕES IMPORTANTES
+# ============================================================================
+# 1. Se você cometeu secrets, use:
+#    $ bfg --delete-files firebase_options.dart
+#    $ git filter-branch --tree-filter 'rm -f .env' HEAD
+#
+# 2. Arquivo .example para documentação:
+#    - .env.example (sem valores reais)
+#    - firebase_options.example.dart
+#    - config.secrets.example.json
+#
+# 3. Se precisa de valores default, use variáveis de ambiente:
+#    - process.env.FIREBASE_API_KEY
+#    - process.env.DATABASE_URL
+#
+# 4. Para desenvolvimento local, copie .example e preencha:
+#    $ cp .env.example .env
+#    $ # edite .env com seus valores
+# ============================================================================

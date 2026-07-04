@@ -10,13 +10,18 @@
 
 | Projeto | Docs | Skills | Agentes | Status |
 |---------|------|--------|---------|--------|
-| **setes-api** | 9 | 4 | 1 | ✅ Ativo |
+| **setes-api** | 11 | 4 | 1 | ✅ Ativo (Fase 2 concluída no backend) |
 | **setes-sync** | 5 | 3 | — | ✅ Ativo |
-| **setes-app** | 0 | 0 | — | ⏳ Futura |
+| **setes-app** | 1 | 0 | — | ⏳ Futura (INDEX com decisões herdadas) |
 | **sincronizador** | 2 | 0 | 1 | ✅ Legado |
-| **database** | 0 | 2 | — | ✅ Suporte |
+| **database** | 1 | 3 | — | ✅ Suporte (espelho de D:\Gestao2027\sql) |
+| **skills-genericas** | — | 2 | — | ✅ Qualquer projeto |
+| **git-github** | 6 | 1 script | — | ✅ Suporte |
+| **codigo-aprendizado** | — | — | — | ✅ POCs/estudo |
 | **integration** | 0 | 1 | — | ✅ Suporte |
-| **Central** | 5 | 0 | — | ✅ Referência |
+| **Central** | 7 | 0 | — | ✅ Referência |
+
+**Onde alocar arquivos novos**: `ORGANIZACAO_PASTAS.md` (tabela de decisão + regra de simetria). Prompts em otimização: `prompts/`.
 
 ---
 
@@ -312,6 +317,7 @@ D:\Gestao2027\Infra-IA/
 | 2026-07-04 | Índice central criado | 1.0 |
 | 2026-07-04 | Agente Delphi→TS documentado | 1.0 |
 | 2026-07-04 | Fase 2 (Gerenciamento Central): prompt fechado, PADROES_BANCO, skills revisar-ddl e refinar-prompt-arquitetura, doc auth multi-institution | 1.1 |
+| 2026-07-04 | Reorganização de pastas: ORGANIZACAO_PASTAS.md (regra de simetria), prompts/, codigo-aprendizado incorporado, README raiz fundido em ARQUITETURA.md, setes-app espelhado, publicar-fase2.ps1 → git-github/ | 1.2 |
 | — | — | — |
 
 ---

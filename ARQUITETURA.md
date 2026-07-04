@@ -1,8 +1,9 @@
 # Arquitetura Final — Gestao 2027
 
-**Versão**: 1.0  
-**Data**: 2026-07-01  
-**Status**: Desacoplamento Completo ✅
+**Versão**: 1.1 (absorve o antigo README.md da raiz)
+**Data**: 2026-07-04
+**Status**: Desacoplamento Completo ✅ | Fase 2 (Gerenciamento Central) concluída no backend
+**Decisões vigentes**: `setes-api/prompt_fase2_gerenciamento_central.md` — em conflito, a Fase 2 prevalece
 
 ---
 
@@ -48,20 +49,20 @@
         ├──────────────────────────┤
         │                          │
         │ setes_central/           │
-        │ ├─ tenants               │
-        │ ├─ feature_flags         │
-        │ ├─ sync_api_keys         │
-        │ ├─ sync_log              │
-        │ └─ ...                   │
+        │ ├─ tb_institution        │
+        │ ├─ tb_entity/company...  │
+        │ ├─ tb_user + vínculos    │
+        │ ├─ tb_feature_flag       │
+        │ ├─ tb_sync_api_key       │
+        │ └─ refs geo/fiscais      │
         │                          │
-        │ schema_tenant_001/       │
-        │ ├─ tb_brand              │
+        │ setes_<cliente>/         │
         │ ├─ tb_customer           │
-        │ ├─ tb_financial          │
-        │ └─ ... (23 tabelas)      │
+        │ ├─ tb_brand, financial   │
+        │ └─ ... (operacional)     │
         │                          │
-        │ schema_tenant_002/       │
-        │ └─ (idem, isolado)       │
+        │ setes_setes/             │
+        │ └─ (Setes como cliente)  │
         │                          │
         └──────────────────────────┘
                    △
@@ -177,13 +178,16 @@ X-Api-Key: chave_compartilhada
 
 **Porta**: 3000
 
-**Endpoints**: 5 APIs
+**Endpoints principais**
 ```
-GET /health                    (sem auth)
-GET /api/core/info            (JWT)
-GET /api/erp/status           (JWT + feature flag)
-GET /api/admin/tenants        (JWT + setes_admin)
-POST /api/admin/tenants       (JWT + setes_admin)
+GET  /health                       (sem auth)
+POST /auth/login                   (público — login multi-institution)
+POST /auth/select-institution      (token de seleção)
+POST /auth/switch-institution      (JWT)
+GET  /api/core/info                (JWT)
+GET  /api/erp/status               (JWT + feature flag)
+GET  /api/admin/institutions       (JWT + super na institution 1)
+POST /api/admin/institutions       (JWT + super na institution 1)
 ```
 
 **Autenticação**: JWT (Bearer token)
@@ -280,13 +284,13 @@ Armazenada em: setes_central.sync_api_keys
 ```
 Tipo: JWT (Bearer Token)
 Header: Authorization: Bearer <jwt>
-Payload: {
-  tenantId: "tenant-001",
-  userId: "user-001",
-  role: "client_user",
-  schemaName: "schema_alpha"
+Payload (Fase 2): {
+  institutionId: 1,
+  userId: 1,
+  role: "super",          // = tb_institution_has_user.kind; 'super' só vale na institution 1
+  schemaName: "setes_setes"
 }
-Assinado com: JWT_SECRET
+Assinado com: JWT_SECRET | TTL 24h, sem refresh
 ```
 
 ### setes-api → MySQL
@@ -367,9 +371,10 @@ FLAG_CACHE_TTL_MS=60000
 
 ### MySQL
 ```
-- Database: setes_central (metadados)
-- Schemas: schema_tenant_001, schema_tenant_002, ... (dados)
-- Tabelas: sync_api_keys, feature_flags, sync_log, tenants
+- Database: setes_central (cadastro, auth, licenças, refs geo/fiscais)
+- Schemas: setes_<cliente> (dados operacionais; Setes = setes_setes)
+- Scripts canônicos: D:\Gestao2027\sql\01..05_*.sql
+- Padrões obrigatórios: Infra-IA/database/PADROES_BANCO.md
 ```
 
 ---
@@ -481,6 +486,20 @@ setes-app (Flutter)
      │
 Browser/Usuário
 ```
+
+---
+
+## 🔗 Dependências Críticas (quem atende quem)
+
+1. **Sincronizador** → **setes-sync** (dados legados chegam via X-Api-Key)
+2. **setes-sync** → **MySQL** → **setes-api** (setes-api consome dados sincronizados)
+3. **setes-api** → **setes-app** (aplicativo Flutter consome /auth e /api)
+4. **sql/** → todos (scripts canônicos do banco, conhecidos por todos os projetos)
+5. **Infra-IA** → todos (documentação, skills, prompts e decisões)
+
+## 📇 Contato
+
+**Email**: valdo@setes.com.br | **Site**: https://www.setes.com.br
 
 ---
 

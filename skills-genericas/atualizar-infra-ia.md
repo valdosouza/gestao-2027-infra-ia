@@ -23,7 +23,8 @@ NÃO retenha: o que o código/git já registra por si; detalhes só desta conver
 | Padrão permanente (vale p/ sempre) | Doc de referência do domínio (ex.: `database/PADROES_BANCO.md`) | Destilado, sem histórico — só a regra vigente |
 | Procedimento repetível | `<projeto>/skills/<verbo-objeto>.md` ou `skills-genericas/` se valer p/ qualquer projeto | Quando usar + workflow numerado + casos reais |
 | Documentação de módulo/feature | `Infra-IA/<projeto>/NN-NOME.md` (numeração sequencial: 01, 02...) | Status, arquivos, como testar |
-| Prompt de fase concluído | `Infra-IA/<projeto>/prompt_faseN_<nome>.md` | Cópia do prompt fechado; rascunho de origem vai para `Rascunho/` → `HISTORICO/` |
+| Prompt em otimização (rascunho/trabalho) | `Infra-IA/prompts/` | Versão de trabalho; nunca na raiz do D:\Gestao2027 |
+| Prompt de fase concluído | `Infra-IA/<projeto>/prompt_faseN_<nome>.md` | Cópia do prompt fechado; rascunho de origem vai para `HISTORICO/` |
 | Análise/relato pontual | `HISTORICO/` | Com INDEX.md atualizado |
 
 ## 3. Atualizações obrigatórias em cadeia
