@@ -48,10 +48,13 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
 | Vive em `setes_central` | Vive em `setes_<schema>` |
 |---|---|
 | Cadastro: `tb_entity`, `tb_company`, `tb_person`, `tb_address`, `tb_phone`, `tb_social_media`, `tb_mailing*` | Operacional do cliente: `tb_customer` e demais tabelas de movimento |
-| Autenticação/licença: `tb_user`, `tb_institution`, `tb_institution_has_user`, `tb_sync_api_key`, `tb_feature_flag` | |
-| UI/permissões: `tb_privilege`, `tb_interface`, `tb_interface_has_privilege` | |
+| Autenticação/licença: `tb_user`, `tb_institution`, `tb_institution_has_user`, `tb_sync_api_key`, `tb_feature_flag` | Configuração do institution (decisão 18 setes-app): `tb_institution_has_interface` (contrato comercial), `tb_module`, `tb_module_has_interface`, `tb_user_has_privilege` |
+| UI/permissões — **catálogo**: `tb_privilege`, `tb_interface`, `tb_interface_has_privilege` | |
+| Preferências/tema (setes-app Fase 1): `tb_user_has_preference`, `tb_institution_theme` | |
 | Referência geográfica: `tb_country`, `tb_state`, `tb_city` | |
 | Referência fiscal: `tb_cfop`, `tb_ncm`, `tb_cest`, `tb_tax_*`, `tb_deter_base_*`, `tb_discharge_icms` | |
+
+- Dois níveis de autorização (decisão 17 setes-app): `tb_feature_flag` = gate técnico de módulos da API (central); `tb_institution_has_interface` = contrato comercial por tela (schema do cliente). A tela de cliente do Super mantém as duas coerentes.
 
 - FKs do schema do cliente para a central são **cross-schema explícitas**: `REFERENCES setes_central.tb_entity (id)`
 - Script 04 (`sql/04_schema_cliente_cleanup.sql`) remove dos schemas o que foi centralizado

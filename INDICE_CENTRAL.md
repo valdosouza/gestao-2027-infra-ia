@@ -1,7 +1,7 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 1.0  
-**Última atualização**: 2026-07-04  
+**Versão**: 2.2  
+**Última atualização**: 2026-07-10  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 
 ---
@@ -12,7 +12,7 @@
 |---------|------|--------|---------|--------|
 | **setes-api** | 11 | 4 | 1 | ✅ Ativo (Fase 2 concluída no backend) |
 | **setes-sync** | 5 | 3 | — | ✅ Ativo |
-| **setes-app** | 1 | 0 | — | ⏳ Futura (INDEX com decisões herdadas) |
+| **setes-app** | 2 | 3 | 1 | 🔨 Fase 1 em construção (fundação pronta, cadastros em evolução) |
 | **sincronizador** | 2 | 0 | 1 | ✅ Legado |
 | **database** | 1 | 3 | — | ✅ Suporte (espelho de D:\Gestao2027\sql) |
 | **skills-genericas** | — | 2 | — | ✅ Qualquer projeto |
@@ -69,8 +69,14 @@ D:\Gestao2027\Infra-IA/
 │       ├── testar-sincronizacao.md       (QA)
 │       └── swagger-endpoint.md           (TBD)
 │
-├── setes-app/                            (Flutter — Interface Web)
-│   └── (documentação em desenvolvimento)
+├── setes-app/                            (Flutter — Web/Android/iOS)
+│   ├── INDEX.md                          ← START HERE
+│   ├── prompt_fase1_fundacao.md          ← Prompt Fase 1 fechado (23 decisões)
+│   ├── temp/                             (Agent_Context_App.md = stack oficial; THEME_EXAMPLE.md)
+│   └── skills/
+│       ├── criar-formulario-cadastro.md  (Contrato visual + workflow CRUD) ⭐ NOVO
+│       ├── campo-lookup-fk.md            (FK com lista de apoio filtrável) ⭐ NOVO
+│       └── internacionalizar-form.md     (i18n pt/en obrigatório) ⭐ NOVO
 │
 ├── Sincronizador/                        (Delphi — Legado)
 │   ├── Documentacao.md
@@ -103,12 +109,16 @@ D:\Gestao2027\Infra-IA/
 - `03-SWAGGER.md` — Documentação de endpoints
 - `04-AUTH-MULTI-INSTITUTION.md` — Login unificado, JWT institutionId, módulo auth ⭐ NOVO
 - `prompt_fase2_gerenciamento_central.md` — Prompt Fase 2 fechado (21 decisões arquiteturais) ⭐ NOVO
+- `ARQUITETURA_MODULOS_API.md` — ⭐ 2026-07-11: 1 cadastro = 1 módulo SIMÉTRICO com o
+  setes-app (6 arquivos: interface/dto/repository/service/controller/routes); URL
+  /api/<modulo> espelha /home/<modulo>; guard POR MÓDULO ("super" nunca vira pasta nem
+  URL). LER antes de criar/alterar módulo de cadastro.
 
 **Skills (4):**
 1. `setup-setes-api.md` — Setup inicial (~15 min)
-2. `novo-endpoint-erp.md` — Adicionar novo endpoint (~15 min)
-3. `delphi-to-typescript.md` — Converter Delphi → TS (~30-45 min) ⭐ NOVO
-4. `novo-modulo.md` — Criar novo módulo (TBD)
+2. `novo-endpoint-erp.md` — Endpoint avulso em módulo legado (erp/core/admin/sync) (~15 min)
+3. `delphi-to-typescript.md` — Converter Delphi → TS (~30-45 min); cadastros saem no padrão simétrico
+4. `novo-modulo.md` — ⭐ 2026-07-11: Novo módulo de CADASTRO no padrão simétrico (6 arquivos, área no gateway) — par da criar-formulario-cadastro.md do app (~20-30 min)
 
 **Agentes (1):**
 - **Delphi-to-TypeScript** (ID: `a81b1668737619946`)
@@ -149,6 +159,29 @@ D:\Gestao2027\Infra-IA/
 3. `testar-sincronizacao.md` — Validar multi-tenant (~15 min)
 
 **Endpoints**: 23 total (brand, customer, product, etc.)
+
+---
+
+### **setes-app** (Flutter — Web/Android/iOS)
+**Função**: Aplicativo do usuário final (ERP)
+**Status**: 🔨 Fase 1 em construção
+
+**Documentação:**
+- `INDEX.md` — Comece aqui
+- `prompt_fase1_fundacao.md` — Prompt Fase 1 fechado (23 decisões)
+- `ARQUITETURA_MODULOS.md` — ⭐ 2026-07-11: 1 interface = 1 módulo flutter_modular
+  (camadas completas + bloc), app/shared (register + lookup), RouterOutlet no Home,
+  regra de promoção (módulo nunca importa módulo). LER antes de criar qualquer tela.
+
+**Skills (3):** ⭐ NOVO 2026-07-10
+1. `criar-formulario-cadastro.md` — Contrato visual (AppBar voltar/check, abas, ícones Android) + workflow de CRUD (~30-60 min)
+2. `campo-lookup-fk.md` — Campo FK readOnly + lista de apoio com filtro (SetesLookupField/showSetesLookup)
+3. `internacionalizar-form.md` — i18n pt/en obrigatório em todo form (register.*, forms.*, lookup.*)
+
+**Agentes (1):**
+- **setes-form-builder** (`D:\Gestao2027\.claude\agents\setes-form-builder.md`)
+  - Cria/reforma cadastros no padrão customer_register (código de referência em codigo-aprendizado/weberpsetes)
+  - Lê as 3 skills acima antes de codar; entrega com flutter analyze limpo
 
 ---
 
@@ -242,6 +275,17 @@ D:\Gestao2027\Infra-IA/
 ```
 **Tempo**: ~30 min
 
+### "Quero criar/melhorar um formulário de cadastro no setes-app"
+```
+1. Use o agente: setes-form-builder (.claude/agents/setes-form-builder.md)
+   OU leia manualmente, nesta ordem:
+2. setes-app/skills/criar-formulario-cadastro.md (contrato visual + workflow)
+3. setes-app/skills/campo-lookup-fk.md (toda FK vira lookup com lista de apoio)
+4. setes-app/skills/internacionalizar-form.md (pt.json + en.json sempre juntos)
+5. Referência de qualidade: codigo-aprendizado/weberpsetes/.../customer_register
+```
+**Tempo**: 30-60 min por cadastro
+
 ### "Tenho um rascunho de ideias e quero virar um prompt de fase"
 ```
 1. Leia: skills-genericas/refinar-prompt-arquitetura.md
@@ -257,6 +301,7 @@ D:\Gestao2027\Infra-IA/
 | Nome | ID | Especialidade | Quando usar |
 |------|----|----|--------|
 | **Delphi-to-TypeScript** | a81b1668737619946 | Converter Delphi → TS | Reescrever Models, DataObjects |
+| **setes-form-builder** | `.claude/agents/setes-form-builder.md` | Formulários de cadastro no setes-app (padrão customer_register) | Tela CRUD nova ou reforma visual/lookup/i18n ⭐ NOVO |
 
 **Criar novo agente:**
 - Se um fluxo repetir em 3+ tarefas → vale a pena agente especializado
@@ -318,6 +363,16 @@ D:\Gestao2027\Infra-IA/
 | 2026-07-04 | Agente Delphi→TS documentado | 1.0 |
 | 2026-07-04 | Fase 2 (Gerenciamento Central): prompt fechado, PADROES_BANCO, skills revisar-ddl e refinar-prompt-arquitetura, doc auth multi-institution | 1.1 |
 | 2026-07-04 | Reorganização de pastas: ORGANIZACAO_PASTAS.md (regra de simetria), prompts/, codigo-aprendizado incorporado, README raiz fundido em ARQUITETURA.md, setes-app espelhado, publicar-fase2.ps1 → git-github/ | 1.2 |
+| 2026-07-05 | setes-app Fase 1 (Fundação): prompt fechado em 3 rodadas (23 decisões), INDEX.md do projeto, rascunho no HISTORICO, GestaoERPApps/core em codigo-aprendizado | 1.3 |
+| 2026-07-10 | setes-app: 3 skills de formulário (criar-formulario-cadastro, campo-lookup-fk, internacionalizar-form) + agente setes-form-builder, extraídos do customer_register (codigo-aprendizado/weberpsetes) | 1.4 |
+| 2026-07-10 | Cadastro de País reformado (1º no contrato visual): SetesFormShell no setes_widgets, fábrica Register* evoluída (readOnly, avatarBuilder, confirmação+SnackBar), i18n register.*/forms.country completo. Decisão do Valdo: código do país = padrão BACEN informado pelo usuário (não sequencial, 409 se existir mesmo excluído) — registrada em setes-app/skills/criar-formulario-cadastro.md | 1.5 |
+| 2026-07-11 | Estado e Cidade reformados (códigos IBGE digitados, lookup FK, tabulação); fix DECIMAL→string do mysql2 (decimalNumbers no pool + jsonDouble no core) | 1.6 |
+| 2026-07-11 | Refatoração arquitetural do setes-app: ARQUITETURA_MODULOS.md (1 interface = 1 módulo com camadas completas + bloc, padrão weberpsetes), módulo super/ desmontado em countries/states/cities, app/shared criado (register + lookup), RouterOutlet + rotas no Home (InterfaceFrame removido), agente e skills atualizados | 1.7 |
+| 2026-07-11 | Cadastro de Interfaces (tb_interface): 1ª tela nova na arquitetura de módulos — id MAX+1 gerado no backend (Código readOnly), checkboxes de privilégios (tb_interface_has_privilege sincronizada no PUT), fábrica ganhou extraChildren; endpoints /super/interfaces e /super/privileges na setes-api. Decisões do Valdo em setes-app/skills/criar-formulario-cadastro.md | 1.8 |
+| 2026-07-11 | Cadastro de Privilégios (tb_privilege): módulo privileges/ no setes-app (padrão 100% repetido de countries/ + id MAX+1 do precedente de Interfaces); CRUD completo em /super/privileges na setes-api (GET /:id, POST, PUT, DELETE reaproveitando o GET de lista dos checkboxes). Nenhum padrão novo | 1.9 |
+| 2026-07-11 | Refatoração arquitetural da setes-api: ARQUITETURA_MODULOS_API.md — módulo super/ desmontado em countries/states/cities/interfaces/privileges (6 arquivos cada: interface/dto/repository/service/controller/routes), "super" virou área no gateway (prefixo /super + super.guard.ts), controller-utils em shared/http. URLs preservadas — app intocado. Simetria total API ↔ app; CLAUDE.md do setes-api e agente setes-form-builder atualizados | 2.0 |
+| 2026-07-11 | Skills da setes-api alinhadas ao padrão simétrico: novo-modulo.md criada (deixou de ser TBD — cadastro em 6 arquivos, par da criar-formulario-cadastro.md); novo-endpoint-erp.md e delphi-to-typescript.md ganharam aviso de escopo (3 camadas só para módulos legados) | 2.1 |
+| 2026-07-11 | URLs alinhadas ao módulo (decisão do Valdo): /api/super/<m> → /api/<m>, espelhando /home/<m> do app; superGuard aplicado POR MÓDULO no gateway ("super" não vira pasta nem URL); Swagger, datasources do app (10 arquivos), docs, skills, agente e memória atualizados | 2.2 |
 | — | — | — |
 
 ---

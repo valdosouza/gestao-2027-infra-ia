@@ -2,6 +2,18 @@
 
 ## 📚 Índice de Documentação
 
+### ⭐ **ARQUITETURA_MODULOS_API.md** (2026-07-11 — LER ANTES de criar/alterar módulo de cadastro)
+Padrão vigente: 1 cadastro = 1 módulo SIMÉTRICO com o setes-app
+- 6 arquivos por módulo: interface / dto / repository / service / controller / routes
+- URL segue o módulo: /api/<modulo> espelha /home/<modulo> do app (ex.: /api/countries)
+- "Super" NUNCA vira pasta nem URL — guard POR MÓDULO no gateway (super.guard.ts nos cadastros do catálogo central)
+- Regras de consistência (envelope {ok,data}, camelCase, soft delete, códigos BACEN/IBGE vs MAX+1)
+- Skill passo a passo: `skills/novo-modulo.md`
+
+**Leia se:** Vai criar ou mexer em qualquer módulo de cadastro (countries, states, cities, interfaces, privileges...)
+
+---
+
 ### 0. **AGENTE_ESPECIALIZADO.md** 🆕
 Guia do agente Delphi → TypeScript
 - O que é o agente

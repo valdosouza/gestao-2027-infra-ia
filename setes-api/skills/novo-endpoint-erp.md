@@ -5,6 +5,19 @@
 
 ---
 
+## ⚠️ ESCOPO desta skill (atualizado 2026-07-11)
+
+Esta skill cobre endpoints AVULSOS em módulos legados (erp, core, admin, sync),
+que ainda usam Repository → Service → Routes.
+
+**Módulo de CADASTRO (CRUD que vira tela no setes-app) NÃO usa esta skill**: use
+`novo-modulo.md` + `Infra-IA/setes-api/ARQUITETURA_MODULOS_API.md` — padrão
+simétrico de 6 arquivos (interface/dto/repository/service/controller/routes),
+1 módulo por cadastro com o mesmo nome do módulo do app. Módulos legados migram
+para o padrão novo quando forem tocados.
+
+---
+
 ## 🏗️ Estrutura
 
 ```

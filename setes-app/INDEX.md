@@ -1,20 +1,28 @@
 # setes-app — Índice (espelho de conhecimento)
 
-**Status**: ⏳ Projeto futuro — pasta criada para manter a simetria projetos × Infra-IA
-**Projeto**: `D:\Gestao2027\setes-app` (Flutter Web e Android)
+**Status**: 🔨 Fase 1 em implementação — backend PRONTO (endpoints + migration 003); esqueleto do monorepo Flutter CRIADO (2026-07-05, ver `D:\Gestao2027\setes-app\README.md`)
+**Projeto**: `D:\Gestao2027\setes-app` (Flutter — monorepo: packages/core, packages/setes_widgets, apps/web)
 **Atende**: usuário final, consumindo `setes-api` (`/auth/*` e `/api/*` com JWT)
 
 ---
 
-## O que já está decidido (herdado da Fase 2 do setes-api)
+## Comece aqui
 
-- Login multi-institution: `POST /auth/login` → 1 institution = JWT direto; N = tela "Escolha a empresa" + `/auth/select-institution`
-- JWT: `{ institutionId, userId, role, schemaName }`, TTL 24h
-- Decisões adiadas PARA este projeto: institution padrão (pular tela de escolha), refresh token (mobile), perfis padronizados/tb_profile
-- Stack registrada no rascunho original: Flutter 3.41+, Dart 3.11+, Kotlin 2.1.0, AGP 8.8, Gradle 8.10.2, compileSdk 36 (confirmar na largada)
+- **`prompt_fase1_fundacao.md`** — prompt executável da Fase 1 (23 decisões registradas, fechado em 2026-07-05)
+  - Escopo: monorepo, design system `Setes*`, i18n (easy_localization + `tb_user_has_preference`), tema por institution (`tb_institution_theme`), responsividade weberpsetes, auth multi-institution, shell web com menus via `GET /api/core/menus`, módulos Super e Sistema, fábrica de cadastros por composição + genéricos
+  - Fora de escopo: apps Android (`budget_sales`, `stock_count`, `budget_autocenter`, `erp_authorization`), iOS, refresh token
+
+## Decisões-chave (detalhe no prompt)
+
+- Dois níveis de autorização: `tb_feature_flag` = gate técnico de módulos da API (mantida); `tb_institution_has_interface` = contrato comercial (decisão 17)
+- Config do cliente no schema do cliente: `tb_module`, `tb_module_has_interface`, `tb_user_has_privilege`, `tb_institution_has_interface` em `setes_<schema>` (decisão 18)
+- Super opera cross-schema recebendo `institutionId` alvo (decisão 23); `03_schema_cliente_ddl.sql` ganha as 4 tabelas novas
+- Stack oficial: `temp/Agent_Context_App.md` (BLoC, flutter_modular v5, dartz; drift só nos apps Android)
 
 ## Referências
 
-- Decisões vigentes: `../setes-api/prompt_fase2_gerenciamento_central.md`
-- Fluxo de auth que o app consome: `../setes-api/04-AUTH-MULTI-INSTITUTION.md`
-- Onde criar docs/skills deste projeto: `../ORGANIZACAO_PASTAS.md`
+- Stack/testes: `temp/Agent_Context_App.md` · Tema: `temp/THEME_EXAMPLE.md`
+- Decisões vigentes da API: `../setes-api/prompt_fase2_gerenciamento_central.md`
+- Fluxo de auth consumido: `../setes-api/04-AUTH-MULTI-INSTITUTION.md`
+- Código de aprendizado: `../codigo-aprendizado/weberpsetes/` (responsividade, clean arch) e `../codigo-aprendizado/GestaoERPApps/core/` (core de referência)
+- Rascunho de origem: `../HISTORICO/rascunho_setes_app_fase1_2026-07-05.txt`

@@ -15,6 +15,16 @@
 - ✅ Adicionar validação com Zod
 - ✅ Documentar com Swagger
 
+## ⚠️ Estrutura de saída (atualizado 2026-07-11)
+
+Se o código Delphi convertido virar um **módulo de CADASTRO** (CRUD com tela no
+setes-app), a saída DEVE seguir o padrão simétrico de 6 arquivos de
+`Infra-IA/setes-api/ARQUITETURA_MODULOS_API.md`:
+`<m>.interface.ts` + `<m>.dto.ts` (Zod) + `<m>.repository.ts` + `<m>.service.ts`
++ `<m>.controller.ts` + `<m>.routes.ts` (router fino) — inclua o doc no prompt do
+agente. As seções abaixo com 3-4 arquivos valem só para endpoints avulsos em
+módulos legados.
+
 ---
 
 ## 🔄 Fluxo de Trabalho

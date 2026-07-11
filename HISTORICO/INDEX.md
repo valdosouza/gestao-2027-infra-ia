@@ -58,6 +58,16 @@ Diagrama da arquitetura no meio do processo.
 
 ---
 
+### 5. **rascunho_setes_app_fase1_2026-07-05.txt**
+**Data**: 2026-07-05
+**Conteúdo**: Rascunho original do setes-app (Prompt - Aplicativo Flutter.txt)
+
+**Status**: ❌ Superado — refinado em 3 rodadas de decisão até virar `../setes-app/prompt_fase1_fundacao.md` (23 decisões)
+
+**Quando usar**: Exemplo de "antes" do método `../skills-genericas/refinar-prompt-arquitetura.md`
+
+---
+
 ## 🔄 Evolução do Projeto
 
 ```
