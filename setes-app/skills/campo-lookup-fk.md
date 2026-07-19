@@ -197,3 +197,14 @@ No salvar: enviar `_countryId` (nunca texto). A entidade precisa do campo de exi
 - [ ] CircleAvatar com id + nome no item
 - [ ] API devolve o nome do relacionado (JOIN) para exibir na edição
 - [ ] Lookup dependente valida o pai antes de abrir
+
+## Guard dos lookups (fix 2026-07-18)
+
+Lookups de endereço (país/UF/cidade) rodam em telas de CLIENTE (aba Endereços
+de customers/collaborators/...). Por isso os módulos geográficos usam
+`superWriteGuard` no gateway (leitura ABERTA a qualquer autenticado; POST/PUT/
+DELETE continuam do Super) e são isentos de feature flag (referência).
+Lookup novo que leia catálogo central: conferir se o guard do módulo permite
+GET para o perfil que vai usar a tela — senão o dialog recebia 403.
+O `showSetesLookup` agora captura falha da consulta (mostra a mensagem em vez
+de loading infinito) — mas guard errado continua sendo bug de API.

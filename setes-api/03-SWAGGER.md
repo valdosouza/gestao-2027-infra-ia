@@ -1,251 +1,100 @@
 # Swagger Documentation — setes-api
 
-## ✅ Integração Swagger Concluída
-
-A API setes-api agora possui documentação completa com Swagger/OpenAPI 3.0.
+**Status**: Vigente — cobertura COMPLETA desde 2026-07-12 (61 paths / 83 operações)
+**Regra inegociável**: TODO endpoint criado ou alterado ganha bloco `@swagger` JSDoc
+no arquivo de rotas, na MESMA entrega. Endpoint sem Swagger = tarefa incompleta.
 
 ---
 
-## 🚀 Acessar Documentação
-
-Após iniciar a API:
+## 🚀 Acessar
 
 ```bash
 cd D:\Gestao2027\setes-api
 npm run dev
 ```
 
-**Abra no navegador:**
-
-```
-http://localhost:3000/docs
-```
-
-Você verá:
-- ✅ Interface interativa Swagger UI
-- ✅ Todos os 5 endpoints documentados
-- ✅ Modelos de requisição/resposta
-- ✅ Teste de endpoints direto do navegador
-- ✅ Autenticação JWT integrada
+- **Swagger UI**: http://localhost:3000/docs
+- **OpenAPI JSON**: http://localhost:3000/docs.json (importável no Postman/Insomnia)
 
 ---
 
-## 📚 Arquivos Criados
+## ⚠️ Como o swagger-jsdoc encontra a documentação (lição de 2026-07-12)
 
+O spec é gerado APENAS dos arquivos que casam com os globs `apis` em
+`src/shared/swagger/swagger-config.ts`:
+
+```ts
+apis: [
+  './src/app.ts',                          // /health
+  './src/shared/swagger/swagger-endpoints.ts',
+  './src/modules/**/*.routes.ts',          // todos os módulos
+  './src/modules/sync/endpoints/*.ts',     // endpoints do Sincronizador
+]
 ```
-setes-api/
-├── src/shared/swagger/
-│   ├── swagger-config.ts        (Definição OpenAPI 3.0)
-│   └── swagger-endpoints.ts     (Documentação dos 5 endpoints)
-└── src/app.ts                   (Atualizado com Swagger)
-```
+
+**Bloco `@swagger` em arquivo fora desses padrões NÃO aparece no /docs** — foi
+exatamente o que aconteceu quando 43 rotas foram documentadas mas o config só
+escaneava app.ts. Regras derivadas:
+
+1. Doc da rota vive no `<modulo>.routes.ts` (ou `sync/endpoints/<recurso>.ts`)
+2. Criou arquivo de rotas com outro padrão de nome? Adicione o glob no config
+3. Validação final SEMPRE inclui recarregar /docs e conferir a rota nova
 
 ---
 
-## 🔍 Exemplo: Testar endpoint no Swagger UI
+## 🔐 Security schemes (definidos no swagger-config.ts)
 
-### 1. Abra http://localhost:3000/docs
+| Scheme | Uso | Header |
+|---|---|---|
+| `BearerAuth` | rotas `/api/*` | `Authorization: Bearer <jwt>` |
+| `ApiKeyAuth` | rotas `/sync/*` (Sincronizador) | `X-Api-Key: <SYNC_API_KEY>` |
+| `security: []` | públicas: /health, /auth/login, /auth/recovery-password, /auth/change-password | — |
 
-### 2. Clique em "Authorize" (cadeado)
-Adicione seu JWT token:
-```
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-
-### 3. Expanda endpoint "GET /api/core/info"
-
-### 4. Clique em "Try it out"
-
-### 5. Clique em "Execute"
-
-### 6. Veja resposta:
-```json
-{
-  "ok": true,
-  "data": {
-    "id": "tenant-001",
-    "name": "Empresa Alpha",
-    "schema_name": "schema_alpha",
-    "active": true
-  }
-}
-```
+`/auth/select-institution` usa Bearer com o selectionToken; `/auth/switch-institution` usa JWT normal.
 
 ---
 
-## 📋 5 Endpoints Documentados
+## 📝 Template do bloco @swagger
 
-### Health (sem autenticação)
-- `GET /health` — Status da API
-
-### Core (com JWT)
-- `GET /api/core/info` — Informações do tenant
-
-### ERP (com JWT)
-- `GET /api/erp/status` — Status do módulo ERP
-
-### Admin (com JWT + role setes_admin)
-- `GET /api/admin/tenants` — Listar todos os tenants
-- `POST /api/admin/tenants` — Criar novo tenant
-
----
-
-## 🔐 Autenticação
-
-### Health Check
-```
-GET /health
-→ Sem autenticação
-```
-
-### Endpoints /api/*
-```
-Authorization: Bearer <jwt_token>
-```
-
-No Swagger UI:
-1. Clique "Authorize" (cadeado no topo)
-2. Digite seu token JWT
-3. Todos os testes incluem a autenticação
-
----
-
-## 📤 Exportar Especificação
-
-### JSON Raw (OpenAPI 3.0)
-
-```
-http://localhost:3000/docs.json
-```
-
-### Usar em outras ferramentas:
-
-**Postman**
-1. Import → Paste raw text
-2. Cole: `http://localhost:3000/docs.json`
-3. Todos os endpoints importados
-
-**Insomnia**
-1. Design → Create → Paste OpenAPI URL
-2. URL: `http://localhost:3000/docs.json`
-
----
-
-## 🛠️ Estrutura Técnica
-
-### swagger-config.ts
-
-Define:
-- Info da API (título, versão, descrição)
-- Servidores (dev, prod)
-- Security schemes (BearerAuth - JWT)
-- Componentes reutilizáveis (SuccessResponse, ErrorResponse, HealthResponse)
-
-### swagger-endpoints.ts
-
-Documentação JSDoc de cada endpoint:
 ```typescript
 /**
  * @swagger
- * /api/core/info:
+ * /api/<modulo>:
  *   get:
- *     summary: Obter Informações do Tenant
- *     description: Retorna informações do tenant autenticado
- *     tags: [Core]
+ *     summary: Listar <coisas>
+ *     tags: [<Modulo>]            # tag = nome do módulo (agrupa no UI)
  *     security:
- *       - BearerAuth: []
+ *       - BearerAuth: []          # ou ApiKeyAuth (sync) ou [] (pública)
  *     responses:
- *       200: { description: Sucesso }
- *       401: { description: Token ausente }
+ *       200: { description: 'Envelope { ok, data }' }
+ *       400: { description: Validação }
+ *       401: { description: Não autenticado }
+ *       403: { description: Sem autorização }
+ *       500: { description: Erro interno }
  */
 ```
 
-### app.ts
-
-Registro das rotas Swagger:
-```typescript
-import { swaggerSpec } from '@shared/swagger/swagger-config'
-import swaggerUi from 'swagger-ui-express'
-
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-app.get('/docs.json', (_, res) => res.send(swaggerSpec))
-```
+Padrões: responses 200/201 + 400/401/403/500; requestBody nos POST/PUT com o
+shape do DTO Zod; parameters nos GET com query/path params; envelope documentado
+(`{ ok, data }`, `{ ok, token }`, `{ error }`).
 
 ---
 
-## 📊 Endpoints por Tag
+## 📊 Cobertura atual (2026-07-12)
 
-### Health
-- GET /health (sem autenticação)
+| Grupo | Rotas | Auth |
+|---|---|---|
+| Health | 1 | pública |
+| Auth | 5 (login, select-institution, recovery-password, change-password, switch-institution) | públicas + tokens |
+| Cadastros simétricos | 30 (countries, states, cities, interfaces, privileges, institutions × 5) | BearerAuth + superGuard |
+| Admin | 3 | BearerAuth + super |
+| Core | 5 | BearerAuth |
+| ERP | 1 | BearerAuth |
+| Sync | 34 (push, pull, status, log + 30 `/<recurso>/sincronize`) | ApiKeyAuth |
 
-### Core
-- GET /api/core/info (JWT)
-
-### ERP
-- GET /api/erp/status (JWT + feature flag)
-
-### Admin
-- GET /api/admin/tenants (JWT + setes_admin)
-- POST /api/admin/tenants (JWT + setes_admin)
-
----
-
-## ✨ Benefícios
-
-✅ **Documentação sempre sincronizada** — JSDoc + código  
-✅ **Teste interativo** — Sem precisar de Postman  
-✅ **Especificação exportável** — OpenAPI 3.0 JSON  
-✅ **Compatível** — Postman, Insomnia, ReDoc  
-✅ **Autenticação integrada** — JWT no Swagger UI  
+Total: 61 paths / 83 operações. Componentes reutilizáveis no config:
+`SuccessResponse`, `ErrorResponse`, `HealthResponse`.
 
 ---
 
-## 🔗 URLs Importantes
-
-- **API Live**: `http://localhost:3000` (quando rodando)
-- **Swagger UI**: `http://localhost:3000/docs`
-- **OpenAPI JSON**: `http://localhost:3000/docs.json`
-- **Projeto**: `D:\Gestao2027\setes-api`
-
----
-
-## 🧪 Como Testar Localmente
-
-### Terminal 1: Iniciar API
-```bash
-cd D:\Gestao2027\setes-api
-npm install
-npm run dev
-```
-
-### Terminal 2: Acessar Swagger
-```
-http://localhost:3000/docs
-```
-
-### Terminal 3: Gerar JWT (opcional)
-```bash
-# Usar script generate-token.ts ou JWT pré-gerado
-node src/scripts/generate-token.ts
-```
-
-### Teste:
-1. Abra http://localhost:3000/docs
-2. Clique Authorize
-3. Cole o JWT
-4. Teste cada endpoint
-
----
-
-## 📝 Notas
-
-- **Porta**: 3000 (setes-api)
-- **Swagger UI**: Habilitado em desenvolvimento
-- **Endpoints**: 5 totais (1 health + 4 com JWT)
-- **Autenticação**: JWT (Bearer token)
-- **Feature Flags**: Aplicadas em /api/erp
-- **Role-based**: Admin endpoints requerem setes_admin
-
----
-
-*Documentação atualizada: 2026-07-01*
+*Documentação atualizada: 2026-07-12*

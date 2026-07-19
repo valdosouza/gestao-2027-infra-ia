@@ -2,7 +2,8 @@
 
 **Status**: Vigente
 **Origem**: Análise de `Infra-IA/codigo-aprendizado/weberpsetes/lib/app/modules/customer_register` (2026-07-10), a pedido do Valdo — os cadastros iniciais (País/Estado/Cidade) estavam visualmente pobres e sem apoio para FKs.
-**Referências**: `prompt_fase1_fundacao.md` (decisões 11, 20, 21, 26), skills irmãs `campo-lookup-fk.md` e `internacionalizar-form.md`
+**Referências**: `prompt_fase1_fundacao.md` (decisões 11, 20, 21, 26), skills irmãs `campo-lookup-fk.md` e `internacionalizar-form.md`.
+**Cadastro que herda a cadeia fiscal** (Institution/Customer/Provider/Collaborator/Bank): esta skill continua valendo para o contrato visual, mas a estrutura (abas compartilhadas, cascade, PF/PJ) vem de `cadastro-entidade-fiscal.md` — LER JUNTO.
 **Quando usar**: SEMPRE que criar ou reformar uma tela de cadastro (CRUD) no setes-app.
 **Tempo**: 30–60 min por cadastro
 
@@ -113,6 +114,12 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
   inteira clicável, `ListView.separated`, `register.emptyList`, AppBar própria no
   estilo do form e `FloatingActionButton` (Icons.add) para novo registro.
 - `SetesTextField` ganhou `readOnly`, `hint`, `suffixIcon`/`onSuffixPressed`.
+- `SetesRadioGroup<T>` + `SetesRadioOption<T>` (setes_widgets, 2026-07-17 —
+  Rodada 4 do customers): radiobox de escolha ÚNICA em domínio minúsculo
+  visível de uma vez (Sim/Não, Liberado/Bloqueado); renderiza como campo do
+  form (InputDecorator com label/borda), aceita `helperText` explicativo e
+  fica fora da sequência de Tab (mesma regra dos checkboxes). Para domínio
+  maior use SetesDropdown; para FK, SetesLookupField.
 - `SetesLookupField` + `showSetesLookup<T>` existem em setes_widgets e a
   fábrica tem `RegisterField.lookup(...)` para FK (reforma do Estado,
   2026-07-11 — ver campo-lookup-fk.md). Código do estado = código IBGE da UF
@@ -182,3 +189,97 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
 - [ ] Zero strings hardcoded — tudo via .tr() em pt.json E en.json
 - [ ] i18nKey roteado no interface_frame.dart
 - [ ] flutter analyze limpo
+
+## Campos configuráveis (Fase 2 — OBRIGATÓRIO em toda tela nova, 2026-07-12)
+
+Prompt: `Infra-IA/setes-app/prompt_fase2_campos_configuraveis.md` (22 decisões).
+
+1. **Catálogo**: toda tela nova ganha suas linhas em `setes_central.tb_interface_has_field`
+   — rode na setes-api: `npm run fields:gen -- --interface <id> --tables <t1,t2>`,
+   revise o .sql (required baseline = DDL NOT NULL ∪ DTO obrigatório) e aplique.
+   **Campo novo em tela existente = linha nova no catálogo** (mesma tool).
+2. **Engine na página**: `with FieldConfigLoader` + `loadFieldConfig('<modulo>')` no
+   initState + `fields: applyFieldConfig([...], fieldConfig)` na fábrica
+   (shared/field_config + shared/register/field_config_merge.dart).
+3. **Validadores**: use `SetesValidators.*` (package setes_validators — espelho do
+   shared/validation da API). Retornam CHAVE i18n (`forms.validation.*`); a fábrica
+   traduz. Override manual: parâmetro `message`. Máscara `#`/`A` via `RegisterField.mask`
+   (o valor vai SEM máscara no onSave — decisão 19).
+
+- [ ] Linhas da tela no catálogo (fields:gen) — campo novo incluído
+- [ ] FieldConfigLoader + applyFieldConfig ligados na página
+
+- 2026-07-12: cadastro de Usuário em DUAS ABAS (pedido do Valdo) — a fábrica
+  ganhou `extraTabs: List<RegisterTab>` (evoluir a fábrica em vez de form
+  artesanal, decisão 20): campos + extraChildren ficam na aba principal
+  (rótulo via `mainTabLabel`) e cada RegisterTab vira aba própria com
+  conteúdo/rolagem da página. A aba principal fica em keep-alive — o check
+  do shell valida o Form mesmo com outra aba aberta. Sem extraTabs o layout
+  é o original (zero impacto nas telas existentes).
+
+## Configurações do sistema (Framework de Configurações, 2026-07-18)
+
+Prompt: `Infra-IA/setes-app/prompt_framework_configuracoes_sistema.md` (17 decisões).
+Nível COMPORTAMENTO da hierarquia (tela → campo → configuração).
+
+1. **Ícone de engrenagem na tela de LISTA** (decisão 11 — PADRÃO, com ou sem
+   configs no catálogo; ajuste 2026-07-18): basta passar
+   `configModuleKey: '<modulo>'` no `RegisterSearchPage` — a fábrica renderiza
+   a engrenagem, navega para `/home/interface-configs/` já filtrado
+   (arguments `{'title','moduleKey','returnTo'}`) e o VOLTAR do painel retorna
+   à tela chamadora (`returnTo`). Sem configs, o painel mostra "Não há
+   configurações para esta interface". Referência: customer_page.dart.
+2. **Consumo de config na página**: `with InterfaceConfigLoader` +
+   `loadInterfaceConfig('<modulo>')` no initState; leia com
+   `configContent('<name>')` / `configBool('<name>')`
+   (shared/interface_config — molde do FieldConfigLoader). Resolução
+   usuário → institution → default é feita pela API (cache TTL).
+3. **Config nova = linha no catálogo** pela seção "Configurações" da tela de
+   Interfaces (Super) — NUNCA tela artesanal por opção. Vendável NÃO é config:
+   é interface `kind='R'` gateada pelo contrato (decisão 1).
+4. **Estado de sessão** (decisão 17): fato derivado do usuário (ex.: isSalesman)
+   vem do `SessionContext` (`app/shared/session/`) — preenchido na entrada da
+   Home via /api/core/me; telas SÓ leem; enforcement é sempre da API.
+   PROIBIDO variável global solta.
+
+- [ ] Engrenagem na lista quando a interface tem configs
+- [ ] InterfaceConfigLoader ligado quando a tela consome config
+
+## Cadastro em ÁRVORE — 2º tipo de cadastro (Valdo, 2026-07-18)
+
+Nem todo cadastro é lista+form: cadastros HIERÁRQUICOS (1º caso real:
+Categorias de produtos/serviços — porta do Delphi reg_category.pas) usam
+TREEVIEW. Moldes completos: `categories` (abas por domínio — kind define a
+árvore) e `financial_plans` (árvore ÚNICA — Natureza/Tipo/Nível são radios
+do form; matemática do caminho em `@shared/tree-path`, promovida no 2º
+consumidor).
+
+**Banco/API:**
+- `posit_level` = caminho materializado (segmentos = código pad 3: '001',
+  '001.005'); profundidade = nº de pontos; `KEY updated_at` p/ sync.
+- O caminho nasce na CRIAÇÃO (caminho do pai + código) e é SEMPRE da API —
+  matemática em funções puras (`categories.path.ts`: pathSegment/childPath/
+  parentIdFromPath/isSelfOrDescendant — testadas em categories-tree.test.ts).
+- GET ordenado por posit_level (ordem já é a da árvore) devolvendo `parentId`
+  derivado; POST com `parentId` (null = raiz); PUT com `parentId` diferente =
+  MOVER (recalcula a subárvore inteira em transação: CONCAT + SUBSTRING no
+  prefixo; proibido ciclo — self/descendente — e pai de outro domínio);
+  DELETE 409 com subníveis (só folhas — decisão do Valdo).
+- Domínios paralelos (kind 'P' produtos × 'S' serviços) = árvores
+  INDEPENDENTES; kind obrigatório no create e IMUTÁVEL.
+
+**App:**
+- `SetesTreeView` (setes_widgets): nós montados pelo módulo (`parentId` →
+  filhos), expand/collapse, clique = edição, ação "+" no nó = SUBNÍVEL.
+- Tela: AppBar (título + engrenagem manual — a fábrica não é usada) + abas
+  por domínio + FAB = NÍVEL raiz (Delphi: dialog "Nível/SubNível" virou
+  FAB + ação no nó).
+- Form (SetesFormShell): descrição + "Nível Superior" = SetesLookupField da
+  MESMA árvore (lista já carregada; exclui self+descendentes no cliente — a
+  API revalida), limpar = raiz; ativo checkbox. Posição/código: API.
+- Engine de campos (Fase 2) NÃO se aplica ao form de árvore v1 (form
+  artesanal); o catálogo de campos existe só para documentação do painel.
+
+- [ ] Caminho calculado só na API (app nunca monta posit_level)
+- [ ] Mover valida ciclo/domínio; excluir bloqueado com filhos
+- [ ] SetesTreeView + FAB raiz + ação de subnível no nó

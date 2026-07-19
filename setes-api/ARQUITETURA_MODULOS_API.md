@@ -33,6 +33,16 @@ interfaces, privileges...). Ao criar um cadastro novo, criam-se DOIS módulos g�
 | `<m>.routes.ts` | Router fino (verbo → controller) + Swagger JSDoc | Handlers inline |
 
 Compartilhados: `shared/http/controller-utils.ts` (handleError, parseId) — todo controller usa.
+Cadeia de entidade fiscal (2026-07-12) — COMPARTILHADA entre os concretos
+(Institution/Customer/Provider/Collaborator/Bank), cada objeto na SUA pasta sob `src/shared/`
+(SOLID — SRP/ISP, decisão do Valdo): `shared/address/`, `shared/phone/`, `shared/social-media/`,
+`shared/fiscal/` (peças independentes — types/dto/repository; escrita transaction-aware
+recebendo `conn` + `entityId`) e `shared/entity/` (tb_entity + `entity-fiscal.ts` de COMPOSIÇÃO:
+EntityFiscalInput/Full, `entityFiscalBody` sem effects + `withFiscalRefinements` por último,
+`saveEntityFiscalChain(conn, id|null, input)`, `getEntityFiscalFull` + `index.ts` barrel —
+consumidores da cadeia importam de '@shared/entity'). Direção de dependência: composição →
+peças; as peças NUNCA importam entity/. A cadeia opera SEMPRE em setes_central — só a tabela
+concreta muda de schema e fica no módulo. Detalhes: skill `setes-app/skills/cadastro-entidade-fiscal.md`.
 
 ## "Super" NÃO é módulo — nem em pasta, nem em URL
 
@@ -83,6 +93,10 @@ posição (por módulo). Mudar o agrupador no menu NUNCA muda URL nem pasta.
 - [ ] Pasta `src/modules/<plural>/` com os 6 arquivos no padrão acima
 - [ ] Montagem no `gateway/router.ts` em `/api/<plural>` com o guard certo por módulo
 - [ ] Zod no dto; envelope `{ ok, data }`; alias camelCase; soft delete
-- [ ] Swagger JSDoc em todas as rotas (tag = nome do módulo)
+- [ ] Swagger JSDoc em todas as rotas (tag = nome do módulo; security por tipo:
+      BearerAuth /api/*, ApiKeyAuth /sync/*, `[]` públicas). ⚠️ swagger-jsdoc só lê
+      os globs `apis` de `src/shared/swagger/swagger-config.ts`
+      (`src/modules/**/*.routes.ts` + `sync/endpoints/*.ts`) — doc fora deles não
+      aparece no /docs. Conferir a rota nova em http://localhost:3000/docs
 - [ ] `npx tsc --noEmit` limpo
 - [ ] Módulo gêmeo no app com o MESMO nome (ARQUITETURA_MODULOS.md do setes-app)

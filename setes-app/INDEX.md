@@ -11,6 +11,9 @@
 - **`prompt_fase1_fundacao.md`** — prompt executável da Fase 1 (23 decisões registradas, fechado em 2026-07-05)
   - Escopo: monorepo, design system `Setes*`, i18n (easy_localization + `tb_user_has_preference`), tema por institution (`tb_institution_theme`), responsividade weberpsetes, auth multi-institution, shell web com menus via `GET /api/core/menus`, módulos Super e Sistema, fábrica de cadastros por composição + genéricos
   - Fora de escopo: apps Android (`budget_sales`, `stock_count`, `budget_autocenter`, `erp_authorization`), iOS, refresh token
+- **`prompt_fase2_campos_configuraveis.md`** — Fase 2: framework de campos configuráveis + validação de cadastros (22 decisões, fechado em 2026-07-12)
+  - Escopo: catálogo `tb_interface_has_field` (central) × `tb_institution_has_field` (schema do cliente — required/caption/mask, cliente só aperta o baseline técnico); painel Sistema/Admin (vitrine de todas as interfaces); engine custom→catálogo na fábrica de cadastros; package `setes_validators` (app) espelhando `src/shared/validation/` (API); erro por campo `{error, fields[]}`; duplicidade CPF/CNPJ ao sair do campo + 409 no salvar; piloto nas 5 telas existentes
+  - Tool pronta: `setes-api/scripts/gerar-interface-fields.ts` (`npm run fields:gen`) — gera seed do catálogo via information_schema
 
 ## Decisões-chave (detalhe no prompt)
 

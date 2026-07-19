@@ -134,5 +134,21 @@ curl -X GET http://localhost:3000/api/erp/feature/1 \
 
 ---
 
-*Skill atualizada: 2026-07-01*
+## 📖 Passo 6: Swagger (OBRIGATÓRIO — nunca pular)
+
+Todo endpoint criado/alterado DEVE ter o bloco `@swagger` no arquivo de rotas
+(como no exemplo do Passo 3), com: tag do módulo, `security` correto
+(`BearerAuth` para /api/*, `ApiKeyAuth` para /sync/*, `[]` para públicas) e
+responses 200/201/400/401/403/500.
+
+⚠️ O swagger-jsdoc SÓ lê arquivos que casam com os globs `apis` de
+`src/shared/swagger/swagger-config.ts` (hoje: `src/modules/**/*.routes.ts` e
+`src/modules/sync/endpoints/*.ts`). Rota documentada em arquivo fora desses
+padrões NÃO aparece no /docs — nomeie o arquivo `*.routes.ts` ou adicione o glob.
+
+Validar: recarregar http://localhost:3000/docs e conferir a rota nova.
+
+---
+
+*Skill atualizada: 2026-07-12*
 

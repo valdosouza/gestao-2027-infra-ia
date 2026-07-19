@@ -664,6 +664,7 @@ ALTER TABLE `tb_tax_icms_nr` ADD PRIMARY KEY (`id`);
 19. **Sessão**: JWT final com **TTL 24h, sem refresh token** (relogin diário). Refresh token = implementação futura junto com o setes-app (mobile).
 20. **Prefixo de schema**: todo schema de cliente segue `setes_<nome>` — validação do onboarding usa `/^setes_[a-z0-9_]+$/` (substituiu `gestao_`).
 21. **Sincronizador**: `sync_api_keys` → `tb_sync_api_key` (script 05), indexada por `tb_institution_id` int com FK; `schema_name` deixa de ser duplicado (vem por JOIN de `tb_institution`).
+22. **Feature flag — extração do moduleKey e módulos isentos (2026-07-12)**: o middleware é montado via `app.use('/api', ...)`, e o Express remove o prefixo do mount de `req.path` — o moduleKey é `req.path.split('/')[1]` (o índice `[2]` original lia o segmento errado, ex.: `status` em `/api/erp/status`; bug ficava invisível porque o super bypassa). Existe lista de isentos `FLAG_EXEMPT_MODULES = ['core']` — `core` serve o menu (`/api/core/menus`) e precisa responder para todo cliente autenticado antes de qualquer flag. Cadastros do catálogo central (countries, states...) NÃO entram na lista: já são bloqueados pelo `superGuard`, e negar por padrão é mais seguro. Teste de regressão em `src/__tests__/feature-flag.middleware.test.ts` (monta o middleware em `/api` como no app.ts).
 
 ---
 

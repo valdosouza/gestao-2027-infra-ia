@@ -36,6 +36,12 @@
 - [ ] Nomes em inglês (caso real: `acao_botao` → `button_action`)
 - [ ] Tabela vive na base certa? (central × schema do cliente — nunca as duas)
 - [ ] FK cross-schema explícita quando referencia a central (caso real: `tb_customer` referenciando `tb_entity` local inexistente)
+- [ ] **Tabela nova em schema de cliente: o 001_baseline.sql (dump do legado) já a cria?**
+      (caso real 2026-07-18: `tb_collaborator` existia no baseline com o typo
+      `fahters_name` — o CREATE IF NOT EXISTS da migration 008 virou no-op e o
+      INSERT quebrou com Unknown column. Correção: a migration REALINHA —
+      DROP da versão legada + CREATE canônico, padrão fix-forward da 005;
+      conferir antes se nada tem FK para ela e se está vazia nos schemas vivos)
 
 ### Seeds e execução
 - [ ] **Seed compatível com o DDL final?** Colunas do INSERT existem? (caso real: seed com `salt` e `kind` após remoção das colunas)

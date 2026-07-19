@@ -38,6 +38,24 @@ Todo tenant é uma **institution** (`tb_institution`, id int). Login único em `
 - TTL **24h**, sem refresh token (decisão 19; refresh fica para o setes-app mobile)
 - `role` = `kind` do vínculo; **`'super'` fora da institution 1 é rebaixado para `'user'`** (decisão 14, hard coded em `@shared/auth/roles.ts` → `SETES_INSTITUTION_ID = 1`, `isSuper()`)
 
+## Padrão de estado de sessão (decisão 17 do Framework de Configurações, 2026-07-18)
+
+O JWT é **identidade mínima** — INVARIANTE: nenhum fato derivado entra no token
+(token de 24h ficaria defasado). Fatos derivados (1º caso: `isSalesman` =
+existe `tb_salesman` com id = userId na institution) vivem em
+`src/shared/session-context/` — resolvidos por request com **cache TTL**
+(`SESSION_CONTEXT_CACHE_TTL_MS`, molde field-config).
+
+- Toda emissão de **token final** (login 1-institution, select-institution,
+  switch-institution) devolve também o bloco **`context`**:
+  `{ ok, token, context: { "isSalesman": false } }`.
+- `GET /api/core/me` também devolve `context` — o app re-hidrata o
+  `SessionContext` (app/shared/session/) no refresh.
+- O bloco é **UX apenas**; enforcement de regra (ex.: filtro de carteira do
+  módulo customers) é SEMPRE da API, consultando o mesmo session-context.
+- Fato novo de sessão = campo novo em `SessionContext` (types) + resolver no
+  service — substituto único das variáveis globais GB_* do Delphi.
+
 ## Integração com o gateway
 
 - `req.institution: InstitutionPayload` (era `req.tenant`/`TenantPayload` — eliminado)

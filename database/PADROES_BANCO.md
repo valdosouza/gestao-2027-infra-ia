@@ -23,6 +23,7 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
 - Foge deliberadamente do padrão `tb_entity_id` — decisão por similaridade/herança (ObjEntity → ObjEntityFiscal)
 - Exceção: tabelas N:N mantêm o padrão `tb_<tabela>_id`
 - Tabelas "lista por tipo" (endereço, telefone, rede social) usam PK composta (`id`, `kind`) — um registro por tipo
+- **Herança em DOIS níveis** (Valdo, 2026-07-17): `tb_salesman` herda de `tb_collaborator`, que herda de `tb_entity` — todo vendedor É colaborador (precedência obrigatória); colaborador pode ser só administrativo. O `id` é o mesmo na cadeia inteira. `tb_collaborator` CRIADA em 2026-07-18 (sql/03 + migration 008; PK `(id, tb_institution_id)`, FK `id → setes_central.tb_entity`); a precedência será instituída na APLICAÇÃO quando o cadastro de salesman nascer (FK física descartada — schemas com salesman sincronizado do legado a inviabilizam). Hierarquia completa: Entity → EntityFiscal → {Customer, Provider, Carrier, Bank, Institution, Collaborator → Salesman} (detalhes: `setes-app/skills/cadastro-entidade-fiscal.md`)
 
 ## 3. Colunas padrão em toda tabela
 
@@ -55,6 +56,35 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
 | Referência fiscal: `tb_cfop`, `tb_ncm`, `tb_cest`, `tb_tax_*`, `tb_deter_base_*`, `tb_discharge_icms` | |
 
 - Dois níveis de autorização (decisão 17 setes-app): `tb_feature_flag` = gate técnico de módulos da API (central); `tb_institution_has_interface` = contrato comercial por tela (schema do cliente). A tela de cliente do Super mantém as duas coerentes.
+
+- **Par catálogo × valor** (padrão consolidado — Fase 2 campos + Framework de
+  Configurações 2026-07-18): característica intrínseca do produto vive UMA vez
+  no catálogo em `setes_central` (`tb_interface_has_field`,
+  `tb_interface_has_config`); a escolha do cliente vive no `setes_<schema>`
+  (`tb_institution_has_field`, `tb_institution_has_config`) com FK composta
+  cross-schema para o catálogo (COLLATE precisa coincidir — utf8mb4_unicode_ci).
+  Valor só existe quando DIVERGE do herdado. Em `tb_institution_has_config`,
+  `tb_user_id` na PK usa **sentinel 0** = valor da institution (coluna de PK
+  não aceita NULL); >0 = override do usuário (só quando o catálogo marca
+  `scope='U'`). Resolução: usuário → institution → default do catálogo.
+
+- **Catálogo central INICIADO PELO CLIENTE** (3º padrão de catálogo — Formas de
+  Pagamento, Valdo 2026-07-18): a tabela vive em `setes_central` mas quem
+  alimenta é o CLIENTE — dedupe por DESCRIÇÃO dentro da transação (existe =
+  reusa/vincula; não existe = MAX+1 e vincula — reuso entre clientes, mesmo
+  espírito da entidade única). O uso por institution fica em
+  `setes_<schema>.tb_institution_has_<x>` (atributos do vínculo, ex.:
+  enable/app_mobile/max_parcels/usage_preference — migration 012). Na linha
+  do catálogo, a DESCRIÇÃO é imutável (chave do reuso); atributos técnicos
+  como `id_nfce` são editáveis pela tela — o PUT atualiza a linha CENTRAL,
+  valendo para todos os clientes vinculados. O cliente nunca exclui a linha
+  compartilhada — por isso o vínculo tem `enable` (desabilitar por um
+  tempo). Helpers em `@shared/payment-types` (molde; upsertLink sem attrs
+  NÃO sobrescreve a configuração existente do vínculo — só ressuscita).
+- `tb_interface.kind char(1) NOT NULL DEFAULT 'T'` (decisão 13 do Framework):
+  'T' = tela (vai a menu), 'R' = recurso/aba vendável (NUNCA vai a menu — os
+  ramos da montagem filtram `kind='T'`). A coluna legada varchar(26) foi
+  reaproveitada; bootstrap-db.ts normaliza valores antigos para 'T'.
 
 - FKs do schema do cliente para a central são **cross-schema explícitas**: `REFERENCES setes_central.tb_entity (id)`
 - Script 04 (`sql/04_schema_cliente_cleanup.sql`) remove dos schemas o que foi centralizado
