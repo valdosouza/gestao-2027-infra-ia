@@ -6,6 +6,7 @@ DP1–DP12, TODAS validadas pelo Valdo em 2026-07-18).
 **Status**: entregáveis das Fases 2–7 EXECUTADOS e decisões VALIDADAS
 (2026-07-18). Implementação liberada para planejamento — bloqueio
 remanescente: revisão do sync antes da migration em schema sincronizado.
+**Escopo**: setes
 **Implementação em ONDAS** (início 2026-07-18, "vamos implementar" do
 Valdo; sync SEGUE o padrão depois — não é bloqueio):
 - **Onda 1 (banco) — FEITA**: migration `013_ordem_servico.sql` (financeiro

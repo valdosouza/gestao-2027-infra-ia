@@ -1,3 +1,5 @@
+**Escopo**: metodo
+
 Você é um engenheiro Flutter sênior focado em testes automatizados. Quero que você implemente uma base completa de testes no meu projeto Flutter existente, de forma incremental e sem refatorações grandes, priorizando cobertura de regressão pós-upgrade.
 
 OBJETIVO

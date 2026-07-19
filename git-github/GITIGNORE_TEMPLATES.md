@@ -1,5 +1,7 @@
 # .gitignore Templates — Copiar e Usar
 
+**Escopo**: metodo
+
 Copie o template apropriado para cada projeto.
 
 ---

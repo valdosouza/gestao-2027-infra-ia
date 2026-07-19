@@ -1,4 +1,5 @@
 # 📚 CLAUDE.md - Documentação do Codebase
+**Escopo**: setes
 
 ## 🎯 Visão Geral
 

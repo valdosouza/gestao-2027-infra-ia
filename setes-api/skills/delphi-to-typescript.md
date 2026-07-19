@@ -3,6 +3,7 @@
 **Objetivo**: Ler código Delphi (Models, Data Objects) e reescrevê-lo como TypeScript/JavaScript para setes-api  
 **Tempo**: ~30-45 minutos (depende da complexidade)  
 **Pré-requisito**: Agente especializado "Delphi-to-TypeScript" ativo  
+**Escopo**: misto
 
 ---
 

@@ -3,6 +3,7 @@
 **Objetivo**: Configurar setes-api do zero para produção  
 **Tempo**: ~15 minutos  
 **Prerequisitos**: Node.js 18+, npm 9+, MySQL rodando, JWT_SECRET gerada
+**Escopo**: setes
 
 ---
 

@@ -12,6 +12,7 @@ Carrier (decisão 11); revisão do sync com reindexação (decisão 12).
 **Método**: `Infra-IA/skills-genericas/refinar-prompt-arquitetura.md`
 **Origem**: rascunho do Valdo (chat 2026-07-15) + referência Delphi
 `D:\gestaoweb\files\cad_entity_fiscal.pas` → `TCadEntityFiscal.saveEntityFiscal` (linha 456)
+**Escopo**: setes
 
 ---
 

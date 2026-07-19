@@ -2,6 +2,7 @@
 
 **Objetivo**: Testar fluxo completo: Sync → API → Dados  
 **Tempo**: ~10 minutos
+**Escopo**: setes
 
 ---
 

@@ -1,4 +1,7 @@
 # Contexto
+
+**Escopo**: setes
+
 	Realinhar a parceria por que ele ficou parecido como eu pensei num sistema anterior, mas ficou muito engessada.
 	
 # Objetivo

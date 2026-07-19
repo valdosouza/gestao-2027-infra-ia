@@ -1,4 +1,5 @@
 # Prompt Técnico APP - Flutter
+**Escopo**: misto
 
 
 ## Contexto para o assistente de código

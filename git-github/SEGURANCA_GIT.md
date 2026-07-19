@@ -1,6 +1,7 @@
 # 🔐 Segurança Git — O Que NÃO Commitar
 
 **Crítico**: Prevenir dados sensíveis e código inútil no GitHub
+**Escopo**: metodo
 
 ---
 

@@ -2,6 +2,7 @@
 
 **Objetivo**: Validar que sincronização está funcionando corretamente  
 **Tempo**: ~5 minutos
+**Escopo**: setes
 
 ---
 

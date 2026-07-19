@@ -1,4 +1,5 @@
 # Documentação — setes-sync
+**Escopo**: setes
 
 ## 📚 Índice de Documentação
 

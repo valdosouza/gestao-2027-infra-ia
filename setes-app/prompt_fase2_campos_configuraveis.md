@@ -3,7 +3,8 @@
 **Status**: FECHADO (2026-07-12, 22 decisões em 4 rodadas) — **IMPLEMENTADO em 2026-07-12**
 **Início/Fechamento**: 2026-07-12
 **Método**: `skills-genericas/refinar-prompt-arquitetura.md` (rodadas de decisão numeradas)
-**Escopo**: setes-api + setes-app + sql (central e schema do cliente)
+**Projetos**: setes-api + setes-app + sql (central e schema do cliente)
+**Escopo**: setes
 
 > **Implementação (2026-07-12)**: DDL aplicado (sql/01, sql/03, migration 004,
 > seed sql/07 — 5 telas-piloto + interface 7 do painel). API: `shared/validation`

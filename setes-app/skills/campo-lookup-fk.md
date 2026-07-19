@@ -6,6 +6,7 @@ Cidade — e `customer_register_city_list_widget.dart`), adaptado ao design syst
 **Referências**: `criar-formulario-cadastro.md` (contrato visual), decisão 11 (setes_widgets)
 **Quando usar**: TODO campo de formulário que grava um id de outra tabela (tb_xxx_id).
 O usuário NUNCA digita id — ele escolhe numa lista com filtro.
+**Escopo**: misto
 
 ---
 

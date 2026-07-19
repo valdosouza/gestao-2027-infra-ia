@@ -3,6 +3,7 @@
 **Objetivo**: Fazer commit e push com segurança  
 **Tempo**: 2 minutos  
 **Frequência**: Sempre que terminar trabalho
+**Escopo**: metodo
 
 ---
 

@@ -6,6 +6,7 @@
 **Modelos prontos**: `src/modules/countries/` (simples, código digitado + 409),
 `src/modules/interfaces/` (id MAX+1 + N:N), `src/modules/privileges/` (mínimo, id MAX+1)
 **Tempo**: ~20-30 min
+**Escopo**: setes
 
 ---
 

@@ -5,6 +5,7 @@
 **Referências**: `ARQUITETURA_MODULOS.md` (app), `Infra-IA/setes-api/ARQUITETURA_MODULOS_API.md` (API),
 legado `Infra-IA/codigo-aprendizado/weberpsetes/lib/app/modules/customer_register` (UI de referência)
 **Primeiro caso real**: Institution/Estabelecimento (2026-07-11)
+**Escopo**: setes
 
 ---
 

@@ -3,6 +3,7 @@
 **Quando usar**: sempre que houver um rascunho de ideias (txt solto, anotações, DDL colado) que precisa virar um prompt executável de fase/projeto.
 **Tempo**: 2–5 rodadas curtas (assíncronas)
 **Origem**: metodologia usada na Fase 2 (Gerenciamento Central) — rascunho de 538 linhas virou prompt fechado com 21 decisões, 5 scripts SQL validados e código refatorado com testes.
+**Escopo**: metodo
 
 ---
 

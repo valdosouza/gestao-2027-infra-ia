@@ -3,6 +3,7 @@
 **Objetivo**: Onboard novo cliente no sistema multi-tenant  
 **Tempo**: ~5 minutos  
 **Exemplo**: Adicionando "Empresa Delta"
+**Escopo**: setes
 
 ---
 

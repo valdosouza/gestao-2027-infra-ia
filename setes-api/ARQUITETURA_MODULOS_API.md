@@ -3,6 +3,7 @@
 **Status**: Vigente (decisão do Valdo, 2026-07-11)
 **Espelho no app**: `Infra-IA/setes-app/ARQUITETURA_MODULOS.md` (LER junto)
 **Aplicado em**: countries, states, cities, interfaces, privileges (migração do antigo `modules/super`)
+**Escopo**: misto
 
 ---
 

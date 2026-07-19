@@ -1,4 +1,5 @@
 # Prompt — Fase 2: Gerenciamento Central (Superusuário e Cadastro Unificado)
+**Escopo**: setes
 
 ## Contexto
 

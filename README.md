@@ -1,5 +1,7 @@
 # Gestao 2027 — Infra-IA (Documentação)
 
+**Escopo**: misto
+
 ## 📚 Índice Central de Documentação
 
 Documentação de todos os componentes do projeto Gestao 2027.

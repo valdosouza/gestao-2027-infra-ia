@@ -4,6 +4,7 @@
 **Data**: 2026-07-04
 **Status**: Desacoplamento Completo ✅ | Fase 2 (Gerenciamento Central) concluída no backend
 **Decisões vigentes**: `setes-api/prompt_fase2_gerenciamento_central.md` — em conflito, a Fase 2 prevalece
+**Escopo**: misto
 
 ---
 

@@ -1,6 +1,7 @@
 # Prompt — Framework de Configurações do Sistema
 
 **Status**: ✅ IMPLEMENTADO (2026-07-18) — 17 decisões em 4 rodadas (fechado 2026-07-17)
+**Escopo**: setes
 
 ## Notas da implementação (2026-07-18)
 

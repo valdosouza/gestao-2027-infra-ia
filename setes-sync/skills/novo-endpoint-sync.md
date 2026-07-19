@@ -3,6 +3,7 @@
 **Objetivo**: Criar novo endpoint de sync em setes-sync  
 **Tempo**: ~15 minutos  
 **Exemplo**: Criando endpoint `/new-entity/sincronize`
+**Escopo**: setes
 
 ---
 

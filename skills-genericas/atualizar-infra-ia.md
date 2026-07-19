@@ -2,6 +2,7 @@
 
 **Quando usar**: ao FINAL de qualquer tarefa que gerou conhecimento novo — decisão arquitetural, padrão, procedimento repetível, documentação de módulo, lição aprendida. Obrigatória, mesmo sem pedido explícito do Valdo.
 **Tempo**: 5–15 min
+**Escopo**: metodo
 
 ---
 
@@ -43,7 +44,16 @@ Ao criar/alterar qualquer arquivo acima, atualize NA MESMA tarefa:
 ## 4. Convenções de escrita
 
 - Português; nomes de arquivo em kebab-case para skills, MAIUSCULAS.md para docs de referência
-- Todo doc começa com: **Status/Versão, Origem (qual fase/conversa), Referências**
+- Todo doc começa com: **Status/Versão, Origem (qual fase/conversa), Referências** e **Escopo** (regra abaixo)
+- **Escopo obrigatório** (decisão do Valdo, 2026-07-19 — produtização da engine de modernização):
+  todo arquivo NOVO ou TOCADO na Infra-IA ganha no cabeçalho a linha
+  `**Escopo**: metodo | setes | misto`
+  - `metodo` = vale para migrar QUALQUER empresa/legado (portável como produto)
+  - `setes` = conteúdo do caso zero (domínio, telas, DDL, decisões de negócio da Setes)
+  - `misto` = princípio portável amarrado à stack/domínio Setes (candidato a destilar depois)
+  - Por quê: a separação método × conteúdo virá por FILTRO quando o gatilho disparar
+    (ver `prompts/rascunho_engine_modernizacao.md` — não separar antes; marcar sempre)
+  - Insight de produto durante o trabalho? → uma linha no "Diário de insights" do rascunho acima
 - Decisões citam o porquê em 1 linha (ex.: "MD5 mantido — decisão do Valdo, risco registrado")
 - Skills têm seção "casos reais" quando nasceram de erros encontrados (ex.: `revisar-ddl.md`)
 

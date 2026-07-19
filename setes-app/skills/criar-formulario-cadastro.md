@@ -6,6 +6,7 @@
 **Cadastro que herda a cadeia fiscal** (Institution/Customer/Provider/Collaborator/Bank): esta skill continua valendo para o contrato visual, mas a estrutura (abas compartilhadas, cascade, PF/PJ) vem de `cadastro-entidade-fiscal.md` — LER JUNTO.
 **Quando usar**: SEMPRE que criar ou reformar uma tela de cadastro (CRUD) no setes-app.
 **Tempo**: 30–60 min por cadastro
+**Escopo**: misto
 
 ---
 

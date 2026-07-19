@@ -3,6 +3,7 @@
 **Versão**: 1.0 (2026-07-04)
 **Propósito**: Definir onde CADA arquivo novo entra. Nenhum arquivo fica solto na raiz.
 **Princípio**: simetria — para cada projeto de software em `D:\Gestao2027\<projeto>` existe um espelho `Infra-IA\<projeto>` com sua documentação. O código fica no projeto; o conhecimento fica no espelho.
+**Escopo**: misto
 
 ---
 

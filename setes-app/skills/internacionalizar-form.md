@@ -4,6 +4,7 @@
 **Origem**: Decisão 26 do prompt_fase1_fundacao.md (i18n via easy_localization) +
 pedido do Valdo (2026-07-10): todo form novo nasce internacionalizado.
 **Quando usar**: em TODO formulário/tela nova, e ao tocar em tela antiga com string fixa.
+**Escopo**: setes
 
 ---
 

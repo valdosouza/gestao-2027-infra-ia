@@ -3,6 +3,7 @@
 **Objetivo**: Configurar setes-sync do zero para produção  
 **Tempo**: ~20 minutos  
 **Prerequisitos**: Node.js 18+, npm 9+, MySQL rodando, X-Api-Key geradas
+**Escopo**: setes
 
 ---
 

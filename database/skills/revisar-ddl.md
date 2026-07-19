@@ -4,6 +4,7 @@
 **Tempo**: ~15 min
 **Origem**: 20+ inconsistências reais encontradas e corrigidas na Fase 2 (Gerenciamento Central) — cada item abaixo aconteceu de verdade.
 **Referência de padrões**: `database/PADROES_BANCO.md`
+**Escopo**: misto
 
 ---
 

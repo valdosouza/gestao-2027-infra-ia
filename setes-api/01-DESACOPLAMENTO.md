@@ -1,4 +1,5 @@
 # Desacoplamento — setes-api
+**Escopo**: setes
 
 ## ✅ Conclusão do Desacoplamento
 

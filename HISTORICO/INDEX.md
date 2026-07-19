@@ -1,6 +1,7 @@
 # 📚 Histórico — Gestão 2027
 
 **Propósito**: Arquivos históricos e documentação anterior (referência)
+**Escopo**: setes
 
 ---
 

@@ -3,6 +3,7 @@
 **Status**: 🔨 Fase 1 em implementação — backend PRONTO (endpoints + migration 003); esqueleto do monorepo Flutter CRIADO (2026-07-05, ver `D:\Gestao2027\setes-app\README.md`)
 **Projeto**: `D:\Gestao2027\setes-app` (Flutter — monorepo: packages/core, packages/setes_widgets, apps/web)
 **Atende**: usuário final, consumindo `setes-api` (`/auth/*` e `/api/*` com JWT)
+**Escopo**: setes
 
 ---
 

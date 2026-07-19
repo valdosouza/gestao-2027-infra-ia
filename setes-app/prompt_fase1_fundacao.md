@@ -3,6 +3,7 @@
 **Status**: ✅ FECHADO — rodadas 0–3 concluídas; 23 decisões registradas; questões pendentes: nenhuma
 **Origem**: `Prompt - Aplicativo Flutter.txt` (rascunho de 2026-07-05) — skill: `skills-genericas/refinar-prompt-arquitetura.md`
 **Numeração de fase**: por projeto (setes-app Fase 1 ≠ setes-api Fase 1)
+**Escopo**: setes
 
 ---
 

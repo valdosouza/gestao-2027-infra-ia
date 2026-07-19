@@ -1,4 +1,5 @@
 # Prompt — Semana 2: Migrations, Onboarding e Testes
+**Escopo**: setes
 
 ## Contexto
 

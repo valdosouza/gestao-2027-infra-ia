@@ -1,4 +1,5 @@
 # Swagger Documentation — setes-sync API
+**Escopo**: setes
 
 ## ✅ Integração Concluída
 

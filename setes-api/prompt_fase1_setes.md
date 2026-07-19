@@ -1,4 +1,5 @@
 # Prompt — Fase 1: Criação do projeto Setes API
+**Escopo**: setes
 
 ## Contexto
 

@@ -1,4 +1,5 @@
 # Agent: Análise e Documentação de Projeto de Migração Legado
+**Escopo**: misto
 
 ---
 

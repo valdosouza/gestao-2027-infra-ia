@@ -1,6 +1,7 @@
 # Gestao 2027 — Relatório de Código Existente
 
 **Data**: 2026-07-01 | **Levantamento**: Completo
+**Escopo**: setes
 
 ---
 

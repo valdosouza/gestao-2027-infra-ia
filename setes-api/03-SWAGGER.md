@@ -3,6 +3,7 @@
 **Status**: Vigente — cobertura COMPLETA desde 2026-07-12 (61 paths / 83 operações)
 **Regra inegociável**: TODO endpoint criado ou alterado ganha bloco `@swagger` JSDoc
 no arquivo de rotas, na MESMA entrega. Endpoint sem Swagger = tarefa incompleta.
+**Escopo**: setes
 
 ---
 

@@ -2,6 +2,7 @@
 
 **Objetivo**: Criar novo endpoint de negócio em setes-api  
 **Tempo**: ~15 minutos
+**Escopo**: setes
 
 ---
 

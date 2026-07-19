@@ -4,6 +4,7 @@
 **Origem**: Refatoração que eliminou o módulo "super" agregador. Padrão comprovado do
 weberpsetes (`Infra-IA/codigo-aprendizado/weberpsetes/lib`), adaptado ao monorepo.
 **Substitui**: qualquer orientação anterior que agrupasse telas por "módulo de sistema".
+**Escopo**: misto
 
 ---
 

@@ -3,6 +3,7 @@
 **Projeto:** Sincronizador Firebird 2.5 → MySQL via API Node.js  
 **Data da análise:** 2026-05-31  
 **Base analisada:** `Sincronizador/` (models, controllers, classes, functions) + `Api/src/data_objetcs/`
+**Escopo**: setes
 
 ---
 

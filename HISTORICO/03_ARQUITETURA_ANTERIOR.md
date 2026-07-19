@@ -1,5 +1,7 @@
 # Arquitetura — Gestao 2027
 
+**Escopo**: setes
+
 ## 📋 Índice de Arquitetura
 
 ### 1. **Visão Geral**

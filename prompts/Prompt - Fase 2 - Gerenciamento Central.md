@@ -1,5 +1,7 @@
 # Prompt — Fase 2: Gerenciamento Central (Superusuário e Cadastro Unificado)
 
+**Escopo**: setes
+
 ## Contexto
 
 A Setes, desenvolvedora e mantenedora do sistema, também será **cliente do próprio sistema**.

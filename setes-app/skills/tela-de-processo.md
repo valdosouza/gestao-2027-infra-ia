@@ -7,6 +7,7 @@ ciclo mensal** (módulos `service-orders` na API × `service_orders` no app,
 Onda 4 do Módulo Software House, 2026-07-19).
 **Tipos anteriores**: lista+form (fábrica Register*) e árvore
 (SetesTreeView) — ver `criar-formulario-cadastro.md`.
+**Escopo**: misto
 
 ---
 

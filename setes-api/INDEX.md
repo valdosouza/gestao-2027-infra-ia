@@ -1,4 +1,5 @@
 # Documentação — setes-api
+**Escopo**: setes
 
 ## 📚 Índice de Documentação
 

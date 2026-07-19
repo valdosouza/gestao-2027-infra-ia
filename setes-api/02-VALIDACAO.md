@@ -1,4 +1,5 @@
 # Validação — setes-api (ERP Puro)
+**Escopo**: setes
 
 ## ✅ Validação Concluída
 

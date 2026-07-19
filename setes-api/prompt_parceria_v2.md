@@ -4,6 +4,7 @@
 refinado em 1 rodada de decisões e IMPLEMENTADO no mesmo dia.
 **Contexto**: o trio tb_partnership/_customer/_partner (Onda 3 do Módulo
 Software House) ficou "engessado" — parecido com um sistema anterior.
+**Escopo**: setes
 
 ## Conceito
 

@@ -1,6 +1,7 @@
 # 🔐 Resumo de Segurança — Git/GitHub Gestão 2027
 
 **Status**: ✅ **MÁXIMA SEGURANÇA IMPLEMENTADA**
+**Escopo**: metodo
 
 ---
 

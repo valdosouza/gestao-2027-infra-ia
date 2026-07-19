@@ -1,6 +1,7 @@
 # ⚡ Guia Rápido — Usar Skills em 30 Segundos
 
 **Objetivo**: Referência ultra-rápida para achar a skill certa
+**Escopo**: misto
 
 ---
 

@@ -1,4 +1,7 @@
 # Contexto
+
+**Escopo**: setes
+
 	Sistema de Validacao dos formualarios esta muito fraco/amador, 
 	Agora que temos um numero bom de formularios/tela/UI. podemos analisamos de forma geral e criar algo que atenda de forma uniformizada
 	

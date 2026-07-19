@@ -4,6 +4,7 @@
 **Módulo**: `setes-api/src/modules/auth/` (repository, service, routes)
 **Especificação completa**: `prompt_fase2_gerenciamento_central.md` (decisões 8, 10, 14, 16–19)
 **Testes**: `src/__tests__/auth-login.test.ts` (11 testes)
+**Escopo**: setes
 
 ---
 

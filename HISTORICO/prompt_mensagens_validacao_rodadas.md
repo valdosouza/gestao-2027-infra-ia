@@ -3,6 +3,7 @@
 **Origem**: rascunho do Valdo `Modelo de mensagem de Alera e validacao.md`
 (nesta pasta). **Status**: RODADA 1 ABERTA (avaliação feita em 2026-07-19;
 NADA implementado — ordem expressa do Valdo: avaliar tudo antes).
+**Escopo**: setes
 
 ---
 
@@ -75,8 +76,72 @@ SnackBar (vira canal exclusivo de sucesso).
 | R7 | Campo de severidade no envelope JSON? | NÃO (status já discrimina; redundância contradiz) |
 | R8 | Mensagens de NEGÓCIO do backend (PT hardcoded) exibidas no dialog | Aceitar PT por ora (produto é PT-BR); catálogo por código de erro = peça futura que AGREGA |
 
-## 4. Após a rodada
+## 4. RODADA 1 — respostas do Valdo (2026-07-19)
 
-Fechar o prompt (mover p/ setes-app ou skills-genericas) e implementar em
-ondas: (1) peças B+E+F + skill; (2) varredura do canal nas telas; (3)
-engine Fase 2 nas telas novas conforme tocadas.
+| # | Decisão |
+|---|---|
+| R1 | ✅ Sucesso = SnackBar; dialog p/ validação/erro/decisão |
+| R2 | ✅ REVISADA: rastro em TABELA — reusar/melhorar a `tb_crashlytics` do baseline ("log na tabela é melhor"); avaliar melhorias na estrutura |
+| R3 | ✅ REVISADA: **foca SÓ no campo** — usuários têm problema com múltiplas validações simultâneas (uma pendência por vez) |
+| R4 | ✅ Estrutura DEVE prever Sim/Não/Cancelar — há casos em que Sim gera uma ação, Não gera OUTRA ação, e o usuário indeciso precisa do Cancelar |
+| R5 | ⏳ Pediu explicação melhor (respondida na rodada 2) |
+| R6 | ⏳ Discussão aberta: o AGENTE que cria telas precisa SABER as validações para já criar certo (proposta na rodada 2) |
+| R7 | ✅ Sem campo de severidade no JSON |
+| R8 | ✅ REVISADA: **catálogo de erros conhecidos AGORA** (não futuro) — ajuda análise junto com a tb_crashlytics |
+
+## 5. RODADA 2 — respostas do Valdo (2026-07-19)
+
+- **R2a** ✅: tb_crashlytics vai para a **setes_central** (suporte enxerga
+  todos os clientes numa consulta). AUTO_INCREMENT mantido como exceção
+  documentada (recomendação sem objeção — log não pode falhar por corrida).
+- **R3a** ✅ (consequência direta da R3, sem objeção): uma pendência por
+  vez — dialog com a 1ª pendência → OK → foco no campo; a próxima aparece
+  no próximo salvar.
+- **R5** ✅: **PRIMEIRA ONDA COMPLETA — "não deixar nada para trás,
+  gerando débito técnico"**: canal novo + engine da Fase 2 nas 6 telas
+  artesanais na MESMA onda de adoção.
+- **R6** ✅ (proposta sem objeção): catálogo-primeiro + skill obrigatória
+  `mensagem-e-validacao.md` + setes-form-builder ATUALIZADO para ler o
+  catálogo e gerar validators/FieldConfigLoader/ponte (proibido SnackBar
+  direto).
+- **R8** ⏳: Valdo pediu mais conversa — não entendeu "tabela criaria
+  sincronização de deploy sem ganho". Explicação + proposta HÍBRIDA na
+  rodada 3: arquivo como fonte (código e erro nascem no mesmo commit) +
+  tabela de REFERÊNCIA derivada automaticamente por gerador (padrão
+  fields:gen) para os joins SQL com a crashlytics.
+
+## 6. Rodada 2 — material original (análises)
+
+- **R2a**: tb_crashlytytics hoje: por schema, PK (id,institution) com
+  AUTO_INCREMENT (única do produto), origen varchar(100), message blob.
+  Melhorias propostas: +`ref` (código de rastro exibido ao usuário),
+  +`code` (catálogo R8), +`status_code`, message guarda JSON
+  {message, stack, payload}; KEY created_at. Questões: (a) mantém no
+  SCHEMA do cliente ou sobe p/ setes_central (suporte enxerga todos os
+  clientes numa consulta — recomendo CENTRAL)? (b) AUTO_INCREMENT vira
+  exceção documentada do padrão (log não pode falhar por corrida de
+  MAX+1 — recomendo manter AI e registrar em PADROES_BANCO)?
+- **R3a**: desenho "uma pendência por vez": no salvar, a 1ª pendência
+  vira dialog OK → foco no campo (inline marca só ele); corrigiu → salvar
+  de novo mostra a próxima. Confirmar.
+- **R5 (explicação)**: duas frentes distintas — (i) trocar o CANAL
+  (SnackBar de erro → apresentador) nas telas existentes é mecânico e
+  rápido (1 onda curta cobre tudo); (ii) adotar o ENGINE da Fase 2
+  (Form + catálogo de campos + assertClientRequired) nas 6 telas
+  artesanais é reescrita de form POR TELA (trabalho grande). Recomendo:
+  onda única para (i); (ii) por tela conforme forem tocadas — OU uma onda
+  dedicada se o Valdo priorizar. Decidir.
+- **R6 (proposta)**: não é agente novo — é dar OLHOS ao executor:
+  (a) workflow "catálogo primeiro" (toda tela nova já nasce com seu
+  tb_interface_has_field no seed + DTO Zod — as DUAS fontes da validação);
+  (b) skill `mensagem-e-validacao.md` obrigatória; (c) ATUALIZAR o agente
+  setes-form-builder para LER o catálogo da interface e gerar os
+  validators + FieldConfigLoader + ponte de feedback (nunca SnackBar
+  direto). setes-conceito guarda o conceito; form-builder executa com
+  validação nativa. Confirmar.
+- **R8a**: catálogo de erros como ARQUIVO compartilhado
+  (shared/errors/error-codes.ts — código estável por erro conhecido,
+  ex.: DUP_DOCUMENT, ORDER_INVOICED, RATE_SUM_EXCEEDED) gravado no
+  envelope `{error, code, ref?, fields[]}` e na coluna `code` da
+  crashlytics (agregação SQL). Alternativa: tabela-catálogo central.
+  Recomendo ARQUIVO (nasce e evolui com o build, como DTO). Decidir.

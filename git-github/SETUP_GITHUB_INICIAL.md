@@ -3,6 +3,7 @@
 **Objetivo**: Preparar GitHub para receber código via agente  
 **Tempo**: ~15 minutos  
 **Crítico**: Fazer ANTES que agente faça push
+**Escopo**: metodo
 
 ---
 

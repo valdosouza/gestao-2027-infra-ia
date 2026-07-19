@@ -1,4 +1,5 @@
 # 🎨 Exemplo de Uso do Theme Centralizado
+**Escopo**: setes
 
 ## Como os Apps Usam o Theme do Core
 

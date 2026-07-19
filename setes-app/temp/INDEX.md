@@ -3,6 +3,7 @@
 **Status**: ⏳ Projeto futuro — pasta criada para manter a simetria projetos × Infra-IA
 **Projeto**: `D:\Gestao2027\setes-app` (Flutter Web e Android)
 **Atende**: usuário final, consumindo `setes-api` (`/auth/*` e `/api/*` com JWT)
+**Escopo**: setes
 
 ---
 

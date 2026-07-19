@@ -2,6 +2,7 @@
 **Data:** 2026-07-04  
 **Status:** ⚠️ CRÍTICO - Exposições encontradas  
 **Ação:** Remover do histórico Git + atualizar .gitignore
+**Escopo**: setes
 
 ---
 

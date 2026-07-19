@@ -8,6 +8,7 @@ para o DDL em si; esta skill valida o CONCEITO antes do DDL existir).
 (2026-07-19) — "peças de lego sem formato final; nuvem é sempre nuvem".
 **Agente par**: `setes-conceito` (entra na orquestração para modelar
 conceitos novos em peças).
+**Escopo**: metodo
 
 ---
 

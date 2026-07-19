@@ -3,6 +3,7 @@
 **Versão**: 1.0
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
+**Escopo**: misto
 
 Este documento é a **referência permanente** para criar qualquer tabela nova. Toda DDL nova deve passar pela skill `database/skills/revisar-ddl.md` antes de executar.
 
@@ -40,7 +41,11 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
 ## 4. IDs
 
 - `int(11)`, **gerados pela aplicação** (`SELECT COALESCE(MAX(id),0)+1 ... FOR UPDATE` dentro de transação)
-- **Sem AUTO_INCREMENT** em nenhuma tabela
+- **Sem AUTO_INCREMENT** em nenhuma tabela — **EXCEÇÃO documentada** (Valdo,
+  2026-07-19, Framework de Mensagens R2): `setes_central.tb_crashlytics`
+  mantém AUTO_INCREMENT — log de erro não pode falhar por corrida de lock
+  justamente quando algo já deu errado; a chave de consulta real é o `ref`
+  (UNIQUE) exibido ao usuário
 
 ## 5. Separação setes_central × setes_<schema>
 

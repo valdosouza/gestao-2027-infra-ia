@@ -1,4 +1,5 @@
 # Documentação — Módulo Software House no Backbone `tb_order` (v4)
+**Escopo**: setes
 
 > **Uso:** prompt mestre para o Claude Desktop. Cole as seções 1–7 (contexto +
 > regras + financeiro + decisões) + a fase em andamento em cada sessão.

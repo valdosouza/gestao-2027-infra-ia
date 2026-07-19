@@ -4,6 +4,7 @@
 **Projeto**: Gestão 2027  
 **Data**: 2026-07-04  
 **Status**: ✅ Totalmente Configurado
+**Escopo**: misto
 
 ---
 

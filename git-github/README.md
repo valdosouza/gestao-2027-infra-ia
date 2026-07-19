@@ -1,6 +1,7 @@
 # 🚀 Git/GitHub — Envio Seguro
 
 **Objetivo**: Fazer push simples e seguro sem dados sensíveis
+**Escopo**: metodo
 
 ---
 

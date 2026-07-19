@@ -1,4 +1,5 @@
 # Prompt — Semana 4: Endpoints Reais de Sincronização
+**Escopo**: setes
 
 ## Contexto do projeto
 
