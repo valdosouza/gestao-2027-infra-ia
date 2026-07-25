@@ -170,3 +170,10 @@ Thumbs.db
 #    $ cp .env.example .env
 #    $ # edite .env com seus valores
 # ============================================================================
+
+# ============================================================================
+# EXCECOES (2026-07-25): documentacao de METODO capturada pelos padroes
+# largos acima (*secret*) — sao instrucoes, nao segredos. Excecao cirurgica
+# pelo nome exato; NAO liberar pastas inteiras.
+# ============================================================================
+!SETUP_PROTECAO_SECRETS.md
