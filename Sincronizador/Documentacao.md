@@ -20,14 +20,27 @@ O Sincronizador é uma aplicação Delphi que opera como agente de sincronizaç�
 		[TableName('')]
 	    [KeyField('')]
     	[FieldName('')] 
-	Local dos arquivos : C:\migration\Sincronizador\model
+	Local dos arquivos (2026-07-20): `D:\Gestao2027\sincronizador\origen\model` e
+	`D:\Gestao2027\sincronizador\destiny\model` — ambas as pastas estão no
+	`DCC_UnitSearchPath` do `.dproj` simultaneamente. ⚠️ São cópias que já
+	divergiram entre si em pelo menos um caso confirmado (ver nota abaixo);
+	tratar como migração em andamento, não como fonte única.
 
 ### 2.2 Models de Destino (MySQL / API Node)
 		Os models de destino estao dividos em
 			Simples - podem ser referenciados como um [De => Para ] com pequenos ajustes
-				local: C:\migration\Api\src\model
+				local (2026-07-20): `D:\Gestao2027\sincronizador\destiny\model`
 			Complexos - models que precisam ser enviados em grupos devido a relacionamento entre eles
-				Local: C:\migration\Api\src\data_objetcs
+				local (2026-07-20): `D:\Gestao2027\sincronizador\destiny\data_objetcs`
+
+		⚠️ Achado (2026-07-20): `objSalesMan.pas` existe em DUAS versões
+		incompatíveis — a de `destiny/data_objetcs` (achatada: `Vendedor`/
+		`Colaborador`/`Fiscal` como propriedades diretas) e uma versão antiga
+		com `objColaborador` aninhado. `ControllerColaborador.pas` (em
+		`origen/controller`) estava escrito contra a versão antiga e foi
+		corrigido para a forma achatada (decisão do Valdo: `destiny` é a
+		estrutura correta). Antes de reaproveitar qualquer DTO deste diretório,
+		conferir se `origen` e `destiny` não divergem no mesmo arquivo.
 				
 
 		Os "models de destino" no código Delphi são serializados via `TJson.ObjectToJsonString()`. 
@@ -48,7 +61,9 @@ O Sincronizador é uma aplicação Delphi que opera como agente de sincronizaç�
 			TReceiveFromWebServer - Recebe dados do servidor web e persiste no Firebird
 |			TGeneralSendFactory - Factory RTTI: instancia classe de envio pelo nome registrado em TB_LISTA_SINCRONIA			SINCRONIA.CLASS_NAME
 
-		Local : C:\migration\Sincronizador\controller
+		Local (2026-07-20): `D:\Gestao2027\sincronizador\origen\controller` e
+		`D:\Gestao2027\sincronizador\destiny\controller` (mesma ressalva de
+		divergência da seção 2.1/2.2 acima — ambas no search path).
 
 ### 2.4 Controllers de Destino
 

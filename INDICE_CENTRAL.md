@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 6.2 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 6.4 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-07-19  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -160,10 +160,41 @@ D:\Gestao2027\Infra-IA/
 
 **Documentação:**
 - `INDEX.md` — Comece aqui
-- `01-SWAGGER.md` — Interface Swagger/OpenAPI 3.0
-- `02-SETUP.md` — Instalação e configuração
+- `prompt_revisao_sincronizador_setes_sync.md` — ⭐ 2026-07-19 Prompt FECHADO (3 rodadas, 24 decisões D1–D24):
+  revisão completa Sincronizador × setes-sync. Regra canônica dos dois grupos (D1), indexação por
+  CPF/CNPJ/UUID — nunca emp_codigo (D3/D4), cadeia SEMPRE em setes_central + papel no schema do cliente (D13),
+  contrato JSON alinhado pelo Delphi ("quem aposenta se adapta" — D15/D22), soft delete DELETED (D2),
+  Brand/Package/Measure centralizados com tb_institution_has_* (D5/D17), auth tb_sync_api_key (D12),
+  rest-* aposentados (D23). Plano em 7 ondas + frente Delphi paralela. LER antes de mexer na setes-sync.
+- `MAPA_INDEXACAO.md` — ⭐ 2026-07-19 (D18): indexador por entidade (DOCUMENTO/UUID/
+  DESCRIÇÃO/ID LOCAL), casos onde o id do Firebird É aceito, pendências da Rodada 4.
+  Leitura OBRIGATÓRIA antes de criar/alterar endpoint de sync.
+- `CONTRATOS_SYNC.md` — ⭐ 2026-07-19 (D22): contrato JSON de TODOS os endpoints
+  revisados (fonte da verdade para o Delphi; par do Swagger /docs).
+- `01-SWAGGER.md` — Interface Swagger/OpenAPI 3.0 (globs agora escaneiam os endpoints)
+- `02-SETUP.md` — Instalação e configuração (⚠️ auth mudou: tb_sync_api_key, sem chave global)
 - `03-INSTRUCOES_TESTE.md` — Testes e validação
-- `04-MULTI_TENANT_SETUP.md` — Multi-tenancy
+- `04-MULTI_TENANT_SETUP.md` — Multi-tenancy (⚠️ pré-revisão)
+- ✅ 2026-07-19: revisão IMPLEMENTADA (Ondas 1–6) — camada de gravação reescrita no
+  padrão Fases 2/3; achados A1–A10 resolvidos. Patches Delphi: `sincronizador/patches-revisao-2026-07/`
+- `verificacao-setes-sync.md` — ✅ EXECUTADA 2026-07-25 (handoff claude.ai celular): verificação
+  local × GitHub — 28 endpoints, contrato D14, auth D12, rest* removidos, 14/14 testes; revisão
+  Ondas 1–6 commitada e publicada (`583ab6d` em origin/feature/fase2-gerenciamento-central;
+  merge para main em aberto)
+- `prompt_revisao_processo_atualiza_entidade.md` — ⭐ FECHADO e EXECUTADO 2026-07-25 (5 decisões):
+  revisão do processo de entidades (Cliente/Fornecedor/Transportadora/Colaborador). Decisões:
+  (1) colaborador fecha ciclo externalCode em TB_COLABORADOR (bootstrap + write-back por classe);
+  (2) documento inválido = sem documento (DerivePersonType em general_web — validação reativada);
+  (3) sentinela 12345677654321 mantida como dupla proteção; (4) frente carrier completa
+  (TCarrierSendWeb + /carrier/sincronize + seed Seq 38 + 409 do customer verifica PAPEL);
+  (5) 404 EXTERNAL_CODE_NOT_FOUND mantido explícito. Seed agora tem 38 linhas.
+- `prompt_correcao_documento_entidade.md` — ⭐ FECHADO e EXECUTADO 2026-07-25 (4 decisões):
+  GRADUAÇÃO do sem-doc — correção de CPF/CNPJ mantém o MESMO tb_entity.id (toggle soft-deleta
+  tb_no_doc). Decisões: (1) envelope `clearExternalCode:true` → Delphi limpa o EXTERNALCODE
+  da tabela da classe; (2) conflitos (doc de outra entity) em `setes_central.tb_sync_conflict`
+  — NUNCA mescla, ação manual; (3) órfão segue por documento SÓ se o doc estiver livre
+  (ocupado → 409 EXTERNAL_CODE_ORPHAN); (4) verificação governamental (BrasilAPI/Serpro) =
+  fase futura. 19/19 testes.
 
 **Skills (3):**
 1. `setup-setes-sync.md` — Setup inicial (~20 min)
@@ -216,11 +247,22 @@ D:\Gestao2027\Infra-IA/
 **Documentação:**
 - `Documentacao.md` — Overview
 - `Agent_Analise_Inicial_Migration.md` — Análise para migração
+- `prompt_construcao_banco_cliente.md` — ✅ IMPLEMENTADO (2026-07-24, 10 decisões): bootstrap
+  100% automático do Firebird do cliente (TB_SINCRONIA+generator+trigger, TB_LISTA_SINCRONIA
+  com checkpoint LAST_UPDATE, DELETED universal, EXTERNALCODE, triggers TG_SRC_* multi-evento
+  geradas do catálogo); TB_SYNC_TABLE REMOVIDA do projeto; DDL compatível Firebird 2.5↔5.0
+- `roteiro-implantacao-cliente.md` — ⭐ 2026-07-25 (handoff claude.ai celular): implantação de
+  campo por cliente em 6 fases (chave tb_sync_api_key → DDL Firebird → registro SISWEB →
+  primeiro start/bootstrap → sincronização inicial na ordem D8 com validações → encerramento);
+  NFS-e/CC-e fora até o patch 04. Repo saneado 2026-07-25: .gitignore Delphi criado, `config`
+  (payload real de cliente) e __history/ removidos do versionamento e EXPURGADOS de todo o
+  histórico (git filter-repo + force push — HEAD `4a47628`)
 
 **Notas:**
 - POST para `http://localhost:3001/<recurso>/sincronize`
 - Autenticação: `X-Api-Key`
 - Estrutura Delphi bem documentada
+- Checkpoint de último envio = `TB_LISTA_SINCRONIA.LAST_UPDATE` (nunca TB_SYNC_TABLE, que não existe mais)
 
 ---
 
@@ -436,6 +478,8 @@ D:\Gestao2027\Infra-IA/
 | 2026-07-19 | **Censo retroativo de Escopo COMPLETO** (decisão do Valdo: deixar o acervo sem avaliação = débito para a engine; classificar o próprio repositório = dogfooding da Fase 1): 4 agentes paralelos marcaram **88 documentos** — 16 `metodo` (skills genéricas + git-github + secrets), 20 `misto` (fila de destilação futura: arquiteturas de simetria, Delphi→TS, análise de legado, padrões de banco, skills de formulário), 52 `setes` (caso zero). Fora do censo: `codigo-aprendizado/` (código de estudo, não doc). Colisão corrigida: linha `Escopo` antiga do prompt_fase2_campos_configuraveis virou `Projetos`. Censo consolidado na seção 3.1 do `prompts/rascunho_engine_modernizacao.md`; verificação por grep | 5.9 |
 | 2026-07-19 | **Caso nº 2 real da engine: Softworks** (Valdo é dev lá; ~2M LOC/30 anos — testa ESCALA; já iniciada com indexação em grafo + memória + Obsidian). Registrado na seção 2.1 do rascunho da engine + regra de higiene multi-caso (conteúdo de caso NUNCA cruza empresas; só o método viaja; `misto` destilado sob demanda) + questão de PI na fila das rodadas. Sincronizador segue como caso interno (natureza serviço×telas) | 6.0 |
 | 2026-07-19 | **Kit de Portabilidade da engine v0.1 — `engine-kit/`** (1ª destilação real, a pedido do Valdo): README (manifesto+higiene multi-caso+versionamento), ESTRUTURA_BASE_CONHECIMENTO (Fase 0: o "vaso" — esqueleto+templates+tripla de memória), skills/ (guardiao-conceitual, rodadas-de-decisao, reter-conhecimento, censo-de-escopo, avaliar-repositorio-legado — este último = 1º `misto` destilado, do Agent_Analise + Fase 1.0 de dimensionamento/indexação p/ repos grandes) e seguranca-git/ (11 docs copiados e NEUTRALIZADOS por agente — placeholders `<conta-github>`/`<repo-*>`/`<responsável>`; varredura final zero resíduos de instância; originais intocados). Achado do agente: string em formato de chave Google/Firebase como "exemplo" em SETUP_PROTECAO_SECRETS.md — Valdo confirmou ser exemplo e encurtou o texto no original (resolvido no dia). Casa canônica do kit fica p/ a rodada de PI | 6.1 |
+| 2026-07-19 | **Revisão Sincronizador × setes-sync — prompt FECHADO** (3 rodadas no dia, 24 decisões; método refinar-prompt-arquitetura; caso nº 2 da engine): rascunho do Valdo (HISTORICO) virou `setes-sync/prompt_revisao_sincronizador_setes_sync.md`. Achados A1–A10: código atual é pré-Fases 2/3 (grava cadeia no schema do cliente, usa id Firebird como entity id, sem reindexação por documento). Decisões-chave: dois grupos canônicos (D1), documento/UUID como indexador com tb_empresa.externalCode (D3/D4/D14), cadeia em setes_central + papel no cliente (D13), Delphi se adapta ao formato novo (D15/D22), DELETED no Firebird (D2), Brand/Package/Measure centrais com vínculo (D5/D17/D24), auth por tb_sync_api_key (D12), fila e rest-* removidos (D19/D23), XMLs em disco por CNPJ (D20). Plano: ondas 0–6 + frente Delphi (C1–C12). Sentido inverso = fase própria (D16) | 6.3 |
+| 2026-07-19 | **Revisão do Sincronizador IMPLEMENTADA — Ondas 1–6 no dia** ("vamos implementar" com autonomia; frente Delphi = kit de patches). **O1** fundação: auth por tb_sync_api_key (JOIN tb_institution; chave global aposentada), envelope D14 com HTTP<>200 nos erros (antes erro voltava 200 e o Delphi marcava sincronizado!), fila/service mortos e rest-* removidos (HISTORICO). **O2** peças da cadeia copiadas da setes-api + motor de reindexação sync.entity (CPF/CNPJ→entity única; UUID tb_no_doc devolvido como externalCode; 14 testes no banco real) + MAPA_INDEXACAO/CONTRATOS_SYNC. **O3** catálogos centrais tb_brand/package/measure (sql/01 + migration 018 cross-schema; dedupe D17 na aplicação — UNIQUE fundiria acentos) + 12 endpoints de cadastro (measure era GAP; smoke ciclo completo 15/15; 3 agentes paralelos acharam código antigo quebrado contra o DDL real). **O4** papéis: customer (entityTax ganhou casa p/ CLI_ENVEMAILAUT/ENVSOMENTEXML), provider, salesman (precedência Collaborator→Salesman na transação), bank-account (FEBRABAN; fix C1); smoke provou MESMO CNPJ cliente+fornecedor = 1 entity/2 papéis. **O5** movimento: orders/invoices (2 endpoints NOVOS)/stock/cashier/financial — financeiro no formato 5.5 com **semântica de ESPELHO** (baixa legado = evento 1 'N'; estornos não viajam); Swagger corrigido (globs não liam endpoints). **O6** retornos NF-e 55/65/NFS-e (tb_invoice_return_* já existiam; C3 vira patch) + filexml em disco `<cnpj>/<ano>/<mes>` (D20; path traversal bloqueado). **Rodada 4 aberta** (3 achados DDL no MAPA): tb_order.tb_user_id NOT NULL, vínculo nota×pedido, PK tb_stock_statement. Kit Delphi C1–C12 em `sincronizador/patches-revisao-2026-07/` | 6.4 |
 | 2026-07-19 | **Kit v0.2 — `engine-kit/INSTALACAO.md`** (feedback do Valdo: instalação não estava executável): passo a passo Dia 1 (montar o vaso: pastas via PowerShell, regras da raiz, índice, conexão com ferramentas existentes — indexador/memória/Obsidian se registram e se governam —, censo do acervo) e Dia 2+ (dimensionar volumetria, unidades de análise, UMA unidade piloto ponta a ponta, 1º ciclo completo avaliar→conceituar→decidir→reter com dono das decisões NOMEADO) + seção "o que nunca fazer" (higiene multi-caso e fronteira método×empresa). README aponta p/ o guia; versionamento do kit atualizado | 6.2 |
 | — | — | — |
 

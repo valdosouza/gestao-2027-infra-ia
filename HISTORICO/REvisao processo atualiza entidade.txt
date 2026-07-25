@@ -1,0 +1,57 @@
+# Contexto
+	Processo que atualiza Clientes/Fornecedores/TRansportadores/Colaboradores entre outros para o setes-sync
+	## Sistema Desktop em Delphi com Banco de dados Firebird.
+		tb_Empresa centraliza a maior parte dos cadastros e tem EMP_CODIGO como identificador.
+		tb_cliente - Especializa tb_empresa
+		tb_fornecedor - Especializa tb_empresa
+		tb_Transportadora - Especializa tb_empresa
+		tb_colaborador - Tabela totalmente independente que deve ser entrar no processo de envio do das entidades como as outras tabelas...
+	
+	## Api setes-sync - nodejs - TypeScript com banco de dados em Mysql
+		Deve rececepcionar um pacote de informacoes contendo uma agrupamentos de estruturas que devem representar os dados do fireird neste novo formato para o mysql.
+		
+	## pequise na documentacao que ja temos tudo organizado, retomando para garantir que o processo esta correto.
+	
+# Objetivo
+	Revisar o processo para garantir que Clientes/Fornecedores/TRansportadores/Colaboradores entre outros sejam gravados corretamentes na nova estrutura
+	
+# Workflow do problema
+	## Regra
+		tb_empresa.emp_codigo tera um codigo diferente na web em tb_entity.id
+		Essa reindexacao sera feita utilizando documentos oficiais e validos CNPJ e CPF
+			Antes de enviar o pacode no endpoint estes documentos devem ser validos...
+			
+		tb_colaborador.clb_codigo tera um codigo diferente na web em tb_entity.id
+		Essa reindexacao sera feita utilizando documentos oficiais e validos CNPJ e CPF
+			Antes de enviar o pacode no endpoint estes documentos devem ser validos...
+			
+	## Problemas a serem considerados
+		Alguns cadastros nao tem cpf e cnpj validos.
+		POrem devem ser enviados pois temos historico de vendas e financeiros...
+		Entao temos que criar no seed do sincronizador
+			tb_empresa.externalcode
+			tb_colaborador.externalcode
+		Estes dois campos deverao ser atualizados quando o cnpj/cpf forem brancos/nulos/invalidos.
+		
+		## Tratamento da setes-sync	
+			Aoa receber um objeto sem documento temos que registrar como tb_no-doc.
+			Um hash sera criado e devolvido no retorno para criar esse vinculo
+			
+			
+# Worflow do processo com documento
+	Envia o objeto com cpf/cnpj 
+		Api consulta cpf/cnpj 
+			Ja existe na setes_central faz atualizacao (last win) e vincula no setes_+schema 
+			Nao existe existe na setes_central, faz o cadastro e vincula no setes_+schema 
+	Envia o objeto sem cpf/cnpj (doc) 
+		A api deve consultar se o elemento external_code (tb_no_doc)
+			Ja existe na setes_central faz atualizacao (last win) e vincula no setes_+schema 
+			Nao existe existe na setes_central, faz o cadastro e vincula no setes_+schema 
+		O retorno aqui precisa ter o hash criado para atualizar na base firebird para atualizar:
+			tb_empresa.externalcode
+			tb_colaborador.externalcode
+
+	1º ciclo sem doc cpf/cnpj e external code em branco
+	2º ciclo sem doc cpf/cnpj e external code com valor que foi atualizado anterirmente
+	
+	
