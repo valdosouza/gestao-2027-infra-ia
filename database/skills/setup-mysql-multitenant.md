@@ -3,6 +3,7 @@
 **Objetivo**: Configurar banco MySQL do zero com multi-tenant  
 **Tempo**: ~10 minutos  
 **Prerequisito**: MySQL Server instalado e rodando
+**Escopo**: setes
 
 ---
 

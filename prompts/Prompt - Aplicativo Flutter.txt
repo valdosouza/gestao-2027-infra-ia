@@ -1,0 +1,242 @@
+# Contexto
+	Projeto Flutter para um ERP Completo. Preciso que a partir deste prompt possamos evoluir para cobrir todas as lacunas para uma implementaca viavel
+	
+# Objetivo
+	Melhorar este prompt para criar um aplicativo Flutter para Web, Android, IOS no contexto Gestao2027
+	
+# Estrutura
+	## setes-app
+		* Internacionalizacao - Importante estrutura para poder distribuir em diversos paises 
+		* Temas e logomarcas - Propor estrutura para o que Estabelecimeto/tenant possa definir a sua identidade visual
+		* Responsividade das Interfaces - Excelente exemplo de como utilizar mantendo a independencia da renderizacao 
+			"D:\Gestao2027\Infra-IA\codigo-aprendizado\weberpsetes\lib\app\core\shared\helpers\responsive.dart"
+			Verifique no projeto "D:\Gestao2027\Infra-IA\codigo-aprendizado\weberpsetes\ como ele e aplicado e organize o prompt para aplicar da mesma maneira
+			
+			
+		* core - Modulos que podem ser compartilhados entre app-web, apps android and Apps IOS
+			** auth - Autenticacao de Usuario com selecao de estabelecimento a conectar no caso de existir mais de um vinculado ao usuario
+			** commom - ex: D:\GestaoERPApps\core\lib\src\common
+			** core - ex: D:\GestaoERPApps\core\lib\src\core
+			** error  - ex: D:\GestaoERPApps\core\lib\src\error
+			** permission: ex: D:\GestaoERPApps\core\lib\src\permission
+			** shared: ex: D:\GestaoERPApps\core\lib\src\shared
+			** splash: ex: D:\GestaoERPApps\core\lib\src\splash
+			
+			Todos em D:\GestaoERPApps\core\lib\src
+			
+		* Widget/component - Considero como coisas iguais - A nao ser que me explique a diferenca se houver
+			Esta pasta deve conter os Widget utilizados pelo Sistema
+				Nunca utilizar diretamente nenhum componente, todo componente deve ser encapsulado dentro de um componente da propria setes.
+				E os Widget da Setes serao usados no sistema, permitindo a troca de Widget obsoletos ou sem atualizao sem impactar todo o sistema.
+				
+			Por exemplo o widget Text() do Flutter nao pode ser usado diretamente ele deve ser encapsulado em SetesText ou CustomText e depois ser usado.	
+			Exemplo ListTile deveira ser encapsulado em SetesListTile ou CustomListTile
+				O nome Setes e um exemplo, mas voce pode sufegir algo que nos mantenha nos padroes, 
+				
+			Alem do encapsulamento, todo Widget que podera ser compartilhado entre os apps deverao estar nesta pasta, 
+				ex: custom_circular_progress_indicator em "D:\GestaoERPApps\core\lib\src\shared\widgets\custom_circular_progress_indicator.dart"
+				
+		* web - Com multi modulos e menus ligados ao modulos mostrando as interfaces-UI disponiveis montando tudo dinamicamente via consulta SQL
+			Exemplo
+			| Modulos---|						  ______________________________________	
+			| Super		|==>|Menus--------------||										|
+			| Sistema	|	|Estabelecimentos	||		Frame que deve renderizar 		|
+			| Projeto	|	|Paises				||		as telas apontatas pelo me		|
+			| Vendas	|	|Estados			||										|
+			| Compras	|	|Cidades			||										|
+							| CFOP				||______________________________________|
+		
+			
+			Responsividade
+				
+			Sempre Pensando na melhor experiencia com o usuario, avalie o exemplo e sugira algo melhor se houver
+		
+		* android - sob dominio com.setes.xxxx)
+			** budget_sales
+			** stock_count
+			** budget_autocenter
+			** erp_authotization
+			
+		* IOS - Implementacao futura
+			Serao os mesmos apps criados para android com deploy para IOS
+			
+# Projeto Exemplo
+	A nao ser que seja uma algo danoso ao sistema, ou tecnicas obsoletos indico fortemente analizar o projeto	
+		"D:\Gestao2027\Infra-IA\codigo-aprendizado\weberpsetes\"
+		Pontos que fortes deste projeto
+			Cleanarchitecture
+			Tratamento da responsividade com arquivos mobile, table, dektop separados deixando uma arquitetura mais clara e limpa para a renderizacao
+			Estrutura de testes unitarios que devem ser aplicados em todos os modulos
+			
+# Arquivos de Referencia
+	D:\Gestao2027\Infra-IA\setes-app\temp
+		todos os arquivos desta pastas contem boas informacoes que podem ser reaproveitadas no projeto
+		
+# Interconecoes com este projeto	
+	Este projeto setes-app e item dentro de uma aracabouco maior Gestao2027.
+	Este setes-app tera uma api setes-api que por sua vez gerencia um base setes_central e outras bases de clientes como setes_+schemas.
+	Dito isso, quando propor alguma solucao precisa determinar o que precisamos implementar na api e no banco de dados conforme o direcionamento.
+		Por exemplo: 
+			Internacionaizacao devera atender todo o projeto setes-app	
+				Cada usuario do sistema devera ter a opcao de escolher a linguagem que queira utilizar.
+					Neste caso a inforamcao deve estar na base setes_central ligadas ao tb_user
+					
+			Themas e Logomarcas é o estabelecimento que determina deve estar na base setes_central ligadas ao tb_institution
+			
+			
+			Muitas outras inforamcoes sera especificas de cada institution que devem ser refletidas apenas no seu proprio setes_+schema
+		
+# Padroes de Operacao dos Cadastros
+	Formulario Interface UI de pesquisa Inicial para cada tipo de cadastro.
+		widgets:
+			Lista com alguns campo para identicar do que se trata no cadastro
+			Campo de filtro para os campos da lista
+			botao para Pesquisar os dados e mostra na lista
+			Botao para visualizar o Cadastro completo
+				Deve mostrar o Formulario de cadastro Completo
+	Formualario Inerface UI para Inserir/alterar/Excluir(no sistema a exclusao sempre será logica alterando o campo deleted = True)
+		o formulario deve conter os campos do objeto para serem manipulados. campos de salvar ou cancelar
+			
+			
+		
+# Cadastros Preparatorio no modulo Super
+	* Modulo Super 
+		Cadastro de Privilegios
+			Operacaoes que serao utilizadas nas interfaces, conforme a funcionalidade de cada interface
+			
+		Cadastro de Interfaces
+			cada Interface UI devera ser registrada, apontando modulo descritivo default e os privilegios que ela vai gerenciar.
+
+		Cadastrar o Cliente
+			Verificar se setes-api ja contempla o cadastro de cliente
+				O objeto ser ObjCustomer ==> ObjEntityFiscal ==> Objentity Exemplo Delphi em "D:\Gestao2027\Infra-IA\codigo-aprendizado\DataObjetcs\objCustomer.pas"
+
+		Tela que deve ser chamada a partir da tela de cliente para o super user definir quais interfaces-UI estarao disponiveis
+			De um lado teremos a tb_interface (todas as Interfaces UI)
+			
+			De outro Lado teremos `tb_institution_has_interface`
+			
+				CREATE TABLE `tb_institution_has_interface` (
+				  `tb_institution_id` int(11) NOT NULL,
+				  `tb_interface_id` int(11) NOT NULL,
+				  `active` char(1) DEFAULT NULL,
+				  `created_at` datetime DEFAULT NULL,
+				  `updated_at` datetime DEFAULT NULL,
+				  `deleted` char(1) NOT NULL DEFAULT 'N'
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+				ALTER TABLE `tb_institution_has_interface`
+				  ADD PRIMARY KEY (`tb_institution_id`,`tb_interface_id`);			
+			
+	* Modulo Sistema
+		Cadastro de Modulo			
+			Workflow do cadasro de modulo no estilo Master-Detail
+				Criar um novo modulo como Master 
+					CREATE TABLE `tb_module` (
+					  `id` int(11) NOT NULL,
+					  `tb_institution_id` int(11) NOT NULL,
+					  `description` varchar(100) DEFAULT NULL,
+					  `link_name` varchar(255) NOT NULL,
+					  `image_icon` int(11) DEFAULT 0,
+					  `created_at` datetime DEFAULT NULL,
+					  `updated_at` datetime DEFAULT NULL,
+					  `deleted` char(1) NOT NULL DEFAULT 'N'
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+				
+				Criar uma lista com Detail
+					CREATE TABLE `tb_module_has_interface` (
+					  `tb_module_id` int(11) NOT NULL,
+					  `tb_interface_id` int(11) NOT NULL,
+					  `active` char(1) DEFAULT NULL,
+					  `created_at` datetime DEFAULT NULL,
+					  `updated_at` datetime DEFAULT NULL,
+					  `deleted` char(1) NOT NULL DEFAULT 'N'
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+				
+				A lista que vai permitir a inclusao de interfaces no modulo esta em `tb_institution_has_interface`
+				Num estilo de Listas lado a lado com setas no meio podendo ser movidas de um lado para o outro.
+				Uma interface pode estar em mais de um modulo para para melhorar o acesso do usuario
+	
+# Workflow da Authentication
+
+	1 - Tela Inicial de login conforme - D:\GestaoERPApps\core\lib\src\auth
+	2 - A autenticacao deve retornar o numero de estabelecimentos que o usuario esta vinculado.
+		2.1 - Caso seja apenas 1 direcionar para a tela home
+		2.1 - Caso seja mais de 1 direcionar para a tela de escolha de Estabelecimentos 
+			2.1.1 - Assim que o usuario escolher 1 estabelecimento ele pode ser direcionado para a tela home
+					2.1.1.1 Na tela de Estabelecimentos alem da Lista de Estabelecimentos oferecer ao usuario a opcao de determinar uma estabelecimento padrao
+							Esse Padrao nao define entrada direta ao estabelecimento, apenas ja traz a opcao defaul marcada para ele avancar sem precisar escolher toda vez
+	3 - Montar Menus de Modulos e Menus de interface.
+	
+# Workflow de montagem dos menus de modulo na home page
+	Selecionar as interfaces que foram registradas no `tb_module` campo utiliza `tb_module`.description
+	Fazer um Union com a Selecao de Interfaces nao utilizadas via Criacao de Module	utilizando
+		tb_institution_has_interface` inner com tb_interface utilizando o campo interface.group_default
+	O A juncao de `tb_module`.description e interface.group_default devem ser usados para montar o menu vertical de modulos
+		Ao Clicar em cada modulo deve montar um segundo menu com as interfaces disponiveis
+		
+# Dois modulos Devem ser criados nessa etapa
+	Super User - 
+		Cadastro
+			Privilegios
+			Interfaces
+			Clientes
+				Referencia  - ObjEntityFiscal com tb_customer = objCustomer
+					"D:\Gestao2027\Infra-IA\codigo-aprendizado\DataObjetcs\objCustomer.pas"
+				Fazer o registro em tb_institution para que o cliente possa usar o sistema 
+				Interfaces para cada Cliente.
+				Cadasro de Usuarios para este cliente.O Super Usuario deve criar pelo menos um usuario para o cliente ter acesso.
+			CFOP
+			Paises
+			Estados
+			Cidades
+			
+	Sistema -
+		Cadastro
+			Estabelecimento - Proprio cliente pode edita-lo
+				Referencia  - ObjEntityFiscal com tb_institution = objInstitution
+					"D:\Gestao2027\Infra-IA\codigo-aprendizado\DataObjetcs\objInstitution.pas"
+			
+			Usuario - Proprio cliente podera criar outros usuarios
+				A partir do cadastro do usuario podemos definir as permissoes para o usuario
+				Seguindo o mesmo processo de
+				Lista de modulos que abre uma lista interfaces que monstra uma lista de privilegio 
+					Nesta lista de privilegio com checkbox para sabermos se ele tem acesso ou nao
+				
+					CREATE TABLE `tb_user_has_privilege` (
+					  `tb_institution_id` int(11) NOT NULL,
+					  `tb_user_id` int(11) NOT NULL,
+					  `tb_interface_id` int(11) NOT NULL,
+					  `tb_privilege_id` int(11) NOT NULL,
+					  `active` char(1) DEFAULT NULL,
+					  `created_at` datetime DEFAULT NULL,
+					  `updated_at` datetime DEFAULT NULL,
+					  `deleted` char(1) NOT NULL DEFAULT 'N'
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;				
+				
+# Workflow para montar os menus
+		Usando o tb_user com `tb_user_has_privilege` podemos gerar a informacao para:
+			monntar menus de modulos
+			montar menus de interfaces UI
+			E por ultimo quando abrirmos a interface saberemos se o usuario tera acesso aos privilegios como inserir, alterar, Excluir
+			
+# Framework para facilitar fabrica de cadastros
+	Como teremos muitos cadastros verifique a possibilidade de criar objetos/widgets para nos ajudar a produzir cadastros
+		Exemplo: Utilizando Delphi podemos criar uma sequencia de Classes para criar um encadeamento de formulario
+			TBaseform herda de TForm
+			TRegisterForm herda TBaseform
+			TEntityForm herda de TRegisterForm
+			TEntityFormFiscal herda TEntityForm
+			TInstitutionForm herda TEntityFormFiscal + tb_instituion
+			TCustomerForm herda TEntityFormFiscal + tb_customer
+			TUserForm herda de TEntityForm
+		Todos os exemplos funcionam bem com Delphi
+		
+# Comparacoes entre DElphi e Flutter
+	Delphi utiliza classe para tudo e tudo pode ser componente
+	Flutter utliza muito widgets que é a mesma ideia de componentes
+	Avalie o que o Flutter pode aproveitar da mesma tecnica usado no Delphi
+
+# Extras...
+	Para atender algumas Interfaces UI precisaremos criar enPoints e tabelas em Banco......
+	Organize de forma que possamos seguir com a implementacao Flutter e atualizacoes da setes-api para pode implementar

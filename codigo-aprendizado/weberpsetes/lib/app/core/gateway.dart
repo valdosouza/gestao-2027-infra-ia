@@ -1,0 +1,135 @@
+import 'dart:io';
+
+import 'package:appweb/app/core/shared/constants.dart';
+import 'package:appweb/app/core/shared/helpers/local_storage.dart';
+import 'package:appweb/app/core/shared/local_storage_key.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+
+class Gateway {
+  Gateway({
+    required this.httpClient,
+  });
+
+  Future<String> getToken() async {
+    return await LocalStorageService.instance.get(key: LocalStorageKey.token);
+  }
+
+  Future getInstitutionId() async {
+    return await LocalStorageService.instance
+        .get(key: LocalStorageKey.tbInstitutionId);
+  }
+
+  Future getUserId() async {
+    return await LocalStorageService.instance
+        .get(key: LocalStorageKey.tbUserId);
+  }
+
+  var statusCode = 0;
+  final http.Client httpClient;
+
+  //var timeout = const Duration(milliseconds: 5000);
+  Future<Map<String, String>> requestOptions() async {
+    final token = await getToken();
+    final headers = {
+      HttpHeaders.authorizationHeader: "Bearer $token",
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Access-Control-Allow-Origin': '*',
+      'Accept': '*/*'
+    };
+    return headers;
+  }
+
+  Future<T> request<T>(
+    String url,
+    T Function(dynamic) fromJson, {
+    data = const {},
+    HTTPMethod method = HTTPMethod.get,
+    Duration timeout = const Duration(milliseconds: 5000),
+    Function(Exception)? onError,
+  }) async {
+    debugPrint('Fetching $url from API');
+    debugPrint('${method.toString().toUpperCase()} $url');
+    debugPrint(data.toString());
+
+    try {
+      late Response response;
+      switch (method) {
+        case HTTPMethod.get:
+          response = await _get(url, timeout);
+          break;
+        case HTTPMethod.post:
+          response = await _post(url, data, timeout);
+          break;
+        case HTTPMethod.put:
+          response = await _put(url, data, timeout);
+          break;
+        case HTTPMethod.delete:
+          response = await _delete(url, data, timeout);
+          break;
+      }
+      statusCode = response.statusCode;
+
+      return fromJson(response.body);
+    } on Exception catch (e, s) {
+      FirebaseCrashlytics.instance.recordError(e, s);
+
+      debugPrint(
+          'Failed fetching $url from API => HTTP CODE: $statusCode -> ${e.toString()}');
+
+      if (onError != null) {
+        return onError(e);
+      }
+      rethrow;
+    }
+  }
+
+  Future<Response> _get(String url, Duration timeout) async {
+    debugPrint("endPonint $url");
+    final response = await httpClient
+        .get(
+          Uri.parse('$baseApiUrl$url'),
+          headers: await requestOptions(),
+        )
+        .timeout(timeout);
+    return response;
+  }
+
+  Future<Response> _post(String url, data, Duration timeout) async {
+    final response = await httpClient
+        .post(
+          Uri.parse('$baseApiUrl$url'),
+          headers: await requestOptions(),
+          body: data,
+        )
+        .timeout(timeout);
+
+    return response;
+  }
+
+  Future<Response> _put(String url, data, Duration timeout) async {
+    final response = await httpClient
+        .put(
+          Uri.parse('$baseApiUrl$url'),
+          headers: await requestOptions(),
+          body: data,
+        )
+        .timeout(timeout);
+    return response;
+  }
+
+  Future<Response> _delete(String url, data, Duration timeout) async {
+    final response = await httpClient
+        .delete(
+          Uri.parse('$baseApiUrl$url'),
+          headers: await requestOptions(),
+          //body: data,
+        )
+        .timeout(timeout);
+    return response;
+  }
+}
+
+enum HTTPMethod { get, post, delete, put }

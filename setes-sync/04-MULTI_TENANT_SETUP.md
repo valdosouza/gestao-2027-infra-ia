@@ -1,4 +1,5 @@
 # Multi-Tenant Configuration — setes-sync
+**Escopo**: setes
 
 ## 🎯 Objetivo
 

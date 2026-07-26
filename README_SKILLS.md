@@ -3,6 +3,7 @@
 **Versão**: 1.0  
 **Data**: 2026-07-01  
 **Total de Skills**: 9 criadas e documentadas
+**Escopo**: misto
 
 ---
 

@@ -1,4 +1,5 @@
 # CONTEXTO
+**Escopo**: setes
 
 Sou desenvolvedor na Setes, empresa que cria e usa seu próprio ERP.
 Precisamos definir a arquitetura macro de uma plataforma multi-tenant

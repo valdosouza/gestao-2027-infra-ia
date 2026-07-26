@@ -3,6 +3,7 @@
 **Objetivo**: Fazer commits profissionais e publicar no GitHub  
 **Tempo**: ~5-10 minutos  
 **Frequência**: Diária (ou a cada feature)
+**Escopo**: metodo
 
 ---
 

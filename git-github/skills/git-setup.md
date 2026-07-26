@@ -3,6 +3,7 @@
 **Objetivo**: Configurar um projeto para versionamento Git com GitHub  
 **Tempo**: ~10 minutos  
 **Pré-requisito**: Git instalado
+**Escopo**: metodo
 
 ---
 

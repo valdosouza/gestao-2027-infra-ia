@@ -1,4 +1,5 @@
 # Setes API — Documentação
+**Escopo**: setes
 
 API HTTP em **Node.js + Express + TypeScript** para o ecossistema **Gestão 2027 / Setes**. Ela centraliza autenticação, controle de módulos por cliente (multi-tenant), onboarding de novos tenants e sincronização de dados entre estabelecimentos locais e o banco central **MySQL/MariaDB**.
 

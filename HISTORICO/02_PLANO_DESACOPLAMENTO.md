@@ -2,6 +2,7 @@
 
 **Data**: 2026-07-01  
 **Objetivo**: Separar 30 endpoints de sincronização de setes-api → nova API setes-sync
+**Escopo**: setes
 
 ---
 

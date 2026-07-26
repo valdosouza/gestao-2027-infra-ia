@@ -3,6 +3,7 @@
 **Objetivo**: Garantir que nenhum dado sensível seja enviado para GitHub  
 **Tempo**: ~2 minutos  
 **Crítico**: Executar ANTES de cada push
+**Escopo**: metodo
 
 ---
 

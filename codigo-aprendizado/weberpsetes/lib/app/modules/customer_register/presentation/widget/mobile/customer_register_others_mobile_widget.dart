@@ -1,0 +1,63 @@
+import 'package:appweb/app/core/shared/theme.dart';
+import 'package:appweb/app/modules/customer_register/data/model/customer_main_model.dart';
+import 'package:appweb/app/modules/customer_register/presentation/bloc/bloc.dart';
+import 'package:flutter/material.dart';
+
+class CustomerRegisterOthersMobileWidget extends StatefulWidget {
+  final CustomerRegisterBloc bloc;
+  final CustomerMainModel? customer;
+  const CustomerRegisterOthersMobileWidget({
+    super.key,
+    required this.bloc,
+    this.customer,
+  });
+
+  @override
+  State<CustomerRegisterOthersMobileWidget> createState() =>
+      _CustomerRegisterOthersMobileWidgetState();
+}
+
+class _CustomerRegisterOthersMobileWidgetState
+    extends State<CustomerRegisterOthersMobileWidget> {
+  @override
+  Widget build(BuildContext context) {
+    bool active = (widget.customer?.customer.active == "S");
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Ativo", style: kLabelStyle),
+          const SizedBox(height: 0.0),
+          RadioGroup<bool>(
+            groupValue: active,
+            onChanged: (value) {
+              final newActive = value ?? false;
+              widget.customer?.customer.active = newActive ? "S" : "N";
+              setState(() {});
+            },
+            child: Row(
+              children: [
+                Row(
+                  children: [
+                    Radio<bool>(value: true, activeColor: Colors.red),
+                    const SizedBox(width: 5.0),
+                    const Text("Sim", style: kLabelStyle),
+                  ],
+                ),
+                const SizedBox(width: 10.0),
+                Row(
+                  children: [
+                    Radio<bool>(value: false, activeColor: Colors.red),
+                    const SizedBox(width: 5.0),
+                    const Text("Não", style: kLabelStyle),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

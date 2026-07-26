@@ -4,6 +4,7 @@
 **ID**: `a81b1668737619946`  
 **Criado**: 2026-07-04  
 **Para**: Valdo (valdo@setes.com.br)
+**Escopo**: misto
 
 ---
 

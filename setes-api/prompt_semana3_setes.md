@@ -1,4 +1,5 @@
 # Prompt — Semana 3: API de Sincronização Firebird ↔ MySQL
+**Escopo**: setes
 
 ## Contexto do projeto
 

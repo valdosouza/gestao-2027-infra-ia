@@ -2,6 +2,20 @@
 
 **Objetivo**: Criar novo endpoint de negócio em setes-api  
 **Tempo**: ~15 minutos
+**Escopo**: setes
+
+---
+
+## ⚠️ ESCOPO desta skill (atualizado 2026-07-11)
+
+Esta skill cobre endpoints AVULSOS em módulos legados (erp, core, admin, sync),
+que ainda usam Repository → Service → Routes.
+
+**Módulo de CADASTRO (CRUD que vira tela no setes-app) NÃO usa esta skill**: use
+`novo-modulo.md` + `Infra-IA/setes-api/ARQUITETURA_MODULOS_API.md` — padrão
+simétrico de 6 arquivos (interface/dto/repository/service/controller/routes),
+1 módulo por cadastro com o mesmo nome do módulo do app. Módulos legados migram
+para o padrão novo quando forem tocados.
 
 ---
 
@@ -121,5 +135,21 @@ curl -X GET http://localhost:3000/api/erp/feature/1 \
 
 ---
 
-*Skill atualizada: 2026-07-01*
+## 📖 Passo 6: Swagger (OBRIGATÓRIO — nunca pular)
+
+Todo endpoint criado/alterado DEVE ter o bloco `@swagger` no arquivo de rotas
+(como no exemplo do Passo 3), com: tag do módulo, `security` correto
+(`BearerAuth` para /api/*, `ApiKeyAuth` para /sync/*, `[]` para públicas) e
+responses 200/201/400/401/403/500.
+
+⚠️ O swagger-jsdoc SÓ lê arquivos que casam com os globs `apis` de
+`src/shared/swagger/swagger-config.ts` (hoje: `src/modules/**/*.routes.ts` e
+`src/modules/sync/endpoints/*.ts`). Rota documentada em arquivo fora desses
+padrões NÃO aparece no /docs — nomeie o arquivo `*.routes.ts` ou adicione o glob.
+
+Validar: recarregar http://localhost:3000/docs e conferir a rota nova.
+
+---
+
+*Skill atualizada: 2026-07-12*
 

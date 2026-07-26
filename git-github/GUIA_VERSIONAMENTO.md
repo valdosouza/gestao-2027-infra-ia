@@ -3,6 +3,7 @@
 **Objetivo**: Manter código versionado com Git e publicado no GitHub  
 **Conta**: https://github.com/valdosouza  
 **Status**: Setup em Progresso
+**Escopo**: metodo
 
 ---
 

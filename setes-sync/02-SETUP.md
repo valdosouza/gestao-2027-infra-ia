@@ -1,4 +1,5 @@
 # Guia de Setup — setes-sync
+**Escopo**: setes
 
 ## Pré-requisitos
 

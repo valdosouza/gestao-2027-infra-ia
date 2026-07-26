@@ -1,6 +1,7 @@
 # 📚 Histórico — Gestão 2027
 
 **Propósito**: Arquivos históricos e documentação anterior (referência)
+**Escopo**: setes
 
 ---
 
@@ -45,6 +46,26 @@ Diagrama da arquitetura no meio do processo.
 **Status**: ❌ Obsoleto (usar ARQUITETURA.md na raiz)
 
 **Quando usar**: Entender evolução arquitetural
+
+---
+
+### 4. **04_RASCUNHO_GERENCIAMENTO_CENTRAL.txt**
+**Data**: 2026-07-04
+**Conteúdo**: Rascunho original da Fase 2 (Gerenciamento Central)
+
+**Status**: ❌ Superado — refinado em 5 rodadas de decisão até virar `../setes-api/prompt_fase2_gerenciamento_central.md` (21 decisões)
+
+**Quando usar**: Exemplo de "antes" do método `../skills-genericas/refinar-prompt-arquitetura.md`
+
+---
+
+### 5. **rascunho_setes_app_fase1_2026-07-05.txt**
+**Data**: 2026-07-05
+**Conteúdo**: Rascunho original do setes-app (Prompt - Aplicativo Flutter.txt)
+
+**Status**: ❌ Superado — refinado em 3 rodadas de decisão até virar `../setes-app/prompt_fase1_fundacao.md` (23 decisões)
+
+**Quando usar**: Exemplo de "antes" do método `../skills-genericas/refinar-prompt-arquitetura.md`
 
 ---
 

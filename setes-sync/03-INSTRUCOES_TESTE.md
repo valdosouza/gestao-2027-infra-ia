@@ -1,4 +1,5 @@
 # Instruções para Testar setes-sync
+**Escopo**: setes
 
 ## Fase 1: Preparação (5 min)
 

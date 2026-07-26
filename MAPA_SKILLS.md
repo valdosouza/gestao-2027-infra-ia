@@ -2,6 +2,7 @@
 
 **Objetivo**: Localizar rapidamente a skill que precisa  
 **Versão**: 1.0
+**Escopo**: misto
 
 ---
 

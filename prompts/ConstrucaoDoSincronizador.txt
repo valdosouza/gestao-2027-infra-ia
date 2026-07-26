@@ -1,0 +1,76 @@
+# Contexto
+	Precisamos instalar o sincronizador no cliente e o banco de dados deve ser preparado para o envio dos dados
+
+# Objetivo
+	Prepara a base do cliente para trabalhar com o sincronizador e seus controller
+	
+# Workflow da verificacao
+	Copia o sincronizador para um pasta qualquer.
+		Normalmente na mesma pasta onde o Gestao.exe já é usado
+	Execcutar o sincronizador
+	Nao permitir que inicie a sincronizacao antes que o banco esteja preparado.
+	Configurar a conexao com o banco de dados
+	
+	Assim que o banco for configurado e for possivel conectar preexecutar 
+		Precisamos pensar nesta duas tabela, um jeito de unificar as duas
+			1 - Criacao da tabela tb_sincronia caso nao exista
+					Referencia
+						ControllerSincronia.pas -  TControllerSincronia
+						tblSincronia.pas - TSincronia
+				
+			2 - Remocao da Tabela tb_sync_table caso exista
+					tblSyncTable - TSyncTable
+					ControllerSyncTable.pas - TControllerSyncTable
+				
+			3 - Criacao da Tabela TB_LISTA_SINCRONIA - 
+					Alterar tblTabelaParaSincronizar para tblListaSincronia e a classe TTabelaParaSincronizar para TListaSincronia			
+					ControllerListaSincronia.pas  - TControllerListaSincronia
+
+					3.1  - Ajustar tabela para controle
+						SEQUENCIA 		| 01 | Temos que determinar a sequencia com que a lista vai ser processada para enviar PK antes das FK
+						NAME_TABELA		| TB_EMPRESA		| Possibilita verificar na TB_SINCRONIA os registros tocados
+						NAME_PROCESS	| UpdateCustomer	| Identitifica o processo a ser executado
+						NAME_TRIGGER	| TG_SRC_EMPRESA	| deve ser usado para preparar o banco criando a trigger caso nao exista. 	
+						NAME_CLASS		| TCustomerSendWeb	| A factory de Classes deve receber esse nome para fazer o loop 
+						END_POINT		| http:\\api.		| Sem hardcoded da a liberdade de usar diferentes url para cada cliente.
+						WAY				| [W]eb / [D]Dskt	| Sentido em que os dados vao trafegar sentido web ou sentido desktop
+						DT_UPDATE		| 23/07/2026		| deve ser atualizado a cada registro enviado. Esta sera a referencia para selecionar os dados na tb_sincronia
+						TM_UPDATE		| 16:58				| deve ser atualizado a cada registro enviado. Esta sera a referencia para selecionar os dados na tb_sincronia talvez juntar este campo com DT_UPDATE
+						SET_ON			| true/false		| habilitar ou nao o proesso na sincronia
+							
+					3.2 - Esta tabela deve ser preenchida utilizando a propria estruturade classes da pasta D:\Gestao2027\sincronizador\classes
+						
+							
+			4 - Preparacao dos trigger 
+					Para cada registro na tabela TB_LISTA_SINCRONIA a partir do campo NAME_TABELA, precisamos criar uma Trigger
+					Verificar em uMain.pas a procedure TPrincipal.execTrigger; e melhore o processo para automatizar criando a triguer automaticamente, avalie uma forma
+					Essa triguer e responsavel em identificar a insercao e/ou alteracao de uma tabela e o registro na tabela sincronia
+					
+		
+		
+# Mudanca Estrutural
+	Toda a tabela devera ter uma campo DELETED inciando com o Valor N
+	Essa mudanca vai atingir todo o sistema pois tudo vai virar soft delete
+	Isso vai permitir que tudo seja devidamente sincronizado insert e update
+	Gerencia Registros deletados poderiam causar muitos problemas, pois o registro deletade deveria ser guardado para saber o que deletar, o que tornaria redundante
+	
+	
+# Fluxo da sincronia	
+	Tabela x é alterada (insert ou update)
+	Registro na tabela sincronia com o nome da tabela, numero do registro, data e hora
+	Syncronizador entra em acao
+		consulta a tabela tb_Lista_Sincronia
+		faz um loop para saber quais quais tabelas devem ser sincronizadas
+			Para cada registro consulta a ultima data e hora de envio
+				Faz a consulta na tb_sincronia dos registros que foram alterados depois do ultimo envio
+					Envia registro a registro usando a factory
+						O retorno deve atualizar o campo SRC_LOG(com ok ou erro encontrado) e a lista sincronia com a data e hora do ultimo registro	
+							Isso garante que se durante o loop der algo de errado ele retoma de onde parou
+							
+# Operacoes automaticas
+	o sistema devera excluir os dados da tabela sincronia obedecendo os seguintes criterios
+		Campo SRC_LOG igual a ok
+		A data e hora do campo SRC_TIME deve estar com a diferenca de tempo de 48 horas na hora da exclusao
+	
+	
+	

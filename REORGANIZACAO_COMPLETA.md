@@ -3,6 +3,7 @@
 **Data**: 2026-07-04  
 **Status**: 90% Automático + 10% Manual  
 **Resultado**: Estrutura limpa e organizada
+**Escopo**: setes
 
 ---
 

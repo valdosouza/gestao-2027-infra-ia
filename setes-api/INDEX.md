@@ -1,6 +1,19 @@
 # Documentação — setes-api
+**Escopo**: setes
 
 ## 📚 Índice de Documentação
+
+### ⭐ **ARQUITETURA_MODULOS_API.md** (2026-07-11 — LER ANTES de criar/alterar módulo de cadastro)
+Padrão vigente: 1 cadastro = 1 módulo SIMÉTRICO com o setes-app
+- 6 arquivos por módulo: interface / dto / repository / service / controller / routes
+- URL segue o módulo: /api/<modulo> espelha /home/<modulo> do app (ex.: /api/countries)
+- "Super" NUNCA vira pasta nem URL — guard POR MÓDULO no gateway (super.guard.ts nos cadastros do catálogo central)
+- Regras de consistência (envelope {ok,data}, camelCase, soft delete, códigos BACEN/IBGE vs MAX+1)
+- Skill passo a passo: `skills/novo-modulo.md`
+
+**Leia se:** Vai criar ou mexer em qualquer módulo de cadastro (countries, states, cities, interfaces, privileges...)
+
+---
 
 ### 0. **AGENTE_ESPECIALIZADO.md** 🆕
 Guia do agente Delphi → TypeScript
@@ -33,6 +46,18 @@ Validação de setes-api como API ERP pura
 - Checklist de validação
 
 **Leia se:** Quer validar que setes-api funciona sem sync
+
+---
+
+### ⭐ **05-ORDEM-SERVICO-SOFTWARE-HOUSE.md** (2026-07-18 — modelagem VALIDADA pelo Valdo)
+Módulo Software House no backbone `tb_order` — Fases 2–7 do prompt FECHADO
+`prompt_modulo_software_house.md` (nesta pasta; decisões DP1–DP12 todas validadas):
+- ER conceitual, rotina mensal (vencimento decidido pelo usuário — DP1; pró-rata; estados na tb_order — DP7), parcerias (ordens PA próprias via tb_order_financial + estorno imutável; PA aberta compensa com PA+C — DP11)
+- DDL físico validado (tb_contract, tb_order_service, tb_order_financial, tb_order_item_merchandise — DP6, realinhamento tb_financial*/tb_partnership*/tb_bank)
+- Especificação de baixa/settled_code/estorno e matriz com 20 casos de teste
+- NADA executado em banco/código ainda; migration 013 depende da revisão do sync
+
+**Leia se:** vai implementar contratos, OS, faturamento mensal, financeiro ou parcerias
 
 ---
 
