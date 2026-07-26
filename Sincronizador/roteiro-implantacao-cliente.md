@@ -23,10 +23,21 @@ Rodar `patches-revisao-2026-07/01_firebird_ddl.sql`:
 
 ## Fase 2 — Configuração do Sincronizador (registro do Windows, seção SISWEB)
 
-- `FApiKey` = chave criada na Fase 0
+- `FApiKey` = chave criada na Fase 0 (**a MESMA para todos os terminais do estabelecimento** — decisão 2 do indexador terminal)
 - `FPathURL` = URL base da setes-sync (porta 3001)
+- `TERMINAL` = número do terminal desta instalação (**0 = Servidor Local/Base única; 1..N = PDVs** — decisões 1 do `prompt_indexador_terminal_pdv.md`, 2026-07-26)
 - Conferir intervalo / nominuto (ciclo de 5 min padrão)
 - NÃO configurar mais institution no payload — a chave resolve institution + schema no servidor
+
+### Clientes com PDVs (terminais de checkout com Firebird próprio)
+
+- UMA instalação do Sincronizador POR BASE: servidor (`TERMINAL=0`) + cada PDV (`TERMINAL=N`,
+  `BDPathBDLocal` apontando para a base do PDV)
+- No PDV o seed nasce com **perfil de movimento** (decisão 3): cadastros Seq 1–16 e 38
+  SET_ON='N' (chegam ao PDV pela retaguarda); movimento Seq 17–29 ativo
+- ⚠️ RETAGUARDA: o bootstrap NÃO toca mais na `TB_SYNC_TABLE` (decisão 4 — reversão do drop);
+  se alguma base dev rodou o bootstrap antigo, recriar a tabela pela DDL de
+  `Gestao2016\Scripts\Banco2022\CriarTodasAsTabelas.sql:3225-3233`
 
 ## Fase 3 — Primeiro start (bootstrap automático)
 

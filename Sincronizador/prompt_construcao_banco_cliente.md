@@ -23,6 +23,11 @@ o banco inteiro sozinho) e baixa-se a nova versão do desktop, já preparada par
    idempotente a cada start).
 3. UM único lugar para o checkpoint de último envio: `TB_LISTA_SINCRONIA.LAST_UPDATE`
    (decisões 1 e 3) — `TB_SYNC_TABLE` é removida por completo do projeto.
+   ⚠️ **REVISÃO 2026-07-26 (decisão 4 de `prompt_indexador_terminal_pdv.md`)**: a remoção
+   do CÓDIGO permanece, mas o **`DROP TABLE TB_SYNC_TABLE` foi REVERTIDO** — a tabela é
+   checkpoint vivo da RETAGUARDA do Gestao2016 (sincronia local Servidor×PDVs) e o
+   Sincronizador NUNCA a toca. Bases dev onde o drop chegou a rodar: recriar pela DDL de
+   `Gestao2016\Scripts\Banco2022\CriarTodasAsTabelas.sql:3225-3233` (checkpoints re-baseiam).
 4. Soft delete universal: campo `DELETED CHAR(1) DEFAULT 'N'` em TODAS as tabelas do sistema
    (decisão 8), exceto `TB_SINCRONIA` e `TB_LISTA_SINCRONIA`.
 5. Limpeza automática da fila `TB_SINCRONIA` (1x por dia — decisão 9).

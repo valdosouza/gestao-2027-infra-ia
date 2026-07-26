@@ -251,6 +251,12 @@ D:\Gestao2027\Infra-IA/
   100% automático do Firebird do cliente (TB_SINCRONIA+generator+trigger, TB_LISTA_SINCRONIA
   com checkpoint LAST_UPDATE, DELETED universal, EXTERNALCODE, triggers TG_SRC_* multi-evento
   geradas do catálogo); TB_SYNC_TABLE REMOVIDA do projeto; DDL compatível Firebird 2.5↔5.0
+- `prompt_indexador_terminal_pdv.md` — ⭐ FECHADO e EXECUTADO 2026-07-26 (4 decisões):
+  indexador TERMINAL (PDVs com Firebird próprio → mesmo schema): fonte SISWEB\TERMINAL,
+  convenção 0=Servidor Local/1..N=PDVs, mesma API key por estabelecimento, perfil PDV
+  (seed só movimento), e **TB_SYNC_TABLE MANTIDA** (reversão do drop do bootstrap — ela é
+  checkpoint da RETAGUARDA do Gestao2016). Web já estava pronta (terminal nas PKs de
+  movimento); Delphi ligou o fio (DM.GbTerminal → LcSendWeb.Terminal). Aguarda compilação.
 - `roteiro-implantacao-cliente.md` — ⭐ 2026-07-25 (handoff claude.ai celular): implantação de
   campo por cliente em 6 fases (chave tb_sync_api_key → DDL Firebird → registro SISWEB →
   primeiro start/bootstrap → sincronização inicial na ordem D8 com validações → encerramento);
