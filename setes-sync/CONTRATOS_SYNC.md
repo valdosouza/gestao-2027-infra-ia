@@ -230,6 +230,27 @@ Sincronizar ANTES do customer: sem ela o `carrierDocument` do cliente ficava em
 409 `CARRIER_NOT_SYNCED` eterno (a classe Delphi `TCarrierSendWeb` não existia).
 Delphi: `TB_TRANSPORTADORA` (TRP_CODEMP = EMP_CODIGO), seed Seq 38.
 
+### POST /user/sincronize (Indexação de usuários — 8 decisões, 2026-07-26)
+```jsonc
+{ /* bloco entity padrão */ "user": { "active": "S" }, "deleted": "N" }
+// → { ok: true, id, externalCode?, clearExternalCode? }  (id = entity.id = tb_user.id)
+```
+Usuário do legado (TB_USUARIO) = AUTOR das operações. Grava na CENTRAL: cadeia
+pelo motor + `tb_user` **SEM credencial** (`password NULL`, `active='N'` — nunca
+loga; criado só se não existe, credencial de usuário web real NUNCA é tocada) +
+`tb_institution_has_user` com `kind='SYNC'` (`active` = USU_ATIVO; deleted vai no
+VÍNCULO, nunca na entity — ex-funcionário sincroniza). Cascata no Delphi
+(`TUserSendWeb`, seed Seq 39 — perfil PDV desliga): CPF/CNPJ válido do colaborador
+vinculado → documento; sem doc → reusa `TB_COLABORADOR.EXTERNALCODE` (vazio =
+segura o ciclo); sem colaborador → `TB_USUARIO.EXTERNALCODE` próprio (write-back).
+Deve sincronizar antes dos movimentos — eles referenciam o autor no bloco `user`:
+```jsonc
+"user": { "userDocument": "52998224725" }      // OU
+"user": { "userExternalCode": "uuid-v4" }      // exatamente UM dos dois
+// 409 USER_NOT_SYNCED quando a referência não resolve (auto-heal no próximo ciclo)
+// bloco AUSENTE = fallback de transição (pedidos: menor usuário; caixa: NULL; extrato: 0)
+```
+
 ### POST /salesman/sincronize (Onda 4 — precedência Collaborator→Salesman)
 ```jsonc
 {
@@ -295,12 +316,15 @@ id+institution+terminal para não colidir entre institutions.
 ### POST /cashier/sincronize (Onda 5 — id local)
 ```jsonc
 { "id": 91, "terminal": 1, "dtRecord": "2026-07-19",
-  "hrBegin": "2026-07-19 08:00:00", "hrEnd": "2026-07-19 18:12:00", "deleted": "N" }
+  "hrBegin": "2026-07-19 08:00:00", "hrEnd": "2026-07-19 18:12:00", "deleted": "N",
+  "user": { "userDocument": "52998224725" } }
 // → { ok: true, id: 91 }  (PK id+institution+terminal)
+// 409 USER_NOT_SYNCED (bloco user presente e não resolvido)
 ```
-`tb_userid` fica NULL (usuário local do Firebird não viaja — D3). O contrato
-antigo com `items` (tb_cashier_items) foi REMOVIDO — fechamento por forma de
-pagamento entra em endpoint próprio na onda de movimento financeiro.
+Bloco `user` opcional resolve o autor (2026-07-26, decisão 6); AUSENTE →
+`tb_userid` NULL (comportamento anterior). O contrato antigo com `items`
+(tb_cashier_items) foi REMOVIDO — fechamento por forma de pagamento entra em
+endpoint próprio na onda de movimento financeiro.
 
 ### POST /order-sale/sincronize (Onda 5 — pedido de venda completo)
 ```jsonc
@@ -312,31 +336,36 @@ pagamento entra em endpoint próprio na onda de movimento financeiro.
                "discountAliquot": 0, "discountValue": 0, "stockListId": 1, "priceListId": 3 } ],
   "totalizer": { "itemsQtde": 1, "productQtde": 2, "productValue": 19.8, "ipiValue": 0,
                  "discountAliquot": 0, "discountValue": 0, "expensesValue": 0, "totalValue": 19.8 },
-  "billing": { "paymentTypeDescription": "DINHEIRO", "plots": "1", "deadline": "30" }
+  "billing": { "paymentTypeDescription": "DINHEIRO", "plots": "1", "deadline": "30" },
+  "user": { "userDocument": "52998224725" }          // AUTOR (PED_CODUSU reindexado)
 }
-// 409: CUSTOMER_NOT_SYNCED · SALESMAN_NOT_SYNCED · PRODUCT_NOT_SYNCED · INSTITUTION_USER_NOT_FOUND
+// 409: CUSTOMER_NOT_SYNCED · SALESMAN_NOT_SYNCED · PRODUCT_NOT_SYNCED ·
+//      USER_NOT_SYNCED · INSTITUTION_USER_NOT_FOUND (fallback sem usuário)
 ```
 Transação única: tb_order + sale + itens kind 'Sale' (+ item_merchandise quando o item
 traz stockListId) + totalizer + billing. `items` = snapshot. Cliente/vendedor por
 DOCUMENTO com papel verificado no schema (D3/D13).
-⚠️ `tb_order.tb_user_id` é NOT NULL (FK central) — fallback: menor usuário vinculado
-ao institution; sem usuário → 409 (decisão definitiva na Rodada 4).
+Autor (2026-07-26): bloco `user` → tb_user_id real; AUSENTE → fallback de transição
+(menor usuário do institution). No reenvio, tb_user_id só é atualizado quando o
+bloco veio — o fallback nunca sobrescreve um autor real.
 
 ### POST /order-purchase/sincronize (Onda 5)
 ```jsonc
 { "id": 2001, "terminal": 0, "deleted": "N", "order": { },
   "purchase": { "number": 12, "providerDocument": "11222333000181", "approved": "S" },
   "items": [ { "id": 1, "productId": 501, "quantity": 10, "unitValue": 5.5 } ],
-  "totalizer": { } }
-// itens kind 'Purchase'; 409 PROVIDER_NOT_SYNCED · PRODUCT_NOT_SYNCED
+  "totalizer": { }, "user": { "userExternalCode": "uuid-v4" } }
+// itens kind 'Purchase'; 409 PROVIDER_NOT_SYNCED · PRODUCT_NOT_SYNCED · USER_NOT_SYNCED
 ```
 
 ### POST /order-stock-adjust/sincronize (Onda 5)
 ```jsonc
 { "id": 3001, "terminal": 0, "deleted": "N", "order": { },
   "adjust": { "number": 3, "entityDocument": "52998224725", "direction": "E" },
-  "items": [ { "id": 1, "productId": 501, "quantity": 3, "unitValue": 0 } ] }
+  "items": [ { "id": 1, "productId": 501, "quantity": 3, "unitValue": 0 } ],
+  "user": { "userDocument": "52998224725" } }
 // itens kind 'Adjust'; entityDocument OPCIONAL (ausente → tb_entity_id = 0 sentinela)
+// bloco user opcional (409 USER_NOT_SYNCED quando presente e não resolvido)
 ```
 
 ### POST /financial/sincronize (Onda 5 — formato NOVO 5.5, semântica de ESPELHO)
@@ -364,9 +393,11 @@ A imutabilidade plena vale para eventos nascidos na web.
   "bankHistoricId": null, "creditValue": 19.8, "debitValue": 0, "manualHistory": "...",
   "kind": "C", "settledCode": 7, "future": "N", "dtOriginal": null, "docReference": "...",
   "conferred": "N", "paymentTypeDescription": "DINHEIRO",
-  "financialPlansIdCre": 0, "financialPlansIdDeb": 0, "deleted": "N" }
+  "financialPlansIdCre": 0, "financialPlansIdDeb": 0, "deleted": "N",
+  "user": { "userDocument": "52998224725" } }
 // 409 BANK_ACCOUNT_NOT_SYNCED (só se bankAccountId informado); ausente → 0 (sentinela)
-// status 'N' e id_origin NULL (espelho); tb_user_id = 0
+// status 'N' e id_origin NULL (espelho); autor via bloco user (MVF_CODUSU) —
+// ausente → tb_user_id = 0 · 409 USER_NOT_SYNCED quando presente e não resolvido
 ```
 
 ### POST /invoice-return-55/sincronize (Onda 6 — id local)

@@ -12,7 +12,7 @@
 | Projeto | Docs | Skills | Agentes | Status |
 |---------|------|--------|---------|--------|
 | **setes-api** | 11 | 4 | 1 | ✅ Ativo (Fase 2 concluída no backend) |
-| **setes-sync** | 5 | 3 | — | ✅ Ativo |
+| **setes-sync** | 6 | 3 | — | ✅ Ativo |
 | **setes-app** | 5 | 4 | 1 | 🔨 Fase 1 em construção (fundação pronta, cadastros em evolução) |
 | **sincronizador** | 2 | 0 | 1 | ✅ Legado |
 | **database** | 1 | 3 | — | ✅ Suporte (espelho de D:\Gestao2027\sql) |
@@ -195,6 +195,18 @@ D:\Gestao2027\Infra-IA/
   — NUNCA mescla, ação manual; (3) órfão segue por documento SÓ se o doc estiver livre
   (ocupado → 409 EXTERNAL_CODE_ORPHAN); (4) verificação governamental (BrasilAPI/Serpro) =
   fase futura. 19/19 testes.
+- `prompt_indexacao_usuario_firebird.md` — ⭐ FECHADO e EXECUTADO 2026-07-26 (8 decisões):
+  indexação de USUÁRIOS do Firebird (autor das operações — resolve a pendência 1 da Rodada 4).
+  Decisões: (1) autor legado = tb_user SEM credencial (password NULL/active 'N') via
+  /user/sincronize; (2) cascata CPF do colaborador → TB_COLABORADOR.EXTERNALCODE →
+  TB_USUARIO.EXTERNALCODE (DM.GetUserSyncRef); (3) contrato mínimo + vínculo kind='SYNC';
+  (4) não-invasão da credencial de usuário web real; (5) fallback só na transição (bloco
+  `user` ausente) e nunca sobrescreve autor real; (6) bloco `user` também em cashier e
+  financial-statement; (7) ex-funcionário sincroniza (active/deleted no VÍNCULO);
+  (8) PDV só resolve por documento (EXTERNALCODE não replica — memória
+  retaguarda-replicacao-externalcode). TUserSendWeb + seed Seq 39; 20/20 testes. Ajuste
+  2026-07-26 (Valdo): 7 linhas TB_REST_* REMOVIDAS do seed + DELETE idempotente no bootstrap
+  (catálogo = 32 linhas; Seqs 31–37 reservados).
 
 **Skills (3):**
 1. `setup-setes-sync.md` — Setup inicial (~20 min)

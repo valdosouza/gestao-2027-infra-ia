@@ -42,13 +42,14 @@ transformações aplicadas. Atualizar SEMPRE que um endpoint for revisado.
 | 14 | Provider | central (cadeia) + setes_<cli>.tb_provider | **DOCUMENTO/UUID** | ❌ NUNCA | Onda 4 |
 | 15 | SalesMan | central (cadeia) + setes_<cli>.tb_collaborator/tb_salesman | **DOCUMENTO/UUID** | ❌ NUNCA | precedência Collaborator→Salesman — Onda 4; ✔ revisão de entidades 2026-07-25: sem CPF → UUID em `TB_COLABORADOR.EXTERNALCODE` (bootstrap cria; write-back por classe) |
 | 15b | Carrier (Transportadora) | central (cadeia) + setes_<cli>.tb_carrier | **DOCUMENTO/UUID** | ❌ NUNCA | ✔ revisão de entidades 2026-07-25 (decisão 4): `TCarrierSendWeb` + `/carrier/sincronize` + seed Seq 38 — fecha o 409 CARRIER_NOT_SYNCED eterno; sincroniza ANTES do customer |
+| 15c | User (TB_USUARIO — autor das operações) | central: cadeia + tb_user SEM credencial (password NULL, active='N') + tb_institution_has_user kind='SYNC' | **DOCUMENTO/UUID** (cascata: CPF do colaborador → TB_COLABORADOR.EXTERNALCODE → TB_USUARIO.EXTERNALCODE) | ❌ NUNCA (USU_CODIGO não viaja) | ✔ `prompt_indexacao_usuario_firebird.md` 2026-07-26 (8 decisões): `TUserSendWeb` + `/user/sincronize` + seed Seq 39 (perfil PDV desliga — EXTERNALCODE não replica); movimentos mandam bloco `user` (409 USER_NOT_SYNCED) |
 | 16 | BankAccount | setes_<cli>.tb_bank_account | **ID LOCAL** ✅ | ✅ CTB_CODIGO = id | banco por NÚMERO FEBRABAN → setes_central.tb_bank (D2 da Onda 3 SH) — Onda 4 |
-| 17–19 | OrderSale/Purchase/StockAdjust | setes_<cli>.tb_order + satélites | **ID LOCAL** ✅ | ✅ PED_CODIGO = id | ✔ Onda 5: cliente/vendedor/fornecedor por DOCUMENTO c/ papel verificado (409 *_NOT_SYNCED); itens snapshot; ⚠️ tb_user_id NOT NULL → fallback menor usuário do institution (Rodada 4) |
+| 17–19 | OrderSale/Purchase/StockAdjust | setes_<cli>.tb_order + satélites | **ID LOCAL** ✅ | ✅ PED_CODIGO = id | ✔ Onda 5: cliente/vendedor/fornecedor por DOCUMENTO c/ papel verificado (409 *_NOT_SYNCED); itens snapshot; ✔ 2026-07-26: autor real via bloco `user` (linha 15c) — fallback só na transição (bloco ausente); reenvio COM bloco corrige o autor |
 | 20–21 | Invoice / InvoiceMerchandise | setes_<cli>.tb_invoice | **ID LOCAL** ✅ | ✅ NFL_CODIGO = id | ✔ Onda 5: destinatário por DOCUMENTO; CFOP = id da central (409 CFOP_NOT_FOUND); ⚠️ tb_invoice NÃO tem coluna de pedido — orderId só validado (vínculo persistido = DDL da Rodada 4) |
 | 22 | StockStatement | setes_<cli>.tb_stock_statement | **ID LOCAL** ✅ | ✅ CET_CODIGO = id | ✔ Onda 5; ⚠️ PK física só `id` AUTO_INCREMENT — colisão entre institutions possível (DDL da Rodada 4); trigger de saldo só dispara no INSERT |
 | 23 | Financial | setes_<cli>.tb_financial | **PK NATURAL** (inst+order+terminal+parcel) | ❌ FIN_CODIGO NÃO viaja (id vestigial no modelo 5.5) | ✔ Onda 5: **SEMÂNTICA DE ESPELHO** — baixa do legado = evento 1 status 'N' via upsert; estornos do legado não viajam; imutabilidade plena p/ eventos nascidos na web |
-| 24 | FinancialStatement | setes_<cli>.tb_financial_statement | **ID LOCAL** ✅ | ✅ MVF_CODIGO = id | ✔ Onda 5: status 'N'/id_origin NULL (espelho); bank_account/historic ausentes → 0 sentinela |
-| 25 | Cashier | setes_<cli>.tb_cashier | **ID LOCAL** ✅ | ✅ | ✔ Onda 5: tb_userid NULL; items do caixa REMOVIDOS do contrato (endpoint próprio futuro) |
+| 24 | FinancialStatement | setes_<cli>.tb_financial_statement | **ID LOCAL** ✅ | ✅ MVF_CODIGO = id | ✔ Onda 5: status 'N'/id_origin NULL (espelho); bank_account/historic ausentes → 0 sentinela; ✔ 2026-07-26: MVF_CODUSU via bloco `user` (ausente → 0) |
+| 25 | Cashier | setes_<cli>.tb_cashier | **ID LOCAL** ✅ | ✅ | ✔ Onda 5: items do caixa REMOVIDOS do contrato (endpoint próprio futuro); ✔ 2026-07-26: autor via bloco `user` (ausente → tb_userid NULL) |
 | — | Retornos NF-e 55/65 / NFS-e / FileXml | tb_invoice (retorno) + disco | chave da NF-e / ID LOCAL | ✅ | arquivos: `SYNC_FILES_ROOT/<cnpj>/<ano>/<mes>/` (D20) — Onda 6 |
 
 > ⚠️ As linhas marcadas com a onda futura são o PLANO — cada onda confirma/ajusta
@@ -66,6 +67,13 @@ mais confiável que a Documentacao.md). Script de seed:
 pelas Ondas 1–6 (SET_ON='S'), 9 ficam SET_ON='N' (7 do módulo restaurante
 aposentado D23 + 2 gaps abaixo).
 
+**Ajuste 2026-07-26 (Valdo)**: as 7 linhas TB_REST_* foram REMOVIDAS do catálogo —
+saíram do seed e o bootstrap as DELETA de bancos já semeados (Seqs 31–37 ficam
+reservados). Catálogo atual = **32 linhas**: Seqs 1–29 + 38 (carrier) + 39 (user)
+com SET_ON='S'; só a CC-e (Seq 30) fica 'N' até a Rodada 4.
+**Campo WAY**: 'E' = Enviar (local → web), 'R' = Receber (web → local, fase D16) —
+convenção do motor (`ControllerListaSincronia`: getListaEnviar/getListaReceber).
+
 **NOVO GAP encontrado**: `TInvoiceRectificationSendWeb` (Carta de Correção
 Eletrônica — CC-e, tabela `TB_CARTA_CORRECAO`/`CCE_CODIGO`) está registrada no
 Delphi mas **não tinha endpoint em nenhuma das 6 ondas** — não estava na ordem
@@ -78,10 +86,11 @@ tabela própria).
 Achadas durante a implementação das Ondas 3–5; os endpoints funcionam com os
 fallbacks descritos, mas a decisão definitiva é arquitetural:
 
-1. **tb_order.tb_user_id NOT NULL** (FK → setes_central.tb_user): pedidos do sync não
-   têm usuário web. Fallback atual: menor usuário vinculado ao institution (409
-   `INSTITUTION_USER_NOT_FOUND` se não houver). Opções: usuário-sentinela "sync" na
-   central × coluna nullable × manter fallback.
+1. ~~**tb_order.tb_user_id NOT NULL**: pedidos do sync não têm usuário web~~ —
+   **RESOLVIDO 2026-07-26** (`prompt_indexacao_usuario_firebird.md`, 8 decisões):
+   frente Usuário completa (linha 15c) — autor real via bloco `user`; o fallback
+   (menor usuário do institution) ficou SÓ para payloads sem o bloco (transição —
+   morte do fallback quando todos os clientes compilarem o executável novo).
 2. **tb_invoice sem coluna de pedido**: o /invoice-merchandise valida o orderId mas
    não persiste o vínculo nota×pedido. Persistir = DDL nova (coluna tb_order_id).
 3. **tb_stock_statement com PK só `id` AUTO_INCREMENT**: ids locais de institutions

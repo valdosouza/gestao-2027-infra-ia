@@ -1,0 +1,32 @@
+# Contexto
+	Tratamentos de Usuarios do sistema delphi quando forem para o sistema web Flutter 
+	
+# Objetivo
+	Criar uma sistematica para indexar corretamente uma vez que :
+		Delphi -> firebird -> TB_PEDIDO.PED_CODUSU
+		Flutter -> Mysql -> tb_order.tb_user_id 
+		
+# workflow do problem
+	Usuarios no sistema delphi nao utilizam email como login ...e sim um login simples como TB_USUARIO.USU_LOGIN.
+	Usuarios no Sistema Flutter utilizam email como login e este email esta conectado a criacao anterior de uma entity.
+	Usuarios no sistema Flutter sao no principio entidades (que podem ou nao possuir cpf/cnpj)
+	Usuarios do Sistema delphi podem estar vinculados a tb_colaborador.clb_codusu ligados a TB_USUARIO.USU_CODIGO
+	Quando enviamos um TB_PEDIDO que se tornara um tb_order o usuario precisa estar identificado, caso contrario erro de FK
+	
+	## Na web quando o payload chega atraves da api o tb_order.tb_user_id precisa ser reinxado para o codigo real, tal qual fazemos com cliente/fornecedor etc.
+		Para todo payload que chega no endpoint o tb_user_id sera o codigo do firebird e nao o usuario real da nova estrutura.
+		
+	## Circunstancias
+		1 - Tem colaborador vinculado com usuario e este usuario pode ter cpf e cnpj
+		2 - Tem colaborador nao vinculado com usuario 
+		3 - O usuario nao vinculado ao colaborador ainda pode ter pedidos vinculado
+			3.1  - Este usuario pode nem mais estar trabalhando na empresa,mas precisamso indexar o codigo
+			
+# importante me ajude a pensar como resolver isso 		
+	
+	
+					
+					
+			
+			
+			
