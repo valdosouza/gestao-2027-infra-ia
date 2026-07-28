@@ -143,6 +143,18 @@ Pai ainda não sincronizado → **409 `PARENT_NOT_SYNCED`** (reenviar no próxim
 `nameBrand`/`namePackage`/`nameMeasure` = DESCRIÇÕES → resolvidas no catálogo central + vínculo
 (fallbacks legados: 'NÃO INFORMADA' / 'UND'). Categoria ausente → **409 `CATEGORY_NOT_SYNCED`**.
 `quantity`/`minimum` NÃO viajam aqui (domínio do /stock-balance). `id_provider` fica NULL (Onda 4).
+**Natureza (D2 — notas M×S, 2026-07-26)**: `product.kind` 'P'/'M' (gravado em `tb_product.kind`;
+fallback de transição: `merchandise.kind` legado); 'S'/'A' → **422 `KIND_NOT_ALLOWED`**
+(serviço usa o /service; 'A' aposentado).
+
+### POST /service/sincronize (notas M×S, 2026-07-26 — produto de SERVIÇO, D2)
+```jsonc
+{ "id": 501, "deleted": "N",             // PRO_CODIGO ✅ (mesmo espaço de id do /merchandise)
+  "product": { "description": "TROCA DE OLEO", "categoryId": 12, "identifier": "...",
+               "promotion": "N", "highlights": "N", "active": "S", "published": "N", "note": null } }
+// grava SÓ tb_product com kind='S' (serviço não tem tb_merchandise/tb_stock)
+// 409 CATEGORY_NOT_SYNCED
+```
 
 ### POST /price-list/sincronize (Onda 3 — id local)
 ```jsonc
@@ -288,17 +300,41 @@ Fix do bug C5: o contrato novo traz fones na lista `phones` (kinds distintos FON
 **409 `ENTITY_NOT_SYNCED`**. `issuer:'S'` = a própria institution emite (coluna
 int grava institutionId — padrão service-orders); `'N'` grava o entity.id do
 terceiro. `cfopId` = o próprio código CFOP (id varchar de setes_central.tb_cfop)
-— desconhecido = **409 `CFOP_NOT_FOUND`**. Sem entityDocument → tb_entity_id = 0
-(NFC-e consumidor). `status` default 'A'.
+— **desconhecido = AUTO-CRIADO com descrição placeholder** (1ª rodada real 2026-07-27:
+a referência estava vazia e o 409 CFOP_NOT_FOUND barrou 1.384 notas; CFOP virou catálogo
+iniciado pelo cliente — a tela de CFOPs do Super enriquece; descrição vinda do legado =
+Rodada 4). `number` aceita VAZIO/ausente → NULL (nota ainda não autorizada; reenvio
+atualiza). Sem entityDocument → tb_entity_id = 0 (NFC-e consumidor). `status` default
+'A'. **Nota avulsa fica SEM ramo** (notas M×S/D3: NFL_TIPO 'EM' = entrada manual sem
+itens — a nota genérica não tem natureza).
 
-### POST /invoice-merchandise/sincronize (Onda 5 — nota vinculada a pedido)
+### POST /invoice-merchandise/sincronize (Onda 5; reescrito nas notas M×S 2026-07-26 — D1/D3)
 ```jsonc
-{ /* payload idêntico ao /invoice */ "orderId": 3021 }
-// 409: ORDER_NOT_SYNCED (tb_order id+institution+terminal) + os do /invoice
+{ /* payload do /invoice */
+  "merchandise": { "dtExit": "2026-07-26", "tmExit": "14:30:00", "baseIcmsValue": 0, "icmsValue": 0,
+                   "baseIcmsStValue": 0, "icmsStValue": 0, "totalValue": 19.8, "freightValue": 0,
+                   "insuranceValue": 0, "expensesValue": 0, "ipiValue": 0, "discountValue": 0,
+                   "totalQtty": 3, "indPres": 1 } }
+// 409: ORDER_NOT_SYNCED + os do /invoice
 ```
-⚠️ ACHADO Onda 5: **tb_invoice NÃO tem coluna de pedido** — `orderId` é apenas
-VALIDADO (pedido precisa existir) e a nota gravada SEM vínculo persistido.
-Persistir nota×pedido = decisão de DDL futura.
+**Vínculo nota×pedido = a PRÓPRIA PK (D1)**: id = NFL_CODIGO = tb_order.id — o pedido precisa
+existir com o MESMO id. A antiga pendência "coluna tb_order_id" MORREU por construção.
+`orderId` legado (PED_CODIGO) é aceito e IGNORADO (transição). Grava tb_invoice **E o ramo
+`tb_invoice_merchandise`** — a natureza da nota é a PRESENÇA do ramo (D3); nota CONJUGADA =
+os dois ramos no mesmo id.
+**RODADA 2 (D10)**: FORA do catálogo do Delphi — o processo completo viaja pelos /order-*
+(bloco `invoice`). Este endpoint permanece na web como canal de NOTA ISOLADA (reenvio avulso).
+
+### POST /invoice-service/sincronize (notas M×S, 2026-07-26 — nota de SERVIÇO, D1/D3)
+```jsonc
+{ /* payload do /invoice (sem model — NFS-e não tem modelo SEFAZ) */
+  "service": { "totalValue": 80 } }    // NFL_VL_TL_SRV
+// 409: ORDER_NOT_SYNCED + os do /invoice
+```
+Grava tb_invoice + ramo `tb_invoice_service` (mínimo: total_value). RPS/lote/protocolo NÃO
+passam aqui — vivem no /invoice-return-service (D4). Mesmo vínculo pela PK (D1).
+**RODADA 2 (D10)**: FORA do catálogo do Delphi — o processo completo de serviço viaja pelo
+/order-service (bloco `invoice`). Permanece na web como canal de NOTA ISOLADA.
 
 ### POST /stock-statement/sincronize (Onda 5 — id local)
 ```jsonc
@@ -337,17 +373,55 @@ endpoint próprio na onda de movimento financeiro.
   "totalizer": { "itemsQtde": 1, "productQtde": 2, "productValue": 19.8, "ipiValue": 0,
                  "discountAliquot": 0, "discountValue": 0, "expensesValue": 0, "totalValue": 19.8 },
   "billing": { "paymentTypeDescription": "DINHEIRO", "plots": "1", "deadline": "30" },
-  "user": { "userDocument": "52998224725" }          // AUTOR (PED_CODUSU reindexado)
+  "user": { "userDocument": "52998224725" },         // AUTOR (PED_CODUSU reindexado)
+  "invoice": {                                       // RODADA 2 (D9/D10): objeto COMPLETO —
+    "kindEmis": "SE", "number": "000124", "serie": "1", "cfopId": "5102",   // a nota do
+    "entityDocument": "11222333000181", "dtEmission": "2026-07-26",         // processo na
+    "value": 19.8, "model": "55", "status": "A", "issuer": "S",             // MESMA transação
+    "merchandise": { "totalValue": 19.8, "discountValue": 0, "indPres": 1, "totalQtty": 2 } }
 }
 // 409: CUSTOMER_NOT_SYNCED · SALESMAN_NOT_SYNCED · PRODUCT_NOT_SYNCED ·
 //      USER_NOT_SYNCED · INSTITUTION_USER_NOT_FOUND (fallback sem usuário)
 ```
 Transação única: tb_order + sale + itens kind 'Sale' (+ item_merchandise quando o item
-traz stockListId) + totalizer + billing. `items` = snapshot. Cliente/vendedor por
-DOCUMENTO com papel verificado no schema (D3/D13).
+traz stockListId) + totalizer + billing. `items` = snapshot **ESCOPADO por kind='Sale'**
+(notas M×S: nunca toca itens 'Service'). Cliente/vendedor por DOCUMENTO com papel
+verificado no schema (D3/D13).
+**Id (D1 — notas M×S, 2026-07-26)**: o id enviado é o **NFL_CODIGO** da nota do pedido
+(a projeção `nfl_codigo AS PED_CODIGO` do legado já fazia isso) — a nota mista vincula
+todo o processo: tb_order.id = tb_invoice.id = orderId do financeiro.
+**D13 (2026-07-27)**: este endpoint recebe vendas PURAS (nota sem itens de serviço);
+o pedido CONJUGADO entra INTEIRO pelo /order-service (blocos sale+saleItems lá).
 Autor (2026-07-26): bloco `user` → tb_user_id real; AUSENTE → fallback de transição
 (menor usuário do institution). No reenvio, tb_user_id só é atualizado quando o
 bloco veio — o fallback nunca sobrescreve um autor real.
+
+### POST /order-service/sincronize (notas M×S — ORDEM DE SERVIÇO COMPLETA, D1/D6/D13)
+```jsonc
+{
+  "id": 1001, "terminal": 0, "deleted": "N",          // id = NFL_CODIGO (D1)
+  "order": { "dtRecord": "2026-07-26", "note": null, "status": "A", "origin": "D" },
+  "service": { "number": 55, "customerDocument": "11222333000181" },   // ramo serviço (sem vendedor)
+  "items": [ { "id": 2, "productId": 501, "quantity": 1, "unitValue": 80,
+               "discountAliquot": 0, "discountValue": 0 } ],           // itens SERVIÇO (sem stockList)
+  "sale":      { "number": 55, "salesmanDocument": "52998224725" },    // D13: CONJUGADA — ramo venda
+  "saleItems": [ { "id": 1, "productId": 502, "quantity": 2, "unitValue": 9.9,
+                   "stockListId": 1, "priceListId": 3 } ],             // D13: itens MERCADORIA (kind Sale)
+  "totalizer": { ... }, "billing": { ... }, "user": { ... }            // idênticos ao /order-sale
+}
+// 409: CUSTOMER_NOT_SYNCED · SALESMAN_NOT_SYNCED · PRODUCT_NOT_SYNCED · USER_NOT_SYNCED
+```
+**D13 (2026-07-27): a ordem CONJUGADA entra INTEIRA por aqui** — `sale`+`saleItems`
+presentes = grava também tb_order_sale + itens kind 'Sale' (+item_merchandise); o
+/order-sale fica para vendas PURAS (nota sem itens de serviço — filtros DISJUNTOS no
+Delphi). Ramo `tb_order_service` (number, tb_customer_id, open_lock NULL) + itens kind
+'Service'. Snapshots ESCOPADOS por kind (Service × Sale independentes). Totalizer/billing
+ÚNICOS do pedido. deleted='S' derruba TODOS os ramos e itens (a conjugada é deste endpoint).
+**RODADA 2 (D9/D10)**: aceita bloco `invoice` (campos do /invoice sem id/terminal/deleted +
+sub-bloco `service: { totalValue }` = NFL_VL_TL_SRV; **na conjugada, sub-bloco
+`merchandise` junto — presença = a nota também é de mercadoria**) — nota gravada na MESMA
+transação. Os /order-purchase e /order-stock-adjust também têm o bloco `invoice` (com
+sub-bloco `merchandise`; na compra, issuer='N' e entityDocument = fornecedor).
 
 ### POST /order-purchase/sincronize (Onda 5)
 ```jsonc

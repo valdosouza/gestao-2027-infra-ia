@@ -181,6 +181,18 @@ D:\Gestao2027\Infra-IA/
   local × GitHub — 28 endpoints, contrato D14, auth D12, rest* removidos, 14/14 testes; revisão
   Ondas 1–6 commitada e publicada (`583ab6d` em origin/feature/fase2-gerenciamento-central;
   merge para main em aberto)
+- `prompt_notas_mercadoria_servico.md` — ⭐ FECHADO e EXECUTADO 2026-07-26 (7 decisões D1–D7):
+  notas de MERCADORIA × SERVIÇO. D1: pedido conjugado = 1 nota MISTA no legado → 1 tb_order
+  (id = NFL_CODIGO, que vincula TODO o processo — pendência "coluna de pedido na tb_invoice"
+  MORTA por construção); D2: tb_product.kind P|M|S (migration 019 + /service novo; /merchandise
+  422 p/ 'S'); D3: natureza da nota = RAMO (tb_invoice_merchandise agora gravada ×
+  tb_invoice_service NOVA — migration 020; nota conjugada = 2 ramos no mesmo id); D4: RPS/lote
+  não sincronizam (retorno cobre; tb_provisional_receipt_service dropada); D5: tb_order_item_detail*
+  + flex dropadas (migration 021); D6: /order-service novo (snapshot escopado por kind);
+  D7: bugs de catch-up do ControllerSincronia corrigidos. **Rodada 2 (D8–D11, 2026-07-27)**:
+  SINCRONIA POR PROCESSO — TB_PEDIDO fora da fila (a NOTA dirige tudo); /order-* recebem o
+  objeto COMPLETO (bloco `invoice` na mesma transação); hierarquia Delphi TInvoice* substitui
+  as TOrder*; catálogo 33 linhas. Smoke 12/12 + 23/23 testes; patches 06/07.
 - `prompt_revisao_processo_atualiza_entidade.md` — ⭐ FECHADO e EXECUTADO 2026-07-25 (5 decisões):
   revisão do processo de entidades (Cliente/Fornecedor/Transportadora/Colaborador). Decisões:
   (1) colaborador fecha ciclo externalCode em TB_COLABORADOR (bootstrap + write-back por classe);

@@ -1,0 +1,132 @@
+# Contexto
+	Temos pedido e notas fiscais conjugadas no sistema Delphi mas separadas no sistema Web Flutter
+	
+# Objetivo
+	Tratar adequadamente a sincronia para que notas de mercadorias e notas de servicos sejam devidamente populadas na web
+	
+# Workflow do processo em Delphi
+	Tb_pedido
+		Inicialmente abrimos um ordem que pode ser de vendas ou de servico e os dois ao mesmo tempo
+		A tabela de pedido e preenchida apenas uma vez
+		
+	Tela de pedido
+		Temos o  cabecalho do pedido e duas Abas
+		Aba de produtos que vem da tabela TB_PRODUTO.PRO_TIPO <> 'S', por que temos pelo menos 2 tipo de produto [P]roduto Acabado|[M]ateria prima
+		Aba de Servicos que vem da tabela TB_PRODUTO.PRO_TIPO = 'S', [S]ervicos
+		
+	Tela de Fatuamento
+		Acontece de forma simultanea gerando TB_NOTA_FISCAL (aqui temos o erro de design pois propriedades se misturam)
+		O financeiro e gerado basedo fazendo a costura entre Tb_pedido => TB_NOTA_FISCAL => TB_FINANCEIRO que contem tanto FIN_CODPED, quanto FIN_CODNFL
+		
+	Tela de Autorizacao da nota Fiscal de Mercadoria
+		Ela somente aparece quando itens da nota do tipo [P]rodutos sao encontrados
+	Tela de Autorizacao da nota Fiscal de Servico
+		Ela somente aparece quando itens da nota do tipo [S]servico sao encontrados
+		
+# Workflow do processo de Sincronia
+	Envio de notas de Mercadorias
+		tb_order
+			tb_order_sale
+			tb_order_item
+			tb_order_billing
+			tb_order_totalizer
+			
+		Para retorno de noas fiscal eletronica temos
+			tb_invoice_return_55
+			tb_invoice_return_65			
+			
+			
+	Envio de notas de Servico
+		tb_order
+			tb_order_service
+				Esta tabela ainda nao existe e aqui e que entra uma nova diferenciacao
+				Atualmente temos 3 tiipos de servicos atualmente
+					Auto center - 99% dos clientes
+					Software house - Apenas a Setes utiliza
+					Manutencao de informatica - Apenas um cliente utiliza
+				Vamos criar essa tabela para atender qualquer tipo de servico
+				Ja temos  que guarda os dados de retorno do processamento de autorizacao
+				
+			tb_order_item
+			tb_order_billing
+			tb_order_totalizer		
+		
+		Para retorno de noas fiscal eletronica temos
+			A nota fiscal de servico exige o envio de u RPS - Recibo provisorio de Servico, que sera processada pela receita e retornara a nota pronta e numerada
+				CREATE TABLE TB_RPS_NFSE ( Padronizando novo nome na internet poderia ser tb_nfse_rps
+					TB_NOTAFISCAL_ID   INTEGER,
+					NUMERO             INTEGER,
+					PROTOCOLO          VARCHAR(50) COLLATE WIN_PTBR,
+					OBS                VARCHAR(500),
+					TB_INSTITUTION_ID  INTEGER,
+					DT_RECORD          TIMESTAMP,
+					DELETED            CHAR(1) DEFAULT 'N'
+				);		
+			Temos o controle de envio de lotes  - Nao sei se precisamos disso precisaria conferir a necessidade..talvez para manter historico antigo
+				CREATE TABLE TB_LOTE_NFSE ( Padronizando novo nome na internet poderia ser tb_nfse_Lote
+					TB_NOTAFISCAL_ID   INTEGER,
+					NUMEROLOTE         INTEGER,
+					OBS                VARCHAR(500),
+					TB_INSTITUTION_ID  INTEGER,
+					DELETED            CHAR(1) DEFAULT 'N'
+				);
+					
+			tb_invoice_return_service
+				Verifique se essa informacao esta sendo sincronizando na web
+
+
+			
+# Conceito de Pedido Conjugado
+	Quando o cliente preicsa de servicos eventualmente pode precisar de pecas para consertar algo.
+	Ao inves de abrir ordem de venda e ordem de servico, abrimos a ordem de servico que contempla pecas/produto e servicos
+	A estrutura ficaria assim
+		tb_order
+			tb_order_sale
+				tb_order_item com itens de produto
+			tb_order_servico
+				tb_order_item com itens de Servico
+			
+			Verifique se vale a pena sinalizar isso no item para nao depender de outas tabela
+			
+
+	
+	
+# Objetos relacionados
+	O conceito de produto no sistema abrange mercadorias e servicos, eventualmente podem surgir outras coisas
+	Esta informacao e apenas para sustentacao da da ideia de separacao na nova estrutura (objetos genericos e objetos especializados)
+	
+	Objeto merchandise é composto basicamente por 
+		tb_produto
+		tb_merchandise
+		tb_stock
+		
+	Objeto service é composto basicamente por 
+		tb_produto
+		nao consegui identificar o que poderia ser especilizado em produto
+			
+	# Sugestao de restruturacao
+		Como estamos reconstruindo vale apena analisar sob a outra otica se vale a pena manter esse conceito ou ja providencia a separacao
+		Hoje em dia eu nao consigo enxergar por que mantive os dois juntos...
+			Acredito que pode ser um erro de design....me ajude nisso
+			
+			
+# Desafio da mudanca
+	tb_nota_fiscal na tabela pode ser de mercadoria e de servico
+		NFL_MODELO nao contempla servico ...nao tem como separar por isso
+		NFL_VL_TL_SRV pode ser um bom marcador pois nota sempre tera valor, mas como os dados estao misturados tomar cuidado
+		NFL_VL_TL_PROD - se tiver valor e pedido conjugado mas as notas estao separadas, se nao tiver valor e somente servico
+		NFL_VL_TL_NOTA - totalizador dos dos valores...podendo incluir valores extras...
+		
+	TB_ITENS_NFL - Serve para produtos e servicos, vinculado com tb_produto podemos saber se e produto do tipo merchandise ou service
+		
+# Endpoints
+	TOrderSaleSendWeb - Ja temos mas precisa ser ajustada para enviar somente se for de mercadoria
+	TOrderServiceSendWeb - Ainda não temos e deve  somente se for de Servico
+		
+			
+			
+# Remocoes
+	tb_order_item_detail_observation
+	tb_order_item_detail_optional
+	tb_order_item_detail_remove
+	tb_order_item_flex

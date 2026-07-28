@@ -1,0 +1,19 @@
+{
+    "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+    "name": "engine-kit",
+    "version": "0.3.0",
+    "description": "Legacy Modernization Engine — a portable, case-neutral method for modernizing legacy systems: faithful legacy assessment, conceptual distillation (lego pieces, not scale models), numbered decision rounds owned by the business owner, continuous knowledge retention, scope census governance, and git security hygiene.",
+    "author": {
+        "name": "Valdo Souza"
+    },
+    "keywords": [
+        "legacy-modernization",
+        "knowledge-base",
+        "decision-records",
+        "domain-modeling",
+        "migration",
+        "skills",
+        "method",
+        "governance"
+    ]
+}

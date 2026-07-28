@@ -30,7 +30,8 @@ transformações aplicadas. Atualizar SEMPRE que um endpoint for revisado.
 | 2 | Category | setes_<cli>.tb_category | **ID LOCAL** ✅ | ✅ CAT_CODIGO = id (PK id+institution) | árvore: posit_level SEMPRE recalculado pela API (@shared/tree-path) — Onda 3 |
 | 3 | Measure | setes_central.tb_measure + tb_institution_has_measure | DESCRIÇÃO | ❌ descartado | Onda 3 |
 | 4 | Package | setes_central.tb_package + tb_institution_has_package | DESCRIÇÃO | ❌ descartado | Onda 3 |
-| 5 | Merchandise (Produto) | setes_<cli>.tb_product/tb_merchandise/tb_stock | **ID LOCAL** ✅ | ✅ PRO_CODIGO = id | ✔ Onda 3: brand/package/measure por DESCRIÇÃO (fallbacks 'NÃO INFORMADA'/'UND'); categoria por id local (409 CATEGORY_NOT_SYNCED); `id_provider` fica NULL até a Onda 4 (fornecedor é por DOCUMENTO — id local violaria D3); quantity/minimum são domínio do stock-balance |
+| 5 | Merchandise (Produto P/M) | setes_<cli>.tb_product/tb_merchandise/tb_stock | **ID LOCAL** ✅ | ✅ PRO_CODIGO = id | ✔ Onda 3: brand/package/measure por DESCRIÇÃO (fallbacks 'NÃO INFORMADA'/'UND'); categoria por id local (409 CATEGORY_NOT_SYNCED); `id_provider` fica NULL até a Onda 4 (fornecedor é por DOCUMENTO — id local violaria D3); quantity/minimum são domínio do stock-balance; ✔ notas M×S 2026-07-26 (D2): `product.kind` P/M gravado em tb_product.kind; 'S'/'A' → 422 KIND_NOT_ALLOWED |
+| 5b | Service (Produto S) | setes_<cli>.tb_product (SÓ ela — kind='S') | **ID LOCAL** ✅ | ✅ PRO_CODIGO = id (mesmo espaço do #5) | ✔ notas M×S 2026-07-26 (D2): `/service/sincronize` — serviço não tem tb_merchandise/tb_stock; migration 019 backfillou kind e soft-deletou especializações indevidas |
 | 6 | PriceList | setes_<cli>.tb_price_list | **ID LOCAL** ✅ | ✅ TPR_CODIGO = id | ✔ Onda 3: coluna de ativo real é `published`; margem = `aliq_profit` |
 | 7 | Price | setes_<cli>.tb_price | composto (institution+priceList+product) | ✅ via PriceList+Produto | ✔ Onda 3: FK real → tb_product; 409 PRICE_LIST/PRODUCT_NOT_SYNCED |
 | 8 | StockList | setes_<cli>.tb_stock_list | **ID LOCAL** ✅ | ✅ ETS_CODIGO = id | ✔ Onda 3: ETS_PRINCIPAL → coluna `main` |
@@ -44,8 +45,10 @@ transformações aplicadas. Atualizar SEMPRE que um endpoint for revisado.
 | 15b | Carrier (Transportadora) | central (cadeia) + setes_<cli>.tb_carrier | **DOCUMENTO/UUID** | ❌ NUNCA | ✔ revisão de entidades 2026-07-25 (decisão 4): `TCarrierSendWeb` + `/carrier/sincronize` + seed Seq 38 — fecha o 409 CARRIER_NOT_SYNCED eterno; sincroniza ANTES do customer |
 | 15c | User (TB_USUARIO — autor das operações) | central: cadeia + tb_user SEM credencial (password NULL, active='N') + tb_institution_has_user kind='SYNC' | **DOCUMENTO/UUID** (cascata: CPF do colaborador → TB_COLABORADOR.EXTERNALCODE → TB_USUARIO.EXTERNALCODE) | ❌ NUNCA (USU_CODIGO não viaja) | ✔ `prompt_indexacao_usuario_firebird.md` 2026-07-26 (8 decisões): `TUserSendWeb` + `/user/sincronize` + seed Seq 39 (perfil PDV desliga — EXTERNALCODE não replica); movimentos mandam bloco `user` (409 USER_NOT_SYNCED) |
 | 16 | BankAccount | setes_<cli>.tb_bank_account | **ID LOCAL** ✅ | ✅ CTB_CODIGO = id | banco por NÚMERO FEBRABAN → setes_central.tb_bank (D2 da Onda 3 SH) — Onda 4 |
-| 17–19 | OrderSale/Purchase/StockAdjust | setes_<cli>.tb_order + satélites | **ID LOCAL** ✅ | ✅ PED_CODIGO = id | ✔ Onda 5: cliente/vendedor/fornecedor por DOCUMENTO c/ papel verificado (409 *_NOT_SYNCED); itens snapshot; ✔ 2026-07-26: autor real via bloco `user` (linha 15c) — fallback só na transição (bloco ausente); reenvio COM bloco corrige o autor |
-| 20–21 | Invoice / InvoiceMerchandise | setes_<cli>.tb_invoice | **ID LOCAL** ✅ | ✅ NFL_CODIGO = id | ✔ Onda 5: destinatário por DOCUMENTO; CFOP = id da central (409 CFOP_NOT_FOUND); ⚠️ tb_invoice NÃO tem coluna de pedido — orderId só validado (vínculo persistido = DDL da Rodada 4) |
+| 17–19 | OrderSale/Purchase/StockAdjust | setes_<cli>.tb_order + satélites **+ tb_invoice + ramo** | **ID LOCAL** ✅ | ✅ **NFL_CODIGO** = id (D1 notas M×S — a projeção do legado `nfl_codigo AS PED_CODIGO` sempre enviou a nota; PED_CODIGO NÃO viaja) | ✔ Onda 5 + rodada 2 (D8–D11, 2026-07-27): **PROCESSO COMPLETO** — fila dirigida por TB_NOTA_FISCAL (TB_PEDIDO FORA da fila; trigger morto); bloco `invoice` grava a nota + ramo na MESMA transação (mata o 409 ORDER_NOT_SYNCED por construção); cliente/vendedor/fornecedor por DOCUMENTO; itens snapshot ESCOPADO por kind; autor via bloco `user` |
+| 17b | OrderService (ordem de serviço COMPLETA) | setes_<cli>.tb_order + tb_order_service (+ tb_order_sale na conjugada) + itens 'Service'/'Sale' + tb_invoice + ramos | **ID LOCAL** ✅ | ✅ NFL_CODIGO = id | ✔ notas M×S (D1/D6/D13): `/order-service/sincronize` recebe a ordem INTEIRA — na conjugada, blocos `sale`+`saleItems`+`invoice.merchandise` viajam juntos (1 envio, 1 transação); /order-sale fica para vendas PURAS; snapshots escopados por kind; totalizer/billing únicos; open_lock NULL |
+| 20–21 | Invoice / InvoiceMerchandise | setes_<cli>.tb_invoice (+ ramo tb_invoice_merchandise) | **ID LOCAL** ✅ | ✅ NFL_CODIGO = id | ✔ Onda 5: destinatário por DOCUMENTO; CFOP = id da central (409 CFOP_NOT_FOUND); ✔ notas M×S (D1/D3): vínculo nota×pedido = a PRÓPRIA PK; ✔ rodada 2 (D10): /invoice-merchandise SAIU do catálogo Delphi (canal de nota ISOLADA na web); só a NOTA_AVULSA (/invoice) segue no catálogo |
+| 21b | InvoiceService (nota de serviço) | setes_<cli>.tb_invoice + ramo tb_invoice_service (migration 020) | **ID LOCAL** ✅ | ✅ NFL_CODIGO = id (MESMO id no conjugado) | ✔ notas M×S (D3) + rodada 2 (D10): /invoice-service SAIU do catálogo Delphi (canal isolado) — o processo de serviço viaja pelo /order-service; RPS/lote vivem no retorno (D4) |
 | 22 | StockStatement | setes_<cli>.tb_stock_statement | **ID LOCAL** ✅ | ✅ CET_CODIGO = id | ✔ Onda 5; ⚠️ PK física só `id` AUTO_INCREMENT — colisão entre institutions possível (DDL da Rodada 4); trigger de saldo só dispara no INSERT |
 | 23 | Financial | setes_<cli>.tb_financial | **PK NATURAL** (inst+order+terminal+parcel) | ❌ FIN_CODIGO NÃO viaja (id vestigial no modelo 5.5) | ✔ Onda 5: **SEMÂNTICA DE ESPELHO** — baixa do legado = evento 1 status 'N' via upsert; estornos do legado não viajam; imutabilidade plena p/ eventos nascidos na web |
 | 24 | FinancialStatement | setes_<cli>.tb_financial_statement | **ID LOCAL** ✅ | ✅ MVF_CODIGO = id | ✔ Onda 5: status 'N'/id_origin NULL (espelho); bank_account/historic ausentes → 0 sentinela; ✔ 2026-07-26: MVF_CODUSU via bloco `user` (ausente → 0) |
@@ -69,8 +72,35 @@ aposentado D23 + 2 gaps abaixo).
 
 **Ajuste 2026-07-26 (Valdo)**: as 7 linhas TB_REST_* foram REMOVIDAS do catálogo —
 saíram do seed e o bootstrap as DELETA de bancos já semeados (Seqs 31–37 ficam
-reservados). Catálogo atual = **32 linhas**: Seqs 1–29 + 38 (carrier) + 39 (user)
-com SET_ON='S'; só a CC-e (Seq 30) fica 'N' até a Rodada 4.
+reservados). **Notas M×S rodada 2 — SINCRONIA POR PROCESSO (D8–D11, 2026-07-27)**: **TB_PEDIDO SAIU
+da fila** (Seqs 17/18/19/41 removidas; Seq 21 NOTA_MERCADORIA também — a intermediária
+não envia; trigger real `TG_SRC_PEDIDO` dropado pelo bootstrap, que também limpa a fila
+órfã). A NOTA dirige tudo, e a **renumeração do Valdo (2026-07-27)** pôs o bloco de
+processo logo após a avulsa (corrigindo a ordem de dependência — retornos processavam
+antes das notas): Seq 20 NOTA_AVULSA (/invoice), **Seq 21 NOTA_SERVICO** (→ /order-service),
+**Seq 22 NOTA_VENDA** (→ /order-sale), **Seq 23 NOTA_COMPRA** (→ /order-purchase),
+**Seq 24 NOTA_AJUSTE** (→ /order-stock-adjust); as linhas antigas 22–30 foram empurradas
+para **25–33** (retornos 55/65/NFS-e = 29/30/31, arquivo 32, CC-e 33 'N'); Seq 40
+TB_PRODUTO/SERVICO (→ /service) mantida. Hierarquia Delphi: TInvoiceSendWeb (base) ←
+TInvoiceMerchandiseSendWeb (intermediária sem catálogo) ← Sale/Purchase/Adjust;
+TInvoiceServiceSendWeb herda da base. **Usuário PRIMEIRO (Valdo, 2026-07-27)**:
+TB_USUARIO subiu para a **Seq 1** (referência do bloco `user` dos movimentos);
+cadastros antigos 1–16 → 2–17; **transportadora → 18 e produto-serviço → 19**
+(cadastros básicos — sem eles as notas não podem ser usadas; estavam depois do
+movimento). Catálogo atual = **33 linhas CONTÍGUAS (32 ativas)**: Seqs 1–19
+cadastros + 20–33 movimento; reservados 34+. Perfil PDV desliga tudo que não é
+movimento (`SEQ NOT BETWEEN 20 AND 33` — robusto a renumeração). O bootstrap agora **ENFORÇA o SEQ por (TABELA, KIND)** a cada start —
+bancos já semeados se renumeram sozinhos; SQL manual do patch 07 = só os INSERTs das
+linhas novas 21–24.
+**Mecânica de fila (D13, 2026-07-27 — a marca [KIND] dos patches 06/07 foi REMOVIDA,
+patch 08)**: marca ÚNICA no SRC_LOG e **só de quem ENVIA** — classe cujo filtro não casa
+"não tem nada pra enviar" e NÃO marca (registro segue para as próximas do ciclo). Funciona
+porque os filtros são **DISJUNTOS**: NOTA_SERVICO = ped_tipo 1 COM itens S (e envia a
+ordem conjugada INTEIRA: sale+saleItems+invoice.merchandise juntos) × NOTA_VENDA =
+ped_tipo 1 SEM itens S × COMPRA/AJUSTE = ped_tipo 2/3 × AVULSA = nfl_tipo 'EM';
+TB_PRODUTO: P/M × S. **Limpeza da fila (revisão do Valdo 2026-07-27)**: só remove
+registro >48h COM envio OK (SRC_LOG='OK'); erro, pendente e órfão (ex.: PRO_TIPO 'A')
+PERMANECEM para verificação.
 **Campo WAY**: 'E' = Enviar (local → web), 'R' = Receber (web → local, fase D16) —
 convenção do motor (`ControllerListaSincronia`: getListaEnviar/getListaReceber).
 
@@ -91,8 +121,10 @@ fallbacks descritos, mas a decisão definitiva é arquitetural:
    frente Usuário completa (linha 15c) — autor real via bloco `user`; o fallback
    (menor usuário do institution) ficou SÓ para payloads sem o bloco (transição —
    morte do fallback quando todos os clientes compilarem o executável novo).
-2. **tb_invoice sem coluna de pedido**: o /invoice-merchandise valida o orderId mas
-   não persiste o vínculo nota×pedido. Persistir = DDL nova (coluna tb_order_id).
+2. ~~**tb_invoice sem coluna de pedido**~~ — **RESOLVIDO 2026-07-26**
+   (`prompt_notas_mercadoria_servico.md`, D1): o vínculo nota×pedido é a PRÓPRIA PK
+   compartilhada (id = NFL_CODIGO = tb_order.id — mesma identidade do módulo nativo
+   Software House). Nenhuma coluna nova; o orderId legado foi aposentado do contrato.
 3. **tb_stock_statement com PK só `id` AUTO_INCREMENT**: ids locais de institutions
    diferentes podem colidir fisicamente. Correção = PK composta (id, institution,
    terminal) — DDL.
