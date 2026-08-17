@@ -239,21 +239,30 @@ não eram logados em lugar nenhum e o SRC_LOG descartava o detalhe):
 1. `invoice.number` VAZIO (2.112) → aceito, grava NULL (nota não autorizada; reenvio atualiza).
 2. Rate limit 500/min (246) → 5.000/min (`SYNC_RATE_LIMIT_PER_MIN`).
 3. **Referência central VAZIA**: tb_cfop tinha 1 linha (1.384 CFOP_NOT_FOUND), tb_state 1,
-   tb_city 2 (500 de FK no endereço). Correções: seed 27 estados IBGE (`sql/06_seed_geo_estados.sql`,
-   alíquota 12.00 placeholder — REVISAR); cidade AUTO-CRIADA na carga (nome placeholder,
-   id do legado); CFOP AUTO-CRIADO (descrição placeholder); país/estado inexistentes =
-   409 COUNTRY/STATE_NOT_FOUND legíveis (era 500).
+   tb_city 2 (500 de FK no endereço). Correções: seed 27 estados IBGE (arquivo temporário
+   06_seed_geo_estados.sql — REMOVIDO em 2026-08-03: redundante com o canônico
+   `sql/06c_geo_state.sql` e o placeholder de alíquota foi superado pela importação real
+   abaixo); cidade AUTO-CRIADA na carga (nome placeholder, id do legado); CFOP AUTO-CRIADO
+   (descrição placeholder); país/estado inexistentes = 409 COUNTRY/STATE_NOT_FOUND
+   legíveis (era 500).
 4. `company.dtFoundation`/`person.birthday` vazios ('') → null (70 clientes barrados).
 ⚠️ Regra operacional: registro com ERRO não reenvia sozinho (pendência = SRC_LOG vazio) —
 retry manual: `UPDATE TB_SINCRONIA SET SRC_LOG = NULL WHERE SRC_LOG <> 'OK'`.
 **Referência REAL importada do legado (2026-07-27)**: Valdo exportou TB_PAIS/TB_STATE/
 TB_CIDADE/TB_CFOP do Firebird (`D:\Gestao2027\seed\*_firebird.sql`) → conversor
-`setes-sync/scripts/import-legado-referencia.ts` gerou o canônico
-`sql/07_seed_referencia_legado.sql` e aplicou: **245 países (BACEN), 28 UFs (IBGE, com
-alíquota interestadual real — mata o placeholder 12.00 do seed 06), 5.568 cidades (id
-do legado + IBGE preenchido), 530 CFOPs com descrição real**. Placeholders auto-criados
-foram todos enriquecidos (0 restantes); zero conflito de IBGE; Curitiba id 4004 confirma
-o esquema de ids. O auto-create de cidade/CFOP na carga permanece como rede de segurança.
+`setes-sync/scripts/import-legado-referencia.ts` gerou 07_seed_referencia_legado.sql e
+aplicou: **245 países (BACEN), 28 UFs (IBGE, com alíquota interestadual real — mata o
+placeholder 12.00 do seed temporário 06), 5.568 cidades (id do legado + IBGE preenchido),
+530 CFOPs com descrição real**. Placeholders auto-criados foram todos enriquecidos
+(0 restantes); zero conflito de IBGE; Curitiba id 4004 confirma o esquema de ids. O
+auto-create de cidade/CFOP na carga permanece como rede de segurança.
+⚠️ **Arquivo REMOVIDO da sequência canônica do sql/ (2026-08-03)**: é artefato POR
+CLIENTE (5.568 cidades com os ids do legado DAQUELE Firebird — colidem entre clientes,
+pendência da Rodada 4) e o bloco de cidades usa `ON DUPLICATE KEY UPDATE`, INCOMPATÍVEL
+com o esquema do canônico `sql/06d_geo_city.sql` (id sequencial + IBGE em coluna) — numa
+base que rodou o 06d ele SOBRESCREVERIA cidades. Já estava aplicado no dev; quando
+precisar (implantação de cliente), REGENERAR com a tool a partir dos dumps em
+`D:\Gestao2027\seed` — nunca versionar o gerado nem rodá-lo em base com 06d.
 **Pendências para a Rodada 4**: indexação de cidade por IBGE no payload (ids de cidade
 são os do legado — colidem entre clientes); retry automático de 409 de dependência.
 

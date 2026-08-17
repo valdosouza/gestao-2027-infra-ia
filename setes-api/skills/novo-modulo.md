@@ -66,6 +66,21 @@ router.use('/<plural>', superGuard, <plural>Routes)   // → /api/<plural>
   da PRÓPRIA tabela. Guia completo: skill `setes-app/skills/cadastro-entidade-fiscal.md`.
 - DECIMAL vira number (`decimalNumbers: true` no pool — nunca remover)
 - DDL nova? ANTES: `Infra-IA/database/PADROES_BANCO.md` + skill revisar-ddl
+- **GET de lista SEMPRE paginado** (2026-08-03 —
+  `Infra-IA/prompts/prompt_paginacao_telas_pesquisa.md`, D1–D10; molde =
+  `customers`): repository recebe `query: ListQuery` (`@shared/list`) e devolve
+  `PagedRows<Row>` — const `where` COMPARTILHADA entre o SELECT da página
+  (`LIMIT ? OFFSET ?`) e o `SELECT COUNT(*)` irmão (mesmo escopo/filtro por
+  construção — D2); ORDER BY estável com desempate por id (D8); NUNCA `LIMIT`
+  fixo no SQL. Controller: `const query = await parseListQuery(req, '<modulo>')`
+  (o 2º argumento resolve o default de pageSize pela config `page_size` do
+  usuário — D4) + `res.json(pagedEnvelope(query, ...))` →
+  `{ ok, data, page, pageSize, total }` (D3). Swagger declara `page`/`pageSize`.
+  A interface nova entra no seed `sql/22_page_size_config_seed.sql`.
+  Exceções (D6): lookups de apoio (LIMIT fixo pequeno) e árvores
+  (categories/financial-plans); relatórios com totais (ex.: extrato) não paginam.
+  Lista com HAVING sobre alias calculado: COUNT via subquery (molde
+  `settlements.listBills`).
 
 ## Passo 5 — Validar
 

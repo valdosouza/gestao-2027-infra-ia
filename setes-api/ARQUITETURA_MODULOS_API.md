@@ -67,6 +67,14 @@ posição (por módulo). Mudar o agrupador no menu NUNCA muda URL nem pasta.
 
 1. **Contrato JSON**: envelope `{ ok, data }`; alias SQL camelCase = nome do campo no
    fromJson do app; DECIMAL vira number (`decimalNumbers: true` no pool — nunca remover).
+   **GET de lista é PAGINADO por construção** (2026-08-03 —
+   `Infra-IA/prompts/prompt_paginacao_telas_pesquisa.md`): envelope
+   `{ ok, data, page, pageSize, total }` via `@shared/list`
+   (`parseListQuery(req, '<modulo>')` + `pagedEnvelope`); repository com `where`
+   compartilhada entre página (`LIMIT ? OFFSET ?`) e COUNT irmão; ORDER BY com
+   desempate por id; NUNCA `LIMIT` fixo. Default de pageSize = config
+   `page_size` do usuário (seed `sql/22`). Exceções: lookups de apoio, árvores
+   e relatórios com totais. Receita completa: skill `novo-modulo.md`.
 2. **Códigos**: padrão externo (BACEN/IBGE) → id digitado + 409 (mesmo deleted='S') +
    ER_DUP_ENTRY→409; sem padrão externo → MAX+1 no backend, campo readOnly no app.
    SEMPRE perguntar ao Valdo qual é o caso.

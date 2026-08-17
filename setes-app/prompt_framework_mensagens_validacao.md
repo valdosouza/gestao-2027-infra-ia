@@ -123,6 +123,29 @@ p/ form_pendency; lookup em queda de rede mostra a chave core.errors.*
 crua (fronteira sem-easy_localization do design system); theme/auth sem
 Failure completo no cubit (fora do escopo — natureza julgada local).
 
+### Correção pós-onda (2026-07-31) — "Validação falhou" genérico
+
+Bug real no cadastro de Estabelecimento: o Zod de DTOs COMPOSTOS (cadeia
+fiscal) devolve `fields[]` com paths ANINHADOS (`entity.nameCompany`,
+`person.cpf`, `company.cnpj`, `addresses.0.zipCode`) enquanto as telas
+declaram names PLANOS — só `schemaName` ancorava; todo o resto caía no
+fallback genérico "Validação falhou" (violando o próprio checklist da
+skill). Além disso as mensagens default do Zod eram técnicas e em inglês.
+Três correções:
+
+1. **API — error map global PT-BR**: `src/shared/validation/zod-pt.ts`
+   (importado por efeito no app.ts) traduz os issues comuns do Zod para
+   mensagens objetivas ("Campo obrigatório", "Informe no máximo N
+   caracteres", "Valor deve ser maior que 0"...). Mensagem explícita no
+   DTO tem precedência; datas ganharam mensagem própria (AAAA-MM-DD).
+2. **App — ancoragem tolerante**: `matchesServerFieldPath` (form_pendency)
+   casa o name do campo com o path exato OU com o ÚLTIMO segmento —
+   usada no showServerFieldFeedback (híbridos) e no showServerFieldError
+   da fábrica.
+3. **App — fallback nunca genérico**: fields[] presente sem campo na tela
+   → dialog `feedback.serverField` = "Campo \"X\": mensagem" (i18n pt/en),
+   em vez de mostrar só o `error` do envelope.
+
 ## Diagnóstico de referência (2026-07-19)
 
 49 SnackBars default em 26 arquivos; 0 componentes de feedback; 40+

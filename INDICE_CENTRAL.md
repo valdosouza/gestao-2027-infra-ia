@@ -1,7 +1,7 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 6.4 (acompanha a tabela "Histórico de Atualizações")  
-**Última atualização**: 2026-07-19  
+**Versão**: 7.6 (acompanha a tabela "Histórico de Atualizações")  
+**Última atualização**: 2026-08-16  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
 
@@ -16,9 +16,10 @@
 | **setes-app** | 5 | 4 | 1 | 🔨 Fase 1 em construção (fundação pronta, cadastros em evolução) |
 | **sincronizador** | 2 | 0 | 1 | ✅ Legado |
 | **database** | 1 | 3 | — | ✅ Suporte (espelho de D:\Gestao2027\sql) |
-| **skills-genericas** | — | 2 | — | ✅ Qualquer projeto |
+| **skills-genericas** | — | 6 | — | ✅ Qualquer projeto |
 | **git-github** | 6 | 1 script | — | ✅ Suporte |
-| **codigo-aprendizado** | — | — | — | ✅ POCs/estudo |
+| **codigo-aprendizado** | — | — | — | ✅ POCs/estudo + código legado (Gestao2016) |
+| **Gestao2016** | 2 | — | — | 📖 Aprendizado do legado sob instrução do AUTOR (em construção) |
 | **integration** | 0 | 1 | — | ✅ Suporte |
 | **Central** | 7 | 0 | — | ✅ Referência |
 | **engine-kit** | 3 | 5 | — | 📦 Kit de portabilidade da engine (v0.1 — só `metodo`; ver README do kit) |
@@ -83,7 +84,13 @@ D:\Gestao2027\Infra-IA/
 │
 ├── Sincronizador/                        (Delphi — Legado)
 │   ├── Documentacao.md
-│   └── Agent_Analise_Inicial_Migration.md
+│   ├── Agent_Analise_Inicial_Migration.md
+│   ├── SISTEMA-TESTES.md                  ⭐ 2026-07-31: Sistema de testes incremental
+│   ├── plano-testes-sincronizador.md      (Arquitetura, BD, endpoints, fluxo)
+│   ├── GUIA-USO-TESTES.md                 (Manual, troubleshooting, referência rápida)
+│   ├── CHECKLIST-IMPLEMENTACAO.md         (Integração API, smoke tests, matriz)
+│   ├── DESCOBERTAS-MAPA-DEPENDENCIAS.md   (10 achados críticos, 32 tabelas, 7 níveis)
+│   └── test-sync-orchestrator.pas         (Template TTestSyncOrchestrator — Delphi)
 │
 ├── database/                             (MySQL Multi-tenant)
 │   └── skills/
@@ -123,8 +130,31 @@ D:\Gestao2027\Infra-IA/
   Reuso por CPF/CNPJ (buscar-antes-de-criar; last-write-wins), personType 'N' (tb_no_doc
   + UUID), GET /api/entities/by-document (prefill aberto = feature), módulo customers
   (1º papel do cliente; 409 papel duplicado com id), schema cliente 100% modelo central
-  (migration 005 dropou cópias locais). Pendente: cadastros salesman/carrier (onda 2) e
-  revisão do sync (reindexação Firebird por cpf/cnpj/tb_no_doc.external_id).
+  (migration 005 dropou cópias locais). Onda 2 (salesman/carrier) CONCLUÍDA em 2026-08-03
+  (ver prompt_onda2_salesman_carrier.md); pendente: revisão do sync (reindexação
+  Firebird por cpf/cnpj/tb_no_doc.external_id — já implementada no lado setes-sync).
+- `prompt_onda2_salesman_carrier.md` — ⭐ 2026-08-03 FECHADO e EXECUTADO (D1–D5):
+  cadastros de Vendedor e Transportadora. D1: salesman = PROMOÇÃO de colaborador
+  (novo nasce do collaborator-lookup — precedência Collaborator→Salesman por
+  construção; 409 DUP_ROLE devolve id); D2: carrier = cadeia fiscal completa + aba
+  Tributação (peça entity-tax PROMOVIDA a shared no app — 2º consumidor); D3: refino
+  "vendedor ATIVO" (isSalesman e lookups de atribuição exigem active='S'); D4:
+  desativar/excluir livres (somente soft-delete; carteira vira histórico); D5:
+  módulo `salesmen`. Seed sql/23 (interfaces 22/23); 153/153 testes; analyze limpo.
+- `prompt_modulo_menus.md` — ⭐ 2026-08-04 FECHADO e EXECUTADO (D1–D4): CRUD dos
+  MÓDULOS DE MENU do cliente (camada 2 — tb_module/tb_module_has_interface com
+  position; migration 023; adminGuard; vínculo ordenável; exclusão graciosa;
+  assertSchema centralizado; icon do menu virou nome Material string). Origem:
+  06-SUGESTAO-CRUD-MODULOS-MENU.md (VGR). Pendem Q5/Q6 na rodada.
+- `prompt_onda3_provider.md` — ⭐ 2026-08-03 FECHADO e EXECUTADO (D1–D3): cadastro de
+  Fornecedor. Papel SEM campo próprio no legado (tblProvider.pas = active) → clone do
+  carrier: cadeia fiscal completa + aba Tributação (D1). Achado estrutural corrigido:
+  tb_provider estava só no baseline (fora da migration 005) — bloco canônico no sql/03 +
+  migration 022 (FKs cross-schema + active default 'S' — D2/D3). Convive com linhas do
+  sync (/provider/sincronize): papel soft-deletado REVIVE pelo cadastro. Seed sql/24
+  (interface 24); 160/160 testes; analyze limpo. Papel bank RESOLVIDO em 2026-08-04
+  (não é papel — ver baixa da decisão 8 no prompt_fase3_entidade_unica.md): cadastro
+  geral do catálogo central = módulo `banks` (Super, interface 25, seed sql/25).
 
 **Skills (4):**
 1. `setup-setes-api.md` — Setup inicial (~15 min)
@@ -250,6 +280,16 @@ D:\Gestao2027\Infra-IA/
 - `ARQUITETURA_MODULOS.md` — ⭐ 2026-07-11: 1 interface = 1 módulo flutter_modular
   (camadas completas + bloc), app/shared (register + lookup), RouterOutlet no Home,
   regra de promoção (módulo nunca importa módulo). LER antes de criar qualquer tela.
+- `prompt_paginacao_telas_pesquisa.md` — ⭐ FECHADO e EXECUTADO 2026-08-03 (10 decisões
+  D1–D10 + notas N1–N11): paginação de TODAS as telas de pesquisa (app × api).
+  Envelope `{ ok, data, page, pageSize, total }` via `setes-api/src/shared/list`
+  (COUNT com a MESMA where — carteira incluída); `PagedResult<T>` em packages/core;
+  barra « X de Y » + seletor 10/25/50/100 no `RegisterPagingBar`
+  (shared/register — fábrica e telas de processo); escolha do usuário persistida na
+  config `page_size` (scope U, seed sql/22, PUT por chave de módulo); default
+  resolvido pela API. Árvores, lookups e extrato NÃO paginam. Lista/endpoint novo
+  nasce paginado — receitas nas skills criar-formulario-cadastro.md (app) e
+  novo-modulo.md (api).
 
 **Skills (4):**
 1. `criar-formulario-cadastro.md` — Contrato visual (AppBar voltar/check, abas, ícones Android) + workflow de CRUD (~30-60 min)
@@ -281,6 +321,15 @@ D:\Gestao2027\Infra-IA/
   (seed só movimento), e **TB_SYNC_TABLE MANTIDA** (reversão do drop do bootstrap — ela é
   checkpoint da RETAGUARDA do Gestao2016). Web já estava pronta (terminal nas PKs de
   movimento); Delphi ligou o fio (DM.GbTerminal → LcSendWeb.Terminal). Aguarda compilação.
+- `prompt_conversao_grupo_subgrupo_categoria.md` — ⭐ NOVO, ✅ IMPLEMENTADO 2026-08-01
+  (7 decisões; limpeza prévia 2026-08-04): conversão TB_GRUPOS/TB_SUBGRUPOS → TB_CATEGORY no BOOTSTRAP (dois níveis:
+  grupo=raiz, subgrupo=filha; ids novos via GN_CATEGORY; PRO_CODCAT SUBSTITUÍDO livremente
+  — campo não estava em uso; PDV não converte); DDL TB_CATEGORY+GN+PRO_CODCAT no EnsureCategoryTable;
+  category_send_web passou a derivar parentId do POSIT_LEVEL (hierarquia chega à web);
+  Fc_GrupoToCategoria delega ao motor. Passo 0 (D7, 2026-08-04): LIMPEZA PRÉVIA condicionada
+  a sujeira — linha que a conversão não produziria zera TB_CATEGORY+PRO_CODCAT+generator e
+  reconverte do zero; tabela conforme passa ilesa (limpar a cada start trocaria ids e
+  reencheria a fila). Aguarda compilação.
 - `roteiro-implantacao-cliente.md` — ⭐ 2026-07-25 (handoff claude.ai celular): implantação de
   campo por cliente em 6 fases (chave tb_sync_api_key → DDL Firebird → registro SISWEB →
   primeiro start/bootstrap → sincronização inicial na ordem D8 com validações → encerramento);
@@ -313,9 +362,13 @@ D:\Gestao2027\Infra-IA/
 
 ### **Skills Genéricas** (qualquer projeto)
 
-**Skills (2):**
+**Skills (6):**
 1. `skills-genericas/refinar-prompt-arquitetura.md` — Transformar rascunho de ideias em prompt executável via rodadas de decisão numeradas
 2. `skills-genericas/atualizar-infra-ia.md` — COMO reter conhecimento: o que salvar, onde cada tipo entra, cadeia INDICE→CLAUDE.md→memória. ⭐ 2026-07-19: regra do **Escopo obrigatório** (`metodo | setes | misto` no cabeçalho de todo arquivo novo/tocado da Infra-IA — produtização da engine de modernização, ver `prompts/rascunho_engine_modernizacao.md`)
+3. `skills-genericas/guardiao-conceitual.md` — OBRIGATÓRIA antes de criar/alterar objetos de domínio: peças de lego, não maquetes (teste do fato gerador; agente par `setes-conceito`)
+4. `skills-genericas/mensagem-e-validacao.md` — OBRIGATÓRIA em tela/endpoint com feedback ao usuário: ponte única, uma pendência por vez, envelope `{error, code, ref, fields}`, catálogo-primeiro
+5. `skills-genericas/revisar-riscos-sistemicos.md` — ⭐ NOVO 2026-08-03: GATE socrático pós-testes-verdes (adaptado do harness-kit `the-grumpy-tech-lead`): checklist de riscos da casa (N+1/paginação, multi-tenant, transação, idempotência), parecer JSON com score (limiar 0.70), pontos abertos como PERGUNTAS; decisão de arquitetura NUNCA é do revisor — vira questão para rodada do Valdo
+6. `skills-genericas/testar-adversarial.md` — ⭐ NOVO 2026-08-03: GATE adversarial par da anterior (adaptado do harness-kit `adversarial-qa`): vetores de ataque por projeto (injeção, tenant cruzado, 409s do sync, idempotência de envelope, bordas de paginação), verdito com severidade — HIGH/CRITICAL reprova independente do score; achado confirmado VIRA teste jest permanente
 
 ---
 
@@ -381,6 +434,15 @@ D:\Gestao2027\Infra-IA/
 5. Referência de qualidade: codigo-aprendizado/weberpsetes/.../customer_register
 ```
 **Tempo**: 30-60 min por cadastro
+
+### "Terminei uma entrega (testes verdes) e quero dar por pronta"
+```
+1. Rode: skills-genericas/revisar-riscos-sistemicos.md (revisão socrática — score ≥ 0.70)
+2. Rode: skills-genericas/testar-adversarial.md (ataque de bordas/segurança — sem HIGH/CRITICAL)
+3. Reprovou em qualquer um → retrabalhar antes de entregar; achado confirmado vira teste jest
+4. Ponto que exige decisão do Valdo → questão numerada para rodada (nunca decidir por ele)
+```
+**Tempo**: ~30-50 min por entrega (setes-api e setes-sync; app/sincronizador = revisão estática)
 
 ### "Tenho um rascunho de ideias e quero virar um prompt de fase"
 ```
@@ -511,7 +573,18 @@ D:\Gestao2027\Infra-IA/
 | 2026-07-19 | **Revisão Sincronizador × setes-sync — prompt FECHADO** (3 rodadas no dia, 24 decisões; método refinar-prompt-arquitetura; caso nº 2 da engine): rascunho do Valdo (HISTORICO) virou `setes-sync/prompt_revisao_sincronizador_setes_sync.md`. Achados A1–A10: código atual é pré-Fases 2/3 (grava cadeia no schema do cliente, usa id Firebird como entity id, sem reindexação por documento). Decisões-chave: dois grupos canônicos (D1), documento/UUID como indexador com tb_empresa.externalCode (D3/D4/D14), cadeia em setes_central + papel no cliente (D13), Delphi se adapta ao formato novo (D15/D22), DELETED no Firebird (D2), Brand/Package/Measure centrais com vínculo (D5/D17/D24), auth por tb_sync_api_key (D12), fila e rest-* removidos (D19/D23), XMLs em disco por CNPJ (D20). Plano: ondas 0–6 + frente Delphi (C1–C12). Sentido inverso = fase própria (D16) | 6.3 |
 | 2026-07-19 | **Revisão do Sincronizador IMPLEMENTADA — Ondas 1–6 no dia** ("vamos implementar" com autonomia; frente Delphi = kit de patches). **O1** fundação: auth por tb_sync_api_key (JOIN tb_institution; chave global aposentada), envelope D14 com HTTP<>200 nos erros (antes erro voltava 200 e o Delphi marcava sincronizado!), fila/service mortos e rest-* removidos (HISTORICO). **O2** peças da cadeia copiadas da setes-api + motor de reindexação sync.entity (CPF/CNPJ→entity única; UUID tb_no_doc devolvido como externalCode; 14 testes no banco real) + MAPA_INDEXACAO/CONTRATOS_SYNC. **O3** catálogos centrais tb_brand/package/measure (sql/01 + migration 018 cross-schema; dedupe D17 na aplicação — UNIQUE fundiria acentos) + 12 endpoints de cadastro (measure era GAP; smoke ciclo completo 15/15; 3 agentes paralelos acharam código antigo quebrado contra o DDL real). **O4** papéis: customer (entityTax ganhou casa p/ CLI_ENVEMAILAUT/ENVSOMENTEXML), provider, salesman (precedência Collaborator→Salesman na transação), bank-account (FEBRABAN; fix C1); smoke provou MESMO CNPJ cliente+fornecedor = 1 entity/2 papéis. **O5** movimento: orders/invoices (2 endpoints NOVOS)/stock/cashier/financial — financeiro no formato 5.5 com **semântica de ESPELHO** (baixa legado = evento 1 'N'; estornos não viajam); Swagger corrigido (globs não liam endpoints). **O6** retornos NF-e 55/65/NFS-e (tb_invoice_return_* já existiam; C3 vira patch) + filexml em disco `<cnpj>/<ano>/<mes>` (D20; path traversal bloqueado). **Rodada 4 aberta** (3 achados DDL no MAPA): tb_order.tb_user_id NOT NULL, vínculo nota×pedido, PK tb_stock_statement. Kit Delphi C1–C12 em `sincronizador/patches-revisao-2026-07/` | 6.4 |
 | 2026-07-19 | **Kit v0.2 — `engine-kit/INSTALACAO.md`** (feedback do Valdo: instalação não estava executável): passo a passo Dia 1 (montar o vaso: pastas via PowerShell, regras da raiz, índice, conexão com ferramentas existentes — indexador/memória/Obsidian se registram e se governam —, censo do acervo) e Dia 2+ (dimensionar volumetria, unidades de análise, UMA unidade piloto ponta a ponta, 1º ciclo completo avaliar→conceituar→decidir→reter com dono das decisões NOMEADO) + seção "o que nunca fazer" (higiene multi-caso e fronteira método×empresa). README aponta p/ o guia; versionamento do kit atualizado | 6.2 |
-| — | — | — |
+| 2026-08-01 | **Conversão Grupo/Subgrupo → Categoria no BOOTSTRAP** (`Sincronizador/prompt_conversao_grupo_subgrupo_categoria.md`, 6 decisões): TB_GRUPOS/TB_SUBGRUPOS viram TB_CATEGORY em dois níveis na preparação do banco (EnsureCategoryTable = DDL TB_CATEGORY+GN_CATEGORY+PRO_CODCAT antes das triggers; MigraGruposParaCategoria = conversão DEPOIS das triggers para cair na fila); ids novos via GN_CATEGORY; PRO_CODCAT SUBSTITUÍDO livremente (campo não estava em uso; subgrupo=nível 2 > grupo-somente=raiz); PDV não converte (colisão com replicação da retaguarda — Q8); `category_send_web` derivou parentId do POSIT_LEVEL (TODO fechado — hierarquia agora chega à web); Fc_GrupoToCategoria delega ao motor. Aguarda compilação Delphi | 6.5 |
+| 2026-08-03 | **Gate de qualidade adaptado do harness-kit (análise D:\harness-kit)**: 2 skills genéricas novas — `revisar-riscos-sistemicos.md` (revisão socrática de tech lead: score-gate 0.70, pontos abertos como perguntas, decisões continuam do Valdo) e `testar-adversarial.md` (QA adversarial: vetores da casa, severidade, achado vira teste) — piloto em setes-api/setes-sync. Veredito da análise: NÃO adotar project-memory/scope-refinement (colidem com simetria Infra-IA e rodadas de decisão); orquestrador autônomo só p/ ondas já decididas (avaliação futura); loop tracer→evaluator→meta-harness e SDK multi-runner = candidatos a destilar p/ engine-kit (registrado no diário da engine). engine-kit v0.3 já consome harness-kit como plugin (regra: nunca fundir código) | 6.6 |
+| 2026-08-03 | **Engrenagem condicional (ajuste da decisão 11 do Framework de Configurações)**: o ícone de configuração só aparece se o módulo TEM configs no catálogo — peça única `RegisterConfigButton` (app/shared/register; GET resolvido na montagem + cache de sessão) usada pela fábrica (configModuleKey) e direto no AppBar das telas de processo/árvore (service_orders, settlements, categories, financial_plans — réplicas manuais removidas). Efeito: árvores perdem a engrenagem vazia; listas paginadas mantêm (page_size). Skill criar-formulario-cadastro e prompt do framework atualizados. Publicado no GitHub (setes-app 930137c; setes-api com paginação/zod-pt/migrations 019–021 em 4 commits) | 6.7 |
+| 2026-08-03 | **Entidade Única Onda 2 — Vendedor + Transportadora FECHADA e EXECUTADA no dia** (Rodada 1 D1–D5 do Valdo; prompt em setes-api/prompt_onda2_salesman_carrier.md): salesman = PROMOÇÃO de colaborador (D1 — o "novo" abre lookup de colaboradores; precedência Collaborator→Salesman morre POR CONSTRUÇÃO; módulo NÃO importa @shared/entity), carrier = molde collaborators + aba Tributação (D2 — EntityTaxData/EntityTaxTab PROMOVIDAS de customers p/ app/shared/entity, i18n forms.entityTax.*), refino "vendedor ATIVO" (D3 — existsSalesman e roleLookup exigem active='S'; fecha pendência da decisão 15), soft-delete livre (D4), módulo `salesmen` (D5). API: módulos salesmen/carriers (6 arquivos cada), collaborator-lookup, flags no insertDefaultFlags, seed sql/23 (interfaces 22/23 Registers + gates + page_size) aplicado em dev, 10 testes novos (153/153). App: módulos salesmen (14 arquivos — form da fábrica com draft no bloc) e carriers (15 arquivos — 6 abas) via agente setes-form-builder; analyze limpo. Onda 2 da Fase 3 SAI das pendências | 6.8 |
+| 2026-08-04 | **Módulo de Menus do cliente FECHADO e EXECUTADO no dia** (sugestão 06 do VGR → prompt `setes-api/prompt_modulo_menus.md`; Rodada 1 D1–D4 em bloco pelo Valdo): a camada 2 do menu ganhou escrita — D1 módulos gêmeos `modules` (/api/modules ↔ /home/modules, chave i18n existente), D2 adminGuard + flag 'modules' (defaults + seed retroativo), D3 vínculo ORDENÁVEL (position por linha; a ordem do array do PUT é a ordem do menu; sync transacional revoga+upsert; getMenus ordena por position), D4 legado fora (migration 023: drop link_name, image_icon INT→VARCHAR(50) nome Material — valor numérico anulado; contrato /api/core/menus icon virou string com parse tolerante no app). Extras da entrega: assertSchema CENTRALIZADO em @shared/db/schema (fim da quadruplicação core/users/admin/field-config), lookup /api/modules/interface-lookup (elegíveis = contratadas kind T fora do Super; 422 com ids em fields[]), exclusão graciosa (telas voltam ao group_default), fábrica do app ganhou hint/trailingBuilder/deleteConfirmMessage + util materialIconByName (skill criar-formulario-cadastro atualizada), seed sql/26 (interface 26 Sistema, id dinâmico). GATES: socrático 0.78 ✅ (correções: 404 transacional no PUT×DELETE, ungrouped ignora módulo morto, migration anula ícone numérico) + adversarial 0.84 ✅ sem HIGH (fechos: teto INT no position, interfaceIds.max(200), ordem de locks unificada). API 193/193 + tsc; app analyze limpo + testes verdes. Pendem Q5 (vínculo que ficou inelegível: 422 × drop silencioso × 422 só p/ novos) e Q6 (sincronia de deploy do contrato do menu) p/ rodada. Achado colateral: flag 'users' nunca semeada (403 p/ admin de cliente) — chip de sessão própria aberto | 7.2 |
+| 2026-08-04 | **Rodada pós-gate do banks — 3 decisões do Valdo executadas**: Q1 soft delete restaurável (recriar number excluído REVIVE a mesma linha, id/FKs preservados; 409 só p/ number vivo — padrão revive do provider); Q2 MAX+1 transacional FOR UPDATE padronizado em privileges e interfaces (banks já tinha); Q3 peça `escapeLike` no @shared/list aplicada aos 20 repositories com filtro LIKE (%/_/\\ deixam de ser coringa; REGRA: filtro novo usa a peça). Lembrete registrado: banco é cadastro EXCLUSIVO do Super — cliente só consome. 179/179 testes, tsc limpo. Incidente corrigido no dia: script PowerShell de aplicação em lote corrompeu acentuação (ANSI×UTF-8) dos 20 arquivos — revertido por re-encode cp1252→UTF-8, verificação de integridade ok | 7.1 |
+| 2026-08-04 | **Decisão 8 da Fase 3 ENCERRADA — Bank não é papel; cadastro de Bancos entregue**: decisão do Valdo (2026-08-04, coerente com a DP2 do Software House): banco = cadastro GERAL do catálogo central (setes_central.tb_bank FEBRABAN), SEM cadeia fiscal, liberado a todos os schemas via lookup de conta corrente (/api/bank-accounts/banks). Manutenção = módulos gêmeos `banks` (Super): API 6 arquivos molde countries (id interno MAX+1; number 3 dígitos digitado, único mesmo contra excluído → 409; number editável no PUT — não é a PK; lista paginada) + superGuard no gateway; app molde countries; seed sql/25 (interface 25 'banks' grupo Super + campos + page_size; 'banks' na lista canônica do seed 22) aplicado em dev. App: módulo banks (agente setes-form-builder, molde countries; analyze limpo). GATES (estreia dupla nas skills 2026-08-03): socrático 0.78 ✅; adversarial reprovou a 1ª rodada (HIGH: DELETE de banco em uso) → correções na entrega: DELETE 409 BANK_IN_USE + listBankUsage cross-schema, insertBank MAX+1 transacional FOR UPDATE, clamp MAX_PAGE no shared/list (blindou as 17 listas contra page=1e21 → 500), seed 25 id dinâmico por i18n_key, DTO trim/'000', fields[] no 409 de corrida; achados fixados em teste (banks.test.ts 17 casos; 177/177, tsc limpo). Questões p/ rodada: reversão de exclusão, MAX+1 transacional em privileges/interfaces, escape de %/_ nos LIKE. Baixa registrada em prompt_fase3_entidade_unica.md e prompt_onda3_provider.md — NENHUM papel pendente na decisão 8 | 7.0 |
+| 2026-08-03 | **Entidade Única Onda 3 — Fornecedor FECHADA e EXECUTADA no dia** (Rodada 1 D1–D3 do Valdo; prompt em setes-api/prompt_onda3_provider.md): papel sem campo próprio no legado (tblProvider.pas = active) → clone do carrier com aba Tributação (D1). Achado estrutural: tb_provider estava SÓ no baseline (fora do realinhamento da migration 005) — bloco canônico no sql/03 + migration 022 (FK id→tb_entity + FK institution cross-schema + active default 'S' — D2/D3), aplicada em dev. API: módulo providers (6 arquivos), gateway, flag no insertDefaultFlags, seed sql/24 (interface 24 Registers + page_size) aplicado, providers.test.ts 7 casos (160/160, tsc limpo). App (agente setes-form-builder): módulo providers 15 arquivos espelho do carriers (6 abas, DUP_ROLE → decisão tipada, prefill by-document), rotas, i18n pt/en; analyze limpo. Convivência com o sync validada por teste (papel soft-deletado do /provider/sincronize REVIVE pelo cadastro). Da decisão 8 da Fase 3 resta só o papel bank | 6.9 |
+| 2026-08-16 | **Gates da Onda 1 (tax-rules) EXECUTADOS — entrega reprovaria e foi corrigida em sessão**: adversarial contra o banco REAL achou 2 HIGH invisíveis aos 212 testes mockados (lista 500 por `st.description`×`name`; 8 catálogos fiscais centrais VAZIOS → seed `sql/28_catalogos_fiscais_seed.sql` com listas verificadas no legado un_Conversao.pas) + 2 MEDIUM na API (RegraDireta sem escopo de institution; CFOP sem validação da decisão 33) + 2 MEDIUM no app (ST travada ligada ao desligar ICMS; fields[] `pisCofins.0.*` do Zod nunca ancorava nos paths por kind). Tudo corrigido e fixado em teste (216/216 api; analyze/testes app ok); socrático 0.82 ✅. Caso novo de calibração na skill testar-adversarial (ciclo E2E real por módulo novo + "quem povoa o catálogo?"). Questões p/ rodada: Q-G1 sentido no match (NAT_SENTIDO do legado × Q14), Q-G2 NCM parcial, Q-G4 códigos pós-legado do seed | 7.6 |
+| 2026-08-16 | **Fase Faturamento Fiscal e Financeiro — prompt FECHADO (34 decisões) + DDL APLICADO + Onda 1 API ENTREGUE**: `Infra-IA/prompts/prompt_fase_faturamento_financeiro.md` (Rodadas 1–2 zeradas + rodada de achados do DDL; parecer setes-conceito APROVADO — tb_tax_ruler era maquete morta no baseline). **DDL** (migrations 025–028 aplicadas em dev + canônicos sql/01/03): família `tb_tax_rule` + 5 peças (presença=incidência; FK física SÓ em INT — D33), `tb_order_installment` (D25 materialização única), `kind` na tb_payment_types (D32 — mapa determinístico id_nfce→kind; backfill expôs dado sujo de DEV que o Valdo corrige pela tela), `tb_tax_ruler` DROPADA (D30, 0 linhas), **rename coordenado tb_cashier.tb_user_id** (D34 — contrato HTTP não carrega nome de coluna; 2 endpoints /cashier + docs vivos + FieldName Delphi). **Onda 1 API**: peça `@shared/tax-rule` (motor com as 6 sutilezas + desempate B9-corrigido + validação de CST nos catálogos) + módulo `tax-rules` (6 arquivos, lista paginada com flags has*, /catalogs lookup, cascata transacional, Swagger) + seed sql/27 (interface 27 Registers, campos, page_size) + flag default/retroativa. **212/212 testes api + 32/32 sync**; smoke ok. PENDE: módulo gêmeo do app (setes-form-builder em execução), gates socrático+adversarial da onda, ondas seguintes (cálculo por item, faturamento, financeiro) | 7.5 |
+| 2026-08-16 | **Tributação do Gestao2016 MAPEADA POR COMPLETO + 2 planos derivados** (`Infra-IA/Gestao2016/`): `tributacao.md` = fonte-da-verdade — Regra de Tributação (seletor×resultado), motor com 6 sutilezas, **14 pipelines P1–P14** (ICMS/ST/IPI/PIS/COFINS/ISSQN/FCP/diferimento/importação/IBS-CBS/obs/validações/montagem/geração) + **8 análises transversais T1–T8** (ordem = grafo de dependências, IBS/CBS por último; rateio com resíduo; pilha de bases; persistir antes de observar). 36 questões Q13–Q36 TODAS fechadas (autor decide, IA verifica; Q25 com fonte oficial RIPI/STF). **Redesenho §6.5**: `tb_tax_rule` + peças 1:1 (presença=incidência; PIS/COFINS kind P\|C; sem peça ISS; II completa; isomórfico à tb_taxes). **Planos**: `tributacao-plano-web.md` (processo preservado + fórmulas conforme legislação) e `tributacao-plano-legado.md` (B1–B9 bugs de cálculo — destaque B2/B3 base IBS/CBS e B9 desempate estado×produto; L1–L7; O1–O3). **Frente autorização ABERTA**: `geracao-nfe-hierarquia.md` (12 classes/9.950 linhas; diagnóstico: fronteira por PROCESSO certa, por MODELO duplicada, barramento global Fr_Principal.Nfe; web = pipeline + strategy + hooks). Decisões de produto: MVA/FCP no schema do cliente (dado interpretável NÃO se compartilha); ISS do prestador; LC116 por produto; regra 5 (sugestão de IA) formalizada no INDEX | 7.4 |
+| 2026-08-15 | **Aprendizado do legado Gestao2016 ABERTO — espelho `Infra-IA/Gestao2016/`** (INDEX.md + processo-pedido-nota.md): corpus construído sob INSTRUÇÃO DO AUTOR com verificação linha a linha no código; lacuna vira QUESTÃO rastreada, nunca suposição (regra do artigo do dia). Ferramenta: **graphify** (pip `graphifyy`) indexou o repo — 36.540 nós / 49.181 arestas / 99% AST real, `graphify-out/` com explain/query/affected/god-nodes; rotulagem via `--backend claude-cli` (assinatura, não API key). ⚠️ REGRA APRENDIDA: as **comunidades do graphify NÃO definem módulos** (clusteriza por imports; no Delphi tudo importa env.pas/STQuery → coesão 0,01-0,02; `UN_Pedido_Vda` caiu em "NFe XML Generation") — grafo serve p/ NAVEGAR, módulo vem do AUTOR. Conteúdo já retido (frente Pedido→Nota): tb_pedido único com PED_TIPO 1 venda/2 compra/3 ajuste/**4 venda internet** (0 ignorar, 5 consignação descontinuado); elo pedido×nota pela própria TB_ITENS_NFL (ITF_CODPED + ITF_CODNFL); `componentes/tributacao.pas` (5.847 linhas) = coração (impostos emitente×destinatário, gera nota, estoque); **estoque = movimento em TB_CTRL_ESTOQUE + trigger TG_ESTOQUE_INSERT no Firebird** (tb_estoque é saldo DERIVADO; operação E/S vem de `substring(NFL_TIPO,1,1)`); numeração assimétrica mercadoria (NFL_NUMERO, nós geramos) × serviço (RPS → **TB_RETORNO_NFS.NFS_NUMERO**, prefeitura numera) = raiz do "origens diferentes"; hierarquia TControllerPedido{Venda,Compra,Ajuste} = técnica a PRESERVAR no order-backbone; financeiro CONDICIONAL a FIN_G_ATIVAR. Descontinuados: UN_Fatura_Srv, Un_Fatura_Web. Abertas Q9 (2ª letra de NFL_TIPO) e Q10 (ControllerPedidoVda × ...Venda) | 7.3 |
 
 ---
 

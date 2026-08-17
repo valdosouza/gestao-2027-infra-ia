@@ -36,7 +36,10 @@ Valdo, 2026-07-19). O conceito: **Validação** julga dado contra REGRA;
       `FieldConfigLoader`) — catálogo do cliente aplicado; telas de
       processo validam seus DIALOGS de ação com os mesmos validators.
 - [ ] `fields[]` do backend ANCORADO no campo (`showServerFieldError` da
-      fábrica ou equivalente) — nunca só a mensagem genérica.
+      fábrica ou equivalente) — nunca só a mensagem genérica. Paths de DTO
+      COMPOSTO vêm aninhados (`entity.nameCompany`) — o casamento é por
+      `matchesServerFieldPath` (path exato ou último segmento); sem âncora,
+      `showUnanchoredServerField` mostra campo + mensagem (2026-07-31).
 - [ ] Textos por i18n pt/en; mensagem PT do backend passa intacta pela
       ponte (`.tr()` em chave inexistente devolve a própria string).
 
@@ -44,6 +47,9 @@ Valdo, 2026-07-19). O conceito: **Validação** julga dado contra REGRA;
 
 - [ ] Toda rejeição = `HttpError(status, msg, fields?, code?)` — NUNCA
       `res.json` manual de erro; controller usa `handleError`/`parseBody`.
+- [ ] Mensagens do Zod: o error map GLOBAL PT-BR (`shared/validation/zod-pt.ts`,
+      ativado no app.ts) cobre os casos comuns — escreva mensagem explícita
+      no DTO só quando a regra é de domínio (CPF, formato de data, schema_name...).
 - [ ] Erro CONHECIDO leva `code` do `error-codes.ts` (código novo = criar
       no MESMO commit do throw + rodar `npm run errors:gen` na entrega).
 - [ ] Erro por campo SEMPRE com `fields[]` (decisão 20 Fase 2) — inclusive

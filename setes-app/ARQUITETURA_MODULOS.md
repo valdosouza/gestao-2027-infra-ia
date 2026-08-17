@@ -78,6 +78,16 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
   `items`/`loading` prontos e notifica `onFilterChanged`/`onNew`/`onView`;
   RegisterFormPage valida e DISPARA `onSave(values)`/`onDelete` (void — quem executa
   é o bloc). A carga inicial é evento do bloc no initState da página.
+- **paginação (2026-08-03 — OBRIGATÓRIA em lista nova)**: contrato
+  `PagedResult<T>` (packages/core) atravessa datasource → usecase → state;
+  a página repassa `page/pageSize/total` + `onPageChanged`/`onPageSizeChanged`
+  à RegisterSearchPage — a barra (« X de Y » + seletor de itens/página) é o
+  widget compartilhado `RegisterPagingBar` (shared/register), que também
+  PERSISTE a escolha do usuário (config `page_size`, scope U) pela chave do
+  módulo. Telas de processo fora da fábrica usam o `RegisterPagingBar`
+  diretamente. Árvores (SetesTreeView) e lookups FK não paginam. Receita
+  completa: skill `criar-formulario-cadastro.md` + molde `customers`;
+  decisões em `Infra-IA/prompts/prompt_paginacao_telas_pesquisa.md`.
 
 ## Navegação (RouterOutlet)
 

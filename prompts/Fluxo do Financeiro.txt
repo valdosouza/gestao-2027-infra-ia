@@ -1,0 +1,162 @@
+A frente aguarda sua primeira instrução. 
+Sugeri uma ordem na §3 — 
+conceito (título × movimento, significado de TIPO/SITUACAO/OPERACAO/ETAPA) 
+
+
+
+
+
+
+# Conceito
+	Financeiro separado do faturamento.
+	Uma coisa e quando voce fatura a outra e quando e como vai receber.
+	
+→ nascimento (Pc_Gera_Financeiro, parcelamento, automático×manual) 
+	Nasce no faturamento pdoendo ser por duas vias
+		Pedido/Ordem
+			Quando a venda esta sendo criada a um passo de negociadacao
+				tb_parcelamento (legado)
+					Voce pdoe definir 
+						Forma de PAgamento
+							DINHEIRO (PIX OU ESPECIE) / CHEQUE / BOLETO / CARTERIA(VULGO FIADO)
+						Prazo de pagamento 
+							numeros de parcelas 1 / 2 /3
+							Prazo entre parcelas 028/056/084
+			Se o cliente definir que sera o que for negociado pelo pedido chamamos de forma automatica
+			
+		Manual - ou de forma confirmativa
+			O cliente que optar por ativar esse modo tera a oportunidade de confirmar a negociacao feito 
+			no tempo do pedido ou redefnir manualmente atraves de uma tela que deve aparcer durante a esteira do faturamento
+	
+	confirmado nesta etapa o financeiro e gerado.qualquer manutencao somente atraves do modulo financeiro
+		
+→ meios (boleto/cheque/cartão/caixa) 
+	Quando o fatuamento gera o financeiro temos uma previa/expectativa de comoo financeiro deve ser quitado
+	Ver os detalhes de cada meios	
+		DINHEIRO especie
+			A VISTA
+				Baixa automatica do tiulo e registro no caixa
+			A PRAZO 
+				Nao existe essa modalidade vira CARTEIRA/FIADO
+		DINHEIRO - pix
+			A VISTA
+				Baixa automatica do tiulo e registro na conta corrente pre-cadastrada
+			A PRAZO 
+				Nao existe essa modalidade vira CARTEIRA/FIADO
+				
+		CHEQUE
+			A VISTA
+				Baixa automatica do tiulo e registro no caixa
+			A PRAZO 
+				Baixa automatica do tiulo e registro no caixa
+			
+			O dados do cheque devem estar registrados no sistema para controle de vencimentos
+				Ver tb_cheques/reg_ctrl_cheque/TControllerCheque
+				
+			Este controle serve para gerencia o uso desta forma peculariar de pagamento onde o cheque e usado como forma de pagamento futuro
+			Transita entre fornecedores ate o pagamento ou pode retornar pode estar sem fundos, descontado para adiantar o valor
+			Esse controle procurar rasterar origem e destino 
+			Merece capitulo a parte .mesmo estando vinculado
+			
+		BOLETO
+			A VISTA
+				Baixa automatica do tiulo e registro na conta corrente pre-cadastrada
+			A PRAZO 
+				Baixa automatica do tiulo e registro na conta corrente pre-cadastrada
+				
+			Controle de Boleto temos um controle especifico
+				Processamento por Bath(Lotes)
+					## WorkFlow do processo
+						Cliente acessa a tela do financeiro
+						Seleciona titulo por titulo
+							Hora individualmente 
+							Hora ele agrupa varios titulo para emitir um boleto com titulos agrupados
+						Usando o sistema de registro de carteiras
+							TB_BOLETO_ELETRONICO / reg_electronic_slip / TControllerBoletoEletronico
+								Onde voce defini como vai receber, informacoes sobre conta corrente e dados de carteira de recebimento fornecido pelo banco onde tem conta
+						Voce vincula os titulos a um boleto numerado.
+						Depois voce cria um lote destes boleto gerando um arquivo no padrao CNAB
+						Com processo externo, voce acessa conta ou portal do banco e envia este arquivo.
+						Depois do arquivo processado o voce pode acompanhar baixando arquivos de retorno
+						Esse arquivo de retorno e processado pelo sistema, registrando baixas ou nao dos titulos
+				Processamento por API
+					## WorkFlow do processo
+						Infelizmente nao tenho o passo a passo pois ainda nao implementei
+						Mas gostaria de implementar o modelo do banco inter onde a Setes tem conta corrente
+						## Sistema de terceiro
+							Hoje eu gero um arquivo Cnab e este arquivo e processado por um sistema de terceiro que envia para o banco inter
+								Quero cortar essa etapa fazendo o controle de envio de boleto, consulta de baixas direto pelo ERP
+								
+								
+→ vida (baixas, juros, reprogramação) 
+	DINHEIRO ESPECIE
+		BAIXA DIRETO NO CAIXA
+	DINEIRO PIX
+		BAIXA DIRETO NA CONTA CORRENTE INFORMADA (Pre-cadastrado)
+	CHEQUE
+		Baixa direto no caixa com controle de de origem e destino de cada cheque
+	BOLETO
+		pode ser manual usando extrato bancario do cliente
+		pode ser automatico usando arquivos de retorno do banco
+		pode ser automatico usando sistema de api fornecidas pelo banco
+		
+		JUROS e multa
+			ja temos campos para isso e é definido pelo cliente, nao ha automatizacao execeto no caso do boleto que a cobranca e pagamento passao pelo sistema bancario
+			
+			
+		REPROGRAMACAO
+			CARTEIRA/FIADO
+				Cliente adminsitra manualmente, baixando somente quando o cliente pagar
+			CHEQUE
+				A baixa do titulo eh feita com o cheque
+					Neste novo conceito o cliente nao deve mais o titulo e sim deve o CHEQUE
+						O CONTROLE de cheque deve controlar caso o cheque volte sem fundos, ou seja descontado
+						
+			BOLETO
+				Passando pelo sistema bancario, vamos ter esse processo mais engessado.
+				Cancelamento de boleto pode
+					ter reemissao de outro boleto
+					pagamento por outra forma de pagamento conforme ja determinado individualmente
+					
+	
+→ especiais (descontada, fechamentos) 
+	CHEQUE
+		o processo de cheques merece um capitulo a parte para falarmos de 
+			rastreamento origem e destino
+			Devolucoes
+			DEscontados
+			
+			
+→ morte (estorno, cancelamento da nota × financeiro) —
+	Baixa 
+		Quando o titulo eh pago.
+	Cancelamento
+		Quando um faturamente e cancelado
+			Todo os registros do faturamento devem ser deletados no padrao softdelete			
+			Neste caso a ordem volta a origem e o processo pode ser todo reiniciado
+			
+		Quando uma nota fiscal autorizada eh cancelada
+			Neste caso a ordem nao pode voltar ao estado original pois temos um documento oficial
+				Mas o finaceiro pode ser simplesmente apagado dentro do padrao soft-delete
+			O que pode restar aqui e uma opacao de copia de ordem para ajduar o cliente a nao preicsar lancar tudo do zero
+			
+	Estorno
+		Baixas erradas pode ser canceladas 
+			Obervar caixa aberto para pode registrar as operacoes no caixa
+				Quando eu baixo dizendo que recebi dinheiro eu preciso fazer o lancamento inverso ao cancelar
+				
+			Na conta corrente, podemos aplicar somente o soft-delete
+			
+			
+				
+	E
+						
+						
+						
+								
+							
+			
+
+				
+				
+	

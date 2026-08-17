@@ -37,7 +37,7 @@
 
 4. Bloco opcional `user` (`{userDocument}` OU `{userExternalCode}`) nos 5 endpoints: order-sale, order-purchase, order-stock-adjust, cashier, financial-statement
 5. Bloco presente → resolve (`sync.user.ts`) → 409 `USER_NOT_SYNCED` se usuário ainda não sincronizado (auto-heal); ausente → fallback de transição (pedidos: usuário mais antigo; caixa: NULL; extrato: 0)
-6. `tb_user_id`/`tb_userid` entram no `ON DUPLICATE KEY UPDATE` **somente quando o bloco veio** — reenvio corrige o autor dos registros gravados com fallback, e o fallback nunca sobrescreve um autor real
+6. `tb_user_id`/`tb_user_id` entram no `ON DUPLICATE KEY UPDATE` **somente quando o bloco veio** — reenvio corrige o autor dos registros gravados com fallback, e o fallback nunca sobrescreve um autor real
 
 ## Decisões arquiteturais registradas (Valdo, 2026-07-26 — Rodada 1)
 
@@ -46,7 +46,7 @@
 3. **(Q3) Contrato mínimo + origem marcada**: payload sem e-mail/level/SMTP (USU_USU_EMAIL não é identidade; e-mail na web é credencial). `tb_institution_has_user.kind='SYNC'` marca a origem; exibição/filtro na tela de usuários é mudança de app → fase própria (D1).
 4. **(Q4) Não-invasão da credencial**: entity que JÁ é usuária web real → sync não toca `password/active/activation_key`; e `active/deleted` do vínculo só são atualizados quando o vínculo nasceu do sync (`kind='SYNC'`). Cadastro (nome etc.) segue last-write-wins normal.
 5. **(Q5) Fallback de transição mantido**: bloco `user` ausente (executável antigo/PDV sem doc) → comportamento anterior. Morte do fallback = item da Rodada 4, quando todos os clientes estiverem no executável novo.
-6. **(Q6) Escopo estendido — todos os movimentos**: caixa (`tb_userid`) e movimento financeiro (`tb_user_id`) ganharam o bloco `user` nesta mesma frente ("importante identificar o usuário de cada operação").
+6. **(Q6) Escopo estendido — todos os movimentos**: caixa (`tb_user_id`) e movimento financeiro (`tb_user_id`) ganharam o bloco `user` nesta mesma frente ("importante identificar o usuário de cada operação").
 7. **(Q7) Ex-funcionários sincronizam**: o histórico precisa deles. `USU_ATIVO` → `active` do VÍNCULO institution×user; deleted do legado → `deleted='S'` no VÍNCULO (nunca na entity/tb_user).
 8. **(Q8) PDV só resolve por DOCUMENTO**: `EXTERNALCODE` não é replicado pela retaguarda do Gestao2016 → no PDV (`GbTerminal <> 0`) a cascata só usa o CPF do colaborador (dado replicado); sem doc → sem bloco → fallback (decisão 5). Limitação aceita e REGISTRADA NA MEMÓRIA do projeto: **revisar replicação/sincronia na retaguarda** (memória `retaguarda-replicacao-externalcode`).
 
@@ -57,7 +57,7 @@
 | Peça `sync.user.ts` (userRefBody + resolveUserId 409 USER_NOT_SYNCED + resolveFallbackUserId deduplicado) | 1/5 | `setes-sync/src/modules/sync/sync.user.ts` |
 | Endpoint `/user/sincronize` (cadeia + tb_user fantasma + vínculo kind='SYNC') + rota + @swagger | 1/3/4/7 | `setes-sync/src/modules/sync/endpoints/user.ts` |
 | Bloco `user` + tb_user_id no upsert condicional nos 3 pedidos | 5/6 | `endpoints/ordersale.ts`, `orderpurchase.ts`, `orderstockadjust.ts` |
-| Bloco `user` no caixa (tb_userid) e no extrato (tb_user_id) | 6 | `endpoints/cashier.ts`, `financialstatement.ts` |
+| Bloco `user` no caixa (tb_user_id) e no extrato (tb_user_id) | 6 | `endpoints/cashier.ts`, `financialstatement.ts` |
 | Teste 401 do /user + suíte completa | — | `src/__tests__/integration.test.ts` (20/20 verdes) |
 | Bootstrap cria `TB_USUARIO.EXTERNALCODE` + índice; perfil PDV desliga Seq 39 | 1/8 | `sincronizador/un_dm.pas` (EnsureExternalCode / SeedListaSincroniaIfEmpty) |
 | `DM.GetUserSyncRef` (cascata + regra PDV) | 2/8 | `sincronizador/un_dm.pas` |

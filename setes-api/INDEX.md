@@ -61,6 +61,16 @@ Módulo Software House no backbone `tb_order` — Fases 2–7 do prompt FECHADO
 
 ---
 
+### 💡 **06-SUGESTAO-CRUD-MODULOS-MENU.md** (2026-08-03 — cross-knowledge do VGR)
+Sugestão para fase futura: completar a camada 2 do menu (tb_module/tb_module_has_interface)
+- O gap: as tabelas existem e o getMenus as LÊ, mas o CRUD/tela nunca foram implementados — personalização de menu hoje exige editar o schema do cliente na mão
+- Referência pronta: módulo `system-modules` do VGR (`D:\ProjetoVGR\api\src\modules\system-modules\`) com sync ordenado, exclusão graciosa (fallback ao group_default) e testes
+- Tabela de adaptações: escopo por schemaName, id MAX+1, guard, tela Flutter (chave i18n `menu.interfaces.modules` já existe esperando)
+
+**Leia se:** for implementar o cadastro de Módulos/Menu do módulo Sistema
+
+---
+
 ### 3. **03-SWAGGER.md**
 Documentação Swagger/OpenAPI 3.0
 - Como acessar interface Swagger UI

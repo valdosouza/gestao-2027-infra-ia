@@ -114,6 +114,23 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
   sufixo `Icons.search` + `register.filterHint`, carga inicial na abertura, linha
   inteira clicável, `ListView.separated`, `register.emptyList`, AppBar própria no
   estilo do form e `FloatingActionButton` (Icons.add) para novo registro.
+- **PAGINAÇÃO OBRIGATÓRIA em tela nova** (2026-08-03 —
+  `Infra-IA/prompts/prompt_paginacao_telas_pesquisa.md`, D1–D10): toda lista de
+  pesquisa nasce paginada. Receita (molde = módulo `customers`):
+  (a) datasource `getList(filter, {int page = 1, int? pageSize})` →
+  `PagedResult<X>` (`packages/core`) — `pageSize` null deixa a API resolver a
+  config `page_size` do usuário; (b) usecase/repository repassam page/pageSize;
+  (c) evento `<X>ListRequested(filter, {page = 1, pageSize})` + state com
+  `filter/page/pageSize?/total?`; (d) bloc guarda `_filter/_page/_pageSize`,
+  re-sincroniza com a RESPOSTA da API e recua quando a página esvazia;
+  (e) página passa `page/pageSize/total` + `onPageChanged` (reenvia
+  `state.filter`) + `onPageSizeChanged` à fábrica — a barra (« X de Y » +
+  seletor 10/25/50/100) e a persistência da escolha (config `page_size`,
+  scope U) são da fábrica/`RegisterPagingBar`, a tela não escreve nada disso.
+  (f) A interface nova entra no seed `sql/22_page_size_config_seed.sql`.
+  Filtro novo SEMPRE volta à página 1. Telas em ÁRVORE (SetesTreeView) e
+  lookups FK NÃO paginam (D6); lista de apoio que consome endpoint paginado
+  pede `pageSize=100` explícito.
 - `SetesTextField` ganhou `readOnly`, `hint`, `suffixIcon`/`onSuffixPressed`.
 - `SetesRadioGroup<T>` + `SetesRadioOption<T>` (setes_widgets, 2026-07-17 —
   Rodada 4 do customers): radiobox de escolha ÚNICA em domínio minúsculo
@@ -133,6 +150,17 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
   do lookup) — nunca nos values do onSave. Checkboxes ficam fora do Tab
   (`ExcludeFocusTraversal`); labels vindos do banco (ex.: description da
   tb_privilege) NÃO se traduzem.
+- `RegisterField` ganhou `hint` (texto de apoio no campo — ex.: "Vazio = fim
+  do menu") e `trailingBuilder(context, value)` (widget AO LADO do campo,
+  reconstruído a cada digitação via ValueListenableBuilder no controller,
+  fora do Tab — 1º uso: preview do ícone Material no cadastro de Módulos de
+  Menu, D4 2026-08-04). `RegisterFormPage` ganhou `deleteConfirmMessage`
+  (mensagem JÁ traduzida da confirmação de exclusão quando há consequência
+  específica — ex.: "as telas voltam aos grupos padrão"; null = genérica).
+  Nome de ícone Material → IconData: util `materialIconByName`
+  (`app/shared/icons/material_icon_names.dart`, catálogo CONST — nunca
+  IconData(codePoint) dinâmico, que quebra o tree-shake do build web);
+  o menu do Home usa o MESMO util para o ícone do tb_module (string).
 - Chaves `register.*` completas já existem em pt.json/en.json (ver
   `internacionalizar-form.md`). Título: a página recebe `required this.title`
   do InterfaceFrame (nome da interface no menu via trCatalog); pesquisa usa
@@ -223,13 +251,17 @@ Prompt: `Infra-IA/setes-app/prompt_fase2_campos_configuraveis.md` (22 decisões)
 Prompt: `Infra-IA/setes-app/prompt_framework_configuracoes_sistema.md` (17 decisões).
 Nível COMPORTAMENTO da hierarquia (tela → campo → configuração).
 
-1. **Ícone de engrenagem na tela de LISTA** (decisão 11 — PADRÃO, com ou sem
-   configs no catálogo; ajuste 2026-07-18): basta passar
-   `configModuleKey: '<modulo>'` no `RegisterSearchPage` — a fábrica renderiza
-   a engrenagem, navega para `/home/interface-configs/` já filtrado
-   (arguments `{'title','moduleKey','returnTo'}`) e o VOLTAR do painel retorna
-   à tela chamadora (`returnTo`). Sem configs, o painel mostra "Não há
-   configurações para esta interface". Referência: customer_page.dart.
+1. **Ícone de engrenagem na tela de LISTA** (decisão 11 — PADRÃO; ajuste
+   2026-08-03): basta passar `configModuleKey: '<modulo>'` no
+   `RegisterSearchPage` — a fábrica monta o `RegisterConfigButton`
+   (shared/register), que SÓ exibe a engrenagem se o módulo TEM configurações
+   no catálogo (GET resolvido na montagem, cache de sessão por módulo) —
+   engrenagem visível = existe algo a configurar. O clique navega para
+   `/home/interface-configs/` já filtrado (arguments
+   `{'title','moduleKey','returnTo'}`) e o VOLTAR do painel retorna à tela
+   chamadora (`returnTo`). Telas fora da fábrica (processo/árvore) usam o
+   MESMO widget direto no actions do AppBar — NUNCA replicar IconButton
+   manual. Referência: customer_page.dart.
 2. **Consumo de config na página**: `with InterfaceConfigLoader` +
    `loadInterfaceConfig('<modulo>')` no initState; leia com
    `configContent('<name>')` / `configBool('<name>')`
@@ -272,7 +304,8 @@ consumidor).
 **App:**
 - `SetesTreeView` (setes_widgets): nós montados pelo módulo (`parentId` →
   filhos), expand/collapse, clique = edição, ação "+" no nó = SUBNÍVEL.
-- Tela: AppBar (título + engrenagem manual — a fábrica não é usada) + abas
+- Tela: AppBar (título + `RegisterConfigButton` no actions — a fábrica não
+  é usada, mas a engrenagem é a MESMA peça) + abas
   por domínio + FAB = NÍVEL raiz (Delphi: dialog "Nível/SubNível" virou
   FAB + ação no nó).
 - Form (SetesFormShell): descrição + "Nível Superior" = SetesLookupField da

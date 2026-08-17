@@ -287,7 +287,29 @@ escrita; sem FK (é rastro, não relacionamento). ⚠️ confirmada na decisão 
   do setes-sync — aqui só nasce a tabela pronta)
 - Governança fina de edição dos dados compartilhados (decisão 1)
 - Aba E-mails / tb_mailing (decisão 7)
-- Papéis provider, collaborator, bank (decisão 8 — só Customer nesta fase)
+- Papéis provider, collaborator, bank (decisão 8 — só Customer nesta fase).
+  **Baixa completa da decisão 8 (2026-08-04)**: collaborator saiu em 2026-07-18,
+  salesman/carrier na Onda 2 e provider na Onda 3 (2026-08-03). **Bank NÃO é
+  papel de entity** — decisão do Valdo em 2026-08-04, coerente com a DP2 do
+  Software House (2026-07-18): banco é cadastro GERAL do catálogo central
+  (setes_central.tb_bank, FEBRABAN), SEM cadeia fiscal, liberado a todos os
+  schemas para uso na conta corrente (lookup /api/bank-accounts/banks).
+  Manutenção do catálogo = módulo `banks` (Super), entregue em 2026-08-04
+  (interface 25, seed sql/25). A decisão 8 está ENCERRADA — nenhum papel pendente.
+  Gates da entrega (2026-08-04): socrático 0.78 ✅; adversarial reprovou a 1ª rodada
+  (HIGH: DELETE de banco em uso quebrava contas de todos os clientes) → corrigido
+  na entrega: DELETE 409 BANK_IN_USE (padrão HAS_CHILDREN da casa), MAX+1 em
+  transação FOR UPDATE, clamp MAX_PAGE no shared/list (valia p/ as 17 listas),
+  seed 25 com id dinâmico, DTO trim + '000' rejeitado — tudo fixado em teste
+  (177/177). **Questões do gate DECIDIDAS pelo Valdo (2026-08-04, mesma rodada)**:
+  Q1 soft delete → RESTAURÁVEL: recriar o number de um banco excluído REVIVE a
+  mesma linha (id preservado, FKs das contas intactas; 409 só p/ number vivo);
+  Q2 MAX+1 transacional FOR UPDATE padronizado também em privileges/interfaces;
+  Q3 coringas %/_/\\ escapados em TODOS os filtros LIKE — peça `escapeLike` no
+  `@shared/list`, aplicada nos 20 repositories (REGRA: filtro novo usa a peça).
+  Lembrete do Valdo registrado: cadastro de banco é EXCLUSIVO do Super
+  (inserir/editar/soft-delete); cliente só CONSOME (lookup da conta corrente).
+  Tudo fixado em teste: 179/179.
 - Telas de cadastro de Salesman e Carrier (decisão 11 — programadas para a
   onda 2 / fase seguinte; nesta fase entram DDL canônica + lookups)
 

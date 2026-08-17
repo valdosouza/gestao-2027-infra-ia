@@ -90,6 +90,11 @@ Regras:
 > Endereço: `tbStateId`/`tbCityId` são os códigos IBGE já usados na web (o Delphi
 > converte UF/cidade via lookup local ANTES de enviar — TControllerUf/TControllerCidade);
 > `tbCountryId` = BACEN (1058 Brasil). CEP e fones sem máscara (somente dígitos).
+> **Fallback geográfico (decisão Valdo 2026-08-01)**: país/estado/cidade são migrados do
+> Firebird — id do trio que NÃO exista na central (dado sujo do legado) não derruba o
+> cadastro: o endereço cai para o trio COMPLETO do endereço do PRÓPRIO institution
+> (`applyGeoFallback` no motor sync.entity; troca parcial criaria cidade fora do estado).
+> Institution sem endereço → segue o 409 legível/cidade placeholder do ensureAddressRefs.
 
 ---
 
@@ -124,6 +129,8 @@ Mesmo padrão do brand; atributos só na criação. (Não existia na setes-sync 
 (@shared/tree-path) — o CAT_NIVEL legado NÃO viaja. Mover de pai move a subárvore.
 Pai ainda não sincronizado → **409 `PARENT_NOT_SYNCED`** (reenviar no próximo ciclo).
 `kind` do filho deve = `kind` do pai (árvores P/S independentes).
+`kind` vazio/ausente = **'P'** (decisão Valdo 2026-08-01 — categorias migradas do legado
+vêm sem tipo; 164 barradas na rodada de 2026-07-31).
 
 ### POST /merchandise/sincronize (Onda 3 — produto: 3 tabelas em transação)
 ```jsonc
@@ -145,7 +152,12 @@ Pai ainda não sincronizado → **409 `PARENT_NOT_SYNCED`** (reenviar no próxim
 `quantity`/`minimum` NÃO viajam aqui (domínio do /stock-balance). `id_provider` fica NULL (Onda 4).
 **Natureza (D2 — notas M×S, 2026-07-26)**: `product.kind` 'P'/'M' (gravado em `tb_product.kind`;
 fallback de transição: `merchandise.kind` legado); 'S'/'A' → **422 `KIND_NOT_ALLOWED`**
-(serviço usa o /service; 'A' aposentado).
+(serviço usa o /service; 'A' aposentado). `product.kind` vazio conta como ausente e o
+default final é 'P' (PRO_TIPO null → 'P' — decisão Valdo 2026-08-01).
+**Campos-ESPELHO (decisão Valdo 2026-08-01, rodada real de 2026-07-31)**:
+`merchandise.composition` = PRO_COMPOSICAO **como está** (domínio legado '1'/'2'/'3'/'5' —
+não é S/N; a web não consome, só espelha) e `stock.divisor` = PRO_DIVISOR **como está**
+(0 é valor legítimo). O snFlag S/N em composition barrava o catálogo inteiro (8.588 itens).
 
 ### POST /service/sincronize (notas M×S, 2026-07-26 — produto de SERVIÇO, D2)
 ```jsonc
@@ -203,6 +215,9 @@ fallback de transição: `merchandise.kind` legado); 'S'/'A' → **422 `KIND_NOT
 ```
 `idNfce` só entra na CRIAÇÃO da linha central. Atributo AUSENTE não sobrescreve a
 configuração web do vínculo. `deleted:'S'` → `enable='N'` no vínculo.
+Tolerância ao legado (decisão Valdo 2026-08-01): flags e `idNfce` vazios ('') contam
+como AUSENTES; `maxParcels` 0 → **fallback 1** (a web consome parcelas — espelho de 0
+quebraria o uso).
 
 ### POST /customer/sincronize (Onda 4 — cadeia + papel + fiscal)
 ```jsonc
@@ -358,7 +373,7 @@ id+institution+terminal para não colidir entre institutions.
 // 409 USER_NOT_SYNCED (bloco user presente e não resolvido)
 ```
 Bloco `user` opcional resolve o autor (2026-07-26, decisão 6); AUSENTE →
-`tb_userid` NULL (comportamento anterior). O contrato antigo com `items`
+`tb_user_id` NULL (comportamento anterior). O contrato antigo com `items`
 (tb_cashier_items) foi REMOVIDO — fechamento por forma de pagamento entra em
 endpoint próprio na onda de movimento financeiro.
 
@@ -387,6 +402,14 @@ Transação única: tb_order + sale + itens kind 'Sale' (+ item_merchandise quan
 traz stockListId) + totalizer + billing. `items` = snapshot **ESCOPADO por kind='Sale'**
 (notas M×S: nunca toca itens 'Service'). Cliente/vendedor por DOCUMENTO com papel
 verificado no schema (D3/D13).
+**Papéis-SENTINELA (opção b — decisão Valdo 2026-08-03)**: `customerDocument`/
+`salesmanDocument` AUSENTES, zerados ou inválidos (venda balcão do legado — a Pipoteca
+tinha ~69k vendas assim, travando TODO o financeiro em cascata) resolvem para papéis
+autocriados por institution: cliente **CONSUMIDOR FINAL** e vendedor **VENDEDOR PADRAO**
+(entity 'N' sem doc + papel no schema; `resolveSentinelRole` no sync.entity, idempotente
+por NOME + entity sem-documento — homônimo real COM documento nunca é confundido).
+Precedente: forma "Carteira" autocreate. Complemento futuro (opção a): referência por
+externalCode para cliente sem-doc IDENTIFICADO — exige contrato + Delphi.
 **Id (D1 — notas M×S, 2026-07-26)**: o id enviado é o **NFL_CODIGO** da nota do pedido
 (a projeção `nfl_codigo AS PED_CODIGO` do legado já fazia isso) — a nota mista vincula
 todo o processo: tb_order.id = tb_invoice.id = orderId do financeiro.
@@ -422,6 +445,14 @@ sub-bloco `service: { totalValue }` = NFL_VL_TL_SRV; **na conjugada, sub-bloco
 `merchandise` junto — presença = a nota também é de mercadoria**) — nota gravada na MESMA
 transação. Os /order-purchase e /order-stock-adjust também têm o bloco `invoice` (com
 sub-bloco `merchandise`; na compra, issuer='N' e entityDocument = fornecedor).
+**invoice.number da nota de SERVIÇO (decisão Valdo 2026-08-01/02)**: NFL_NUMERO é número
+de nota de MERCADORIA — para serviço é SEMPRE vazio. O número da NFS-e vem DIRETO do
+retorno: `TB_RETORNO_NFS.NFS_NUMERO` via `NFS_CODNFL = NFL_CODIGO` (Delphi
+`DM.GetNfsNumero` em TInvoiceServiceSendWeb, semântica de LEFT JOIN — achou usa; na
+conjugada, NFL_NUMERO preenchido pela NF-e da parte mercadoria é preservado quando não há
+retorno). **Sem retorno, number fica EM BRANCO e a web grava NULL** (invoiceBody.number
+nullish + '' → NULL no upsert — o reenvio pós-autorização atualiza; nada de 400).
+Bancos sem NFS-e (ex.: Pipoteca, sem serviço) nunca acionam a classe.
 
 ### POST /order-purchase/sincronize (Onda 5)
 ```jsonc
@@ -448,6 +479,8 @@ sub-bloco `merchandise`; na compra, issuer='N' e entityDocument = fornecedor).
   "orderId": 1001, "terminal": 0, "parcel": 1,        // PK NATURAL — FIN_CODIGO não viaja
   "dtExpiration": "2026-08-19", "tagValue": 19.8,
   "paymentTypeDescription": "DINHEIRO", "deleted": "N",
+  "kind": "R",                                        // FIN_TIPO cru (D1 2026-08-03): 1ª letra R/P
+  "number": "DUP-1001/1",                             // FIN_NUMERO (D3) — nº do documento da bill
   "payment": {                                        // presente = baixa espelhada
     "paidValue": 19.8, "dtPayment": "2026-07-19", "dtRealPayment": null,
     "interestValue": 0, "lateValue": 0, "discountAliquot": 0,
@@ -460,6 +493,19 @@ sub-bloco `merchandise`; na compra, issuer='N' e entityDocument = fornecedor).
 eventos (N/E/R), mas o Firebird só conhece o ESTADO ATUAL — a baixa entra como
 evento 1 status 'N' via upsert; histórico de estornos do legado NÃO viaja.
 A imutabilidade plena vale para eventos nascidos na web.
+**BILL 1:1 no espelho (decisões do Valdo 2026-08-03, revisadas no mesmo dia)**:
+sem a `tb_financial_bills` o título é INVISÍVEL ao módulo de baixas da web
+(INNER JOIN na listagem e na baixa). O /financial grava a bill na MESMA
+transação, mesma PK natural. **ESPELHO FIEL: kind = FIN_TIPO COMO ESTÁ**
+(RA/RM/PA/PM — a 1ª ideia RL/PL foi descartada pelo Valdo: a rotina de
+parcerias do settlements que RA/RM dispara só roda em baixa FEITA PELA WEB e é
+guiada por dados — sem parceria cadastrada é no-op; e kind inventado escaparia
+dos filtros das telas). Direção (operation C receber × D pagar) pela 1ª letra;
+payload sem kind (pré-patch Delphi) → fallback pelo pedido (tb_order_purchase =
+P; senão R), gravado como RM/PM e corrigido no reenvio pós-compilação;
+`number` = FIN_NUMERO, fallback `orderId-parcela`; situation/stage 'N' (estado
+pago×aberto deriva dos payments, não da bill). Backfill = limpar SRC_LOG +
+rebobinar LAST_UPDATE da TB_FINANCEIRO (upsert idempotente).
 
 ### POST /financial-statement/sincronize (Onda 5 — id local)
 ```jsonc

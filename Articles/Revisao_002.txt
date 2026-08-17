@@ -1,0 +1,258 @@
+# From AI-Assisted Coding to AI-Governed Software Engineering
+
+Six months ago, I was using AI to help me write software.
+
+Today, I believe I could rewrite a 700,000-line system in a month.
+
+And that is not even the most important part.
+
+The important part is understanding **why**.
+
+Because those 700,000 lines were never the real asset.
+
+Most of them are sediment: the same business concepts rewritten, protected, bypassed, and extended over decades.
+
+The real asset was the collection of decisions buried inside the code.
+
+And, until six months ago, most of those decisions lived in my head.
+
+This is the story of how I started moving them out of my head and into an engineering system.
+
+The month is just a consequence.
+
+---
+
+## The human brain is a great processor — and a terrible database
+
+Software engineering requires a lot of processing.
+
+We analyse problems, connect concepts, understand business rules, identify side effects, and search for solutions.
+
+Humans are remarkably good at this.
+
+But complex solutions are rarely linear.
+
+A decision made in one place affects another process, which depends on another rule, which exists because of something that happened ten years ago.
+
+That is where things become difficult.
+
+The same brain that is good at processing information is not particularly good at remembering everything it has processed.
+
+I increasingly believe that many engineering failures are not caused by a lack of intelligence.
+
+They are caused by a **lack of memory**.
+
+This is where the combination of humans and AI becomes interesting.
+
+AI, without governance, can produce plausible, confident and subtly wrong solutions.
+
+AI with governance can become something very different.
+
+It does not forget the repository.
+
+It does not get tired of reading the same documentation.
+
+It does not decide that verification can wait until Monday.
+
+So I stopped thinking about the division of work as:
+
+> **AI writes. Human reviews.**
+
+Instead, I think about it as:
+
+> **I process. AI remembers. Governance is the contract between us.**
+
+---
+
+## Asking AI to fix the problem is often the first mistake
+
+One of the biggest changes in my thinking was realising that the problem is not simply getting AI to generate better code.
+
+The real problem is teaching AI to understand **what the software is supposed to do**.
+
+That requires more than prompts.
+
+It requires agents, skills, orchestration, validation and persistent knowledge.
+
+Traditional documentation helps, of course.
+
+But documentation has a fundamental weakness: someone still has to remember that it exists, find it, read it, understand it and keep it relevant.
+
+Even organisations that produce enormous amounts of documentation still struggle with this.
+
+So I started looking at agents differently.
+
+An agent should not simply perform an action.
+
+It should participate in a process where actions are recorded, validated and turned into reusable knowledge.
+
+Two rules became particularly important for me:
+
+**Consult before acting.
+Retain after acting.**
+
+If a task teaches us something, that knowledge should not disappear when the conversation ends.
+
+It should return to the knowledge base through a defined chain:
+
+**document → index → root rules → persistent memory**
+
+Otherwise, as far as the engineering system is concerned, the learning never happened.
+
+That was the point where I stopped thinking primarily about **prompt engineering** and started thinking about **memory engineering**.
+
+The knowledge base became the asset.
+
+The model became replaceable.
+
+---
+
+## Governance: memory without rules is just a pile of information
+
+Having information is not enough.
+
+A document does not automatically become an asset.
+
+A memory does not automatically become knowledge.
+
+There has to be governance.
+
+One of the mechanisms I am experimenting with is simple:
+
+Every problem discovered becomes a numbered question.
+
+Every proposed correction is evaluated by a human.
+
+It can be accepted.
+
+It can be rejected.
+
+But it should not simply disappear.
+
+It becomes evidence that the subject was investigated.
+
+The process continues until the open questions are resolved.
+
+And there is another important principle:
+
+**AI does not make the decision.**
+
+If the AI encounters something it does not understand, it should not silently assume.
+
+The gap becomes a question.
+
+That distinction is extremely important when working with legacy software.
+
+Because in a mature system, an assumption can be more dangerous than an obvious error.
+
+The goal is to create a system where, six months from now, nobody needs to remember the details personally.
+
+You should be able to ask:
+
+> **“What do we know about subject X?”**
+
+And have the engineering system reconstruct the knowledge that was accumulated around it.
+
+---
+
+## Lego pieces, not scale models
+
+There is another lesson I am learning from working with AI on complex software.
+
+AI is extremely good at generating structures.
+
+Ask it for a model and, in seconds, it can produce an entire architecture that looks coherent, elegant and complete.
+
+But there is a danger here.
+
+AI does not inherently have a commitment to your business concept.
+
+It recognises patterns and produces something similar to patterns it has seen before.
+
+That can result in a beautiful model that is subtly wrong.
+
+And with AI, the cost of creating that wrong structure has collapsed.
+
+Previously, building the wrong structure could take weeks.
+
+That cost forced us to think.
+
+Today, AI can create the wrong structure in seconds.
+
+So the risk of freezing the wrong model has actually **increased**.
+
+My approach is therefore becoming less about asking AI to build complete structures and more about creating **Lego pieces**.
+
+Small, well-defined concepts that can be combined in different ways without prematurely freezing the final architecture.
+
+The best analogy I have found is a cloud.
+
+A cloud is always recognisable as a cloud, regardless of its exact shape.
+
+A well-defined domain concept should behave in a similar way.
+
+Its identity should survive different combinations and implementations.
+
+Before introducing a new domain object, I want AI to answer two questions — and I validate the answers:
+
+**What is the single concept represented by this object?**
+
+One sentence.
+
+No “and”.
+
+And:
+
+**What fact does this object originate from?**
+
+An object that exists primarily because someone created a database record is often a warning sign.
+
+Another signal I use is even simpler:
+
+> **If we need a rule whose only purpose is to prevent the structure from contradicting itself, the structure may already be wrong.**
+
+This is not a documentation rule.
+
+It is becoming part of the engineering process.
+
+The idea is to turn this thinking into an agent that participates in the orchestration before a new domain object is introduced.
+
+---
+
+## What changed for me
+
+Six months ago, I saw AI primarily as a tool that could make me faster at writing code.
+
+Today, I see it as something much bigger.
+
+The opportunity is not simply:
+
+**“How much code can AI write?”**
+
+The more interesting question is:
+
+**“How much engineering knowledge can we preserve, organise, validate and reuse?”**
+
+That changes the role of AI in legacy software dramatically.
+
+A 700,000-line system is no longer just 700,000 lines of code.
+
+It is a large collection of business decisions, historical constraints, relationships, exceptions and accumulated knowledge.
+
+The challenge is not simply to rewrite it faster.
+
+The challenge is to **extract the knowledge hidden inside it without losing the reasons behind the system**.
+
+That is where I believe AI can become transformative.
+
+Not as a replacement for the engineer.
+
+Not as an autonomous programmer.
+
+But as a persistent engineering partner that can remember what the team has learned, challenge gaps in understanding, enforce processes and make decades of accumulated knowledge accessible.
+
+The code is only the visible layer.
+
+**The real asset is the knowledge behind it.**
+
+And I am increasingly interested in building the infrastructure that allows us to preserve it.

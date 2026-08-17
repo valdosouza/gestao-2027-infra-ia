@@ -23,6 +23,14 @@
 - Super opera cross-schema recebendo `institutionId` alvo (decisão 23); `03_schema_cliente_ddl.sql` ganha as 4 tabelas novas
 - Stack oficial: `temp/Agent_Context_App.md` (BLoC, flutter_modular v5, dartz; drift só nos apps Android)
 
+## Como rodar em dev (portas nos .env — 2026-08-03)
+
+- **setes-api**: porta em `setes-api/.env` (`PORT=...`; dotenv) → `npm run dev`
+- **setes-app web**: `apps/web/.env` (`WEB_PORT` = porta do dev server; `API_URL` =
+  endereço da setes-api, vira `AppConfig.baseApiUrl` via dart-define) → rodar
+  `apps/web/run-dev.ps1` (lê o .env e monta `--web-port` + `--dart-define-from-file`).
+  `.env.example` ao lado; nunca subir o flutter "na mão" com porta divergente do .env.
+
 ## Referências
 
 - Stack/testes: `temp/Agent_Context_App.md` · Tema: `temp/THEME_EXAMPLE.md`

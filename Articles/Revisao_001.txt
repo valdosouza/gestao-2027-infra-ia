@@ -1,0 +1,72 @@
+Seção 1 — 
+
+Seis meses atrás eu usava IA para me ajudar a programar.
+
+Hoje eu sei que poderia reescrever um sistema de 700 mil linhas em um mês.
+
+E isso nem de perto é a parte mais importante.
+
+Porque aquelas 700 mil linhas nunca foram o ativo. A maior parte é sedimento — o mesmo punhado de conceitos de negócio reescritos, protegidos e contornados durante anos. O ativo eram as decisões enterradas ali dentro, e até seis meses atrás o único lugar onde elas viviam era a minha cabeça.
+
+Este artigo é sobre tirá-las de lá. O mês é só a consequência.
+
+Seção 2 — 
+
+Nosso cérebro é uma máquina biológica
+
+Boa de processamento e criativa na busca de soluções.
+
+Mas muitas soluções têm uma complexidade intrínseca, interligada por mini processos ao longo do caminho — e é ali que a solução quebra. Porque a mesma máquina que processa bem tem péssima memória.
+
+A maior parte das falhas de engenharia não é falta de inteligência. É falta de memória.
+
+Com uma governança de IA, memorizando e organizando o que o humano processa, aparece o poder real dessa simbiose. Solta, ela produz trabalho plausível, confiante e sutilmente errado. Governada, ela nunca esquece, nunca se cansa do arquivo e nunca pula a verificação porque é sexta-feira.
+
+Então a divisão de trabalho não é "a IA escreve e eu reviso". É:
+
+Eu processo. Ela memoriza. A governança é o contrato entre os dois.
+
+Seção 3 — 
+
+Pedir para a IA corrigir o erro é o primeiro erro
+
+Ensinar a IA a entender o que o código deve fazer — criando agentes com skills numa boa orquestração — é o que produz o código que você precisa.
+
+E não adianta apostar em documentação. Mesmo quem produzia toneladas dela ainda precisava lê-la, e todos sabemos como isso funciona na prática.
+
+Orquestrar agentes, registrando e validando ações, gera memória que vira artefato — não conversa.
+
+Duas regras permanentes, valendo para mim e para a IA: consultar antes, reter depois. O que uma tarefa ensinou volta para a base por uma cadeia obrigatória — documento, índice, regras da raiz, memória persistente — ou não aconteceu.
+
+Foi aqui que parei de fazer engenharia de prompt e comecei a fazer engenharia de memória. A base é o ativo; o modelo é peça trocável.
+
+Seção 4 — FECHADA. Cole no doc:
+
+Governança: memória sem regra é só um monte
+
+O que transforma um documento em ativo é uma regra — e a maneira como a informação é recuperada. Sem as duas, é só arquivo morto.
+
+Ideias corrigidas pelo humano, organizadas pela IA. Cada problema encontrado vira uma questão numerada. Cada correção sugerida é validada ou refutada por mim — mas nunca descartada: ela vira evidência de que o assunto foi tratado. Repete até zerar as pendências.
+
+A IA nunca decide nada. Não pode assumir nenhuma situação. Toda lacuna que ela não compreende tem que virar questão levantada.
+
+Daqui a seis meses, ninguém precisa lembrar. Basta perguntar à IA: "o que sabemos sobre o assunto X?"
+
+Seção 5 —
+Peças de lego, não maquetes
+
+Um sistema complexo ramifica de infinitas maneiras — e a IA ramifica mais rápido do que qualquer coisa que existia antes. Peça um modelo e ela devolve uma estrutura inteira, bonita e coerente, em segundos.
+
+Só que ela não tem compromisso com o conceito. Ela reconhece formatos, e devolve o mais parecido com o que já viu. Isso é uma maquete: formato congelado, plausível, sutilmente errado — e pronto para engessar o sistema inteiro.
+
+Antes, construir a estrutura errada custava semanas, e o custo obrigava a pensar. Hoje custa segundos. O risco de congelar o formato errado aumentou com a IA, não diminuiu.
+
+Por isso a IA não modela sozinha. O que se constrói são peças de lego: objetos sem formato final, em que cada peça nova dá mais poder ao todo.
+
+A melhor imagem é uma nuvem. Nuvem é sempre nuvem, com infinitos formatos, e qualquer um que a veja sabe que é uma nuvem. Um objeto bem conceituado faz o mesmo: mantém a identidade em qualquer combinação.
+
+Antes de qualquer objeto novo, duas perguntas que a IA tem que responder e eu valido: qual é o conceito único desta peça — uma frase, sem "e". E de que fato ela nasce: objeto que existe só porque alguém criou um registro quase sempre é erro de modelagem.
+
+Um sinal que uso para confirmar: se existe uma regra só para impedir a estrutura de se contradizer, a estrutura está errada.
+
+E nada disso ficou como texto para alguém lembrar. Virou um agente, obrigatório na orquestração antes de qualquer objeto de domínio novo. O pensamento parou de depender da minha memória no dia em que virou etapa do processo.

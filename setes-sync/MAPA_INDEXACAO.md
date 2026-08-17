@@ -15,7 +15,7 @@ transformações aplicadas. Atualizar SEMPRE que um endpoint for revisado.
 
 | Indexador | Como funciona |
 |---|---|
-| **DOCUMENTO** | CPF/CNPJ → `tb_person`/`tb_company` → entity.id em setes_central (motor `sync.entity.ts`) |
+| **DOCUMENTO** | CPF/CNPJ → `tb_person`/`tb_company` → entity.id em setes_central (motor `sync.entity.ts`). ⚠️ **2026-08-14 (Valdo)**: entity ACHADA é **IMUTÁVEL** — reusa o id e NÃO reescreve a cadeia (fim do last-write-wins DESTE lado; cadastro errado de um cliente sobrescrevia o correto de outro, pois o mesmo documento vive em N institutions). Só a CRIAÇÃO grava; graduação do sem-doc segue atualizando (corrige a própria entity). setes-api/app inalterados (D1). **Convergência de dado novo = decisão PENDENTE** (memória `entidade-existente-imutavel-sync`) |
 | **UUID** | Sem documento → `tb_no_doc.external_id`, devolvido como `externalCode` e gravado em `tb_empresa.externalCode` no Firebird (D4) |
 | **DESCRIÇÃO** | Dedupe central por `UPPER(TRIM(descricao))`, acentos preservados (D17) + vínculo `tb_institution_has_*` (D5) |
 | **ID LOCAL** ✅ | Id do Firebird ACEITO como id na web (D11) — só quando a tabela vive no schema do cliente com PK por institution e não há chave de negócio melhor |
@@ -27,7 +27,7 @@ transformações aplicadas. Atualizar SEMPRE que um endpoint for revisado.
 | # | Entidade (classe Delphi) | Tabela destino | Indexador | Id local Firebird | Observações |
 |---|---|---|---|---|---|
 | 1 | Brand | setes_central.tb_brand + tb_institution_has_brand | DESCRIÇÃO | ❌ descartado | Onda 3 |
-| 2 | Category | setes_<cli>.tb_category | **ID LOCAL** ✅ | ✅ CAT_CODIGO = id (PK id+institution) | árvore: posit_level SEMPRE recalculado pela API (@shared/tree-path) — Onda 3 |
+| 2 | Category | setes_<cli>.tb_category | **ID LOCAL** ✅ | ✅ CAT_CODIGO = id (PK id+institution) | árvore: posit_level SEMPRE recalculado pela API (@shared/tree-path) — Onda 3; ✔ 2026-08-01: TB_CATEGORY local nasce no BOOTSTRAP (conversão TB_GRUPOS/TB_SUBGRUPOS em 2 níveis + PRO_CODCAT — `Sincronizador/prompt_conversao_grupo_subgrupo_categoria.md`) e o `parentId` viaja REAL, derivado do POSIT_LEVEL (era hardcoded 0); ✔ 2026-08-04: Passo 0 = LIMPEZA PRÉVIA condicionada a sujeira (linha que a conversão não produziria → zera tabela+PRO_CODCAT+generator e reconverte; tabela conforme passa ilesa) |
 | 3 | Measure | setes_central.tb_measure + tb_institution_has_measure | DESCRIÇÃO | ❌ descartado | Onda 3 |
 | 4 | Package | setes_central.tb_package + tb_institution_has_package | DESCRIÇÃO | ❌ descartado | Onda 3 |
 | 5 | Merchandise (Produto P/M) | setes_<cli>.tb_product/tb_merchandise/tb_stock | **ID LOCAL** ✅ | ✅ PRO_CODIGO = id | ✔ Onda 3: brand/package/measure por DESCRIÇÃO (fallbacks 'NÃO INFORMADA'/'UND'); categoria por id local (409 CATEGORY_NOT_SYNCED); `id_provider` fica NULL até a Onda 4 (fornecedor é por DOCUMENTO — id local violaria D3); quantity/minimum são domínio do stock-balance; ✔ notas M×S 2026-07-26 (D2): `product.kind` P/M gravado em tb_product.kind; 'S'/'A' → 422 KIND_NOT_ALLOWED |
@@ -35,7 +35,7 @@ transformações aplicadas. Atualizar SEMPRE que um endpoint for revisado.
 | 6 | PriceList | setes_<cli>.tb_price_list | **ID LOCAL** ✅ | ✅ TPR_CODIGO = id | ✔ Onda 3: coluna de ativo real é `published`; margem = `aliq_profit` |
 | 7 | Price | setes_<cli>.tb_price | composto (institution+priceList+product) | ✅ via PriceList+Produto | ✔ Onda 3: FK real → tb_product; 409 PRICE_LIST/PRODUCT_NOT_SYNCED |
 | 8 | StockList | setes_<cli>.tb_stock_list | **ID LOCAL** ✅ | ✅ ETS_CODIGO = id | ✔ Onda 3: ETS_PRINCIPAL → coluna `main` |
-| 9 | StockBalance | setes_<cli>.**tb_stock_balance** | composto (institution+stockList+merchandise) | ✅ | ✔ Onda 3: tabela PRÓPRIA com a dimensão da lista (corrigido — não é tb_stock); 409 STOCK_LIST/MERCHANDISE_NOT_SYNCED |
+| 9 | StockBalance | setes_<cli>.**tb_stock_balance** | composto (institution+stockList+merchandise) | ✅ | ✔ Onda 3: tabela PRÓPRIA com a dimensão da lista (corrigido — não é tb_stock); 409 STOCK_LIST/MERCHANDISE_NOT_SYNCED; ✔ 2026-08-14 (implantação Setes, decisão Valdo): saldo de produto kind 'S' → **200 sem gravar** (serviço não tem estoque; o legado cria TB_ESTOQUE p/ todo produto — sem o desvio o 409 seria eterno) |
 | 10 | Promotion | setes_<cli>.tb_promotion + tb_promotion_items | **ID LOCAL** ✅ | ✅ | ✔ Onda 3: DDL real é price_tag/quantity/reg_active/oper (sem dt_begin/dt_end); items = snapshot (ausente no payload → deleted='S') |
 | 11 | FinancialPlans | setes_<cli>.tb_financial_plans | **ID LOCAL** ✅ | ✅ PLC_CODIGO = id | ✔ Onda 3: árvore ÚNICA (posit_level recalculado; 409 PARENT_NOT_SYNCED); source_/kind/cluster |
 | 12 | PaymentType | setes_central.tb_payment_types + tb_institution_has_payment_types | DESCRIÇÃO | ❌ descartado | ✔ Onda 3: id_nfce só na criação; attrs do vínculo só os presentes no payload; deleted='S' → `enable='N'` (coluna do vínculo é enable) |
@@ -52,8 +52,8 @@ transformações aplicadas. Atualizar SEMPRE que um endpoint for revisado.
 | 22 | StockStatement | setes_<cli>.tb_stock_statement | **ID LOCAL** ✅ | ✅ CET_CODIGO = id | ✔ Onda 5; ⚠️ PK física só `id` AUTO_INCREMENT — colisão entre institutions possível (DDL da Rodada 4); trigger de saldo só dispara no INSERT |
 | 23 | Financial | setes_<cli>.tb_financial | **PK NATURAL** (inst+order+terminal+parcel) | ❌ FIN_CODIGO NÃO viaja (id vestigial no modelo 5.5) | ✔ Onda 5: **SEMÂNTICA DE ESPELHO** — baixa do legado = evento 1 status 'N' via upsert; estornos do legado não viajam; imutabilidade plena p/ eventos nascidos na web |
 | 24 | FinancialStatement | setes_<cli>.tb_financial_statement | **ID LOCAL** ✅ | ✅ MVF_CODIGO = id | ✔ Onda 5: status 'N'/id_origin NULL (espelho); bank_account/historic ausentes → 0 sentinela; ✔ 2026-07-26: MVF_CODUSU via bloco `user` (ausente → 0) |
-| 25 | Cashier | setes_<cli>.tb_cashier | **ID LOCAL** ✅ | ✅ | ✔ Onda 5: items do caixa REMOVIDOS do contrato (endpoint próprio futuro); ✔ 2026-07-26: autor via bloco `user` (ausente → tb_userid NULL) |
-| — | Retornos NF-e 55/65 / NFS-e / FileXml | tb_invoice (retorno) + disco | chave da NF-e / ID LOCAL | ✅ | arquivos: `SYNC_FILES_ROOT/<cnpj>/<ano>/<mes>/` (D20) — Onda 6 |
+| 25 | Cashier | setes_<cli>.tb_cashier | **ID LOCAL** ✅ | ✅ | ✔ Onda 5: items do caixa REMOVIDOS do contrato (endpoint próprio futuro); ✔ 2026-07-26: autor via bloco `user` (ausente → tb_user_id NULL) |
+| — | Retornos NF-e 55/65 / NFS-e / FileXml | tb_invoice (retorno) + disco | chave da NF-e / ID LOCAL | ✅ | arquivos: `SYNC_FILES_ROOT/<cnpj>/<ano>/<mes>/` (D20) — Onda 6; ✔ 2026-08-14 (implantação Setes — 4 correções): (1) `code_verif` 15→**100** e `motive` 60→**255** (migration 024) — prefeitura devolve a CHAVE da nota como verificação, `NFS_COD_VERIF` é VARCHAR(100) no Firebird; (2) ano/mês da pasta agora vem da **emissão extraída do próprio XML** (`dhEmi`/`dEmi`/`DataEmissao`; `dtReference` só fallback) — o Delphi manda a data do ENVIO e jogava TUDO no mês corrente; (3) `fileName` com caminho completo do desktop → basename; (4) blob `ARQ_CONTEUDO` vazio → 200 sem gravar (fila limpa; 20 casos na Setes) e conteúdo sem nome derivável → `sem-nome-<hash>.xml` |
 
 > ⚠️ As linhas marcadas com a onda futura são o PLANO — cada onda confirma/ajusta
 > a linha ao revisar o endpoint (se mudar, atualizar AQUI no mesmo commit).
@@ -128,6 +128,22 @@ fallbacks descritos, mas a decisão definitiva é arquitetural:
 3. **tb_stock_statement com PK só `id` AUTO_INCREMENT**: ids locais de institutions
    diferentes podem colidir fisicamente. Correção = PK composta (id, institution,
    terminal) — DDL.
+4. ~~**order-stock-adjust sem `direction` (sentido Entrada/Saída)**~~ —
+   **RESOLVIDO 2026-08-09** (Valdo): não precisava de DDL nova — a 1ª letra do
+   `TB_NOTA_FISCAL.NFL_TIPO` da própria nota já dá o sentido (`EI`/`EX` =
+   Entrada Interna/Externa, `SI`/`SE` = Saída Interna/Externa).
+   `invoice_merchandise_adjust_send_web.pas` agora manda
+   `Copy(FCtrl.Registro.Tipo, 1, 1)` como `adjust.direction`. Sem mudança no
+   contrato do setes-sync (já exigia `direction` de 1 char).
+5. ~~**financial ORDER_NOT_SYNCED em nota AVULSA (`NFL_TIPO='EM'`)**~~ —
+   **RESOLVIDO 2026-08-09**: achado na investigação do "Pedido 217864 ainda
+   não sincronizado" — nota avulsa passa só por `/invoice/sincronize`
+   (`upsertInvoice`), que grava `tb_invoice` mas NUNCA `tb_order` (só as
+   notas de PROCESSO criam os dois juntos, D9). `financial.ts` checava
+   exclusivamente `tb_order`, então financeiro de nota avulsa 409ava pra
+   sempre — não era problema de ordem de envio nem filtro disjunto. Fix:
+   `financial.ts` agora aceita `tb_invoice` (id+institution+terminal) como
+   alternativa válida a `tb_order` antes de lançar `ORDER_NOT_SYNCED`.
 
 ## Precedente do padrão "código externo"
 

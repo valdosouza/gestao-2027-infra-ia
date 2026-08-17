@@ -218,7 +218,14 @@ documentação interna (este prompt e Infra-IA), nunca no banco/telas.
    demais=campo com validação do kind); i18n pt/en.
 7. **App — atalho contextual**: ícone de engrenagem na tela de LISTA (decisão 11;
    contrato visual da skill criar-formulario-cadastro.md) → painel filtrado na
-   interface corrente.
+   interface corrente. **Ajuste 2026-08-03 (Valdo)**: a engrenagem só APARECE se o
+   módulo tem configurações no catálogo (antes aparecia sempre e o painel dizia
+   "não há configurações") — peça única `RegisterConfigButton`
+   (`app/shared/register/register_config_button.dart`): consulta o GET resolvido
+   do módulo na montagem (cache de sessão) e some quando a lista vem vazia; usada
+   pela fábrica (`configModuleKey`) e direto no AppBar das telas de
+   processo/árvore (service_orders, settlements, categories, financial_plans —
+   as réplicas manuais de IconButton foram removidas).
 8. **App — sessão + engine de consumo**: `app/shared/session/` (decisão 17); loader
    de config resolvida (molde FieldConfigLoader); piloto na tela Clientes
    (pré-seleção PF/PJ, Consumidor/Revenda; filtro de vendedor fixo/bloqueado na

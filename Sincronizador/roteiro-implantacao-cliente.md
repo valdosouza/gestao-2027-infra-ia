@@ -55,6 +55,66 @@ Rodar `patches-revisao-2026-07/01_firebird_ddl.sql`:
 
 ## Fase 4 — Sincronização inicial (UMA entidade por vez, ordem D8)
 
+### Primeira carga SELETIVA por período (decisão Valdo 2026-08-01)
+
+O cliente pode não querer levar todo o histórico. Na tela de configuração
+(aba Período da primeira carga: `ChBx_Periodo` + datas inicial/final), com o
+período marcado, o "Colocar na Fila Sincronia" aplica filtro nas tabelas com
+regra (`SqlFiltroPeriodoPrimeiraCarga` em tas_config.pas):
+
+| Tabela | Regra |
+|---|---|
+**PRINCÍPIO (Valdo, 2026-08-04): "Enviar somente o que for do período" — padrão Fc_Usuario**
+— a LISTA nasce no CONTROLLER da tabela: o `getList` honra `Periodo/DataInicial/DataFinal`
+(do ControllerBase) com a query vinculada à NOTA do período (ou à própria data de
+movimento); sem `Periodo`, devolve a query original (carga completa — callers antigos
+intactos). A `Fc_*` do tas_config só instancia o controller, seta o período capturado,
+itera a `Lista` chamando `Fc_InsertSicronia(tabela, campo, codigo)` e reporta via
+InicioEtapa/FimEtapa. Na thread da carga, cada controller recebe `DataBase := FCargaDB`
+(conexão própria — o DM segue livre para o ciclo de envio). As funções
+`SqlPrimeiraCargaPeriodo` (abordagem anterior por WHERE) foram REMOVIDAS.
+
+Molde do SQL (confirmado no código, `ControllerProduto.getList`): `TB_PEDIDO → tb_nota_fiscal
+(NFL_CODPED=PED_CODIGO) → tb_itens_nfl (ITF_CODPED=PED_CODIGO) → TB_PRODUTO
+(PRO_CODIGO=ITF_CODPRO) WHERE nfl_dt_emissao BETWEEN :ini AND :fim`. Nota AVULSA (`NFL_TIPO
+='EM'`) não tem `TB_PEDIDO` e por isso não entra nesse molde de produto — ela é tratada à
+parte, sem join de itens (`ControllerNotaFiscal.getList`, filtro direto `nfl_tipo='EM'`); o
+que indexa `tb_order.id` na web continua sendo sempre `TB_NOTA_FISCAL.NFL_CODIGO`
+([[notas-mercadoria-servico]]), independente de o funil de produto passar ou não pelo pedido.
+
+**Realinhamento de tipo de registro (Valdo, 2026-08-09)** — nem toda tabela do funil deve
+respeitar Período; cadastros de referência e catálogos pequenos vão SEMPRE completos,
+mesmo com a aba Período marcada, para não gerar 409 `*_NOT_SYNCED` em cascata nem custo de
+filtrar poucos registros:
+
+- **catálogo pequeno, sempre completo**: `TB_CATEGORY`, `TB_EMBALAGEM`, `TB_MEDIDA`,
+  `TB_MARCA_PRODUTO`, `TB_FORMAPAGTO` — deixaram de filtrar por produto movimentado
+  (removida a query via `TB_PEDIDO→NF→ITENS_NFL→PRODUTO`; voltaram ao `SELECT *` simples)
+- **ativo da empresa, sempre completo**: `TB_CLIENTE`, `TB_FORNECEDOR` — deixaram de filtrar
+  por nota emitida no período (mesmo critério que já valia para transportadora/colaborador)
+- **funil (respeita Período)**: `TB_NOTA_FISCAL` e os derivados diretos do produto
+  MOVIMENTADO na nota — `TB_PRODUTO`/`TB_PRECO`/`TB_ESTOQUE`/`TB_TABELA_PRECO`/`TB_ESTOQUES` —
+  e o financeiro vinculado à nota (`TB_FINANCEIRO`)
+
+⚠️ Achado em aberto (2026-08-04, Pipoteca — "25 mil produtos na fila com banco zerado"):
+a conversão Grupo/Subgrupo→Categoria do bootstrap regrava PRO_CODCAT de TODOS os
+produtos e a TG_SRC_PRODUTO enfileira o catálogo inteiro, ignorando o período (uma
+tentativa de "primeira carga substitui a fila" foi implementada e REVERTIDA a pedido
+do Valdo — solução dele pendente). Regras vigentes:
+
+| Tabela | Regra (no controller) |
+|---|---|
+| TB_NOTA_FISCAL | `NFL_DT_EMISSAO` dentro do período |
+| TB_PRODUTO / TB_PRECO / TB_ESTOQUE | produto MOVIMENTADO no período (nota→pedido→itens do pedido — `NFL_CODPED=PED_CODIGO`, `ITF_CODPED=PED_CODIGO → ITF_CODPRO`) |
+| TB_MARCA_PRODUTO / TB_EMBALAGEM / TB_MEDIDA / TB_CATEGORY / TB_FORMAPAGTO | ✔ 2026-08-09: catálogo pequeno — carga SEMPRE completa (Período não filtra) |
+| TB_TABELA_PRECO / TB_ESTOQUES | ✔ 2026-08-04: tabela com preço de produto movimentado (`PRC_CODTPR`) / depósito com saldo de produto movimentado (`EST_CODETS`) |
+| TB_CLIENTE / TB_FORNECEDOR | ✔ 2026-08-09: ativo da empresa — carga SEMPRE completa (Período não filtra) |
+| TB_FINANCEIRO | parcela cuja NOTA vinculada é do período (`FIN_CODNFL = NFL_CODIGO`, não `NFL_CODPED`). Financeiro avulso (nulo/0) fica fora — já não grava na web (orderId obrigatório) |
+| TB_RETORNO_NFE / NFC / NFS + TB_CARTA_CORRECAO | pela NOTA vinculada (`*_CODNFL`) |
+| TB_ARQUIVOS (XMLs) | pela nota, por `ARQ_TIPO` (3/6 direto; 1 via retorno NF-e; 4 via NFC-e; 2 via carta; tipo fora desses fica fora — igual ao legado) |
+| TB_MOVIM_FINANCEIRO / TB_CASHIER / TB_CTRL_ESTOQUE | pela PRÓPRIA data (`MVF_DATA` / `DT_RECORD` / `CET_DATA`) |
+| Usuário, colaborador, transportadora, forma pagto, plano contas, conta bancária, promoção | carga COMPLETA de propósito — são REFERÊNCIA dos movimentos (autor, vendedor, carrier, billing, payment, extrato); filtrá-los causaria 409 `*_NOT_SYNCED` em cascata |
+
 Ativar/testar nesta ordem, validando cada uma antes da próxima:
 
 1. brand → 2. category → 3. measure → 4. package → 5. merchandise →
@@ -84,6 +144,33 @@ Validações por entidade:
 - Deixar o ciclo automático rodando e acompanhar 2–3 ciclos completos
 - Revisar `TB_SINCRONIA.SRC_LOG` — zerar pendências ou justificar
 - Registrar: cliente, data, chave criada, versão do executável
+
+### Reenviar registros que FALHARAM (mecânica confirmada 2026-08-02)
+
+Registro que falhou fica ESTACIONADO: o envio grava a mensagem de erro em
+`TB_SINCRONIA.SRC_LOG` e as queries de envio só pegam `SRC_LOG` null/vazio —
+NÃO há retry automático (a limpeza de 48h só remove `SRC_LOG='OK'`). Depois de
+corrigir a causa (patch na web ou no Delphi), **NUNCA apague nada** — nem na
+web (falha = transação com rollback, nada foi gravado; sucesso = upsert
+last-write-wins, reenvio corrige em cima) nem no Firebird. Basta limpar a marca:
+
+```sql
+UPDATE TB_SINCRONIA
+   SET SRC_LOG = NULL
+ WHERE SRC_LOG IS NOT NULL
+   AND SRC_LOG <> ''
+   AND SRC_LOG <> 'OK';
+```
+
+O próximo ciclo reenvia tudo o que estava parado. Para forçar o reenvio
+COMPLETO de uma classe (ex.: notas de serviço após recompilar com
+`GetNfsNumero`), rebobinar o checkpoint — o catch-up cai na sentinela
+01/01/2016 e reprocessa tudo (idempotente):
+
+```sql
+UPDATE TB_LISTA_SINCRONIA SET LAST_UPDATE = NULL
+ WHERE DESC_TABELA = 'TB_NOTA_FISCAL' AND KIND = 'NOTA_SERVICO';
+```
 
 ## Fora do escopo desta implantação
 
