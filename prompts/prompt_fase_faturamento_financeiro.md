@@ -1,10 +1,20 @@
-# Prompt — Fase: Faturamento Fiscal e Financeiro (web)
+﻿# Prompt — Fase: Faturamento Fiscal e Financeiro (web)
 
 **Escopo**: setes
 **Estado**: Onda 1 ENTREGUE nos dois lados + GATES EXECUTADOS (2026-08-16 —
 6 achados corrigidos, seed 28 dos catálogos fiscais criado/aplicado; ver seção
-"Gates da Onda 1"). Próximo: RODADA do Valdo (RA-Q1..Q4 + Q-G1/Q-G2/Q-G4) →
-ondas seguintes (W2 cálculo por item → faturamento → W3 financeiro).
+"Gates da Onda 1"). 2026-08-19: pontos abertos dos gates baixados (cache
+/catalogs + LOWs do app) e DECISÕES 35/36/37 executadas (Q-G1+RA-Q3 sentido
+obrigatório E/S — migration 029; Q-G2 NCM fiel; Q-G4 catálogos completos —
+seed sql/30; D38 RA-Q1 produto/cliente = especialização do cadastro de
+origem, somente-leitura na tela + validação de existência). 2026-08-20:
+RODADA FECHADA — D39 RA-Q2 chips visuais viram REGRA GERAL do app (uso
+seletivo em telas com muita informação, ERP mantém tom sério; fábrica
+rowBuilder ganha suporte a chips) e D40 RA-Q4 ordem das abas do legado
+mantida sem alteração. LIBERADO seguir para as ondas (W2 cálculo por item →
+faturamento → W3 financeiro); RA-Q2 ainda pede implementação dos chips na
+lista de regras. 2026-08-20: W2 Onda 1 (motor de cálculo por item, puro, sem
+persistência) ENTREGUE — ver seção W2 abaixo.
 **Fontes** (mapeamento do legado, fonte-da-verdade): `Infra-IA/Gestao2016/tributacao.md`
 (P1–P14, T1–T8), `tributacao-plano-web.md`, `processo-pedido-nota.md`, `financeiro.md`,
 `geracao-nfe-hierarquia.md`. Decisões numeradas abaixo citam as questões de origem (Qn).
@@ -41,6 +51,182 @@ nota transmitida**.
 Ordem com ramos + negociação (forma+prazo) → faturamento.
 
 ### W2 — Faturamento fiscal (novo)
+
+**Onda 1 ENTREGUE (2026-08-20)**: motor de CÁLCULO por item, puro e sem
+persistência — `setes-api/src/shared/tax-rule/calc.ts` (extensão da peça
+`@shared/tax-rule`, exportado no barrel). Cobre IPI (P4/decisão 5), ICMS
+regime normal por CST 00/10/20/30/40/41/50/51/60/70/90 + bases `Fn_CalcBaseICMS`/
+`Fn_CalcBaseICMSST` (P2.4/P2.5), FCP próprio + FCP-ST unificado (P7.3/decisão 7),
+PIS/COFINS numa única fórmula (P5/decisão 2 — bug de assimetria do legado NÃO
+reproduzido), II completo (P9/decisão 11), ISSQN (P6.1, alíquota da CIDADE) e
+o orquestrador `calculateItemTaxes` na ordem T1 (rateio externo → IPI → ICMS
+com FCP → II → PIS/COFINS → ISSQN se kind S). Rateio T2 em `prorateWithResidue`
+(proporção truncada 4 casas, resíduo no último item). IBS/CBS FORA desta onda
+(P10 é stub no próprio legado — aguarda regulamento). 36 testes novos
+(`tax-calc.test.ts`) validam cada fórmula contra os números de tributacao.md;
+257/257 testes api + `tsc --noEmit` limpo, sem regressão.
+**CSOSN (Simples Nacional) NÃO entrou nesta onda** — P2.9 do tributacao.md
+está "mapeado em largura", sem detalhamento validado; implementar quando essa
+seção for aprofundada com o autor, para não fabricar fórmula sem lastro.
+**Onda 2 ENTREGUE (2026-08-20)**: catálogo MVA/FCP por UF×NCM —
+`tb_state_mva_ncm`/`tb_state_fcp_ncm` (migration
+`setes-api/migrations/030_state_tax_rates.sql`, aplicada em dev; bloco
+canônico em `sql/03_schema_cliente_ddl.sql`), dado do CLIENTE (schema do
+institution, decisão Q22 — sem tela no app ainda). Módulo de API completo
+`state-tax-rates` (interface/dto/repository/service/controller/routes, CRUD
+`/mva` e `/fcp`, flag retroativa `sql/31`) + as funções que a orquestração
+vai consumir: `resolveMvaAliq` (igualdade exata de NCM) e `resolveFcpAliq`
+(prefixo — mais específico vence, P7.1). 10 testes novos; 267/267 api,
+`tsc --noEmit` limpo.
+
+**Onda 3 ENTREGUE (2026-08-20, rodada R4 do Valdo)**: endpoints de
+faturamento — módulo `billing` (7 arquivos + billing.context.ts).
+Decisões R4: (Q1) DOIS endpoints — POST /api/billing/validate (valida TUDO
+em lote, lista COMPLETA de issues, grava a regra achada por item em
+`tb_order_item_tax_rule` origin 'A'; origin 'M' = escolha manual do cliente,
+NUNCA sobrescrita — mata a dupla checagem do legado) e POST
+/api/billing/invoice (fatura consumindo as regras GRAVADAS, sem rebuscar —
+item sem regra = 422 REQUIRES_VALIDATION); (Q2) FINANCEIRO JÁ NESTA ONDA
+(tb_financial/tb_financial_bills — 3º produtor, decisões 25/29; installment
+elaborado vence, senão o prazo string gera as parcelas via parseDeadline +
+parcelQuotas; set_financial='N' exclui o item); (Q3) nota MAX+1 por
+MODELO+SÉRIE, série na config `invoice_serie` do Framework (interface
+'billing' kind R, seed sql/32); (Q4) payload {orderId, useMvaOriginal?,
+adjustment?{direction,cfopId}} — autoria SÓ do JWT. Migration 031
+(`tb_order_item_tax_rule` — port da TB_ITENS_NFL_TRIBUTACAO com PK
+incluindo kind + campo origin M|A; set_financial portado — verificado no
+legado: flag "gera financeiro?"/TEMFINANCEIRO). Impostos gravados nas 7
+tabelas do baseline (primeiro produtor — Rodada 3); nota nasce NÃO
+transmitida (status '0'); ordem → 'F'; tudo em UMA transação
+(persistInvoice, molde generateInvoice). Emitente Simples (CRT 1) = issue
+na validação (CSOSN aguarda P2.9). MVA ajustada pela fórmula P2.7
+(adjustMva) quando useMvaOriginal=false. ⚠️ Gap registrado: PRO_SUB_TRIB
+(ST do produto) não tem coluna no formato novo — derivado da PRESENÇA de
+CEST (deriveProductSt; lastro: CEST só existe p/ produto ST); confirmar na
+próxima rodada se vira coluna própria + sync. 19 testes novos; 286/286 api,
+tsc limpo; migration 031 + seeds 31/32 aplicados em dev.
+
+**GATES da Onda 3 EXECUTADOS (2026-08-20)**: a entrega como estava
+REPROVARIA (socrático 0.63; adversarial 2 HIGH) — corrigida na sessão:
+1. **HIGH (nota sem imposto silenciosa)**: regra soft-deletada entre
+   /validate e /invoice fazia loadPieces devolver {} e a nota sair SEM
+   imposto com 201 — `findDeadRuleIds` no /invoice agora exige regra VIVA
+   (422 REQUIRES_VALIDATION). "Sem rebuscar ≠ confiar cegamente na
+   referência" (dica arquitetural do gate).
+2. **HIGH (link 'A' órfão)**: validação cujo match FALHA agora LIMPA o link
+   automático antigo (`clearAutoRuleLink` — 'M' intocável); antes, issue e
+   fatura passavam JUNTAS com a regra velha.
+3. **P1 (natureza por presença)**: tb_invoice_merchandise era incondicional
+   e tb_invoice_service nunca nascia — agora cada ramo só nasce se há itens
+   dele (conjugada = os dois); model por presença (mercadoria→55, só
+   serviço→SE).
+4. MEDIUMs: deadline absurdo → 422 INVALID_DEADLINE (teto 3650 dias — campo
+   é texto livre do sync); item negativo → 422 NEGATIVE_ITEM_VALUE;
+   destinatário sem entity_tax → issue (defaults silenciosos casavam regra
+   errada); `aliq_st` gravada ERRADA (persistia a alíquota da regra, não a
+   interna do destino usada no value_st) — corrigida; addDays em data LOCAL
+   (UTC pulava o vencimento à noite); códigos novos no error-codes.ts;
+   serie truncada ao varchar(10); dedupe de loadPieces por regra (N+1).
+Todos os achados fixados em teste (24 no billing.test.ts); 291/291 api.
+
+**Pontos abertos registrados (sem retrabalho obrigatório)**: leitura
+otimista fora da transação (item editado entre cálculo e persist grava
+snapshot morto — mitigado pelo FOR UPDATE do status; recomputar dentro da
+transação é arquitetural, avaliar na onda das telas); MAX+1 da nota com
+CAST sem índice (avaliar UNIQUE (institution, model, serie, number) +
+número em coluna INT quando o fluxo de transmissão nascer); frete "some"
+se todos os itens têm valor zero; sutileza 5 (presencial) nunca dispara
+pelo billing (premissa: ordem web não é presencial — registrada);
+refaturamento não existe (cancelamento/reemissão = fluxo futuro).
+
+### Questões para rodada (Rodada 5 — decisões do Valdo)
+
+- **R5-Q1**: ordem de AJUSTE de estoque gera financeiro? Hoje o link nasce
+  set_financial='S' e sem tb_order_billing o ajuste morre em 422
+  ORDER_NO_BILLING — é isso, ou ajuste fatura SEM financeiro
+  (set_financial='N' por construção no ramo adjust)?
+- **R5-Q2**: parcelamento ELABORADO que diverge da base financeira
+  calculada (itens editados depois da negociação): bloqueia (422), avisa
+  (issue na validação) ou prevalece o elaborado como está hoje? A decisão
+  25 diz que o elaborado VENCE, mas não diz até quando diverge do valor.
+- **R5-Q3**: issues de ITEM da validação (ex.: produto sem NCM) não
+  bloqueiam o /invoice se a regra casou — nota "pronta" com pendência
+  conhecida é aceitável até a transmissão, ou o faturamento re-executa o
+  gate das issues?
+- **R5-Q4**: serviço com aliq_iss = 0 na cidade do prestador fatura com ISS
+  zero SEM aviso (cidade não configurada é indistinguível de isenção) —
+  vira issue de validação ou é aceitável?
+- **R5-Q5**: gap do PRO_SUB_TRIB — o ST do produto hoje é DERIVADO da
+  presença de CEST (deriveProductSt; lastro: CEST só existe p/ produto ST).
+  Vira coluna própria na tb_merchandise + envio pelo sync (frente Delphi),
+  ou a derivação por CEST fica permanente?
+
+**Retomar por**: (1) Rodada 5 acima; (2) despacho CSOSN (P2.9); (3)
+observações fiscais T6/P11 (motor de obs — a nota hoje nasce sem obs); (4)
+baixa automática à vista + gate de caixa (W3.2); (5) telas de processo no
+app (validar/faturar); (6) smoke E2E validate→invoice contra banco dev
+(gate adversarial pediu — mock verde ≠ banco real, lição da Onda 1).
+
+## Parecer conceitual (setes-conceito, 2026-08-20) — persistência do cálculo por item
+
+**Primeira leitura (CORRIGIDA pelo Valdo)**: o parecer inicial leu "nenhum
+endpoint do sync lê/escreve nas 8 tabelas `tb_order_item_icms/_icms_fcp/_ipi/
+_ipi_back/_ii/_pis/_cofins/_issqn` + `tb_observation`" como sinal de tabela
+MORTA (mesmo perfil da decisão 30) e recomendou aposentar + nascer família
+canônica nova. **Está ERRADO**: essas tabelas nunca tiveram produtor porque
+o cálculo por item é NOVO NO ERP WEB — o Delphi legado nunca mandou esse
+nível de detalhe pro sync (só agregados). O ERP (W2) é o PRIMEIRO produtor
+delas, não um substituto — mesmo padrão da decisão 29 (financeiro reusa
+`tb_financial`/`tb_financial_bills` existentes). A analogia com a decisão 30
+foi aplicada errada (aquela tabela FOI SUBSTITUÍDA por desenho novo; estas
+estão esperando o primeiro produtor).
+
+**Decisão corrigida (2026-08-20)**: **REUSAR as tabelas do baseline**, sem
+DDL nenhum nesta onda — elas já existem com a estrutura certa:
+`tb_order_item_icms` (:1373), `tb_order_item_icms_fcp` (:1413, sem PK — nota
+abaixo), `tb_order_item_ipi` (:1448), `tb_order_item_ii` (:1433),
+`tb_order_item_pis` (:1509), `tb_order_item_cofins` (:1270),
+`tb_order_item_issqn` (:1481) — todas em `setes-api/src/migrations/sql/
+001_baseline.sql`. `tb_order_item_ipi_back` (:1469, sem PK, colunas mínimas
+`p_ipi/v_ipi`) fica de fora do W2 — parece artefato de rotina de backup do
+Delphi, não uma peça do domínio; não é dropada, só não é usada.
+
+**`tb_observation`** (:1198) é o CATÁLOGO de textos de observação (id,
+institution, description, note, general) — já referenciado por
+`tb_tax_rule.tb_observation_id` desde a Onda 1. NÃO precisa de tabela nova
+por item: o "nível do item" (resposta do Valdo à R3-Q3) já existe
+NATURALMENTE, porque cada item carrega a regra que casou (com seu
+`observationId`) — gerar o texto da nota é **DISTINCT dos `observationId`
+dos itens da nota**, sem tabela de ligação nova.
+
+**Achado de estrutura relevante para o mapeamento (P9/decisão 11)**:
+`tb_order_item_ii` só tem `base_value/customs_expense/tag_value/iof_value` —
+bate exatamente com `Pc_DefineII` (P9: `vBC/vDespAdu/vII/vIOF`, só ad
+valorem). AFRMM/IRPJ/CSLL (decisão 11, peça `IiPiece` completa) NÃO têm
+coluna aqui — Q32 já registrava que esses campos "agem FORA da
+tributacao.pas... pertence à frente da Compra/importação (futura)". Ou seja:
+`tb_order_item_ii` recebe só o resultado simples do motor; a peça completa
+da REGRA (`IiPiece`) segue existindo para quando a frente de Compra nascer.
+
+## ⚠️ Questões pendentes (Rodada 3 — decisões do Valdo)
+
+- ~~R3-Q1~~ — ✅ RESPONDIDA: `tb_order_item_icms_fcp` já existe, reusar.
+- ~~R3-Q2~~ — ✅ CORRIGIDA (a pergunta partia de premissa errada — ver acima):
+  NENHUMA tabela é dropada; todas as 9 (+ `_ipi_back`, sem uso) permanecem.
+- ~~R3-Q3~~ — ✅ RESPONDIDA: nível do item — já resolvido naturalmente via
+  `tb_tax_rule.tb_observation_id` de cada item + DISTINCT na geração da nota.
+
+**Rodada 3 FECHADA. Sem DDL nesta onda — as 7 tabelas de persistência por
+item já existem e só precisam de um escritor (o motor de orquestração da
+próxima onda).**
+
+**Nota do Valdo (2026-08-20)**: essas 7 tabelas NÃO precisam de endpoint de
+sync — são cálculo INTERNO do momento do faturamento (o sync nunca as toca,
+e está certo que não toque). O que precisam é de repository/service internos
+(controller/model, no sentido do padrão da casa) para OPERAR o cálculo e o
+salvamento — ou seja: módulo de orquestração do faturamento com
+repository próprio escrevendo nelas, sem rota `/sync/*` correspondente.
+
 1. Para cada item: buscar regra (motor §2 do tributacao.md — coringas, precedência
    NCM, estado exato×coringa, finalidade 0 no ajuste, presencial, escolha por item)
 2. Regra não encontrada → INTERROMPE com alerta descritivo (produto a produto +
@@ -104,6 +290,10 @@ Ordem com ramos + negociação (forma+prazo) → faturamento.
 | 32 | `kind` na `tb_payment_types` com domínio COMPLETO desde já (espécie/PIX/cheque/boleto/carteira/cartão/outros — classificar ≠ implementar); backfill das linhas centrais por **MAPA DETERMINÍSTICO `id_nfce` → kind** (01→espécie, 02→cheque, 03/04→cartão, 05→carteira, 15→boleto, 17→PIX; sem id_nfce → outros p/ revisão) — id_nfce é o FPT_TIPO_NFCE no formato novo, já predefinido; NENHUMA heurística de texto. Cadastro de forma pelo CLIENTE mantém o padrão do catálogo: dedupe por DESCRIÇÃO na central (nunca duplica) + preenchimento privado de `tb_institution_has_payment_types`; forma nova define o kind no cadastro (sugerido pelo id_nfce) | R2-Q4 |
 | 33 | FKs físicas SÓ em colunas INT (collation dos catálogos centrais sem normalização); integridade de CST/modBC/CFOP pela peça `@shared/tax-rule` | achado 1 do DDL |
 | 34 | `tb_cashier.tb_user_id` — padrão da casa mantido JÁ (não adiado): rename coordenado executado nos dois endpoints /cashier web + docs vivos + FieldName do model destiny Delphi (contrato HTTP intacto — o nome da coluna não viaja no payload) | achado 3 do DDL |
+| 35 | Sentido SEM coringa em toda a cadeia (2026-08-19): "não deve existir CFOP sem way" — `tb_cfop.way` normalizado pelo 1º dígito (1-3=E, 5-7=S; corrigiu 6411) e OBRIGATÓRIO no cadastro; `tb_tax_rule.direction` OBRIGATÓRIA E/S ("Ambos" morreu — o legado era assim por construção: toda regra tinha natureza, natureza sempre tem sentido); o motor SEMPRE filtra `r.direction = :sentido` (paridade NAT_SENTIDO, sem branch NULL); sentido da OPERAÇÃO = way da natureza no faturamento (W2); CFOP na regra com way divergente do direction = 422 (regra morta por construção). Migration 029 + cfop.dto way obrigatório | Q-G1 + RA-Q3 |
+| 36 | NCM no match por IGUALDADE EXATA, fiel ao legado — "é exigência do governo" (Valdo, 2026-08-19); cadastro segue aceitando 2–8 dígitos e prefixo continua regra SÓ do FCP (P7.1). Sem mudança de código | Q-G2 |
+| 37 | Catálogos fiscais COMPLETOS com os códigos oficiais que o legado não tinha (seed sql/30, aplicado em dev 2026-08-19): CST ICMS monofasia 02/15/53/61 (NT 2023.001) + PIS/COFINS crédito/entrada 05/49/50–56/60–67/70–75/98 (tabelas 4.3.3/4.3.4 SPED) — ICMS NR com a Tabela B completa (15), PIS/COFINS completos (33 cada); CSOSN já estava completo no seed 28. CST × CSOSN seguem catálogos SEPARADOS (espelho TB_TRIB_ICMS_NR × TB_TRIB_ICMS_SN): a peça ICMS carrega os DOIS FKs e o DESPACHO é pelo CRT do emitente (§P2.3: 3/2 → CST, 1 → CSOSN; CRT = 1º caractere do tb_entity_tax.tax_regime, decisão 15 da Fase 3). Nota p/ W2: emitente Simples com regra SEM csosn (ou Normal sem cstNr) = regra incompleta para o regime → mesmo alerta descritivo da regra ausente | Q-G4 |
+| 38 | Produto/Cliente do seletor = ESPECIALIZAÇÃO que nasce do cadastro de ORIGEM (2026-08-19): os dois campos podem ficar nulos (coringa) e NUNCA são digitados na tela da regra — serão preenchidos quando a regra for criada A PARTIR do cadastro do produto ou do cliente (ações futuras nesses cadastros: produto quando o módulo nascer; cliente é candidata). Na tela da regra ficam SOMENTE LEITURA (hint "preenchido pelo cadastro de origem"); pendências locais removidas; a API valida a EXISTÊNCIA quando presentes (peça findInvalidSelectorRefs — produto escopado pela institution/PK composta, cliente na tb_entity central; 422 fields[] — mata regra morta e o 500 de FK). Papel no motor confirmado: são critérios de DESEMPATE (pickRule: cliente > estado+produto > estado > produto — já implementado, paridade Fc_DefineTributacao com B9 corrigido) | RA-Q1 |
 
 ## Parecer conceitual (setes-conceito, 2026-08-16) — síntese
 
@@ -158,20 +348,27 @@ observationId/taxesId (PUT não os zera), números como texto até o toJson.
 
 ## ⚠️ Questões pendentes (rodada do APP — decisões do Valdo)
 
-- **RA-Q1**: Produto/Cliente no seletor ficaram como campos NUMÉRICOS opcionais
-  (não existe lookup compartilhado de Produto/Entity em app/shared; o de
-  contratos é privado). Quando o cadastro de Produtos nascer, promover
-  `ProductLookupDatasource` a shared e trocar por `SetesLookupField`?
-  **(Recomendado: sim, na onda do cadastro de produtos)**
-- **RA-Q2**: presença das peças na LISTA como tokens de texto ("ICMS + IPI") —
-  evoluir a fábrica (rowBuilder com widgets) para chips visuais, ou texto basta?
-- **RA-Q3**: `direction` virou dropdown "Ambos/Entrada/Saída" (vazio = coringa) —
-  confirmar que "Ambos" é a leitura certa do NULL (e não "não se aplica").
-- **RA-Q4**: ordem das abas Seletor → ICMS → ICMS-ST → IPI → PIS/COFINS →
-  Importação (ordem do legado) — confirmar ou reordenar.
+- ~~RA-Q1~~ — ✅ FECHADA em 2026-08-19 (decisão 38): lookup NENHUM — os campos
+  são especialização que nasce do CADASTRO DE ORIGEM (produto/cliente) e
+  viraram somente-leitura na tela da regra; API valida existência (422).
+  A ação "criar regra deste produto/cliente" nasce nos cadastros de origem
+  (produto = onda do módulo products; cliente = candidata).
+- ~~RA-Q2~~ — ✅ FECHADA em 2026-08-20 (decisão 39): chips visuais SIM, mas
+  como REGRA GERAL do app (não só nesta tela) — ERP mantém tom sério, chips
+  entram como recurso de legibilidade especificamente em telas com MUITA
+  informação condensada (ex.: presença de peças na lista de regras de
+  tributação). Fábrica (rowBuilder) ganha suporte a chips widget além de
+  texto puro; usar com critério, não em toda lista.
+- ~~RA-Q3~~ — ✅ FECHADA em 2026-08-19 junto com a Q-G1 (decisão 35): "Ambos"
+  NÃO existe — direction obrigatória E/S, dropdown só Entrada/Saída (default
+  'S' na criação).
+- ~~RA-Q4~~ — ✅ FECHADA em 2026-08-20 (decisão 40): mantida a ordem do legado
+  Seletor → ICMS → ICMS-ST → IPI → PIS/COFINS → Importação, sem reordenar.
 
-**Depois da rodada** (RA-Q1..Q4 + Q-G1/Q-G2/Q-G4 abaixo): ondas seguintes
-(W2 cálculo por item → faturamento → W3 financeiro).
+**Rodada FECHADA (RA-Q1..Q4 + Q-G1/Q-G2/Q-G4)**: LIBERADO seguir para as ondas
+seguintes (W2 cálculo por item → faturamento → W3 financeiro). RA-Q2 ainda
+pede implementação (chips na lista de regras); as demais são só confirmação/
+registro, sem código pendente.
 
 ## Gates da Onda 1 — EXECUTADOS (2026-08-16; correções sem decisão aplicadas)
 
@@ -209,30 +406,32 @@ Achados corrigidos (nenhum exigia decisão):
    toJson do draft.
 
 Pontos abertos registrados (sem retrabalho obrigatório): validação de catálogo
-fora da transação (catálogo é do Super, baixa rotatividade); `/catalogs` sem
-cache (8 queries/chamada — candidato a TTL como o field-config); teto 100 nas
-alíquotas do DTO; `tb_observation` ainda não existe (observationId aguarda W2);
-LOWs estáticos do app (L1 `deferredAliq` oculto viaja no payload; L3 religar um
-toggle só restaura o digitado com a aba montada; L5 fromJson tolera kind
-duplicado vindo do banco).
+fora da transação (catálogo é do Super, baixa rotatividade); teto 100 nas
+alíquotas do DTO; `tb_observation` ainda não existe (observationId aguarda W2).
+**Baixados em 2026-08-19 (manutenção sem decisão)**: `/catalogs` ganhou cache
+TTL no molde do field-config (env `TAX_CATALOG_CACHE_TTL_MS`, 8 queries em
+paralelo, teste fixa o comportamento — 217/217); LOWs do app corrigidos —
+L1 `deferredAliq` oculto não viaja nem gera pendência (par do M1), L3 memória
+das fatias subiu para o `_TaxRuleFormViewState` (religar toggle restaura o
+digitado mesmo após trocar de aba; zera na troca de registro), L5 fromJson
+com kind duplicado fica com a PRIMEIRA ocorrência (determinístico). Também
+em 2026-08-19: seed `sql/29_users_flag_retroativo_seed.sql` criado e aplicado
+em dev — flag 'users' retroativa (chip do módulo de menus baixado; novas
+institutions já ganhavam pelo insertDefaultFlags/A2).
 
 ### Questões para rodada (dos gates — decisões do Valdo)
 
-- **Q-G1** (paridade do motor — amarra com RA-Q3): o WHERE do legado SEMPRE
-  filtra `NAT_SENTIDO = :sentido` (§2 do tributacao.md) e a Q14 fixou "sentido
-  da natureza = componente da regra em tempo de busca"; o motor web hoje NÃO
-  filtra sentido nenhum — uma regra de entrada casaria item de saída. Como
-  modelar: **(a)** `direction` do seletor participa do match com NULL = Ambos
-  (recomendado — o app já apresenta o dropdown assim), ou **(b)** sentido entra
-  só pela natureza (`tb_cfop.way`) quando o W2 tiver o item/natureza?
-- **Q-G2** (NCM parcial): o cadastro aceita NCM de 2–8 dígitos e o match é por
-  IGUALDADE exata — fiel ao legado (prefixo é regra SÓ do FCP, P7.1). Uma regra
-  com NCM `84` nunca casa produto `84713012`. Manter fiel (recomendado) ou
-  restringir o cadastro a NCM pleno para evitar regra morta por engano?
-- **Q-G4** (conteúdo do seed 28): entraram as listas DO LEGADO (verificadas);
-  os códigos oficiais que o legado não tinha ficaram FORA — ICMS monofasia
-  02/15/53/61 (NT 2023.001) e PIS/COFINS de crédito/entrada (05, 49, 50–56,
-  60–67, 70–75, 98). Incluir já ou quando a frente correspondente nascer?
+- ~~Q-G1~~ — ✅ FECHADA em 2026-08-19 (decisão 35, resposta do Valdo: "não
+  deve existir CFOP sem way; o parâmetro deve existir e sempre ter um valor
+  E/S" + confirmação de que vale para a REGRA): variação da (a) SEM coringa —
+  direction obrigatória na regra, way obrigatório no CFOP, motor sempre
+  filtra. Executada nos dois lados; ver decisão 35.
+- ~~Q-G2~~ — ✅ FECHADA em 2026-08-19 (decisão 36): fiel ao legado, igualdade
+  exata — "é exigência do governo". Sem mudança de código.
+- ~~Q-G4~~ — ✅ FECHADA em 2026-08-19 (decisão 37): SIM, códigos oficiais
+  incluídos já (seed sql/30 aplicado em dev). A dúvida CST × CSOSN do Valdo
+  foi verificada e está mapeada — ver decisão 37 (catálogos separados, peça
+  com os dois FKs, despacho pelo CRT do emitente §P2.3).
 
 ## Scripts/Entregáveis do DDL (aplicados em dev 2026-08-16; 199/199 testes verdes)
 
@@ -243,6 +442,7 @@ duplicado vindo do banco).
 | `setes-api/migrations/027_payment_types_kind_central.sql` | `kind` na central + backfill por mapa id_nfce→kind (idempotente por information_schema — a migration roda por schema) | 16/26/32 |
 | `sql/03_schema_cliente_ddl.sql` | blocos canônicos das 7 tabelas novas | — |
 | `sql/01_setes_central_ddl.sql` | `kind` no canônico da tb_payment_types + domínio documentado | — |
+| `setes-api/migrations/029_tax_rule_direction.sql` | way do tb_cfop normalizado pelo 1º dígito (central, idempotente; corrigiu 6411) + backfill e NOT NULL do `direction` (COLLATE explícito no JOIN cross-schema) — aplicada em dev 2026-08-19 | 35 |
 
 ### Relatório revisar-ddl (executado)
 
