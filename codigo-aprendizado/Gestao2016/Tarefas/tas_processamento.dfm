@@ -1,0 +1,40 @@
+object TasProcessamento: TTasProcessamento
+  Left = 0
+  Top = 0
+  BorderIcons = []
+  BorderStyle = bsNone
+  ClientHeight = 120
+  ClientWidth = 346
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PopupMode = pmAuto
+  Position = poScreenCenter
+  TipMode = tipClose
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnl_processo: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 3
+    Width = 340
+    Height = 114
+    Align = alClient
+    BevelOuter = bvNone
+    TabOrder = 0
+    object Image: TACBrGIF
+      Left = 0
+      Top = 0
+      Width = 340
+      Height = 114
+      OnClick = ImageClick
+    end
+  end
+end

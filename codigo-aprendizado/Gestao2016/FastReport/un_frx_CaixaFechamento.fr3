@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited Version="5.3.16" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Padrão" PrintOptions.PrintMode="pmSplit" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="43076,475621412" ReportOptions.Description.Text="" ReportOptions.LastChange="43283,6903857523" ScriptLanguage="PascalScript" ScriptText.Text="&#13;&#10;begin&#13;&#10;end." OnStartReport="frxBaseOnStartReport">
+  <Datasets>
+    <item DataSet="frxDBaseReport" DataSetName="frxDBaseReport"/>
+  </Datasets>
+  <Variables>
+    <item Name=" CabecalhoEmpresa"/>
+    <item Name="NomeFantasia"/>
+    <item Name="DocFiscal"/>
+    <item Name="Endereco"/>
+    <item Name="Fones"/>
+    <item Name="email"/>
+    <item Name="website"/>
+    <item Name="Titulo"/>
+    <item Name=" Footer"/>
+    <item Name="SumProduct"/>
+    <item Name="SumService"/>
+    <item Name=" General"/>
+    <item Name="StrConnection"/>
+  </Variables>
+  <inherited Name="Data" Height="1000" Left="0" Top="0" Width="1000">
+    <inherited Name="IBD_Gestao" DatabaseName="C:\Modelos\Dagoberto\DataBase\IBGCOM.FDB" LoginPrompt="False" Params.Text="user_name=SYSDBA&#13;&#10;password=masterkey&#13;&#10;lc_ctype=WIN1252" SQLDialect="3" PropData="05704C65667402240470546F70022C"/>
+  </inherited>
+  <inherited Name="Page1" PaperWidth="80" PaperHeight="148" PaperSize="256" LeftMargin="2" RightMargin="2" TopMargin="10" BottomMargin="10" Columns="1" ColumnWidth="190" ColumnPositions.Text="0" EndlessHeight="True" HGuides.Text="" VGuides.Text="" OnBeforePrint="Page1OnBeforePrint">
+    <inherited Name="PageHeader1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="129" Left="0" Top="18,89765" Width="287,24428">
+      <inherited Name="lbTitulo" Align="baWidth" Left="0" Top="111" Width="287,24428" Height="20,77953" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="12" Frame.TopLine.Width="2" Frame.BottomLine.Width="2" ParentFont="False" Text="[Titulo]"/>
+      <inherited Name="Logo" Left="7" Top="4" Width="13,93692" Height="17,07081" Visible="False" FileLink="C:\Modelos\Gestao2016\Bin\logo.jpg" HightQuality="False" Transparent="False" TransparentColor="16777215"/>
+      <inherited Name="lbDocFiscal" Left="3,25974" Top="16,22047" Width="279,685039370079" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[DocFiscal]"/>
+      <inherited Name="lbEndereco" Left="3,25974" Top="35,22047" Width="279,685039370079" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[Endereco]"/>
+      <inherited Name="lbFones" Left="3,25974" Top="53,22047" Width="279,685039370079" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[Fones]"/>
+      <inherited Name="lbWebSites" Left="3,25974" Top="89,22047" Width="279,685039370079" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[website]"/>
+      <inherited Name="lbemail" Left="3,25974" Top="71,22047" Width="279,685039370079" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[email]"/>
+      <inherited Name="lbNomeFantasia" Left="3" Top="3,77953" Width="279,685039370079" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[NomeFantasia]"/>
+    </inherited>
+    <inherited Name="PageFooter1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="23" Left="0" Top="408,18924" Width="287,24428">
+      <inherited Name="Memo39" Left="146" Top="2" Width="136,03154" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="[&#60;Date&#62;] - [&#60;Time&#62;]">
+        <Formats>
+          <item FormatStr="mm.dd.yyyy" Kind="fkDateTime"/>
+          <item/>
+        </Formats>
+      </inherited>
+      <inherited Name="Memo40" Left="665,50371" Top="2,22047" Width="45" Height="17" DisplayFormat.Kind="fkDateTime" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="[&#60;Page#&#62; / &#60;TotalPages#&#62;]"/>
+      <inherited Name="Memo41" Left="596,50371" Top="2,22047000000001" Width="64" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Pagina Nº"/>
+      <inherited Name="Memo42" Left="4" Top="2,00000000000006" Width="139" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Relatório emitido em:"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="22,67718" Left="0" Top="260,78757" Width="287,24428" ColumnWidth="0" ColumnGap="0" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" RowCount="0">
+      <TfrxMemoView Name="E_Fone" Align="baLeft" Left="0" Top="2" Width="203,26778" Height="17" AutoWidth="True" DataField="FPT_DESCRICAO" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="[frxDBaseReport.&#34;FPT_DESCRICAO&#34;]"/>
+      <TfrxMemoView Name="Memo1" Align="baRight" Left="204,92146" Top="2" Width="82,32282" Height="17" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" DisplayFormat.DecimalSeparator="," DisplayFormat.ThousandSeparator="." DisplayFormat.FormatStr="%2.2n" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0" HAlign="haRight" ParentFont="False" Text="[frxDBaseReport.&#34;VALORTOTAL&#34;]"/>
+    </TfrxMasterData>
+    <TfrxReportSummary Name="ReportSummary1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="41,57483" Left="0" Top="343,93723" Width="287,24428">
+      <TfrxMemoView Name="Memo4" Left="0" Top="18" Width="219,21274" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" HAlign="haRight" ParentFont="False" Text="Valor Total"/>
+      <TfrxMemoView Name="Memo5" Align="baRight" Left="177,63791" Top="18" Width="109,60637" Height="18,89765" DisplayFormat.FormatStr="%2.2n" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="0" HAlign="haRight" ParentFont="False" WordWrap="False" Text="[SUM(&#60;frxDBaseReport.&#34;VALORTOTAL&#34;&#62;,MasterData1)]"/>
+    </TfrxReportSummary>
+    <TfrxHeader Name="Header1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="30,23624" Left="0" Top="207,87415" Width="287,24428">
+      <TfrxMemoView Name="Memo6" Left="2" Top="5" Width="200,31509" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Forma de Pagamento"/>
+      <TfrxMemoView Name="Memo7" Align="baRight" Left="207,87415" Top="5" Width="79,37013" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="Valor Total"/>
+    </TfrxHeader>
+  </inherited>
+</inherited>

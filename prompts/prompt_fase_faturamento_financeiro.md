@@ -139,33 +139,448 @@ se todos os itens têm valor zero; sutileza 5 (presencial) nunca dispara
 pelo billing (premissa: ordem web não é presencial — registrada);
 refaturamento não existe (cancelamento/reemissão = fluxo futuro).
 
-### Questões para rodada (Rodada 5 — decisões do Valdo)
+### Rodada 5 — FECHADA e EXECUTADA (2026-08-21, evidência real no legado)
 
-- **R5-Q1**: ordem de AJUSTE de estoque gera financeiro? Hoje o link nasce
-  set_financial='S' e sem tb_order_billing o ajuste morre em 422
-  ORDER_NO_BILLING — é isso, ou ajuste fatura SEM financeiro
-  (set_financial='N' por construção no ramo adjust)?
-- **R5-Q2**: parcelamento ELABORADO que diverge da base financeira
-  calculada (itens editados depois da negociação): bloqueia (422), avisa
-  (issue na validação) ou prevalece o elaborado como está hoje? A decisão
-  25 diz que o elaborado VENCE, mas não diz até quando diverge do valor.
-- **R5-Q3**: issues de ITEM da validação (ex.: produto sem NCM) não
-  bloqueiam o /invoice se a regra casou — nota "pronta" com pendência
-  conhecida é aceitável até a transmissão, ou o faturamento re-executa o
-  gate das issues?
-- **R5-Q4**: serviço com aliq_iss = 0 na cidade do prestador fatura com ISS
-  zero SEM aviso (cidade não configurada é indistinguível de isenção) —
-  vira issue de validação ou é aceitável?
-- **R5-Q5**: gap do PRO_SUB_TRIB — o ST do produto hoje é DERIVADO da
-  presença de CEST (deriveProductSt; lastro: CEST só existe p/ produto ST).
-  Vira coluna própria na tb_merchandise + envio pelo sync (frente Delphi),
-  ou a derivação por CEST fica permanente?
+Todas as 5 decisões confirmadas com leitura de código-fonte do Gestao2016
+(não suposição) antes de implementar — Valdo pediu a verificação
+explicitamente para R5-Q1/Q2/Q3.
 
-**Retomar por**: (1) Rodada 5 acima; (2) despacho CSOSN (P2.9); (3)
-observações fiscais T6/P11 (motor de obs — a nota hoje nasce sem obs); (4)
-baixa automática à vista + gate de caixa (W3.2); (5) telas de processo no
-app (validar/faturar); (6) smoke E2E validate→invoice contra banco dev
-(gate adversarial pediu — mock verde ≠ banco real, lição da Onda 1).
+- **R5-Q1 — FECHADA**: ajuste PODE gerar financeiro, e o par
+  `(kind RA|PA, operation C|D)` NÃO é fixo por ramo — é calculado pela
+  DIREÇÃO escolhida na tela de faturamento (evidência `Pc_Gera_Financeiro`
+  em `UN_Fatura_Vda/Cpa/Srv/Ajt.pas`): venda e serviço = RA+C; compra =
+  PA+D; ajuste INVERTE — Saída (devolução ao fornecedor) = PA+C (crédito
+  nosso), Entrada (cliente devolve pra nós) = RA+D (débito nosso). Sem DDL
+  nova: `tb_financial_bills.kind`/`.operation` já existiam no baseline sem
+  produtor (mesmo padrão de [[tabela-sem-consumidor-nao-e-morta]]).
+  Implementado: `resolveFinancialPolarity` em `billing.context.ts`, usado
+  por `invoiceOrder` com `input.adjustment.direction` (mesmo campo já usado
+  no match da regra — não é campo novo). **Pendente, fora desta rodada**:
+  o legado também exige VENDEDOR obrigatório quando ajuste Entrada gera
+  crédito (`UN_Fatura_Ajt.pas:754-782`) — `tb_order_stock_adjust` não tem
+  `tb_salesman_id` no schema novo; decisão de modelagem (nova coluna?
+  opcional só quando há financeiro?) fica para quando essa trava for
+  implementada — não bloqueou a Rodada 5 porque não é uma das 5 perguntas.
+- **R5-Q2 — FECHADA**: elaborado que diverge do valor atual da ordem
+  **BLOQUEIA (422)** — evidência `TControllerPedido.ValidaParcelamento`
+  (`ControllerPedido.pas:1490`): `IF (valorPedido <> valorParcelado) AND
+  (valorParcelado > 0) THEN BLOCK`. Implementado em `invoiceOrder`:
+  soma do elaborado ≠ `financialBase` → 422 `INSTALLMENT_MISMATCH`.
+- **R5-Q3 — FECHADA**: NCM ausente/inválido é gate DURO no legado,
+  revalidado no momento de faturar — evidência `Fc_Valida_Itens_Nota`
+  (`tributacao.pas:1138-1417`): regra ausente e NCM inválido BLOQUEIAM;
+  só "Código de Benefício Fiscal" ausente é aviso (`Result:=False`
+  comentado no código-fonte). Implementado: `invoiceOrder` agora bloqueia
+  com 422 `MISSING_NCM` quando item de mercadoria não tem NCM — não confia
+  só no `/validate` anterior (itens podem mudar entre as duas chamadas).
+- **R5-Q4 — FECHADA**: ISS zero sem aviso é aceitável — decisão do Valdo:
+  "temos que aguardar recusa no momento da autorização" (SEFAZ/prefeitura
+  são o gate real). Nenhuma mudança de código necessária.
+- **R5-Q5 — FECHADA**: derivação por CEST permanece (não vira coluna
+  própria agora) — reforçada pelo achado de que a checagem de CEST no
+  legado está MORTA/comentada (`tributacao.pas:1372-1397`), confirmando
+  que o próprio legado abandonou esse caminho.
+
+### Observações fiscais (T6/P11) — IMPLEMENTADO (2026-08-22)
+
+Motor `billing.observations.ts` (funções puras) + wiring em `billing.service.ts`/
+`billing.repository.ts`. Evidência linha a linha das ~20 rotinas
+`Pc_Obs_CSTxx`/`Pc_Obs_CSOSNxxx` extraída de `tributacao.pas:4185-5432`
+(agente dedicado — ver achados completos no `tributacao.md` §P11, não
+repetidos aqui). "Regra 5" do mapeamento (colapsar em UMA tabela
+declarativa) aplicada: `REGIME_GROUPS` cobre CST 00/10/20/30/40/41/50/51/90
++ CSOSN 101/102/103/201/202/203/300/400/500/900.
+
+**3 bugs comprovados do legado CORRIGIDOS (decisão do Valdo — "corrigir os
+3")**: CST 80 (procedimento vazio no legado; nem existe no nosso domínio,
+nada a fazer); CSOSN 400 (bind de OBS_CODMHA ausente no legado — nunca
+disparava; aqui filtra certo); CSOSN 201 (placeholder trocado no legado —
+base/valor ST calculados mas nunca chegavam ao texto; aqui usa os 4 campos
+que o próprio comentário do código-fonte sugeria: base ST, valor ST,
+alíquota crédito, valor crédito).
+
+**Decisão mantida (paridade)**: quando há mais de uma observação distinta
+cadastrada pro mesmo grupo, usa só a 1ª (replica o "lê só a 1ª linha" do
+legado, presente em ~10 das ~19 rotinas mesmo com agregação — `GROUP BY
+OBS_DETALHES` + `First` sem loop).
+
+**Gap registrado (fora desta rodada)**: CST 60/70 dependem do rastreio de
+ST retido (P2.8, `Pc_ControleRastreioICMSST`) — explicitamente fora do
+`calc.ts` desde a Onda 1 do W2. Sem esse rastreio não há campo confiável
+pra alimentar o texto; esses 2 grupos ficam sem observação regime-específica
+até a frente do rastreio nascer (nota fatura normal, só sem essa observação).
+
+**Imposto Aproximado (Lei 12.741/2012) — escopo AMPLIADO pelo Valdo** (a
+sugestão inicial de deixar fora foi corrigida por ele): usa
+`setes_central.tb_ncm` (aliq_nac/aliq_imp/aliq_est/aliq_mun — catálogo
+IBPT já existia no baseline central, sem produtor até aqui, mesmo padrão
+de [[tabela-sem-consumidor-nao-e-morta]]). Percentual TOTAL por item
+(`ITF_IMP_APROX` do legado) persistido SEMPRE (independente de config) em
+`tb_order_item_tax_rule.approx_tax_aliq` — coluna nova, migration 032,
+local escolhido porque é a tabela que a Onda 3 já criou pra registrar como
+cada item foi tributado (decisão do Valdo, sem lembrar o nome exato — a
+tabela era a candidata natural). A OBSERVAÇÃO agregada na nota (média
+ponderada por esfera Nacional/Estadual/Municipal, texto literal do legado)
+é gated por config nova `billing/approx_tax_enabled` (seed sql/34, default
+'N') + só ordem de venda (`branch==='sale'`, equivalente ao "natureza
+contém VENDA" do legado).
+
+Persistência: `tb_invoice.note` (coluna do baseline já existente, sem
+produtor) recebe o texto concatenado (general + regime + ISSQN + imposto
+aproximado, um por linha) — sem tabela nova de observações; XML final
+(`infCpl`) só tem UM campo de texto mesmo, a concatenação já reflete isso.
+
+20 testes novos em `billing-observations.test.ts` + mocks atualizados em
+`billing.test.ts`; 328/328 api, `tsc --noEmit` limpo. Migrations/seeds
+aplicados em dev: 032 (approx_tax_aliq) + sql/34 (approx_tax_enabled).
+
+### CSOSN (P2.9) — IMPLEMENTADO (2026-08-21)
+
+`calcIcmsCsosn` (`calc.ts`) + `CSOSN_GROUPS` (101/102/103/300/400/201/202/
+203/500/900) — detalhe completo em `Infra-IA/Gestao2016/tributacao.md`
+§P2.9. Crédito SN via config nova `billing/sn_credit_aliq` (seed sql/33,
+aplicado em dev). Bloqueio de emitente Simples REMOVIDO de
+`loadContext` — faturamento por CSOSN liberado. 12+2 testes novos;
+308/308 api.
+
+### Caixa (W3.2) — IMPLEMENTADO (2026-08-22, parecer setes-conceito)
+
+Objeto de domínio NOVO pro lado web: abertura/fechamento de caixa por
+dia+usuário (terminal fixo 0), passou pelo guardiao-conceitual ANTES do
+DDL. Achado do parecer: a hipótese registrada em memória de sessão
+anterior (`bankAccountId=0` como conta bancária SENTINELA) era maquete —
+`bankAccountId=0` já é usado corretamente em
+`settlements.repository.settleBatch` como marca de NATUREZA do movimento
+(stage 'B'/'C'), não como linha fake em `tb_bank_account`; precedente real
+no legado (`MVF_CODCTB=0`). `tb_cashier`/`tb_cashier_items` (baseline,
+dormentes pro lado web) eram a fundação certa — sem DDL novo, só
+`tb_financial_statement.tb_cashier_id` (migration 033) pra amarrar o
+movimento à sessão.
+
+Detalhe completo em `Infra-IA/Gestao2016/financeiro.md` §5.4b (parecer +
+6 questões fechadas). Peça `@shared/financial-settlement` (settleOneTitle/
+writeManualCashierMovement/tryAutoSettleCash — módulo NUNCA importa
+módulo, billing e cashier consomem a peça, não um ao outro) + módulo
+`cashier` (open/current/:id balance/:id withdraw/:id close). Gate de
+faturamento em espécie SEM caixa aberto: NÃO bloqueia (decisão do Valdo)
+— título fica aberto pra baixa manual depois. 23 testes novos; 352/352 api.
+
+**Retomar por**: (1) telas de processo
+no app (validar/faturar/caixa — EM ANDAMENTO, ver módulo `orders` abaixo);
+(2) smoke E2E validate→invoice contra banco dev (gate adversarial pediu —
+mock verde ≠ banco real, lição da Onda 1); (3) decisão pendente do
+vendedor obrigatório no ajuste com crédito (R5-Q1); (4) baixa automática
+de PIX (kind='X', conta corrente pré-cadastrada, sem gate de caixa —
+deixada de fora desta rodada); (5) rastreio de ST retido (P2.8, gap do
+motor de observações CST 60/70).
+
+### Pendência registrada (fora de escopo, NÃO investigar sem pedido explícito)
+
+`setes-api/src/modules/sync/` (prefixo `/sync/*` DENTRO do próprio
+setes-api — distinto do projeto `setes-sync`, ver
+[[arquitetura-dois-grupos-boundary]]) tem 3 endpoints registrados e ativos
+(`ordersale.ts`/`orderpurchase.ts`/`orderstockadjust.ts`) referenciando
+colunas que NÃO existem mais no schema atual (`tb_order.situation` em vez
+de `status`, `tb_order_sale.tb_payment_types_id` inexistente,
+`tb_order_item.tb_merchandise_id`/`price` em vez de `tb_product_id`/
+`unit_value`) — qualquer chamada real quebraria. Achado ao mapear
+dependências pro módulo `orders` (2026-08-22); investigação PAUSADA a
+pedido do Valdo (não é escopo desta sessão). Fica registrado pra quando
+ele quiser retomar.
+
+### Módulo `orders` (pedido de venda/conjugado) — EM DESENHO (2026-08-22)
+
+Motivação: não existe NENHUM jeito de criar pedido de venda pelo app hoje
+(só `service-orders`, que é Ordem de Serviço — fluxo diferente); billing
+só CONSOME um orderId já existente. Levantamento de dependências (agente
+Explore) mapeou fundação pronta × gap real:
+
+- **Fundação pronta**: `tb_order_service`+`tb_order_sale` coexistem sem
+  impedimento estrutural na mesma `tb_order` (conjugada é possível);
+  `tb_product.kind` (P/M/S, migration 019) já resolve a natureza do item;
+  `tb_order_totalizer` tem padrão pronto de escrita via API
+  (`service-orders.repository.recalcTotalizer`); `service-orders` é o
+  molde estrutural mais próximo (openOrderDto→createOpenOrder MAX+1→
+  sub-recurso de itens→lockOpenOrder por status).
+- **Gap real**: NÃO existia endpoint de consulta de mercadoria (só serviço,
+  via `service-orders` lookup `kind='S'`); resolução de `tb_stock_list`/
+  `tb_price_list` pro item novo não tem nenhum precedente (dado existe via
+  sync, mas nada LÊ hoje); vendedor é SEMPRE escolha explícita (sem
+  vínculo user→salesman; `tb_customer.tb_salesman_id` sugere default).
+
+**IMPLEMENTADO (2026-08-22)**: módulo `orders` (backbone tb_order + ramo
+tb_order_sale SEMPRE presente; tb_order_service nasce por PRESENÇA — 1º
+item de serviço adicionado cria o ramo, `open_lock` SEMPRE NULL, backbone
+DISTINTO do "1 OS aberta por cliente" de service-orders, mesma tabela por
+natureza do ramo, sem colisão de unique key). SEM DDL nova — só peças
+prontas usadas: `tb_product.kind` (P/M/S, migration 019) decide o ramo do
+item automaticamente; `recalcTotalizer` no molde de
+`service-orders.repository`; preço sempre DIGITADO (sem
+`tb_price`/`tb_stock_list` — mesmo padrão de service-orders, decisão
+implícita por paridade). Faturamento NÃO é ação deste módulo — a tela
+chama `/api/billing/validate` + `/api/billing/invoice` (já prontos).
+Endpoints: `POST /api/orders` (abre, 400 SALESMAN_REQUIRED se não houver
+vendedor explícito nem default), `GET /api/orders` (lista paginada,
+`hasService` indica conjugada), `GET /api/orders/:id`, `GET /api/orders/
+merchandise-lookup` (P/M, NOVO), `GET /api/orders/service-lookup` (S,
+espelha service-orders sem importar — módulo nunca importa módulo),
+`POST/PUT/DELETE /api/orders/:id/items[/:itemId]`, `DELETE /api/orders/:id`
+(cancela). `getOrderBranch` do billing NÃO precisou de ajuste — sale
+sempre existe pra ordem deste módulo, itens mistos (Sale+Service) já
+eram separados por `productKind` na hora de faturar (P1 já testado).
+14 testes novos; 366/366 api. Flag `orders` (seed sql/36, aplicada em dev).
+
+**Tela Flutter IMPLEMENTADA (2026-08-22, agente setes-form-builder)**:
+`apps/web/lib/app/modules/orders/` completo (domain/data/presentation+
+bloc, molde `service_orders`); lista com abas Abertos/Faturados; detalhe
+com dialog de item usando `SegmentedButton` Mercadoria×Serviço (dois
+lookups, uma lista única de itens com indicador visual do ramo); botão
+"Validar e Faturar" chama `/api/billing/validate` (mostra issues se
+houver) → `/api/billing/invoice` em cadeia. Não existia módulo Flutter
+`billing` — chamadas HTTP direto no datasource do `orders`, sem importar
+módulo. `flutter analyze` limpo. Seed que faltava (interface não aparecia
+no menu — módulo pronto mas invisível) criada e aplicada em dev: `sql/37`
+(`tb_interface` id 29 'orders', grupo 'Vendas' — chave i18n nova, pt
+"Vendas"/en "Sales" — + `tb_institution_has_interface` + page_size).
+
+**Smoke E2E EXECUTADO (2026-08-22) contra banco dev real** — via curl
+direto na API (validação visual do Flutter bloqueada: screenshot exige o
+painel do Browser aberto no cliente, fora do controle da sessão):
+1. `POST /api/orders` sem vendedor nem default → 400 `SALESMAN_REQUIRED` ✅
+2. `POST /api/orders` cliente com vendedor padrão na carteira → abre ✅
+3. Lookups mercadoria/serviço → dados reais devolvidos ✅
+4. Item mercadoria + item serviço no MESMO pedido → conjugada: `kind`
+   Sale/Service corretos, `tb_order_service` criado por presença,
+   totalizer somou os dois (100+100=200) ✅
+5. `GET /api/orders` lista `hasService:true` corretamente ✅
+6. `POST /api/billing/validate` → `branch:'sale'` detectado certo mesmo
+   sendo conjugada; issues reais (emitente sem tributação + item sem
+   regra fiscal — produto de teste sem regra cadastrada, esperado); item
+   de SERVIÇO não exigiu regra fiscal (correto — só mercadoria) ✅
+7. `DELETE /api/orders/:id` cancela e some da lista Abertos ✅
+Produto de teste (id 16, mercadoria fictícia) criado e REMOVIDO ao final;
+pedido de teste ficou soft-deleted (cancelado), sem lixo residual visível.
+
+**Tela Flutter do `cashier` IMPLEMENTADA (2026-08-22)**:
+`apps/web/lib/app/modules/cashier/` completo (14 arquivos, camadas
+completas) — tela de SESSÃO/STATUS (não lista): `/current` decide estado
+vazio ("Abrir Caixa") × painel ativo (saldo derivado + formas de
+pagamento com registrado + Retirar/Transferir + Fechar Caixa); dialog de
+fechamento com relatório registrado×contado×diferença (nunca só "ok").
+Lookup de conta bancária via `/api/bank-accounts` direto (sem importar
+módulo). Grupo de menu **Financial** reaproveitado de settlements/
+bank-accounts (sem i18n novo). `flutter analyze` limpo (verificado 2x,
+pelo agente e independentemente). Seed `sql/38` (interface id 30
+'cashier') aplicada em dev. Bug pego durante a construção: campo do bloc
+chamado `close` colidia com `Bloc.close()` — corrigido pra
+`closeCashier`.
+
+**Achado de processo (2026-08-22)**: o agente `setes-form-builder`, ao
+ser chamado via `Agent()` direto, respondeu 2x com um PLANO em vez de
+executar (relatório de "completed" sem nenhum arquivo no disco) — só
+funcionou quando o brief completo foi reenviado E ele mesmo disparou um
+sub-agente `general-purpose` que de fato escreveu os arquivos. Para
+próximas chamadas a este agente: sempre VERIFICAR o filesystem antes de
+aceitar um relatório de conclusão como real (ver
+[[feedback-verificar-codigo-antes-doc]] — mesmo princípio, agora
+aplicado a "verificar arquivo antes de aceitar relatório de agente").
+
+### Gate de entrega EXECUTADO (2026-08-22) — revisar-riscos-sistemicos + testar-adversarial
+
+Rodados sobre toda a entrega de 2026-08-21/22 (R5, CSOSN, observações,
+cashier+financial-settlement, orders). **Revisão socrática: score 0.68
+(abaixo do limiar 0.70)** — 2 achados:
+1. **CORRIGIDO em sessão**: `tryAutoSettleCash` rodava dentro da MESMA
+   transação da nota sem isolamento — qualquer falha TÉCNICA inesperada
+   ali (não só os 3 motivos de negócio já tratados) derrubava a nota
+   inteira, contradizendo a decisão "faturar sem baixar". Corrigido com
+   `SAVEPOINT`/`ROLLBACK TO SAVEPOINT` isolando só a baixa; teste novo
+   prova (`gate socrático 2026-08-22` em billing.test.ts). 367/367 api.
+2. **Questão para o Valdo (Q-Caixa 7)**: `openCashier`
+   (`cashier.repository.ts`) trava com `SELECT...FOR UPDATE` sem índice
+   de apoio em `tb_cashier` — a checagem "1 caixa aberto por
+   usuário/dia" pode ter janela de corrida quando NÃO existe linha
+   nenhuma pra travar (SELECT que devolve 0 linhas não garante gap lock
+   sem índice líder cobrindo o predicado). Abrir índice novo
+   `(tb_institution_id, terminal, tb_userid, hr_end)` — mesmo padrão de
+   migration usado no resto da fase — ou aceitar o risco (abertura de
+   caixa é ação rara, manual, baixo volume de cliques simultâneos)?
+
+Achados descartados (verificados, sem risco): atomicidade de `orders`
+addItem OK (tudo numa transação); institutionId/userId sempre do JWT nos
+3 módulos novos; sem vazamento cross-schema; registro nos módulos segue
+o padrão simétrico.
+
+**QA adversarial: score 0.30, REPROVADO** (1 CRITICAL + 1 HIGH + 1 MEDIUM
++ 1 LOW) — TODOS corrigidos em sessão, verificados contra o banco dev
+REAL (não só mock, lição da Onda 1 repetida — "verde no mock, 500 no
+banco real"):
+1. **CRITICAL**: migration 028 renomeou `tb_cashier.tb_userid` →
+   `tb_user_id`, mas `cashier.repository.ts` (5 pontos) e
+   `financial-settlement.ts` (`findOpenCashierId`, usado pela baixa
+   automática do billing) continuavam lendo o nome VELHO — `GET /api/
+   cashier/current`, `POST /open`, `GET /:id` sempre 500; nenhum usuário
+   conseguia abrir caixa. Corrigido (rename); confirmado com curl real:
+   open→current→close funcionando ponta a ponta.
+2. **HIGH**: `POST /api/cashier/:id/withdraw` e `/close` filtravam só por
+   institution — qualquer usuário da MESMA institution sacava/fechava
+   caixa de OUTRO usuário sem checagem de posse. Corrigido:
+   `AND tb_user_id = ?` na trava (404 sem vazar existência, mesmo padrão
+   multi-tenant da casa); confirmado com curl (userId 2 tentando caixa do
+   userId 1 → 404). 2 testes novos em cashier.test.ts.
+3. **MEDIUM**: `POST /api/orders/:id/items` aceitava produto INATIVO por
+   ID direto (só os lookups filtravam `active='S'`, a inclusão não).
+   Corrigido; confirmado com curl. 2 testes novos em orders.test.ts.
+4. **LOW**: lookups de `orders` (`merchandise-lookup`/`service-lookup`)
+   não usavam `escapeLike` no filtro (regra da casa — memória `banks`).
+   Corrigido.
+
+**Q-Caixa 7 FECHADA (2026-08-22)**: Valdo escolheu criar o índice.
+Migration `034_cashier_open_lock_index.sql` — `idx_cashier_open_lock
+(tb_institution_id, terminal, tb_user_id)` em `tb_cashier`, aplicada em
+dev e confirmada via `SHOW INDEX`. Fecha a janela de corrida do
+`SELECT...FOR UPDATE` de `openCashier` (antes só a PK cobria a tabela,
+sem índice de apoio pro predicado da trava).
+
+**Retomar por**: baixa automática de PIX; rastreio de ST retido (P2.8);
+validação VISUAL do Flutter (pede o painel do Browser aberto no cliente).
+(R5-Q1 vendedor no ajuste: RESOLVIDA pela rodada Comissão/Devolução abaixo.)
+
+### Comissão por item + Devolução de mercadoria — IMPLEMENTADO (2026-08-24, rodada Q1–Q5 + D1–D4)
+
+Fecha a pendência R5-Q1 (vendedor no ajuste). Correção de entendimento do
+Valdo: ajuste em si NÃO exige vendedor — a exigência real é a DEVOLUÇÃO
+com crédito, que presume venda anterior comissionada e gera comissão
+NEGATIVA. Legado verificado linha a linha (`UN_Fatura_Ajt.pas`:
+Chbx_Financeiro/ChBx_DevolucaoMercadoria, `Fc_VerificaItemDevolvido`,
+`VerificaExistenciaDevolvido`, `Pc_GeraComissaoNegativaDevolucao` →
+`Pc_Comissao`/TB_COMISSAO, elo TB_ITENS_DEV).
+
+**Decisões do Valdo (2026-08-24)**:
+- Q1: peça mínima de comissão nasce AGORA; cálculo POR ITEM (≠ legado,
+  que era por pedido). Rascunho dele adaptado ao padrão da casa.
+- Q2: devolução POR ITEM; estorno = lançamento com value NEGATIVO, nunca
+  apagar/alterar (filosofia do financeiro imutável). Corrige o achado
+  literal do legado (devolução parcial estornava a comissão INTEIRA do
+  pedido original).
+- Q3: equivalente web da TB_ITENS_DEV criado (`tb_order_item_return`).
+- Q4: dois controles no ajuste Entrada — Financeiro (pedido+vendedor →
+  crédito + comissão negativa) × Devolução (controle por item via elo).
+- Q5: `kind` da comissão 'F' (faturamento) | 'R' (recebimento); modo por
+  CONFIG (`commission_mode`, registrada SEM seed/engine — entra quando a
+  peça completa nascer). Nesta versão só 'F' tem produtor.
+- D1: `tb_kickback` do baseline (mesmo conceito, nome errado — kickback =
+  propina; dormente, zero consumidores) DROPADA; renasce `tb_commission`.
+- D2: `tb_entity_id` do rascunho → `tb_customer_id` (papel ≠ entidade).
+- D3: vendedor da devolução DERIVADO do `tb_order_sale` do pedido
+  original ("do jeito que falei fica ambíguo") — o diálogo só pede o
+  pedido; a validação de igualdade do legado morre por construção.
+- D4: `doc_value`/`ali_value` → `base_value`/`aliq`/`value` (snapshot
+  imutável do valor calculado).
+- Terminal: `tb_commission.terminal` na PK e amarrado à ordem pela FK
+  composta (pedido explícito do Valdo — já nasceu assim).
+
+**Entregue**: migration 035 (DROP tb_kickback + `tb_commission` PK
+(id,institution,terminal) + `tb_order_item_return` PK = PK do item
+devolvido, colunas `*_ori` + `tb_order_stock_adjust_return` âncora PK =
+PK do ajuste) — aplicada em dev; blocos canônicos no sql/03 (lição:
+FK composta com `kind` varchar exige COLLATE igual ao do tb_order_item
+do baseline, general_ci — errno 150). Peças `@shared/commission`
+(resolveCommissionAliq com clamp 0..100 — kickback_product='S' →
+tb_price.aliq_kickback senão tb_salesman.aliq_kickback; insertCommissions
+em LOTE, MAX+1 único por nota) e `@shared/order-return` (buildReturnPlan
+com validações do legado + acúmulo intra-plano + QTY_EPSILON;
+assertReturnableInTx = revalidação DENTRO da transação sob FOR UPDATE do
+pedido ORIGINAL; persistReturn; elo aponta o item MAIS RECENTE do produto
+— paridade ITF_CODIGO DESC). Billing: `adjustment.returnedOrderId` nos
+dois endpoints (issues em lote no /validate; gates duros
+RETURN_REQUIRES_ENTRY/RETURN_INVALID no /invoice, revalidado padrão
+R5-Q3); venda gera comissão POSITIVA por item (kind 'F', base = valor
+líquido do item, aliq 0 = sem linha, cache por produto×lista) e devolução
+gera NEGATIVA espelhando a alíquota POSTADA da venda (fallback fonte
+atual p/ vendas pré-peça) — tudo na transação da nota. Swagger atualizado.
+
+**Gates (2026-08-24)**: socrático 0.66 REPROVOU como estava (R1 saldo não
+acumulava itens irmãos do plano; R2 TOCTOU — plano validado fora da
+transação com lock só no ajuste) + adversarial 0.30 REPROVOU (CRITICAL:
+`tb_price_list_id` foi dropada de tb_order_item pela migration 013 — o
+BASELINE mente; a seleção nova quebrava TODO /validate//invoice com 500
+no banco real, mock verde não pegou — MESMO padrão da calibração
+2026-08-16; + HIGH TOCTOU; MEDIUM clamp; LOW serviço no plano). TODOS
+corrigidos em sessão e fixados em teste; queries reformadas provadas
+contra o banco dev real (smoke venda 6533). 399/399 testes.
+RE-SCORE socrático 0.80 ✅ (R1/R2/R5/R6 verificados mortos; invariante
+nas duas camadas; ordem de locks sem deadlock) + adversarial 0.85 ✅
+passou=true (4/4 achados provados corrigidos contra o banco real, zero
+vulnerabilidade remanescente). LOWs REGISTRADOS sem retrabalho:
+assertReturnableInTx revalida só QUANTIDADE sob lock (cliente/valor
+unitário da origem editados na janela mínima passam); comentário-
+sentinela adicionado no persistInvoice (SUMs do recomputo devem ser as
+1ªs leituras não-locking da transação — SELECT simples antes congelaria
+o snapshot antes do lock). Caso não testado registrado: E2E HTTP
+/validate→/invoice de devolução completa (§4.6 — teste jest permanente
+quando a rodada fechar as questões).
+
+### Questões da rodada Comissão/Devolução — FECHADAS (2026-08-24, mesma sessão)
+
+1. (R3/Q-C) **SIM — origem precisa estar FATURADA** (status 'F').
+   EXECUTADO: issue no buildReturnPlan + recheck sob lock no
+   assertReturnableInTx ("origem deixou de estar faturada sob lock →
+   422"); 401/401 testes.
+2. (R4) **Reconciliação = SEMPRE lançamento novo de compensação** —
+   nunca soft delete/UPDATE em tb_commission. Hoje não existe caminho
+   que solte devolução faturada (status 'F' → 409); a regra fica
+   registrada no cabeçalho da peça @shared/commission para as frentes
+   futuras (cancelamento de nota, estorno).
+3. (R7/Q-A) **NÃO — ignorar PDV**: devolução contra venda de terminal≠0
+   fora do escopo; o terminal=0 fixo nas queries da peça é o desenho
+   decidido, não pendência.
+4. (Q-B) **Item com valor LÍQUIDO comissiona** — inclusive serviço na
+   conjugada; comportamento atual confirmado (paridade com o legado, que
+   somava TB_ITENS_NFL sem filtrar).
+
+### Módulo order-returns (Devolução no app) — IMPLEMENTADO nos DOIS lados (2026-08-24)
+
+Parecer setes-conceito APROVOU: módulo novo `order-returns` = 1º PRODUTOR
+do ramo tb_order_stock_adjust (o billing sabia faturar ajuste mas ninguém
+o criava); lista filtra por EXISTÊNCIA da âncora (módulo irmão futuro de
+ajuste avulso lista os SEM âncora — disjuntos por construção). Decisões
+do Valdo: devolução NASCE na aba Faturados do orders (ação "Devolver",
+itens pré-carregados); contrato do billing ENCOLHIDO — adjustment =
+{cfopId}, direction DERIVADA do ramo e pedido original DERIVADO da âncora
+(fonte única por construção; supersede a parte da R5-Q1 "direção escolhida
+no faturamento"); âncora nasce na ABERTURA (fato gerador = decidir
+devolver; persistReturn só VALIDA e grava elos — sem insert-se-ausente);
+devoluções abertas CONCORRENTES permitidas com pré-carga descontando as
+irmãs; pré-carga POR PRODUTO (um item por produto, saldo agregado, unit do
+item mais recente); sem re-adicionar item (cancela e reabre).
+
+API: modules/order-returns (6 arquivos, shape de AÇÕES da tela-de-processo
+— POST abre da venda 'F' com pré-carga em 1 transação, GET lista/detalhe
+com maxQuantity, PUT quantidade com teto-cortesia, DELETE item/cancelar);
+peça order-return ganhou getAnchor + getOpenReturnQuantityByProduct.
+APP: modules/order_returns (17 arquivos — abas, detalhe dirigido pelo
+estado, dialog de faturar com lookup CFOP, encadeamento validate→invoice)
++ ação Devolver no detalhe faturado do orders; rotas + i18n pt/en.
+Seeds 39 (flag, + insertDefaultFlags) e 40 v2 (interface id DINÂMICO=31,
+grupo Vendas). 414/414 api; flutter analyze limpo; smoke E2E real (abrir→
+detalhe→PUT→validate com âncora derivada→cancelar→limpeza hard).
+
+**GATES (2026-08-24)**: socrático 0.78 ✅ + adversarial: código resistiu a
+51 ataques reais SEM falha, mas REPROVOU por 1 HIGH de SEED — o sql/40 v1
+fixava id 30 JÁ ocupado pelo cashier (seed 38) e o INSERT IGNORE silenciou
+(interface nunca nasceu). LIÇÃO: seed de interface NUNCA fixa id — id
+DINÂMICO MAX+1 + vínculos keyed por i18n_key (padrão seed 27). Corrigido
+(v2, id 31, verificado no banco). Achados socráticos BAIXADOS em sessão:
+R1 assertReturnableInTx compara plano × itens VIVOS sob o lock (PUT no
+meio → 422 REQUIRES_VALIDATION); R2 cortesia do PUT fora da transação
+(pool não se auto-estrangula); R3 códigos novos no error-codes.ts +
+ADJUST_PARAMS_REQUIRED atualizado; R4 falha de billing recarrega o
+detalhe (teto fresco); R5 guard de duplo-clique no Devolver.
+PENDÊNCIAS registradas: teste jest E2E HTTP permanente da devolução
+completa (§4.6 — quando houver emitente com tributação no dev); Q-R6 do
+fluxo (pós-abertura aterrissa na LISTA; detalhe direto = decisão do
+Valdo se incomodar).
 
 ## Parecer conceitual (setes-conceito, 2026-08-20) — persistência do cálculo por item
 

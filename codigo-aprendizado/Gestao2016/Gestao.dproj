@@ -1,0 +1,1606 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{1C2F8691-D9D6-4A3F-B80D-50DBB6D1EC37}</ProjectGuid>
+        <MainSource>Gestao.dpr</MainSource>
+        <Config Condition="'$(Config)'==''">Release</Config>
+        <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+        <ProjectVersion>18.4</ProjectVersion>
+        <FrameworkType>VCL</FrameworkType>
+        <Base>True</Base>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <TargetedPlatforms>1</TargetedPlatforms>
+        <AppType>Application</AppType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_CodePage>1252</DCC_CodePage>
+        <DCC_IOChecking>false</DCC_IOChecking>
+        <DCC_AssertionsAtRuntime>false</DCC_AssertionsAtRuntime>
+        <DCC_Define>VCL;$(DCC_Define)</DCC_Define>
+        <DCC_OutputDRCFile>true</DCC_OutputDRCFile>
+        <DCC_MapFileARM>2</DCC_MapFileARM>
+        <UsePackages>true</UsePackages>
+        <DCC_RemoveTmpLnkFile>false</DCC_RemoveTmpLnkFile>
+        <DCC_DebugInfoInTds>true</DCC_DebugInfoInTds>
+        <DCC_MapFile>3</DCC_MapFile>
+        <DCC_UnitSearchPath>Repository;frames;ListasSimples;controller;Componentes;componentes\Pk_Setes_For_Firedac;ApiAdmDesktop\model;model;RegraNegocios;Parametros;..\gestaoweb\model;Funcao;framework;Ajuda;tarefas;relatorios;Arquivos;Task;FastReport;Classes;DataObjetcs;ApiAdmDesktop;RegrasInterfaces;Interface;restClient\ApyTray\model\;..\gestaoweb\framework;..\gestaoweb\restClient\apiData;..\gestaoweb\DataObjetcs;..\gestaoweb\api\;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <VerInfo_Build>6</VerInfo_Build>
+        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_MajorVer>2</VerInfo_MajorVer>
+        <VerInfo_Locale>1046</VerInfo_Locale>
+        <SanitizedProjectName>Gestao</SanitizedProjectName>
+        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;IBX;System.Win;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Keys>CompanyName=Setes Gestão Computacional;FileDescription=Gestão;FileVersion=2.0.1.6;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=Gestao.exe;ProductName=Gestão Empresarial - Setes;ProductVersion=2.016;Comments=Sistema de Gestão Empresarial</VerInfo_Keys>
+        <DCC_DcuOutput>$(Plataform)\$(config)</DCC_DcuOutput>
+        <DCC_UsePackage>rtl;dbexpress;DbxCommonDriver;DataSnapIndy10ServerTransport;DataSnapProviderClient;vclx;vcl;vclactnband;vclie;vclimg;xmlrtl;inet;dsnap;inetdb;IndySystem;IndyCore;IndyProtocols;DbxClientDriver;inetdbxpress;inetdbbde;DataSnapServer;DBXInterBaseDriver;DBXMySQLDriver;dbxcds;DBXFirebirdDriver;DBXSybaseASEDriver;DBXSybaseASADriver;DBXOracleDriver;DBXMSSQLDriver;DBXInformixDriver;DBXDb2Driver;vcltouch;dsnapcon;TeeUI;TeeDB;Tee;vclib;ibxpress;adortl;VclSmp;soaprtl;vclribbon;frce;ACBr_Comum;ACBr_synapse;ACBr_OpenSSL;ACBr_Diversos;ACBr_Serial;ACBr_Sintegra;ACBr_TXTComum;ACBr_SPED;ACBr_SPEDImportar;ACBr_TCP;ACBr_Boleto;ACBr_TEFD;ACBr_NFeDanfeRL;ACBr_NFe;ACBr_DFeComum;ACBr_NFSe;ACBr_BoletoRL;ACBr_NFCeECFVirtual;ACBr_NFeDanfeESCPOS;ACBr_BlocoX;Pk_Setes;ACBr_PCNComum;DelPrintDX10;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_RunTimeTypeInfo>true</DCC_RunTimeTypeInfo>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <ImageDebugInfo>true</ImageDebugInfo>
+        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+        <DCC_ExeOutput>..\Modelos\Gestao2016\Bin\</DCC_ExeOutput>
+        <DCC_DcpOutput>..\Modelos\TempGestao2016\</DCC_DcpOutput>
+        <DCC_DependencyCheckOutputName>C:\Modelos\Gestao2016\Bin\Gestao.exe</DCC_DependencyCheckOutputName>
+        <DCC_ImageBase>00400000</DCC_ImageBase>
+        <DCC_Platform>x86</DCC_Platform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_DebugDCUs>false</DCC_DebugDCUs>
+        <UsePackages>false</UsePackages>
+        <DCC_UsePackage>Rave110VCL;office2K;ACBr_Integrador;DataSnapCommon;CustomIPTransport;vcldb;fs23;fsDB23;fsIBX23;dbrtl;bindengine;bindcomp;IndyIPClient;IndyIPCommon;RESTComponents;pkgADRIFood;$(DCC_UsePackage)</DCC_UsePackage>
+        <VerInfo_Build>18</VerInfo_Build>
+        <VerInfo_Release>0</VerInfo_Release>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Keys>CompanyName=Setes - Gestão Computacional;FileVersion=2.0.0.18;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=Sistema Gestão Empresarial;ProductVersion=2.0.0.18;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName)</VerInfo_Keys>
+        <Icon_MainIcon>D:\Magazord\Gestao_Icon.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <AppExecutionLevel>requireAdministrator</AppExecutionLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <UsePackages>true</UsePackages>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_Optimize>true</DCC_Optimize>
+        <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <DCC_DebugDCUs>false</DCC_DebugDCUs>
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_GenerateStackFrames>false</DCC_GenerateStackFrames>
+        <DCC_DebugInfoInExe>false</DCC_DebugInfoInExe>
+        <DCC_MapFile>3</DCC_MapFile>
+        <DCC_ImportedDataReferences>false</DCC_ImportedDataReferences>
+        <Icon_MainIcon>Gestao_Icon.ico</Icon_MainIcon>
+        <DCC_DebugInfoInTds>false</DCC_DebugInfoInTds>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <UsePackages>false</UsePackages>
+        <VerInfo_Build>19</VerInfo_Build>
+        <VerInfo_Release>0</VerInfo_Release>
+        <VerInfo_Keys>CompanyName=F. D. SOUZA DESENVOLVIMENTO E LICENCIAMENTO DE PROGRAMAS ;FileVersion=2.0.0.19;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=SISTEMA SETES;ProductVersion=2.0.0.19;Comments=CNPJ : 07.742.094/0001-13;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName)</VerInfo_Keys>
+        <AppExecutionLevel>requireAdministrator</AppExecutionLevel>
+        <PreBuildEvent><![CDATA[call "$(PROJECTDIR)\Tools\build_map_symbols.cmd" "$(OUTPUTDIR)$(MSBuildProjectName).map" "$(PROJECTDIR)\Funcao\MapSymbols.bin" "$(PROJECTDIR)\Funcao\MapSymbols.rc" "$(PROJECTDIR)\Funcao\MapSymbols.res" "$(BDS)\bin\brcc32.exe"]]></PreBuildEvent>
+        <PreBuildEventIgnoreExitCode>True</PreBuildEventIgnoreExitCode>
+        <DCC_CodePage>1252</DCC_CodePage>
+        <BT_BuildType>Debug</BT_BuildType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <DCC_RemoteDebug>true</DCC_RemoteDebug>
+        <DCC_RangeChecking>true</DCC_RangeChecking>
+        <DCC_IntegerOverflowCheck>true</DCC_IntegerOverflowCheck>
+        <DCC_Optimize>false</DCC_Optimize>
+        <DCC_DebugDCUs>true</DCC_DebugDCUs>
+        <DCC_RunTimeTypeInfo>false</DCC_RunTimeTypeInfo>
+        <UsePackages>false</UsePackages>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_MajorVer>1</VerInfo_MajorVer>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <PreBuildEventCancelOnError>false</PreBuildEventCancelOnError>
+        <PreBuildEvent><![CDATA[taskkill /f /im $(OUTPUTFILENAME) 2>
+1 || exit /B 0
+$(PreBuildEvent)]]></PreBuildEvent>
+        <VerInfo_Release>0</VerInfo_Release>
+        <VerInfo_Build>16</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Setes - Gestão Computacional;FileVersion=1.0.0.16;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=Sistema Gestão Empresarial;ProductVersion=2.0.0.16;Comments=;ProgramID=com.embarcadero.$(MSBuildProjectName);FileDescription=$(MSBuildProjectName)</VerInfo_Keys>
+        <AppExecutionLevel>requireAdministrator</AppExecutionLevel>
+        <BT_BuildType>Debug</BT_BuildType>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="componentes\uFxtDelayedHandler.pas"/>
+        <DCCReference Include="componentes\libssh2.pas"/>
+        <DCCReference Include="componentes\libssh2_publickey.pas"/>
+        <DCCReference Include="componentes\libssh2_sftp.pas"/>
+        <DCCReference Include="componentes\uMySFTPClient.pas"/>
+        <DCCReference Include="Tarefas\Un_DM.pas">
+            <Form>DM</Form>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_TabelasEmListas.pas">
+            <Form>DM_ListaConsultas</Form>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Principal.pas">
+            <Form>Fr_Principal</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\UN_SPLASH.pas">
+            <Form>SplashForm</Form>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_CardapioPanel.pas">
+            <Form>Fm_CardapioPanel</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_Cardapio.pas">
+            <Form>Fm_Cardapio</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_CardapioMT.pas">
+            <Form>Fm_CardapioMT</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_Itens_Pedido.pas">
+            <Form>Fm_Itens_Pedido</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaEmpresaEndereco.pas">
+            <Form>Fm_ListaEmpresaEndereco</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaProdutos.pas">
+            <Form>Fm_ListaProdutos</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaTabelaPreco.pas">
+            <Form>Fm_ListaTabelaPreco</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaUsuarios.pas">
+            <Form>Fm_ListaUsuarios</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_MetodoPagamento.pas">
+            <Form>Fm_MetodoPagamento</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_FormaPagto.pas">
+            <Form>Fm_FormaPagto</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_MetodoPagamentoParcelado.pas">
+            <Form>Fm_MetodoPagamentoParcelado</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaEstoques.pas">
+            <Form>Fm_ListaEstoques</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaGrupoSubGrupo.pas">
+            <Form>Fm_ListaGrupoSubGrupo</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_fm_ListaTributacao.pas">
+            <Form>fm_ListaTributacao</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\un_fm_lista_pet.pas">
+            <Form>Fm_ListaPet</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_CentroResultado.pas">
+            <Form>Fm_CentroResultado</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_CentroCusto.pas">
+            <Form>Fm_CentroCusto</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaFornecedores.pas">
+            <Form>Fm_ListaFornecedores</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaEmpresas.pas">
+            <Form>Fm_ListaEmpresas</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaSituacao.pas">
+            <Form>Fm_ListaSituacao</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaHistoricoBancario.pas">
+            <Form>Fm_ListaHistoricoBancario</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaMarcaProduto.pas">
+            <Form>Fm_ListaMarcaProduto</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaTecnicos.pas">
+            <Form>Fm_ListaTecnicos</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaColaboradores.pas">
+            <Form>Fm_ListaColaboradores</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaMultiEmpresa.pas">
+            <Form>Fm_ListaMultiEmpresa</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\un_fm_billing_portfolio.pas">
+            <Form>FmBillingPortfolio</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaEspecieDoc.pas">
+            <Form>Fm_ListaEspecieDoc</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaContaBancaria.pas">
+            <Form>Fm_ListaContaBancaria</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_CardapioMTP.pas">
+            <Form>Fm_CardapioMTP</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_CardapioMTS.pas">
+            <Form>Fm_CardapioMTS</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_CardapioUT.pas">
+            <Form>Fm_CardapioUT</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_fm_listaCidade.pas">
+            <Form>FmListaCidades</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaClientes.pas">
+            <Form>Fm_ListaClientes</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_PizzariaMTP.pas">
+            <Form>Fm_PizzariaMTP</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\fm_itens_importa_xml.pas">
+            <Form>FmItensImportaXml</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="FastReport\un_frx_ReportCtaReceber.pas">
+            <Form>frx_ReportCtaReceber</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_RL_Report.pas">
+            <Form>RL_Report</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_base_Pesq.pas">
+            <Form>Fr_Base_Pesq</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_RL_ReportBudget.pas">
+            <Form>RL_ReportBudget</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_RL_ReportList.pas">
+            <Form>RL_ReportList</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_RL_ReportOrder.pas">
+            <Form>RL_ReportOrder</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_RL_ReportProduct.pas">
+            <Form>RL_ReportProduct</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\tas_config.pas">
+            <Form>TasConfig</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\un_geranfe3X.pas">
+            <Form>Fr_GeraNfe3x</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_Pesq_NotaFiscal.pas">
+            <Form>Fr_Pesq_NotaFiscal</Form>
+        </DCCReference>
+        <DCCReference Include="Funcao\un_func_img_button.pas"/>
+        <DCCReference Include="env.pas"/>
+        <DCCReference Include="Tarefas\Un_Cupom_Fiscal.pas">
+            <Form>Fr_Cupom_Fiscal</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\human_resource\register\sea_job_position.pas">
+            <Form>SeaJobPosition</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\human_resource\register\reg_job_position.pas">
+            <Form>RegJobPosition</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\reg_printers.pas">
+            <Form>RegPrinters</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\reg_virtual_shop.pas">
+            <Form>RegVirtualShop</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\sea_printers.pas">
+            <Form>SeaPrinters</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\sea_users.pas">
+            <Form>SeaUsers</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_city.pas">
+            <Form>RegCity</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_city.pas">
+            <Form>SeaCity</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\reg_commitment.pas">
+            <Form>RegCommitment</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Pedido_Vda.pas">
+            <Form>Fr_Pedido_Vda</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Nota_Fiscal.pas">
+            <Form>Fr_Nota_Fiscal</Form>
+        </DCCReference>
+        <DCCReference Include="repository\base_config.pas">
+            <Form>Fr_Base_Config</Form>
+        </DCCReference>
+        <DCCReference Include="repository\base_download.pas">
+            <Form>BaseDonwload</Form>
+        </DCCReference>
+        <DCCReference Include="view\inheritable\base_registry.pas">
+            <Form>BaseRegistry</Form>
+        </DCCReference>
+        <DCCReference Include="view\inheritable\base_search.pas">
+            <Form>BaseSearch</Form>
+        </DCCReference>
+        <DCCReference Include="repository\tas_lanca_item_produto.pas">
+            <Form>TasLancaItemProdutos</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\sea_receipt.pas">
+            <Form>SeaReceipt</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\reg_receipt.pas">
+            <Form>RegReceipt</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Cotacao.pas">
+            <Form>Fr_Cotacao</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Fatura_Vda.pas">
+            <Form>Fr_Fatura_Vda</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Pedido_Cpa.pas">
+            <Form>Fr_Pedido_Cpa</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Pedido_Ajt.pas">
+            <Form>Fr_Pedido_Ajt</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Fich_Fin_Cli.pas">
+            <Form>Fr_Fich_Fin_Cli</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Fich_Fin_For.pas">
+            <Form>Fr_Fich_Fin_For</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_MalaDiretaEMail.pas">
+            <Form>Fr_MalaDiretaEMail</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Clta_Mov_Produtos.pas">
+            <Form>Fr_Clta_Mov_Produtos</Form>
+        </DCCReference>
+        <DCCReference Include="repository\Un_Empresa.pas">
+            <Form>Fr_Empresa</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Itens_Produto.pas">
+            <Form>Fr_Itens_Produto</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Itens_Produto_Vda.pas">
+            <Form>Fr_Itens_Produto_Vda</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\reg_banking_account.pas">
+            <Form>RegBankingAccount</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\reg_banking_history.pas">
+            <Form>RegBankingHistory</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\reg_billing_portfolio.pas">
+            <Form>RegBillingPortfolio</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\reg_electronic_card.pas">
+            <Form>RegElectronicCard</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\reg_electronic_slip.pas">
+            <Form>RegElectronicSlip</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\sea_banking_history.pas">
+            <Form>SeaBankingHistory</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\sea_electronic_slip.pas">
+            <Form>SeaElectronicSlip</Form>
+        </DCCReference>
+        <DCCReference Include="Roteador\function\un_tray_to_gestao.pas"/>
+        <DCCReference Include="Roteador\function\un_base_tray.pas"/>
+        <DCCReference Include="Funcao\Un_Funcoes.pas"/>
+        <DCCReference Include="view\module\banking\register\sea_banking_account.pas">
+            <Form>SeaBankingAccount</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_ContasCorrente.pas">
+            <Form>Fr_ContasCorrente</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Lanca_Banco.pas">
+            <Form>Fr_Lanca_Banco</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Lanca_Caixa.pas">
+            <Form>Fr_Lanca_Caixa</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Lanca_Command.pas">
+            <Form>Fr_Lanca_Command</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Lanca_Despacho.pas">
+            <Form>Fr_Lanca_Despacho</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Lanca_Pagto.pas">
+            <Form>Fr_Lanca_Pagto</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Lanca_PlanoContas.pas">
+            <Form>Fr_Lanca_PlanoContas</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Pagar_Multipla.pas">
+            <Form>Fr_Pagar_Multipla</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Receber_Multipla.pas">
+            <Form>Fr_Receber_Multipla</Form>
+        </DCCReference>
+        <DCCReference Include="Relatorios\UN_Imp_Lucratividade.pas">
+            <Form>Fr_Imp_Lucratividade</Form>
+        </DCCReference>
+        <DCCReference Include="Arquivos\Un_Produtos.pas">
+            <Form>Fr_Produtos</Form>
+        </DCCReference>
+        <DCCReference Include="Relatorios\UN_Imp_Produtos.pas">
+            <Form>Fr_Imp_Produtos</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\un_estoque_manual.pas">
+            <Form>Fr_Estoque_manual</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\Un_Configuracao.pas">
+            <Form>Fr_Configuracao</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\Un_Atualiza.pas">
+            <Form>Fr_Atualiza</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_package.pas">
+            <Form>SeaPackage</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_package.pas">
+            <Form>RegPackage</Form>
+        </DCCReference>
+        <DCCReference Include="Controller\ControllerEmbalagem.pas"/>
+        <DCCReference Include="view\module\operation\register\sea_uf.pas">
+            <Form>SeaUf</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_uf.pas">
+            <Form>RegUf</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblFcpUfNcm.pas"/>
+        <DCCReference Include="model\tblMvaUfNcm.pas"/>
+        <DCCReference Include="Controller\ControllerFcpUfNcm.pas"/>
+        <DCCReference Include="Controller\ControllerMvaUfNcm.pas"/>
+        <DCCReference Include="Parametros\prm_mva_uf_ncm.pas"/>
+        <DCCReference Include="Parametros\prm_fcp_uf_ncm.pas"/>
+        <DCCReference Include="Arquivos\Un_Especie_Doc.pas">
+            <Form>Fr_Especie_Doc</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Info_Compra_Venda.pas">
+            <Form>Fr_Info_Compra_Venda</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\reg_users.pas">
+            <Form>RegUsers</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblSendWhatsApp.pas"/>
+        <DCCReference Include="Controller\ControllerSendWhatsApp.pas"/>
+        <DCCReference Include="Funcao\UnGeraLog.pas"/>
+        <DCCReference Include="view\module\operation\register\reg_interface.pas">
+            <Form>RegInterface</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_interface.pas">
+            <Form>SeaInterface</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\Un_envia_email.pas">
+            <Form>Fr_envia_email</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblItensIFC.pas"/>
+        <DCCReference Include="view\module\operation\admin\tas_notification.pas">
+            <Form>TasNotification</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\tas_notification_item.pas">
+            <Form>TasNotificationItem</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Relatorios\UN_RL_OS_Extintor.pas">
+            <Form>RL_OS_Extintor</Form>
+        </DCCReference>
+        <DCCReference Include="Relatorios\Un_RL_MovimentoProduto.pas">
+            <Form>RL_MovimentoProduto</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_ContasReceberBoleto.pas">
+            <Form>Fr_ContasReceberBoleto</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Fatura_Ajt.pas">
+            <Form>Fr_Fatura_Ajt</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\Un_Agenda.pas">
+            <Form>Fr_Agenda</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\un_geranfe_Srv.pas">
+            <Form>Fr_geranfe_Srv</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\human_resource\register\reg_collaborator.pas">
+            <Form>RegCollaborator</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\human_resource\register\sea_collaborator.pas">
+            <Form>SeaCollaborator</Form>
+        </DCCReference>
+        <DCCReference Include="view\inheritable\base_frame_list.pas">
+            <Form>BaseFrameList</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Pesq_Produto.pas">
+            <Form>Fr_Pesq_Produto</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\reg_quotation_log.pas">
+            <Form>RegQuotationLog</Form>
+        </DCCReference>
+        <DCCReference Include="Funcao\Un_Fc_Sored_Procedures.pas"/>
+        <DCCReference Include="Tarefas\sea_pay_back.pas">
+            <Form>SeaPayBack</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_ImportaXMLNFe.pas">
+            <Form>Fr_ImportaXMLNFe</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblProdProd.pas"/>
+        <DCCReference Include="Controller\ControllerReposicao.pas"/>
+        <DCCReference Include="view\module\operation\register\reg_produto_reposicao.pas">
+            <Form>RegProdutoReposicao</Form>
+        </DCCReference>
+        <DCCReference Include="Arquivos\Un_Composicao.pas">
+            <Form>Fr_Composicao</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Caixa.PAS">
+            <Form>Fr_Caixa</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\rg_privilege.pas">
+            <Form>RgPrivilege</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_profile.pas">
+            <Form>SeaProfile</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_profile.pas">
+            <Form>RegProfile</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_oper_interface.pas">
+            <Form>SeaOperInterface</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_oper_interface.pas">
+            <Form>RegOperInterface</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_business.pas">
+            <Form>RegBusiness</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_business.pas">
+            <Form>SeaBusiness</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Clta_Negocio.pas">
+            <Form>Fr_Clta_Negocio</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\reg_config_tag.pas">
+            <Form>RegConfigTag</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\admin\sea_config_tag.pas">
+            <Form>SeaConfigTag</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_vehicle_brand.pas">
+            <Form>RegVehicleBrand</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_vehicle_model.pas">
+            <Form>RegVehicleModel</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_note.pas">
+            <Form>SeaNote</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_note.pas">
+            <Form>RegNote</Form>
+        </DCCReference>
+        <DCCReference Include="Funcao\setes_forms.pas"/>
+        <DCCReference Include="Arquivos\Un_Cardapio.pas">
+            <Form>Fr_Cardapio</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_subgroup_menu.pas">
+            <Form>RegSubgroupMenu</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_group.pas">
+            <Form>RegGroup</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\sea_Mdfe.pas">
+            <Form>SeaMdfe</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\tas_mdfe.pas">
+            <Form>TasMdfe</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\tas_mdfe_operacoes.pas">
+            <Form>TasMdfeOperacoes</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\tas_mdfe_config.pas">
+            <Form>TasMdfeConfig</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblNfEletronica.pas"/>
+        <DCCReference Include="Controller\ControllerNfEletronica.pas"/>
+        <DCCReference Include="Parametros\prm_nf_eletronica.pas"/>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfe_config.pas">
+            <Form>TasGeraNfeConfig</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfe_operacao.pas">
+            <Form>TasGeraNfeOperacao</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfe_inutiliza.pas">
+            <Form>TasGeraNfeInutiliza</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfe_schemas.pas">
+            <Form>TasGeraNfeSchemas</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\un_geranfe_ajt.pas">
+            <Form>Fr_GeraNfe_Ajt</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\un_geranfe_vda.pas">
+            <Form>Fr_GeraNfe_vda</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfce_autorizacao_lote.pas">
+            <Form>TasGeraNfceAutorizacaoLote</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfce_autorizacao.pas">
+            <Form>TasGeraNfceAutorizacao</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\un_geranfe_cpa.pas">
+            <Form>Fr_geranfe_cpa</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfce_operacao.pas">
+            <Form>TasGeraNfceOperacao</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_gera_nfe_autorizacao.pas">
+            <Form>TasGeraNfeAutorizacao</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_customer_prospection.pas">
+            <Form>RegCustomerProspection</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Pesq_Empresa.pas">
+            <Form>Fr_Pesq_Empresa</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_measure.pas">
+            <Form>SeaMeasure</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_measure.pas">
+            <Form>RegMeasure</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_cfop.pas">
+            <Form>SeaCfop</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_cfop.pas">
+            <Form>RegCfop</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_product_brand.pas">
+            <Form>SeaProductBrand</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_product_brand.pas">
+            <Form>RegProductBrand</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_general_taxes.pas">
+            <Form>RegGeneralTaxes</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_kind_profitability.pas">
+            <Form>RegKindProfitability</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_vehicle_kind.pas">
+            <Form>SeaVehicleKind</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_vehicle_kind.pas">
+            <Form>RegVehicleKind</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_situation.pas">
+            <Form>SeaSituation</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_situation.pas">
+            <Form>RegSituation</Form>
+        </DCCReference>
+        <DCCReference Include="Arquivos\Un_Cliente.pas">
+            <Form>Fr_Cliente</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_tax_relieves_icms.pas">
+            <Form>SeaTaxRelievesIcms</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Adic_Imp.pas">
+            <Form>Fr_Adic_Imp</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_vehicle_brand.pas">
+            <Form>SeaVehicleBrand</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Itens_Produto_CTC_Vda.pas">
+            <Form>Fr_Itens_Produto_CTC_Vda</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_FrenteCaixa.pas">
+            <Form>Fr_FrenteCaixa</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\sea_ctrl_cheque.pas">
+            <Form>SeaCtrlCheque</Form>
+        </DCCReference>
+        <DCCReference Include="Parametros\prm_ctrl_cheque.pas"/>
+        <DCCReference Include="view\module\operation\task\reg_ctrl_cheque.pas">
+            <Form>RegCtrlCheque</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\financial\task\dpt_ctrl_cheque.pas">
+            <Form>DptCtrlCheque</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\financial\task\dct_ctrl_cheque.pas">
+            <Form>DctCtrlCheque</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\reg_correction_letter.pas">
+            <Form>RegCorrectionLetter</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\Un_Virtual_Shop.pas">
+            <Form>Fr_Virtual_Shop</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Info_Dec_Imp.pas">
+            <Form>Fr_Info_Dec_Imp</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Produto_Series.pas">
+            <Form>Fr_Produto_Serie</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblSerieProduto.pas"/>
+        <DCCReference Include="Controller\ControllerSerieProduto.pas"/>
+        <DCCReference Include="Parametros\prm_serie_produto.pas"/>
+        <DCCReference Include="model\tblSerieVeiculo.pas"/>
+        <DCCReference Include="Controller\ControllerSerieVeiculo.pas"/>
+        <DCCReference Include="Parametros\prm_serie_veiculo.pas"/>
+        <DCCReference Include="Tarefas\Un_Comissao.pas">
+            <Form>Fr_Comissao</Form>
+        </DCCReference>
+        <DCCReference Include="Parametros\prm_comissao.pas"/>
+        <DCCReference Include="model\tblOrdemServico.pas"/>
+        <DCCReference Include="Controller\ControllerOrdemServico.pas"/>
+        <DCCReference Include="Parametros\prm_ordem_servico.pas"/>
+        <DCCReference Include="Tarefas\Un_Lanca_Folha.pas">
+            <Form>Fr_Lanca_Folha</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblFolhaPagto.pas"/>
+        <DCCReference Include="Controller\ControllerFolhaPagto.pas"/>
+        <DCCReference Include="view\module\financial\register\reg_plano_contas.pas">
+            <Form>RegPlanoContas</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_coating.pas">
+            <Form>SeaCoating</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_coating.pas">
+            <Form>RegCoating</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_custo_pedido.pas">
+            <Form>RegCustoPedido</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_conserto.pas">
+            <Form>TasConserto</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Clta_Csto.pas">
+            <Form>Fr_Clta_Csto</Form>
+        </DCCReference>
+        <DCCReference Include="Arquivos\Un_Frete.pas">
+            <Form>Fr_Frete</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblfrete.pas"/>
+        <DCCReference Include="Controller\ControllerFrete.pas"/>
+        <DCCReference Include="Arquivos\Un_Transportadora.pas">
+            <Form>Fr_Transportadora</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\banking\register\sea_electronic_card.pas">
+            <Form>SeaEletronicCard</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_category.pas">
+            <Form>SeaCategory</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_category.pas">
+            <Form>RegCategory</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_kind_profitability.pas">
+            <Form>Seakindprofitability</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_subgroup.pas">
+            <Form>RegSubgroup</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Ctrl_Lotes.pas">
+            <Form>Fr_Ctrl_Lote</Form>
+        </DCCReference>
+        <DCCReference Include="Relatorios\Un_Imp_EtiqProdutos.pas">
+            <Form>Fr_Imp_EtiqProdutos</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_group_menu.pas">
+            <Form>SeaGroupMenu</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_group.pas">
+            <Form>SeaGroup</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_service.pas">
+            <Form>RegService</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_group_menu.pas">
+            <Form>RegGroupMenu</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_service.pas">
+            <Form>SeaService</Form>
+        </DCCReference>
+        <DCCReference Include="FastReport\un_frx_base_report.pas">
+            <Form>FrxBaseReport</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\tas_production.pas">
+            <Form>TasProduction</Form>
+        </DCCReference>
+        <DCCReference Include="FastReport\un_frx_ReportProducao.pas">
+            <Form>frx_ReportProducao</Form>
+        </DCCReference>
+        <DCCReference Include="FastReport\un_frx_ReportProducaoMP.pas"/>
+        <DCCReference Include="Tarefas\sea_production.pas">
+            <Form>SeaProduction</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_contacts.pas">
+            <Form>RegContacts</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_order_log.pas">
+            <Form>RegOrderLog</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_contacts.pas">
+            <Form>SeaContacts</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_dead_line.pas">
+            <Form>SeaDeadLine</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_dead_line.pas">
+            <Form>RegDeadLine</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_line_business.pas">
+            <Form>SeaLineBusiness</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_line_business.pas">
+            <Form>RegLineBusiness</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_sales_origin.pas">
+            <Form>SeaSalesOrigin</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_sales_origin.pas">
+            <Form>RegSalesOrigin</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\sea_assistance.pas">
+            <Form>SeaAssistance</Form>
+        </DCCReference>
+        <DCCReference Include="Parametros\prm_assistance.pas"/>
+        <DCCReference Include="view\module\operation\task\reg_assistance.pas">
+            <Form>RegAssistance</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblAssistenciaItens.pas"/>
+        <DCCReference Include="model\tblFichaTecnica.pas"/>
+        <DCCReference Include="model\tblItensInd.pas"/>
+        <DCCReference Include="model\tblCfgGrid.pas"/>
+        <DCCReference Include="Parametros\prm_assistance_itens.pas"/>
+        <DCCReference Include="Controller\ControllerAssistenciaItens.pas"/>
+        <DCCReference Include="Controller\ControllerFichaTecnica.pas"/>
+        <DCCReference Include="Controller\ControllerItensInd.pas"/>
+        <DCCReference Include="Controller\ControllerCfgGrid.pas"/>
+        <DCCReference Include="Interface\Un_RL_ReportCheque.pas">
+            <Form>RL_ReportCheque</Form>
+        </DCCReference>
+        <DCCReference Include="Interface\Un_RL_ReportChequeSimples.pas">
+            <Form>RL_ReportChequeSimples</Form>
+        </DCCReference>
+        <DCCReference Include="Interface\Un_RL_ReportVendas.pas">
+            <Form>RL_ReportVendas</Form>
+        </DCCReference>
+        <DCCReference Include="Interface\Un_RL_ReportVendasGeral.pas">
+            <Form>RL_ReportVendasGeral</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_VehicleSo.pas">
+            <Form>Fr_VehicleSo</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\UN_Fatura_Cpa.pas">
+            <Form>Fr_Fatura_Cpa</Form>
+        </DCCReference>
+        <DCCReference Include="Interface\Un_RL_ReportAssistencia.pas">
+            <Form>RL_ReportAssistencia</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\cfg_assistance.pas">
+            <Form>CfgAssistance</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_customer_origin.pas">
+            <Form>SeaCustomerOrigin</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_customer_origin.pas">
+            <Form>RegCustomerOrigin</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Pizzaria.pas">
+            <Form>Fr_Pizzaria</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_stocks.pas">
+            <Form>SeaStocks</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_stocks.pas">
+            <Form>RegStocks</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_tax_icms_nr.pas">
+            <Form>SeaTaxIcmsNr</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_tax_icms_nr.pas">
+            <Form>RegTaxIcmsNr</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_tax_icms_sn.pas">
+            <Form>SeaTaxIcmsSn</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_tax_relieves_icms.pas">
+            <Form>RegTaxRelievesIcms</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_tax_mode_det_bc_icms.pas">
+            <Form>RegTaxModeDetBcIcms</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_tax_mode_det_bc_icms_st.pas">
+            <Form>RegTaxModeDetBcIcmsSt</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_tax_mode_det_bc_icms.pas">
+            <Form>SeaTaxModeDetBcIcms</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_tax_mode_det_bc_icms_st.pas">
+            <Form>SeaTaxModeDetBcIcmsSt</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_tax_icms_sn.pas">
+            <Form>RegTaxIcmsSn</Form>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaEstados.pas">
+            <Form>Fm_ListaEstados</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_taxation.pas">
+            <Form>SeaTaxation</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_taxation.pas">
+            <Form>RegTaxation</Form>
+        </DCCReference>
+        <DCCReference Include="Arquivos\Un_CardapioProduto.pas">
+            <Form>Fr_CardapioProduto</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\sea_button_image.pas">
+            <Form>SeaButtonImage</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_button_image.pas">
+            <Form>RegButtonImage</Form>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaMedida.pas">
+            <Form>Fm_ListaMedida</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaUnidades.pas">
+            <Form>Fm_ListaUnidades</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Relatorios\UN_Imp_Empresas.pas">
+            <Form>Fr_Imp_Empresa</Form>
+        </DCCReference>
+        <DCCReference Include="Ajuda\UN_Aniversariante.pas">
+            <Form>Fr_Aniversariantes</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Receber_Descontada.pas">
+            <Form>Fr_Receber_Descontada</Form>
+        </DCCReference>
+        <DCCReference Include="Frames\Un_Fm_ListaCFOP_UF.pas">
+            <Form>Fm_ListaCFOP_UF</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\un_fm_lista_cfop.pas">
+            <Form>Fm_lista_cfop</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="D:\gestaoweb\controller\TypesCollection.pas"/>
+        <DCCReference Include="D:\gestaoweb\controller\TypesObjectsCollection.pas"/>
+        <DCCReference Include="Tarefas\sea_loja_tray_order.pas">
+            <Form>SeaLojaTrayOrder</Form>
+        </DCCReference>
+        <DCCReference Include="restClient\ApyTray\model\trayThumbs.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\trayProductSoldImage.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayCategoryNew.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\trayUrl.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\trayStock.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayProductsSold.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\trayCustomerProfileRelation.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayCustomerAddressWrapper.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayPayment.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayPaymentWrapper.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayOrderTransaction.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayPaymentMethodMessage.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayPaymentsNotification.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayOrderUrls.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayOrder.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\TrayOrderWrapper.pas"/>
+        <DCCReference Include="restClient\ApyTray\model\OrderJsonPopulator.pas"/>
+        <DCCReference Include="view\inheritable\Un_Base.pas">
+            <Form>Fr_Base</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\task\tas_items_sales_before.pas">
+            <Form>TasItemsSalesBefore</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_PizzariaHistorico.pas">
+            <Form>Fr_PizzariaHistorico</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_CopiaPedidoNota.pas">
+            <Form>Fr_CopiaPedidoNota</Form>
+        </DCCReference>
+        <DCCReference Include="Relatorios\Un_RL_Reposicao.pas">
+            <Form>RL_Reposicao</Form>
+        </DCCReference>
+        <DCCReference Include="Task\sea_ctrl_estoque_zerado.pas">
+            <Form>SeaCtrlEstoqueZerado</Form>
+        </DCCReference>
+        <DCCReference Include="Tarefas\Un_Fatura_Fin.pas">
+            <Form>Fr_Fatura_Fin</Form>
+        </DCCReference>
+        <DCCReference Include="Componentes\tributacao.pas"/>
+        <DCCReference Include="view\module\operation\register\sea_taxes.pas">
+            <Form>SeaTaxes</Form>
+        </DCCReference>
+        <DCCReference Include="view\module\operation\register\reg_taxes.pas">
+            <Form>RegTaxes</Form>
+        </DCCReference>
+        <DCCReference Include="Frames\un_fm_lista_tax_incidency.pas">
+            <Form>FmListaTaxIncidency</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\un_fm_lista_class_trib_cbs_ibs.pas">
+            <Form>FmListaClassTribIbsCbs</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Frames\un_fm_lista_cst_cbs_ibs.pas">
+            <Form>FmListaCstCbsIbs</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Controller\ControllerIbscbs.pas"/>
+        <DCCReference Include="Controller\ControllerIbsMun.pas"/>
+        <DCCReference Include="model\tblIbsMun.pas"/>
+        <DCCReference Include="Controller\ControllerCbs.pas"/>
+        <DCCReference Include="model\tblCBS.pas"/>
+        <DCCReference Include="model\TblIbsCbs.pas"/>
+        <DCCReference Include="Controller\ControllerIbscbsTribregular.pas"/>
+        <DCCReference Include="Controller\ControllerIbscbscredpres.pas"/>
+        <DCCReference Include="model\tblIbscbscredpres.pas"/>
+        <DCCReference Include="model\tblIbscbsTribcompraGov.pas"/>
+        <DCCReference Include="Controller\ControllerIbscbsTribcompraGov.pas"/>
+        <DCCReference Include="model\tblIbscbsMono.pas"/>
+        <DCCReference Include="Controller\ControllerIbscbsMono.pas"/>
+        <DCCReference Include="Frames\un_fm_lista_eventos_nfe.pas">
+            <Form>FmListaEventosNfe</Form>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="model\TblIbsCbsDif.pas"/>
+        <DCCReference Include="model\TblIbsCbsRed.pas"/>
+        <DCCReference Include="model\TblIbsCbsDevTrib.pas"/>
+        <DCCReference Include="Controller\ControllerIbsCbsDif.pas"/>
+        <DCCReference Include="Controller\ControllerIbsCbsRed.pas"/>
+        <DCCReference Include="Controller\ControllerIbsCbsDevTrib.pas"/>
+        <DCCReference Include="Relatorios\UN_Imp_Notas.pas">
+            <Form>Fr_Imp_Notas</Form>
+        </DCCReference>
+        <DCCReference Include="model\tblDistNfe.pas"/>
+        <DCCReference Include="model\tblDfeResumoNfe.pas"/>
+        <DCCReference Include="model\tblDfeResumoEvento.pas"/>
+        <DCCReference Include="model\tblDfeProtocolo.pas"/>
+        <DCCReference Include="Controller\ControllerDistNfe.pas"/>
+        <DCCReference Include="Controller\ControllerDfeResumoNfe.pas"/>
+        <DCCReference Include="Controller\ControllerDfeResumoEvento.pas"/>
+        <DCCReference Include="Controller\ControllerDfeProtocolo.pas"/>
+        <DCCReference Include="Tarefas\Un_Despacho.pas">
+            <Form>Fr_Despacho</Form>
+        </DCCReference>
+        <DCCReference Include="Funcao\Un_tr_send_email_login.pas"/>
+        <DCCReference Include="Funcao\Un_tr_send_email_estoque_negativo.pas"/>
+        <DCCReference Include="Controller\ControllerDespacho.pas"/>
+        <None Include="FastReport\Un_frx_ReportCtaReceber.fr3"/>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+        <BorlandProject>
+            <Delphi.Personality>
+                <Source>
+                    <Source Name="MainSource">Gestao.dpr</Source>
+                </Source>
+                <Parameters>
+                    <Parameters Name="UseLauncher">False</Parameters>
+                    <Parameters Name="LoadAllSymbols">True</Parameters>
+                    <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+                </Parameters>
+                <VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+                    <VersionInfo Name="MajorVer">2</VersionInfo>
+                    <VersionInfo Name="MinorVer">0</VersionInfo>
+                    <VersionInfo Name="Release">1</VersionInfo>
+                    <VersionInfo Name="Build">6</VersionInfo>
+                    <VersionInfo Name="Debug">False</VersionInfo>
+                    <VersionInfo Name="PreRelease">False</VersionInfo>
+                    <VersionInfo Name="Special">False</VersionInfo>
+                    <VersionInfo Name="Private">False</VersionInfo>
+                    <VersionInfo Name="DLL">False</VersionInfo>
+                    <VersionInfo Name="Locale">1046</VersionInfo>
+                    <VersionInfo Name="CodePage">1252</VersionInfo>
+                </VersionInfo>
+                <VersionInfoKeys>
+                    <VersionInfoKeys Name="CompanyName">Setes Gestão Computacional</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileDescription">Gestão</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.0.1.6</VersionInfoKeys>
+                    <VersionInfoKeys Name="InternalName"/>
+                    <VersionInfoKeys Name="LegalCopyright"/>
+                    <VersionInfoKeys Name="LegalTrademarks"/>
+                    <VersionInfoKeys Name="OriginalFilename">Gestao.exe</VersionInfoKeys>
+                    <VersionInfoKeys Name="ProductName">Gestão Empresarial - Setes</VersionInfoKeys>
+                    <VersionInfoKeys Name="ProductVersion">2.016</VersionInfoKeys>
+                    <VersionInfoKeys Name="Comments">Sistema de Gestão Empresarial</VersionInfoKeys>
+                </VersionInfoKeys>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="D:\Componentes\ADRIFood\Source\Source_10_2\pkgADRIFood.bpl">File D:\Componentes\ADRIFood\Source\Source_10_2\pkgADRIFood.bpl not found</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
+            </Delphi.Personality>
+            <ModelSupport>False</ModelSupport>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+            </Platforms>
+            <Deployment Version="2">
+                <DeployFile LocalName="Tarefas\Un_Caixa.PAS" Configuration="Debug" Class="ProjectFile"/>
+                <DeployFile LocalName="FastReport\Un_frx_ReportCtaReceber.fr3" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="D:\Modelos\Gestao2016\Bin\Gestao.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="D:\Modelos\Gestao2016\Bin\Gestao.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>Gestao.rsm</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Tarefas\Un_Caixa.PAS" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="D:\Modelos\Gestao2016\Bin\Gestao.exe" Configuration="Release" Class="ProjectOutput"/>
+                <DeployFile LocalName="D:\Modelos\Gestao2016\Bin\Gestao.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Gestao.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="FastReport\Un_frx_ReportCtaReceber.fr3" Configuration="Debug" Class="ProjectFile"/>
+                <DeployFile LocalName="Tarefas\Un_Caixa.PAS" Configuration="Release" Class="ProjectFile"/>
+                <DeployFile LocalName="FastReport\Un_frx_ReportCtaReceber.fr3" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployClass Name="ProjectiOSDeviceResourceRules"/>
+                <DeployClass Name="ProjectOSXResource">
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\Resources</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidClassesDexFile">
+                    <Platform Name="Android">
+                        <RemoteDir>classes</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AdditionalDebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteDir>Contents\MacOS</RemoteDir>
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_LauncherIcon144">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-xxhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidLibnativeMipsFile">
+                    <Platform Name="Android">
+                        <RemoteDir>library\lib\mips</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_Launch768">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Required="true" Name="ProjectOutput">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Android">
+                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="DependencyFramework">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                        <Extensions>.framework</Extensions>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectUWPManifest">
+                    <Platform Name="Win32">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win64">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Launch640">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_Launch1024">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectiOSDeviceDebug">
+                    <Platform Name="iOSDevice64">
+                        <RemoteDir>..\$(PROJECTNAME).app.dSYM\Contents\Resources\DWARF</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <RemoteDir>..\$(PROJECTNAME).app.dSYM\Contents\Resources\DWARF</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidLibnativeX86File">
+                    <Platform Name="Android">
+                        <RemoteDir>library\lib\x86</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidLibnativeArmeabiFile">
+                    <Platform Name="Android">
+                        <RemoteDir>library\lib\armeabi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Launch320">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectiOSInfoPList"/>
+                <DeployClass Name="DebugSymbols">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_Launch1536">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_SplashImage470">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-normal</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_SplashImage640">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-large</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_LauncherIcon96">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-xhdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPhone_Launch640x1136">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="UWP_DelphiLogo150">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win64">
+                        <RemoteDir>Assets</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectiOSEntitlements"/>
+                <DeployClass Name="AndroidGDBServer">
+                    <Platform Name="Android">
+                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_LauncherIcon72">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-hdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectOSXInfoPList"/>
+                <DeployClass Name="ProjectOSXEntitlements"/>
+                <DeployClass Name="UWP_DelphiLogo44">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="Win64">
+                        <RemoteDir>Assets</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidSplashStyles">
+                    <Platform Name="Android">
+                        <RemoteDir>res\values</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="iPad_Launch2048">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_SplashImage426">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-small</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidSplashImageDef">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectiOSResource">
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="ProjectAndroidManifest">
+                    <Platform Name="Android">
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_DefaultAppIcon">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="File">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="Android">
+                        <Operation>0</Operation>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>0</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="AndroidServiceOutput">
+                    <Platform Name="Android">
+                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_LauncherIcon48">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-mdpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Required="true" Name="DependencyPackage">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.bpl</Extensions>
+                    </Platform>
+                    <Platform Name="iOSDevice64">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSDevice32">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                    <Platform Name="iOSSimulator">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_SplashImage960">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-xlarge</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="Android_LauncherIcon36">
+                    <Platform Name="Android">
+                        <RemoteDir>res\drawable-ldpi</RemoteDir>
+                        <Operation>1</Operation>
+                    </Platform>
+                </DeployClass>
+                <DeployClass Name="DependencyModule">
+                    <Platform Name="Win32">
+                        <Operation>0</Operation>
+                        <Extensions>.dll;.bpl</Extensions>
+                    </Platform>
+                    <Platform Name="OSX32">
+                        <Operation>1</Operation>
+                        <Extensions>.dylib</Extensions>
+                    </Platform>
+                </DeployClass>
+                <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="Linux64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+            </Deployment>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+    <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
+        <PreBuildEvent>call &quot;$(PROJECTDIR)\Tools\build_map_symbols.cmd&quot; &quot;$(OUTPUTDIR)$(MSBuildProjectName).map&quot; &quot;$(PROJECTDIR)\Funcao\MapSymbols.bin&quot; &quot;$(PROJECTDIR)\Funcao\MapSymbols.rc&quot; &quot;$(PROJECTDIR)\Funcao\MapSymbols.res&quot; &quot;$(BDS)\bin\brcc32.exe&quot;</PreBuildEvent>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent/>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win32'">
+        <PreBuildEvent>taskkill /f /im $(OUTPUTFILENAME) 2&gt;&amp;1 || exit /B 0</PreBuildEvent>
+        <PreBuildEventIgnoreExitCode>True</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent/>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+</Project>

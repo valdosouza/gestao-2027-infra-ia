@@ -46,6 +46,17 @@
 
 ### Seeds e execução
 - [ ] **Seed compatível com o DDL final?** Colunas do INSERT existem? (caso real: seed com `salt` e `kind` após remoção das colunas)
+- [ ] **Seed de interface/catálogo com id FIXO?** NUNCA — id sempre
+      DINÂMICO (MAX+1) e vínculos keyed pela chave natural (i18n_key),
+      padrão do seed 27 (caso real 2026-08-24: sql/40 fixou id 30 já
+      ocupado pelo cashier/seed 38; o INSERT IGNORE silenciou e a
+      interface nunca nasceu — achado HIGH de gate adversarial)
+- [ ] **Colunas do INSERT existem no schema APLICADO, não no baseline?**
+      O baseline mente — migrations posteriores dropam/movem colunas
+      (casos reais 2026-08-24: tb_price_list_id e tb_stock_list_id
+      saíram de tb_order_item na migration 013; SELECT/INSERT novos
+      quebravam só contra o banco real). Conferir com SHOW COLUMNS no
+      dev antes de escrever SQL novo sobre tabela antiga.
 - [ ] **FKs do seed satisfeitas?** (caso real: endereço com país/estado/cidade sem as linhas de `tb_country/state/city`)
 - [ ] Sem datas `0000-00-00` (falha em modo estrito) — usar `NOW()`
 - [ ] **Ordem de dependência**: CREATEs e INSERTs na ordem das FKs (caso real: `tb_institution_has_user` criada antes de `tb_user`/`tb_institution`)

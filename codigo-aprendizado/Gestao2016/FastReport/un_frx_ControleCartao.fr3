@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited Version="5.3.16" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Padrão" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="43076,475621412" ReportOptions.Description.Text="" ReportOptions.LastChange="43909,5942470139" ScriptLanguage="PascalScript" ScriptText.Text="var&#13;&#10;  It_Repeticao : Integer;                                              &#13;&#10;  It_Nr_Parcelas : Integer;&#13;&#10;&#13;&#10;                      &#13;&#10;  DataVencimento : String;                      &#13;&#10;  VL_Receber : Real;&#13;&#10;  Ordem : String;            &#13;&#10;&#13;&#10;  Parcelado : String;&#13;&#10;  Vl_Parcela : Real;&#13;&#10;&#13;&#10;&#13;&#10;&#13;&#10;procedure MasterData1OnBeforePrint(Sender: TfrxComponent);&#13;&#10;Var&#13;&#10;  Lc_data : TDAteTime;&#13;&#10;  Lc_Vl_Receber : REal;&#13;&#10;  Lc_Vl_Parcela : Real;                            &#13;&#10;Begin&#13;&#10;  Lc_Data            := &#60;frxDBaseReport.&#34;NFL_DT_EMISSAO&#34;&#62; ;&#13;&#10;  Lc_Data            := Lc_Data + (  &#60;frxDBaseReport.&#34;CTE_PRZO_DEBI&#34;&#62; * It_Repeticao);&#13;&#10;  DataVencimento               := DateToStr(Lc_Data) ;&#13;&#10;  if &#60;frxDBaseReport.&#34;MVF_VL_FUTURO&#34;&#62; &#62; 0 then&#13;&#10;    Lc_Vl_Parcela    := &#60;frxDBaseReport.&#34;MVF_VL_FUTURO&#34;&#62;&#13;&#10;  else&#13;&#10;    Lc_Vl_Parcela    := &#60;frxDBaseReport.&#34;MVF_VL_CREDITO&#34;&#62;&#13;&#10;  Lc_Vl_Receber      := (Lc_Vl_Parcela * &#60;frxDBaseReport.&#34;CTE_ALIQ_CRED&#34;&#62; )/100;&#13;&#10;  Lc_Vl_Receber      := Lc_Vl_Parcela - Lc_Vl_Receber;&#13;&#10;  VL_Receber         := Lc_Vl_Receber;&#13;&#10;&#13;&#10;  &#13;&#10;  Ordem              := IntToStr(It_Repeticao) + '/' + IntToStr(It_Nr_Parcelas);&#13;&#10;&#13;&#10;  Parcelado          := IntToStr(It_Nr_Parcelas);&#13;&#10;  Vl_Parcela         := Lc_Vl_Parcela;&#13;&#10;  inc(It_Repeticao);&#13;&#10;end;&#13;&#10;&#13;&#10;procedure Page1OnBeforePrint_inherited(Sender: TfrxComponent);&#13;&#10;begin&#13;&#10;    It_Repeticao := 1;&#13;&#10;    It_Nr_Parcelas := MasterData.Dataset.RecordCount                                                           &#13;&#10;end;&#13;&#10;&#13;&#10;begin&#13;&#10;end." OnStartReport="frxBaseOnStartReport">
+  <Datasets>
+    <item DataSet="frxDBaseReport" DataSetName="frxDBaseReport"/>
+  </Datasets>
+  <Variables>
+    <item Name=" CabecalhoEmpresa"/>
+    <item Name="NomeFantasia"/>
+    <item Name="DocFiscal"/>
+    <item Name="Endereco"/>
+    <item Name="Fones"/>
+    <item Name="email"/>
+    <item Name="website"/>
+    <item Name="Titulo"/>
+    <item Name=" Footer"/>
+    <item Name="SumProduct"/>
+    <item Name="SumService"/>
+    <item Name=" General"/>
+    <item Name="StrConnection"/>
+    <item Name="Repeticao"/>
+  </Variables>
+  <inherited Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <inherited Name="Page1" PaperWidth="210" PaperHeight="297" PaperSize="9" LeftMargin="10" RightMargin="10" TopMargin="10" BottomMargin="10" Columns="2" ColumnWidth="95" ColumnPositions.Text="0&#13;&#10;95" HGuides.Text="" VGuides.Text="" OnBeforePrint="Page1OnBeforePrint_inherited">
+    <inherited Name="PageHeader1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="129" Left="0" Top="18,89765" Visible="False" Width="718,1107" OnBeforePrint="PageHeader1OnBeforePrint_inherited">
+      <inherited Name="lbTitulo" Align="baWidth" Left="0" Top="111" Width="718,1107" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="12" Frame.TopLine.Width="2" Frame.BottomLine.Width="2" ParentFont="False" Text="[Titulo]"/>
+      <inherited Name="Logo" Left="7" Top="4" Width="150" Height="104" FileLink="C:\Modelos\Gestao2016\Bin\logo.jpg" HightQuality="False" Transparent="False" TransparentColor="16777215"/>
+      <inherited Name="lbDocFiscal" Left="162" Top="20" Width="539" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[DocFiscal]"/>
+      <inherited Name="lbEndereco" Left="162" Top="39" Width="539" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[Endereco]"/>
+      <inherited Name="lbFones" Left="162" Top="57" Width="539" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[Fones]"/>
+      <inherited Name="lbWebSites" Left="162" Top="93" Width="539" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[website]"/>
+      <inherited Name="lbemail" Left="162" Top="75" Width="539" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[email]"/>
+      <inherited Name="lbNomeFantasia" Left="161,74026" Top="0" Width="539" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[NomeFantasia]"/>
+    </inherited>
+    <inherited Name="PageFooter1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="23" Left="0" Top="517,79561" Width="718,1107">
+      <inherited Name="Memo41" Left="596,50371" Top="2,22046999999998" Width="64" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Pagina Nº"/>
+      <inherited Name="Memo42" Left="4" Top="2" Width="139" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Relatório emitido em:"/>
+      <inherited Name="Memo1" Left="151,1812" Top="0" Width="143,62214" Height="18,89765" Text="[&#60;Date&#62;]  [&#60;Time&#62;]">
+        <Formats>
+
+        </Formats>
+      </inherited>
+      <inherited Name="Memo2" Left="668,97681" Top="0" Width="90,70872" Height="18,89765" Text="[Page]"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="249,44898" Left="0" Top="207,87415" Width="359,05535" OnBeforePrint="MasterData1OnBeforePrint" AllowSplit="True" ColumnWidth="19653,5433070866" ColumnGap="0" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" KeepTogether="True" RowCount="0">
+      <TfrxShapeView Name="Shape1" Align="baClient" Left="0" Top="0" Width="359,05535" Height="249,44898"/>
+      <TfrxMemoView Name="E_NomeCliente" Left="64,25201" Top="7,55905999999999" Width="162,51979" Height="18,89765" DataField="NOMECLIENTE" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" Text="[frxDBaseReport.&#34;NOMECLIENTE&#34;]"/>
+      <TfrxMemoView Name="Memo3" Left="3,77953" Top="7,55905999999999" Width="49,13389" Height="18,89765" Text="Cliente"/>
+      <TfrxMemoView Name="Memo4" Left="234,33086" Top="3,77952999999999" Width="37,7953" Height="18,89765" Text="Data:"/>
+      <TfrxMemoView Name="E_Data" Left="275,90569" Top="3,77952999999999" Width="79,37013" Height="18,89765" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" Text="[DataVencimento]"/>
+      <TfrxMemoView Name="Memo5" Left="3,77953" Top="34,01577" Width="49,13389" Height="18,89765" Text="Pedido:"/>
+      <TfrxMemoView Name="E_Nr_Pedido" Left="64,25201" Top="34,01577" Width="79,37013" Height="18,89765" DataField="PED_NUMERO" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" Text="[frxDBaseReport.&#34;PED_NUMERO&#34;]"/>
+      <TfrxMemoView Name="Memo6" Left="234,33086" Top="30,23624" Width="41,57483" Height="18,89765" Text="Valor:"/>
+      <TfrxMemoView Name="E_VL_Receber" Left="283,46475" Top="30,23624" Width="71,81107" Height="18,89765" DisplayFormat.FormatStr="%2.2n" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Fill.BackColor="-16777195" HAlign="haRight" ParentFont="False" Text="[VL_Receber]"/>
+      <TfrxMemoView Name="Memo7" Left="234,33086" Top="52,91342" Width="49,13389" Height="18,89765" Text="Ordem"/>
+      <TfrxMemoView Name="E_Ordem" Left="287,24428" Top="52,91342" Width="68,03154" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" HAlign="haRight" ParentFont="False" Text="[Ordem]"/>
+      <TfrxMemoView Name="Memo8" Left="3,77953" Top="83,14966" Width="117,16543" Height="18,89765" Text="Valor Total Venda:"/>
+      <TfrxMemoView Name="E_VL_NotaFiscal" Left="124,72449" Top="83,14966" Width="79,37013" Height="18,89765" DataField="NFL_VL_TL_NOTA" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" DisplayFormat.FormatStr="%2.2n" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Fill.BackColor="-16777195" HAlign="haRight" ParentFont="False" Text="[frxDBaseReport.&#34;NFL_VL_TL_NOTA&#34;]"/>
+      <TfrxMemoView Name="Memo10" Left="3,77953" Top="109,60637" Width="117,16543" Height="18,89765" Text="Parcelando em: "/>
+      <TfrxMemoView Name="E_Parcelado" Left="124,72449" Top="109,60637" Width="79,37013" Height="18,89765" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Fill.BackColor="-16777195" HAlign="haCenter" ParentFont="False" Text="[Parcelado]"/>
+      <TfrxMemoView Name="Memo12" Left="3,77953" Top="132,28355" Width="117,16543" Height="18,89765" Text="Valor parcela:"/>
+      <TfrxMemoView Name="E_Vl_Parcela" Left="124,72449" Top="132,28355" Width="79,37013" Height="18,89765" DisplayFormat.FormatStr="%2.2n" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Fill.BackColor="-16777195" HAlign="haRight" ParentFont="False" Text="[Vl_Parcela]"/>
+      <TfrxMemoView Name="Memo14" Left="3,77953" Top="170,07885" Width="117,16543" Height="18,89765" Text="Taxa do Cartão"/>
+      <TfrxMemoView Name="E_Taxa_Cartao" Left="124,72449" Top="170,07885" Width="49,13389" Height="18,89765" DataField="CTE_ALIQ_CRED" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" DisplayFormat.FormatStr="%2.2f" DisplayFormat.Kind="fkNumeric" Font.Charset="1" Font.Color="0" Font.Height="-13" Font.Name="Arial" Font.Style="0" Fill.BackColor="-16777195" HAlign="haCenter" ParentFont="False" Text="[frxDBaseReport.&#34;CTE_ALIQ_CRED&#34;]"/>
+      <TfrxMemoView Name="Memo16" Left="3,77953" Top="196,53556" Width="151,1812" Height="18,89765" Text="Lança na C/C do Banco:"/>
+      <TfrxMemoView Name="E_Banco" Left="162,51979" Top="196,53556" Width="185,19697" Height="18,89765" DataField="NOMEBANCO" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" Fill.BackColor="-16777195" Text="[frxDBaseReport.&#34;NOMEBANCO&#34;]"/>
+      <TfrxMemoView Name="Memo18" Left="3,77953" Top="219,21274" Width="56,69295" Height="18,89765" Text="Cartão"/>
+      <TfrxMemoView Name="E_Cartao" Left="68,03154" Top="219,21274" Width="283,46475" Height="18,89765" DataField="CTE_DESCRICAO" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" Fill.BackColor="-16777195" Text="[frxDBaseReport.&#34;CTE_DESCRICAO&#34;]"/>
+    </TfrxMasterData>
+  </inherited>
+</inherited>

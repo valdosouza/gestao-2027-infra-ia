@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited Version="5.3.16" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Padrão" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="43076,475621412" ReportOptions.Description.Text="" ReportOptions.LastChange="45377,4224978357" ScriptLanguage="PascalScript" ScriptText.Text="  &#13;&#10;begin&#13;&#10;end." OnStartReport="frxBaseOnStartReport">
+  <Datasets>
+    <item DataSet="frxDBaseReport" DataSetName="frxDBaseReport"/>
+  </Datasets>
+  <Variables>
+    <item Name=" CabecalhoEmpresa"/>
+    <item Name="NomeFantasia"/>
+    <item Name="DocFiscal"/>
+    <item Name="Endereco"/>
+    <item Name="Fones"/>
+    <item Name="email"/>
+    <item Name="website"/>
+    <item Name="Titulo"/>
+    <item Name=" Footer"/>
+    <item Name="SumProduct"/>
+    <item Name="SumService"/>
+    <item Name=" General"/>
+    <item Name="StrConnection"/>
+  </Variables>
+  <inherited Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <inherited Name="Page1" PaperWidth="80" PaperHeight="148" PaperSize="256" LeftMargin="2" RightMargin="2" TopMargin="10" BottomMargin="10" ColumnWidth="0" ColumnPositions.Text="" HGuides.Text="" VGuides.Text="" OnBeforePrint="Page1OnBeforePrint">
+    <inherited Name="PageHeader1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="189,47248" Left="0" Top="18,89765" Width="287,24428" Stretched="True">
+      <inherited Name="lbTitulo" Align="baWidth" Left="0" Top="111" Width="287,24428" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.Typ="12" Frame.TopLine.Width="2" Frame.BottomLine.Width="2" HAlign="haCenter" ParentFont="False" Text="[Titulo]"/>
+      <inherited Name="Logo" Left="7" Top="4" Width="2,59833" Height="13,29128" Visible="False" Visibility="3" FileLink="C:\Modelos\Gestao2016\Bin\logo.jpg" Stretched="False" HightQuality="False" Transparent="False" TransparentColor="16777215"/>
+      <inherited Name="lbDocFiscal" Left="0" Top="16,22047" Width="285,50402" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[DocFiscal]"/>
+      <inherited Name="lbEndereco" Align="baWidth" Left="0" Top="35,22047" Width="287,24428" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" WordBreak="True" Text="[Endereco]"/>
+      <inherited Name="lbFones" Align="baWidth" Left="0" Top="53,22047" Width="287,24428" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[Fones]"/>
+      <inherited Name="lbWebSites" Align="baWidth" Left="0" Top="89,22047" Width="287,24428" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[website]"/>
+      <inherited Name="lbemail" Align="baWidth" Left="0" Top="71,22047" Width="287,24428" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[email]"/>
+      <inherited Name="lbNomeFantasia" Left="2,03927" Top="0" Width="285,20501" Height="17" Font.Charset="1" Font.Color="0" Font.Height="-12" Font.Name="Arial" Font.Style="1" HAlign="haBlock" ParentFont="False" Text="[NomeFantasia]"/>
+      <TfrxMemoView Name="Memo3" Left="3,77953" Top="136,06308" Width="60,47248" Height="18,89765" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" Frame.TopLine.Width="2" Frame.BottomLine.Width="2" HAlign="haCenter" ParentFont="False" Text="Número:"/>
+      <TfrxMemoView Name="Memo4" Left="68,03154" Top="136,06308" Width="60,47248" Height="18,89765" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.TopLine.Width="2" Frame.BottomLine.Width="2" HAlign="haCenter" ParentFont="False" Text="[NUMERO]"/>
+      <TfrxMemoView Name="Memo5" Align="baWidth" Left="0" Top="170,07885" Width="287,24428" Height="19,39363" StretchMode="smMaxHeight" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.TopLine.Width="2" Frame.BottomLine.Width="2" HAlign="haBlock" ParentFont="False" Text="[DETALHE]"/>
+    </inherited>
+    <inherited Name="PageFooter1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="49,23624" Left="0" Top="268,34663" Width="287,24428">
+      <inherited Name="Memo41" Left="596,50371" Top="2,22047000000001" Width="64" Height="17" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Pagina Nº"/>
+      <inherited Name="Memo42" Left="257,22851" Top="28,45671" Width="10,49598" Height="17" Visible="False" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="Relatório emitido em:"/>
+      <inherited Name="Memo1" Left="272,12616" Top="26,45671" Width="7,55906" Height="18,89765" Visible="False" Text="[&#60;Date&#62;]  [&#60;Time&#62;]">
+        <Formats>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+          <item Kind="fkDateTime"/>
+          <item/>
+        </Formats>
+      </inherited>
+      <inherited Name="Memo2" Left="668,97681" Top="0" Width="90,70872" Height="18,89765" Text="[Page]"/>
+      <TfrxMemoView Name="Memo6" Align="baWidth" Left="0" Top="26,45671" Width="287,24428" Height="18,89765" DataSet="frxDBaseReport" DataSetName="frxDBaseReport" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.TopLine.Width="2" Frame.BottomLine.Width="2" ParentFont="False" Text="[LOCAL_DATA]"/>
+      <TfrxMemoView Name="Memo7" Align="baWidth" Left="0" Top="3,77953" Width="596,50371" Height="18,89765" Font.Charset="1" Font.Color="-16777208" Font.Height="-13" Font.Name="Arial" Font.Style="0" Frame.Typ="4" Frame.BottomLine.Width="2" ParentFont="False" Text="[SACADO]"/>
+    </inherited>
+  </inherited>
+</inherited>

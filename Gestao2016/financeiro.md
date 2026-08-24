@@ -228,6 +228,58 @@ da retaguarda.
   `Fc_VerificaCaixaAberto` guarda as operações em `Un_Caixa.PAS` e afins;
   coerente com a regra do estorno em §3.6.)
 
+### 5.4b Modelagem do caixa web — parecer setes-conceito (2026-08-22)
+
+Motivação: `billing` precisa de baixa automática à vista; DINHEIRO ESPÉCIE
+(`kind='E'`) exige caixa aberto, PIX (`kind='X'`) não (vai pra conta
+corrente pré-cadastrada — fora deste parecer). Caixa hoje só existe como
+escrita do SYNC (`tb_cashier`/`tb_cashier_items`, baseline, dormentes pro
+lado web — nenhum endpoint abre/fecha caixa na API).
+
+**Achado no legado** (`Un_Caixa.PAS`+`Un_Caixa_Fechamento.pas`, lidos pelo
+agente): `TB_MOVIM_FINANCEIRO.MVF_CODCTB=0` já é precedente real de "razão
+único com marcador de natureza" — mas a hipótese anterior desta memória
+(`bankAccountId=0` como conta bancária SENTINELA em `tb_bank_account`) foi
+**REJEITADA** (teste da maqueta: exigiria 3 guardas de exceção — pular FK,
+esconder do lookup, proteger de edição — sintoma de maquete forçada; o
+legado marca a natureza do MOVIMENTO, nunca finge conta bancária zero).
+
+**Modelagem aprovada**:
+- `tb_cashier` (baseline) = a SESSÃO (abrir/fechar por dia+usuário+terminal)
+  — reaproveitar como está; web ganha endpoints de abrir/fechar.
+- `tb_cashier_items` (baseline, dormente) = NÃO é movimento — é a
+  CONFERÊNCIA do fechamento (registrado × digitado por forma de
+  pagamento), a mesma tela do legado nunca escrita pela web.
+- Movimento em espécie = a peça financeira imutável JÁ existente
+  (`tb_financial_payment`/`tb_financial_statement`, motor do módulo
+  `settlements`), com `tb_cashier_id` como CONTEXTO/precondição — sem
+  sentinela de conta bancária. Baixa em espécie sem caixa aberto = 409
+  `CASHIER_NOT_OPEN` (equivalente ao `Fc_VerificaCaixaAberto` do legado).
+- Saldo do caixa = DERIVADO (soma dos movimentos da sessão), nunca
+  armazenado — mesmo princípio do financeiro imutável.
+- Fora do conceito de caixa (não herdar): bloqueio de NFC-e pendente no
+  fechamento (regra fiscal, domínio separado) e expiração de payback no
+  fechamento (side job do legado).
+
+**Questões para a rodada (Q-Caixa 1-6) — FECHADAS e EXECUTADAS (2026-08-22)**:
+1. `tb_financial_statement.tb_cashier_id` — SIM, coluna nova (migration 033).
+2. Caixa web × PDV — terminal FIXO 0 pra web (nunca colide com PDV 1..N).
+3. Fechamento — replica o legado: conferência é auditoria, NÃO bloqueia
+   diferença.
+4/6. Escopo — COMPLETO: ciclo abrir→baixar→retirada avulsa→fechar com
+   conferência+transferência, tudo nesta rodada.
+
+**IMPLEMENTADO**: peça `@shared/financial-settlement` (`settleOneTitle` —
+baixa de 1 título sem lote/parcerias; `writeManualCashierMovement` —
+retirada/transferência, mesma operação com destino opcional;
+`tryAutoSettleCash` — dispara em `billing` pra `kind='E'`, SEM bloquear o
+faturamento se não há caixa aberto, decisão do Valdo) + módulo `cashier`
+(open/current/:id balance/:id withdraw/:id close). Gate de "preferência de
+uso" (`usage_preference` já existia em `tb_institution_has_payment_types`,
+migration 012 — 'B' pula o caixa, sem conta pra escolher automaticamente).
+23 testes novos (financial-settlement + cashier + wiring no billing);
+352/352 api.
+
 ### 5.5 Adiadas para o futuro (decisão do autor, 2026-08-16)
 
 - **Receber Descontada** (antecipação de recebíveis + devolução) — FICA PARA O

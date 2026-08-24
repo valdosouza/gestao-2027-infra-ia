@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<TfrxReport Version="5.3.16" DotMatrixReport="False" IniFile="\Software\Fast Reports" PreviewOptions.Buttons="4095" PreviewOptions.Zoom="1" PrintOptions.Printer="Padrão" PrintOptions.PrintMode="pmSplit" PrintOptions.PrintOnSheet="0" ReportOptions.CreateDate="43076,475621412" ReportOptions.Description.Text="" ReportOptions.LastChange="45019,7450191782" ScriptLanguage="PascalScript" ScriptText.Text="                                                &#13;&#10;begin&#13;&#10;  Page1.PaperWidth := &#60;SizePage&#62;                                                                             &#13;&#10;end." OnStartReport="frxBaseOnStartReport">
+  <Variables>
+    <item Name=" CabecalhoEmpresa"/>
+    <item Name="Produto"/>
+    <item Name="Barras"/>
+    <item Name="Preco"/>
+    <item Name=" Footer"/>
+    <item Name="SumProduct"/>
+    <item Name="SumService"/>
+    <item Name=" General"/>
+    <item Name="StrConnection"/>
+    <item Name="SizePage"/>
+  </Variables>
+  <TfrxDataPage Name="Data" Height="1000" Left="0" Top="0" Width="1000"/>
+  <TfrxReportPage Name="Page1" PaperWidth="80" PaperHeight="70" PaperSize="256" LeftMargin="2" RightMargin="2" TopMargin="10" BottomMargin="10" Columns="1" ColumnWidth="190" ColumnPositions.Text="0" EndlessHeight="True" HGuides.Text="" VGuides.Text="" OnBeforePrint="Page1OnBeforePrint" OnManualBuild="Page1OnManualBuild">
+    <TfrxReportTitle Name="ReportTitle1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Height="158,74026" Left="0" Top="18,89765" Width="287,24428">
+      <TfrxMemoView Name="E_Produto" Left="5" Top="14,22047" Width="279,68522" Height="26,45671" AutoWidth="True" Font.Charset="1" Font.Color="0" Font.Height="-19" Font.Name="Arial" Font.Style="1" ParentFont="False" WordWrap="False" Text="[Produto]"/>
+      <TfrxMemoView Name="E_Barras" Left="3,77953" Top="44,45671" Width="283,46475" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-11" Font.Name="Arial" Font.Style="1" ParentFont="False" Text="[Barras]"/>
+      <TfrxMemoView Name="E_VL_Preco" Left="3,77953" Top="60,47248" Width="283,46475" Height="45,35436" Font.Charset="1" Font.Color="0" Font.Height="-37" Font.Name="Arial" Font.Style="1" HAlign="haCenter" ParentFont="False" Text="[Preco]"/>
+      <TfrxMemoView Name="e_data" Left="3,77953" Top="109,60637" Width="283,46475" Height="15,11812" Font.Charset="1" Font.Color="0" Font.Height="-9" Font.Name="Arial" Font.Style="0" ParentFont="False" Text="[dataprint]"/>
+    </TfrxReportTitle>
+  </TfrxReportPage>
+</TfrxReport>

@@ -1,0 +1,17 @@
+[
+  {
+    "file": "repository/Un_Empresa.dfm",
+    "block_type": "SQL.Strings",
+    "issue": "duplicate_result_name",
+    "field": "END_ENDER",
+    "count": 2,
+    "entries": [
+      "END_ENDER",
+      "tb_endereco.end_ender || '#39'"
+    ],
+    "remove_candidates": [
+      "tb_endereco.end_ender || '#39'"
+    ],
+    "fireDAC_suffix": "END_ENDER1"
+  }
+]

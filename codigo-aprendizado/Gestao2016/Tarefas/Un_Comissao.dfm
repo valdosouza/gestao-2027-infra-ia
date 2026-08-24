@@ -1,0 +1,1679 @@
+object Fr_Comissao: TFr_Comissao
+  Left = 534
+  Top = 138
+  Anchors = [akLeft, akTop, akRight, akBottom]
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Manuten'#231#227'o de Comiss'#227'o'
+  ClientHeight = 475
+  ClientWidth = 692
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PG_Comissao: TPageControl
+    Left = 0
+    Top = 0
+    Width = 692
+    Height = 475
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'Tab_Filtra'
+      OnShow = TabSheet1Show
+      object Panel1: TPanel
+        Left = 0
+        Top = 50
+        Width = 684
+        Height = 264
+        Align = alClient
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        object Label4: TLabel
+          Left = 281
+          Top = 6
+          Width = 31
+          Height = 14
+          Caption = 'Status'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label17: TLabel
+          Left = 177
+          Top = 6
+          Width = 32
+          Height = 14
+          Caption = 'Pedido'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object DBG_Comissao: TDBGrid
+          Left = 2
+          Top = 50
+          Width = 680
+          Height = 212
+          Align = alBottom
+          Anchors = [akLeft, akTop, akRight, akBottom]
+          Color = clMoneyGreen
+          DataSource = Ds_Qr_Comissao
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Options = [dgTitles, dgIndicator, dgColLines, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+          ParentFont = False
+          PopupMenu = PopupMenu1
+          ReadOnly = True
+          TabOrder = 4
+          TitleFont.Charset = DEFAULT_CHARSET
+          TitleFont.Color = clWindowText
+          TitleFont.Height = -11
+          TitleFont.Name = 'MS Sans Serif'
+          TitleFont.Style = []
+          OnDblClick = DBG_ComissaoDblClick
+          OnTitleClick = DBG_ComissaoTitleClick
+          Columns = <
+            item
+              Expanded = False
+              FieldName = 'COM_DT_VENDA'
+              Title.Caption = 'Data'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'PED_NUMERO'
+              Title.Caption = 'Pedido'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 68
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'COM_VL_DOC'
+              Title.Caption = 'Valor Documento'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 93
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'COM_AQ_COM'
+              Title.Caption = 'Aliq Comiss'#227'o'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'COM_VL_COM'
+              Title.Caption = 'Valor Comiss'#227'o'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 90
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'COM_DT_PAGTO'
+              Title.Caption = 'Data pagto'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Width = 83
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'EMP_NOME'
+              Title.Caption = 'Nome do Cliente'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Visible = True
+            end
+            item
+              Expanded = False
+              FieldName = 'CLB_NOME'
+              Title.Caption = 'Nome do Vendedor'
+              Title.Font.Charset = ANSI_CHARSET
+              Title.Font.Color = clNavy
+              Title.Font.Height = -11
+              Title.Font.Name = 'Arial'
+              Title.Font.Style = []
+              Visible = True
+            end>
+        end
+        object CB_Status: TComboBox
+          Left = 278
+          Top = 21
+          Width = 106
+          Height = 21
+          Style = csDropDownList
+          CharCase = ecUpperCase
+          ItemIndex = 1
+          TabOrder = 3
+          Text = 'PENDENTES'
+          OnChange = CB_StatusChange
+          Items.Strings = (
+            'PAGAS'
+            'PENDENTES'
+            'TODAS')
+        end
+        object E_Data_Ini: TDateTimePicker
+          Left = 5
+          Top = 21
+          Width = 84
+          Height = 22
+          Date = 39580.356281493060000000
+          Time = 39580.356281493060000000
+          Enabled = False
+          TabOrder = 0
+        end
+        object E_Data_Fim: TDateTimePicker
+          Left = 90
+          Top = 21
+          Width = 84
+          Height = 22
+          Date = 39580.356281493060000000
+          Time = 39580.356281493060000000
+          Enabled = False
+          TabOrder = 1
+        end
+        object ChBx_Periodo: TCheckBox
+          Left = 7
+          Top = 6
+          Width = 141
+          Height = 12
+          Caption = 'Data Inicial    Data Final'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 5
+          OnClick = ChBx_PeriodoClick
+        end
+        object E_Busca_Pedido: TEdit
+          Left = 175
+          Top = 21
+          Width = 98
+          Height = 21
+          TabOrder = 2
+        end
+        inline Fm_ListaColaborador: TFm_ListaColaboradores
+          Left = 387
+          Top = 6
+          Width = 290
+          Height = 39
+          TabOrder = 6
+          ExplicitLeft = 387
+          ExplicitTop = 6
+          ExplicitWidth = 290
+          ExplicitHeight = 39
+          inherited Label19: TLabel
+            Width = 290
+            Caption = 'Colaborador'
+            ExplicitWidth = 59
+          end
+          inherited Sb_Cadastro: TSpeedButton
+            Left = 264
+            Height = 22
+            ExplicitLeft = 366
+            ExplicitHeight = 22
+          end
+          inherited Dblcb_Vendedor: TDBLookupComboBox
+            Width = 261
+            ExplicitWidth = 261
+          end
+        end
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 380
+        Width = 684
+        Height = 67
+        Align = alBottom
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 1
+        DesignSize = (
+          684
+          67)
+        object SB_Pagar: TSpeedButton
+          Left = 492
+          Top = 6
+          Width = 88
+          Height = 54
+          Anchors = [akRight, akBottom]
+          Caption = 'Pagar - F8'
+          Enabled = False
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Glyph.Data = {
+            360C0000424D360C000000000000360000002800000020000000200000000100
+            180000000000000C0000120B0000120B00000000000000000000FFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFC9E1C894BC9087AA8482AB7FBDC3BDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FF77AD735ED15C63DC6156C45299A398FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FF7AAF7767F8684CFF4D65DE639BA49BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEF0F1F0E5E5E5DDE3
+            DD61995E62F46244F54463D762879E85CAD2CAD7D7D6E2E2E2F0F0F0FFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1F6F1B3BFB278A974509F4D4EA64A4EA8
+            4A53B04F66F56644EF434CD74B24A9212EB42C28AB244AAB4777A974A4B3A2DC
+            DEDCFCFCFCFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFC4DDC361A05C59C5565FDF5D57F35657FD5757FE
+            5859FB584DEF4C41E74036E53529E7282DE32C29E3292CDA2C21CC1E31BB2E55
+            9A509BA89AF1F1F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFCFDFC9EC59A4FA94B64ED6451FF5245FB4540F4403EF03E3CEC
+            3C3AE9383EE73C41E5403FE23E43E14041DD4043DB4242DA403CDA3B28D92720
+            CF1F2CA6277B9A79ECECECFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFA0C79C51B44E5FFC5F43FC443FF63F42F44141F0413DED3D51F4
+            5066F4654DEA4D42E44060F0605DEA5C5BEB5A47E1453ED53C41D43F44D1413D
+            D13A21D52028B424829A80F2F2F2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFC8E0C64FAA4B5FFC6041FC4141F64142F34142F1413EEE3E51F65159CC
+            5742973D5DE85C45EA4362D660408C3A45A8415CDC5C4CE04B3ED03C40CF3D41
+            CC3E42CB4022D3212FA72AAEB7ADFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFF71AD6C5FE95E40FC413DF63D3FF43D3EF03E3BEC3B4FF84E5BC958549D
+            4D559D5062EE6144E84360D85E8AA188AFD1AD4C9C475DDB5B43D3403FCC3C3F
+            CB3D40C73E3CC93921C320689C64E9E9E9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            CFE3CD5CC45A67FF6757FF5759FF5959FF5958FE5957FE5861F66149A044D5E2
+            D382B87E62ED6144E64362DB609DA59CFFFFFFB4D6B14FB24B53E1513CC83A3F
+            C93D3FC43C40C23D2BCC29309F2CD2D4D1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            B7D6B5439F4056B15256AF5256AF5256AF5256AF5258B154479E426E9F6BFFFF
+            FF7DB47962ED6144E44362DC60979E96FFFFFFE7F3E654AF4F57E5563BC6393F
+            C63C3FC23C42C03F27D42624A820BFC9BEF4F5F4FFFFFFFFFFFFFFFFFFFFFFFF
+            FAFCFAF5F9F5F6F9F6F6F9F6F6F9F6F6F9F6F6F9F6F6F9F6F5F9F5FCFDFCFFFF
+            FF7CB77862EC6144E24362DB5FA2AAA2FFFFFF80B87C52BF4F4DD94C3DC43A3F
+            C33C3FC13C41C53E25D72523A71FBFC8BEF7F8F7FFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FF739C7064F16344E0425FD35C5E88595E9A5948AC455AE25A3EC73B3FC33C3E
+            C13B3DC43A3DCB3A28D62730A32CD3DCD2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEAF0EAC5CA
+            C456845266F06542DB4168E06749AB4453C8505AE35943CC413EC33B3FC13C3D
+            C43B3CCA3936D4341FC91D549950F5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE0E7DF90B08E72A27072CA7069E4
+            6661DB5F4CDC4B3FD33D51E04F55E55350DC4F3EC93D3EC43B3FC23C3EC33B3E
+            C83B3BCE391FD91E2CA728ACCEA9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFEDF4EC7CB17953B15064E86261EA614FE34F45E1
+            4446DF443FD23C40D03D3DCC393CC93A3DC73A3FC63C3FC23C3EC13B3FC73C37
+            CF351FD91F2AB3287FB47AF8FBF8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFD3E6D15FA55B65D96459F15742E0413CDC3B3FD93D3FD6
+            3D3FD43D40D13E40CF3D40CC3D3FCA3D41C63E43C2403FC13C3BC9392DD22B20
+            D01F30A72C7AB275F4F9F4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFEBF4EA60A65B64E1634CED4A3DDD3B3FDC3E40D93F40D73E40D5
+            3E3FD13D3FCF3C40CD3D40CA3E3FC73C34CA3128D0272AD02822C62030AC2C5F
+            A35AB3D2B0FDFEFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFF8DBD8A5FCA5D50EF4F3EDE3C40DD3F40DB3E40D73E40D43E3ED2
+            3D45D74242CF3F40CA3E3CC83A29D2272CBE2927AB233BAA3780B97CC6DCC3F5
+            F9F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFF0F7F056AE5258EC573EE13B40DD3F40DB3F40D93E3FD53D41D53F55E0
+            535FD55C62E86141CE3F57CA554D844A99C596D1E4CFF8FAF8FEFFFEFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFD6E8D563B06079F17743DE423EDB3D3CD83A3ED63C3ED23C5CE55B5BB8
+            5845923F61E36043CD4063DC61A0A69FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFC3DEC162A55E9DF19E7DE77C69E16853DB5145D4434CE14B51BC4EBDD7
+            BB81B67D61E36043CA4062DB5F9AA498FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFBFBFBFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFD6E8D464AA619BF19B84E78288E68686E48478DF7682E9815DAB59FFFF
+            FF7DB27962E56142C93F61D95FA8B3A7CDDECB547C515A87575A87585A87575A
+            88575B88585C8859558252B6BBB5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFF1F7F061A85E91E79084E78285E48385E38388E1868AE28886CB8475AA
+            7162A05E5BDE5A41CB3E5ED45C6B9167589A535CD35954E9524EE84B4CED4B4A
+            F1494BF54A5AF6584AAE45BDC4BCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFF89BA8585CC828DEC8C84E28285E18385DF8383DE828CE08B84CD
+            817DC37A75D67349D0476DD66C6FB36A73CF7283EC8281EE8080F07F7FF47E7D
+            F67D80FF7F6CDC6972AF6DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFDEEDDD63A45F95E09388E68684DF8284DE8384DD8383DB8288DE
+            868DDF8B8CDD8A7FDD7D84E18386E88581EC807DEB7B7CEE7A7AF1797AF5787B
+            FE7A6FE86E4C9E46DAEAD8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFC2DCC05B9F5693DA918FE58D88E08783DB8183D98183D8
+            8282DA8081DD7F81E17F7FE47E7EE77C7CE97B79ED7879F3787EFA7D7CFB7B6D
+            DC6C4B9C45BBD8B8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFC8DEC65D9E5877BA7385D1838EDC8C91DF8F85DD
+            8485E2847FE07D7FE37D7EE87D80EF7E84F38391F78F86EC8674D7725BB1576A
+            A965DBEBDAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9F2E9AFCEAC71AA6D5B9F5668B16475C1
+            7060B05C8EE38D81EA807FD37D67BB6474C17060A85B68A86484B580C5DCC3F7
+            FAF6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFDFCF7FAF6F5F9F5E5F1
+            E46EA869A8EFA7A1FBA08CD28A8AA587E3EFE2F2F7F2FAFCFAFEFFFEFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FF7DB0795AA45669AD6551A14CB5BDB4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+          Layout = blGlyphTop
+          ParentFont = False
+          OnClick = SB_PagarClick
+        end
+        object SB_Filtro: TSpeedButton
+          Left = 410
+          Top = 7
+          Width = 88
+          Height = 54
+          Anchors = [akRight, akBottom]
+          Caption = 'Filtrar - F7'
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Glyph.Data = {
+            360C0000424D360C000000000000360000002800000020000000200000000100
+            180000000000000C0000110B0000110B00000000000000000000FFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFEDEDEDA4A4A49E9E9EE4E4E4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFB9B9B9A2A2A2919191878787FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFC9C9C99F9F9FAFAFAF8E8E8EF2F2F2FEFEFEFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFC0C0C0969696B6B6B6989898E1E1E1EDEDEDFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFBCBCBC898989AFAFAF9A9A9ADEDEDED5D5D5E7E7E7F9F9F9FFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFC0C0C06060607B7B7B888888DEDEDED1D1D1D1D1D1D9D9D9EAEAEAF9
+            F9F9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFB8B8B85B5B5B6E6E6E767676DEDEDED1D1D1D1D1D1D0D0D0D1D1D1DA
+            DADAEBEBEBFAFAFAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFF7676765454547F7F7F8F8F8FCECECED5D5D5D1D1D1D1D1D1D1D1D1D0
+            D0D0D2D2D2DCDCDCEDEDEDFBFBFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFA8A8A82727275E5E5E9B9B9BCFCFCFA9A9A9DFDFDFD0D0D0D0D0D0D1D1D1D1
+            D1D1D1D1D1D0D0D0D2D2D2DDDDDDEDEDEDFBFBFBFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE7E7
+            E73838384F4F4F979797C2C2C2E6E6E6E9E9E9C0C0C0E6E6E6D8D8D8D2D2D2D0
+            D0D0D1D1D1D1D1D1D0D0D0CFCFCFD7D7D7ECECECFDFDFDFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7474
+            744C4C4C7A7A7A9E9E9EBABABAD0D0D0DDDDDDB8B8B8F9F9F9FBFBFBE7E7E7D4
+            D4D4D0D0D0D1D1D1D2D2D2D5D5D5E4E4E4FAFAFAFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB6B6B64040
+            405A5A5A6E6E6E7D7D7D8D8D8D939494888888949494BEBEBEFFFFFFFEFEFEF0
+            F0F0E5E5E5E9E9E9F0F0F0F5F5F5FBFBFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEDED5252525151
+            516C6C6C7E7E7E9495959D9D9DA4A5A5999A9A7C7C7C838383DBDBDBFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8C8C8C5050506565
+            657B7B7B969696A4A4A5ABACACA8A8A89B9C9C7B7B7B6D6D6D8B8B8BFEFEFEFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC2C2C25151516161617B7B
+            7B979798A3A3A4B6B6B7BFBFBFB1B2B29D9D9E8787886767676E6E6EB8B8B8FF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF3F3F36A6A6A6060607B7B7B9898
+            98A8A8A8B7B6B6C0C0C0D7D8D9C6C7C8ACADAE9394946E6E6E6B6B6B858585E6
+            E6E6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9797976060607171719A9A9AA5A3
+            A4B2B1B1C7C7C7CCCCCCCECFCFC2C3C4ACADAE999A9A7575756F6F6F7C7C7CAE
+            AEAEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFCF646464676767858585A3A3A3AFAE
+            AFC3C3C3CFCFCFDCDBDCCACACABCBEBEAFB0B0A3A4A59A9A9B7D7D7D8888889C
+            9C9CC5C5C5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFF9F9F98282826D6D6D7272728080809D9D9DB9B8
+            B8D1CFD0D8D8D9DAD9DAC9C9C8B0B1B1AAABACA6A8A8AFB1B199999A8D8D8D98
+            9898B1B1B1F6F6F6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFA8A8A87272726C6C6C7272727B7B7B898989A3A2
+            A2B0AFB0B1B1B1AEAEAF9E9E9E8C8C8C959697989999A5A7A7B4B5B595959599
+            9999989898C2C2C2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFDADADA4B4B4B5050505959596363636D6D6D7272727B7B
+            7B807F7F8282828080807F7F7F7D7C7D787979868686A0A0A0B7B8B8ACADAD98
+            99988F8F8F848484C9C9C9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFF848484585858696969818181959595A2A2A2A3A3A3B9B9
+            B9DFDBDCEAE8E9E4E4E4D9D8D9DAD7D9C6C5C6E1E3E4E3E5E5E1E3E4E2E5E597
+            98985C5C5C5C5C5C6E6E6EF5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFEFEFEFA9A9A97777776767676464646464646363636B6B
+            6BD0CCCCDBD7D9EAEAEAD0D0D0D7D5D7CAC8CAC4C5C6DDE0E0DADDDDC8CBCC91
+            9293363636565656BDBDBDFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEF8F8F8EDEDEDE1E1E1D5D5D5CCCC
+            CCDFDCDCD2CFCFE6E5E6DEDEDFD6D6D7D8D6D8C2C0C1CED0D0CCCFCFB4B6B7B6
+            B8B9E9E8E8FCFCFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFF7F7F7D3CECED9D7D9EAE9EAD3D3D4D9D8D8D7D6D7BDBCBEC9CBCCC7C8C9BD
+            BEBFDEDEDEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFCFCFCDAD4D5D1CFD1E2E1E2DEDEDED5D4D4D7D5D7D5D3D3C9C9C9CBCECEBE
+            C0C1D1D1D2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFEFEFEDEDADAD3CFD0D6D4D6E8E7E8D4D4D4DAD9D9DEDEDEDCDCDBCAC7C8D1
+            D2D2CBCCCCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFE5E3E3D8D1D1D4D2D5D6D4D5D5D5D4D2D3D3D4D2D2D2CECEE2E0E0FF
+            FFFFFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFF1F1F1D8D1D1D5D3D4D6D6D7D5D2D2D4D0D0DCDADAF9F9F9FFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFBFCFCDAD7D7D3CCCDCECBCCE1DEDFF8F8F8FFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFE8E9E8E8E7E7FBFBFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+          Layout = blGlyphTop
+          ParentFont = False
+          OnClick = SB_FiltroClick
+        end
+        object Sb_Sair_0: TSpeedButton
+          Left = 586
+          Top = 7
+          Width = 90
+          Height = 54
+          Anchors = [akBottom]
+          Caption = 'Sair - ESC'
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Layout = blGlyphTop
+          ParentFont = False
+          OnClick = Sb_Sair_0Click
+        end
+        object Sb_Alterar: TSpeedButton
+          Left = 316
+          Top = 6
+          Width = 88
+          Height = 54
+          Anchors = [akRight, akBottom]
+          Caption = 'Alterar - F3'
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Layout = blGlyphTop
+          ParentFont = False
+          OnClick = Sb_AlterarClick
+        end
+      end
+      object Grb_MnhaEmpresa: TGroupBox
+        Left = 0
+        Top = 0
+        Width = 684
+        Height = 50
+        Align = alTop
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 2
+        DesignSize = (
+          684
+          50)
+        object chbx_Empresas: TCheckBox
+          Left = 7
+          Top = 8
+          Width = 165
+          Height = 14
+          Caption = 'Selecionar todas as Empresas'
+          TabOrder = 0
+          OnClick = chbx_EmpresasClick
+        end
+        object Dblcb_Mha_Empresa: TDBLookupComboBox
+          Left = 5
+          Top = 24
+          Width = 672
+          Height = 21
+          Anchors = [akLeft, akRight]
+          KeyField = 'EMP_CODIGO'
+          ListField = 'EMP_NOME'
+          ListSource = DM_ListaConsultas.Ds_ListaEstabelecimento
+          TabOrder = 1
+        end
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 314
+        Width = 684
+        Height = 66
+        Align = alBottom
+        BevelOuter = bvNone
+        TabOrder = 3
+        object Grb_Faturamento: TGroupBox
+          Left = 0
+          Top = 0
+          Width = 342
+          Height = 66
+          Align = alLeft
+          Anchors = [akLeft, akBottom]
+          Caption = 'Totalizador de Vendas'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+          DesignSize = (
+            342
+            66)
+          object Lb_Faturamento: TLabel
+            Left = 7
+            Top = 17
+            Width = 37
+            Height = 14
+            Anchors = [akLeft, akBottom]
+            Caption = 'Vendas'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label18: TLabel
+            Left = 93
+            Top = 19
+            Width = 57
+            Height = 14
+            Anchors = [akLeft, akBottom]
+            Caption = 'Devolu'#231#245'es'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label20: TLabel
+            Left = 181
+            Top = 19
+            Width = 102
+            Height = 14
+            Anchors = [akLeft, akBottom]
+            Caption = 'Saldo para Comiss'#227'o'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object E_Vl_Recebido: TEdit_Setes
+            Left = 5
+            Top = 33
+            Width = 86
+            Height = 21
+            Alignment = taRightJustify
+            Anchors = [akLeft, akBottom]
+            TabOrder = 0
+            Text = ''
+          end
+          object E_Vl_Devolvido: TEdit_Setes
+            Left = 92
+            Top = 33
+            Width = 86
+            Height = 21
+            Alignment = taRightJustify
+            Anchors = [akLeft, akBottom]
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clRed
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 1
+            Text = ''
+          end
+          object E_Sd_P_Comissao: TEdit_Setes
+            Left = 180
+            Top = 33
+            Width = 104
+            Height = 21
+            Alignment = taRightJustify
+            Anchors = [akLeft, akBottom]
+            TabOrder = 2
+            Text = ''
+          end
+        end
+        object Grb_Comissao: TGroupBox
+          Left = 342
+          Top = 0
+          Width = 342
+          Height = 66
+          Align = alRight
+          Anchors = [akLeft, akBottom]
+          Caption = 'Totalizador de Comiss'#245'es'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 1
+          DesignSize = (
+            342
+            66)
+          object Label22: TLabel
+            Left = 6
+            Top = 16
+            Width = 24
+            Height = 14
+            Anchors = [akLeft, akBottom]
+            Caption = 'Pago'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label23: TLabel
+            Left = 93
+            Top = 19
+            Width = 37
+            Height = 14
+            Anchors = [akLeft, akBottom]
+            Caption = #224' Pagar'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label24: TLabel
+            Left = 181
+            Top = 19
+            Width = 27
+            Height = 14
+            Anchors = [akLeft, akBottom]
+            Caption = 'Saldo'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object E_Vl_Pago: TEdit_Setes
+            Left = 5
+            Top = 33
+            Width = 86
+            Height = 21
+            Alignment = taRightJustify
+            Anchors = [akLeft, akBottom]
+            TabOrder = 0
+            Text = ''
+          end
+          object E_VL_Pagar: TEdit_Setes
+            Left = 92
+            Top = 33
+            Width = 86
+            Height = 21
+            Alignment = taRightJustify
+            Anchors = [akLeft, akBottom]
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clRed
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 1
+            Text = ''
+          end
+          object E_Sd_Comissao: TEdit_Setes
+            Left = 180
+            Top = 33
+            Width = 104
+            Height = 21
+            Alignment = taRightJustify
+            Anchors = [akLeft, akBottom]
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clBlack
+            Font.Height = -11
+            Font.Name = 'MS Sans Serif'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            Text = ''
+          end
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Alterar'
+      ImageIndex = 1
+      OnShow = TabSheet2Show
+      object Panel3: TPanel
+        Left = 0
+        Top = 0
+        Width = 684
+        Height = 447
+        Align = alClient
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        DesignSize = (
+          684
+          447)
+        object Sb_Gravar: TSpeedButton
+          Left = 519
+          Top = 388
+          Width = 79
+          Height = 54
+          Anchors = [akRight, akBottom]
+          Caption = 'Gravar - F5'
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Glyph.Data = {
+            360C0000424D360C000000000000360000002800000020000000200000000100
+            180000000000000C0000120B0000120B00000000000000000000FFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFDFDFDB4B4B4D5D5D5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFCFCFC8A8A8A0F0F0F4A4A4AD4D4D4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4F4
+            F48686861919195B5B5B2A2A2A4B4B4BCCCCCCFCFCFCFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFBEBEBEB8383
+            831A1A1A626262D8D8D89D9D9D2727274B4B4BC6C6C6F4F4F4FEFEFEFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4F4F4E4E4E48383831D1D
+            1D5959596A6A6A9F9F9FA2A2A2D3D3D36C6C6C474747BDBDBDECECECFAFAFAFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFCEAEAEADFDFDF8383831B1B1B5757
+            57676767686868808080E8E8E8FFFFFFFFFFFF6A6A6A444444BBBBBBE4E4E4F4
+            F4F4FEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFF6F6F6E2E2E2DEDEDE8484841A1A1A5151515F5F
+            5F5A5A5A7B7B7BEBEBEBFFFFFFF0F0F0FFFFFFFFFFFF676767444444BBBBBBDF
+            DFDFECECECFCFCFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFEFEFEEDEDEDDBDBDBDEDEDE8585851717174444444D4D4D4848
+            486A6A6AE5E5E5FFFFFFFEFEFEE3E3E3E7E7E7FFFFFFFCFCFC656565454545BC
+            BCBCDCDCDCE4E4E4F7F7F7FEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFF0F0F0D9D9D9DEDEDE8585851414143636364040404040406565
+            65E6E6E6FFFFFFF2F2F2FFFFFFFFFFFFDEDEDEE0E0E0FBFBFBF6F6F662626245
+            4545BDBDBDDBDBDBDCDCDCF4F4F4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFCFCFCF3F3F38686861010102B2B2B3636363A3A3A5E5E5EE4E4
+            E4FFFFFFFEFEFEECECECE9E9E9FFFFFFFFFFFFD8D8D8D8D8D8F5F5F5F0F0F05F
+            5F5F444444BDBDBDE9E9E9F9F9F9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFF9C9C9C0D0D0D2121212C2C2C3232324A4A4AE0E0E0FFFF
+            FFF5F5F5FFFFFFFFFFFFE7E7E7E5E5E5FFFFFFFEFEFECFCFCFD1D1D1EFEFEFE9
+            E9E95C5C5C494949DDDDDDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFF9C9C9C0808081A1A1A2727272B2B2B2F2F2F5A5A5AFFFFFFFFFF
+            FFF3F3F3EFEFEFFFFFFFFFFFFFE2E2E2E0E0E0FFFFFFF6F6F6CACACACBCBCBE8
+            E8E8E2E2E25A5A5A4F4F4FDEDEDEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFF9C9C9C0505051212123131313030303030303434343939399E9E9EFFFF
+            FFFFFFFFEFEFEFEAEAEAFFFFFFFFFFFFDEDEDED8D8D8F8F8F8F1F1F1C4C4C4C4
+            C4C4E1E1E1DBDBDB5757574F4F4FDEDEDEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            9C9C9C0505050E0E0E3B3B3B3D3D3D3939393838383838383B3B3B3C3C3CA3A3
+            A3FFFFFFFFFFFFEBEBEBE5E5E5FFFFFFFFFFFFD8D8D8CFCFCFF3F3F3EBEBEBC0
+            C0C0C0C0C0DADADAD4D4D45454544F4F4FDEDEDEFFFFFFFFFFFFFFFFFF9C9C9C
+            0505051313134D4D4D4C4C4C4545454242424040403F3F3F3F3F3F4141414343
+            43A6A6A6FFFFFFFFFFFFE7E7E7E0E0E0FFFFFFFFFFFFCFCFCFCACACAECECECE4
+            E4E4BDBDBDBCBCBCD2D2D2CECECE4B4B4B4F4F4FDEDEDEFFFFFFA2A2A2050505
+            1818186565656464645454544E4E4E4A4A4A4747474545454242424949494444
+            44484848A8A8A8FFFFFFFFFFFFE4E4E4DDDDDDFEFEFEF9F9F9CBCBCBC6C6C6E5
+            E5E5DDDDDDB9B9B9C1C1C1CBCBCB8C8C8C2929294E4E4EDBDBDB5454541C1C1C
+            8181817E7E7E6C6C6C6060605757575353534F4F4E4444447A7A7BA7A7A75858
+            584747474B4B4BA9A9A9FFFFFFFFFFFFE4E4E4D6D6D6F7F7F7F2F2F2C7C7C7C2
+            C2C2DCDCDCD7D7D7CBCBCB909090B4B4B4ADADAD242424747474E9E9E94B4B4B
+            7A7A7A9090907979796C6C6C6161615B5B5B4F4F4E838383CFCFD0CCCCCDAAAA
+            AB5C5C5C4848484C4C4CA9A9A9FFFFFFFFFFFFDEDEDECDCDCDF1F1F1ECECECC4
+            C4C4D1D1D1D7D7D79595956A6A6AA8A8A89A9A9A242424BABABAFFFFFFEDEDED
+            4747477878789090907979796C6C6C5B5B5B8F8F90E0E0E0D8D8D8CDCDCDCACA
+            CAACACAC5F5F5F4848484A4A4AA7A7A7FFFFFFFFFFFFD7D7D7C9C9C9E8E8E8E8
+            E8E8D7D7D78686866A6A6A6C6C6C5A5A5A222222BABABAFFFFFFFFFFFFFFFFFF
+            EDEDED4747477878789090907171719D9D9DECECECE6E6E6DCDCDDD5D5D5CDCD
+            CDCACACAADADAE616161464646464646A5A5A5FFFFFFFBFBFBD3D3D3DDDDDDE1
+            E1E17B7B7B5656566868685C5C5C252525BABABAFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFEDEDED474747757575BCBCBCF5F5F5F0F0F1E9E9E9E3E3E4DDDDDDD5D5
+            D5CDCDCDC9C9C9B3B3B46464644141414141419F9F9FFFFFFFFDFDFDE6E6E678
+            78784545455C5C5C585858252525BABABAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFEDEDED494949CACACAFFFFFFF2F2F2EEEEEEE9E9E9E3E3E4DDDD
+            DDD5D5D5D4D4D4B0B0B1A5A5A56868683B3B3B3B3B3B8E8E8EC7C7C77373733C
+            3C3C4B4B4B505050232323BABABAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFEDEDED4E4E4ECACACAFFFFFFF2F2F2EEEEEEE9E9E9E3E3
+            E3E5E5E6B8B8B93434344F4F4FABABAC6565653838383333333636363737373E
+            3E3E434343212121BABABAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFEDEDED4E4E4ECACACAFFFFFFF2F2F2EDEDEEF1F1
+            F1C9C9C95151513333331B1B1B717171C0C0C14D4D4D2D2D2D31313133333336
+            36361F1F1FBABABAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEDED4E4E4ECACACAFFFFFFF8F8F8D6D6
+            D669696A4D4D4D3D3D3D5E5E5EC7C7C78888883636362C2C2C2929292B2B2B1B
+            1B1BBABABAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEDED4E4E4ECECECEEDEDED8080
+            80676767575757767676DCDCDC9292923939393737372B2B2B202020171717BA
+            BABAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEF5A5A5AADADAD9595
+            956F6F6F8C8C8CE8E8E89C9C9C464646464646303030141414141414BABABAFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4F4F45B5B5BABAB
+            ABB5B5B5EFEFEFABABAB5B5B5B5959593636360707070F0F0FBABABAFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4F4F45A5A
+            5ACCCCCCC9C9C97979796D6D6D4444440404040D0D0DBABABAFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4F4
+            F4545454404040282828151515020202151515BBBBBBFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFF4F4F45F5F5F575757858585AFAFAFE1E1E1FFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+          Layout = blGlyphTop
+          ParentFont = False
+          OnClick = Sb_GravarClick
+        end
+        object SB_Cancelar: TSpeedButton
+          Left = 598
+          Top = 388
+          Width = 79
+          Height = 54
+          Anchors = [akRight, akBottom]
+          Caption = 'Cancelar - F6'
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Glyph.Data = {
+            160B0000424D160B0000000000003600000028000000200000001D0000000100
+            180000000000E00A0000600F0000600F00000000000000000000FFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFDFDFAF8F7FFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDCDB3DCB18BF4EFEBFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6EAE3E3A16BFEECDBE2B18BDEC3AEFDFC
+            FCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFEFDFDE5BB9DF7D8B1FDF3E8FFFFFFF0CDB4D2A0
+            7CF1EAE6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFEED0BCF9ECDBF9DBACFBECDEFFFFFFFFFFFFFCF2
+            EBDAA480DABAA7FCFBFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFCF7F3EBC4A4FFFFFBF8D8A8FBE9C8FFFDEFFFFFFFFFFF
+            FFFFFFFFEAC6B1C88E6BEFE7E3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFEBC5A8FDF7EBFFFFEEF9DDAEFBE6BEFFF7C8FFEAC4FFF9
+            F0FFFFFFFFFFFFF8EDE8CE9375D5B2A0FCFBFBFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFAF0E7F2D3B8FFFFF8FFFFEBFCE2B6FBE1B7FFFCD4FFE2AAFFD4
+            9DFFE8CFFFFFFFFFFFFFFFFFFFE0BAA5A2695BEDE4DEFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFCFEFEFEFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFEEC8A9FEFBF5FFFFEEFFFFEAFDEAC2FADCB0FFFED8FFEBBAFFD5
+            9BFFC283FFC899FFECDFFFFFF7ABABE86D6CE16D3C5AD0AA94FBFAFAFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFF3F3FA7878EDA7A7DEFFFFFEFFFFFFFFFFFFFFFFFF
+            FFFFFFFAF0E7F5DAC0FFFFFDFFFFEDFFFFE9FEF3CEF9D6A5FFFEDAFFEEC0FFDD
+            A7FFC98CFFB775FEAD66A185B5666AF98F90FF8A8FFA71527EB8734FE9DBD4FF
+            FFFFFFFFFFFFFFFFF1F1F98282F36060FF4B4BFB9E9EDCFEFEFEFFFFFFFFFFFF
+            FFFFFFF2D0B1FEFAF4FFFFF5FFFFEDFFFFE7FFF9DAF9D19CFFFAD9FFEFC1FFE2
+            AFFFCF94FFC079D8917B4A48F46264FF7979FFA1A1FF8F93F97E70A3B77351CE
+            A594FCFBF9F3F3FA8888F27575FF4A4AFF2F2FFF2A2AF9D6D6F2FFFFFFFFFFFF
+            FCF7F2F5D5B7FFFFFFFFFFF4FFFFEDFFFEE6FFFFE4F9D49EFDF0CFFFF2C4FFE4
+            B1FFD69EFFC383F9AE6C9367B05257FF7070FF8888FFA8A8FF8C8EF6807DB8CA
+            9E8191616F8080EE8383FF5F5FFF4242FF2F2FFE9B9BF9FEFEFFFFFFFFFFFFFF
+            F5DBC0FDF5EDFFFFFEFFFFF4FFFFEDFFFEE6FFFFE5FCE3B3FAD9AEFFFAD7FFE4
+            B0FFD7A0FFCA8EFFB874FFA3568E5FAA585EFF7677FF8888FF9E9EFF7C7CF16C
+            69B77878EE8686FF6868FF4F4FFF3B3BFE9999F7FFFFFFFFFFFFFFFFFFFEFCFA
+            F5D2ADFFFFFFFFFFFBFFFFF4FFFFEDFFFEE6FFFCE0FFFAD9F9D196F9D5A9FFEE
+            CBFFDBA4FFCB8EFFBF7FFFAF67FF974892589C535AFF6F70FF7979FF8383FF76
+            77FF7777FF6565FF5353FF3E3EFEA0A0F6FFFFFFFFFFFFFFFFFFFFFFFFFAE9D6
+            FDEDDDFFFFFFFFFFFBFFFFF4FFFFEDFFFEE6FFFCE0FFFAD9FFF6D0FAD296F4C4
+            8FFBDFBCFFD5A0FFBE7CFFB36EFFA559FF8E3A8B4F994D51FF5E5FFF6060FF60
+            60FF5858FF4C4CFF3D3EFF9594F2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEF7D6B2
+            FFFFFEFFFFFFFFFFFBFFFFF4FFFFEDFFFEE6FFFCE0FFF9D8FFF3CBFFEFC5FDDD
+            A6F3BC7DF4CCA3FFD09FFFB26CFFA65DFF9A4CFF8B29703F9A393FFF4E4EFF4A
+            4AFF3838FF3133FF3727B2F7F4F1FFFFFFFFFFFFFFFFFFFFFFFFFDF5EDF9D8B0
+            FFFFFFFFFFFFFFFFFBFFFFF4FFFFEDFFFEE6FFFCE0FFF9D8FFF3CBFFEBBFFFE6
+            B5FFE1AAF5BA77F6CBA1FFBA78FFA85FFFA246BA6650241BD94244FF5353FF55
+            55FF4545FF1E1EFF0603E4B3B2D4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFBE3C7
+            FDF0E1FFFFFFFFFFFBFFFFF4FFFFEDFFFEE6FFFCE0FFF9D8FFF3CBFFEBBFFFE4
+            B3FFDFA8FDCF8EF2BE8AFFBF84FFB158BB715D0F09DD3F43FF6261FF6060FF31
+            34FF5959FF5B5BFF3737FF0607EBBEBEDEFFFFFFFFFFFFFFFFFFFFFFFFFCF2E6
+            FCEAD4FFFFFFFFFFFBFFFFF4FFFFEDFFFEE6FFFCE0FFF9D8FFF3CBFFEBBFFFE4
+            B3FFDEA7FFD495F2BA81FFD89AB577680B08E15B5EFF8786FF8485FF292EFF26
+            12C91F1FF97D7EFF8A89FF6D6DFF0808EBB4B4DAFFFFFFFFFFFFFFFFFFF9E0C2
+            FEF7EEFFFFFFFFFFFBFFFFF4FFFFEDFFFEE6FFFCE0FFF9D8FFF3CBFFEBBFFFE4
+            B3FFDDA6FFD89CFEC475B18C891110E27274FFACACFFA8A8FF353DFF4E24A6F1
+            7E357842922027FE9E9FFFACACFF8989FF0B0BE8BCBCDCFFFFFFFFFFFFFEF5EC
+            F9D4AAFFFEFDFFFFFFFFFFF4FFFFEDFFFEE6FFFFE4FFFEDFFFF5CDFFEABEFFE4
+            B3FFDDA6FFDC99D9B18E0804DD9597FFD6D6FFCECEFF3F44FF511C8EFC8332F1
+            864AF7AE7F7D3E8A272DFCC0C2FFD5D5FFB3B3FF0303E7D4D4EAFFFFFFFFFFFF
+            FDF5EBF8D4ABFCEAD7FFFFFEFFFFF5FFFFEEFAE8C1F2CEA5F8E2C3FFF3CEFFE6
+            B4FFDCA4FFD999EFC78C4736C46669FFF3F3FF5357FF4131BFFC994FFC7B32E9
+            9468F0B390FA98626B29813338F8EBEBFF8B8BFE4C4CE9F9F9FDFFFFFFFFFFFF
+            FFFFFFFFFFFEFBEBD9F6D3AEF9E0C5F2CFA4F6E4D2FDFAF8F7E5D7EDC3A1F8DF
+            BCFFE7B7FFD597FFD38BF9C87A523EB71F23FA5739A6EE9849EAA978EFA781EC
+            AA86EDAC88F2A882E972368471B82022F65959E7FCFCFEFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFEFDFCF3E9FEFBF8FFFFFFFFFFFFFFFFFFFEFDFCF4DA
+            C8EABC96FBDFB9FFD698FFCA7CF9BB73A07185FCAC60FFA857F1A26CD09574E3
+            B092EBB394EFAE8AE17140EEDFD5E1E3FAFCFCFEFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFDF8F5EECCB6ECBF9AFDD6A3FFC87CFFBD63FFAE63FFA85EE5A278F4EDEBFC
+            F8F5E4BCA6E3AC8FE48A60E2C7BBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFCF6F2E8C0A6EDBE97FFCB93FFAD60FFAC65D9A182FDFCFCFF
+            FFFFFFFFFFF6E8E2D69475E4C3B3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFF7EAE2E5B99EF1BA8EFEC89CDAB4A0FFFFFFFF
+            FFFFFFFFFFFFFFFFFEFCFBFEFCFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEF5E4DAE1B39AF2E6DFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7EAE3FEFCFCFFFFFFFF
+            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+          Layout = blGlyphTop
+          ParentFont = False
+          OnClick = SB_CancelarClick
+        end
+        object Label19: TLabel
+          Left = 254
+          Top = 6
+          Width = 56
+          Height = 14
+          Caption = 'Total Venda'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label25: TLabel
+          Left = 343
+          Top = 129
+          Width = 47
+          Height = 14
+          Caption = 'Comiss'#227'o'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label21: TLabel
+          Left = 424
+          Top = 129
+          Width = 45
+          Height = 14
+          Caption = 'Aliq. Com'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label3: TLabel
+          Left = 474
+          Top = 143
+          Width = 17
+          Height = 22
+          Caption = '%'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -19
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label2: TLabel
+          Left = 5
+          Top = 4
+          Width = 71
+          Height = 14
+          Caption = 'Data da Venda'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label6: TLabel
+          Left = 118
+          Top = 4
+          Width = 72
+          Height = 14
+          Caption = 'N'#250'mero Pedido'
+          FocusControl = E_Pedido
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label10: TLabel
+          Left = 5
+          Top = 45
+          Width = 32
+          Height = 14
+          Caption = 'Cliente'
+          FocusControl = E_Cliente
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object E_VL_Venda: TDBEdit
+          Left = 254
+          Top = 20
+          Width = 137
+          Height = 22
+          TabStop = False
+          Color = clMenu
+          DataField = 'COM_VL_DOC'
+          DataSource = Ds_Qr_Comissao
+          DragMode = dmAutomatic
+          Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 2
+        end
+        object E_VL_Comissao: TEdit_Setes
+          Left = 341
+          Top = 143
+          Width = 77
+          Height = 21
+          Alignment = taRightJustify
+          TabOrder = 4
+          Text = ''
+          OnExit = E_VL_ComissaoExit
+        end
+        object E_AQ_COM: TEdit_Setes
+          Left = 421
+          Top = 143
+          Width = 51
+          Height = 21
+          Alignment = taRightJustify
+          TabOrder = 5
+          Text = ''
+          OnChange = E_AQ_COMChange
+          OnExit = E_AQ_COMExit
+        end
+        object E_Dt_Pagto: TDateTimePicker
+          Left = 497
+          Top = 144
+          Width = 84
+          Height = 22
+          Date = 39580.356281493060000000
+          Time = 39580.356281493060000000
+          Enabled = False
+          TabOrder = 6
+        end
+        object Chbx_DataPagto: TCheckBox
+          Left = 499
+          Top = 129
+          Width = 80
+          Height = 12
+          Caption = 'Data Pagto'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 7
+          OnClick = Chbx_DataPagtoClick
+        end
+        object E_Pedido: TDBEdit
+          Left = 118
+          Top = 20
+          Width = 134
+          Height = 21
+          TabStop = False
+          Color = clMenu
+          DataField = 'PED_NUMERO'
+          DataSource = Ds_Qr_Comissao
+          DragMode = dmAutomatic
+          TabOrder = 1
+        end
+        object E_Cliente: TDBEdit
+          Left = 5
+          Top = 61
+          Width = 572
+          Height = 21
+          TabStop = False
+          Color = clMenu
+          DataField = 'EMP_NOME'
+          DataSource = Ds_Qr_Comissao
+          DragMode = dmAutomatic
+          TabOrder = 3
+        end
+        object E_Dt_Venda: TDateTimePicker
+          Left = 4
+          Top = 19
+          Width = 111
+          Height = 22
+          Date = 39580.356281493060000000
+          Time = 39580.356281493060000000
+          TabOrder = 0
+        end
+        inline Fm_ListaEditColaborador: TFm_ListaColaboradores
+          Left = 2
+          Top = 86
+          Width = 575
+          Height = 39
+          TabOrder = 8
+          ExplicitLeft = 2
+          ExplicitTop = 86
+          ExplicitWidth = 575
+          ExplicitHeight = 39
+          inherited Label19: TLabel
+            Width = 575
+            Caption = 'Colaborador'
+            ExplicitWidth = 59
+          end
+          inherited Sb_Cadastro: TSpeedButton
+            Left = 549
+            Height = 22
+            ExplicitLeft = 366
+            ExplicitHeight = 22
+          end
+          inherited Dblcb_Vendedor: TDBLookupComboBox
+            Width = 546
+            ExplicitWidth = 546
+          end
+        end
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Pagar'
+      ImageIndex = 2
+      OnShow = TabSheet3Show
+      object Panel5: TPanel
+        Left = 0
+        Top = 0
+        Width = 684
+        Height = 447
+        Align = alClient
+        BevelInner = bvRaised
+        BevelOuter = bvLowered
+        TabOrder = 0
+        DesignSize = (
+          684
+          447)
+        object SB_Confirmar: TSpeedButton
+          Left = 497
+          Top = 387
+          Width = 87
+          Height = 54
+          Anchors = [akRight, akBottom]
+          Caption = 'Confirmar - F10'
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+            3333333333FFFFF3333333333000003333333333F777773FF333333008877700
+            33333337733FFF773F33330887000777033333733F777FFF73F330880FAFAF07
+            703337F37733377FF7F33080F00000F07033373733777337F73F087F00A2200F
+            77037F3737333737FF7F080A0A2A220A07037F737F3333737F7F0F0F0AAAA20F
+            07037F737F3333737F7F0F0A0FAA2A0A08037F737FF33373737F0F7F00FFA00F
+            780373F737FFF737F3733080F00000F0803337F73377733737F330F80FAFAF08
+            8033373F773337733733330F8700078803333373FF77733F733333300FFF8800
+            3333333773FFFF77333333333000003333333333377777333333}
+          Layout = blGlyphTop
+          NumGlyphs = 2
+          ParentFont = False
+          Spacing = 10
+          OnClick = SB_ConfirmarClick
+        end
+        object SB_Sair: TSpeedButton
+          Left = 590
+          Top = 387
+          Width = 87
+          Height = 54
+          Anchors = [akRight, akBottom]
+          Caption = 'Fechar - ESC'
+          Flat = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          Glyph.Data = {
+            360C0000424D360C000000000000360000002800000020000000200000000100
+            180000000000000C0000C30E0000C30E00000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000020300000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000000
+            00000000002E4800528000466C003B5C00324F00273D001E2F001520000D1400
+            060A000102000000000000000000000000000000000000000000000000000000
+            00000000000000000000000000000000000000000000131D0019280018260018
+            26001826004F7B0267A60466A60367A40266A100649D006299005E9300598B00
+            5382004C7600446A00395A00324D002032000102000000000000000000000000
+            0000000000000000000000000000000000000019270060970061990060980060
+            98006098005E930B66AD1C76CB1C7AC91A78C61876C31473BE1270B90E6EB60C
+            6CB1096AAE0769AA0468A60267A500649E001725000000000000000000000000
+            00000000000000000000000000000000000000314D00649E0D4571103F681040
+            69103E670452820E6DB42382D22487D32588D32485D32284D32284D22182D220
+            80D11F7FD01D7CCD1B7ACB1772C60767AC002233000000000000000000000000
+            000000000000000000000000000000000000002F4A01619A123C6414375D1438
+            5E14365C0550801173B9288AD7298FD7278DD6288ED6288DD5268CD5258BD425
+            8AD42489D32387D22287D21F7FD10B6CB1002337000000000000000000000000
+            000000000000000000000000000000000000002E49016199113C6513385F1339
+            6013385E0352831576BD2B8FD92A92D8268DD62C93D92B93D9288FD7258CD529
+            90D82890D7268DD5258CD52488D50E71B800273C000000000000000000000000
+            000000000000000000000000000000000000004065015F96123C6313385F1339
+            6013395F035486197AC12E92DC2C93D9288FD72F96DB2E95DB2B91D8278DD62C
+            93D92B93D9278ED6268DD6288CD71175BB002A43000000000000000000000000
+            000000000000000000000000000000000000004771045A901339601339601339
+            601339600256891C7DC53195DD2D94DB2A91D83299DD3197DC2C93D92990D72F
+            96DB2E95DB2990D8288FD72B8FDA1276BD002F4A000000000000000000000000
+            00000000000000000000000000000000000000456D04598F13385F1339601339
+            5F12396002588C1F81C93599DF2F97DD2D95DC359DE0349ADE2E95DB2A91D832
+            99DD3197DC2C93D92A90D72E92DC167AC3003351000000000000000000000000
+            000000000000000000000000000000000405004F7E05578E1439601339601338
+            5F113B62025A8F2485CD399EE33196D72C8BC9379ADA379FE33198DD2C93D935
+            9CDF349ADE2F96DB2B92D93196DE1A7DC7003757000000000000000000000000
+            00000000000000000000000000000000070C005A8B044767122C53133A621338
+            5F113C63035C922A8CD43594D41B639F134F86205C86348FC8349CE12E95DA38
+            9FE1379EE03299DD2D94DA359AE01C80C8003A5C000000000000000000000000
+            00000000000000000000000000000000050E005B79056F14052C210F28501439
+            61103D65045F952C8DD31B68AF1267B31570BE0E519122608A3499DA3097DD3C
+            A2E33AA1E2359CDF2D94DA389DE21F84CC003F63000000000000000000000000
+            00000000000000000000000000000000020300403D30A63D319E3A0033160D22
+            47103C6606649C2781C81265B01C84D01D87D3136EBC1A55883493CE329ADF3F
+            A5E53DA3E4389FE12F96DB3AA0E32489D100436A000000000000000000000000
+            000000000000000000002100055407157E1B2A993257C46977DC8E42AE4D0343
+            100529480867A22681C92270B659A6DE5BA8DF3180C3195D96389AD7349BDF42
+            A8E73FA6E53CA2E33097DB3EA4E6278CD3004670000000000000000000000000
+            000000000E000461061EA92939C54B4DCE625CD17165D27C70D38683DE9B5CC0
+            650C61330663A03193DC387CBAB8D2E8C6DDF15286B92A82BD3DA4E5349BDF45
+            ABE943A9E73FA6E53098DC41A7E72B8FD5004A75000000000000000000000000
+            000B0006740922BD3235C4493FC4524AC75F57CB6C63CF796FD3857AD69194E7
+            A85AB68F03649F3EA1E63F9FDF4388C34F8EC53B92CF49B0EC3EA5E5369DDF48
+            AEEB45ACE942AAE83298DD44A9E93095DA014F7E000102000000000000000200
+            02620418B92827BF3A33C24741C8554ECC615BD06D66D17C6FD38582DD9A71D0
+            7A197A4F0968A840A3E74DB4EF2F99DE40AAE94CB4F04CB3EE3FA6E5379EE04B
+            B1ED48AFEB47ADEA349ADE46ABEB3499DF025484000305000000000000002800
+            0BA3151EC03227BF3826B63422A52C1C922B1E8E374BB95C7ADD9258C2640F64
+            220340600F6FAE44A7EA4BB2EF2F99DF45AFEE49B3F049B3F03BA6E7319DE346
+            B2F043AFEF41AEEE2A97DF40ACEE379CE0035788000508000000000000015A02
+            12BA2214B022097A0D004400001E00003143005C7834A64246B54E0755281030
+            580943741274B045AAEE53B5ED45A0D960B8E866BBE96ABDE864B3E062AFDB79
+            C2E57BC1E27CC0E273B4D575BBE13CA0E4045B8F00060B000000000000036907
+            0AA413004100000500000000000000002E5200678A0C7F170A4C351233611537
+            5F0746731277B654B0ECDEDDCEFEF6D8FFF6DDFCF2DDFFF3DDFFF3DEFDEFDFFD
+            EEE0FDEDE1FFF1E2FCEDE3FFE9D15CACE0025F9800080D000000000000016402
+            00480000000000000000000000000000446C025F910E40541335621339611437
+            5D064876127BBC79C1E6DDCCD9736CF1655EEF7A75F1ADA9F5CDC9F7706CF257
+            52F1726DF3E3E1FC706CF5FFF5E76CB4E002619C000B12000000000000005800
+            001200000000000000000000000000004670045A911437631339601339601437
+            5D044978177EC086CBE8AFA6E13F3BF3B1AEFAC3C1FB4E47F14942F1BBB9FA75
+            70F4A09DF7E8E8FD5B57F4FFF8EC73B9E20365A2000E17000000000000001400
+            00030000000000000000000000000000466F04598E13385F1339601339601437
+            5E034B7A1A83C68CCEEAB7ADE3403BF28783F5EFEFFE847FF5352EEEFFFFFF81
+            7CF5B2B0F8F2F3FE5C58F6FEF6EA7CBEE3076CAB00101B000000000000000000
+            00000000000000000000000000000000476F05588D14385E1339601339601338
+            5E024E7E1D88CB92D1E9B8ADE33E38F29592F7E9E9FD645FF33028EEDAD8FC77
+            71F4938FF6B4B1FB5750D3C0B3A46AB2DF0D73B100121E000000000000000000
+            00000000000000000000000000000000476F05588D14385E1339601339601339
+            5F005182228CCF9BD6E9B8ADE52D26F16A65F3807CF56D69F4AEACF96B67F460
+            5BF3706BF5726DF3DCC3C9BAD1D54DB6F61375B1001725000000000000000000
+            00000000000000000000000000000000477008538614375D13396013395F1339
+            600053862691D49CD0E7E9DEE7AFADF9BDBAF8D2CFF9F0EDFBFFFFFBF2EEF8FD
+            F8F7FFFEF6FFFFF0EDE0D166C0F14FB8F7187BB9001B2C000000000000000000
+            0000000000000000000000000000000047700A4F8015355A14375D14375C1338
+            5E0055892995D99DCAE2FFF3D5FFFFEAFFFFE6FFFAE2FFF5E0FFF0DDFFEFDBFB
+            EBD9F2E8D9E7E3D691C5E24DBAF950B4F6197DBF001F32000000000000000000
+            000000000000000000000000000000004974055D950A4F80095081094F810950
+            81005A902F95D96CBDEECDD6D2C5D7DBB3D3E0A5CFE493CAE784C5EA75C0ED64
+            B9ED58B3ED4BACEA41A5E73D9FDF3193D70E74B600253B000000000000000000
+            0000000000000000000000000000000033510049740047700047700047700049
+            73005C923091D744AAF13FA8EC38A2E52F98DD2791D6218ACE1982C5157DBF0F
+            75B60A70B0066BA903659F00619A00588C00588B001825000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000004
+            06005D92086EAC0B6EAB0569A502649E006099005A90005486004E7C00426A00
+            3F65002E4A002C46001C2C001725000B11000609000000000000000000000000
+            0000000000000000000000000000000000000000000000000000000000000005
+            0800426800476F003656002F4A00223600192700121C00070B00030500000000
+            0000000000000000000000000000000000000000000000000000}
+          Layout = blGlyphTop
+          ParentFont = False
+          OnClick = SB_SairClick
+        end
+        object Label1: TLabel
+          Left = 8
+          Top = 6
+          Width = 59
+          Height = 14
+          Caption = 'Colaborador'
+          FocusControl = E_PagaColaborador
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label8: TLabel
+          Left = 498
+          Top = 48
+          Width = 52
+          Height = 14
+          Caption = 'Data Pagto'
+          FocusControl = E_PagaColaborador
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label13: TLabel
+          Left = 398
+          Top = 49
+          Width = 76
+          Height = 14
+          Caption = 'M'#234's Referencia'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object Label16: TLabel
+          Left = 62
+          Top = 67
+          Width = 33
+          Height = 14
+          Caption = 'VIA(S)'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+        end
+        object E_PagaColaborador: TDBEdit
+          Left = 8
+          Top = 22
+          Width = 569
+          Height = 21
+          TabStop = False
+          Color = clMenu
+          DataField = 'CLB_NOME'
+          DataSource = Ds_Qr_Comissao
+          DragMode = dmAutomatic
+          TabOrder = 0
+        end
+        object Panel6: TPanel
+          Left = 6
+          Top = 94
+          Width = 575
+          Height = 48
+          BevelInner = bvRaised
+          BevelOuter = bvLowered
+          TabOrder = 1
+          object Label5: TLabel
+            Left = 4
+            Top = 4
+            Width = 77
+            Height = 14
+            Caption = 'Total de Vendas'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label15: TLabel
+            Left = 481
+            Top = 4
+            Width = 87
+            Height = 14
+            Caption = 'Total de Comiss'#227'o'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object E_Vl_Vendas: TLabel
+            Left = 12
+            Top = 20
+            Width = 69
+            Height = 16
+            Alignment = taRightJustify
+            AutoSize = False
+            Caption = '0,00'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Arial'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object E_Vl_Com_Pagar: TLabel
+            Left = 496
+            Top = 20
+            Width = 72
+            Height = 18
+            Alignment = taRightJustify
+            AutoSize = False
+            Caption = '0,00'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Arial'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+        end
+        object E_Dt_Baixa: TDateTimePicker
+          Left = 497
+          Top = 64
+          Width = 84
+          Height = 22
+          Date = 39580.356281493060000000
+          Time = 39580.356281493060000000
+          TabOrder = 2
+        end
+        object CB_Mes: TComboBox
+          Left = 398
+          Top = 64
+          Width = 97
+          Height = 22
+          Style = csDropDownList
+          CharCase = ecUpperCase
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Arial'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 3
+          Items.Strings = (
+            '<<ESCOLHA O MES>>'
+            'JANEIRO'
+            'FEVEREIRO'
+            'MARCO'
+            'ABRIL'
+            'MAIO'
+            'JUNHO'
+            'JULHO'
+            'AGOSTO'
+            'SETEMBRO'
+            'OUTUBRO'
+            'NOVEMBRO'
+            'DEZEMBRO')
+        end
+        object Chbx_Recibo: TCheckBox
+          Left = 8
+          Top = 48
+          Width = 97
+          Height = 17
+          Caption = 'Imprimir Recibo'
+          Checked = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clNavy
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = []
+          ParentFont = False
+          State = cbChecked
+          TabOrder = 4
+          OnClick = Chbx_ReciboClick
+        end
+        object E_Nr_Vias: TEdit_Setes
+          Left = 8
+          Top = 64
+          Width = 49
+          Height = 21
+          Alignment = taRightJustify
+          TabOrder = 5
+          Text = '2'
+        end
+      end
+    end
+  end
+  object Qr_Comissao: TSTQuery
+    Database = DM.IBD_Gestao
+    Transaction = DM.IB_Transacao
+    ForcedRefresh = True
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    SQL.Strings = (
+      'SELECT '
+      '  COM_CODIGO,'
+      '  COM_DT_VENDA,'
+      '  COM_CODPED,'
+      '  PED_NUMERO,'
+      '  COM_CODEMP,'
+      '  EMP_NOME, '
+      '  COM_CODVDO,'
+      '  CLB_NOME,'
+      '  COM_VL_DOC,'
+      '  COM_AQ_COM,'
+      '  COM_VL_COM,'
+      '  COM_DT_PAGTO'
+      'FROM TB_COMISSAO Tb_comissao '
+      '    INNER JOIN TB_EMPRESA Tb_empresa '
+      '    ON  (Tb_empresa.EMP_CODIGO = Tb_comissao.COM_CODEMP) '
+      '    INNER JOIN TB_COLABORADOR Tb_Colaborador'
+      '    ON  (Tb_Colaborador.CLB_CODIGO = Tb_comissao.COM_CODVDO) '
+      '    INNER JOIN TB_PEDIDO Tb_pedido'
+      '    ON  (Tb_pedido.PED_CODIGO = Tb_comissao.COM_CODPED) ')
+    Left = 396
+    Top = 208
+  end
+  object Qr_Pagar: TSTQuery
+    Database = DM.IBD_Gestao
+    Transaction = DM.IB_Transacao
+    ForcedRefresh = True
+    BufferChunks = 1000
+    CachedUpdates = False
+    ParamCheck = True
+    Left = 288
+    Top = 136
+  end
+  object Ds_Qr_Comissao: TDataSource
+    AutoEdit = False
+    DataSet = Qr_Comissao
+    Left = 400
+    Top = 264
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 228
+    Top = 218
+    object Corrigirduplicados1: TMenuItem
+      Caption = 'Corrigir duplicados'
+      OnClick = Corrigirduplicados1Click
+    end
+  end
+end

@@ -238,10 +238,36 @@ item de saída (`Destino = ITF_CODIGO`). Não roda para consumidor final nem qua
 09/06/2022): **decisão do autor (2026-08-16) — o comportamento ATUAL está certo;
 ignorar a linha morta.** Na web, o rastreio não filtra por finalidade.
 
-### P2.9 CSOSN (Simples, `:2797+`) — mapeado em largura, detalhar na rodada do autor
+### P2.9 CSOSN (Simples, `:2797+`) — IMPLEMENTADO (2026-08-21)
 
 Grupos tratados: 101 (com crédito), 102/103/300, 400, 201 (com ST + crédito),
 202/203 (com ST), 500 (retido), 900 (outros). Também em par regra × manual.
+
+**Motor implementado** (`calcIcmsCsosn` em `setes-api/src/shared/tax-rule/calc.ts`,
+evidência `Pc_RegimeTributarioSimplesNacional` linha a linha): antes do
+despacho por grupo, SEMPRE calcula `vICMSOp` (base×aliq, nunca zerado),
+`vICMS` com diferimento opcional (gate `destinationIsResale`, mesmo
+TRB_CONSUMIDOR='N' já usado no ST do CST) e ST pela MESMA fórmula do CST
+(`vICMSST = base×aliq − vICMS_próprio`, "por dentro"). Base SEMPRE inclui
+frete (única exceção além do CST 51) e IPI pela mesma regra
+`icmsIpiIntegratesBase`. Depois o grupo zera seletivamente ICMS/ST/crédito
+— tabela `CSOSN_GROUPS` no código. Dois achados LITERAIS do legado,
+replicados sem "correção": CSOSN 400 NÃO zera o ICMS próprio (só o ST);
+CSOSN 500 NÃO zera o crédito SN (só ICMS+ST). FCP próprio/FCP-ST (P7.3)
+estendidos para aceitar código CSOSN além de CST (mesma base).
+
+**Crédito SN**: alíquota vem de config NOVA da institution
+(`billing`/`sn_credit_aliq`, seed `sql/33`, kind Float, default '0') — não
+é campo da regra nem do produto (evidência: legado lê a config global
+`GRL_G_AQ_CRED_ICMS` em venda/compra/ajuste/cupom, SEMPRE a mesma).
+Persistido em `tb_order_item_icms.cred_calc_aliq`/`.cred_expl_value` —
+colunas do baseline sem produtor até aqui. `IcmsPiece.csosn` já existia
+desde a Onda 1; sem DDL nova.
+
+Bloqueio "emitente Simples: CSOSN ainda não disponível" (`loadContext` em
+`billing.service.ts`) REMOVIDO — faturamento de emitente do Simples está
+liberado. 12 testes novos em `tax-calc.test.ts` + 2 em `billing.test.ts`;
+308/308 api.
 
 ## P3 — ICMS ST (mapeado no código, 2026-08-16; aguarda validação do autor)
 
@@ -455,7 +481,7 @@ regulamento fechar.
 item) + **`TB_CBS`** + grupos (`TB_GRUPO_UB`, créd. presumido etc.) — espelho relacional
 dos grupos do XML.
 
-## P11 — Observações fiscais (mapeado, 2026-08-16; aguarda validação)
+## P11 — Observações fiscais (IMPLEMENTADO 2026-08-22)
 
 ### Estrutura descoberta: os CSTs são CATÁLOGOS
 
@@ -480,6 +506,48 @@ geral, ISSQN e imposto aproximado (config `GRL_G_IMPOSTO_APROX` + natureza conte
 
 **Sugestão p/ web (regra 5)**: as ~20 rotinas quase idênticas colapsam em UMA
 consulta parametrizada por grupo de CST + catálogo — o conteúdo é dado, não código.
+
+**IMPLEMENTADO (2026-08-22)** — extração completa das ~20 rotinas por agente
+dedicado (leitura literal, sem normalizar) revelou 3 bugs REAIS no legado,
+não nuances de design:
+
+1. **CST 80 é no-op**: procedimento vazio no despacho — nunca gerava
+   observação. Não existe no nosso domínio (`calc.ts` não tem CST 80).
+2. **CSOSN 400 nunca dispara**: o SQL exige `OBS_CODMHA` mas o código nunca
+   faz o bind — comparação com NULL sempre falha.
+3. **CSOSN 201 tem placeholder trocado**: recalcula base/valor do ST mas
+   tenta substituir tokens já consumidos numa rodada anterior — esses dois
+   valores nunca chegam ao texto final, mesmo com o comentário do código
+   sugerindo que sim; o texto real mostra a alíquota de crédito duplicada.
+
+**Decisão do Valdo**: corrigir os 3 na web (não replicar os bugs). Mantido
+fielmente: quando há mais de uma observação distinta cadastrada pro mesmo
+grupo, usa só a 1ª (padrão em ~10 das ~19 rotinas, com ou sem agregação —
+achado consolidado #6 da extração).
+
+**Motor**: `setes-api/src/modules/billing/billing.observations.ts`
+(`REGIME_GROUPS` — tabela declarativa por CST/CSOSN) + wiring em
+`billing.service.ts` (constrói os textos com os itens JÁ calculados) +
+`billing.repository.ts` (leituras: observações gerais `general='2'`,
+observação por regra via `tb_tax_rule.tb_observation_id`, catálogo IBPT
+`setes_central.tb_ncm`). Persistido em `tb_invoice.note` (concatenado,
+1 texto por linha — o XML final só tem 1 campo `infCpl` mesmo).
+
+**Gap registrado**: CST 60/70 (rastreio de ST retido, P2.8) ficam sem
+observação regime-específica até essa frente nascer — `calc.ts` não
+calcula os campos `_RET` necessários (fora de escopo desde a Onda 1 do W2).
+
+**Imposto Aproximado (Lei 12.741/2012) — escopo trazido de volta pelo
+Valdo** (a IA tinha sugerido deixar fora por falta de tabela IBPT — Valdo
+apontou que `setes_central.tb_ncm` já existia com
+`aliq_nac/aliq_imp/aliq_est/aliq_mun`, sem produtor). Percentual por item
+(`ITF_IMP_APROX`) persistido em `tb_order_item_tax_rule.approx_tax_aliq`
+(migration 032) sempre, independente de config — só a OBSERVAÇÃO agregada
+na nota é gated (`billing/approx_tax_enabled`, seed sql/34, + só venda).
+Textos literais replicados: `"Valor aprox Imp. Nacional R$ X (Y)%"` +
+`"| Imp. Estadual..."` + `"| Imp. Municipal..."`, concatenados sem
+separador (achado: se a 1ª esfera for zero, o texto começa direto com
+"| Imp. Estadual" — replicado como está).
 
 ## P12 — Validações pré-XML (mapeado, 2026-08-16; aguarda validação)
 

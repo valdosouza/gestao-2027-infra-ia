@@ -1,0 +1,423 @@
+unit ControllerGrupos;
+
+interface
+
+uses     System.Classes, System.SysUtils, Generics.Collections, STQuery, ControllerBase, tblGrupos, prm_group_menu, ControllerSubGRupos, tblRestGroup;
+
+Type
+  TListaGrupo  = TObjectList<TGrupos>;
+
+  TControllerGrupos = Class(TControllerBase)
+  private
+    FParametros: TPrmGroupMenu;
+    procedure setFParametros(const Value: TPrmGroupMenu);
+  public
+    Lista:TListaGrupo;
+    Registro : TGrupos;
+    SubGrupo : TControllerSubGRupos;
+    Obj:TRestGroup;
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function salva:boolean;
+    function migra:Boolean;
+    procedure getbyId;
+    function insert:boolean;
+    function update:boolean;
+    Function delete:boolean;
+    Function getList:boolean;
+    function Replace:boolean;
+    function getByDescricao(pGrupo:String) : Boolean;
+    function autocreate(pGrupo:String):Integer;
+    procedure AtivarDesativarProdutos(grupoId:Integer;oper:boolean);
+    procedure FillDataRestGRoup(grupo: TGrupos;ObjRestGroup:TRestGroup; institutioWebId:Integer);
+    function Fc_GrupoExiste(pCodigo: integer; pDescricao: String;pCardapio:Boolean): Integer;
+
+    function getCodigoLista(Descricao: String): Integer;
+    function getDescricaoLista(Codigo: Integer): String;
+
+    procedure clear;
+    procedure Search;
+    property Parametros : TPrmGroupMenu read FParametros write setFParametros;
+  End;
+
+implementation
+
+uses     Un_sistema, Un_Regra_Negocio, env;
+procedure TControllerGrupos.AtivarDesativarProdutos(grupoId: Integer;
+  oper: boolean);
+var
+  Lc_Qry : TSTQuery;
+begin
+  Lc_Qry := GeraQuery;
+  Try
+    with Lc_Qry do
+    Begin
+      active := False;
+      sql.Clear;
+      sql.add(concat(
+                'update tb_produto set ',
+                'PRO_ATIVO=:PRO_ATIVO ',
+                'WHERE PRO_CODGRP=:PRO_CODGRP '
+      ));
+      if oper then
+        ParamByName('PRO_ATIVO').AsString := 'S'
+      else
+        ParamByName('PRO_ATIVO').AsString := 'N';
+      ParamByName('PRO_CODGRP').AsInteger := GrupoId;
+      ExecSql;
+    end;
+  Finally
+    FinalizaQuery(Lc_Qry);
+  End;
+end;
+
+function TControllerGrupos.autocreate(pGrupo: String): Integer;
+begin
+  getByDescricao(pGrupo);
+  if exist then
+  Begin
+    Result := Registro.Codigo;
+  End
+  else
+  Begin
+    Registro.Codigo             := Generator('GN_GRUPO');
+    Registro.Descricao          := pGrupo;
+    Registro.ValorDesconto      := 0;
+    Registro.Composicao         := '';
+    Registro.ControleInterface  := '';
+    Registro.Tamanhos           := '';
+    Registro.Tamanhos           := '';
+    Registro.Agrupar            := '';
+    InsertObj(Registro);
+    Result := Registro.Codigo;
+  End;
+end;
+
+procedure TControllerGrupos.clear;
+begin
+  clearObj(Registro);
+  FParametros.Clear;
+end;
+
+constructor TControllerGrupos.Create(AOwner: TComponent);
+begin
+  inherited;
+  Registro := TGRupos.Create;
+  Lista := TListaGrupo.create;
+  SubGRupo := TControllerSubGRupos.Create(self);
+  Obj := TRestGroup.create;
+  FParametros := TPrmGroupMenu.Create;
+end;
+
+function TControllerGrupos.delete: boolean;
+begin
+  Result := True;
+  Try
+    DeleteObj(Registro);
+  Except
+    Result := False;
+  End;
+end;
+
+destructor TControllerGrupos.Destroy;
+begin
+  FreeAndNil(Obj);
+  FreeAndNil(SubGRupo);
+  FreeAndNil(Registro);
+  FreeAndNil(Lista);
+  FreeAndNil(FParametros);
+  inherited;
+end;
+
+procedure TControllerGrupos.FillDataRestGroup(grupo: TGrupos;
+  ObjRestGroup: TRestGRoup; institutioWebId: Integer);
+begin
+  ObjRestGroup.Codigo          := grupo.Codigo;
+  ObjRestGroup.Estabelecimento := institutioWebId;
+  ObjRestGroup.Sequencia       := grupo.Sequencia;
+  ObjRestGroup.Descricao       := grupo.Descricao;
+  ObjRestGroup.Ativo           := 'S';
+end;
+
+function TControllerGrupos.insert: boolean;
+begin
+  Result := True;
+  if Registro.Codigo = 0 then
+    Registro.Codigo := Generator('GN_GRUPO');
+  Try
+    InsertObj(Registro);
+  Except
+    Result := False;
+  End;
+end;
+
+function TControllerGrupos.migra: Boolean;
+begin
+  Result := True;
+  SaveObj(Registro);
+end;
+
+function TControllerGrupos.Replace: boolean;
+begin
+  Result := True;
+  Try
+    replaceObj(Registro);
+  Except
+    Result := False;
+  End;
+end;
+
+function TControllerGrupos.salva: boolean;
+begin
+  Result := True;
+  if Registro.Codigo = 0 then
+    Registro.Codigo := Generator('GN_GRUPO');
+  SaveObj(Registro);
+end;
+
+procedure TControllerGrupos.Search;
+var
+  Lc_Qry : TSTQuery;
+  LITem : TGrupos;
+begin
+  Lc_Qry := GeraQuery;
+  Try
+    with Lc_Qry do
+    Begin
+      SQL.Text :=
+        'SELECT g.*, s.SBG_CODIGO, s.SBG_DESCRICAO '+
+        'FROM TB_GRUPOS g ';
+      if Parametros.Vazio then
+      Begin
+        SQL.Text := SQL.Text +
+        '   LEFT OUTER JOIN TB_SUBGRUPOS s '+
+        '   ON (s.SBG_CODGRP= g.GRP_CODIGO) ';
+      End
+      else
+      Begin
+        SQL.Text := SQL.Text +
+        '   INNER JOIN TB_SUBGRUPOS s '+
+        '   ON (s.SBG_CODGRP= g.GRP_CODIGO) ';
+      End;
+
+      if Parametros.isRestaurant then
+        SQL.Text := SQL.Text + 'WHERE (GRP_COMPOSICAO IS NOT NULL) '
+      else
+        SQL.Text := SQL.Text + 'WHERE (GRP_COMPOSICAO IS NULL)';
+
+      if Parametros.Vazio then
+        SQL.Text := SQL.Text + ' AND (SBG_DESCRICAO IS NULL) '
+      else
+        SQL.Text := SQL.Text + ' AND (SBG_DESCRICAO IS NOT NULL) ';
+
+
+      if FParametros.FieldName.Ativo = SIGLA_S then
+      begin
+        SQL.Text := SQL.Text + ' AND ( (GRP_ATIVO = ''S'') or (GRP_ATIVO = '''') or (GRP_ATIVO is null) ) ';
+      end
+      else
+      Begin
+        SQL.Text := SQL.Text + ' AND  (GRP_ATIVO = ''N'') ';
+      End;
+
+      if FParametros.FieldName.Descricao <> EmptyStr then
+      begin
+        SQL.Text := SQL.Text + ' AND g.GRP_DESCRICAO LIKE :GRP_DESCRICAO';
+        ParamByName('GRP_DESCRICAO').AsString := Concat('%',FParametros.FieldName.Descricao,'%');
+      end;
+
+      if FParametros.FieldName.DescricaoSubGrupo <> EmptyStr then
+      begin
+        SQL.Text := SQL.Text + ' AND s.SBG_DESCRICAO LIKE :SBG_DESCRICAO';
+        ParamByName('SBG_DESCRICAO').AsString := Concat('%',FParametros.FieldName.DescricaoSubGrupo,'%');
+      end;
+
+      Active := True;
+      FetchAll;
+      First;
+      Lista.Clear;
+
+      while not Eof do
+      Begin
+        LITem := TGrupos.Create;
+        get(Lc_Qry, LITem);
+
+        LItem.CodigoSubGrupo := FieldByName('SBG_CODIGO').AsInteger;
+        LItem.DescricaoSubGrupo := FieldByName('SBG_DESCRICAO').AsString;
+        Lista.add(LITem);
+
+        Next;
+      end;
+    end;
+  Finally
+    FinalizaQuery(Lc_Qry);
+  End;
+end;
+
+procedure TControllerGrupos.setFParametros(const Value: TPrmGroupMenu);
+begin
+  FParametros := Value;
+end;
+
+function TControllerGrupos.update: boolean;
+begin
+  Result := True;
+  Try
+    UpdateObj(Registro);
+  Except
+    Result := False;
+  End;
+end;
+
+function TControllerGrupos.getByDescricao(pGrupo:String): Boolean;
+var
+  Lc_Qry : TSTQuery;
+begin
+  Result := True;
+  Lc_Qry := GeraQuery;
+  Try
+    with Lc_Qry do
+    Begin
+      active := False;
+      sql.Clear;
+      sql.add(concat(
+                  'SELECT * ',
+                  'FROM TB_GRUPOS ',
+                  'WHERE ( UPPER( GRP_DESCRICAO ) =:GRP_DESCRICAO ) '
+      ));
+      ParamByName('GRP_DESCRICAO').AsString := UpperCase( pGrupo );
+      Active := True;
+      FetchAll;
+      exist := recordCount > 0;
+      if exist then
+        get(Lc_qry,Registro);
+    end;
+  Finally
+    FinalizaQuery(Lc_Qry);
+  End;
+end;
+
+procedure TControllerGrupos.getById;
+var
+  Lc_Qry : TSTQuery;
+begin
+  Lc_Qry := GeraQuery;
+  Try
+    with Lc_Qry do
+    Begin
+      active := False;
+      sql.Clear;
+      sql.add(concat(
+                'SELECT * FROM TB_GRUPOS ',
+                'WHERE GRP_CODIGO =:GRP_CODIGO '
+      ));
+      if Registro.Composicao <> '' then
+        sql.add(' AND (GRP_COMPOSICAO IS NOT NULL) ');
+      ParamByName('GRP_CODIGO').AsInteger := Registro.Codigo;
+      Active := True;
+      FetchAll;
+      exist  := ( RecordCount > 0 );
+      if exist then get(Lc_Qry,Registro) ;
+    end;
+  Finally
+    FinalizaQuery(Lc_Qry);
+  End;
+end;
+
+
+function TControllerGrupos.getList: boolean;
+var
+  Lc_Qry : TSTQuery;
+  LcLista : TGrupos;
+begin
+  Result := True;
+  Lc_Qry := GeraQuery;
+  Try
+    with Lc_Qry do
+    Begin
+      active := False;
+      sql.Clear;
+      sql.add(concat(
+                'SELECT * FROM TB_GRUPOS ',
+                'WHERE GRP_CODIGO IS NOT NULL '
+      ));
+      if Registro.Composicao <> '' then
+        sql.add(' AND (GRP_COMPOSICAO IS NOT NULL) ');
+      Active := True;
+      FetchAll;
+      First;
+      Lista.Clear;
+      while not eof do
+      Begin
+        LcLista := TGrupos.Create;
+        get(Lc_qry,LcLista);
+        Lista.add(LcLista);
+        next;
+      end;
+    end;
+  Finally
+    FinalizaQuery(Lc_Qry);
+  End;
+end;
+
+function TControllerGrupos.Fc_GrupoExiste(pCodigo: integer; pDescricao: String;pCardapio:Boolean): Integer;
+var
+  Lc_Qry : TSTQuery;
+begin
+  Lc_Qry := GeraQuery;
+  Result := 0;
+  Try
+    with Lc_Qry do
+    Begin
+      SQL.Text := 'SELECT GRP_CODIGO '+
+                  'FROM TB_GRUPOS '+
+                  'WHERE GRP_DESCRICAO=:GRP_DESCRICAO '+
+                  'and (GRP_CODIGO <>:GRP_CODIGO) and (GRP_CODIGO > 0) ';
+      if pCardapio then
+        SQL.Text := SQL.Text + ' and GRP_COMPOSICAO IS NOT NULL '
+      else
+        SQL.Text := SQL.Text + ' and GRP_COMPOSICAO IS  NULL ';
+      ParamByName('GRP_CODIGO').AsInteger := pCodigo;
+      ParamByName('GRP_DESCRICAO').AsString := pDescricao;
+      Active := True;
+      FetchAll;
+      First;
+      if ( RecordCount > 0) then
+        Result := FieldByName('GRP_CODIGO').AsInteger;
+    end;
+  Finally
+    FinalizaQuery(Lc_Qry);
+  End;
+end;
+
+function TControllerGrupos.getCodigoLista(Descricao: String): Integer;
+var
+  i: Integer;
+begin
+  Result := 0;
+  for i := 0 to Pred(Lista.Count) do
+  begin
+    if Lista[i].Descricao = Descricao then
+    begin
+      Result := Lista[i].Codigo;
+      Break;
+    end;
+  end;
+end;
+
+function TControllerGrupos.getDescricaoLista(Codigo: Integer): String;
+var
+  i: Integer;
+begin
+  Result := EmptyStr;
+  for i := 0 to Pred(Lista.Count) do
+  begin
+    if Lista[i].Codigo = Codigo then
+    begin
+      Result := Lista[i].Descricao;
+      Break;
+    end;
+  end;
+end;
+
+end.

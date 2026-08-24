@@ -1,0 +1,17 @@
+# Delphi legado (Windows): alinhar com ANSI/Windows-1252 para não perder acentos ao salvar no Cursor/VS Code.
+# Requer extensão "EditorConfig for VS Code" (geralmente já instalada).
+
+root = true
+
+[*.{pas,dfm,dpr,dpk,inc}]
+charset = latin1
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = false
+
+[*.{dproj,deployproj,identcache,todo}]
+charset = utf-8
+end_of_line = crlf
+
+[*.md]
+charset = utf-8

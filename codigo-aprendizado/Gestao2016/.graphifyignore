@@ -1,0 +1,12 @@
+# Ruído do legado — não é código vivo
+__history/
+.svn/
+*.svn-base
+*.~1~
+*.~2~
+*.~3~
+*.~4~
+*.~5~
+*.identcache
+*.stat
+*.res

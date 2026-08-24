@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+	</Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="FavoritoButtons.pas"/>
+    <File Path="QEdit_Setes.pas"/>
+    <File Path="STDatabase.pas"/>
+    <File Path="STQuery.pas"/>
+    <File Path="STScript.pas"/>
+    <File Path="STStoredProc.pas"/>
+    <File Path="STTransaction.pas"/>
+    <File Path="CustomCaptionPanel.pas"/>
+    <File Path="STClientDataset.pas"/>
+    <File Path="STTable.pas"/>
+    <File Path="STDataSet.pas"/>
+    <File Path="STFBDriverLink.pas"/>
+    <File Path="STSQL.pas"/>
+    <File Path="STWaitCursor.pas"/>
+    <File Path="ACBr_Boleto.dcp"/>
+    <File Path="ACBr_DFeComum.dcp"/>
+    <File Path="ACBr_NFe.dcp"/>
+    <File Path="ACBr_OpenSSL.dcp"/>
+    <File Path="ACBr_PCNComum.dcp"/>
+    <File Path="ACBr_Serial.dcp"/>
+    <File Path="dbrtl.dcp"/>
+    <File Path="designide.dcp"/>
+    <File Path="dsnap.dcp"/>
+    <File Path="FireDAC.dcp"/>
+    <File Path="FireDACCommon.dcp"/>
+    <File Path="FireDACCommonDriver.dcp"/>
+    <File Path="FireDACIBDriver.dcp"/>
+    <File Path="ibxpress.dcp"/>
+    <File Path="inet.dcp"/>
+    <File Path="rtl.dcp"/>
+    <File Path="soaprtl.dcp"/>
+    <File Path="vcl.dcp"/>
+    <File Path="vclactnband.dcp"/>
+    <File Path="vcldb.dcp"/>
+    <File Path="vclFireDAC.dcp"/>
+    <File Path="vclie.dcp"/>
+    <File Path="VclSmp.dcp"/>
+    <File Path="vclx.dcp"/>
+    <File Path="xmlrtl.dcp"/>
+  </ProjectSortOrder>
+</BorlandProject>

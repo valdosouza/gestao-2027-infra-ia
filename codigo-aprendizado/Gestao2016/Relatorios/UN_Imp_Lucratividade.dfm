@@ -1,0 +1,449 @@
+object Fr_Imp_Lucratividade: TFr_Imp_Lucratividade
+  Left = 506
+  Top = 154
+  Anchors = [akLeft, akTop, akRight, akBottom]
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Relat'#243'rio de Lucratividade'
+  ClientHeight = 242
+  ClientWidth = 430
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnKeyDown = FormKeyDown
+  OnKeyPress = FormKeyPress
+  OnShow = FormShow
+  ExplicitWidth = 320
+  ExplicitHeight = 240
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Pnl_botao: TPanel
+    Left = 0
+    Top = 179
+    Width = 430
+    Height = 63
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 2
+    object Sb_Sair_0: TSpeedButton
+      AlignWithMargins = True
+      Left = 345
+      Top = 5
+      Width = 80
+      Height = 53
+      Margins.Left = 1
+      Align = alRight
+      Caption = 'Sair - ESC'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      Layout = blGlyphTop
+      ParentFont = False
+      OnClick = Sb_Sair_0Click
+      ExplicitLeft = 341
+      ExplicitTop = 4
+      ExplicitHeight = 54
+    end
+    object SB_Imprimir: TSpeedButton
+      AlignWithMargins = True
+      Left = 263
+      Top = 5
+      Width = 80
+      Height = 53
+      Margins.Left = 1
+      Margins.Right = 1
+      Align = alRight
+      Caption = 'Imprimir - F3'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      Layout = blGlyphTop
+      ParentFont = False
+      OnClick = SB_ImprimirClick
+      ExplicitTop = 6
+    end
+    object Sb_Exportar: TSpeedButton
+      AlignWithMargins = True
+      Left = 183
+      Top = 5
+      Width = 78
+      Height = 53
+      Margins.Left = 1
+      Margins.Right = 1
+      Align = alRight
+      Caption = 'Exportar - F2'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      Layout = blGlyphTop
+      ParentFont = False
+      OnClick = Sb_ExportarClick
+      ExplicitLeft = 182
+      ExplicitHeight = 54
+    end
+    object Sb_Impostos: TSpeedButton
+      AlignWithMargins = True
+      Left = 103
+      Top = 5
+      Width = 78
+      Height = 53
+      Margins.Left = 1
+      Margins.Right = 1
+      Align = alRight
+      Caption = 'Impostos - F2'
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      Glyph.Data = {
+        360C0000424D360C000000000000360000002800000020000000200000000100
+        180000000000000C0000120B0000120B00000000000000000000FFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFC9E1C894BC9087AA8482AB7FBDC3BDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FF77AD735ED15C63DC6156C45299A398FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FF7AAF7767F8684CFF4D65DE639BA49BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEF0F1F0E5E5E5DDE3
+        DD61995E62F46244F54463D762879E85CAD2CAD7D7D6E2E2E2F0F0F0FFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1F6F1B3BFB278A974509F4D4EA64A4EA8
+        4A53B04F66F56644EF434CD74B24A9212EB42C28AB244AAB4777A974A4B3A2DC
+        DEDCFCFCFCFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFC4DDC361A05C59C5565FDF5D57F35657FD5757FE
+        5859FB584DEF4C41E74036E53529E7282DE32C29E3292CDA2C21CC1E31BB2E55
+        9A509BA89AF1F1F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFCFDFC9EC59A4FA94B64ED6451FF5245FB4540F4403EF03E3CEC
+        3C3AE9383EE73C41E5403FE23E43E14041DD4043DB4242DA403CDA3B28D92720
+        CF1F2CA6277B9A79ECECECFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFA0C79C51B44E5FFC5F43FC443FF63F42F44141F0413DED3D51F4
+        5066F4654DEA4D42E44060F0605DEA5C5BEB5A47E1453ED53C41D43F44D1413D
+        D13A21D52028B424829A80F2F2F2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFC8E0C64FAA4B5FFC6041FC4141F64142F34142F1413EEE3E51F65159CC
+        5742973D5DE85C45EA4362D660408C3A45A8415CDC5C4CE04B3ED03C40CF3D41
+        CC3E42CB4022D3212FA72AAEB7ADFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFF71AD6C5FE95E40FC413DF63D3FF43D3EF03E3BEC3B4FF84E5BC958549D
+        4D559D5062EE6144E84360D85E8AA188AFD1AD4C9C475DDB5B43D3403FCC3C3F
+        CB3D40C73E3CC93921C320689C64E9E9E9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        CFE3CD5CC45A67FF6757FF5759FF5959FF5958FE5957FE5861F66149A044D5E2
+        D382B87E62ED6144E64362DB609DA59CFFFFFFB4D6B14FB24B53E1513CC83A3F
+        C93D3FC43C40C23D2BCC29309F2CD2D4D1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        B7D6B5439F4056B15256AF5256AF5256AF5256AF5258B154479E426E9F6BFFFF
+        FF7DB47962ED6144E44362DC60979E96FFFFFFE7F3E654AF4F57E5563BC6393F
+        C63C3FC23C42C03F27D42624A820BFC9BEF4F5F4FFFFFFFFFFFFFFFFFFFFFFFF
+        FAFCFAF5F9F5F6F9F6F6F9F6F6F9F6F6F9F6F6F9F6F6F9F6F5F9F5FCFDFCFFFF
+        FF7CB77862EC6144E24362DB5FA2AAA2FFFFFF80B87C52BF4F4DD94C3DC43A3F
+        C33C3FC13C41C53E25D72523A71FBFC8BEF7F8F7FFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FF739C7064F16344E0425FD35C5E88595E9A5948AC455AE25A3EC73B3FC33C3E
+        C13B3DC43A3DCB3A28D62730A32CD3DCD2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEAF0EAC5CA
+        C456845266F06542DB4168E06749AB4453C8505AE35943CC413EC33B3FC13C3D
+        C43B3CCA3936D4341FC91D549950F5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE0E7DF90B08E72A27072CA7069E4
+        6661DB5F4CDC4B3FD33D51E04F55E55350DC4F3EC93D3EC43B3FC23C3EC33B3E
+        C83B3BCE391FD91E2CA728ACCEA9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFEDF4EC7CB17953B15064E86261EA614FE34F45E1
+        4446DF443FD23C40D03D3DCC393CC93A3DC73A3FC63C3FC23C3EC13B3FC73C37
+        CF351FD91F2AB3287FB47AF8FBF8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFD3E6D15FA55B65D96459F15742E0413CDC3B3FD93D3FD6
+        3D3FD43D40D13E40CF3D40CC3D3FCA3D41C63E43C2403FC13C3BC9392DD22B20
+        D01F30A72C7AB275F4F9F4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFEBF4EA60A65B64E1634CED4A3DDD3B3FDC3E40D93F40D73E40D5
+        3E3FD13D3FCF3C40CD3D40CA3E3FC73C34CA3128D0272AD02822C62030AC2C5F
+        A35AB3D2B0FDFEFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFF8DBD8A5FCA5D50EF4F3EDE3C40DD3F40DB3E40D73E40D43E3ED2
+        3D45D74242CF3F40CA3E3CC83A29D2272CBE2927AB233BAA3780B97CC6DCC3F5
+        F9F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFF0F7F056AE5258EC573EE13B40DD3F40DB3F40D93E3FD53D41D53F55E0
+        535FD55C62E86141CE3F57CA554D844A99C596D1E4CFF8FAF8FEFFFEFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFD6E8D563B06079F17743DE423EDB3D3CD83A3ED63C3ED23C5CE55B5BB8
+        5845923F61E36043CD4063DC61A0A69FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFC3DEC162A55E9DF19E7DE77C69E16853DB5145D4434CE14B51BC4EBDD7
+        BB81B67D61E36043CA4062DB5F9AA498FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFBFBFBFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFD6E8D464AA619BF19B84E78288E68686E48478DF7682E9815DAB59FFFF
+        FF7DB27962E56142C93F61D95FA8B3A7CDDECB547C515A87575A87585A87575A
+        88575B88585C8859558252B6BBB5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFF1F7F061A85E91E79084E78285E48385E38388E1868AE28886CB8475AA
+        7162A05E5BDE5A41CB3E5ED45C6B9167589A535CD35954E9524EE84B4CED4B4A
+        F1494BF54A5AF6584AAE45BDC4BCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFF89BA8585CC828DEC8C84E28285E18385DF8383DE828CE08B84CD
+        817DC37A75D67349D0476DD66C6FB36A73CF7283EC8281EE8080F07F7FF47E7D
+        F67D80FF7F6CDC6972AF6DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFDEEDDD63A45F95E09388E68684DF8284DE8384DD8383DB8288DE
+        868DDF8B8CDD8A7FDD7D84E18386E88581EC807DEB7B7CEE7A7AF1797AF5787B
+        FE7A6FE86E4C9E46DAEAD8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFC2DCC05B9F5693DA918FE58D88E08783DB8183D98183D8
+        8282DA8081DD7F81E17F7FE47E7EE77C7CE97B79ED7879F3787EFA7D7CFB7B6D
+        DC6C4B9C45BBD8B8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFC8DEC65D9E5877BA7385D1838EDC8C91DF8F85DD
+        8485E2847FE07D7FE37D7EE87D80EF7E84F38391F78F86EC8674D7725BB1576A
+        A965DBEBDAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9F2E9AFCEAC71AA6D5B9F5668B16475C1
+        7060B05C8EE38D81EA807FD37D67BB6474C17060A85B68A86484B580C5DCC3F7
+        FAF6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFDFCF7FAF6F5F9F5E5F1
+        E46EA869A8EFA7A1FBA08CD28A8AA587E3EFE2F2F7F2FAFCFAFEFFFEFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FF7DB0795AA45669AD6551A14CB5BDB4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+      Layout = blGlyphTop
+      ParentFont = False
+      OnClick = Sb_ImpostosClick
+      ExplicitTop = 6
+    end
+  end
+  object Pnl_Parametro: TPanel
+    Left = 0
+    Top = 50
+    Width = 430
+    Height = 129
+    Align = alClient
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    TabOrder = 1
+    TabStop = True
+    object Label2: TLabel
+      Left = 8
+      Top = 85
+      Width = 54
+      Height = 14
+      Caption = 'C'#243'd Cliente'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Lb_Numero: TLabel
+      Left = 5
+      Top = 44
+      Width = 109
+      Height = 14
+      Caption = 'N'#250'mero do Documento'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+    end
+    object DBLCB_Empresa: TDBLookupComboBox
+      Left = 71
+      Top = 100
+      Width = 348
+      Height = 22
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      KeyField = 'EMP_CODIGO'
+      ListField = 'EMP_NOME'
+      ListSource = DM_ListaConsultas.Ds_ListaCliente
+      ParentFont = False
+      TabOrder = 5
+      OnKeyDown = DBLCB_EmpresaKeyDown
+    end
+    object ChBx_Nome: TCheckBox
+      Left = 72
+      Top = 83
+      Width = 121
+      Height = 17
+      Caption = 'Nome/Raz'#227'o Social'
+      Checked = True
+      Enabled = False
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 6
+      OnClick = ChBx_NomeClick
+    end
+    object ChBx_Fantasia: TCheckBox
+      Left = 194
+      Top = 82
+      Width = 121
+      Height = 17
+      Caption = 'Apelido/Fantasia'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 7
+      OnClick = ChBx_FantasiaClick
+    end
+    object E_BuscaCodigo: TMaskEdit
+      Left = 5
+      Top = 100
+      Width = 65
+      Height = 22
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Arial'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 4
+      Text = ''
+      OnExit = E_BuscaCodigoExit
+    end
+    object E_Data_Ini: TDateTimePicker
+      Left = 232
+      Top = 59
+      Width = 92
+      Height = 22
+      Date = 39580.356281493060000000
+      Time = 39580.356281493060000000
+      TabOrder = 2
+    end
+    object E_Data_Fim: TDateTimePicker
+      Left = 327
+      Top = 59
+      Width = 92
+      Height = 22
+      Date = 39580.356281493060000000
+      Time = 39580.356281493060000000
+      TabOrder = 3
+    end
+    object ChBx_Periodo: TCheckBox
+      Left = 233
+      Top = 45
+      Width = 178
+      Height = 12
+      Caption = 'Data Inicial         Data Final'
+      Checked = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      ParentFont = False
+      State = cbChecked
+      TabOrder = 8
+      OnClick = ChBx_PeriodoClick
+    end
+    object Gb_Tipodoc: TGroupBox
+      Left = 2
+      Top = 2
+      Width = 426
+      Height = 40
+      Align = alTop
+      Caption = 'Tipo de Documento'
+      TabOrder = 0
+      TabStop = True
+      object Chbx_Orcamento: TCheckBox
+        Left = 7
+        Top = 18
+        Width = 81
+        Height = 17
+        Caption = 'Or'#231'amentos'
+        TabOrder = 0
+        OnClick = Chbx_OrcamentoClick
+      end
+      object Chbx_PedidoFechado: TCheckBox
+        Left = 211
+        Top = 18
+        Width = 111
+        Height = 17
+        Caption = 'Pedidos Fechados'
+        TabOrder = 1
+        OnClick = Chbx_PedidoFechadoClick
+      end
+      object Chbx_NotaFiscal: TCheckBox
+        Left = 327
+        Top = 18
+        Width = 85
+        Height = 17
+        Caption = 'Notas Fiscais'
+        TabOrder = 2
+        OnClick = Chbx_NotaFiscalClick
+      end
+      object Chbx_PedidoAberto: TCheckBox
+        Left = 98
+        Top = 18
+        Width = 99
+        Height = 17
+        Caption = 'Pedidos Abertos'
+        TabOrder = 3
+        OnClick = Chbx_PedidoAbertoClick
+      end
+    end
+    object E_Numero: TEdit
+      Left = 3
+      Top = 60
+      Width = 102
+      Height = 21
+      TabOrder = 1
+    end
+  end
+  object Grb_MnhaEmpresa: TGroupBox
+    Left = 0
+    Top = 0
+    Width = 430
+    Height = 50
+    Align = alTop
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    TabStop = True
+    DesignSize = (
+      430
+      50)
+    object chbx_Empresas: TCheckBox
+      Left = 7
+      Top = 8
+      Width = 165
+      Height = 14
+      Caption = 'Selecionar todas as Empresas'
+      TabOrder = 0
+      OnClick = chbx_EmpresasClick
+    end
+    object Dblcb_Mha_Empresa: TDBLookupComboBox
+      Left = 5
+      Top = 24
+      Width = 418
+      Height = 21
+      Anchors = [akLeft, akRight]
+      KeyField = 'EMP_CODIGO'
+      ListField = 'EMP_NOME'
+      ListSource = DM_ListaConsultas.Ds_ListaEstabelecimento
+      TabOrder = 1
+    end
+  end
+end
