@@ -14,7 +14,52 @@ rowBuilder ganha suporte a chips) e D40 RA-Q4 ordem das abas do legado
 mantida sem alteração. LIBERADO seguir para as ondas (W2 cálculo por item →
 faturamento → W3 financeiro); RA-Q2 ainda pede implementação dos chips na
 lista de regras. 2026-08-20: W2 Onda 1 (motor de cálculo por item, puro, sem
-persistência) ENTREGUE — ver seção W2 abaixo.
+persistência) ENTREGUE — ver seção W2 abaixo. 2026-08-31: **D41 (rodada
+Regime Tributário do Estabelecimento)** EXECUTADA nos dois lados — (a) regime
+mantido SÓ no Admin/Meu Estabelecimento (dropdown campo avulso; PUT com MERGE
+sobre a tb_entity_tax do próprio emitente — nunca zera os demais campos; Super
+não ganhou o campo); (b) `parseCrt` PROMOVIDO do billing.context para
+@shared/entity-tax (re-export mantém consumidores); (c) /api/tax-rules/catalogs
+devolve `emitterCrt` (por request, fora do cache central) e a aba ICMS do form
+ADAPTA CST × CSOSN ao regime (Simples 1/2 = só CSOSN; Normal 3 = só CST; null =
+os dois; valor do campo oculto NUNCA é apagado — regra continua agnóstica, motor
+despacha pelo CRT, D37); (d) faturamento mantém a issue bloqueante como único
+enforcement (campo NÃO obrigatório no PUT). Complemento visual: campos código
+de produto/cliente da aba Seletor agora SÓ aparecem quando preenchidos
+(especialização D38), nunca para edição. GATES da D41 EXECUTADOS 2026-09-01
+(socrático 0.78 ✅ / adversarial 0.85 sem HIGH-CRITICAL ✅ — 11 ataques reais,
+merge provado no banco). A Q-D41.1 dos gates virou **D42 (2026-09-01,
+decisão do Valdo)**: troca de regime é CONTROLADA — (a) app emite AVISO na
+troca de GRUPO do dropdown (Sim/Cancelar; Cancelar reverte): "remoção do
+código CST (indo p/ Simples) / CSOSN (indo p/ Normal) + revisar as regras,
+senão risco de interrupção do faturamento"; (b) no SAVE a API REMOVE das
+regras o código do regime antigo (peça `clearIcmsCodesForRegime` em
+@shared/tax-rule — só grupo muda: 1↔2 e Real↔Presumido não removem; null
+não remove); (c) /billing/validate acusa regra casada sem o código do
+regime VIGENTE (`icmsMissingCodeForCrt`): auto ('A') NÃO grava o link
+(invoice → 422 REQUIRES_VALIDATION — a "interrupção" prometida) e
+RegraDireta ('M') mantém o vínculo mas gera a issue. Rede de segurança:
+mesmo se a remoção falhar pós-regime-gravado, o validate pega a
+incoerência. EXECUTADA nos dois lados: 444/444 api (11 testes novos) +
+E2E real nos 2 sentidos (regra 9001 no banco dev) + diálogo/Cancelar
+validados no Browser; gates 0.80/0.85 ✅. **D43 (2026-09-01, rodada CFOP
+por alçada)**: no Seletor da regra, Sentido veio ANTES do CFOP e o CFOP
+virou LOOKUP filtrado pela ALÇADA — 1º dígito derivado de sentido + UF do
+destinatário vs UF do emitente (mesma UF = 1/5; outra UF = 2/6; EX
+Exterior = 3/7; UF vazia/coringa = os 3 dígitos do sentido; emitente sem
+UF = mesmo+outro). Endpoint GET /api/tax-rules/cfops (direction+stateId+
+filter; alçada resolvida na API — app não conhece a UF do emitente; 422
+stateId inexistente; filtra active='S' do catálogo); trocar sentido ou UF
+LIMPA o CFOP escolhido. 449/449 api; alçadas provadas por curl (5/6/1) e
+lookup validado no Browser (UF troca → lista 5xxx→6xxx). Achados de
+dado no dev: (a) FECHADO 2026-09-01 (decisão do Valdo): CFOPs nascem
+active='N' e vão sendo ATIVADOS conforme a necessidade na tela de CFOP —
+lista da alçada vazia (ex.: EX/3xxx/7xxx hoje) é comportamento correto,
+não bug; o filtro active='S' do /api/tax-rules/cfops é canônico;
+(b) os endereços do estabelecimento dev estavam todos deleted='S' —
+curls de gate com addresses:[] em 2026-08-31 apagaram (restaurado 1 vivo
+via UPDATE; cuidado permanente: PUT establishment sincroniza listas por
+PRESENÇA).
 **Fontes** (mapeamento do legado, fonte-da-verdade): `Infra-IA/Gestao2016/tributacao.md`
 (P1–P14, T1–T8), `tributacao-plano-web.md`, `processo-pedido-nota.md`, `financeiro.md`,
 `geracao-nfe-hierarquia.md`. Decisões numeradas abaixo citam as questões de origem (Qn).
