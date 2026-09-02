@@ -25,6 +25,16 @@ POST→GET→PUT→DELETE com identifier=id e remoção de preço por null); LOW
 DELETE de tabela de preço não checa uso (decisão: soft delete livre,
 preços viram histórico). Commits: api 062922b · app 914e326 · sql 1b46b5f
 · Infra-IA 8c5c4a5.
+**Revisão estrutural (2026-09-02, pedido do Valdo)**: conformidade com
+ARQUITETURA_MODULOS(_API).md e D1–D7 confirmada; 2 desvios de fronteira
+corrigidos — (1) page consumindo o datasource PRINCIPAL do módulo para
+lookups (presentation → data): extraído `service_lookup_datasource.dart`
+(categoria/plano) e `cfop_lookup_datasource.dart` no tax_rules (o mesmo
+desvio existia lá, meu) — regra reafirmada: page só toca lookup datasource
+dedicado (padrão StateLookupDatasource), escrita passa por usecase/bloc;
+(2) app services chamava /api/price-lists (endpoint do módulo vizinho):
+criado GET /api/services/price-lists — módulo do app fala SÓ com o seu
+/api/<m>.
 **Origem**: pedido do Valdo ("veja como está na programação o cadastro de
 serviço" → não existe produtor web); fase Faturamento Fiscal e Financeiro.
 
