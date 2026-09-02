@@ -12,7 +12,19 @@ correção minha: i18n_key/rota `price-lists` com HÍFEN — convenção
 contrato Setes, page_size, flags retroativas) aplicado em dev. Smoke E2E
 12/12 (POST→GET→PUT→DELETE + ataques: mercadoria invisível via /services
 404; FK 400 fields; grade duplicada 400; 401). Menu/lista/form validados no
-Browser. Pende: gates socrático/adversarial + commit.
+Browser. GATES (2026-09-02): socrático 0.80 ✅ — pontos abertos: (1)
+syncPrices soft-deleta o preço de TODAS as tabelas fora da grade, inclusive
+de tabelas já soft-deletadas (histórico de tabela morta some no próximo
+save — LOW, a grade só mostra vivas); (2) assertRefs faz 1 SELECT por linha
+da grade (N pequeno — tabelas de preço são poucas); (3) MAX+1 da tb_product
+é compartilhado com o futuro módulo products e com o sync — coberto pela D3
+(liberação só sem legado). Adversarial 0.85 ✅ sem HIGH/CRITICAL — 12
+ataques executados no dev (mercadoria invisível via /services nos 3 verbos;
+FK inexistente 400 fields; grade duplicada 400; 401 sem token; ciclo
+POST→GET→PUT→DELETE com identifier=id e remoção de preço por null); LOW:
+DELETE de tabela de preço não checa uso (decisão: soft delete livre,
+preços viram histórico). Commits: api 062922b · app 914e326 · sql 1b46b5f
+· Infra-IA 8c5c4a5.
 **Origem**: pedido do Valdo ("veja como está na programação o cadastro de
 serviço" → não existe produtor web); fase Faturamento Fiscal e Financeiro.
 
