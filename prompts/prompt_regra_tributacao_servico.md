@@ -176,4 +176,17 @@ regra municipal compartilhada na central (Q8.1).
 - API módulo `service-list` (6 arquivos, molde cfop: id digitado, 409 mesmo
   excluído, imutável; lista paginada com ORDER numérico do item;
   superGuard). Testes service-list.test.ts.
-- App módulo `service_list` (setes-form-builder, molde cfop) — em execução.
+- App módulo `service_list` (setes-form-builder, molde cfop; verificado: 13
+  arquivos, page sem datasource, analyze limpo; rótulo do menu "Serviços LC
+  116" porque a fábrica prefixa "Lista de") — validado no browser (199 itens,
+  8 páginas; form com incidência P/E).
+- Smoke API no dev: lista/filtro/GET 7.02='E'/409 duplicado/400 id inválido/
+  ciclo POST→PUT→DELETE→404→409 mesmo excluído/401. 471/471 testes.
+- Gates da Onda 1 (catálogo simples, sem transação/tenant): socrático 0.85
+  (ponto aberto: descrições da LC 116 RESUMIDAS — Super corrige; itens
+  4.22/4.23/5.09/15.01/15.09 marcados 'P' pela ADI 5835 — revisar se o STF
+  modular), adversarial 0.85 sem HIGH/CRITICAL (vetores executados acima).
+- Commits: api 9f356f8 · sql dc620ec · app (ver git) · Infra-IA d550daa.
+- **ONDA 1 CONCLUÍDA (2026-09-02).** Próxima: Onda 2 — tb_service_tax_rule
+  (D1/D4/D12/D13) + módulos gêmeos service-tax-rules + tb_service (D3) +
+  lookup da regra no cadastro de serviço.
