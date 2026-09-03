@@ -206,4 +206,24 @@ regra municipal compartilhada na central (Q8.1).
   Cadastros, contrato Setes, page_size, flags retro) aplicado em dev.
 - 12 testes (483 total); smoke E2E 14/14 (409 duplicata, 400 FKs, 409 em
   uso, null limpa a FK, 401).
-- App `service_tax_rules` + lookup da regra no form de serviço — form-builder.
+- App `service_tax_rules` (form-builder; verificado: 15 arquivos, page só com
+  lookup datasource dedicado, analyze limpo) + lookup da regra no form de
+  serviço. Ajuste na API a pedido do agente: `stateId` na linha da regra
+  (lookup dependente UF → cidade). Validado no browser: regra 2
+  (1.02 · CURITIBA/PR · 5%) criada pelo form (pendência R3 e validação
+  0–100 funcionando) e vinculada ao serviço 6 (DESENVOLVIMENTO) — dado de
+  dev mantido para a Onda 3.
+- Gates Onda 2: socrático 0.80 ✅ — pontos abertos: (1) FK literal deixa as
+  exceções da LC 116 dependentes da conferência de cidade do tomador (D12,
+  entra na Onda 3); (2) tb_service nasce mesmo sem regra (linha com FK null —
+  presença ≠ enquadrado; o billing decide por serviceTaxRuleId null, D6);
+  (3) DELETE 409 em uso não cobre serviço soft-deletado (JOIN filtra
+  p.deleted='N' — reviver o serviço reaponta uma regra morta → validate
+  acusa). Adversarial 0.85 ✅ sem HIGH/CRITICAL (14 ataques reais no dev).
+- Commits: api b3ae4e9 + 9e3979d · sql 6608bdb · app (ver git) · Infra 002cbe5.
+- **ONDA 2 CONCLUÍDA (2026-09-03).** Próxima: Onda 3 — caminho kind='S' no
+  billing (validate/invoice): regra do serviço obrigatória (D6), conferência
+  cidade da regra × cidade do tomador (D12), `@shared/service-tax-rule`
+  (resolução + calcIssqn com alíquota da regra), vínculo por item com
+  RegraDireta (D14 — tabela irmã de tb_order_item_tax_rule), produtores de
+  listservice/tax_code em tb_order_item_issqn, drop de tb_city.aliq_iss (D8).
