@@ -1,7 +1,7 @@
 # Prompt — Regra de Tributação de Serviço (ISS)
 
 **Escopo**: setes
-**Estado**: RODADAS 1–2 FECHADAS (2026-09-02) — D1–D14; Onda 1 em execução.
+**Estado**: CONCLUÍDA (2026-09-03) — D1–D14 executadas nas Ondas 1–3; gates verdes; commits nos 4 repos.
 **Origem**: rascunho do Valdo `Regra de tributacao de servicos.txt` + artigo
 `Articles/iss-curitiba-aliquotas.md` (Curitiba = exemplo; vale para qualquer
 município). Fase Faturamento Fiscal e Financeiro.
@@ -227,3 +227,41 @@ regra municipal compartilhada na central (Q8.1).
   (resolução + calcIssqn com alíquota da regra), vínculo por item com
   RegraDireta (D14 — tabela irmã de tb_order_item_tax_rule), produtores de
   listservice/tax_code em tb_order_item_issqn, drop de tb_city.aliq_iss (D8).
+
+## Execução — Onda 3 (2026-09-03): faturamento de serviço pela regra
+
+- Peça `@shared/service-tax-rule` (resolução pela FK literal + checagem
+  NO_RULE/INACTIVE/CITY_MISMATCH contra a cidade do TOMADOR — D12; nada
+  reusa @shared/tax-rule — D5). `calcIssqn` continua puro; a alíquota
+  passa a ser a da REGRA (`IssqnCalcContext.aliqPct` — D13).
+- billing/validate: item kind='S' → RegraDireta 'M' (getById) ou regra do
+  cadastro; problema = issue `serviceTaxRule` + vínculo 'A' limpo (D6);
+  ok = vínculo 'A' em `tb_order_item_service_tax_rule` (migration 037,
+  irmã da tb_order_item_tax_rule — D14; sem endpoint manual, paridade
+  exata com mercadoria). billing/invoice: serviço sem vínculo → 422
+  REQUIRES_VALIDATION; regra revalidada (paridade R5-Q3); ISSQN calculado
+  com a alíquota da regra; `tb_order_item_issqn.listservice/tax_code`
+  ganharam produtor (tax_code alargado para 20 — código municipal, D4).
+- D8: `tb_city.aliq_iss` DROPADA na central (sql/45, idempotente com
+  IF EXISTS — MariaDB 10.4); canônicos 01/06d/07 sem a coluna; módulo
+  cities (API+app) sem o campo. LIÇÃO: o seed 06d tinha BOM UTF-8 — o
+  mysql2 rejeita; canônicos ficam sem BOM.
+- Consulta de links de serviço só roda quando a ordem TEM serviço —
+  sequências de mock/queries de ordens só-mercadoria intactas.
+- Smoke real (ordem 6533, tomador em São José dos Pinhais): serviço sem
+  regra → issue D6 + invoice 422; regra 2 (Curitiba) → issue CITY_MISMATCH
+  (D12); regra de SJP criada e vinculada → sem issue, vínculo 'A' gravado;
+  DELETE da regra em uso 409; desvincular → vínculo 'A' soft-deletado.
+  Dev restaurado (serviço 5 sem regra; regra SJP apagada; regra 2 e o
+  serviço 6 mantidos).
+- 16 testes novos (494 total).
+- Gates Onda 3: socrático 0.80 ✅ — pontos abertos: (1) RegraDireta 'M' de
+  serviço sem produtor (só a tabela/semântica — igual à mercadoria hoje);
+  (2) invoice consulta a regra por vínculo (cache por id) — N regras
+  distintas = N SELECTs, N pequeno; (3) exceções da LC 116 dependem de o
+  cliente cadastrar a regra da cidade do tomador e apontá-la no serviço —
+  limitação conhecida da FK literal (D1), registrada. Adversarial 0.85 ✅
+  sem HIGH/CRITICAL (6 vetores reais no dev + 16 unitários).
+- Commits: api (ver git) · sql · app · Infra.
+- **FRENTE CONCLUÍDA.** Pendências fora da frente: NFS-e nativa (exigibilidade
+  — Q9), ISS fixo (D13, fora até haver caso), endpoint de RegraDireta.
