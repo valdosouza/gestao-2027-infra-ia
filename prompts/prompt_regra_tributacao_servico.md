@@ -190,3 +190,20 @@ regra municipal compartilhada na central (Q8.1).
 - **ONDA 1 CONCLUÍDA (2026-09-02).** Próxima: Onda 2 — tb_service_tax_rule
   (D1/D4/D12/D13) + módulos gêmeos service-tax-rules + tb_service (D3) +
   lookup da regra no cadastro de serviço.
+
+## Execução — Onda 2 (2026-09-02/03): regra + enquadramento
+
+- Migration 036 (schema do cliente, aplicada em dev) + sql/03: `tb_service_tax_rule`
+  (id+institution, tb_city_id FK central, tb_service_list_id varchar SEM FK
+  física — validado na peça como os CSTs, aliq, municipal_code, active,
+  tb_taxes_id elo da reforma; fato único institution×cidade×item por 409 —
+  soft delete impede UNIQUE) e `tb_service` (PK/FK = tb_product, FK literal
+  tb_service_tax_rule_id — D1/D3).
+- API `service-tax-rules` (6 arquivos; lista paginada JOIN cidade/UF/item;
+  lookup /service-list dos itens ativos; DELETE 409 SERVICE_TAX_RULE_IN_USE)
+  + `services` com serviceTaxRuleId/serviceTaxRuleLabel, tb_service na mesma
+  transação, lookup /tax-rules. Flag default + seed sql/44 (interface 36,
+  Cadastros, contrato Setes, page_size, flags retro) aplicado em dev.
+- 12 testes (483 total); smoke E2E 14/14 (409 duplicata, 400 FKs, 409 em
+  uso, null limpa a FK, 401).
+- App `service_tax_rules` + lookup da regra no form de serviço — form-builder.
