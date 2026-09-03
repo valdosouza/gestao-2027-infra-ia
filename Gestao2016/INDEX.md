@@ -21,6 +21,13 @@ VERIFICADA contra o código antes de ser registrada.
    `guardiao-conceitual`/`setes-conceito`). Sugestão aceita vira decisão registrada;
    recusada é arquivada com o porquê.
 
+## Governança da iniciativa "Investigação de Conhecimento" (aberta 2026-09-02)
+
+Prompt mestre auto-retomável: `Infra-IA/prompts/PROMPT-GESTAO2016-KNOWLEDGE.md`.
+Workspace da iniciativa (Decisão 1 do Valdo): **`D:\Gestao2016\Infra-IA\Gestao\`** — dentro do projeto legado.
+Estado em `STATUS.md` de lá (SEMPRE começar por ele) · contexto/escopo/taxonomia em `BRIEFING.md` · lições em
+`LEARNINGS.md` · fases em `01-grafo/` … `05-regras/`. Os seis docs abaixo permanecem AQUI (espelho do Gestao2027). Escopo do código: `Apps\` FORA (a remover), `Roteador\` = projeto próprio.
+
 ## Documentos
 
 | Documento | Conteúdo |
@@ -37,7 +44,12 @@ VERIFICADA contra o código antes de ser registrada.
 
 ## Grafo de navegação (graphify)
 
-`codigo-aprendizado/Gestao2016/graphify-out/graph.json` — 36.540 nós, 49.181 arestas,
+**Vigente (2026-09-02)**: `D:\Gestao2016\graphify-out\graph.json` — 37.559 nós / 58.651 arestas,
+100% AST/regex local (0 tokens LLM), sem Apps/Roteador; Roteador isolado em `D:\Gestao2016\Roteador\graphify-out`.
+Cobertura e lacunas: `D:\Gestao2016\Infra-IA\Gestao\01-grafo\COBERTURA.md`. Rebuild SÓ por
+`D:\Gestao2016\.claude\graphifyuild_graph.py` (resolvedor de units homônimas — LEARNINGS #2).
+
+SUPERADO: `codigo-aprendizado/Gestao2016/graphify-out/graph.json` (15/08, cópia de julho) — 36.540 nós, 49.181 arestas,
 99% extraído de AST real. Serve para NAVEGAR (quem chama quem, o que quebra se eu mexer
 aqui): `graphify explain`, `query`, `affected`, `path`, `god-nodes`.
 

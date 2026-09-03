@@ -1,0 +1,36 @@
+# Contexto
+	Regra de Tributacao produtos e servicos
+	
+# Objetivo
+	Criar um processo de tributacao diferente para servicos
+	
+# divergencia
+	1 - Na tela de regra de tributacao esta obrigando a inclusao de ICMS, mas so produtos tem isso
+	1.1 - Para servicos a aliquota fica no cadastro de cidades que cada uma define a aliquota.
+	1.1.1 - Mas isso esta errado pois dependende de uma lista de servicos...
+	2 - Foi trazido um processo do legado que agora estou enxergando falhas...
+	2.1 - temos que definir processo proprio.
+	
+# Referencia
+	"D:\Gestao2027\Infra-IA\Articles\iss-curitiba-aliquotas.md"
+	Curitiba é apenas uma referencia, mas serve para todas as cidades.
+	
+# Conceito
+	Temos uma tabela de produtos tb_product
+		Mas os produtos podem ser
+			Mercadoria kind  = P
+			Servico - kind = S
+			
+# Processo sugerido
+	Criar tela de regra de tributacao para servico
+	informando dados que viculem a cidade do requerente...
+	Aliquotas e codigos de especificos necessarios.
+	
+	No cadastro de produtos fazemos o vinculo da regra direto no servico...
+	
+	No momento do faturamento fazemos o mesmo processo de validacao de regra especifico para os servicos
+	
+
+	
+
+	

@@ -1,7 +1,7 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 7.6 (acompanha a tabela "Histórico de Atualizações")  
-**Última atualização**: 2026-08-16  
+**Versão**: 7.7 (acompanha a tabela "Histórico de Atualizações")  
+**Última atualização**: 2026-09-02  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
 
@@ -19,7 +19,7 @@
 | **skills-genericas** | — | 6 | — | ✅ Qualquer projeto |
 | **git-github** | 6 | 1 script | — | ✅ Suporte |
 | **codigo-aprendizado** | — | — | — | ✅ POCs/estudo + código legado (Gestao2016) |
-| **Gestao2016** | 2 | — | — | 📖 Aprendizado do legado sob instrução do AUTOR (em construção) |
+| **Gestao2016** | 7 + governança | — | — | 📖 Aprendizado do legado sob instrução do AUTOR · **Investigação de Conhecimento F0/F1 (2026-09-02)** — workspace em `D:\Gestao2016\Infra-IA\Gestao\` (começar pelo STATUS.md de lá) |
 | **integration** | 0 | 1 | — | ✅ Suporte |
 | **Central** | 7 | 0 | — | ✅ Referência |
 | **engine-kit** | 3 | 5 | — | 📦 Kit de portabilidade da engine (v0.1 — só `metodo`; ver README do kit) |
@@ -517,6 +517,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-09-02 | **Investigação de Conhecimento Gestao2016 ABERTA (F0/F1) — governança em `D:\Gestao2016\Infra-IA\Gestao\`** (BRIEFING + STATUS + LEARNINGS + 01-grafo…05-regras; prompt mestre em `prompts/PROMPT-GESTAO2016-KNOWLEDGE.md` v1.2). Local = Decisão 1 do Valdo (dentro do projeto legado; a 1ª tentativa no espelho `Infra-IA/Gestao2016` foi corrigida — LEARNINGS #1). Graphify REINSTALADO (pipx graphifyy 0.9.53, extrator Pascal nativo, 0 tokens): grafo principal 37.559 nós/58.651 arestas SEM `Apps\` (a remover) e SEM `Roteador\` (projeto próprio, grafo isolado 7.233 nós). ⚠️ ACHADO DE MÉTODO: resolvedor de units homônimas do graphify apontava a herança de todos os controllers para a cópia do Roteador (GeraQuery 783→15 arestas) — corrigido por script `D:\Gestao2016\.claude\graphifyuild_graph.py`; nunca rodar `/graphify .` na raiz. F1: `01-grafo/COBERTURA.md` (o que escapou: tabelas via regex 556 units×300 tabelas, SQL dinâmico, eventos DFM, RTTI, 64 .sql sem parser). Decisão 2 = piloto **Faturamento de venda** (tronco; fatiado em 7 lotes F2) e Decisão 3 = propósito (Gestao2016 vira versão 2026 desktop e base de regras p/ web; compartilhamento de inteligência com setes-api/setes-app — BusinessRule ganha campo `web:`). Achado: grafo NÃO resolve chamadas `Obj.Metodo` (Fc_Faturar_Normal = 0 calls) | 7.7 |
 | 2026-07-04 | Índice central criado | 1.0 |
 | 2026-07-04 | Agente Delphi→TS documentado | 1.0 |
 | 2026-07-04 | Fase 2 (Gerenciamento Central): prompt fechado, PADROES_BANCO, skills revisar-ddl e refinar-prompt-arquitetura, doc auth multi-institution | 1.1 |
