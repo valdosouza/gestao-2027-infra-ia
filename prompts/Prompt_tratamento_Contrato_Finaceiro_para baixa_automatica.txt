@@ -1,0 +1,51 @@
+# Contexto
+	Criacao de Contrato financeiro para baixas automaticas
+	
+# Objetivo
+	Controlar a baixa automatica de caixa somente se um caixa do usuario estiver aberta
+	Controlar a baixa automatica de Banco somente se uma conta corrente estiver criada.
+	
+# Regra no faturamento
+	Nao proibe faturamento e o financeiro deve ser gerado com baixa posterior
+	
+# Novo Metodo baseado no legado
+	##Legado example
+		reg_electronic_card.pas
+			Funciona como um contrato.
+				Existe vinculo com
+					forma de pagamento
+					Conta corrente
+				Existem
+# REgras
+	Forma de pagamento sem contrato vai para o financeiro sem nenhum tipo de tratamento.
+	
+# Referencias legado
+	un_cupom_fiscal.pas Linha 282 que desvia para linha 310 e usa Pc_LancaValorCartao
+	
+# REsultado esperado
+	Utilizar o TControllerCartaoEletronico para gerar um contrato mais generico em que podemos:
+		Definir qual forma de pagamento tera baixa automatica
+		Se havera algum tipo de agio ou prazo para recebimento
+			Como o caso dos cartoes de credito
+			
+		## Sugestao
+			
+			CREATE TABLE TB_CARTAOELETRONICO 									==> tb_financial_contract
+			CTE_CODIGO     INTEGER NOT NULL,									==> id 
+			CTE_DESCRICAO  VARCHAR(100) CHARACTER SET WIN1252 COLLATE WIN_PTBR,	==> ignore
+			CTE_TIPO       CHAR(1) CHARACTER SET WIN1252 COLLATE WIN_PTBR,		==> ignore
+			CTE_ALIQ_CRED  NUMERIC(10,2),										==> fee_rate
+			CTE_PRZO_CRED  INTEGER,												==> payment_term
+			CTE_ALIQ_DEBI  NUMERIC(10,2),										==> ignore
+			CTE_PRZO_DEBI  INTEGER,												==> ignore
+			CTE_CONTATO    VARCHAR(100) CHARACTER SET WIN1252 COLLATE WIN_PTBR,	==> note //campo blob
+			CTE_FONE       VARCHAR(14) CHARACTER SET WIN1252 COLLATE WIN_PTBR,	==> ignore
+			CTE_VALIDADE   DATE,												==> expiration_date //pode ser nulo
+			CTE_CODCTB     INTEGER NOT NULL,									==> tb_bank_account_id //zero indica lancamento em caixa
+			CTE_CODPLC_D   INTEGER,												==> tb_financial_plans_cred_id //pode ser null
+			CTE_CODPLC_C   INTEGER,												==> tb_financial_plans_debi_id //pode ser null
+			CTE_CODFPT     INTEGER												==> tb_payment_type_id
+		);
+				
+				
+	

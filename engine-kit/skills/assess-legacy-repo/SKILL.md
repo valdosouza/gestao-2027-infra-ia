@@ -12,6 +12,9 @@ following phases.
 **Origin**: distilled from the case-zero analysis script (migration of a legacy
 synchronization service) + the scale lesson from case two (~2M lines / 30 years).
 **Scope**: method
+**Changelog**: 2026-09-04 — added "Lessons from legacy cases" (13 rules distilled from a Delphi/Firebird ERP case,
+sessions 1–3: index validation, call density, fact × intent, rules as data, inverse process, sibling diff table, proposed modules,
+vault entry door); 2026-09-04 (later) — lesson 14: owner-verified docs are hypotheses (doc × code table per batch)
 
 ---
 
@@ -81,6 +84,62 @@ Markdown, fixed sections. Omit none — when information is missing, write
 3. **Never** ignore an inconsistency — everything goes to section 6
 4. **Never** omit a section — fill it with ⚠️ if necessary
 5. Respect the case's discard warnings (code from abandoned plans is noise)
+
+## Lessons from legacy cases (distilled — apply in every assessment)
+
+1. **Validate the index against a known truth before trusting it.** Graph tools that
+   resolve symbols by global name pick the wrong copy when the tree contains copied
+   subprojects (a "god node" list turned out to be the sum of two projects). Scope
+   resolution to the corpus; check the in-degree of one function you already know is
+   central.
+2. **A code graph is a map of structure, not of flow.** In OO languages, calls through
+   a typed field (`Obj.Method`) often produce no edge: a trunk routine showed 0 calls.
+   Measure the call density of a known unit before using the graph as a census;
+   inventory by imports + a regex over qualified calls + instrumented phases instead.
+3. **Do not label communities with an LLM.** Cluster cohesion in a monolith is near
+   zero (shared utility units glue everything) and the labels cost millions of tokens;
+   module names come from the owner. A 0-token index serves navigation just as well.
+4. **Photography, not comparison.** The assessment describes the legacy by itself. The
+   target system appears only as a source that maps the legacy, and in a traceability
+   field filled in a later phase — never as a judgment ("in the new system this
+   becomes…") inside the description. The owner will make you remove it; save the rework.
+5. **Record `file:line` on every fact.** It is what lets the knowledge base answer
+   "where?" without reopening the source, and what makes rule ids clickable later.
+6. **Before asking the owner, exhaust the code.** Split every open item into FACT (the
+   code answers it — grep, read, cite the line; half of an accumulated "questions to
+   the author" list closed this way in an hour) and INTENT (only the owner can say
+   whether the behavior is deliberate). Only intent becomes a question — with the
+   evidence and a suggested answer attached. Enumerations in code comments
+   (`0 NOT SENT / 1 SENT / …`) outrank the owner's memory: read the whole legend before
+   recording a decision about one value.
+7. **Rules are born as data.** Business rules go into a structured catalog (id, class,
+   owning module, process steps, evidence, status) and the documents are GENERATED from
+   it — consistent metadata, automatic index, programmatic check that every id cited by
+   a process exists. Hand-editing a generated file is forbidden.
+8. **After the pilot process, map its inverse** (cancel / reverse / undo) before
+   changing domain. It costs about a quarter of the pilot and tests whether the state
+   model closes (document, order, stock, receivables); it also surfaces atomicity bugs
+   the forward reading cannot see.
+9. **A sibling process starts with a difference table** against the process already
+   mapped (stock moved at the order vs at the document; single transaction vs none;
+   manual vs automatic settlement). Reuse measured at ~60%; the table is the most
+   useful artifact of the sibling.
+10. **Modules that emerge in later processes stay "proposed"** until the owner
+    validates them — never silently inserted into the current list.
+11. **The knowledge base needs one entry door**: FAQ → document, clickable rule ids,
+    and a test with real questions from both profiles (developer / non-developer)
+    measured in "hops from the index".
+12. **The pilot may be small OR the most critical unit**, as long as it is sliced into
+    summarizable pieces (process phases); the anti-big-bang criterion is the slicing,
+    not the size.
+13. **Infra items in the status file carry their check command** (`svn propget …`,
+    `git config …`), not the assumption — a "pending" item was found already done.
+14. **A document "verified by the owner" is a hypothesis with priority, not a fact.**
+    It is the owner's memory of the code. Close every batch with a table
+    *owner's doc × code → confirms / contradicts / details*; every contradiction becomes
+    a numbered question. The first such table found a direct contradiction ("soft
+    delete" in the doc, physical `DELETE` in the code). Also: grep the callers before
+    marking a routine as a bug — two "bugs" were dead code.
 
 ## Output and chaining
 

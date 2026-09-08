@@ -1,0 +1,47 @@
+Q18 - Vamos criar a tabela de cheques
+	CREATE TABLE tb_bank_cheks (
+    CHQ_CODIGO       INTEGER NOT NULL, 
+	CHQ_CODMHA       INTEGER - tb_institution_id
+	CHQ_DATA         DATE,
+    CHQ_NR_BANCO     INTEGER,  
+    CHQ_CONTA_CORRENTE  VARCHAR(30),	
+    CHQ_AGENCIA      VARCHAR(7) CHARACTER SET WIN1252 COLLATE WIN_PTBR,
+    CHQ_NUMERO       VARCHAR(20) CHARACTER SET WIN1252 COLLATE WIN_PTBR,
+    CHQ_EMITENTE     VARCHAR(100) CHARACTER SET WIN1252 COLLATE WIN_PTBR,	
+    CHQ_VALOR        NUMERIC(10,2),
+    CHQ_TIPO         VARCHAR(1) CHARACTER SET WIN1252 COLLATE WIN_PTBR, [P]roprio - [T]ERCEIRO   
+);
+Esta tabela nao tem no legado. separei alguns campos de TB_CHEQUE do legado para fazer o rastreamento do cheque
+CREATE TABLE tb_bank_cheks_Tracking
+	tb_bank_cheks
+	tb_institution_id
+	dt_record
+	tb_entity_id - pode ser nulo
+	tb_financial_id - pode ser nulo
+	settled_code  - pode ser nulo
+	Status (Devolvido / Descontado / Quitado)
+	
+Preciso que me ajude neste rastreio, vou fazer um fluxo dos acontecimentos do cheque  - fluxo mais complexo
+Registra o Cheque
+	Define a origem do Cheque (
+		qual financeiro que recebeu
+		Assim teremos o cliente que usou o cheque para pagar,
+			considere que o cliente pode usar um cheque de terceiros para pagar...
+	cheque pode ser devolvido
+		Quando ele e registrado como devolvido temos que gerar um financeiro de contas a receber em relacao ao cheque
+			Considere que o cliente nao deve mais o faturado...agora ele deve o cheque
+			Quando o usuario baixar o cheque no financeiro temos que registrar isso no tracking
+	Cheque pode ser usado no contas a pagar 
+		Registrar para quem foi...aqui usa o mesmso processo do tb_financial...no modo contas a pagar
+	Cheque descontado
+		Informa o nome do fornecedor (tb_entity_id) que efetou a operacao de troca
+	O cheque descontado pode voltar ao sistema 
+		Quando o cheque pre-datado cheque no dia em que pode ser deposito ele pode ser usado para no processo de desconto
+		Ou seja o factoring usa o mesmo cheque pre-datado que agora chamamos de cheque bom para trocar outros cheque predatadp
+		
+
+
+
+
+
+			

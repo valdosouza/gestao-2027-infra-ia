@@ -1,0 +1,47 @@
+ tb_bank_charge_slip e a tabela que contem as configuracoes para gerar o boleto
+	tb_bank_charge_kind
+	tb_bank_charge_ticket
+	
+essa tabela abaixo e do legado precisamos ajustar os nomes para o novo modelo
+aqui fica uma duvida sobre o nomes e de como seria a derivacao
+	tb_financial_doc_slip - Ligado ao modulo financeiro
+	tb_bank_doc_slip - Ligado ao modulo banco
+CREATE TABLE TB_BOLETO_BANCARIO (
+    BLT_CODIGO            INTEGER NOT NULL,
+    BLT_CODEMP            INTEGER,
+    BLT_NUMERO            VARCHAR(30) CHARACTER SET WIN1252 COLLATE WIN_PTBR,
+    BLT_DATA              DATE,
+    BLT_CODCTB            INTEGER,
+    BLT_TX_DESCONTO       NUMERIC(10,2),
+    BLT_BAIXA             CHAR(1),
+    BLT_VALOR             NUMERIC(10,2),
+    BLT_CODQTC            INTEGER,
+    BLT_TX_JUROS          NUMERIC(10,2),
+    BLT_TX_MORA           NUMERIC(10,2),
+    BLT_VL_MORA           NUMERIC(10,2),
+    BLT_VL_DESCONTO       NUMERIC(10,2),
+    BLT_TX_MULTA          NUMERIC(10,2),
+    BLT_VL_TARIFA         NUMERIC(10,2),
+    BLT_CODBLE            INTEGER,
+    BLT_DT_VENCIMENTO     DATE,
+    BLT_DT_PROCESSAMENTO  DATE,
+    BLT_ACEITE            CHAR(1),
+    BLT_PARCELA           VARCHAR(30) CHARACTER SET WIN1252 COLLATE WIN_PTBR,
+    BLT_INSTRUCOES        BLOB SUB_TYPE 1 SEGMENT SIZE 80 CHARACTER SET WIN1252,
+    BLT_REMESSA           "Inteiro" /* "Inteiro" = INTEGER */,
+    BLT_CODRET            INTEGER,
+    BLT_STATUS            CHAR(1),
+    BLT_NOSSONUMERO       VARCHAR(100) CHARACTER SET WIN1252 COLLATE WIN_PTBR,
+    BLT_DT_PROTESTO       DATE,
+    BLT_DT_DESC_VENC      DATE,
+    BLT_MSG_RETORNO       VARCHAR(100) CHARACTER SET WIN1252 COLLATE WIN_PTBR,
+    BLT_NR_REMESSA        INTEGER,
+    BLT_DIAS_PROTESTO     INTEGER,
+    BLT_TIPO_DIA          CHAR(1),
+    BLT_DIAS_NEGATIVACAO  INTEGER,
+    BLT_DT_NEGATIVACAO    DATE
+);
+
+
+Q20 - b
+Q21 - confirmado

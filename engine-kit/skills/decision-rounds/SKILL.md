@@ -12,6 +12,9 @@ them.
 **Origin of the method**: case zero — a draft of hundreds of lines became a closed
 prompt with dozens of numbered decisions, validated DDL, and code with tests.
 **Scope**: method
+**Changelog**: 2026-09-04 — question format rule added (evidence + options + explicit recommendation: in a real round, the only
+answer that diverged was the one question asked without a recommendation); Round 0 gains step 0 (check the decisions already recorded; split pending items into
+fact × intent) — from a legacy ERP case where a redundant decision and half of the "questions to the owner" were avoided
 
 ---
 
@@ -22,6 +25,11 @@ The draft is not silently corrected. It is **organized as-is** and the problems 
 permanently. Repeat until pending items reach zero.
 
 ### Round 0 — Organize
+0. **Check the decisions already recorded** in the target's decision table (search for the
+   table/concept the draft touches): a draft often re-raises something already decided —
+   answer it with the decision number instead of opening a redundant one. Then split every
+   problem into **fact** (the code answers it — resolve it and cite `file:line`) and **intent**
+   (only the owner can answer) — only intent becomes a numbered question.
 1. Restructure the draft into the standard phase-prompt format:
    `Context → Objectives → Workflow → Grouped specifications → Success criteria`
 2. Keep the content faithful; mark problems with ⚠️ at the exact spot + a reference to
@@ -52,6 +60,10 @@ permanently. Repeat until pending items reach zero.
 
 - **Never decide for the owner** on architecture/business items — suggest with
   "(Recommended)" and wait
+- **Every question carries evidence (`file:line`), closed options and ONE explicit
+  recommendation** — even when the agent is neutral, say which reading it would take.
+  Closed questions with a recommendation are answered in minutes; the question asked
+  without one is the one most likely to diverge or stall
 - **Never lose a decision**: once decided, it enters the permanent section with a
   number — and numbers are NEVER reused/renumbered
 - **Always sweep for residues** after every naming change (search for the old names)

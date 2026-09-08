@@ -37,6 +37,10 @@
 - [ ] Nomes em inglês (caso real: `acao_botao` → `button_action`)
 - [ ] Tabela vive na base certa? (central × schema do cliente — nunca as duas)
 - [ ] FK cross-schema explícita quando referencia a central (caso real: `tb_customer` referenciando `tb_entity` local inexistente)
+- [ ] **JOIN por VARCHAR com tabela do baseline? Collation IGUAL à dela** (`utf8mb4_general_ci`
+      — o baseline é general_ci, as migrations novas unicode_ci; `col = col` entre
+      collations diferentes dá erro 1267 só no banco real. Caso real 2026-09-06:
+      `tb_order_item.kind = tb_order_item_tax_rule.kind` — regra em PADROES_BANCO.md)
 - [ ] **Tabela nova em schema de cliente: o 001_baseline.sql (dump do legado) já a cria?**
       (caso real 2026-07-18: `tb_collaborator` existia no baseline com o typo
       `fahters_name` — o CREATE IF NOT EXISTS da migration 008 virou no-op e o

@@ -1,6 +1,6 @@
 # ⚙️ Engine Kit — Legacy Modernization Engine (Portability Kit)
 
-**Version**: 0.3 (2026-07-28) — English edition + Claude Code plugin format
+**Version**: 0.4 (2026-09-04) — first feedback loop from a large legacy case folded into the skills
 **Scope**: method
 **Origin**: `Infra-IA/prompts/rascunho_engine_modernizacao.md` (product journal) — this kit is the materialization of the `mixed`/`method` queue from the 2026-07-19 scope census
 **Canonical home**: PROVISIONALLY here; the definitive home (a neutral vault, outside any company workspace) will be decided in the product's IP round
@@ -93,3 +93,4 @@ Every evolution: a new row in the table below + update the **Version** at the to
 | 0.1 | 2026-07-19 | Initial kit extracted from case zero: 5 skills + knowledge-base skeleton + git security package (11 neutralized docs) |
 | 0.2 | 2026-07-19 | `INSTALACAO.md` created (owner feedback: "how to install" was not executable) — Day 1/Day 2+ step-by-step with commands, connection to existing tools, pilot unit, and "what to never do" |
 | 0.3 | 2026-07-28 | English edition + Claude Code plugin format adopted from harness-kit best practices: `.claude-plugin/plugin.json` manifest, `skills/<name>/SKILL.md` with auto-trigger frontmatter, `agents/` personas, git security package converted to skills with a `references/` folder |
+| 0.4 | 2026-09-04 | First feedback loop from a real large legacy case (ERP, ~2.4k source files, 3 sessions): `assess-legacy-repo` gains "Lessons from legacy cases" (13 distilled rules: index validation, call density, fact × intent, rules as data, inverse process, sibling diff table, proposed modules, vault entry door); `decision-rounds` Round 0 gains step 0 (check existing decisions + fact × intent split) |

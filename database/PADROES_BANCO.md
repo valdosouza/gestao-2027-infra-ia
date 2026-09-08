@@ -73,6 +73,18 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
   não aceita NULL); >0 = override do usuário (só quando o catálogo marca
   `scope='U'`). Resolução: usuário → institution → default do catálogo.
 
+- **Collation em JOIN por VARCHAR — schema do cliente é MISTO por construção**
+  (Q-N2 da negociação do pedido, Valdo 2026-09-07): o baseline 001 cria as tabelas
+  em `utf8mb4_general_ci` (151 tabelas) e as migrations novas em
+  `utf8mb4_unicode_ci` (34). `coluna = coluna` VARCHAR entre collations distintas
+  explode com erro 1267 SÓ contra o banco real (`coluna = ?` não) — caso real:
+  `tb_order_item.kind = tb_order_item_tax_rule.kind` em `@shared/order`. Regra:
+  **tabela nova que faz JOIN por VARCHAR com tabela do baseline adota a collation
+  dela** (precedente `tb_order_item_return`, sql/03); `COLLATE` explícito no JOIN
+  só como exceção documentada no código. Convergir o schema inteiro é projeto
+  próprio (não decidido). FK cross-schema para a central continua exigindo
+  `utf8mb4_unicode_ci` (item acima).
+
 - **Catálogo central INICIADO PELO CLIENTE** (3º padrão de catálogo — Formas de
   Pagamento, Valdo 2026-07-18): a tabela vive em `setes_central` mas quem
   alimenta é o CLIENTE — dedupe por DESCRIÇÃO dentro da transação (existe =

@@ -1,9 +1,13 @@
 # PROMPT MESTRE — Investigação de Conhecimento Gestao2016 (Kit Engine)
 
-**Status**: em otimização (v1.2) · **Origem**: D:\Download (Valdo, 2026-09-02) · **Escopo**: misto
+**Status**: em otimização (v1.3) · **Origem**: D:\Download (Valdo, 2026-09-02) · **Escopo**: misto
 **Referências**: `D:\Gestao2016\Infra-IA\Gestao\BRIEFING.md`, `STATUS.md`, `LEARNINGS.md`, `engine-kit/`
 
 > Changelog
+> - 2026-09-04 v1.3 — REGRAS DE OPERAÇÃO ganham 4 regras nascidas nas sessões 2–3 (perguntas ao autor:
+>   fato × intenção; regras como catálogo gerado; inverso do piloto e tabela de diferenças do processo irmão,
+>   módulos emergentes ficam propostos; itens de infra com comando de verificação) e a MELHORIA CONTÍNUA ganha
+>   o item 5 "prazo da lição" (LEARNINGS #11–#19 do caso).
 > - 2026-09-02 v1.1 — caminho do workspace ajustado de `Infra-IA\Projetos\Gestao2016-Knowledge\` para
 >   `Infra-IA\Gestao2016\` (regra do próprio prompt: kit vence — simetria projeto↔espelho; LEARNINGS #1).
 >   `01-grafo` guarda EXTRATOS (csv/stats) e aponta para o graph.json no projeto (LEARNINGS #5).
@@ -83,6 +87,16 @@ Você é o agente executor do processo de extração de conhecimento do projeto 
   units envolvidas, arestas) para indexação futura.
 - Não invente comportamento de código: se a análise for incerta, marque
   `[INCERTO]` com o motivo, em vez de afirmar.
+- **Perguntas ao autor**: antes de registrar, esgote o código — separe FATO (o código
+  responde; cite arquivo:linha) de INTENÇÃO (só o autor). Só intenção sobe ao STATUS,
+  sempre com evidência e sugestão de resposta.
+- **Regras (F5) nascem como catálogo estruturado** e viram `.md` por geração; nunca
+  editar um `.md` de regra à mão.
+- **Depois do processo piloto, mapeie o seu inverso** (cancelar/estornar) antes de
+  mudar de domínio; ao mapear um processo irmão, produza primeiro a tabela de
+  diferenças contra o já mapeado; módulos que emergirem ficam "propostos" até o
+  autor validar (nunca entram na lista vigente em silêncio).
+- **Itens de infra no STATUS levam o comando de verificação** ao lado, não a suposição.
 
 ## MELHORIA CONTÍNUA (obrigatória — encerramento de toda sessão)
 
@@ -102,6 +116,9 @@ CADA sessão, antes de atualizar o STATUS.md:
    decisão.
 4. **Versione a mudança:** toda edição no kit recebe uma linha de changelog
    no próprio arquivo editado (data + resumo da alteração).
+5. **Prazo da lição:** toda linha marcada "candidata ao kit" no LEARNINGS vence em
+   1 sessão — ou é aplicada ao kit (baixo risco) ou vira proposta explícita ao usuário.
+   Lições sem dono acumulam e o kit não melhora.
 
 Assim, cada iteração sobre o Gestao2016 deixa o kit engine melhor do que
 o encontrou — o processo se refina usando o resultado dele mesmo.
