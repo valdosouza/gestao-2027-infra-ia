@@ -2,7 +2,8 @@
 
 **Escopo**: setes
 **Status**: ENTREGUE (2026-09-04) — D1–D10 + D7a–c implementadas, gates 0.90/passou
-após 3 rodadas, D11 (reuso pós-estorno) decidida e executada. Ver §7.
+após 3 rodadas, D11 (reuso pós-estorno) decidida e executada. Ver §7. Visual do app
+VALIDADO em passeio logado (2026-09-08, §9); Q-CH1 e Q-CH2 DECIDIDAS e EXECUTADAS (§10, §11).
 **Origem**: `TratamentoRastreabilidade de cheques.txt` (resposta do Valdo à Q18 de
 `prompt_contrato_financeiro_baixa_automatica.md`)
 **Fase**: Faturamento Fiscal e Financeiro — onda do cheque (decisões 17, 19, 27)
@@ -301,5 +302,108 @@ chamar o helper; teste fixa a fonte. Reprovado: 52/53.
   cheques no "Validar e Faturar". Frente própria, fora desta onda — o backend já aceita
   o bloco `checks`.
 
-**Status**: onda do cheque ENTREGUE (API + app; visual do app pendente). Código NÃO
-commitado.
+**Status**: onda do cheque ENTREGUE (API + app; visual do app validado em 2026-09-08 —
+§9). Código commitado e publicado em 2026-09-08 (api af4d83a · app 3dbfa2d).
+
+## 9. Passeio logado do módulo Cheques (2026-09-08) — visual VALIDADO + Q-CH1
+
+Valdo: "passeio curto o modulo de cheques". Claude in Chrome com o login do Valdo, app web
+recompilado (build debug). Roteiro no cheque 42 (PASSEIO2-40, R$ 40,00, recebido na fatura
+6190 do passeio nº 2 da negociação):
+1. `/home/checks/` — lista com abas por ESTADO (Em Custódia · No Banco · Na Factoring ·
+   Usado em Pagamento · Devolvido c/ Reembolso · Em Cobrança), busca por número/emitente,
+   24 cheques em custódia (cliente, nº, emitente, valor, data do cheque), paginação.
+2. Detalhe — cabeçalho imutável (emitente, banco, ag/cc, nº, data, tipo, "entregue por"),
+   chip de estado, Linha do Tempo (1 Recebido · código da baixa 106 · título 6632/1) e as
+   ações Depositar / Descontar / Usar em Pagamento / Devolver / Estornar.
+3. Depositar — dialog com data do movimento e lookup de contas (`/api/checks/bank-accounts`:
+   "Banco do Brasil — 1234/56789") → chip "No banco", evento 2 "Depositado · código 107";
+   no estado banco só "Estornar" fica disponível.
+4. Estornar — dialog "Estornar Último Evento" exige o MOTIVO → evento 3 "Estornado · código
+   108 · Origem: evento 2 · Obs.: <motivo>", chip volta a "Em custódia" e as cinco ações
+   reaparecem.
+
+Evidência (setes_setes): `tb_check_event` 42 = R (106, payment_event 1) · B (107, conta 1)
+· X (108). `tb_financial_statement`: 106 = caixa +45,00 "Cheque(s) recebido(s) | Pedido
+6632 parcela 1"; 107 = caixa −40,00 e conta 1 +40,00 "Depósito cheque PASSEIO2-40";
+108 = caixa +40,00 e conta 1 −40,00 "Estorno: <motivo>" (espelho exato; originais
+marcados status 'E').
+
+**Q-CH1 (achado do passeio — aguarda o Valdo)**: o estorno de B/D/T do cheque
+(`reverseStatementOnly` em `@shared/check`, "mesmo padrão dos satélites do boleto") grava
+as linhas-espelho SEM `tb_financial_statement_id_origin`, com status padrão (não 'R') e
+`dt_record` = data do estorno; o núcleo `settlement-batch` (D-G3 do contrato) grava o
+inverso com status 'R', origem apontando para a linha original e `dt_record` HERDADO do
+original (dt_original = hoje). São duas convenções de estorno no mesmo extrato.
+Recomendação: extrair do núcleo um `reverseStatementLines(conn, settledCode, note)` e
+usá-lo no cheque e nos satélites do boleto (origem + 'R' + herança de dt_record) — tarefa
+pequena, sem DDL, após o "vai".
+
+Lições de condução (memória `passeio-logado-browser`): a janela que a extensão cria pode
+nascer oculta/minimizada — sem `requestAnimationFrame` o Flutter não sobe (checar
+`document.visibilityState` e um rAF de 2 s antes de esperar); o Valdo NEGOU acesso de área
+de trabalho ao Chrome (não pedir de novo — pedir a ele que traga a janela para a frente);
+numa aba nova o app abriu em `/login` (o Valdo faz o login; o agente nunca digita senha).
+
+**Status**: visual do app VALIDADO; Q-CH1 → D-CH1 EXECUTADA (§10, 650/650, smoke no dev).
+Q-CH2 → D-CH2 EXECUTADA (§11, saldo do caixa soma todas as linhas não deletadas; 650/650;
+`GET /api/cashier/5` = 278,00). Código do passeio commitado e publicado em 2026-09-08 (api
+af4d83a · app 3dbfa2d); `statement-reversal` e a correção do caixa ainda NÃO commitadas.
+
+## 10. D-CH1 — convenção única de estorno do extrato (Valdo 2026-09-08: "Q-CH1 vai") — EXECUTADA
+
+Peça nova `@shared/financial-settlement/statement-reversal.ts`:
+- `reverseStatementLines(conn, s, inst, userId, settledCode, note, dtOriginal?)` — para um
+  `settled_code` SEM título (B/D/T do cheque): lê as linhas vivas (`status NOT IN ('R','E')`,
+  FOR UPDATE), minta o código novo (sempre — é o identificador do evento X) e, para cada
+  linha, chama `mirrorStatementLine`: espelho com **status 'R'**, **`tb_financial_statement_
+  id_origin` = a linha**, **`dt_record` HERDADO** da original (D-G3: anula na mesma data de
+  disponibilidade), `dt_original` = fato gerador (data informada ou hoje), histórico
+  "Estorno: <motivo>" (100 chars); a original vira 'E'.
+- `insertStatement` (financial-settlement.ts) ganhou os campos opcionais `status` e
+  `originId` — compatível com todos os produtores existentes (default 'N' / NULL).
+- `@shared/check`: `reverseStatementOnly` (privada, divergente) REMOVIDA; os dois pontos
+  (X de B/D/T e a devolução V a partir do banco) usam a peça única. O núcleo
+  `reverseOnePayment` (baixas de título + satélites) já seguia a convenção e não mudou.
+- Testes: `statement-reversal.test.ts` (+4: espelho/origem/herança, sem linha viva, data
+  omitida, corte do histórico) e asserções novas no `check.test.ts` (status 'R', origem,
+  histórico) → **650/650**.
+- Smoke no dev: depósito do cheque 42 com `dt_record` RETROATIVA 2026-09-01 (código 109)
+  e estorno hoje (código 110): linhas 149/150 com status 'R', origem 147/148, `dt_record`
+  2026-09-01 herdado e `dt_original` 2026-09-08; originais 147/148 viraram 'E'.
+- Verificação sistêmica: a única leitura de saldo hoje é a do CAIXA (`cashier`), e ela
+  revelou a Q-CH2 abaixo — a peça nova segue a convenção do núcleo, mas o leitor do
+  núcleo exclui as originais 'E'.
+
+**Q-CH2 (achado sistêmico ao executar a D-CH1 — aguarda o Valdo)**: `getCashierBalance` e
+`getRegisteredByPaymentType` (módulo `cashier`) somam `status IN ('N','R')` e EXCLUEM as
+originais 'E'. Com o desenho de espelhos (original vira 'E' + espelho 'R' que a compensa),
+o estorno TOTAL entra no saldo uma vez só — o saldo fica errado exatamente pelo valor
+estornado; no estorno PARCIAL (original segue 'N' + espelho 'R') a conta fecha. Medido no
+caixa 5 do dev: filtro atual **−871,00** (30 linhas) × todas as linhas **278,00** (37);
+só as 'E' somam +1.149,00 (7 linhas: 4 com espelho 'R' vinculado pela origem, 3 do padrão
+antigo do cheque com espelho 'N'). Bug PRÉ-EXISTENTE do núcleo (afeta estornos do
+contrato, do boleto e do cheque), não introduzido pela D-CH1. Recomendação: saldo e
+conferência do fechamento somam TODAS as linhas não deletadas — o status é informativo
+(N vigente · E estornada · R estorno) e o razão é append-only; 2 queries + teste, sem DDL.
+A alternativa (somar só 'N') quebra o estorno parcial. Conferir também qualquer outra
+leitura de saldo que venha a nascer (extrato de conta bancária ainda não soma).
+
+## 11. D-CH2 — saldo do caixa soma todas as linhas não deletadas (Valdo 2026-09-08: "Q-CH2 vai") — EXECUTADA
+
+Antes do "vai" o Valdo perguntou se "excluem as originais" considerava o soft-delete: NÃO —
+são dois filtros independentes; `deleted = 'N'` fica, o que saiu foi `status IN ('N','R')`.
+Nenhum código do setes-api marca `deleted = 'S'` em linha do extrato; o estorno nunca
+apaga, grava o espelho e muda o status da original para 'E'.
+
+- `getCashierBalance` e `getRegisteredByPaymentType` (`modules/cashier`): filtro de status
+  REMOVIDO; comentário com a regra e a medição. REGRA: o razão do extrato é append-only;
+  saldo = Σ(crédito − débito) de TODAS as linhas com `deleted = 'N'`; o status é
+  informativo (N vigente · E estornada · R estorno) — o espelho 'R' compensa a original 'E'
+  no total e convive com a original 'N' no parcial.
+- Teste `cashier.test.ts` (saldo derivado) passou a exigir `deleted = 'N'` e a proibir
+  qualquer filtro de status nas duas consultas → suíte **650/650**.
+- Smoke no dev: `GET /api/cashier/5` → balance **278,00** (era −871,00 pelo filtro
+  antigo); por forma: sem forma −855,00 · 1 −30,00 · 3 (cheque) 1.163,00.
+- Alcance: única leitura de saldo hoje (extrato de conta bancária ainda não soma); quando
+  nascer, segue a mesma regra.
