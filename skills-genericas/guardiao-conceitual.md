@@ -58,6 +58,7 @@ provavelmente é maquete.
 | Catálogo central iniciado pelo cliente | Compartilhado com dedupe por descrição | tb_payment_types (molde `@shared/payment-types`) |
 | Referência central | Fato do mundo (não muda por cliente) | tb_country, tb_cfop, tb_bank |
 | Backbone + ramos | UMA operação, N naturezas | tb_order + tb_order_<ramo> (id compartilhado) |
+| Natureza por PRESENÇA × processo por ATO | O ramo diz "o que a operação é"; o processo diz "sob que ciclo ela está" — produtores diferentes, tabelas diferentes | tb_order_service (natureza: venda com serviço, sync, OS) × tb_service_order (ciclo da OS — só o módulo grava; migration 047, 2026-09-09). Sintoma de maquete: coluna com 3 significados vindos de 3 produtores (o `number` da natureza) e identidade por AUSÊNCIA de outro ramo |
 | Detalhe universal + especialização | Item genérico × natureza do item | tb_order_item + tb_order_item_merchandise |
 | Financeiro imutável | Dinheiro não se apaga — inverte | payment/statement N/E/R + settled_code N:1 |
 | Vínculo N:N com atributos | Relação institution × catálogo | tb_institution_has_<x> |

@@ -145,6 +145,20 @@ fallbacks descritos, mas a decisão definitiva é arquitetural:
    `financial.ts` agora aceita `tb_invoice` (id+institution+terminal) como
    alternativa válida a `tb_order` antes de lançar `ORDER_NOT_SYNCED`.
 
+6. **Sync × cancelamento de nota na WEB (Q-G6 do cancelamento de nota, 2026-09-09 —
+   decisão D-G6 do Valdo: registrar, sem código agora)**: a web agora tem nota com HISTÓRIA
+   (`tb_invoice_event` E/C; nota pendente cancelada = `deleted='S'` + evento C; número
+   reaproveitável) e numera por `number_seq` (migration 045) no MESMO (modelo, série) que o
+   legado. Dois riscos: (a) `upsertInvoice` do `/invoice/sincronize` pode REVIVER/sobrescrever
+   uma nota cancelada na web sem saber (id = pedido); (b) legado × web disputam o MAX+1 do
+   mesmo modelo/série. Candidatos: o sync não toca nota que tem evento na web (respeita a
+   história) e/ou série própria da web; no sentido inverso (D16) o evento C precisa viajar.
+7. **`tb_order_service.open_lock` é LEGADO desde a migration 047 da setes-api (2026-09-09)**: o
+   ciclo da Ordem de Serviço mora em `tb_service_order` (tabela que o sync NUNCA grava — é assim
+   que o pedido de serviço PURO sincronizado nunca vira OS). O `/order-service/sincronize` ainda
+   escreve `open_lock` (NULL) no INSERT — tarefa deste projeto: remover a coluna do INSERT; depois
+   a setes-api dropa a coluna (deploy casado — precedente `tb_cashier.tb_user_id`).
+
 ## Precedente do padrão "código externo"
 
 CFOP na setes-api (2026-07-18): id = o próprio código digitado, imutável, 409 mesmo

@@ -133,3 +133,41 @@ python3 -c "import sqlglot; sqlglot.parse(open('arquivo.sql').read(), read='mysq
 ```
 
 E rodar o checklist completo: `database/skills/revisar-ddl.md`.
+
+## 9. Locks, isolamento e leituras que decidem (2026-09-09 — Q-A6/Q-G17 do cancelamento de nota)
+
+Regras que os gates do financeiro (contrato, boleto, cheque, negociação, cancelamento) provaram
+a ferro: cada uma nasceu de um CRITICAL/HIGH real.
+
+1. **REPEATABLE READ é invariante** — fixado por conexão no pool (`shared/db/connection.ts`) e
+   conferido no boot (`assertIsolationLevel`). Todo gap/range lock da casa (trava D5 em UNIQUE,
+   MAX+1 `FOR UPDATE`, numeração pelo índice, leituras travantes dos planos) só existe nesse
+   nível; um default diferente do servidor desligaria tudo em silêncio.
+2. **Leitura que DECIDE trava** — leitura que decide gravação, bloqueio OU mensagem faz
+   `FOR UPDATE` (ou `LOCK IN SHARE MODE`). Sob REPEATABLE READ a leitura consistente vê o
+   snapshot de ANTES de esperar o lock: decide com o passado. Subquery dentro de um `SELECT …
+   FOR UPDATE` NÃO trava (só a tabela externa) — `NOT EXISTS`/`EXISTS` que decidem precisam de
+   leitura travante própria.
+3. **Ordem canônica de locks do financeiro**: pedido → nota → título (`tb_financial`) → cheque
+   (`tb_check` → `tb_check_event`) → baixa (`tb_financial_payment`) → extrato; boletos
+   (`tb_bank_slip` → `_title`) e devoluções depois. Toda peça nova entra nessa ordem; quem
+   precisa inverter, reexecuta.
+4. **Toda transação que cruza esses locks usa `withDeadlockRetry`** (`@shared/db/deadlock-retry`,
+   3 tentativas): o InnoDB escolhe a vítima e desfaz a transação inteira — reexecutar do zero é
+   seguro; propagar é 500. Lock wait (1205) NÃO reexecuta: vira 409 RESOURCE_BUSY na borda
+   (`@shared/db/contention`, transversal).
+5. **MAX+1 sob `FOR UPDATE` com índice cujo prefixo é o WHERE** (settled_code, tb_check,
+   `tb_invoice.number_seq`): o lock fica no intervalo do negócio (institution/modelo/série), não na
+   tabela inteira. Coluna VARCHAR que participa de MAX numérico ganha coluna GERADA indexada.
+6. **Contadores de relatório só depois do commit** — uma tentativa desfeita pelo retry não pode
+   ser contada duas vezes (rotina mensal da OS).
+7. **Quem CUNHA número por MAX+1 trava a institution ANTES** (`@shared/db/counters`
+   `lockInstitutionCounters`, 1º lock da transação): `SELECT MAX(...) FOR UPDATE` num índice
+   secundário deixa gap lock no supremum e gap locks são COMPATÍVEIS entre si — N transações
+   passam do MAX com o mesmo número e deadlockam no INSERT; o retry (3×) não segura 6
+   concorrentes (Q-A12: 47 % de 500 abrindo OS; 50 % abrindo venda com 2). Um X de uma linha
+   serializa só os cunhadores. Duas formas: (a) 1º lock da transação (abrir pedido/OS/devolução);
+   (b) DENTRO do cunhador compartilhado quando a transação já travou outras coisas antes —
+   `nextSettledCode` (fonte única de todo movimento financeiro: baixa, estorno, cheque, boleto,
+   auto-baixa) toma o X ali (Q-A18) e aceita o retry contra as portas (a). Contadores que ficam
+   só no retry (provado 10/10): nº da nota, id do cheque, id do boleto.

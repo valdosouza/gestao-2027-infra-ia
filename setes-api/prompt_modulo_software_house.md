@@ -1,4 +1,11 @@
 # Documentação — Módulo Software House no Backbone `tb_order` (v4)
+
+> **2026-09-09 — CICLO da OS em tabela própria (`tb_service_order`, migration 047)**: a trava D5
+> (`open_lock` UNIQUE) e o nº da OS saíram de `tb_order_service` (que voltou a ser NATUREZA por
+> presença, compartilhada com a venda de serviço e com o sync). Onde este prompt diz "open_lock em
+> tb_order_service", leia `tb_service_order`. Motivo e parecer: `prompts/prompt_cancelamento_nota.md`
+> §10.9 (D-G11); regra no inventário da `skills-genericas/guardiao-conceitual.md`.
+
 **Escopo**: setes
 
 > **Uso:** prompt mestre para o Claude Desktop. Cole as seções 1–7 (contexto +

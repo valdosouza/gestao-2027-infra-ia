@@ -65,6 +65,11 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
 ## Camadas (weberpsetes fiel — decisão do Valdo 2026-07-11)
 
 - **datasource** (abstract + impl): fala com a setes-api via ApiClient; lança Failure.
+  **Exceção nomeada (Q-G24 do cancelamento de nota, Valdo 2026-09-09)**: os endpoints de
+  PROCESSO compartilhado `/api/billing/validate|invoice|cancel` podem ser chamados pelo datasource
+  de qualquer módulo cujo DOCUMENTO passa por eles — hoje `orders` (venda), `order_returns`
+  (devolução) e `service_orders` (cancelar a nota da OS). Fora dessa lista a regra continua:
+  módulo fala só com o seu `/api/<módulo>` e com lookups em `shared/lookup`.
 - **repository** (abstract no domain + impl no data): converte exceção em
   `Either<Failure, T>` (dartz — decisão 12).
 - **usecases**: 1 arquivo por operação — `<X>Getlist`, `<X>Post`, `<X>Put`, `<X>Delete`.
