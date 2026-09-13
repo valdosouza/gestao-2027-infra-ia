@@ -63,7 +63,28 @@ provavelmente é maquete.
 | Financeiro imutável | Dinheiro não se apaga — inverte | payment/statement N/E/R + settled_code N:1 |
 | Vínculo N:N com atributos | Relação institution × catálogo | tb_institution_has_<x> |
 | Peça transaction-aware | Regra reusável dentro de transação | funções (conn, ...) em `src/shared/` |
+| Composição sobre peças | SÓ combina peças, com a POLÍTICA que não pode bifurcar entre chamadores | `@shared/entity` (cadeia fiscal) · `@shared/title-automation` (desfecho que a FORMA dá à parcela recém-nascida: baixa por contrato × boleto automático; 2026-09-13). Sintoma de recorte errado: precisar de um parâmetro `bloqueia: true/false` para caber um irmão — foi por isso que o CHEQUE ficou de fora |
 | 3 tipos de tela | lista+form × árvore × processo | skills criar-formulario-cadastro / tela-de-processo |
+
+## Palavras já OCUPADAS (consulte antes de nomear)
+
+Palavra reusada em conceito novo é como coluna com três significados: o leitor
+não sabe qual. Esta lista nasceu da rodada "contrato" (Valdo, 2026-09-13): a
+palavra tinha SEIS sentidos, três visíveis ao usuário, e a colisão só apareceu
+quando duas telas ficaram lado a lado no menu.
+
+| Palavra | Já significa | Se o seu conceito novo for parecido |
+|---|---|---|
+| **contrato** | (1) mensalidade do cliente `tb_contract` · (2) contrato COMERCIAL das telas `tb_institution_has_interface` ("Contrato de interfaces") · (3) contratação de cobrança com o banco `tb_bank_charge_agreement` · (4) `tb_bank_account.dt_contract` · (5) contrato de API (comentários) | NÃO use. Previsão configurada = `_rule`; vínculo = `_has_`; acordo com terceiro = `_agreement` |
+| **regra** (`_rule`) | previsão configurada que o motor consulta: `tb_tax_rule`, `tb_service_tax_rule`, `tb_settlement_rule` | use para "o que o sistema deve presumir até o fato acontecer" |
+| **ordem** (`tb_order`) | backbone de QUALQUER operação (venda, compra, OS, ajuste) | ramo novo entra como `tb_order_<ramo>`, nunca como tabela paralela |
+| **conta** | `tb_bank_account` (corrente) × `tb_cashier` (caixa) | diga qual |
+
+**Lição de método da rodada**: a D15 daquela fase tinha MANTIDO um nome ruim
+**em troca** de uma condição ("o rótulo da tela deve distinguir"). A condição
+não foi cumprida na entrega, e um ano-luz depois a confusão apareceu como se
+fosse erro de modelagem. **Decisão com condição embutida precisa virar item de
+verificação da entrega** — senão a troca vira só a metade cara.
 
 ## Checklist de nomenclatura
 

@@ -1,0 +1,18 @@
+# contexto
+	Primeiro cliente devera ser a propria setes, com os contratos de servico de software e manutencao via suporte
+
+# Objetivo
+	Criar tracking the entrega de ponta a ponta. checando todos os processos
+	
+# Processos
+	Cadastro de Servicos
+	Cadastro de clientes
+	Cadastro de contratos
+	Cadastro de parcerias
+	Geracao de cobranca em lote cobranca mensal
+	Emissao de boletos com envio para o banco inter
+	emissao de nota fiscal de servico
+	
+# Resutlado esperado
+	Plano de entrega e desenvolvimento
+	Implantacao dos software em producao
