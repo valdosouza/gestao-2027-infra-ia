@@ -671,9 +671,10 @@ Q-A3 sim · Q-A4 herdar.
    `tb_contract_item_competence` e faz backfill dos itens de serviço já injetados — o backfill
    carimba o mês em que o item NASCEU, não a competência faturada (Q-A32): em clientes que já
    reexecutaram a rotina retroativamente, conferir/corrigir antes de rodar o próximo mês.
-6. **Boleto com desconto (D-G30, Rodada 6)**: a alíquota de desconto da CARTEIRA
-   (`tb_bank_charge_agreement.aliq_discount`) passa a QUITAR título — revisar quem pode editar a
-   carteira em cada cliente (Q-G36 decide se entra sob o privilégio DESCONTO).
+6. **Boleto com desconto (D-G30 + D-G36, Rodada 6)**: a alíquota de desconto da CARTEIRA
+   (`tb_bank_charge_agreement.aliq_discount`) passa a QUITAR título e já está SOB o privilégio
+   DESCONTO (seed 55 vincula o privilégio 8 também à interface `bank-charge-agreements`) — quem
+   mantém carteira com desconto em cada cliente precisa do privilégio, senão recebe 403 ao salvar.
 
 ### 10.4 Socrático da Rodada 2 — 1ª passada: **0.58 REPROVOU** (leitura; banco parado)
 
@@ -1783,3 +1784,41 @@ reescrito) e o saldo voltou a 2 un.
 **A regra da casa que isso reafirma**: saldo é sempre DERIVADO do que está vigente — baixa estornada
 sai do saldo do título, nota cancelada sai do faturamento, devolução cancelada sai do devolvido. O
 passado não é alterado; muda só o que o cálculo enxerga.
+
+## 14. Estado para a próxima sessão (2026-09-13)
+
+**A fase está FECHADA e PUBLICADA** — `main`: sql `3cc8b1a` · api `24e00a3` · app `f460a13` ·
+Infra-IA `530bfbf`. 7 rodadas de decisão do Valdo, **nenhuma questão aberta**, 74 questões marcadas
+com o resultado. Provas: **784/784** jest (api) · **41/41** + analyze limpo (app) · passeio logado
+com 3 casos (§12).
+
+### Ambiente de dev (como ficou)
+- Migrations aplicadas até a **051**; seeds **51–55** aplicados na base central.
+- Config `max_discount_aliquot` = **0** e carteira 1 sem desconto (fixtures restauradas depois dos
+  gates e do passeio); forma 3 `kind='C'`, `max_parcels` 1, regra de tributação 2
+  (`final_consumer='N'`) e 4 (`deleted='N'`), produtos 1/5/6/7 serviço ativos, 16 mercadoria, 17
+  deletado. Caixa 6 aberto. Nenhuma OS aberta, nenhum contrato vivo.
+- `innodb_rollback_on_timeout` = OFF (pré-requisito da D-G31 (a) — o boot avisa se mudar).
+- **Resíduo dos gates** (dados de teste, podem ser ignorados ou limpos): pedidos ~6636–7655,
+  boletos 52–89, cheques 45–162, notas de prova, usuários regulares 265–274 soft-deletados,
+  contratos 9–17 soft-deletados. Evidências deliberadamente mantidas: 7386/7387 (desconto empilhado
+  antes da D-G28), 7375/7470 (principal zero antes da Q-A27), CH 7382 (D-G19).
+
+### O que retomar (escolha do Valdo)
+1. **Implantação** por cliente — §10.3 (6 itens): `max_parcels`, privilégios FATURAR/CANCELAR
+   (seeds 51–54), conferências ANTES das migrations 046/047, **seed 55 é pré-requisito do app**
+   (senão a tela fica mais restritiva que a API), decidir teto do desconto OU conceder o privilégio 8
+   a quem hoje dá desconto, e conferir a competência da 051 em quem já reexecutou a rotina.
+2. **Próximo processo** — decisão do Valdo: Transmissão SEFAZ (Onda 2 do cancelamento: evento C
+   mantendo o número, ramo autorizado) × Compra/estoque.
+3. **Pendências pequenas** (nenhuma bloqueia):
+   - UX: `CurrentInterface` hidrata só no clique do MENU — vindo de "Devolver" no pedido a tela
+     avalia o privilégio de `orders` (L3 do socrático da Rodada 6); hidratar pela ROTA resolve isso
+     e o `can()` no deep link. Junto: deep link do detalhe (`#/home/orders/<id>`) cai na lista.
+   - UX: tela de Baixas pode mostrar `checksReversed`/`checksKept` que a API já devolve.
+   - UX: item da OS injetado pela rotina não mostra de QUAL contrato veio (D-A33 — dois contratos
+     com o mesmo produto geram duas linhas).
+   - Método: 9 `round2` locais ainda convivem com a peça `@shared/money` (migrar por frente, cada
+     uma com seus testes de borda .xx5).
+   - `setes-app`: expurgo do histórico (blobs de build) segue aguardando "vai" do Valdo.
+   - Sync (outro grupo, Q-C4): parar de gravar `tb_order_service.open_lock` e então DROPAR a coluna.
