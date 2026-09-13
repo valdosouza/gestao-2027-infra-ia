@@ -4,7 +4,7 @@
 são método portável da engine; a configuração do cliente Setes é conteúdo `setes`)
 **Aberto em**: 2026-09-13
 **Origem**: `PrimeiroCliente-Setes.txt` (rascunho do Valdo)
-**Estado**: Rodada 1 DECIDIDA (D1–D8) · **Ondas 0 e 1 EXECUTADAS** · Ondas 2–4 aguardam Q1/Q4/Q5/Q6
+**Estado**: Rodadas 1–4 DECIDIDAS (D1–D22) · COMMITADO 2026-09-13 · **Ondas 0 e 1 EXECUTADAS** · Ondas 2–4 aguardam Q1/Q4/Q5/Q6
 
 ---
 
@@ -742,3 +742,24 @@ traz de volta a dinheiro; forma inexistente → 400 PAYMENT_TYPE_UNAVAILABLE.
   cobrança de item que ele já gerou. Atrito com o princípio da D-A36 ("nada é reescrito no
   passado"). Amarrar a condição ao item injetado (na `tb_contract_item_competence`) resolveria — é
   decisão sua.
+
+---
+
+## 10. Checkpoint — COMMITADO em 2026-09-13
+
+`main` nos quatro repositórios (sem push — o Valdo pediu só o commit):
+
+| Repo | Commit |
+|---|---|
+| sql | `b2e0b34` |
+| setes-api | `fcf96dd` |
+| setes-app | `5512f4e` |
+| Infra-IA | `3d94013` |
+
+Provas do checkpoint: **872/872** jest · **55/55** + analyze limpo (app) · trilha
+**16 OK · 7 PENDENTE · 0 FALHA**.
+
+**Aguardam o Valdo**: os 3 valores do P0 (limite de parcelas, teto do desconto, quais usuários
+recebem FATURAR/CANCELAR), **Q-R1** (condições do lote vindas do contrato VIVO × da competência
+injetada), Q-P2/Q-P3/Q-P5/Q-P6 (contrato do lote) e a ordem das próximas ondas — Inter (2), NFS-e
+(3) ou produção (4), lembrando que o webhook do Inter exige URL pública.
