@@ -407,3 +407,10 @@ apaga, grava o espelho e muda o status da original para 'E'.
   antigo); por forma: sem forma −855,00 · 1 −30,00 · 3 (cheque) 1.163,00.
 - Alcance: única leitura de saldo hoje (extrato de conta bancária ainda não soma); quando
   nascer, segue a mesma regra.
+
+## 12. Guarda nova na peça (2026-09-09, Q-A24 do cancelamento de nota)
+`useCheckInPayment` (evento P) lia só `tb_financial` e aceitava título a RECEBER — um cheque em
+custódia "pagava" a venda de outro cliente e o caixa ganhava um 2º crédito do mesmo papel
+(`settleOneTitle` herda a operação do título). Agora a leitura do título traz `operation` (JOIN
+`tb_financial_bills`, FOR UPDATE) e **P só existe contra título a PAGAR** → 422
+`CHECK_TITLE_NOT_PAYABLE`. Detalhe e prova em `prompt_cancelamento_nota.md` §10.15.

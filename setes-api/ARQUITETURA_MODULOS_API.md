@@ -109,3 +109,21 @@ posição (por módulo). Mudar o agrupador no menu NUNCA muda URL nem pasta.
       aparece no /docs. Conferir a rota nova em http://localhost:3000/docs
 - [ ] `npx tsc --noEmit` limpo
 - [ ] Módulo gêmeo no app com o MESMO nome (ARQUITETURA_MODULOS.md do setes-app)
+
+## Privilégio de AÇÃO: rota × controller (2026-09-13, D-G32 do cancelamento de nota)
+
+Privilégio de ação tem DOIS lugares legítimos — e só dois:
+
+1. **Na ROTA**, com `requirePrivilege(interfaceKey, privilegeId)` ou
+   `requirePrivilegeFor(privilegeId, resolver)`, quando a ação INTEIRA depende do privilégio
+   (FATURAR, CANCELAR). O guard não lê o corpo além do necessário para resolver a interface.
+2. **No CONTROLLER**, como POLÍTICA condicional, quando o privilégio só é exigido para um
+   CONTEÚDO do corpo (D-G32: desconto na baixa — sem desconto, ninguém precisa de privilégio).
+   A política é uma peça própria do módulo (`<modulo>.<politica>-policy.ts`), chamada depois do
+   parse do DTO e antes do repositório, e devolve 403 com `fields[].expected` quando há teto.
+
+Em ambos os casos vale a regra da Q-G29 (Valdo, 2026-09-10): **o privilégio existe na TABELA
+(`tb_privilege` + vínculo `tb_interface_has_privilege` — seed), é OPÇÃO na TELA (o cadastro de
+privilégios do usuário só oferece o que a interface tem) e o CÓDIGO valida pela interface do
+RAMO**. Admin e super passam sempre. Teto configurável vive no Framework de Configurações
+(scope I), nunca hard-coded.

@@ -443,3 +443,10 @@ DEVE entrar nessa revisão antes de rodar em schema com sincronizador ativo.
 | # | Pendência | Fase dona |
 |---|---|---|
 | P12 | ~~Calendário de feriados para o 5º dia útil~~ — **CANCELADA** (DP1 revisada: vencimento é informado pelo usuário no faturamento; 5º dia útil é só sugestão de default) | — |
+
+### Nota 2026-09-11 — contrato valida o serviço; rotina mensal pula e reporta (Q-G27 do cancelamento de nota, "ambos")
+`tb_contract_item` não tem FK para o produto: o POST/PUT do contrato agora valida cada item pela peça
+`@shared/service-product` (existe, ativo, kind 'S' — 400 PRODUCT_NOT_FOUND / 422
+SERVICE_ORDER_ITEM_NOT_SERVICE) e a rotina mensal PULA o item cujo produto ficou inválido depois,
+reportando em `errors[{customerId, contractId, productId, message}]` (antes injetava e o cinto do
+faturamento recusava a OS inteira). Detalhe em `prompts/prompt_cancelamento_nota.md` §10.16.

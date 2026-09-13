@@ -166,8 +166,16 @@ a ferro: cada uma nasceu de um CRITICAL/HIGH real.
    secundário deixa gap lock no supremum e gap locks são COMPATÍVEIS entre si — N transações
    passam do MAX com o mesmo número e deadlockam no INSERT; o retry (3×) não segura 6
    concorrentes (Q-A12: 47 % de 500 abrindo OS; 50 % abrindo venda com 2). Um X de uma linha
-   serializa só os cunhadores. Duas formas: (a) 1º lock da transação (abrir pedido/OS/devolução);
-   (b) DENTRO do cunhador compartilhado quando a transação já travou outras coisas antes —
-   `nextSettledCode` (fonte única de todo movimento financeiro: baixa, estorno, cheque, boleto,
-   auto-baixa) toma o X ali (Q-A18) e aceita o retry contra as portas (a). Contadores que ficam
-   só no retry (provado 10/10): nº da nota, id do cheque, id do boleto.
+   serializa só os cunhadores. Duas formas: (a) 1º lock da transação — abrir pedido/OS/devolução,
+   abrir/retirar do caixa e a baixa em lote (`settleBatchTx` cunha o código ANTES do laço de
+   títulos); (b) DENTRO do cunhador compartilhado quando a transação já travou outras coisas —
+   `nextSettledCode` (fonte única de todo movimento: estorno, cheque, boleto, auto-baixa do
+   faturamento) toma o X ali (Q-A18) e aceita o retry contra as portas (a). O ciclo estrutural
+   existe (porta (a) segura o X e espera a linha do pedido mais novo, que faturamento/cancel
+   seguram) — o InnoDB mata a porta (a), barata de reexecutar (Q-G26 mede o convoy). Contadores
+   que ficam SÓ no retry (provado 10/10): nº da nota, id do cheque, id do boleto e o `tb_order.id`
+   cunhado no meio da baixa (ordem PA) e do cheque devolvido (título CH). **Espera limitada (D-A23,
+   2026-09-11)**: o X é tomado com `FOR UPDATE WAIT 10` (MariaDB ≥ 10.3, detectado no boot —
+   `detectLockWaitSupport`; sem suporte cai no `innodb_lock_wait_timeout` com aviso): 1 detentor lento
+   não prende o pool inteiro por 50 s; quem espera mais recebe 1205 → 409 RESOURCE_BUSY e NÃO reexecuta
+   (falhar cedo é o objetivo — só deadlock 1213 reexecuta).

@@ -299,3 +299,17 @@ setes-sync:3001
 ---
 
 *Validação realizada: 2026-07-01*
+
+## Dinheiro: o que valida é o que grava (2026-09-09, Q-A27 do cancelamento de nota)
+
+`Math.round(9.995 * 100) / 100` dá **9,99** em JS (9,995 é 9,99499… em binário); o banco recebe o
+literal `9.995` e grava **10,00** (DECIMAL arredonda half-up sobre o decimal escrito). Validar com
+uma regra e gravar com outra abriu uma baixa com principal ZERO (juros 9,995 sobre 10 pagos → 201).
+
+Regra para qualquer valor monetário que a API compara ou grava:
+1. Normalize com a peça **`@shared/money`** (`toCents` / `round2` — half-up sobre a representação
+   decimal curta, `toPrecision(15)`; 9,995 → 10,00 como o DECIMAL) **antes** de comparar.
+2. Compare em **centavos inteiros** no DTO (Zod `refine`) — nunca `a + b < c` em float.
+3. Passe ao INSERT o valor **normalizado** — o que passou na validação é o que fica no banco.
+4. Nada de `round2` local por módulo (há 9 cópias legadas; migre por frente, com os testes de borda
+   .xx5 de cada uma) — a peça é a fonte única.
