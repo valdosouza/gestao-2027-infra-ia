@@ -40,7 +40,9 @@ dataEmissao, dataVencimento, valorNominal, tipoCobranca, situacao, dataSituacao 
 valorTotalRecebido, origemRecebimento BOLETO|PIX, motivoCancelamento, arquivada, descontos, multa, mora,
 pagador}` + `boleto{nossoNumero ≤11, codigoBarras 44, linhaDigitavel 47}` (ausente em
 EM_PROCESSAMENTO) + `pix{txid, pixCopiaECola}` (ausente se não deu para gerar) + `notaFiscal`.
-**Rate limit 120/min produção · 10/min sandbox.**
+**Rate limit 120/min produção · 10/min sandbox.** **Janela do sandbox: só responde das 8h às 20h, de
+segunda a sexta** (fato do cadastro do Valdo em developers.inter.co, 2026-09-20) — fora disso tudo é
+BANK_UNAVAILABLE; o smoke avisa antes de rodar.
 
 **Situações** (consulta): `EM_PROCESSAMENTO`, `A_RECEBER`, `RECEBIDO`, `MARCADO_RECEBIDO`, `ATRASADO`,
 `CANCELADO`, `EXPIRADO`, `FALHA_EMISSAO`, **`PROTESTO`**. No **callback** só: `RECEBIDO`, `A_RECEBER`,

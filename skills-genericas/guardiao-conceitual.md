@@ -78,7 +78,12 @@ quando duas telas ficaram lado a lado no menu.
 | **contrato** | (1) mensalidade do cliente `tb_contract` · (2) contrato COMERCIAL das telas `tb_institution_has_interface` ("Contrato de interfaces") · (3) contratação de cobrança com o banco `tb_bank_charge_agreement` · (4) `tb_bank_account.dt_contract` · (5) contrato de API (comentários) | NÃO use. Previsão configurada = `_rule`; vínculo = `_has_`; acordo com terceiro = `_agreement` |
 | **regra** (`_rule`) | previsão configurada que o motor consulta: `tb_tax_rule`, `tb_service_tax_rule`, `tb_settlement_rule` | use para "o que o sistema deve presumir até o fato acontecer" |
 | **ordem** (`tb_order`) | backbone de QUALQUER operação (venda, compra, OS, ajuste) | ramo novo entra como `tb_order_<ramo>`, nunca como tabela paralela |
-| **conta** | `tb_bank_account` (corrente) × `tb_cashier` (caixa) | diga qual |
+| **conta** | `tb_bank_account` (corrente) × `tb_cashier` (caixa) × header `x-conta-corrente` do Inter (derivado da corrente — D-I14) | diga qual |
+| **registro / registrar** | (1) apresentação do boleto ao BANCO por API `tb_bank_slip_registration` (Onda 2 Inter) · (2) "registro" = linha de tabela em comentários antigos · (3) `dt_record` das baixas | boleto "registrado" é o que o banco ACEITOU (evento `G`); nunca use para "gravei no banco de dados" |
+| **canal** | `tb_bank_account_channel` = a conta corrente fala com o SEU banco por API (segredos + ambiente + token de entrada; D-I3/D-I4) | não é "canal de venda", nem "canal de atendimento"; integração nova com banco = adaptador no MESMO canal |
+| **apresentação** | 1 boleto × N tentativas de registro no banco (`attempt`); o banco responde com a VOZ dele (`_registration_event`, append-only) — estado DERIVADO do último evento | "reapresentar" = nova tentativa, nunca UPDATE da anterior |
+| **integração** | palavra de comentário, não de tabela: o que existe é `canal` (conta×banco) + `adaptador` (`@shared/bank-channel/adapters/<banco>`) + `apresentação` (o fato) | não crie `tb_integration*`; diga qual das três peças |
+| **segredo** | `@shared/secret-store`: arquivo em `SECRETS_PATH/<schema>/<owner>/<id>/<S|P>/<name>` (D-I1: dono + finalidade; certificado mTLS do canal ≠ certificado A1 do emissor fiscal) | nunca coluna de tabela, nunca no JSON de resposta — a tela só vê PRESENÇA + validade |
 
 **Lição de método da rodada**: a D15 daquela fase tinha MANTIDO um nome ruim
 **em troca** de uma condição ("o rótulo da tela deve distinguir"). A condição

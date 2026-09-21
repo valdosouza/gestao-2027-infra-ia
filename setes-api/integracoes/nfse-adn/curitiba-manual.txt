@@ -1,0 +1,790 @@
+            Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                             Departamento de Rendas Mobiliárias
+
+                            Gerência de Sistemas, Inovação e Inteligência
+                                                     Núcleo de Inteligência Fiscal
+
+MANUAL DE EMISSÃO DA NOTA
+
+FISCAL  DE  SERVIÇO
+
+ELETRÔNICA NACIONAL (NFS-E)
+
+                                                                                          1
+        Manual_Emissão_NFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Sumário
+
+ Introdução .............................................................................................................................. 3
+ Acessando o Sistema ............................................................................................................ 4
+ Emitindo a NFS-e ................................................................................................................... 5
+
+      1. Dados das Pessoas ....................................................................................................... 6
+           1.1 Data de competência.............................................................................................. 6
+           1.2 Dados do Emitente da NFS-e ................................................................................. 7
+           1.3 Dados do Tomador de Serviços ............................................................................. 8
+
+      2. Dados do Serviço ........................................................................................................... 9
+           2.1 Local da Prestação ................................................................................................. 9
+           2.2 Serviço Prestado .................................................................................................... 9
+           2.3 Informações Complementares .............................................................................. 13
+
+      3. Dados dos Valores ....................................................................................................... 14
+           3.1 Valores do Serviço Prestado ................................................................................ 14
+           3.2 Tributação Municipal............................................................................................. 15
+           3.2.1 Regime Especial de Tributação ................................................................... 15
+           3.2.2 Exigibilidade Suspensa de Recolhimento .................................................... 16
+           3.2.3 Retenção na Fonte do ISSQN e Substituição Tributária............................... 16
+           3.2.4 Benefício Municipal Fiscal............................................................................ 18
+           3.2.5 Dedução/Redução à Base de Cálculo do ISSQN......................................... 19
+           3.3 Tributação Federal e Valor Aproximado dos Tributos ........................................... 21
+
+      4. Emitir NFS-e................................................................................................................. 22
+      5. Pesquisando a NFS-e Emitida/Cancelamento por Substituição/................................... 26
+      Cancelamento .................................................................................................................. 26
+
+           a) Regras do Cancelamento por substituição ........................................................... 27
+           b) Regras do Cancelamento da NFS-e ..................................................................... 28
+      6. Documento de Arrecadação Municipal - DAM NFS-e ................................................... 28
+           EM CASO DE DÚVIDAS, ENTRAR EM CONTATO COM A SECRETARIA
+
+                MUNICIPAL DE PLANEJAMENTO, ORÇAMENTO.............................................. 31
+      Anexo I - Depara entre item da Lista de Serviço e item NBS- Nomenclatura Brasileira de
+
+         Serviços, intangíveis e outras operações que produzam variações no patrimônio ....... 32
+      Anexo II - Emissão NFS-e ­ Serviços para destinatário no Exterior com
+
+         Consumo/Resultado no Brasil. ..................................................................................... 33
+
+                                                                                                                             2
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                        Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                         Departamento de Rendas Mobiliárias
+
+                                                                                                         Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                  Núcleo de Inteligência Fiscal
+
+Introdução
+
+Este documento contempla as principais etapas para emissão e os eventos de cancelamento
+da Nota Fiscal de Serviços Eletrônica Nacional­ NFS-e, no Ambiente Nacional. Traz ainda, a
+informação de como emitir o DAM- Documento de Arrecadação Municipal, através do Sistema
+ISS-Curitiba.
+O objetivo é proporcionar ao contribuinte um maior entendimento quanto às telas que fazem
+parte do processo, ou seja, explanar sobre os passos elementares referentes à emissão
+completa da NFS-e.
+Insta frisar que, este Manual é um complemento dos Manuais disponibilizados no Portal
+Nacional de Emissão de Nota Fiscal de Serviço Eletrônica.
+A emissão da Nota Fiscal de Serviços Eletrônica Nacional­ NFS-e, está disponível no Portal
+de Gestão NFS-e a todos prestadores de serviços.
+De acordo com a legislação, a emissão da NFS-e é obrigatória para todos os prestadores de
+serviços, independentemente do valor da receita bruta anual de serviços, exceto aos
+proibidos descritos no art. 5º da Lei 73/2009.
+Para emitir a NFS-e, as empresas obrigadas ou que optarem pela emissão do documento
+eletrônico, deverão efetuar o cadastro no Portal de Gestão NFS-e ou acessar com
+certificado digital, assim como, acesso via GOVBR.
+
+                                          Manual_Emissão_NFS-e_Nacional
+                                                                                                                            3
+                                                                                        Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                         Departamento de Rendas Mobiliárias
+
+                                                                                                         Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                  Núcleo de Inteligência Fiscal
+
+Acessando o Sistema
+
+O Acesso ao Portal de Gestão NFS-e Nacional poderá ser efetuado através do endereço
+eletrônico:
+
+                                    https://www.nfse.gov.br/emissornacional
+
+Para acessar o Sistema Nacional NFS-e sem a utilização de um certificado digital ou via
+GOVBR, é imprescindível a criação de uma senha pessoal.
+
+Os contribuintes podem criar login e senha no Sistema. Basta clicar em "fazer primeiro
+acesso" e informar o CNPJ/CPF.
+
+Para criação de novo usuário, é indispensável que o contribuinte tenha em mãos o número
+do CNPJ ou CPF e demais informações acerca de sua empresa para preenchimento correto
+do formulário. Neste, será necessário criar um login e senha para acesso ao sistema.
+Salienta-se que essa senha deverá conter entre 6 e 10 caracteres, sendo permitidos
+números e letras, maiúsculas e minúsculas são diferenciadas.
+
+Mais informações sobre o acesso ao Sistema Nacional NFS-e e manual com instruções estão
+disponíveis nos links abaixo:
+
+EBook:                                                                       MEIs
+Passo a passo para cadastro e emissão pelos
+
+Vídeo:
+Cadastro no Portal Nacional de Emissão de Nota Fiscal de Serviço Eletrônica
+
+                                                                                  4
+Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Emitindo a NFS-e
+
+ Está disponível nos links a seguir, vídeos com informações básicas no que se refere a
+ emissão da NFS-e.
+ Emissão de Nota Fiscal de Serviço Eletrônica NFS-E através do Emissor WEB
+ Emissão de Nota Fiscal de Serviço Eletrônica NFS-E através do APP NFS-E Mobile
+ Na sequência para maiores esclarecimentos é apresentado um passo a passo desde o
+ preenchimento dos dados da NFS-e até a emissão do DAM ­ Documento de Arrecadação
+ Municipal NFS-e.
+ Pois bem.
+ Os contribuintes obrigados ou que optarem pela emissão da NFS-e, deverão fazê-la para
+ todos os serviços prestados, sendo vedada a emissão de uma mesma NFS-e que englobe
+ serviços enquadrados em mais de um código de atividade dos serviços descritos na
+ Lista de Serviços anexa à Lei Complementar 116/2003.
+ Após entrar no Sistema Nacional NFS-e o contribuinte terá duas formas de acesso à "emissão
+ completa" da NFS-e.
+ Na parte superior da tela
+
+Na parte inferior da tela
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                              5
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Ao clicar em "NFS-e+" aparecerá três tipos de emissão da NFS-e: Emissão completa, Emissão
+Simplificada, Emissão por decisão administrativa/judicial.
+
+Regra geral deve-se escolher a emissão completa.
+A opção Emissão simplificada está disponível somente para o MEI - Microempreendedor
+Individual.
+Emissão completa
+A emissão completa compreende quatro etapas: Pessoas, Serviço, Valores e Emitir NFS-e.
+
+Preliminarmente, cabe ressaltar que no decorrer da emissão da NFS-e, o emitente se
+deparará com campos opcionais e obrigatórios de preenchimento. Quando for obrigatória
+a informação, ao lado constará um asterisco vermelho "*".
+
+1. Dados das Pessoas
+
+Os Dados das Pessoas abrangem: Data da Competência, Dados do Emitente da NFS-e e
+Dados do Tomador de Serviços.
+ 1.1 Data de competência
+Refere-se à data em que o serviço foi prestado.
+
+                                                                                                                             6
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Não selecionar o box "Informar série e número da DPS" - Declaração de Prestação de Serviço,
+pois é uma informação opcional. Se for clicado será obrigatório o preenchimento dos dados.
+O número e a série da DPS são campos de controle da DPS que ajudam a identificar unicamente
+uma DPS. Em geral, os campos são gerados automaticamente pelo sistema para cada emitente
+de NFS-e. No entanto, existem situações em que o emitente ainda necessita controlá-los ou
+deverá informá-los manualmente.
+ 1.2 Dados do Emitente da NFS-e
+ A NFS-e poderá ser emitida por um Prestador, Tomador ou Intermediário. No entanto, as
+ emissões de NFS-e por Tomador e Intermediário não estão disponíveis, até a publicação deste
+ Manual.
+
+Após escolher a opção "Prestador", o próximo passo é informar o Município do Emissor. Feito
+isso, o sistema automaticamente preencherá o Indicador Municipal (inscrição municipal- IMU),
+CNPJ e Razão Social. A informação se é optante ou não pelo Simples Nacional já estará
+preenchida.
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                              7
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+ 1.3 Dados do Tomador de Serviços
+ Para identificação do Tomador dos Serviços, o sistema de emissão de NFS-e apresenta as
+ opções de "Tomador não informado", "Tomador do Brasil" e "Tomador do Exterior".
+
+IMPORTANTE: Preferivelmente deve-se identificar o tomador, para que este tenha a
+
+oportunidade de participar do Programa Nota Curitibana.
+
+Informados os Dados das Pessoas, clicar em "Avançar", na parte inferior direita da tela.
+
+                                                                                                                             8
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+2. Dados do Serviço
+
+ Campo destinado às informações relativas ao Local da Prestação, Serviço Prestado e
+ Informações Complementares.
+ 2.1 Local da Prestação
+No Local da Prestação informa-se o País e Município em que o serviço foi prestado, caso seja
+no Brasil.
+Se a prestação foi em outro País, a informação se restringirá ao País.
+
+ 2.2 Serviço Prestado
+No Serviço Prestado é necessário informar:
+
+    a) o Código de Tributação Nacional;
+    b) se o Serviço Prestado é um caso ou não de Imunidade, Exportação ou Não Incidência
+
+         ISSQN;
+    c) Descrição do Serviço; e
+    d) o Item da NBS ­ Nomenclatura Brasileira de Serviços, intangíveis e outras operações
+
+         que produzam variações no patrimônio ­ correspondente ao Serviço Prestado.
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                              9
+                                                                                        Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                         Departamento de Rendas Mobiliárias
+
+                                                                                                         Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                  Núcleo de Inteligência Fiscal
+
+O campo "Código de Tributação Nacional" tem como objetivo a pesquisa dos serviços
+descritos na Lista de Serviços, anexa à Lei Complementar 116/2003, pelo nome ou através
+do próprio código, conforme demonstrado na tela abaixo.
+
+                                                                                                                          10
+                                          Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+ Após, confirmar o item e subitem do serviço prestado, há a necessidade de assinalar se a
+ prestação de serviço possui ou não "imunidade", se é o caso de "exportação" ou "não
+ incidência do ISSQN".
+Exceto em situações específicas o contribuinte deve optar por "Não", ou seja, não é o caso de
+imunidade, exportação de serviço ou não incidência.
+
+Marcando a opção "Não", o sistema automaticamente informará o local de incidência do ISSQN,
+de acordo com o disposto no art. 3°, da Lei Complementar 116/2003.
+
+Insta frisar que, a imunidade se refere apenas às previstas no inciso VI, art. 150, da Constituição
+Federal de 1988.
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            11
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Quanto à exportação, salienta-se que para efeitos do ISSQN, uma operação pode representar
+uma exportação de serviço quando:
+
+    a) O serviço foi concluído no exterior; ou,
+    b) O resultado dessa prestação é verificado no exterior;
+
+IMPORTANTE: o prestador deverá possuir elementos de prova, a serem exibidos para o
+
+Fisco quando solicitado, de que os serviços foram executados de modo a atender uma demanda
+a ser satisfeita no mercado exterior, em favor do tomador que atue, como tal, naquele outro
+mercado.
+Referente à "Não Incidência do ISSQN", inexiste previsão legal na Lei Complementar
+n° 40/2001 ­ Código Tributário Municipal.
+Prosseguindo a emissão da NFS-e é imperativo discriminar o serviço prestado na "Descrição do
+Serviço". Exemplo: Serviço de limpeza, manutenção e conservação de vias e logradouros
+públicos ­ parques e jardins.
+
+É importante ainda, selecionar o "Item NBS ­ Nomenclatura Brasileira de Serviços, intangíveis
+e outras operações que produzam variações no patrimônio ­ correspondente ao serviço
+prestado"
+O depara entre item da Lista de Serviço e item NBS pode ser encontrado neste endereço
+(AnexoVIII-CorrelacaoItemNBSIndOpCClassTrib_IBSCBS_V1.00.00 -- Portal da Nota Fiscal de
+Serviço eletrônica)
+
+                                                                                                                            12
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                        Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                         Departamento de Rendas Mobiliárias
+
+                                                                                                         Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                  Núcleo de Inteligência Fiscal
+
+                                   Resumo dos Dados do Serviço Prestado
+
+2.3 Informações Complementares
+Elucida-se que as "Informações Complementares" fazem parte dos campos opcionais.
+Nestes campos pode-se informar: Número do documento de responsabilidade técnica,
+Documento de Referência e Informações Complementares.
+
+                                          Manual_Emissão_NFS-e_Nacional
+                                                                                                                          13
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Preenchidos os dados acima, clicar em "Avançar".
+
+3. Dados dos Valores
+
+Campo destinado às informações concernentes: aos Valores dos Serviço Prestados; Tributação
+Municipal; Tributação Federal; e Valor Aproximado dos Tributos.
+ 3.1 Valores do Serviço Prestado
+
+Valor do serviço prestado é o montante do serviço prestado.
+O valor recebido pelo intermediário, quando aplicável, é o total recebido pelo intermediário.
+Desconto incondicionado: desconto oferecido sem que haja necessidade de que alguma
+condição seja cumprida para obtenção do desconto. O desconto incondicionado, concedido por
+vontade do prestador sem qualquer imposição, reduzirá o valor do serviço prestado.
+Desconto condicionado: desconto oferecido desde que alguma condição seja cumprida para
+obtenção do desconto. O desconto condicionado, depende de alguma condição posterior à
+emissão da NFS-e. A base de cálculo não é reduzida pelo desconto condicionado.
+
+                                                                                                                            14
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+ 3.2 Tributação Municipal
+Na opção Tributação Municipal o contribuinte informará conforme o serviço prestado, se:
+
+     a) possui Regime Especial de Tributação;
+     b) é o caso de Exigibilidade Suspensa de Recolhimento;
+     c) há Retenção do ISSQN;
+     d) o serviço prestado está amparado por algum Benefício Municipal Fiscal; e
+     e) existirá aplicação de qualquer tipo de Dedução/Redução à Base de Cálculo do ISSQN.
+
+  3.2.1 Regime Especial de Tributação
+Salienta-se que o Regime Especial de Tributação não necessariamente está relacionado ao
+valor do serviço.
+O Regime Especial Municipal previsto no art. 10 da Lei Complementar 40/01 refere-se apenas
+à Sociedade de Profissionais.
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            15
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+  3.2.2 Exigibilidade Suspensa de Recolhimento
+A exigibilidade do recolhimento poderá ser suspensa por decisão judicial ou processo
+administrativo. A informação do número do processo é imprescindível.
+
+  3.2.3 Retenção na Fonte do ISSQN e Substituição Tributária
+As retenções existentes, conforme o Sistema Nacional NFS-e podem ser realizadas pelo
+tomador do serviço ou intermediário.
+Quando o tomador ou intermediário não foram informados nos dados da Pessoa, neste momento
+deverá ser incluso.
+
+O art. 8° e 8°-A, da Lei Complementar 40/01, prevê os responsáveis pela retenção na fonte do
+                                                                                                                            16
+
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+ISSQN e respectivo recolhimento, assim como os substitutos tributários.
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            17
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+  3.2.4 Benefício Municipal Fiscal
+
+Os benefícios municipais fiscais, registrados no sistema são: Alíquota Diferenciada e Isenção
+do ISSQN.
+
+ a) Alíquota Diferenciada
+
+De acordo com o art. 4°, inciso I, II, III e VI da Lei Complementar 40/01 a alíquota do ISS pode
+ser diferente de 5%.
+
+As alíquotas diferenciadas, quando possível, foram atribuídas diretamente ao item e subitem
+da Lista de Serviço anexa à Lei Complementar Lei 116/2003.
+
+Na impossibilidade destas atribuições, as alíquotas diferenciadas foram registradas
+como "benefício municipal fiscal".
+
+Serviços com alíquotas diferenciadas consideradas como benefício municipal fiscal:
+
+    1) atividades de Unidade de Central de Atendimento (call centers) e de assistência técnica
+         remota;
+
+    2) vigilância;
+    3) composição gráfica;
+    4) sanatórios, manicômios, casas de saúde, prontos-socorros;
+    5) operadoras de planos de assistência medico-veterinária e cooperativas de serviços;
+    6) serviços prestados ao SUS.
+    7) TECNOPARQUE, de acordo com a Lei Complementar 64/2007.
+    8) Programa Municipal de Competitividade, conforme Lei Complementar 84/2011.
+    9) Recebimento e triagem de materiais reutilizáveis e recicláveis, realizados pelas
+
+         Associações de Catadores, inscritas no Programa Ecocidadão da Secretaria Municipal
+         do Meio Ambiente. (Vide Decreto nº2396/2023) (Redação acrescida pela Lei
+         Complementar nº 138/2023).
+    10) atividade de serviços para destinatários no exterior, com resultado no Brasil.
+
+IMPORTANTE: A emissão de NFS-e de atividade de serviços para destinatário no
+
+exterior, COM CONSUMO NO BRASIL, não pode ser considerado como uma exportação.
+
+Vide exemplo de NFS-e no Anexo II "Emissão NFS-e ­ Serviços para destinatário no Exterior
+com Consumo no Brasil".
+
+                                                                                                                            18
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+ b) Isenção do ISSQN
+Isenção prevista no inciso V, art. 85 da Lei Complementar 40/01.
+
+  3.2.5 Dedução/Redução à Base de Cálculo do ISSQN
+As Deduções/Reduções à Base de Cálculo do ISSQN estão previstas no art. 13-A, da Lei
+Complementar 40/2001, no art. 15, do Decreto Municipal 1682/2020, assim como, disposto
+no § 1º-A, do Art. 13, da Lei Complementar 123/2006.
+
+IMPORTANTE: Elucida-se que as Deduções/Reduções, são os valores repassados a
+
+terceiros.
+Lei Complementar 40/2001 ­ Código Triutário Municipal
+
+Decreto Municipal 1682/2020
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            19
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Lei Complementar 123/2006.
+
+Art. 13
+(...)
+§ 1°-A Os valores repassados aos profissionais de que trata a Lei n° 12.592 de 18 de janeiro de 2012,
+contratados por meio de parceria, nos termos da legislação civil, não integrarão a receita bruta da empresa
+contratante para fins de tributação, cabendo ao contratante a retenção e o recolhimento dos tributos
+devidos pelo contratado.
+
+(...)
+                                                                                                                            20
+
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Lembrando que a possibilidade de dedução à base de cálculo do ISSQN está atrelada
+principalmente à legislação de incidência do ISSQN, com base no disposto no art. 3°, da Lei
+Complementar 116/2003.
+
+Quando atendida o que preceitua a legislação supramencionada, o contribuinte terá a
+possibilidade de dedução/redução de base cálculo do ISSQN.
+
+O ISSQN será calculado, quando for o caso, automaticamente após preenchidos os campos da
+tela de "Serviços" e "Valores".
+
+ 3.3 Tributação Federal e Valor Aproximado dos Tributos
+A Tributação Federal relaciona-se com as particularidades do PIS/COFINS e valores retidos de
+IRRF- Imposto de Renda Retido na Fonte, CSLL ­ Contribuição Social sobre o Lucro Líquido e
+CP ­ Contribuição Previdenciária. O preenchimento destes campos, de acordo com Legislação
+Federal, é de inteira responsabilidade do contribuinte.
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            21
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Quanto ao Valor Aproximado dos Tributos, é imprescindível informar em valores monetários
+ou percentuais, a importância total de imposto federal, estadual e municipal, em relação ao
+montante total do serviço.
+
+Preenchidos os campos obrigatórios clicar em "Avançar" para "Emitir NFS-e".
+
+4. Emitir NFS-e
+
+Nesta tela aparecerá o resumo das informações constantes das telas anteriores: "Informação
+do Emitente", "Tomador do Serviço", "Serviço Prestado", "Valor do Serviço Prestado",
+"Tributação Municipal".
+Os campos acima devem ser conferidos, podendo ser editados antes da emissão da NFS-e.
+
+                                                                                                                            22
+                                           Manual_EmissãoNFS-e_Nacional
+                               Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                Departamento de Rendas Mobiliárias
+
+                                                Gerência de Sistemas, Inovação e Inteligência
+                                                                        Núcleo de Inteligência Fiscal
+
+Manual_Emissão_NFS-e_Nacional
+                                                                                23
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Abaixo na tela de emissão da NFS-e, ainda conterá a "Prévia dos Valores da NFS-e",
+sendo possível voltar para as telas anteriores ou emitir NFS-e.
+
+                                                                                                                            24
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Optando pela emissão da NFS-e, o Sistema realizará a emissão desde que todos os
+campos sejam preenchidos adequadamente.
+
+A NFS-e estará disponível para baixar em arquivo XML e DANFSe (PDF).
+
+O contribuinte poderá visualizar a NFS-e emitida, como todas as NFS-e emitidas até
+aquele momento, bem como, optar pela emissão de uma nova NFS-e.
+
+Exemplo de DANFSe:
+
+                    Manual_Emissão_NFS-e_Nacional
+
+                                                   25
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+5. Pesquisando a NFS-e Emitida/Cancelamento por Substituição/
+Cancelamento
+
+Na parte superior da tela do Portal do Contribuinte haverá a opção de consultar a NFS-
+e emitida até a data da pesquisa.
+
+                                                                                                                            26
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Realizada a consulta, o emissor na opção "Situação" da NFS-e, terá a possibilidade de
+visualização, cancelamento por substituição, cancelamento, download em XML e PDF.
+
+a) Regras do Cancelamento por substituição
+     O prazo máximo para cancelamento é de 60 dias.
+     É permitido substituir uma NFS-e onde os não-emitentes não foram identificados.
+
+Considera-se não-emitentes as duas pessoas (Prestador, Tomador, Intermediário) que são
+diferentes da pessoa do emitente do documento. Por exemplo: Para uma NFS-e onde o emitente
+seja o Prestador do Serviço, os não-emitentes serão o Tomador e o Intermediário da nota.
+
+     É possível alterar as informações dos não-emitentes na NFS-e substituta.
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            27
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+b) Regras do Cancelamento da NFS-e
+     O prazo máximo para cancelamento é de 60 dias.
+     Não existe restrição de valor para o cancelamento de uma NFS-e.
+     É permitido cancelar uma NFS-e onde o Tomador não foi identificado.
+     Motivos do cancelamento: erro na emissão, serviço não prestado ou outros. É
+         obrigatória a justificativa para todos os motivos.
+
+ O contribuinte somente poderá cancelar a NFS-e antes do pagamento do imposto, dentro
+ do prazo de 60 dias contados a partir do momento da emissão da NFS-e, exclusivamente
+ por meio do Sistema Nacional NFS-e.
+
+ IMPORTANTE:
+
+ Após o recolhimento do Imposto não será permitido o cancelamento da nota fiscal.
+
+6. Documento de Arrecadação Municipal - DAM NFS-e
+
+ O recolhimento do Imposto sobre Serviço ­ ISSQN referente às NFS-e emitidas será efetuado
+ pelo Documento de Arrecadação Municipal ­ DAM NFS-e através do Sistema ISS Curitiba.
+ A emissão do DAM NFS-e está disponível na guia Emissão DAM's, item DAM NFS-e.
+
+                                                                                                                            28
+                                           Manual_EmissãoNFS-e_Nacional
+                               Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                Departamento de Rendas Mobiliárias
+
+                                                Gerência de Sistemas, Inovação e Inteligência
+                                                                        Núcleo de Inteligência Fiscal
+
+Manual_Emissão_NFS-e_Nacional
+                                                                                29
+                               Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                Departamento de Rendas Mobiliárias
+
+                                               Gerência de Sistemas, Inovação e Inteligência
+                                                                        Núcleo de Inteligência Fiscal
+
+                                                                                30
+Manual_EmissãoNFS-e_Nacional
+                                                                              Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                               Departamento de Rendas Mobiliárias
+
+                                                                                               Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                       Núcleo de Inteligência Fiscal
+
+EM CASO DE DÚVIDAS, ENTRAR EM CONTATO COM A SECRETARIA
+MUNICIPAL DE PLANEJAMENTO, ORÇAMENTO
+E FINANÇAS ATRAVÉS DO EMAIL:
+
+isscuritiba@curitiba.pr.gov.br
+
+                                  Manual_Emissão_NFS-e_Nacional
+                                                                                                                   31
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+   Anexo I - Depara entre item da Lista de Serviço e item NBS-
+   Nomenclatura Brasileira de Serviços, intangíveis e outras operações que
+   produzam variações no patrimônio
+
+Tabela de Correlação Subitem x NBS
+(AnexoVIII-CorrelacaoItemNBSIndOpCClassTrib_IBSCBS_V1.00.00 -- Portal da Nota Fiscal
+de Serviço eletrônica)
+
+                                                                                                                            32
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+   Anexo II - Emissão NFS-e ­ Serviços para destinatário no Exterior com
+   Consumo/Resultado no Brasil.
+
+                                              Tela de Pessoas
+Nesta tela além dos dados do emitente, o Prestador deve informar que o Tomador de Serviços
+é do Exterior.
+
+Na sequência colocar todos os dados do Tomador do Serviço.
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            33
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+                                              Tela de Serviços
+Considerando que os Serviços para destinatário no Exterior com Consumo/Resultado no
+Brasil, não é uma exportação, no campo de "serviço prestado", deve ser escolhida a opção
+"Não", ou seja, não se trata de imunidade, exportação ou não incidência do ISSQN.
+
+                                                                                                                            34
+                                           Manual_EmissãoNFS-e_Nacional
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+Salientamos que nas "Informações para Comércio Exterior" é imprescindível sinalizar que o
+"Modo de Prestação" é "Consumo no Brasil".
+
+                                               Tela de Valores
+Numa situação geral, na Tela de Valores o Prestador do Serviço informará que não é o caso de
+exigibilidade suspensa e retenção do ISSQN.
+Ele optará somente pelo amparo do "Benefício Fiscal Municipal" ­ "Alíquota Diferenciada ­
+Atividade de Serviços para destinatário no Exterior com Resultado no Brasil- alíquota 2%.
+
+                                           Manual_Emissão_NFS-e_Nacional
+                                                                                                                            35
+                                                                                          Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                                                                           Departamento de Rendas Mobiliárias
+
+                                                                                                           Gerência de Sistemas, Inovação e Inteligência
+                                                                                                                                    Núcleo de Inteligência Fiscal
+
+                                              Tela Emitir NFS-e
+No final do processo de emissão da NFS-e o Prestador de Serviços terá um resumo das
+informações das telas anteriores. Estas informações podem ser revisadas e editadas, conforme
+a seguir.
+Estando corretos todos os dados da DPS o contribuinte deve emitir a NFS-e.
+
+                                                                                                                            36
+                                           Manual_EmissãoNFS-e_Nacional
+                               Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                Departamento de Rendas Mobiliárias
+
+                                                Gerência de Sistemas, Inovação e Inteligência
+                                                                        Núcleo de Inteligência Fiscal
+
+Manual_Emissão_NFS-e_Nacional
+                                                                                37
+                               Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                Departamento de Rendas Mobiliárias
+
+                                               Gerência de Sistemas, Inovação e Inteligência
+                                                                        Núcleo de Inteligência Fiscal
+
+                                                                                38
+Manual_EmissãoNFS-e_Nacional
+                               Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                Departamento de Rendas Mobiliárias
+
+                                                Gerência de Sistemas, Inovação e Inteligência
+                                                                        Núcleo de Inteligência Fiscal
+
+Manual_Emissão_NFS-e_Nacional
+                                                                                39
+                               Secretaria Municipal de Planejamento, Finanças e Orçamento
+                                                                Departamento de Rendas Mobiliárias
+
+                                               Gerência de Sistemas, Inovação e Inteligência
+                                                                        Núcleo de Inteligência Fiscal
+
+                                                                                40
+Manual_EmissãoNFS-e_Nacional
+

@@ -417,3 +417,307 @@ MySQL sobe só como administrador (o Valdo sobe à mão). API de dev pelo `previ
 gates (contrato 50 excluído, 51 inativo; carteira e conta 1 = banco 001). Nada commitado até este
 checkpoint — commit local feito ao fechar a sessão (sem push).
 
+---
+
+## 10. Gates da onda — EXECUTADOS com retrabalho em sessão (2026-09-19 → 20)
+
+Sem credenciais do sandbox ainda (item 1 do §9 continua do Valdo). Tudo abaixo foi feito com o que
+não depende delas: testes do app, sondas ao vivo contra o dev, os dois gates, o retrabalho e a re-prova.
+
+### 10.1 Sondas ao vivo (dev, conta 077 DESCARTÁVEL + par PEM autoassinado — tudo removido no fim)
+18 sondas de contrato responderam com código e envelope certos (403 do adminGuard, 422 banco sem
+adaptador, 409 sem canal/sem apresentação, 404 indistinto do webhook, 400 do DTO). Achados:
+**A1** chave privada PEM com corpo lixo era ACEITA (só o cabeçalho era conferido) e sobrescrevia a boa;
+**A2** handshake mTLS recusado (`EPROTO tlsv1 alert unknown ca`) virava 503 "banco indisponível, tente
+de novo" — o operador repetiria e empilharia tentativas F; **A4** `clientId` aceitava `../../etc/x`;
+rajada de 160 chamadas no webhook não disparou o rate limit (é o global de 300/min por IP, não um
+limite do webhook). Fail-closed do registro PROVADO ao vivo: 2 tentativas F, nenhuma S, nova
+tentativa liberada.
+
+### 10.2 Gate socrático — 1ª rodada **0.64 ✗**
+HIGH-1 efeito recusado por causa TRANSITÓRIA (lock wait, deadlock, erro de programa) virava pendência
+permanente: `runIsolated` engolia tudo, o R ficava com `slip_event` NULL e a idempotência por (kind,
+dt) nunca mais tentava a baixa. HIGH-2 o "throttle" filtrava pelo último EVENTO — consulta sem
+novidade não deixava rastro: os 8 mais antigos eram reconsultados a cada abertura de tela e o 9º nunca
+(starvation; sandbox 10/min). HIGH-3 tentativa interrompida > 10 min virava F SEM perguntar ao banco
+e o mesmo `seuNumero` era reenviado — duas cobranças vivas no Inter, e a órfã paga sem porta de
+entrada. MED-1 reconciliação adotava código de tentativa antiga (ER_DUP_ENTRY em loop); MED-2 cancelar
+não consultava antes e gravava C no 202; MED-3 rotina sem orçamento de tempo nem exclusão mútua;
+MED-4 pendência só no detalhe; MED-5 webhook sem teto de códigos, processadores ilimitados, sem
+trust proxy; LOW-1 401 do próprio token retentava; LOW-2 `res.on('error')` ausente; LOW-3 GET do canal
+e test sem adminGuard; LOW-4 `SECRETS_PATH` default no cwd; LOW-5 UNIQUE com NULL não é cinto.
+
+### 10.3 Gate adversarial — 1ª rodada **0.62 ✗** (64 testes em `onda2-adversarial.test.ts`, 11 = achados)
+**A1 HIGH** desfecho AMBÍGUO do POST (timeout/5xx, ou 2xx sem JSON) fechava em F e liberava a
+tentativa 2 sem reconciliar (= HIGH-3 pelo outro lado); A2 registrar × cancelar (reserva em voo
+cancelada "às cegas"; passo 3b sem reconferir o estado); A3 voz atrasada regredia apresentação
+encerrada (UNIQUE → 500); A4 cancelar pedia ao banco antes de validar o estado local; A5 voz da
+tentativa N gravada na N+1 (TOCTOU reg0 × reg); A6 `inbound_token` a usuário comum; A7 chave ilegível
+aceita; LOWs: throttle na mão do cliente (`minMinutes` 0), `expires_in` não numérico nunca cacheava,
+cache do token não invalidava ao trocar `client_id`, DELETE do canal deixa segredos no disco,
+`bank_our_number` sem corte para 11.
+
+### 10.4 Retrabalho (tudo em sessão; `onda2-gate-rework.test.ts` 24 testes fixa cada item)
+- **Migration 056** `tb_bank_slip_registration.last_queried_at` + índice `(institution, last_queried_at)`
+  (DDL canônico `sql/03` alinhado; aplicada no dev). É o fato "NÓS olhamos o banco" — distinto da voz
+  dele; `touchQueriedAt` em toda consulta; `listLiveRegistrationsToRefresh` filtra e rodiziona por ela
+  (NULL primeiro). [HIGH-2]
+- `refreshRegistration`: só recusa de REGRA (HttpError 4xx, exceto RESOURCE_BUSY/lock/deadlock) grava
+  "Efeito recusado"; transitório/erro de programa desfaz a transação inteira e a próxima consulta tenta
+  de novo (`isRuleRefusal`). [HIGH-1] Voz atrasada não regride apresentação encerrada; idempotência por
+  (kind, dt) em TODOS os eventos (`hasRegistrationEvent`). [A3] Sob o lock, tentativa ≠ da consultada →
+  nada gravado. [A5]
+- `registerBankSlip`: última tentativa SEM código (interrompida > 10 min OU F) → `findByReference` por
+  seuNumero ANTES de reservar (achou = S retroativo → 409 já registrado; nada = F source Q só na
+  tentativa sem evento; banco fora = falha fechado). Desfecho ambíguo do POST não grava F — a reserva
+  fica em voo para a reconciliação (`isAmbiguousBankOutcome`). Passo 3b grava código + S sempre e, se
+  o boleto deixou de estar aberto no intervalo, pede cancelamento ao banco + K e devolve 409. [HIGH-3, A1, A2]
+- `reconcileInFlightRegistration` (peça única, usada pelo registro e pela rotina): exclui códigos já
+  conhecidos do boleto, prefere o de maior `statusAt`. [MED-1]
+- `cancelRegisteredBankSlip`: reserva em voo → 409 IN_PROGRESS (interrompida reconcilia antes) →
+  estado LOCAL sob lock (não aberto = 409 sem tocar o banco) → CONSULTA (RECEBIDO = efeito aplicado +
+  409; C/V/F = só local) → pedido ao banco (202) → C + K. [MED-2, A2, A4]
+- Rotina: `REFRESH_BUDGET_MS` 20 s total; órfãos param em BANK_UNAVAILABLE/RATE_LIMITED; coalescência
+  por institution (2 telas = 1 varredura). DTO `minMinutes ≥ 1`. [MED-3, LOW]
+- Webhook: `MAX_WEBHOOK_CODES` 50 por chamada; fila SERIAL por institution em memória. [MED-5]
+- Canal: `validatePrivateKeyPem` (createPrivateKey) + `keyMatchesCertificate` no upload; GET do canal
+  REDIGE `inboundToken`/`webhookPath` para não admin; `POST /channel/test` com adminGuard; `clientId`
+  com alfabeto de id. [A7, A6, LOW-3, A4 da sonda]
+- Transporte: falha de TLS/certificado no handshake → **409 BANK_AUTH_FAILED** "confira os segredos"
+  (`isTlsCredentialError`); `res.on('error')`. [A2 da sonda, LOW-2]
+- Adaptador: token pedido FORA da retentativa (401 do token não repete); `expires_in` inválido → 1 h;
+  chave do cache inclui `clientId`; `bank_our_number` cortado em 11. [LOW-1, LOWs]
+- Testes antigos alinhados ao contrato novo (3 em `bank-slip-registration.test.ts`; 5 "provas
+  positivas" do adversarial que documentavam o comportamento antigo). **1036/1036** api · **92/92** app.
+- Re-prova ao vivo V1–V8 (dev recarregado): chave lixo → 400; test com cert falso → 409
+  BANK_AUTH_FAILED; registrar boleto com F sem código → GET por seuNumero primeiro (409 do TLS, nenhuma
+  tentativa nova); GET canal como user sem token; test como user 403; clientId traversal 400; webhook
+  150 códigos → received 100 (teto depois baixado para 50); `minMinutes` 0 → 400.
+
+### 10.4.1 Re-score socrático pós-retrabalho — **0.76 ✅** (2026-09-20)
+Todas as correções conferidas no código; nenhuma contradiz D-I8/D-I10/D-I13 (a consulta prévia do
+cancelamento é adição, não inversão; deixar de gravar fato no transitório é MAIS fiel à D-I10). Achados
+remanescentes e destino: **M1** cofre gravava o certificado ANTES de conferir o par com a chave (cert
+novo × chave velha no disco quando o par não casava) → corrigido em sessão: as escritas só depois de
+toda validação ("cofre = último par válido"); **M2** consulta que falha ANTES da voz do banco por causa
+persistente (canal inativo, segredo do sandbox removido, situação desconhecida) não marcava
+`last_queried_at` e monopolizaria a cabeça do rodízio → corrigido em sessão como assunção **Q-I10**
+(marca em falha persistente 4xx/502; preserva em lock/deadlock/RESOURCE_BUSY/503); **L1** consulta
+prévia dizendo C/V já cancelava o boleto (source A) e o cancel local repetido devolvia 409 → corrigido
+(o C do efeito é a resposta); **L2** reconciliação decide por leitura antes do lock (só história
+duplicada, sem cobrança dupla) → anotado; **L3** órfã do 3b com cancel falho no banco fica sem porta
+de retentativa → **Q-I12**; **L4** fila do webhook sem teto de comprimento/dedupe e sem parada no 429 →
+Q-I6. **E1 (só o sandbox prova)**: se o `GET /cobrancas?seuNumero` do Inter for eventualmente
+consistente, a reconciliação pode dizer "não achou" cedo demais → entra como caso explícito do smoke
+(Q11/Q12 do §9). Testes M2/L1 em `onda2-gate-rework.test.ts` (27); suíte 1039/1039.
+
+### 10.5 Assunções EXECUTADAS (viram decisão com o "concordo" do Valdo; divergência = reverter)
+- **D-I20 (assunção)** — apresentação ganha `last_queried_at` (write-many, família dos write-once da
+  D-I6): sem o fato "nós vimos" não há throttle nem rodízio. Alternativas descartadas: tabela de
+  consultas (cresce sem limite) e evento "sem mudança" (polui a voz do banco).
+- **D-I21 (assunção, refina D-I13)** — F só por recusa EXPLÍCITA do banco (4xx); ambíguo fica em voo;
+  toda tentativa sem código consulta o banco por seuNumero antes de uma nova apresentação.
+- **D-I22 (assunção, refina D-I8)** — "banco primeiro" = estado local → consulta → pedido → gravação;
+  reserva em voo bloqueia o cancelamento. O C local ainda nasce no 202 (Q-I4 decide se muda).
+- **D-I23 (assunção)** — webhook com teto 50 e fila serial por institution; token do webhook só a
+  admin (GET redigido; test admin).
+- **D-I24 (assunção)** — falha de handshake mTLS é CREDENCIAL (409), nunca indisponibilidade.
+
+### 10.6 Questões para o Valdo (rodada 2 da onda)
+- **Q-I1** (HIGH-1 resolveu o transitório; sobra a recusa de REGRA): R com `slip_event` NULL deve ser
+  REAPLICADO automaticamente na consulta seguinte enquanto o banco disser o mesmo, só por ato manual
+  "Reaplicar" no detalhe, ou ambos? (Rec.: ato manual nesta onda — exige modelar "reaplicação" como
+  evento próprio, a idempotência por (kind, dt) hoje impede um 2º R.)
+- **Q-I2** confirmar D-I20 (coluna) ou pedir outra forma. (Rec.: manter.)
+- **Q-I3** confirmar D-I21. (Rec.: manter — custo é 1 GET por reapresentação, rara.)
+- **Q-I4** cancelamento: gravar C local no 202 (hoje) ou só quando a consulta confirmar CANCELADO
+  (K = "pendente", boleto segue open e os títulos presos pela D-B1 até lá)? (Rec.: manter o 202 — a
+  consulta ativa e o webhook trazem a confirmação; se o banco recusar depois, a voz C/V não chega e o
+  RECEBIDO cai em pendência visível.)
+- **Q-I5** (MED-4) sinal de "voz do banco pendente" na LISTA de boletos (badge/filtro) ou aceitar que só
+  existe no detalhe? (Rec.: coluna/badge na lista na próxima passada de UX — hoje o operador não
+  descobre dinheiro na conta sem título baixado sem abrir boleto por boleto.)
+- **Q-I6** Onda 4: `trust proxy` + limitador próprio do webhook + fila compartilhada entre instâncias.
+  (Rec.: sim, junto com a URL pública.)
+- **Q-I7** confirmar D-I23 para o GET redigido (a seção Canal API do app já trata `webhookPath` nulo).
+- **Q-I8** DELETE do canal: apagar os segredos junto (hoje ficam no disco e o PUT seguinte revive o
+  canal com o MESMO token) ou recusar o DELETE com apresentações vivas? (Rec.: apagar segredos + rotacionar
+  o token no revive; recusar com apresentações vivas.)
+- **Q-I9** piso do throttle: `minMinutes ≥ 1` para todos (feito) ou admin pode 0? (Rec.: manter ≥ 1.)
+- **Q-I10** (M2 do re-score, EXECUTADA como assunção) — consulta que falha antes da voz do banco por
+  causa persistente conta como "tentamos olhar" (marca `last_queried_at`); transitório preserva. Confirmar
+  ou pedir contador de falhas com backoff.
+- **Q-I11** virada sandbox → produção: apresentações congeladas em 'S' seguem vivas e exigem os
+  segredos do sandbox no cofre; recusar o PUT do canal com apresentações S vivas (rec.) ou criar ato
+  administrativo "encerrar apresentação de teste"?
+- **Q-I12** (L3) órfã do passo 3b com cancelamento falho no banco: K "pendente" reprocessado pela
+  rotina (cruza com Q-I4) ou operação manual no portal do banco documentada em §10.7? (Rec.: manual
+  nesta onda; o log já existe.)
+- **Q-I13** (M1) confirmar a invariante "cofre = último par válido" (feito: escritas só após validar o
+  par; falta atomicidade temp+rename se o Valdo quiser cinto extra).
+
+### 10.7 Tarefas de implantação (somam às do §9)
+`SECRETS_PATH` FORA do diretório do deploy (default `./secrets` some no redeploy da SaveInCloud —
+LOW-4); migration 056; `npm run errors:gen` (feito no dev: 113 códigos, nenhum novo nesta rodada);
+D-I3: colocar os segredos pela aba Canal API (o upload agora valida par cert × chave). Rodada 2: migration
+057 + `npm run errors:gen`; **Q-I12 (operação manual)**: apresentação órfã cujo cancelamento falhou no banco
+→ cancelar no portal do Inter pelo `codigoSolicitacao` do log e depois "Atualizar com o banco" no boleto.
+
+### 10.8 O que FALTA para fechar a Onda 2 (atualizado)
+1. Credenciais do sandbox (§9 item 1 — Valdo) e conta do banco 077 real da Setes no schema.
+   **Cadastro em developers.inter.co FEITO (Valdo, 2026-09-20)**; ⚠️ o sandbox só atende **seg–sex,
+   8h–20h** — smoke, trilha P7b e passeio logado só nessa janela (o smoke avisa quando está fora).
+2. Smoke `scripts/smoke-inter-sandbox.ts` (C1–C9) + provar Q11/Q12 no sandbox.
+3. Trilha P7b → OK.
+4. ~~Re-score socrático~~ FEITO: **0.76 ✅** (§10.4.1; M1/M2/L1 corrigidos em sessão).
+5. Passeio logado (Claude in Chrome) na aba Canal API e no detalhe do boleto.
+6. Rodada 2 de decisões (Q-I1…Q-I13) e commit dos repos (api · sql · app · Infra-IA — nada commitado
+   nesta sessão).
+
+**Retomada 2026-09-21 (seg, 16h54 — dentro da janela do sandbox)**: ambiente reverificado antes de qualquer
+passo — API 1039/1039 jest + `tsc` limpo, app 25/25 nos testes das entidades novas (item 4 do §9 FEITO:
+`bank_account_channel_entity_test.dart` e `bank_slip_registration_entity_test.dart`), migration 056 espelhada
+no `sql/03`, MySQL de pé; dev tem a conta 5 (banco 077, número placeholder `00000000`) com o canal 5 em S e
+`client_id` NULL, cofre `secrets/setes_setes/bank-account/` VAZIO. Tudo o que resta (itens 1–3, 5, 6) parte
+das credenciais e das decisões Q-I1…Q-I13 — só o Valdo.
+
+**SDKs oficiais do Inter como referência (Valdo, 2026-09-21)**: repos `inter-co/pj-sdk-{python,java,csharp,php}`
+(fev/2025) lidos como SEGUNDA opinião — a fonte primária segue a spec em `setes-api/integracoes/banco-inter/`.
+Conferido no `pj-sdk-python`: mesmos endpoints, mesmo enum de situações (9), token cacheado, `x-conta-corrente`,
+filtro por `seuNumero`. Divergências DELIBERADAS mantidas: (a) token único com os 2 escopos (o SDK pede 1 por
+escopo — gasta o limite de 5/min); (b) 429 = 503 BANK_RATE_LIMITED e a passada para (o SDK dorme 60 s no
+processo — inaceitável em API multi-tenant). Útil: `functional_tests/BillingFunctionalTests.py` = roteiro do que o
+sandbox aceita (conferir contra o smoke); `/webhook/callbacks` (lista de callbacks) = candidato à Onda 4 para
+reconciliar webhooks perdidos. Flutter: nenhum SDK se aplica (o app só fala com a nossa API).
+
+### 10.9 Rodada 2 — DECIDIDA e EXECUTADA (Valdo 2026-09-21, "siga as recomendações da rodada 2")
+
+**Confirmações (viram decisão, sem código)**: D-I20 (`last_queried_at`, Q-I2) · D-I21 (F só por recusa
+explícita, Q-I3) · D-I22 (C local nasce no 202, Q-I4 — manter) · D-I23 (webhook teto 50 + token só admin,
+Q-I7) · D-I24 (TLS = credencial) · Q-I9 piso `minMinutes ≥ 1` mantido · Q-I10 marca em falha persistente
+confirmada · Q-I13 "cofre = último par válido" confirmada (sem temp+rename). Q-I6 (`trust proxy` +
+limitador próprio + fila entre instâncias) e a lista de callbacks `/webhook/callbacks` do banco ficam
+para a **Onda 4**. **Q-I12** (órfã do 3b com cancelamento falho no banco) = operação MANUAL nesta onda:
+cancelar a cobrança no portal do Inter pelo `codigoSolicitacao` do log (`Apresentação aceita para boleto
+que não está mais aberto — cancelamento no banco falhou`) e depois "Atualizar com o banco" no boleto — a
+voz C chega e o K fica como história (entra em §10.7).
+
+**Decisões novas com código (api + sql + app, tudo em sessão):**
+- **D-I25 (Q-I1)** — R/C/V com `slip_event` NULL se resolve por ato MANUAL "Reaplicar efeito do evento N"
+  (nunca automático). A idempotência por (kind, dt) impede um 2º R, então a reaplicação é EVENTO PRÓPRIO
+  **`E`** (migration 057 — só o COMENTÁRIO do `kind`; `sql/03` espelhado), FINAL como a voz que reaplica
+  (entra em `FINAL_REGISTRATION_KINDS` e sai da consulta ativa). Peça
+  `reapplyRegistrationEffect(schema, inst, user, slip, attempt, event)`: `lockSlip` → apresentação e evento
+  FOR UPDATE → a voz GRAVADA vira `ChargeStatus` (valor/data/meio do evento, SEM consultar o banco) → a
+  MESMA porta `applyBankStatus` → E com `slip_event` + o R/C/V original recebe o mesmo `slip_event` (some da
+  pendência). Recusa de novo = 409 com o motivo da regra e NADA gravado (sem SAVEPOINT de propósito).
+  Boleto já no estado que o banco disse = link ao evento existente. `POST /api/bank-slips/:id/reapply`
+  `{attempt, event}` → 201; 404 `BANK_SLIP_REGISTRATION_EVENT_NOT_FOUND`; 409 `BANK_SLIP_EFFECT_NOT_PENDING`
+  (G/S/K… ou já aplicado). App: botão "Reaplicar efeito do evento N" em cada pendência do detalhe
+  (usecase `BankSlipReapply`, evento `BankSlipReapplyRequested`, rótulo do kind E).
+- **D-I26 (Q-I8)** — `DELETE /:id/channel` recusa com apresentação VIVA (em voo ou voz não final) em
+  qualquer ambiente: 409 `BANK_CHANNEL_HAS_LIVE_REGISTRATIONS` (leitura sob lock do canal, peça
+  `countLiveRegistrationsForAccount`). Sem viva: soft delete + segredos de **S e P** fora do cofre (DEPOIS
+  do commit). O revive pelo PUT nasce com `inbound_token` NOVO (UPSERT: `inbound_token = IF(deleted='S',
+  VALUES(inbound_token), inbound_token)` ANTES de `deleted='N'` — ordem de avaliação do ON DUPLICATE KEY).
+- **D-I27 (Q-I11)** — `PUT /:id/channel` que muda o ambiente com apresentação viva no ambiente ATUAL →
+  409 no campo `environment` (mesmo código), sob lock do canal na mesma transação do upsert. Mesmo ambiente
+  ou canal novo não conta. "Encerrar apresentação de teste" NÃO virou ato próprio: liquidar (pay-sandbox) ou
+  cancelar resolve.
+- **D-I28 (Q-I5)** — a LISTA de boletos carrega `pendingBankEffects` (subquery pela regra ÚNICA
+  `PENDING_EFFECT_WHERE` da peça: `kind IN ('R','C','V') AND slip_event IS NULL`) e aceita
+  `?pending=true` (HAVING, na lista E na contagem). App: célula "Voz do banco pendente (n)" em cor de erro na
+  linha + checkbox "Só boletos com voz do banco pendente" (estado no bloc; a volta do detalhe preserva).
+  Regra do app alinhada à da API: **C e V sem `slipEvent` também são pendência** (antes só o R contava —
+  teste da entidade atualizado com o motivo).
+
+**Socrático da rodada (em sessão) — 1 achado, corrigido**: R recusado deixa o boleto `open` com apresentação
+FINAL → "Registrar no banco" voltava a aparecer e `registerBankSlip` aceitava: **2ª cobrança viva no banco
+para dinheiro JÁ recebido**. Guarda ANTES do pagador, do canal e da reserva: 409 `BANK_SLIP_EFFECT_PENDING`
+enquanto houver pendência (peça `countPendingEffects`); app esconde o botão quando `refusedEffects` não está
+vazio. Conferido sem achado: reaplicar concorrente (2º vê `slip_event` preenchido → 409); reaplicar de
+evento de outro boleto/tentativa → 404; E com `dt_bank_status` NULL não colide no UNIQUE (NULLs distintos);
+webhook simultâneo serializa no `lockSlip`; canal com viva em voo (sem evento) também prende o DELETE.
+
+Testes: `onda2-rodada2.test.ts` (17) — 129/129 nas 4 suítes da onda; `errors:gen` 117 códigos; migration 057
+APLICADA no dev; app `analyze` limpo + testes das entidades (E final, C/V pendentes, `pendingBankEffects`,
+`BankSlipReapplyResult`). Tarefa de implantação: migration 057 + `npm run errors:gen` (somam ao §10.7).
+
+**Credenciais do sandbox (2026-09-21)**: o Valdo entregou o zip do portal — certificado UAT (emissor "UAT
+Partners CDPJ", válido 21/09→21/10/2026, 30 dias) + chave RSA 4096, par CONFERIDO; guardados no cofre
+`secrets/setes_setes/bank-account/5/S/{client.crt,client.key}` (gitignored). **Ainda faltam `client_id` e
+`client_secret`** (não vêm no zip; ficam na aplicação do portal) e o nº real da conta 077 (a conta 5 do dev
+tem placeholder `00000000`). Smoke, P7b e passeio logado seguem presos nisso.
+
+### 10.10 Smoke no SANDBOX real — FEITO (2026-09-21, 18h30–19h05, com as credenciais do Valdo)
+
+**Credenciais**: `client_id` + `client_secret` informados pela aba Canal API (D-I3, write-only); conta 5 passou a
+ter o número REAL da Setes no Inter (0001/<conta real> — `x-conta-corrente` derivado). Primeiro "Testar conexão"
+deu 503: o **serviço Cobrança v3 do sandbox estava fora** ("no healthy upstream" — OAuth e gateway de pé;
+curl direto confirmou), voltou em ~5 min; a tradução `BANK_UNAVAILABLE` estava certa.
+
+**Resultado final do smoke `scripts/smoke-inter-sandbox.ts`: C1–C9 = 9/9 OK** (boleto 272: apresentação
+real, A_RECEBER com linha digitável e Pix, pagamento simulado → RECEBIDO → L source A, 2ª consulta
+`changed=false`, PDF oficial 68 KB). **Trilha P7b → OK** (21 OK · 3 PENDENTE = Ondas 3/4 · 0 FALHA).
+
+**4 achados do smoke, corrigidos em sessão (o sandbox pagou o ingresso):**
+1. **`Accept` do adaptador** — o `POST /cobrancas/{id}/pagar` (204) respondia **406** "Supported types:
+   [application/problem+json]" a `Accept: application/json` puro (na 1ª corrida apareceu como 500). Curl não
+   manda Accept e passava. Agora `Accept: application/json, application/problem+json` em toda chamada
+   (teste de contrato no `bank-channel-inter-adapter.test.ts`). Sem isso o critério 2 era improvável no sandbox.
+2. **Vencimento anterior a hoje** — o banco recusa `dataVencimento < hoje` (400) e o boleto do título do dev
+   (2018) virou tentativa F só para ouvir o óbvio. Guarda NOSSA antes do pagador/canal/reserva: 422
+   `BANK_SLIP_EXPIRATION_PAST` com o campo (`registerBankSlip`; teste em `onda2-rodada2.test.ts`; 118 códigos).
+3. **Smoke desatualizado** — C4 mandava `description` para a carteira (o cadastro do §13 exige `agreement`) e
+   procurava a carteira em `/bank-slips/agreements` (lookup sem `bankAccountId` → criava uma carteira por
+   corrida; a 7 foi excluída). Emite com `dtExpiration` = hoje + 30.
+4. **Smoke engolia a falha do pagamento** — C7 seguia para o poll mesmo com o `pay-sandbox` recusado; agora
+   falha alto e o poll tem 8 × 6 s (o sandbox processa o pagamento de forma assíncrona; na prática veio na hora).
+
+**Q11 PROVADA (contrato do banco)**: `seuNumero` NÃO é único no Inter — aceitou 2ª cobrança com o MESMO
+`seuNumero` com a 1ª VIVA (A_RECEBER) e uma 3ª depois de cancelar a 1ª; a listagem por `seuNumero` devolveu as
+3. Consequências: (a) **nenhuma coluna `sent_reference`** — a retentativa reusa o `our_number` (já é assim);
+(b) a unicidade "1 viva por boleto" é NOSSA (reserva sob lock, D-I12) e a reconciliação só adota código
+DESCONHECIDO (MED-1) — as duas guardas ficam confirmadas como necessárias, não redundantes.
+**Q12 PROVADA (órfão)**: cobrança criada POR FORA com `seuNumero` 274 + reserva plantada sem código há 15 min →
+`POST /bank-slips/refresh` reportou `reconciled: 1`, adotou o `codigoSolicitacao`, gravou S/Q "Reconciliado por
+seuNumero" e G/Q com linha digitável. **E1**: no sandbox o `GET /cobrancas?seuNumero` enxergou a cobrança 4 s
+depois da emissão (1 amostra — consistência imediata; a janela de 10 min da D-I13 segue como cinto).
+**Cancelamento "banco primeiro" ao vivo (D-I22)**: 273 e 274 cancelados pela API → K/P, 202 no banco, consulta
+seguinte trouxe C/Q CANCELADO; estado local `cancelled`.
+
+**Resíduo no dev** (história, não sujeira): boletos 270–272 liquidados por pagamento simulado (baixas
+837/838/…), 268/269/273/274 cancelados, carteira 6 "INTER-SANDBOX" (fica para as próximas corridas), 2
+cobranças Q11 canceladas no banco. Token do sandbox usado nas sondas apagado do disco.
+
+**Ficam para fechar a onda**: passeio logado (Claude in Chrome — precisa do Valdo logado) e commit dos 4 repos.
+
+### 10.11 Passeio logado — FEITO (2026-09-21, 19h05–19h35, Claude in Chrome com o Valdo logado)
+
+Roteiro percorrido pela tela (o agente nunca digitou senha; segredos foram pelo Valdo):
+1. **Contas bancárias → conta 5 (077, 0001/<conta real>) → seção "Canal API com o banco"**: ambiente sandbox,
+   client_id gravado, "Certificado: presente · Chave privada: presente · Client Secret: presente · válido até
+   2026-10-21 (29 dias)", caminho do webhook com copiar. **"Testar conexão"** → "Conexão com o banco OK —
+   webhook cadastrado: nenhum". (Na 1ª tentativa o sandbox devolveu 500 "Erro desconhecido" no GET webhook —
+   log da API confirma 500 REAL do banco às 21:40 e 22:08 UTC, curl logo depois deu 404 normal; instabilidade
+   do sandbox, não nossa.)
+2. **Boletos → 275 (emitido pela API para o passeio) → "Registrar no banco"**: snackbar "Boleto apresentado ao
+   banco — código 39eaa6a0…", seção passa a "Apresentação 1 · sandbox · Enviado ao banco (EM_PROCESSAMENTO)"
+   com o código e os botões Atualizar/PDF; linha do tempo "Voz do banco" com o evento 1 (Resposta direta).
+3. **"Atualizar com o banco"** → "Registrado no banco (A_RECEBER)", nosso número do banco, linha digitável e
+   Pix copia e cola com copiar; evento 2 (Consulta). **"PDF do banco"** abriu em nova aba (blob, 68 KB).
+4. **D-I10/D-I25/D-I28 na tela** — voz RECEBIDO com efeito recusado plantada por SQL (evento 3, R/W, R$ 85,00,
+   slip_event NULL): a LISTA mostra "Voz do banco pendente (1)" em vermelho na linha do 275; o checkbox "Só
+   boletos com voz do banco pendente" reduz os 185 abertos a 1; no detalhe a pendência aparece em vermelho com
+   **"Reaplicar efeito do evento 3"** (e o botão "Registrar" some). Clique → snackbar "Efeito reaplicado —
+   evento 2 do boleto"; evento 3 ganha "Efeito no boleto: evento 2 · Efeito reaplicado (evento 4)", nasce o
+   evento 4 "Efeito reaplicado" (E, Resposta direta), selo do boleto vira **Liquidado**, "Baixar" vira
+   "Estornar". Banco de dados: tb_bank_slip_event 2 = L source A baixa 840 R$ 85,00; pendências = 0.
+5. **Achado de UX corrigido em sessão**: a frase da pendência dizia "Recebido pelo banco no banco em…" (o rótulo
+   do kind já traz "pelo banco") → i18n `bankPendingRow` pt/en sem o "no banco".
+
+Resíduo: boleto 275 liquidado aqui por reaplicação de uma voz SIMULADA — a cobrança correspondente foi
+CANCELADA no banco por curl (202) para não ficar viva no sandbox. Token das sondas apagado.
+
+**Onda 2: nada pendente além do commit** (api · sql · app · Infra-IA). Q-I6 e a lista de callbacks ficam
+para a Onda 4; Q-I12 é operação manual (§10.7).
