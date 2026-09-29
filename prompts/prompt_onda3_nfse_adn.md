@@ -740,3 +740,29 @@ retransmitir** (a 2ª tentativa reusa o nDPS — D-N3 — e ganha um Id novo só
 - `PENDENCIA_FISCO` da trilha ganhou `FISCAL_DPS_REJECTED`: rejeição do fisco por cadastro é PENDENTE com a frase dele.
 Ainda [INCERTO] até a 1ª autorização: nomes do JSON de resposta 2xx (`nfseXmlGZipB64`, `chaveAcesso`), 200×201, formato
 do `GET /nfse/{chave}/eventos`, envelope do evento gerado (Id EVT, dhProc), `/parametros_municipais/…/convenio`.
+**IM informada pelo Valdo (2026-09-28): "01 06 501.367-7"** → gravada em `tb_company.im` como `01065013677` e retransmitida
+(tentativas 2–7 da nota 8011): o fisco repetiu **E0116** para TODAS as formas tentadas (`01065013677` · `01 06 501.367-7` ·
+`0106501367-7` · `01.06.501.367-7` · `1065013677`). Leitura do Anexo I (regra do E0116): o CNC NFS-e de Curitiba TEM
+registro complementar da Setes (senão o erro seria "IM não deve ser informada"), e a IM da DPS precisa bater EXATAMENTE
+com a registrada lá — nenhuma das formas bateu. **Pendência do Valdo**: conferir no Portal Nacional NFS-e (CNC → dados
+complementares do município, login gov.br/e-CNPJ) ou no ISS Curitiba qual string está registrada — em produção
+restrita o CNC pode divergir do de produção. `<IM>` vai dentro de `<prest>` logo após `<CNPJ>` (ordem do XSD conferida).
+**Passeio no Portal Nacional (Claude in Chrome, sessão do Valdo, 2026-09-28)** — `nfse.gov.br/EmissorNacional` (PRODUÇÃO):
+as 5 NFS-e que o Valdo emitiu hoje pelo portal mostram **"Inscrição Municipal: -"**, "ME/EPP", "Base de cálculo 0,00 ·
+Alíquota 0,00 · ISSQN 0,00 · 1 - Não retido", NFS-e gerada (cStat 100). Ou seja: **em produção o CNC de Curitiba NÃO exige
+IM da Setes** — o E0116 é da PRODUÇÃO RESTRITA, cujo CNC é outra base (registro complementar com uma IM que nenhuma das 9
+formas tentadas bateu: `01065013677` · `01 06 501.367-7` · `0106501367-7` · `01.06.501.367-7` · `1065013677` ·
+`0106501367` · `010650136770` · `106501367`). O portal do contribuinte da produção restrita (`producaorestrita.nfse.gov.br/
+EmissorNacional`) devolve página de erro / redireciona para gov.br/nfse — sem como ler o CNC de homologação por aqui.
+**Consequência para a Onda 3**: o pipeline até o fisco está provado; a autorização em homologação depende de Curitiba/ISS
+Curitiba informar a string do CNC de produção restrita (ou de a produção ser o 1º ambiente de autorização, quando a
+próxima cobrança real da Setes for faturada por aqui — decisão do Valdo, **Q-N35**). `tb_company.im` fica `01065013677`
+(inofensivo em produção: sem registro complementar, o Anexo I manda NÃO informar — **atenção**: regra E0118-família "IM não
+deve ser informada" pode disparar em produção; ver Q-N35).
+**Achado do passeio que vale para PRODUÇÃO (executado)**: Anexo I **E0625/E0621** — para ME/EPP com ISSQN apurado PELO
+Simples (regApTribSN 1/omitido), município conveniado e SEM retenção, `pAliq` é PROIBIDA (o ISS vai no DAS — é o "alíquota
+0,00" das notas do portal); COM retenção é obrigatória (≥ 1,8 %). `buildDpsBase` passou a omitir `pAliq` nesse cenário
+(`issInDas`); apuração por fora (2/3) ou não optante seguem com a alíquota da regra. Teste na `onda3-gate-rework-r2`.
+**Q-N35 (Valdo)**: em produção, mandar `<IM>` ou não? O portal não manda (CNC sem registro). Rec.: NÃO mandar quando o
+município não tiver registro complementar — como não há consulta ao CNC pela API, a forma segura é `tb_company.im`
+VAZIO para a Setes em produção (a NFS-e sai como as do portal) e IM só quando o município exigir.
