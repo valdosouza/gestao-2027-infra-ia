@@ -715,3 +715,28 @@ Q-N28b ficam para a 1ª sessão real (envelope do evento e código E-xxxx de "j�
 **Nenhuma questão da Onda 3 fica aberta.** Próximo passo = 1ª transmissão REAL da nota da OS em homologação (o A1 da Setes
 já está no cofre; regra de ISS corrigida): roda pela trilha (P8b) ou pela tela "No fisco" — é ato externo, dispara com o
 "vai" do Valdo; é ela que crava os [INCERTO] (envelope JSON, `erros[]`, `/convenio`, sha1×sha256, 201×200, Id do evento).
+
+## 12. 1ª SESSÃO REAL com o e-CNPJ da Setes — homologação (2026-09-28, "vai" do Valdo)
+
+Trilha P8b transmitiu a nota da OS 8011 (nº 6790/1, SE, R$ 250) para `sefin.producaorestrita.nfse.gov.br` com o
+A1 real (CN …:07742094000113, vence 08/10/2026). **O fisco RESPONDEU**: HTTP 400 com
+
+> `E0116: A IM deve ser informada para o emitente prestador do serviço na DPS, conforme informações complementares
+> registradas no CNC NFS-e do município emissor informado na DPS.`
+
+Gravado como manda a peça: tentativa 1 em H, `dps_id` DPS4106902 2 07742094000113 00001 …0002, voz **R** source P com
+`authority_code = E0116` e a frase do fisco, `invoice_event = 1` (vida da nota), DPS assinado em
+`storage/07742094000113/2026/09/…-dps.xml`. `tb_company.im` da Setes = NULL → o DPS saiu sem `<IM>` (opcional no XSD, mas
+o CNC NFS-e de Curitiba o exige). **Tarefa do Valdo: informar a Inscrição Municipal no Meu Estabelecimento e
+retransmitir** (a 2ª tentativa reusa o nDPS — D-N3 — e ganha um Id novo só se a nota for refaturada).
+
+**[INCERTO] do §9 CRAVADOS pela resposta real:**
+- mTLS com o e-CNPJ A1 real: handshake ACEITO (o 403 da sonda era só o autoassinado).
+- Envelope do POST /nfse: `{ "dpsXmlGZipB64": … }` ENTENDIDO pelo fisco (ele leu o DPS por dentro — a crítica é semântica).
+- Rejeição: HTTP **400** com `erros[]` = `[{ codigo: 'E0116', descricao: '…' }]` — `authorityRejections` extraiu código e
+  frase sem ajuste; `firstAuthorityCode` gravou `E0116` em `authority_code`.
+- Assinatura XMLDSig (sha1, C14N inclusive, enveloped): NÃO rejeitada — a crítica E0116 vem de regra de negócio, depois
+  do XSD; fica confirmada como "não é o algoritmo errado" (a confirmação definitiva é a 1ª AUTORIZAÇÃO).
+- `PENDENCIA_FISCO` da trilha ganhou `FISCAL_DPS_REJECTED`: rejeição do fisco por cadastro é PENDENTE com a frase dele.
+Ainda [INCERTO] até a 1ª autorização: nomes do JSON de resposta 2xx (`nfseXmlGZipB64`, `chaveAcesso`), 200×201, formato
+do `GET /nfse/{chave}/eventos`, envelope do evento gerado (Id EVT, dhProc), `/parametros_municipais/…/convenio`.
