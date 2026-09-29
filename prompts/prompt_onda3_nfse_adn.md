@@ -766,3 +766,14 @@ Simples (regApTribSN 1/omitido), município conveniado e SEM retenção, `pAliq`
 **Q-N35 (Valdo)**: em produção, mandar `<IM>` ou não? O portal não manda (CNC sem registro). Rec.: NÃO mandar quando o
 município não tiver registro complementar — como não há consulta ao CNC pela API, a forma segura é `tb_company.im`
 VAZIO para a Setes em produção (a NFS-e sai como as do portal) e IM só quando o município exigir.
+**Cadastro do ISS Curitiba (PDF "Consulta de Dados Cadastrais", emitido 28/09/2026 22:36, enviado pelo Valdo)**: F. D. SOUZA
+DESENVOLVIMENTO E LICENCIAMENTO DE PROGRAMAS · CNPJ 07.742.094/0001-13 · **Inscrição Municipal 01 06 501.367-7** (confirma o
+número) · R. Faustino Jacob Stofella 28, Alto Boqueirão, CEP 81770-090 · início 30/09/2005 · situação ATIVA · alvará
+001.225.245 (25/05/2015) · **Simples Nacional desde 01/01/2018** · atividades C.18.3.0-0/03.00, J.62.0.2-3/00.00,
+J.62.0.3-1/00.00 (desenvolvimento e licenciamento de programas — item 1.02/1.05 da LC 116). Conclusão: o número que
+enviamos ao fisco É a IM real; a divergência está no CNC da produção restrita (base de teste da Sefin/Curitiba), não no
+cadastro da Setes. Tentativas extras com o número do alvará (001225245 · 1225245 · 001.225.245) registradas abaixo.
+Resultado das 3 formas do alvará: **E0116 nas três** (12 formas ao todo). `tb_company.im` restaurada para `01065013677`.
+**Estado ao fechar a sessão (2026-09-28)**: pipeline até o fisco PROVADO; 1ª AUTORIZAÇÃO depende de (a) Curitiba/Sefin
+informar a IM carregada no CNC da produção restrita, ou (b) Q-N35 = autorizar em PRODUÇÃO com a próxima cobrança real
+(sem IM e sem alíquota, como o portal fez hoje). Nota 8011 do dev: 13 tentativas R (E0116), todas em homologação.
