@@ -643,3 +643,46 @@ Sem DDL. Implantação: quem já tinha par em `S` (H) precisa reenviar o .pfx (o
 Questões abertas da fase para o Valdo: **Q-N17…Q-N24** (assunções do §10.1), **Q-N19a**, **Q-N25**, **Q-N26…Q-N32**
 (§10.4), **Q-N33/Q-N34** (executadas como assunção — confirmar), **Q-N30b/Q-R3.1**.
 Estado final: suíte **1363/1363** api · tsc limpo · app analyze limpo **148/148 (analyze limpo)** · trilha **21 OK · 3 PENDENTE · 0 FALHA (P8b = código municipal da regra de ISS)**.
+
+## 11. ⚠️ Rodada 2 — questões consolidadas para o Valdo (2026-09-28; recomendação entre parênteses)
+
+Tudo o que está EXECUTADO como assunção segue valendo até resposta; "concordo" fecha, divergência reverte.
+
+### 11.1 Assunções do retrabalho socrático (§10.1) — confirmar ou reverter
+- **Q-N17** kind **N** ("pedido de cancelamento não consta no fisco") devolve a NFS-e a AUTORIZADA e libera novo pedido. (**Rec.: manter** — a alternativa era reusar A com outro dh, fato falso.)
+- **Q-N18** contador do nDPS no EMISSOR (`dps_last_number`), contínuo mesmo trocando a série; revive zera `dps_number` (nova vida = novo nDPS). (**Rec.: manter.**)
+- **Q-N19** `simples_regime` NULL no emitente = 422, nunca default "não optante". (**Rec.: manter.**)
+- **Q-N19a** → **RESPONDIDA pelo Valdo (2026-09-28): SIM, a Setes é ME/EPP (opSimpNac 3) — D-N19a EXECUTADA.** Fato do
+  XSD (tiposComplexos v1.01): `regApTribSN` é OPCIONAL e serve ao ME/EPP que ULTRAPASSOU sublimite/limite (1 federais e
+  municipal pelo SN · 2 federais pelo SN e ISSQN por fora · 3 tudo por fora); ausente = o fisco apura pelo SN. Executado:
+  migration **062** `tb_entity_tax.simples_assessment` (espelho no sql/03), peça entity-tax + módulo establishment
+  (`simplesAssessment`, limpo automaticamente quando o regime deixa de ser 3), `buildEmitter` só emite o elemento com
+  opSimpNac 3 e valor informado (NULL = omitido — ausência do fato prevista no XSD, não default), app: dropdown "Apuração
+  no Simples (sublimite)" visível só com ME/EPP, i18n pt/en. Dev: institution 1 gravada com `simples_regime = '3'`,
+  apuração NULL (dentro do sublimite) — o Valdo confirma na aba Tributação se ultrapassou.
+- **Q-N20** `liability` (tribISSQN) derivada da exigibilidade do EMITENTE; override por regra de ISS = futuro. (**Rec.: manter.**)
+- **Q-N21** consulta ativa vigia A a cada 24 h e retenta C pendente a cada 15 min. (**Rec.: manter.**)
+- **Q-N22** consultas exigem o privilégio TRANSMITIR do ramo (quem consulta pode disparar efeito local). (**Rec.: manter.**)
+- **Q-N23** `dCompet` = data de emissão nesta onda. (**Rec.: manter até rejeição real por competência.**)
+- **Q-N24** `dps_description_format` consumido no billing de venda; OS = itens. (**Rec.: manter.**)
+- **Q-N25** reinício do nDPS por série? (**Rec.: NÃO — numeração contínua; o Id inclui a série, sem colisão.**)
+
+### 11.2 Questões do re-score socrático (§10.4) e das rodadas adversariais
+- **Q-N26** nota já faturada com `municipal_code` do legado ("0102") NÃO transmite até corrigir a regra de ISS e refaturar. (**Rec.: aceitar — e, na implantação, deixar o código municipal VAZIO quando o município não exigir; o campo é opcional no DPS. Hoje no dev: regra 2 → vazio.**)
+- **Q-N27** coluna `invoice_event` na transmissão (vida da nota) — EXECUTADA (migration 061). (**Rec.: confirmar.**)
+- **Q-N28** carência de 10 min para K virar N — EXECUTADA. (**Rec.: confirmar.**)
+- **Q-N28b** recusa do fisco "já cancelada" no 2º pedido dispara a reconciliação (refresh) antes do 409? (**Rec.: sim, na 1ª sessão real, quando o código E-xxxx for conhecido.**)
+- **Q-N29** A1 tem que ser do CNPJ do emitente; e-CPF recusado; CN sem os 14 dígitos entra. (**Rec.: confirmar; reforço = recusar CN sem CNPJ para o modelo SE — fail-closed.**)
+- **Q-N30** falha de credencial LOCAL = 409 sem voz F — EXECUTADA. (**Rec.: confirmar.**)
+- **Q-N30b / Q-R3.1** falha local no transmit deixa a reserva em voo 10 min (nova tentativa dá 409 IN_PROGRESS; a reconciliação fecha com F "sem resposta"). (**Rec. dos dois gates: fechar NA HORA com F "credencial local do emissor" — o fisco comprovadamente não foi chamado.**)
+- **Q-N31** contador do nDPS por ambiente (zera ao ir de H para P) ou contínuo? (**Rec.: contínuo — NFS-e não tem inutilização e o Id inclui tpAmb pelo ambiente da tentativa, não pelo número; simples e sem risco.**)
+- **Q-N32** leituras fiscais (`GET /fiscal/:orderId`, `/xml`, `/danfse`) só com a flag billing — o XML carrega dados do tomador. (**Rec.: gate pelo acesso à INTERFACE do ramo (orders/service-orders), sem privilégio novo.**)
+- **Q-N33** transmit recusa nota com voz C do fisco e efeito local pendente (409 `FISCAL_EFFECT_PENDING`) — EXECUTADA. (**Rec.: confirmar.**)
+- **Q-N34** cancelamento manual pela rota genérica liga a pendência da voz C; eventos e pendências filtram por vida — EXECUTADA. (**Rec.: confirmar.**)
+
+### 11.3 Registrados sem correção (LOW) — decidir se entram nesta onda
+- **L3/LOW-C** exigir `infEvento/@Id` no aceite e aceitar a chave embutida no Id EVT. (**Rec.: na 1ª sessão real, quando o envelope for conhecido.**)
+- **L4** XML/DANFSe passam por `buildEmitter` (exigem simples_regime/IBGE) — só precisam do CNPJ. (**Rec.: corrigir agora, é pequeno.**)
+- **L8** cinto 422 quando `vServ ≠ base_iss_value` (hoje coincidem). (**Rec.: corrigir agora.**)
+- **L2** coalescência em memória com 2 instâncias. (**Rec.: Onda 4.**)
+- Cópia órfã do A1 em `secrets/setes_setes/establishment/1/S` (pasta antiga de H). (**Rec.: apagar.**)
