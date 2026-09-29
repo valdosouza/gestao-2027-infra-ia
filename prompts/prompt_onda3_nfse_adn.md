@@ -686,3 +686,32 @@ Tudo o que está EXECUTADO como assunção segue valendo até resposta; "concord
 - **L8** cinto 422 quando `vServ ≠ base_iss_value` (hoje coincidem). (**Rec.: corrigir agora.**)
 - **L2** coalescência em memória com 2 instâncias. (**Rec.: Onda 4.**)
 - Cópia órfã do A1 em `secrets/setes_setes/establishment/1/S` (pasta antiga de H). (**Rec.: apagar.**)
+
+### 11.4 Rodada 2 DECIDIDA e EXECUTADA (Valdo, 2026-09-28 — "siga as recomendações")
+**Confirmadas sem mudança (viram decisão)**: Q-N17→D-N17 · Q-N18→D-N18 · Q-N19→D-N19 · Q-N20→D-N20 · Q-N21→D-N21 ·
+Q-N22→D-N22 · Q-N23→D-N23 · Q-N24→D-N24 · **Q-N25→D-N25 numeração do nDPS NÃO reinicia por série** · Q-N27→D-N27 ·
+Q-N28→D-N28 · Q-N30→D-N30 (metade "409 sem voz do fisco") · **Q-N31→D-N31b contador do nDPS CONTÍNUO de H para P**
+(não zera; o Id inclui o ambiente pela tentativa) · Q-N33→D-N33 · Q-N34→D-N34 · L2 fica para a Onda 4 · L3/LOW-C e
+Q-N28b ficam para a 1ª sessão real (envelope do evento e código E-xxxx de "já cancelada").
+**Executadas em sessão**:
+- **Q-N26 → D-N26b**: nota já faturada com código municipal fora da forma NÃO transmite até corrigir a regra e refaturar
+  (aceito). Implantação: código municipal VAZIO quando o município não exigir (opcional no DPS). Dev: regra de ISS 2
+  gravada com `municipal_code = NULL` — a próxima corrida da trilha fatura sem o "0102".
+- **Q-N29 reforço → D-N29b**: fail-closed — CN sem os 14 dígitos do padrão ICP-Brasil ("RAZÃO SOCIAL:CNPJ") não é
+  e-CNPJ → 409 `FISCAL_CERT_INVALID` "não é um e-CNPJ" (soma-se ao e-CPF e ao CNPJ divergente). Só entra sem comparar
+  quando não há `expectedCnpj` (uso de peça). Provas do R3-5/P6 e da rework-r2 mudaram de sentido.
+- **Q-N30b / Q-R3.1 → D-N30b**: falha de credencial LOCAL no transmit fecha a tentativa NA HORA com **F "credencial
+  local"** (source P) — o fisco comprovadamente não foi chamado; nada fica em voo, o reenvio com o cofre corrigido vai
+  ao fisco. `OUTCOME_KIND.local = 'F'`. Provas P5/P7 do R3 e D-N30 da rework-r2 mudaram de sentido.
+- **Q-N32 → D-N32**: leituras fiscais (`GET /fiscal/:orderId`, `/xml`, `/danfse`) passam por `requireInterfaceFor`:
+  a interface do RAMO resolvida por requisição tem que estar no contrato da institution (`tb_institution_has_interface`
+  ativa); admin passa; 403 `INTERFACE_NOT_ALLOWED`. Sem privilégio novo (não existe acesso por usuário a interface no
+  modelo — o contrato é da institution).
+- **L4**: XML/DANFSe/tela leem só o CNPJ do emitente (`emitterCnpj`) — limpar a aba Tributação não torna um XML já
+  autorizado ilegível.
+- **L8**: 422 `FISCAL_DPS_INVALID` (campo `baseIss`) quando, com ISS tributável, a base congelada ≠ valor do serviço —
+  o DPS não tem campo de base; cinto para quando dedução/redução entrar no cálculo.
+- Cópia órfã do A1 em `secrets/setes_setes/establishment/1/S` APAGADA (o par vigente está em `P`, único — D-N31).
+**Nenhuma questão da Onda 3 fica aberta.** Próximo passo = 1ª transmissão REAL da nota da OS em homologação (o A1 da Setes
+já está no cofre; regra de ISS corrigida): roda pela trilha (P8b) ou pela tela "No fisco" — é ato externo, dispara com o
+"vai" do Valdo; é ela que crava os [INCERTO] (envelope JSON, `erros[]`, `/convenio`, sha1×sha256, 201×200, Id do evento).
