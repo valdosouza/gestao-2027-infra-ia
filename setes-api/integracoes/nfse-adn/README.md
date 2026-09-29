@@ -114,3 +114,15 @@ https://www.nfse.gov.br/consultapublica).
 - Adesões municipais: https://www.gov.br/nfse/pt-br/municipios/monitoramento-adesoes
 - Prazos IBS/CBS: https://www.gov.br/nfse/pt-br/noticias/cgnfs-e-orienta-sobre-os-prazos-para%20destaque-de-ibs-cbs-nas-notas-fiscais-de-servico
 - Manual Integrado 2022: https://www.gov.br/nfse/pt-br/biblioteca/eventos_NFS-e/evento-tecnico-setembro-de-2022/manualintegradosnnfse_v1-01-00-homologacao.pdf
+
+## Complementos baixados em 2026-09-21 (abertura da execução da Onda 3)
+| Arquivo | O quê |
+|---|---|
+| `anexo_b-lista_servico_nacional-v1.01.xlsx` | Anexo B v1.01 (22/01/2026): aba `LISTA.SERV.NAC.` = **338 códigos de tributação nacional** (`cTribNac`, 6 dígitos = item(2)+subitem(2)+desdobro(2); a planilha grava sem o zero à esquerda: `10201` = `010201`) + aba `LISTA.NBS_v2.0` (1.210 códigos NBS) |
+| `nfse-esquemas_xsd-v1.01-20260209.zip` → `xsd/Schemas/` | XSD oficiais v1.01 (DPS, NFS-e, eventos, componentes) — validação local antes de assinar |
+
+**Fato que decide o modelo do código nacional**: 338 códigos para os ~200 subitens da LC 116 → um subitem pode ter
+VÁRIOS desdobros nacionais (ex.: 1.01 tem 01.01.01; 7.02 tem vários). Logo `cTribNac` NÃO cabe como coluna de
+`tb_service_list` (1 linha por subitem): é catálogo central próprio (`tb_service_national_code`, PK code CHAR(6),
+FK ao subitem) e a REGRA de ISS escolhe o código (pré-preenchido quando o subitem só tem um). **Setes: 1.02
+Programação → único desdobro → `010201`.**

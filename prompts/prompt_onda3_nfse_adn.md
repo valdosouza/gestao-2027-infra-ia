@@ -7,8 +7,10 @@ webservice municipal · achado A2 ramo de serviço vazio · D33 ordem Inter → 
 **Molde**: `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates)
 **Aberto em**: 2026-09-20 (Rodada 0 = levantamento + parecer do guardião conceitual, agente `setes-conceito`,
 enquanto o sandbox do Inter está fechado — janela seg–sex 8h–20h)
-**Estado**: Rodada 0 ORGANIZADA · **Rodada 1 AGUARDA o Valdo (Q-N1…Q-N16)** · contrato oficial LEVANTADO
-(§1.1 + `setes-api/integracoes/nfse-adn/`; swagger/XSD só com o e-CNPJ) · nenhuma linha de código
+**Estado**: **EM EXECUÇÃO — retrabalho dos gates (2026-09-28)**: §10.3 (10 achados adversariais R1 corrigidos) ·
+§10.4 (socrático 0.67 → D-N26…D-N30 executadas, migration 061) · §10.5 (adversarial R2 0.64 → R2-1…R2-5 corrigidos) ·
+**§10.6 re-score FINAL: socrático 0.74 ✅ · adversarial R3 0.58 → 7 corrigidos + D-N31 (um A1 por estabelecimento) + rótulo Homologação** · suíte 1363/1363 · trilha 21 OK · 3 PENDENTE · 0 FALHA (P8b = código municipal da regra de ISS) · NADA commitado. Rodada 1 DECIDIDA 2026-09-21 (D-N1…D-N16);
+contrato oficial em `setes-api/integracoes/nfse-adn/` (swagger/XSD só com o e-CNPJ)
 
 ---
 
@@ -220,6 +222,27 @@ deploy, certificado A1 real da Setes).
 
 ## 7. ⚠️ Rodada 1 — questões para o Valdo (recomendação entre parênteses)
 
+> **Antes de decidir, ler `prompt_onda_nfe_sefaz.md`** (Rodada 0 da NF-e por simetria, 2026-09-21): a Q-E1 responde a
+> Q-N4 (PK do emissor por MODELO, não por autoridade), a Q-E2 tira `dps_serie` daqui (série = coluna do emissor por
+> modelo), a Q-E3/Q-E23 tiram `simples_regime` da habilitação (vai para `tb_entity_tax` com `special_tax_regime` e
+> `cnae`), a Q-E6 renomeia a composição para `@shared/invoice-transmission` + `branches/service.ts`, e o §9 daquele
+> prompt enquadra a aba de configuração do `un_geranfe_Srv` do legado (provedor/layout/versão/portal morrem com a D1;
+> LC 116/tributação municipal/NBS já são dado por serviço; CRET/CNAE são fato do emitente; formato da discriminação e
+> e-mails viram configs da interface `billing`).
+
+**Fatos do dev levantados na abertura da onda (2026-09-21)**, para decidir com o dado na mão:
+- Todos os serviços da Setes (`tb_service` × `tb_service_tax_rule`) apontam para o item **1.02 Programação**
+  da LC 116 (`tb_service_list.id = '1.02'`), código municipal 0102, alíquota 5 %, cidade de incidência
+  Curitiba. Os contratos 4 e 11 têm dois serviços cada, mas os dois são 1.02 → **nunca há dois `cTribNac`
+  na mesma OS** (Q-N2 (a) é segura; a recusa `INVOICE_SERVICE_MULTI_CODE` nunca dispara no caso zero).
+- `tb_service_list` hoje é só `id` (o item, "1.02") + `description` + `local_incidence` — o `national_code`
+  (`cTribNac`, 6 dígitos) NÃO existe (Q-N11 confirmada: a coluna nasce nesta onda, catálogo Super).
+- Q-N14 com a data certa: para o 1.02 o grupo `IBSCBS` é obrigatório em **01/10/2026** (regra geral; só
+  1.03/1.05/1.09/16.01 vão para 01/12) — a ausência não rejeita até 31/12/2026, mas a Onda 4 (produção)
+  nasce dentro do período obrigatório.
+- Resíduo do dev: serviços 19–40 "TRILHA Suporte mensal …" são sobras da trilha (não da onda); limpar junto
+  com o ambiente ao fechar.
+
 - **Q-N1** Liberar a reserva T/A/R/D/I de `tb_invoice_event`; voz do fisco em tabela própria; estado
   fiscal derivado por RAMO. *(Rec.: liberar — D-I5 espelhada.)*
 - **Q-N2** Um DPS = um serviço: nota de serviço com mais de um `cTribNac` — (a) faturamento/OS recusa
@@ -266,4 +289,357 @@ deploy, certificado A1 real da Setes).
   próprios futuros (mesma família do "desativar a cobrança" B09). *(Rec.: fora.)*
 
 ## 8. Decisões registradas
-(nenhuma ainda — Rodada 1 aguarda o Valdo)
+
+**Rodada 1 DECIDIDA (Valdo 2026-09-21: "siga as recomendações nas duas rodadas" — NFS-e e NF-e juntas).** Onde a
+Rodada 0 da NF-e (`prompt_onda_nfe_sefaz.md`) corrigiu a recomendação daqui, vale a versão corrigida:
+
+- **D-N1** Reserva T/A/R/D/I de `tb_invoice_event` LIBERADA (comentário do `kind` muda; só E/C continuam); voz do
+  fisco em tabela própria; estado fiscal derivado por RAMO.
+- **D-N2** Um DPS = um serviço: OS/venda com mais de um `cTribNac` recusa (`INVOICE_SERVICE_MULTI_CODE`). Caso zero:
+  todos os serviços da Setes são 1.02 (fato do dev, §7).
+- **D-N3** Número do DPS próprio do ramo (`dps_number` write-once na 1ª transmissão, MAX+1 por série do emissor sob
+  `lockInstitutionCounters`).
+- **D-N4** (corrigida pela D-E1) Habilitação `tb_establishment_issuer` com PK **`(tb_institution_id, model)`**;
+  autoridade DERIVADA do modelo. Linha `SE` para a NFS-e.
+- **D-N5** PKCS#12 convertido no upload → cofre guarda só o par PEM; senha nunca persistida. A3 fora (D-E22).
+- **D-N6** `environment` H/P por linha; certificado sob a pasta do ambiente (`establishment/<inst>/<H|P>/`), o mesmo A1
+  serve a todos os modelos do ambiente.
+- **D-N7** Cancelamento: plano local → estado fiscal → pedido ao fisco → voz → C na MESMA transação; C local só com a
+  voz; ambíguo = K em voo bloqueante; recusa local posterior = fato + pendência.
+- **D-N8** Retenção/exigibilidade: colunas `iss_withheld` e `liability` no ramo, congeladas; fonte configurável no 1º
+  caso real (Setes = tributável, sem retenção, defaults).
+- **D-N9** Transmitir = ato explícito + lote "Transmitir pendentes"; automático vira config do emissor depois
+  (`fiscal_auto_transmit`, futura).
+- **D-N10** IBS/CBS e deduções fora; ramo cresce por coluna. **Data no radar: 01/10/2026** (item 1.02) — mesma mesa da
+  D-E17 (fase própria de IBS/CBS para os dois documentos).
+- **D-N11** Pré-requisitos: adesão de Curitiba (confirmada pela fonte) e `national_code` no catálogo central
+  `tb_service_list` — 1ª tarefa da onda.
+- **D-N12** Alvo = API da Sefin Nacional (mTLS + XMLDSig), produção restrita = ambiente H; a 1ª sessão com o e-CNPJ da
+  Setes crava o contrato do `POST /nfse` e o algoritmo de assinatura (swagger/XSD → `integracoes/nfse-adn/`).
+- **D-N13** DANFSe = PDF NOSSO nesta onda (`@shared/danfse`, render server-side do XML autorizado; motor de PDF único
+  com o futuro DANFE — D-E13/D-E25).
+- **D-N14** IBS/CBS (b): fora desta onda, com data marcada (01/10/2026); a Onda 4 nasce dentro do período obrigatório.
+- **D-N15** Prazo de cancelamento: lê o PAM (`GET /parametros_municipais/{cMun}/convenio`, com cache) e AVISA na tela;
+  a recusa definitiva é a do fisco (E0822).
+- **D-N16** Análise fiscal (`e101103`) e substituição (`chSubstda`): fora; atos próprios futuros.
+- **Herdadas da NF-e** (D-E2/D-E3/D-E6/D-E23/D-E24): `serie` = coluna do emissor por modelo (aposenta `invoice_serie` e
+  o `dps_serie`); `simples_regime` + `special_tax_regime` + `cnae` em `tb_entity_tax` (aba Tributação do Meu
+  Estabelecimento); composição ÚNICA `@shared/invoice-transmission` + `branches/service.ts`; configs de comportamento
+  (`dps_description_format`, `fiscal_accountant_email`, `fiscal_email_copy_to_issuer`) na interface `billing`.
+
+**Ordem de execução (D-E20 (a): peças comuns nascem com esta onda; a NF-e em si espera o 1º cliente com mercadoria)**
+— ver `prompt_onda_nfe_sefaz.md` §10 para o que da NF-e entra agora.
+
+## 9. Execução — CHECKPOINT (sessão de 2026-09-21 → 22; retomar por aqui)
+
+### Etapa 1 — DDL + ramo de serviço (A2 fechado) — ENTREGUE
+- **Seed sql/57** (aplicado no dev): catálogo CENTRAL `tb_service_national_code` (336 códigos do Anexo B v1.01; PK
+  `code` CHAR(6), FK ao subitem `tb_service_list`) — **D-N11a (assunção)**: 338 códigos para ~200 subitens → o código
+  nacional é catálogo próprio ligado ao subitem, NÃO coluna de `tb_service_list`; a regra de ISS escolhe
+  (`tb_service_tax_rule.national_code`), pré-preenchido/derivado quando o subitem tem um único desdobro
+  (`DERIVED_NATIONAL_CODE_SQL` na peça). Setes: 1.02 → **010201**. Subitens 11.05 e 99.01 do Anexo B não existem no
+  nosso catálogo LC 116 (ficaram fora; conferir quando houver cliente nesses itens). DDL canônico em `sql/01`.
+- **Migration 058** (aplicada no dev; `sql/03` espelhado): `tb_entity_tax` + `simples_regime`/`special_tax_regime`/`cnae`
+  (D-E23); `tb_service_tax_rule.national_code` + FK cross-schema; `tb_invoice_service` + 11 colunas congeladas
+  (subitem, códigos, cidade de incidência, base/alíquota/ISS, retenção, exigibilidade, `dps_number` write-once,
+  `description`); comentário de `tb_invoice_event.kind` liberado (D-N1); **`tb_establishment_issuer` PK (institution,
+  model)** + backfill da linha 55 a partir da config `invoice_serie` (D-E2; no dev não havia valor);
+  `tb_invoice_service_transmission` + `_event` (conceitos B/C). Validação sqlglot: `ADD KEY IF NOT EXISTS` (MariaDB) o
+  parser não conhece — validar com essas cláusulas removidas, como na 056.
+- **Seed sql/58** (aplicado): configs `dps_description_format` (Options I/O/A), `fiscal_accountant_email`,
+  `fiscal_email_copy_to_issuer` na interface `billing`; `invoice_serie` marcada deleted='S' no catálogo (D-E2).
+  FEITO (2026-09-22): billing lê a série da linha do emissor por modelo (`getIssuer(model)`, fallback '1') e a OS a
+  da linha SE — `invoice_serie` não é mais lida em lugar nenhum.
+- **Código** (1049 → verde nas suítes tocadas; jest completo 1057/1057 antes dos agentes): `@shared/entity-tax`
+  (3 fatos do emitente) + módulo `establishment` (DTO/PUT/GET); `@shared/service-tax-rule` resolve `nationalCode`
+  (derivado) e `checkServiceRule` ganha o problema `NATIONAL_CODE` (depois da cidade); módulo `service-tax-rules` grava
+  `nationalCode`, valida que é desdobro do subitem (422 `SERVICE_TAX_RULE_NATIONAL_CODE_MISMATCH`), lookup
+  `GET /national-codes?serviceListId=`; **`issueInvoice` troca `serviceTotal` por `service: InvoiceServiceInput`**
+  (ramo por colunas); billing monta o ramo (`buildServiceBranch`: D-N2 → 422 `INVOICE_SERVICE_MULTI_CODE`; regra sem
+  código → 422 `SERVICE_RULE_NATIONAL_CODE_REQUIRED`; descrição = "qtd x nome; …"); **OS: `resolveServiceOrderFiscal`
+  ANTES da transação** (regra por serviço, cidade do tomador pela cadeia, retenção do tomador) + `freezeServiceOrderIss`
+  SOB o lock (itens relidos; `tb_order_item_issqn` por item — mesma tabela da venda; item trocado no intervalo = 422) →
+  a nota da OS nasce COM o ramo. Trilha: **P8a OK** (21 OK · 3 PENDENTE · 0 FALHA). Códigos novos: os 4 acima +
+  `SERVICE_ORDER_ITEM_NO_RULE`.
+- Libs instaladas: `node-forge` (PKCS#12), `xml-crypto` (XMLDSig/C14N), `pdfkit` (DANFSe) + types.
+- Contrato baixado: Anexo B v1.01 (xlsx) + XSD v1.01 (zip → `xsd/Schemas/1.01/`) em `integracoes/nfse-adn/`; assinatura =
+  **rsa-sha1** pelo manual 2022 (XSD genérico não fixa) — parametrizada, confirmar com o e-CNPJ.
+
+### Etapa 2 — habilitação do emissor: API ENTREGUE (agente, 2026-09-22 — verificada: 21 testes, tsc limpo, 133 códigos) · APP ENTREGUE (agente: aba "Emissor fiscal" como seção autônoma com `file_selector`, 3 fatos do emitente na aba principal, código nacional dependente do item no form da regra; analyze limpo, 120/120; `file_selector` declarado no pubspec do app; achado: o molde `bank_account_channel_section` libera `_busy` só no finally — spinner atrás do dialog de falha, não corrigido lá)
+- API: peça `@shared/fiscal-issuer` (linhas por modelo, cofre owner `establishment` por ambiente H→'S'/P→'P',
+  `storeIssuerCertificate` converte .pfx+senha → PEM com node-forge validando o par antes de gravar; `openIssuer`;
+  status com CNPJ do e-CNPJ) + sub-recurso `establishment/issuer` (`GET /issuer`, `PUT/DELETE /issuer/:model`,
+  `PUT/DELETE /issuer/certificate/:environment` write-only) + códigos `FISCAL_ISSUER_MISSING/CERT_MISSING/CERT_EXPIRED/
+  CERT_INVALID/MODEL_NOT_SUPPORTED/ISSUER_HAS_LIVE_TRANSMISSIONS`.
+- App: aba **"Emissor fiscal"** no Meu Estabelecimento (certificado por ambiente via `file_selector` + linhas por
+  modelo SE/55) + 3 fatos do emitente na aba principal + código nacional no form da regra de ISS (lookup dependente do
+  item; derivado quando único).
+
+### Etapa 3 — transmissão: peça `@shared/tax-authority` ENTREGUE (agente, 2026-09-22; 23 testes, tsc limpo); composição EM CURSO
+- **[INCERTO] só a 1ª sessão com o e-CNPJ confirma** (registrar o resultado aqui): (1) nomes JSON do envelope
+  (`dpsXmlGZipB64` envio · `nfseXmlGZipB64` + `chaveAcesso` retorno · evento `pedidoRegistroEventoXmlGZipB64` — sem fonte —
+  e retorno `eventoXmlGZipB64`; leitura tolerante a qualquer chave `xml…gzip…b64`); (2) formato de `erros[]`
+  (`{codigo, descricao, complemento}` assumido; aceita `errors[]`/`mensagens[]`); (3) lista de `GET /nfse/{chave}/eventos`
+  e o JSON do `/convenio` (prazo procurado por `*cancel*` + `prazo|dias`); (4) SHA-1 × SHA-256 (manual 2022 = sha1;
+  `ADN_SIGN_ALGORITHM` parametrizado); (5) `<serie>` sem zero à esquerda; (6) 201 × 200 no `POST /nfse` (aceita 2xx).
+  **Fatos cravados nas fontes**: `nPedRegEvento` não existe (Id = `PRE`+chave(50)+código(6)); `e101101/xDesc` fixo
+  "Cancelamento de NFS-e"; `cStat` da NFS-e NÃO expressa cancelamento — `queryNfse` deriva `cancelled` dos eventos.
+- Peça `@shared/tax-authority` (agente): `xmldsig.ts` paramétrico, `dps-builder.ts` (Id 45, XML na ordem do XSD,
+  evento e101101, parse da NFS-e), `adapters/adn.ts` (REST JSON gzip+b64, mTLS com o A1, tradução única de falhas:
+  `FISCAL_AUTHORITY_UNAVAILABLE/AUTH_FAILED/DPS_REJECTED/NFSE_NOT_FOUND/AUTHORITY_UNKNOWN_RESPONSE`).
+- Já escrito: `@shared/invoice-transmission/transmission.repository.ts` (tabelas B/C do ramo de serviço: reserva
+  `attempt`, `dps_id` nosso, write-once do fisco, voz append-only idempotente por (kind, dh), `touchQueriedAt`, rodízio,
+  pendentes para o lote, `nextDpsNumber` MAX+1 sob lock da institution — D-N3).
+- **Composição ENTREGUE (agente, 2026-09-22; verificada: tsc limpo, jest 88 suítes/1131 testes, errors:gen 143)**:
+  `@shared/invoice-transmission` (transmit/refresh/applyCancelEffect/cancelAtAuthority/refreshOpen/view/readNfseXml) +
+  `branches/service.ts`; `@shared/danfse` (pdfkit; QR Code em texto — [INCERTO: lib de QR]); 8 rotas `/api/billing/fiscal*`
+  + `POST /billing/transmit`; bloco **`fiscal`** no `buildCancelPlan` (nota com A/em voo/K → 409 `INVOICE_CANCEL_BLOCKED`
+  field `fiscal` — variante escolhida em vez de código próprio); **migration 059** (`dps_id` deixa de ser UNIQUE: toda
+  tentativa reusa o nDPS — D-N3); **seed sql/59** privilégio TRANSMITIR (id 9) em `service-orders` e `orders`; trilha
+  **P8b real** (PENDENTE com motivo exato). Códigos: `INVOICE_SERVICE_BRANCH_MISSING`, `FISCAL_TRANSMISSION_IN_PROGRESS`,
+  `FISCAL_ALREADY_AUTHORIZED`, `FISCAL_CANCEL_IN_FLIGHT`, `FISCAL_CANCEL_REFUSED`, `FISCAL_NOT_TRANSMITTED`,
+  `INVOICE_NOT_TRANSMITTABLE`, `FISCAL_EMITTER_INCOMPLETE`, `FISCAL_RECIPIENT_INCOMPLETE`, `FISCAL_EFFECT_PENDING`.
+  **Assunções do agente a confirmar (Q-N17…)**: sem evento `S` (POST síncrono → A/R/F direto); reserva sem voz > 10 min
+  → no transmit consulta `GET /dps/{id}` (achou = A retroativo; não achou = F "sem resposta"); efeito C pendente é
+  RETENTADO na consulta seguinte (não há "reaplicar" manual como na D-I25); TRANSMITIR conferido por item no lote;
+  `tb_invoice.status` intocado.
+- **App "No fisco" ENTREGUE (agente; analyze limpo, 143/143)**: seção no documento faturado da OS (situação, chave/nº
+  com copiar, pendências, Transmitir/Consultar/XML/DANFSe/Cancelar NFS-e gated por TRANSMITIR/CANCELAR; "Cancelar nota"
+  some com A/K), lote "Transmitir pendentes" na aba Faturadas (fatias de 50, reentrância H1), `showInfoFeedback` para
+  `warnings[]`, 45 chaves i18n.
+- **Sonda ao vivo (2026-09-22, dev, certificado AUTOASSINADO descartável — removido no fim)**: PUT issuer SE (H, série 1)
+  → PUT certificate H → `POST /billing/transmit` da nota 8005: DPS montado (Id
+  `DPS4106902 2 07742094000113 00001 000000000000001`, tomador com endNac/CEP, cTribNac 010201, vServ 250, pAliq 5)
+  , assinado, salvo em `storage/<cnpj>/2026/09/`, produção restrita respondeu **403** (cert não ICP-Brasil) → 409
+  `FISCAL_AUTHORITY_AUTH_FAILED`, evento F, view `state: failed`, refresh idempotente. **Achados da sonda (corrigir)**:
+  (a) `cTribMun` cortado para 3 dígitos ("0102" → "010") — omitir quando não tem exatamente 3 dígitos; (b) mensagem do
+  403 carrega o HTML do fisco — limpar tags e limitar.
+- Falta: gates (socrático + adversarial EM CURSO), correções, 1ª sessão com o e-CNPJ da Setes (só o Valdo), commit.
+- Antes (referência do plano): composição `@shared/invoice-transmission` + `branches/service.ts` (transmit/refresh/cancel na ordem D-N7;
+  montagem do DPS a partir do ramo + cadeia do emitente/tomador + `tb_entity_tax`; XML em `STORAGE_PATH/<cnpj>/<ano>/
+  <mes>/<chave>.xml`), endpoints em `/api/billing` (`POST /transmit {orderId}`, `POST /fiscal/refresh`,
+  `GET /fiscal/:orderId`, `GET /fiscal/:orderId/xml`, `GET /fiscal/:orderId/danfse`), bloco `fiscal` no
+  `buildCancelPlan` (plano local → estado fiscal → pedido ao fisco → voz → C na mesma transação), `@shared/danfse`
+  (pdfkit), privilégio TRANSMITIR (seed), app "No fisco" na OS faturada + lote "Transmitir pendentes", trilha P8b,
+  gates, 1ª sessão com o e-CNPJ da Setes (D-N12/D-E19 — só o Valdo).
+
+## 10. Gates da onda (2026-09-22)
+
+### 10.1 Gate socrático — 1ª rodada **0.63 ✗** (retrabalho em sessão)
+Nenhum CRITICAL. **HIGH-1** K (cancelamento em voo) não tinha saída quando o fisco NÃO cancelou (timeout antes de o
+pedido chegar → nota presa em 409 para sempre). **HIGH-2** o revive do cabeçalho zerava `dps_number` e o MAX+1 lia só
+linhas vivas → cancelar e refaturar a última nota cunhava o MESMO nDPS/Id de DPS para conteúdo diferente. **HIGH-3** a
+voz C do mesmo cancelamento chegava com `dh` diferente por três caminhos (NFS-e agregada, lista de eventos, resposta
+do pedido) → 2º C gravado, e o efeito batia em `lockInvoice` 404 (nota já soft-deletada) → pendência permanente.
+MEDIUM: R terminal para a consulta (NFS-e de tentativa anterior inalcançável — a chave ia para `latestTransmission`, não
+para quem cunhou o `dps_id`); idade da reserva misturava relógio do MySQL com `Date.now()`; DPS assinado de leitura
+pré-transação sem cinto de versão; lote sem orçamento nem coalescência; defaults silenciosos em fato fiscal
+(`opSimpNac` '1', `liability` '1', `cTribMun` truncado); consulta ativa não vigiava A nem retentava C pendente; consulta
+sem privilégio e `minMinutes` 0. LOW: erros de montagem do DPS como `Error` cru (500); UNIQUE (kind, dh) com NULL não é
+cinto; lote listava reserva em voo como pendente; comentário de `status='0'` desatualizado; ordem de locks invertida na
+consulta (retry cobre); amostra de 2xx ilegível no log; `dhEmi` antes da assinatura; configs do seed 58 sem consumidor;
+contador por institution e não por série.
+
+**Assunções EXECUTADAS no retrabalho (viram decisão com o "concordo"; divergência = reverter):**
+- **D-N17** — kind **`N`** ("pedido de cancelamento não consta no fisco", voz source Q) resolve o K: consulta com K vigente e
+  fisco dizendo autorizada/não cancelada grava N; N devolve a transmissão ao estado AUTORIZADO (`isAuthorized` = A ou N),
+  é final para a consulta ativa e libera novo pedido de cancelamento. Alternativas descartadas: reusar A com outro dh
+  (fato falso), apagar o K (append-only).
+- **D-N18** — o contador do nDPS vive no EMISSOR: `tb_establishment_issuer.dps_last_number` (migration 060, backfill =
+  MAX incluindo canceladas), incrementado sob `lockInstitutionCounters`; o revive continua zerando `dps_number` (nova vida
+  = novo nDPS, Id novo); trocar a série NÃO reinicia a numeração (o Id inclui a série — sem colisão; diverge da prática
+  "por série" — Q-N25 se o Valdo quiser reinício por série).
+- **D-N19** — `simples_regime` NULL no emitente = 422 `FISCAL_EMITTER_INCOMPLETE` (campo `simplesRegime`), nunca default
+  "não optante"; `special_tax_regime` NULL → '0' documentado. Se a Setes for ME/EPP, `regApTribSN` precisa de coluna
+  (fato do emitente) antes da 1ª sessão — **Q-N19a**.
+- **D-N20** — `liability` (tribISSQN) derivada da exigibilidade do EMITENTE (`tb_entity_tax.iss_exigibilidade`: 01→1,
+  05→2 imune, 04→3 exportação, 02→4 não incidência; demais/NULL → 1) nas duas portas; override por regra de ISS = futuro.
+- **D-N21** — a consulta ativa vigia A (throttle 24 h — cancelamento pelo portal do contribuinte) e retenta C com efeito
+  pendente (15 min), dentro dos mesmos 8/passada e orçamento.
+- **D-N22 (divergente da rec.)** — as rotas de consulta exigem o privilégio TRANSMITIR do ramo (quem consulta pode disparar
+  efeito local — cancelamento, estorno de cheque); `minMinutes ≥ 1`. (Rec. do gate era VISUALIZAR: não existe privilégio
+  de visualização por ramo — acesso à interface é o que há.)
+- **D-N23** — `dCompet` = `dt_emission` nesta onda (a competência do contrato fica para quando houver rejeição por isso).
+- **D-N24** — `dps_description_format` consumido no billing de VENDA ('I' itens · 'O' observação · 'A' ambos); OS = 'I'.
+- HIGH-3 — C idempotente por KIND na tentativa (um C por transmissão, qualquer dh); efeito reconhece nota já cancelada
+  (último evento C, mesmo soft-deletada) como aplicado. MEDIUM-1 — consulta/reconciliação por `dps_id` em R/F, chave gravada
+  na tentativa que CUNHOU o Id. MEDIUM-2 — idade no banco (`TIMESTAMPDIFF`). MEDIUM-3 — reserva confere `lastEvent` e
+  `updated_at` do ramo (409 RESOURCE_BUSY se mudou) e abre o emissor sob lock. MEDIUM-4 — lote com orçamento 60 s,
+  `stoppedEarly`, coalescência por institution (409 `FISCAL_BATCH_RUNNING`), IN_PROGRESS retryable. LOW-1 — montagem do DPS
+  falha com 422 (`FISCAL_DPS_INVALID`) antes de reservar. LOW-3/4/6/9/10 executados/registrados.
+
+### 10.2 ⚠️ RETOMAR AQUI (sessão fechada em 2026-09-22 ~02h; os dois agentes caíram por 522 do provedor no FIM do trabalho)
+**Conferido no disco ANTES de fechar (mais preciso que o texto abaixo)**: `tsc` LIMPO; **migration 060 existe e está
+APLICADA no dev** (`dps_last_number` no emissor, kind N; `sql/03` espelhado; `simples_regime='1'` gravado na institution
+1); `onda3-gate-rework.test.ts` **33/33** (retrabalho do §10.1 chegou inteiro); suíte completa **1269/1279 — as 10 falhas
+são TODAS no `onda3-adversarial.test.ts`** e são os ACHADOS que o gate deixou FALHANDO de propósito (o relatório não foi
+entregue — a lista é a dos títulos dos testes): **ACHADO 1 (HIGH)** `registerEvent` trata 2xx SEM envelope legível
+(corpo vazio / JSON sem XML / 201 HTML de proxy / 204) como ACEITE → voz C + `cancelInvoice` local nascem sem voz do fisco
+(D-N7 furada) — deve virar 502 ambíguo + K em voo; **série**: DTO do emissor aceita "0"/"00000"/"50000" e `buildDpsId`
+aceita 50000/99999 (limitar 1–49999 nas duas camadas); **`municipal_code` com 2 dígitos → `Error` cru** (422 antes de
+reservar); **lote com TLS recusado na 1ª nota** deve parar (`stoppedEarly`) sem chamar o fisco de novo nem gravar F nas
+demais; **2xx com `chaveAcesso` "123" e XML sem Id → 502** (não é chave) e nada gravado; **ACHADO 6 (LOW)** .pfx com dois
+certificados da MESMA chave (renovação) → o cofre deve ficar com o VÁLIDO. Passo 1 da retomada = corrigir esses 10 em
+sessão (cada teste já é a prova), re-score socrático, docs, commit.
+Estado do disco ao fechar: setes-api 51 arquivos sujos · setes-app 39 · sql 5 · Infra-IA 8 — **NADA commitado da Onda 3**.
+Última migration em disco: **059** (060 do retrabalho AINDA NÃO existia); `src/__tests__/onda3-adversarial.test.ts`
+existe PARCIAL (o gate adversarial estava escrevendo; `tsc` acusa erros nele — linhas 76/77 — e nenhum relatório foi
+entregue); o retrabalho socrático (§10.1: D-N17…D-N24, migration 060, `onda3-gate-rework.test.ts`) tinha acabado de ser
+delegado — provavelmente nada ou pouco dele chegou ao disco.
+
+**Passos para retomar, nesta ordem:**
+1. `cd setes-api && npx tsc --noEmit -p . && npx jest --silent` — separar o que está quebrado: se só o
+   `onda3-adversarial.test.ts` quebra, é o arquivo parcial (renomear para `.wip` ou completar); se `invoice-transmission`,
+   `branches/service.ts`, `transmission.repository.ts` ou `fiscal-issuer` quebram, o retrabalho ficou pela metade —
+   comparar com o §10.1 e concluir item a item (HIGH-1 kind N · HIGH-2 contador `dps_last_number` no emissor + migration
+   060 + espelho em sql/03 · HIGH-3 C idempotente por kind + efeito reconhece nota já cancelada · MEDIUM-1…7 · LOWs).
+2. Refazer o gate adversarial (prompt do §10.1 e o molde `onda2-adversarial.test.ts`) e o re-score socrático até ≥ 0.70 /
+   sem HIGH; corrigir em sessão; registrar em §10.3/§10.4.
+3. `flutter analyze` + `flutter test` em setes-app/apps/web (estado ao fechar: analyze limpo, 143/143).
+4. Trilha `scripts/trilha-primeiro-cliente.ts` (estado ao fechar: 21 OK · 3 PENDENTE · 0 FALHA; P8b diz "sem habilitação
+   SE"). No dev a linha SE (H, série 1) FICOU habilitada pela sonda; o certificado autoassinado foi REMOVIDO.
+5. Fechar docs (§9/§10 aqui, INDICE_CENTRAL, CLAUDE.md, memória, palavras ocupadas do guardião: transmissão · emissor ·
+   autoridade · chave · voz) e **commitar os 4 repos** (um commit por repo; push só com "vai" do Valdo).
+6. 1ª sessão com o e-CNPJ A1 da Setes (só o Valdo): aba Emissor fiscal → certificado H → Transmitir a nota da OS →
+   cravar os [INCERTO] do §9 (envelope JSON, `erros[]`, `/convenio`, sha1×sha256, 201×200) e a Q-N19a (ME/EPP →
+   `regApTribSN`).
+Questões abertas para o Valdo: Q-N17…Q-N24 (assunções do §10.1, confirmar ou reverter), Q-N19a, Q-N25 (reinício do nDPS
+por série?).
+
+### 10.3 Gate adversarial — 1ª rodada: os 10 achados CORRIGIDOS em sessão (2026-09-28)
+Retomada pelo §10.2. Estado do disco conferido antes de tocar: `tsc` limpo, suíte 1269/1279 — as 10 falhas eram
+exatamente os achados que o gate deixou como testes em `onda3-adversarial.test.ts` (o relatório nunca foi entregue; a
+lista abaixo é a dos testes). Cada correção passou pelo teste que a provava; suíte **1279/1279** ao final.
+
+| # | Sev. | Achado (o que o teste provava) | Correção |
+|---|---|---|---|
+| 1 | **HIGH** | `registerEvent` do ADN tratava 2xx SEM o evento gerado (corpo vazio, JSON sem XML, 201 HTML de proxy, 204) como ACEITE: devolvia `dhEvento null` e a composição gravava a voz C e cancelava a nota localmente sem a voz do fisco — D-N7 furada; a consulta seguinte nem olhava o fisco (C sem pendência = fim da história). | `adapters/adn.ts`: sem evento parseado (`eventCode` + `dhProc|dhEvento`) → 502 `FISCAL_AUTHORITY_UNKNOWN_RESPONSE` (mesma `unknownResponse` do transmit). A composição já tratava ambíguo como K em voo — o erro sobe COMO VEIO (prova positiva (16) exige identidade do erro, inclusive erro cru). Teste unitário do adaptador que fixava o comportamento antigo foi atualizado (`tax-authority.test.ts`). |
+| 2 | MEDIUM | `municipal_code` presente e fora de 3 dígitos era OMITIDO em silêncio no DPS (default em fato fiscal, MEDIUM-5 do socrático); demais casos (alíquota ≥ 10, valor negativo, série 0/não numérica) já viravam 422 pela LOW-1. | `branches/service.ts`: presente e ≠ 3 dígitos → 422 `FISCAL_DPS_INVALID` campo `municipalCode` ANTES de reservar; ausente segue omitido (XSD opcional). ⚠️ O valor está CONGELADO no ramo no faturamento — nota faturada com código do legado ('0102') não transmite até a regra de ISS ser corrigida e a nota refaturada (**Q-N26**). |
+| 3 | MEDIUM | DTO do emissor aceitava série "0"/"00000"/"50000"; `buildDpsId` aceitava 50000–99999 (faixa do emissor nacional, §1). | Constantes ÚNICAS `DPS_SERIE_MIN/MAX` (1–49999) em `dps-builder.ts`, consumidas pelo DTO (`.refine`), pelo service do emissor e por `buildDpsId`. NF-e admite série 0 no SEFAZ — quando a onda 55 executar, a faixa passa a depender do modelo (Q-E). |
+| 4 | MEDIUM | Lote `transmit-batch` só parava em `FISCAL_AUTHORITY_UNAVAILABLE`: TLS recusado na 1ª nota gerava 1 F por nota e N handshakes com o mesmo A1 quebrado (lição §10.4 da Onda 2: credencial ≠ indisponibilidade). | `billing.fiscal.service.ts`: `FISCAL_AUTHORITY_AUTH_FAILED` também pára o lote (`stoppedEarly`; restantes `retryable` sem F). |
+| 5 | LOW | 2xx com `chaveAcesso` "123" e XML sem Id gravava A com "chave" que o cancelamento (`buildEventId` exige 50) estourava como `Error` cru. | `adapters/adn.ts`: `asAccessKey` — chave só com 50 dígitos em `transmit`, `queryNfse` (chave do XML) e `queryDpsAccessKey`; sem chave válida → 502, nada gravado. |
+| 6 | LOW | `.pfx` com DOIS certificados da MESMA chave (renovação que reaproveitou o par: vencido + válido) → o cofre ficava com o 1º que casava, mesmo vencido → 409 injusto. | `fiscal-issuer.ts` `pkcs12ToPem`: entre os que casam com a chave, prefere o VIGENTE agora; empate = o que vence por último. |
+
+Ajuste de harness (não de prova): o teste do ACHADO 1 checava o NOME do construtor (`ctor: 'HttpError'`); o erro do
+adaptador é `AuthorityHttpError` (subclasse) e a prova positiva (16) exige que ele suba idêntico — trocado por
+`toBeInstanceOf(HttpError)` + mensagem "sem envelope legível", como já fazia o teste (3). A prova do bug (≥ 502, nenhum C,
+`cancelInvoice` não chamado, K em voo) ficou intacta.
+
+Régua da fase re-executada com a API no ar (2026-09-28): **trilha 21 OK · 3 PENDENTE · 0 FALHA** (P7b pendente = sandbox
+do Inter fora da janela 8h–20h; P8b = sem A1 no cofre; P9 = Onda 4) — nenhum OK anterior quebrou.
+
+### 10.4 Re-score socrático **0.67 ✗** (2026-09-28) → retrabalho EXECUTADO em sessão (assunções D-N26…D-N30)
+Os 3 HIGH da 1ª rodada e os 10 achados do adversarial foram conferidos FECHADOS no código; D-N17…D-N24 conferidas
+item a item. Sobrou 1 HIGH NOVO, estrutural, nascido da própria correção MEDIUM-1 da 1ª rodada, e 4 MEDIUM.
+**Assunções EXECUTADAS (viram decisão com o "concordo"; divergência = reverter)** — testes em
+`onda3-gate-rework-r2.test.ts` (12/12):
+- **D-N26 (HIGH-1)** — a chave da NFS-e pousa na tentativa que CUNHOU o Id (MEDIUM-1 da 1ª rodada), que pode NÃO ser
+  a última (1 em voo → F por 404 eventual do `/dps`, 2 reusa o nDPS → R, consulta acha → A na 1). TODOS os decisores
+  liam a última (`ORDER BY attempt DESC`): o plano de cancelamento cancelava LOCALMENTE uma nota autorizada no fisco
+  (D-N7 furada por outro caminho) e o transmit abria a 3ª tentativa com o mesmo Id (`fillAuthorityData` batia no UNIQUE
+  da chave → 500 em loop). Agora `latestTransmission` é o leitor ÚNICO da VIGENTE: **quem DETÉM a chave decide**
+  (`ORDER BY access_key IS NOT NULL DESC, attempt DESC`); `currentOf()` aplica a mesma regra na lista da tela. Alternativa
+  descartada: leitor novo `currentServiceTransmission` (deixaria o antigo vivo para alguém usar errado).
+- **D-N27 (MEDIUM-1)** — a transmissão pertence a uma VIDA da nota: migration **061** (`invoice_event` = evento E que
+  a emitiu; backfill = último E anterior à criação da tentativa; sem E localizável = NULL, segue visível). Cancelar e
+  refaturar o MESMO id (revive, D3) abre vida nova: a tela "No fisco", o XML, o DANFSe e a lista de pendentes mostravam
+  a NFS-e CANCELADA da vida anterior como se fosse desta nota. `LIFE_WHERE` em todos os leitores por nota.
+- **D-N28 (MEDIUM-2)** — K só vira N depois da CARÊNCIA (`lastEventAgeMinutes ≥ IN_FLIGHT_MINUTES` = 10, idade no
+  banco): 5 s após um timeout o fisco pode ainda estar processando o pedido — "ambíguo não é N", mesma lição do
+  "ambíguo não é F". Antes da carência a consulta só marca "nós olhamos". A parte "recusa do fisco 'já cancelada' dispara
+  refresh antes do 409" fica para a 1ª sessão real (o código E-xxxx é [INCERTO]) — **Q-N28b**.
+- **D-N29 (MEDIUM-3)** — sem procuração (D-N12) o A1 tem que ser do CNPJ do EMITENTE: a porta do cofre
+  (`storeIssuerCertificate` com `expectedCnpj` = CNPJ da institution) recusa CN com CNPJ diferente (409
+  `FISCAL_CERT_INVALID` no campo `pfx`). CN sem o padrão ICP-Brasil (sem 14 dígitos) entra — não há como comparar.
+- **D-N30 (MEDIUM-4)** — falha de credencial LOCAL (par PEM não abre/não casa, `ERR_OSSL_*` antes de qualquer byte
+  chegar ao fisco — ex.: cert novo + key velha numa corrida de upload) NÃO é voz do fisco: 409 `FISCAL_CERT_INVALID`
+  (authorityStatus 0), outcome `local` na composição = NADA gravado na nota (a reserva reconcilia como as demais);
+  F fica só para 401/403 do fisco. `writeSecret` grava por tmp + rename (nunca arquivo pela metade); a troca dos
+  DOIS arquivos continua não atômica — o 409 sem voz é o que contém o dano.
+- **L5** kinds numa fonte só (`transmission-kinds.ts`); **L6** lote pára também em 409 do EMISSOR (sem habilitação,
+  sem certificado, vencido, par inválido) — `STOPS_THE_BATCH`.
+Ficam registrados sem correção (LOW): L1 ordem de locks no plano do cancelamento fiscal (retry cobre); L2 coalescência em
+memória morre com 2 instâncias (Onda 4 — o lock da nota é a segurança real); L3 exigir `infEvento/@Id` quando a 1ª
+sessão confirmar o envelope (parcialmente coberto: aceite exige Id OU dhProc); L4 `readNfseXml`/view passam por
+`buildEmitter` (exige simples_regime/IBGE) — só precisam do CNPJ; L7 rotas GET `/fiscal/:orderId`, `/xml`, `/danfse` só
+com a flag billing (o XML carrega dados do tomador); L8 `vServ = total_value` coincide com `base_iss_value` HOJE — cinto
+422 se divergirem quando dedução/redução entrar no cálculo; L9 → Q-N31; L10 UNIQUE (kind, dh) com NULL.
+**Questões para o Valdo**: **Q-N26** nota faturada com `municipal_code` do legado ('0102', congelado no ramo) não transmite
+até corrigir a regra e refaturar — aceitar, ou permitir editar o código municipal do ramo? · **Q-N27** confirmar a coluna
+`invoice_event` (alternativa: filtrar por `created_at` > último E — frágil) · **Q-N28** carência de 10 min para o N +
+**Q-N28b** (recusa "já cancelada" dispara reconciliação) · **Q-N29** confirmar a recusa do A1 de outro CNPJ (e-CPF entra
+hoje — o CN não traz 14 dígitos) · **Q-N30** confirmar "falha local = 409 sem voz" · **Q-N31** contador do nDPS por
+ambiente (zera ao trocar H→P) ou contínuo? — junta-se à Q-N25 · **Q-N32** L7: gate de privilégio nas leituras fiscais?
+
+### 10.5 Gate adversarial — rodada 2 **0.64 ✗** (2026-09-28) → R2-1…R2-5 CORRIGIDOS em sessão
+`onda3-adversarial-r2.test.ts` (37 testes: 14 provas de bug → agora 37/37; 23 provas positivas: corridas transmit ×
+cancel × refresh serializadas, lote com orçamento estourado no meio, consulta ativa com 502 repetido, nota
+soft-deletada + C pendente, efeito recusado → transitório → aplicado, PKCS#12 com dois válidos). Família do que sobrou:
+"o fisco respondeu, mas respondeu AO QUE EU PERGUNTEI?" — o adaptador aceitava envelope bem formado sem conferir
+chave, tipo do evento ou Id do DPS contra o pedido.
+
+| # | Sev. | Achado | Correção |
+|---|---|---|---|
+| R2-1 | MEDIUM | `registerEvent` aceitava o ECO do próprio pedido (pedRegEvento tem e101101 + dhEvento), evento gerado de OUTRA chave ou de OUTRO tipo → C + `cancelInvoice` sem voz (mesmo efeito do ACHADO 1). | Aceite = evento GERADO (`infEvento/@Id` EVT… OU `dhProc`) + `eventCode` = e101101 + `chNFSe` = chave pedida (`isGeneratedEventFor`). |
+| R2-2 | MEDIUM | Chave com 50 dígitos porém DIFERENTE da pedida passava; `infDPS/@Id` embutido na NFS-e nunca era comparado com o DPS enviado; `/eventos` cancelava por e101101 de outra chave. | `transmit`: chave JSON × chave XML × `Id` do DPS enviado (`sentDpsIdOf`); `queryNfse`: chave do XML = pedida, eventos filtrados pela chave; a composição confere `parsed.dpsId` = `target.dpsId` na consulta antes de gravar (502, nem "nós olhamos"). |
+| R2-3 | MEDIUM | Consulta ativa não parava em AUTH_FAILED: N handshakes e N notas "olhadas" sem nada aprendido. | `stopsTheRun` inclui AUTH_FAILED e FISCAL_CERT_INVALID (sem `touchQueriedAt`). |
+| R2-4 | LOW | Certificado AINDA NÃO VIGENTE (notBefore amanhã) entrava no cofre e abria o emissor. | `certificateInfo.notYetValid`; upload, `openIssuer` e "habilitado" recusam (409). |
+| R2-5 | LOW | `municipal_code` "1-2-3"/"12 3"/"1.2.3" virava cTribMun "123" (normalização em fato fiscal). | Conferência do VALOR trimado com `/^\d{3}$/`. |
+
+Fixtures de testes anteriores atualizados para os contratos novos (K→N com carência, Id do DPS na NFS-e do adaptador,
+7º argumento do `insertTransmission`). Suíte **1328/1328** · tsc limpo · app analyze limpo 143/143 · trilha 21 OK · 3
+PENDENTE · 0 FALHA (re-executada após o retrabalho; migration 061 aplicada no dev pelo boot do servidor).
+
+### 10.6 Re-score FINAL (2026-09-28): socrático **0.74 ✅** · adversarial R3 **0.58 ✗ → 7 achados CORRIGIDOS em sessão**
+**Socrático 0.74 — PASSA** (≥ 0.70, nenhum CRITICAL/HIGH): as 10 correções da rodada 2 conferidas item a item no código;
+regressões procuradas e descartadas (leitor pela chave × reserva interrompida/cancel; `LIFE_WHERE` × consulta ativa; vidas
+com `invoice_event` NULL = só nota sincronizada, que `assertTransmittable` já recusa; chNFSe formatado normalizado). Sobraram
+2 MEDIUM, EXECUTADOS em sessão como assunção (recomendação do gate):
+- **M1 (Q-N34 a)** — os leitores de EVENTO e o contador de pendência não filtravam por VIDA (metade da D-N27): C do fisco
+  com efeito recusado numa vida anterior ficava órfão para sempre e a tela contava pendência numa nota sã. Agora eventos e
+  `countPendingEffects` passam pela transmissão (`JOIN` + `LIFE_WHERE`) e o cancelamento manual pela rota GENÉRICA
+  (`POST /billing/cancel`) liga a pendência da voz C ao C que ele produz — espelho do que a rota fiscal já fazia.
+- **M2 (Q-N33)** — transmit aceitava nota com voz C do fisco e efeito local PENDENTE: 2ª tentativa reenviava o MESMO Id de
+  DPS (fisco ecoa a NFS-e cancelada → chave repetida no UNIQUE → 500; timeout → órfã). Agora 409 `FISCAL_EFFECT_PENDING`
+  no gate da reserva até a pendência resolver.
+- **LOW-A** — consulta ativa e lote param pelo MESMO critério (`EMITTER_FAILURE_CODES` em `branches/service.ts`: fisco
+  indisponível, credencial recusada, par local inválido, emissor sem habilitação/certificado/vencido) e sem marcar "nós
+  olhamos" quando o fisco não foi chamado.
+- Registrados sem correção: LOW-B/R3-6 (fechado abaixo), LOW-C chave do evento só por `chNFSe` (se o envelope real
+  trouxer a chave só no Id EVT, a 1ª sessão crava — fallback pela chave embutida no Id junto com L3), LOW-D → **Q-N30b**,
+  LOW-E → Q-N29 (reforço: recusar CN sem CNPJ para o modelo SE?).
+
+**Adversarial rodada 3 (`onda3-adversarial-r3.test.ts`, 35 testes: 13 provas de bug → agora 35/35 · 22 provas
+positivas: contornos de `isGeneratedEventFor`, dois `infDPS`, `id=` minúsculo, NULL na idade do K, toque manual não
+adianta o N, consulta ativa pára em CERT_INVALID, TypeError cru continua ambíguo, lote com 409 local vindo do
+adaptador, corridas transmit × refresh com a vigente ≠ última):**
+| # | Sev. | Achado | Correção |
+|---|---|---|---|
+| R3-1 | **HIGH** | Tentativa ÓRFÃ: 1 → F (404 eventual do `/dps`); 2 reusa o nDPS, o fisco GERA a NFS-e mas a resposta se perde; reconciliação acha a chave e a põe na 1 ("a mais antiga sem chave"); a 2 fica em voo sem voz PARA SEMPRE — invisível ao leitor único (D-N26), nunca reconciliada, listada em 1º lugar em TODA passada da consulta ativa (com 8 órfãs a vigilância D-N21 morre em silêncio). | `findTransmissionByDpsId` prefere quem JÁ detém a chave (idempotente; nunca a mesma chave em duas linhas); `refreshServiceTransmission` ganhou `opts.attempt` (reserva interrompida e rodízio da consulta ativa olham a PRÓPRIA tentativa); quando a tentativa que perguntou está em voo e a NFS-e pertence a outra, ela é encerrada com **F "envio reconciliado"** (voz da consulta) e sai do rodízio; chave diferente da que o Id já tem → 502, nada gravado. |
+| R3-2 | MEDIUM | D-N30 só chegou ao transmit: credencial LOCAL no pedido de cancelamento gravava K "enviado sem resposta" (fato falso). | `cancelServiceInvoiceAtAuthority`: outcome `local` sobe sem K. |
+| R3-3 | MEDIUM | O adaptador conhecia 2 dos 4 cancelamentos do XSD: **e105104** (deferido por análise fiscal — o único caminho fora do prazo municipal) e **e305101** (de ofício) deixavam a NFS-e "autorizada" aqui. | `CANCEL_EVENT_CODES` (101101 · 105102 · 105104 · 305101) em `dps-builder.ts`, consumido pelo adaptador. |
+| R3-4 | MEDIUM | D-N29 deixava passar o **e-CPF** (CN "NOME:CPF" não tem 14 dígitos → "não há como comparar"). | `cpfFromSubject`: e-CPF com `expectedCnpj` → 409 `FISCAL_CERT_INVALID` ("sem procuração o A1 tem que ser o e-CNPJ do emitente"). |
+| R3-7 | MEDIUM | D-N30 ficou no TRANSPORTE: chave ilegível no cofre estourava cru em `signXml` (`ERR_OSSL_UNSUPPORTED`) → 500 por nota no transmit, no cancelamento e no lote (`code: null` não parava). | `openIssuer` valida a CHAVE ao abrir (`validatePrivateKeyPem` → 409); `signLocal` traduz erro local da assinatura em 409 `FISCAL_CERT_INVALID`; o lote pára pelo `EMITTER_FAILURE_CODES`. |
+| R3-5 | LOW | `cnpjFromSubject` atravessava a RDN: CN sem CNPJ + `OU=AR X:99887766000155` atribuía o CNPJ da OU ao titular. | `cnValueOf`: só o VALOR da RDN CN é lido (CNPJ e CPF). |
+| R3-6 | LOW | Consulta aceitava NFS-e SEM identidade (nem Id do infNFSe nem do infDPS) como a da chave pedida — um `<e101101>` dentro virava C irreversível. | `queryNfse`: sem nenhuma identidade → 502 (régua da R2-2). |
+Mantido como está, com questão: **Q-N30b / Q-R3.1** — falha de credencial LOCAL no transmit deixa a reserva em voo (nova
+tentativa dá 409 IN_PROGRESS até os 10 min; a reconciliação fecha com F "sem resposta" embora o fisco não tenha sido
+chamado). Rec. dos dois gates: fechar na hora com F "credencial local" — decisão do Valdo; com o R3-7 (chave validada
+antes de reservar) o caso vira corrida rara. Fixado como prova positiva no r3.
+**Rótulo do ambiente H (Valdo, 2026-09-28)**: "Produção restrita" → **"Homologação"** na tela (pt/en) e na mensagem da
+API; o código continua `H` (tpAmb 2 do fisco, que o chama de "produção restrita").
+**D-N31 (Valdo, 2026-09-28) — UM certificado A1 por estabelecimento**: "o certificado usado é o mesmo para produção e
+para testes, mantenha apenas 1 na hora de carregar o A1". A metade "o A1 é do AMBIENTE" da D-N6 cai; a outra metade
+(o HOST do fisco fica congelado por tentativa — a consulta de uma tentativa nascida em H fala com H mesmo com o emissor já
+em P) permanece. Peça: `issuerSecretRef(schema, institution, name)` sem ambiente (pasta `P` fixa —
+`ISSUER_SECRET_ENVIRONMENT`; `secretEnvironmentOf` morreu), `issuerCertificateStatus`/`storeIssuerCertificate`/
+`clearIssuerCertificate` sem ambiente, `authorityContextFor` usa sempre o par aberto. API: `GET /issuer` devolve
+`certificate` (singular) no lugar de `certificates.{H,P}`; `PUT/DELETE /api/establishment/issuer/certificate` (sem
+`/:environment`); `enabled` de cada modelo = linha + o único par vigente. App: um bloco de certificado na aba Emissor
+fiscal (sem escolha de ambiente), `certificate` singular na entidade, `notYetValid` na validade. Testes reescritos onde
+provavam a D-N6 do certificado ((7b) do adversarial R1 virou prova positiva: tentativa em H consultada com o mesmo par;
+`fiscal-issuer.test.ts` "o par de H não serve a P" virou "cofre vazio → CERT_MISSING; linha em P abre com o único A1").
+Sem DDL. Implantação: quem já tinha par em `S` (H) precisa reenviar o .pfx (o dev não tinha).
+Questões abertas da fase para o Valdo: **Q-N17…Q-N24** (assunções do §10.1), **Q-N19a**, **Q-N25**, **Q-N26…Q-N32**
+(§10.4), **Q-N33/Q-N34** (executadas como assunção — confirmar), **Q-N30b/Q-R3.1**.
+Estado final: suíte **1363/1363** api · tsc limpo · app analyze limpo **148/148 (analyze limpo)** · trilha **21 OK · 3 PENDENTE · 0 FALHA (P8b = código municipal da regra de ISS)**.
