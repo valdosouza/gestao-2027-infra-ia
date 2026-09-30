@@ -126,3 +126,16 @@ VÁRIOS desdobros nacionais (ex.: 1.01 tem 01.01.01; 7.02 tem vários). Logo `cT
 `tb_service_list` (1 linha por subitem): é catálogo central próprio (`tb_service_national_code`, PK code CHAR(6),
 FK ao subitem) e a REGRA de ISS escolhe o código (pré-preenchido quando o subitem só tem um). **Setes: 1.02
 Programação → único desdobro → `010201`.**
+
+## Cravado ao vivo — 404 do `GET /dps/{id}` (2026-09-30, Q-ADV2f)
+
+Sonda de UMA leitura na PRODUÇÃO RESTRITA com Id de DPS inexistente (`DPS4106902207742094000113000019999…98`, 45 posições):
+HTTP **404**, `Content-Type: application/json; charset=utf-8`, corpo
+
+```json
+{ "tipoAmbiente": 0, "dataHoraProcessamento": "2026-09-30T09:42:39.5553657-03:00",
+  "erro": { "codigo": "E2404", "descricao": "Não foi gerada uma NFS-e com o identificador de DPS informado" } }
+```
+
+- `erro` no **SINGULAR** (objeto), diferente das rejeições do `POST /nfse`, que vêm em `erros[]`.
+- **E2404** é o único sinal conclusivo de "DPS sem NFS-e" (`adn.ts` `isDpsNotGenerated`); qualquer outro 404 é ambíguo.

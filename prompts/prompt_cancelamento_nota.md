@@ -1969,3 +1969,20 @@ Teste `qadv2-adversarial.test.ts` (7; dois `it.failing` fixam achados abertos). 
   restrita (chama o fisco — só com "vai").
 - **Q-ADV2g** (LOW): pasta não rastreada `setes-api/undefined/…` gravada por teste com STORAGE_PATH indefinido — rec.: apagar e
   corrigir o teste; `.gitignore` como cinto.
+
+### 15.8 Rodada Q-ADV2d…g — DECIDIDA e EXECUTADA (Valdo, 2026-09-30: "vai, siga as recomendações e faça o push")
+
+- **Q-ADV2d**: a reconferência passa ao refresh a consulta pela CHAVE que o fisco acabou de dar (um só `GET /dps`); cinto — se
+  depois disso a vida ainda não tem chave, 409 FISCAL_TRANSMISSION_IN_PROGRESS ("existe no fisco mas não foi reconciliada").
+- **Q-ADV2f** (sonda ao vivo, uma leitura na produção restrita): o 404 real é `{"erro":{"codigo":"E2404",…}}` — `erro`
+  SINGULAR. **Conhecimento que virou regra**: 404 conclusivo = código **E2404** (e só ele); substitui a regra de "forma"
+  da Q-ADV2b, que teria deixado TODO DPS nunca gerado em voo para sempre. Fato em `integracoes/nfse-adn/README.md`.
+- **Q-ADV2e**: absorvida pela Q-ADV2f — `code` de gateway, `erros[]` vazio ou outro código não são E2404 → 502 em voo.
+- **Q-ADV2g**: `process.env.X = undefined` grava a STRING "undefined" → teste restaurava `STORAGE_PATH` assim e o seguinte
+  gravava em `./undefined/`. Restauração com `delete`, teste do layout H em pasta temporária, pasta removida,
+  `undefined/` no `.gitignore` do setes-api. Conhecimento NEGATIVO para todo teste que mexe em env.
+1422/1422 api.
+- **Gate do delta (2026-09-30)**: socrático **0.78 ✅** · adversarial sem HIGH (teste `qadv2dg-adversarial.test.ts`). LOW
+  **Q-ADV2h** corrigido em sessão pela regra já vigente (MEDIUM-1/D-N26): a reconferência manda o refresh para a tentativa
+  que CUNHOU o Id do DPS (a mais antiga com o mesmo `dps_id`), não para a última F. Formas vizinhas do 404 (`errors[{code}]`,
+  `erro` como lista, código numérico) ficam em voo — seguro; revisar se o ADN mudar o contrato. 1429/1429 — PUBLICADO.
