@@ -1917,3 +1917,29 @@ retransmitir reusa o Id do DPS e reconcilia. Questões abertas (aguardam o Valdo
 - **Q-N38a** XMLs de homologação em subpasta própria, fora do arquivo fiscal de produção? (rec.: sim, `<cnpj>/H/…`)
 LOW registrado: evento e NFS-e podem cair em meses diferentes quando a autorização é descoberta pela consulta
 (`findFiscalXml` varre e acha — não duplica).
+
+### 15.4 Rodada Q-ADV1a…Q-N38a — DECIDIDA e EXECUTADA (Valdo, 2026-09-30: "vai, siga as recomendações e faça o push")
+
+| # | Decisão | Execução |
+|---|---|---|
+| **Q-ADV1a** | Só falha ANTES do envio é F (conclusiva); o resto é ambíguo (em voo) | `httpsRequest` marca `err.afterHandshake` (evento `secureConnect`); `authorityJson` só trata erro "TLS" como credencial quando o handshake NÃO terminou — depois vira 503 (ambíguo). `queryDpsAccessKey`: 404 só é "DPS sem NFS-e" com corpo JSON estruturado do fisco; 404 vazio/HTML → 502 (em voo) |
+| **Q-ADV1b** | Reconferir no fisco antes do cancelamento LOCAL | `reconfirmBeforeLocalCancel` (composição) no início do `cancelOrderInvoice`, fora da transação: vigente com F de envio interrompido (voz por consulta, sem chave) → `GET /dps` de novo; achou → consulta (A) e o plano passa a exigir "Cancelar NFS-e"; fisco fora → erro sobe (não cancela no escuro). `lastSource` lido no TX_SELECT |
+| **Q-CA5a** | Script de correção só com a chave da VIDA vigente | filtro D-N27 (`invoice_event ≥ último E`) na busca da chave de produção |
+| **Q-CA5b** | NFS-e autorizada em HOMOLOGAÇÃO: cancelamento local direto permitido | plano não bloqueia A/N de 'H' (K em voo continua bloqueando); app `blocksLocalCancel` idem |
+| **Q-N38a** | XMLs de homologação fora do arquivo fiscal de produção | `saveFiscalXml`/`findFiscalXml` por ambiente: H em `<cnpj>/H/<ano>/<mês>`, P no layout original; busca de H cai no layout antigo (compatibilidade); varredura de P só em pastas de ano |
+
+Testes novos: Q-ADV1a (fase do TLS × credencial; 404 estruturado × gateway), Q-ADV1b (4 casos), Q-CA5b (plano + app),
+Q-N38a (layout H). **1403/1403 api · 150/150 app.** Gate do delta: §15.5.
+
+### 15.5 Gate do delta final (2026-09-30): socrático **0.72 ✅** · adversarial **0.60 ✗ → HIGH corrigido em sessão**
+
+- **HIGH (provado ao vivo, Node 21)**: conexão REAPROVEITADA pelo keep-alive do agente HTTPS não emite `secureConnect`
+  → `afterHandshake` ficava false e o erro TLS pós-envio voltava a ser "credencial" (F conclusivo) justamente no LOTE — o
+  DPS podia ter chegado e a retransmissão sairia com nDPS novo (NFS-e duplicada). Corrigido: `req.reusedSocket` conta
+  como handshake feito. Teste `final-delta-adversarial.test.ts` (era `it.failing`, agora verde).
+- **MEDIUM**: a reconferência da Q-ADV1b consultava também HOMOLOGAÇÃO (sandbox fora prendia a nota, contra a Q-CA5b) →
+  tentativa 'H' não é reconferida.
+- **LOW** corrigido: app assume PRODUÇÃO quando o JSON não traz `environment` (lado conservador — bloqueia o cancelar
+  local). **LOW** registrado: a reconferência olha só a tentativa vigente (F 'Q' de tentativa anterior seguido de F 'P'
+  não é reconferido).
+1406/1406 api · 150/150 app. **PUBLICADO no GitHub 2026-09-30** (ver CLAUDE.md para os hashes).
