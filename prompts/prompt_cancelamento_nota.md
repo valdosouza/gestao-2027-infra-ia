@@ -1822,3 +1822,98 @@ com 3 casos (§12).
      uma com seus testes de borda .xx5).
    - `setes-app`: expurgo do histórico (blobs de build) segue aguardando "vai" do Valdo.
    - Sync (outro grupo, Q-C4): parar de gravar `tb_order_service.open_lock` e então DROPAR a coluna.
+
+## 15. Ramo AUTORIZADO da D3/D4 — EXECUTADO (Valdo, 2026-09-29: "siga as recomendações")
+
+**Escopo**: setes
+
+**Origem**: 1ª NFS-e autorizada em produção (nº 704, OS 7374 / pedido 8011) cancelada no fisco pela seção "No fisco"
+(`prompt_onda3_nfse_adn.md` §13.3). O efeito local do C do fisco (`applyCancelEffect`) reaproveitava o caminho da nota
+PENDENTE: soft-deletou a nota, os ramos e o snapshot de ISSQN, liberou o número, devolveu o pedido a 'A' e reabriu a
+OS. Valdo: *"nota autorizada e cancelada não pode voltar a ficar não faturada — existe registro fiscal nela; para
+todos os casos de NF-e ou NFS-e autorizada o cancelamento não pode simplesmente apagar tudo."* Não é decisão nova: é
+a **D3/D4** (§6 — "autorizada cancelada é MANTIDA, mantém o número"), cujo ramo autorizado nunca tinha sido
+implementado (Onda 1 = só pendente, D1). O legado confirma (`proc-cancelamento-nfe` §2, PED-01): autorizada →
+`NFL_STATUS='C'`, `PED_FATURADO='C'`, impostos por item e retorno ficam; títulos e comissão desfeitos.
+
+| # | Decisão | Origem |
+|---|---|---|
+| **Q-CA1** | Pedido/OS com nota de registro fiscal cancelada vira **'C'** (cancelado): somente leitura, NUNCA refaturável — a nota tem o id do pedido; faturar de novo = pedido/OS NOVO. `tb_order.status` varchar(1), sem DDL | rec. (legado PED-01) |
+| **Q-CA2** | OS da rotina mensal **devolve a competência** ao contrato (a rotina pode injetar o mês numa OS nova; a cancelada vira história) — princípio da D-A29 | rec. |
+| **Q-CA3** | OS cancelada aparece na aba **Faturadas**, somente leitura, com o selo "NFS-e cancelada" (a nota nunca some da vista) | rec. |
+| **Q-CA4** | FICAM: nota viva (evento C = estado cancelada), número, ramos, snapshots por item, XML. DESFEITOS como antes: financeiro, boleto, cheque em custódia, comissão (D6–D9). Critério = **REGISTRO FISCAL** (a transmissão vigente detém a chave do fisco — D-N26), nunca o modelo: NFS-e hoje, NF-e quando o ramo existir | rec. |
+
+**Execução**:
+- Peça `@shared/invoice/invoice-cancel.ts`: `buildCancelPlan` devolve `fiscalRecord` (lido na mesma leitura travante do
+  bloco fiscal 2f); a trava D5 de outra OS aberta só bloqueia quem REABRE (pendente). `cancelInvoice` ramifica:
+  registro fiscal → nota/ramos/snapshots intocados, `status='C'`, competências liberadas; pendente → caminho antigo.
+- Peça `@shared/service-order.releaseServiceOrderCompetences` — fonte ÚNICA (o `cancelOrder` do módulo passou a usá-la).
+- `listPendingServiceInvoices` (lote "Transmitir pendentes") exclui nota cujo último evento é C — viva ≠ pendente.
+- Módulo `service-orders`: aba Faturadas (status F) também lista 'C'; ordem `(status='A') DESC, número DESC`; selo
+  fiscal para F e C. App: `isCancelled`, rótulo "Cancelada (nota fiscal cancelada — somente leitura)", sem "Cancelar
+  nota" nem "Transmitir" na OS 'C'.
+- **Correção do dado do dev**: `setes-api/scripts/repair-authorized-cancel.ts <schema> <pedido> [--apply]` (simulação por
+  padrão; só toca linhas carimbadas pelo próprio C; aborta se algo foi editado depois). Aplicado ao pedido 8011: nota
+  6790 viva, ramo de serviço e snapshot ISSQN revividos, pedido 'C', OS com a trava solta, competência 2026-09 do
+  contrato 65 devolvida.
+- Testes: `invoice-cancel.test.ts` (describe D3/D4 — 4 casos) + pin do SQL de pendentes. 1381/1381 api · 149/149 app.
+- Conhecimento NEGATIVO: "cancelar = soft-delete" vale SÓ para nota sem registro fiscal. Qualquer leitor novo que use
+  `tb_invoice.deleted='N'` como "faturada" precisa olhar o último evento (C = cancelada viva).
+
+### 15.1 Gates da correção (2026-09-29/30)
+
+- **Socrático 0.66 ✗** → HIGH: a porta de VENDA (`/billing/validate`, `/billing/invoice` e o cinto travante do
+  `persistInvoice`) recusava só `'F'` — pedido 'C' refaturava e o `issueInvoice` sobrescrevia a nota mantida (vida nova
+  escondia a NFS-e cancelada). **Corrigido com predicado ÚNICO** `@shared/order.assertOrderOpen` ("faturável/editável =
+  'A'"; 'C' → 409 **ORDER_CANCELLED**, código novo no catálogo), usado nas três portas e no `lockOpenOrder`. Regra
+  para o futuro: estado terminal novo = UM predicado consumido por todas as portas, nunca cada porta negando só o que
+  conhecia. MEDIUM: venda 'C' sumia das abas / negociação virava 'A' → espelho da Q-CA3 aplicado como ASSUNÇÃO
+  (**Q-CA7**): Faturados lista 'C', somente leitura, sem devolução nem cancelar.
+- **Adversarial 0.72 ✅** (13 ataques; HIGH A2 = o mesmo, corrigido em paralelo) → MEDIUM A8 **corrigido**: DANFSe de
+  NFS-e cancelada saía SEM o selo (o XML em disco é o da autorização; o cancelamento vem da voz do fisco) —
+  `readNfseXml` devolve `cancelled` pela vigente e `renderDanfse(opts.cancelled)` carimba. LOWs: tipo 'C' no detalhe da
+  OS; script de correção aborta se nenhum ramo revive com a nota. Testes do gate:
+  `cancel-autorizada-adversarial*.test.ts`. **1387/1387 api · 149/149 app.**
+- **Abertas para o Valdo**: **Q-CA5** homologação conta como registro fiscal? (rec.: não — critério "chave obtida em
+  PRODUÇÃO"); **Q-CA6/Q-ADV3** a OS 'C' perde o registro da competência quando a rotina reinjeta o mês (upsert pela PK)
+  — basta a trilha do evento C? (rec.: basta); **Q-CA7** venda 'C' em Faturados (assunção aplicada) × aba própria;
+  **Q-ADV1** chave do fisco chegando DEPOIS de um cancelamento local de nota pendente (F "sem resposta") — pré-existente
+  (rec.: (b) recusar o cancelamento local de nota com F "sem resposta" até consulta conclusiva); **Q-ADV2** DANFSe de
+  cancelada: carimbar (feito) × bloquear; **Q-N38** gravar em disco o XML do evento de cancelamento.
+- **Re-score socrático 0.78 ✅** (2026-09-30). LOW fechado em seguida: as guardas de edição de pedido, OS e devolução
+  (`orders`/`service-orders`/`order-returns` repository) passaram a usar o MESMO `assertOrderOpen` (antes negavam
+  "não A" com texto próprio "já faturado" — 'C' agora responde ORDER_CANCELLED em todas as portas). INFO registrado:
+  todo total/relatório futuro sobre "Faturados" deve derivar do vigente (D-A36) — 'C' não soma. 1387/1387 api.
+
+### 15.2 Rodada Q-CA5…Q-N38 — DECIDIDA e EXECUTADA (Valdo, 2026-09-30: "vai, siga as recomendações")
+
+| # | Decisão | Execução |
+|---|---|---|
+| **Q-CA5** | Só chave obtida em **PRODUÇÃO** é registro fiscal — NFS-e de homologação cancelada segue o caminho da PENDENTE (soft-delete, número liberado, pedido/OS reabertos) | `fiscalRecord = !!tx?.accessKey && tx.environment === 'P'` (peça) + mesma condição no script de correção; teste "Q-CA5" |
+| **Q-CA6/Q-ADV3** | A trilha do evento C basta — a OS 'C' não guarda linha própria da competência depois que a rotina reinjeta o mês | sem código (conhecimento: o upsert pela PK reaponta a competência para a OS nova) |
+| **Q-CA7** | Venda 'C' fica na aba **Faturados** (espelho da Q-CA3) | a assunção do §15.1 vira decisão |
+| **Q-ADV1** | (b) nunca cancelar localmente nota sem consulta conclusiva | **JÁ GARANTIDO POR CONSTRUÇÃO** — todo F é conclusivo: 401/403 (auth_failed), falha local (fisco nem chamado) ou `GET /dps/{id}` após envio interrompido sem NFS-e (`reconcileInterrupted`); o AMBÍGUO nunca vira F: fica em voo e bloqueia o cancelamento local (bloco `fiscal`). Conhecimento NEGATIVO: não criar F para ambíguo |
+| **Q-ADV2** | DANFSe de cancelada sai **carimbado** "NFS-e CANCELADA" (não bloqueado) | já executado no §15.1 (A8) |
+| **Q-N38** | O XML do **evento de cancelamento** gerado pelo fisco vai para o arquivo fiscal | adaptador devolve `eventXml` (registro do evento e consulta); `<chave>-evt101101.xml` na pasta do mês da AUTORIZAÇÃO (ao lado do `-nfse.xml`), gravado ANTES da transação local no cancelamento e regravado pela consulta se faltar — o "Consultar" da OS 7374 recupera o da NFS-e 704; teste "Q-N38" |
+
+1389/1389 api · 149/149 app. Gate do delta: ver §15.3.
+
+### 15.3 Gate do delta Q-CA5/Q-N38 (2026-09-30): socrático **0.76 ✅** · adversarial **0.74 ✅** (sem HIGH)
+
+Teste do gate: `setes-api/src/__tests__/qca5-qn38-adversarial.test.ts` (6/6 — path traversal recusado, pasta do evento,
+caracterização do F pós-handshake). **A Q-ADV1 "por construção" foi CONTESTADA (MEDIUM)**: `isTlsCredentialError`
+(`https-json.ts`) classifica pela MENSAGEM (`SSL routines|certificate`), não pela fase — erro TLS DEPOIS do handshake
+(POST já entregue) vira `auth_failed` → **F**; e o 404 do `GET /dps/{id}` não distingue "DPS sem NFS-e" de 404 de gateway.
+Esse F libera o cancelamento local pelo caminho da pendente e a NFS-e de produção pode ficar órfã. Atenuante:
+retransmitir reusa o Id do DPS e reconcilia. Questões abertas (aguardam o Valdo):
+- **Q-ADV1a** erro pós-handshake / 404 não comprovado → F ou em voo (ambíguo)? (rec.: a fronteira HTTPS marca se o
+  corpo foi ENVIADO; só o que falha ANTES do envio vira F)
+- **Q-ADV1b** cancelamento local de nota cujo último F veio de envio interrompido: nova consulta `GET /dps` antes (ou
+  carência, espelho da D-N28)? (rec.: consulta inline antes do cancelamento local)
+- **Q-CA5a** script de correção exigir a chave na VIDA vigente (D-N27) — hoje pode achar a chave de uma vida anterior
+  (rec.: sim, filtro de vida na consulta)
+- **Q-CA5b** nota autorizada em HOMOLOGAÇÃO presa (sandbox fora / prazo vencido): permitir cancelamento local direto?
+  (rec.: sim — não tem valor jurídico)
+- **Q-N38a** XMLs de homologação em subpasta própria, fora do arquivo fiscal de produção? (rec.: sim, `<cnpj>/H/…`)
+LOW registrado: evento e NFS-e podem cair em meses diferentes quando a autorização é descoberta pela consulta
+(`findFiscalXml` varre e acha — não duplica).

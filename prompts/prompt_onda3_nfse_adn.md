@@ -7,7 +7,7 @@ webservice municipal · achado A2 ramo de serviço vazio · D33 ordem Inter → 
 **Molde**: `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates)
 **Aberto em**: 2026-09-20 (Rodada 0 = levantamento + parecer do guardião conceitual, agente `setes-conceito`,
 enquanto o sandbox do Inter está fechado — janela seg–sex 8h–20h)
-**Estado**: **EM EXECUÇÃO — retrabalho dos gates (2026-09-28)**: §10.3 (10 achados adversariais R1 corrigidos) ·
+**Estado**: **EM EXECUÇÃO — 1ª sessão em PRODUÇÃO (2026-09-29, §13: Q-N35 (b) + Q-N36 executada — regApTribSN obrigatório p/ ME/EPP)** · antes: retrabalho dos gates (2026-09-28): §10.3 (10 achados adversariais R1 corrigidos) ·
 §10.4 (socrático 0.67 → D-N26…D-N30 executadas, migration 061) · §10.5 (adversarial R2 0.64 → R2-1…R2-5 corrigidos) ·
 **§10.6 re-score FINAL: socrático 0.74 ✅ · adversarial R3 0.58 → 7 corrigidos + D-N31 (um A1 por estabelecimento) + rótulo Homologação** · suíte 1363/1363 · trilha 21 OK · 3 PENDENTE · 0 FALHA (P8b = código municipal da regra de ISS) · NADA commitado. Rodada 1 DECIDIDA 2026-09-21 (D-N1…D-N16);
 contrato oficial em `setes-api/integracoes/nfse-adn/` (swagger/XSD só com o e-CNPJ)
@@ -777,3 +777,93 @@ Resultado das 3 formas do alvará: **E0116 nas três** (12 formas ao todo). `tb_
 **Estado ao fechar a sessão (2026-09-28)**: pipeline até o fisco PROVADO; 1ª AUTORIZAÇÃO depende de (a) Curitiba/Sefin
 informar a IM carregada no CNC da produção restrita, ou (b) Q-N35 = autorizar em PRODUÇÃO com a próxima cobrança real
 (sem IM e sem alíquota, como o portal fez hoje). Nota 8011 do dev: 13 tentativas R (E0116), todas em homologação.
+
+## 13. 1ª SESSÃO em PRODUÇÃO — Q-N35 e Q-N36 decididas (2026-09-29, Valdo)
+
+**Q-N35 → (b), Valdo**: "pode transmitir sem a IM, faremos o teste em produção". O Valdo trocou o emissor SE para
+**P** e limpou `tb_company.im` pela tela (o agente não altera configuração fiscal por SQL — negado pelo classificador
+e correto: a troca leva a próxima transmissão ao fisco real). OS 7374 / nota 6790 (pedido 8011, K2) em produção:
+- tentativa 14 (IM ainda preenchida) → **E0120** "IM do prestador não deve ser informado, pois não existem informações
+  complementares registradas no CNC NFS-e do município" — espelho do E0116 da homologação; confirma que em PRODUÇÃO a
+  Setes não tem registro complementar no CNC de Curitiba: `<IM>` vai VAZIO (tb_company.im NULL).
+- tentativa 15 (sem IM) → **E0166** "É obrigatório o preenchimento do campo de regime de apuração dos tributos do SN
+  para o optante do Simples Nacional ME/EPP". mTLS, envelope e leitura do DPS em produção CRAVADOS.
+
+**Q-N36 — DECIDIDA e EXECUTADA ("vai", Valdo 2026-09-29): D-N19a CORRIGIDA.** A premissa "regApTribSN NULL = dentro
+do sublimite, elemento omitido (opcional no XSD)" MORREU com o E0166: para opSimpNac 3 o elemento é OBRIGATÓRIO.
+Conhecimento negativo — ninguém volta a "simplificar" para omitido: o XSD mente por omissão, a regra de negócio da
+Sefin exige.
+- Peça `branches/service.ts` (identidade do emitente): regime 3 sem apuração → **422 FISCAL_EMITTER_INCOMPLETE**
+  `fields[simplesAssessment]` ANTES de reservar tentativa (molde da D-N19); `issInDas` passa a exigir
+  `regApTribSN === '1'` explícito (o `?? '1'` era o eco da premissa morta).
+- Módulo `establishment`: PUT com estado RESULTANTE regime 3 sem apuração → **422 REQUIRED_FIELDS** no campo, antes
+  de gravar qualquer parte (o que valida é o que grava); sair do regime 3 segue limpando a apuração.
+- App (Meu Estabelecimento → Tributação): opção "Dentro do sublimite (não informar)" REMOVIDA (chave i18n
+  `simplesAssessment0` apagada; placeholder = "Não informado", estado a corrigir); pendência local obrigatória no
+  campo com regime 3 — espelho da API. Rótulo "Apuração no Simples".
+- Setes: apuração **1** (federais e ISS pelo Simples — como as notas do portal: alíquota 0,00, ISS no DAS; `pAliq`
+  segue omitida sem retenção, E0625/E0621).
+- Testes: fixtures de emitente ME/EPP ganharam `simplesAssessment: '1'`; teste do 422 local + dois do save.
+  **1371/1371 api · 148/148 app · analyze limpo.**
+
+**Junto (pedido do Valdo na mesma sessão): nº da nota + selo fiscal na lista de OS faturadas.** A lista não permitia
+achar a OS do teste (avatar = nº da OS; o "8011" era o id do pedido). `GET /api/service-orders` devolve
+`invoiceNumber`, `fiscalState` (none|in_flight|authorized|rejected|failed|cancelled|cancel_in_flight; null = aberta ou
+nota da origem, sem evento E na web), `fiscalEnvironment`, `nfseNumber`. O selo vem do MESMO leitor do detalhe: nova
+`currentTransmissionsOf` (lote, vida vigente D-N27, escolha pelo `currentOf` D-N26) + `getServiceFiscalSummaries`
+(`fiscalStateOf`) — sem 2ª cópia da regra em SQL. Filtro só com dígitos acha pelo nº da OS ou da nota (igualdade).
+Homologação sinalizada no selo ("· Homologação"). Nada commitado.
+
+### 13.1 Q-N37 — total aproximado de tributos (Lei 12.741) — DECIDIDA e EXECUTADA ("vai", Valdo 2026-09-29)
+
+Tentativa 16 (apuração 1 já gravada) → **E0712** "Para ME/EPP o indicador de informação de valor total de tributos não
+pode ser informado". O DPS mandava SEMPRE `totTrib/indTotTrib=0` — válido SÓ para MEI. Matriz do Anexo I (RN do
+`totTrib`, linhas 538–541):
+
+| opSimpNac | indTotTrib=0 | pTotTribSN | vTotTrib / pTotTrib (por esfera) |
+|---|---|---|---|
+| 2 MEI | ✅ | ❌ E0710 | ✅ |
+| 3 ME/EPP | ❌ E0712 | ✅ | ✅ |
+| 1 não optante | ❌ E0713 | ❌ E0713 | ✅ |
+
+Decisão (recomendação aceita): **ME/EPP → `pTotTribSN` = % aproximado da alíquota EFETIVA do Simples (DAS)**, fato do
+emitente em `tb_entity_tax.simples_total_tax_aliquot DECIMAL(5,2)` (migration **063**; TSDec2V2 ⇒ 0,01–99,99, > 0 —
+declarar 0 seria falso para o tomador); MEI segue `indTotTrib=0`; **não optante = 422 honesto "ainda não suportado"**
+(decidir valor/percentual por esfera com o 1º cliente assim). Nunca `0,00` para passar na validação.
+**Valor da Setes = 6,00 %** — derivado do DAS de 08/2026 (PGDAS-D, R$ 713,41): a repartição IRPJ 4,00 · CSLL 3,50 ·
+COFINS 12,82 · PIS 2,78 · CPP 43,40 · ISS 33,50 % bate EXATAMENTE com a faixa 1 do Anexo III (faixa 2 já seria COFINS
+14,05 / ISS 32,00), onde a efetiva = nominal (sem parcela a deduzir); receita implícita ≈ R$ 11.890. Revisar quando o
+RBT12 mudar de faixa (o contador informa).
+Guardião: fato do EMITENTE, irmão de simples_regime/simples_assessment — não é peça nova; histórico congelado em cada
+DPS transmitido; o irmão futuro (percentual por esfera do não optante) AGREGA colunas, não reforma.
+- Peça `branches/service.ts`: nova `emitterDpsFacts(prest, aliquot)` — obrigações do DPS por regime (Q-N36 apuração +
+  Q-N37 totTrib) SAÍRAM do `buildEmitter`: o cancelamento também lê o emitente, e uma NFS-e autorizada não pode deixar
+  de ser cancelável porque alguém limpou a aba Tributação (corrige o 422 que a Q-N36 tinha posto no leitor comum).
+- Módulo `establishment`: DTO (> 0, ≤ 99,99, 2 casas), 422 REQUIRED_FIELDS no estado resultante com regime 3, sair do
+  regime 3 limpa apuração e %; Swagger do GET/PUT com os fatos do emitente.
+- App (Tributação): campo "% aproximado de tributos do Simples" (texto com vírgula/ponto, dica "alíquota efetiva do
+  DAS"), obrigatório e validado localmente com regime 3 — espelho da API.
+- **1377/1377 api · 149/149 app · analyze limpo · migration 063 aplicada no dev.** Nada commitado.
+
+### 13.2 🎉 1ª AUTORIZAÇÃO em PRODUÇÃO (2026-09-29 23:33:44)
+
+Tentativa 17 da OS 7374 / nota 6790 (pedido 8011), após informar apuração 1 e 6,00 % na aba Tributação: **NFS-e nº 704**,
+chave `41069022207742094000113000000000070426093703546385`, cStat 100, dhProc 2026-09-29T23:33:44-03:00, Curitiba,
+vServ = vLiq = 250,00, tomador NICOLE CRISTINA LOPES ALVES LTDA (K2). Voz **A** source P gravada; XML da NFS-e em
+`storage/07742094000113/2026/09/<chave>-nfse.xml` (regApTribSN 1, pTotTribSN 6.00, opSimpNac 3, sem IM, sem pAliq —
+igual às notas do portal). **CRAVADOS pela resposta real** os [INCERTO] do §12: o JSON 2xx do POST /nfse (chave + XML
+gzip/b64) foi lido pelo adaptador SEM ajuste e conferido contra a pergunta (R2-2: Id do infDPS = DPS enviado); fluxo
+Q-N35/Q-N36/Q-N37 fechado em 4 tentativas (E0120 → E0166 → E0712 → A). Ainda a provar ao vivo: consulta de eventos,
+DANFSe desta nota, cancelamento em produção (se a nota for só de teste, cancelar pela seção "No fisco" dentro do prazo
+do município).
+
+### 13.3 1º CANCELAMENTO em PRODUÇÃO (2026-09-29 23:35:18)
+
+O Valdo cancelou a NFS-e 704 pela seção "No fisco" ~2 min após a autorização: o fisco ACEITOU (voz **C** source P no
+evento 2 da tentativa 17, `invoice_event` 2 ligado); efeito local na MESMA transação (D-N7): `tb_invoice_event` 2 = C,
+nota 6790 soft-deletada, OS 7374 de volta a **A** com a trava `open_lock` restaurada. DANFSe da 704 aberto antes sem
+erro. Ciclo emitir → autorizar → DANFSe → cancelar PROVADO ao vivo em produção.
+**Achado (Q-N38, aguarda o Valdo)**: o XML do EVENTO de cancelamento (pedido assinado + resposta do fisco) NÃO é
+gravado em disco — só `-dps.xml` e `-nfse.xml` existem (`saveFiscalXml` não é chamado no cancelamento). O arquivo
+fiscal do contribuinte deveria guardar o evento junto com a NFS-e (mesma pasta `<cnpj>/<ano>/<mês>`). Rec.: gravar
+`<chave>-evt101101.xml` com o evento devolvido pelo fisco, na composição do cancelamento.
