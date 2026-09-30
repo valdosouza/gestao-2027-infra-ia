@@ -1943,3 +1943,29 @@ Q-N38a (layout H). **1403/1403 api · 150/150 app.** Gate do delta: §15.5.
   local). **LOW** registrado: a reconferência olha só a tentativa vigente (F 'Q' de tentativa anterior seguido de F 'P'
   não é reconferido).
 1406/1406 api · 150/150 app. **PUBLICADO no GitHub 2026-09-30** (ver CLAUDE.md para os hashes).
+
+### 15.6 Re-run adversarial (0.78 ✅) + rodada Q-ADV2 — DECIDIDA e EXECUTADA (Valdo, 2026-09-30: "vai, siga as recomendações e faça o push")
+
+Re-run do adversarial sobre 4c38f39/df1379c: **0.78 ✅**, HIGH do keep-alive RE-PROVADO fechado em servidor TLS local real
+(TLS 1.2/1.3, socket novo × reaproveitado, PEM trocado, ECONNREFUSED/ENOTFOUND). Teste
+`adversarial-rerun-2026-09-30.test.ts` (travas de regressão do transporte). Decisões:
+| # | Decisão | Execução |
+|---|---|---|
+| **Q-ADV2a** | Reconferir se QUALQUER tentativa da vida vigente tem F por consulta sem chave (o Id do DPS é o mesmo na vida — D-N3) | `reconfirmBeforeLocalCancel` lê todas as tentativas da vida (`listServiceTransmissions`); alguma com chave → o plano decide |
+| **Q-ADV2b** | 404 do `GET /dps` só é conclusivo com `erros[]`/`codigo` no corpo | `isAuthorityJsonBody` exige a forma do fisco; JSON de gateway/rota → 502 em voo |
+| **Q-ADV2c** | A1 vencido/emissor desabilitado impedir o cancelamento local de nota com F por consulta é ACEITO (lado seguro; a mensagem aponta o certificado) | sem código |
+| obs. | Nota de homologação cancelada LOCALMENTE sai do rodízio de 24 h | `listLiveTransmissionsToRefresh`: A/N cuja nota tem último evento C fica fora. A tela "No fisco" não aparece para OS reaberta (só `!isOpen`) nem na vida nova (D-N27) — sem mudança de app |
+Os `it.failing` do re-run (MEDIUM/LOW) viraram `it` e passam. 1416/1416 api. Gate do delta: §15.7.
+
+### 15.7 Gate do delta Q-ADV2 (2026-09-30): socrático **0.76 ✅** · adversarial **0.72 ✅** — PUBLICADO
+
+Teste `qadv2-adversarial.test.ts` (7; dois `it.failing` fixam achados abertos). Abertas para o Valdo:
+- **Q-ADV2d** (MEDIUM, pré-existente na função): a reconferência acha a chave no 1º `GET /dps` e o refresh pergunta DE NOVO —
+  se a 2ª resposta vier 404, a reconferência volta em silêncio e o cancelamento local segue (rec.: passar a resposta já
+  obtida ao refresh — uma pergunta só ao fisco).
+- **Q-ADV2e** (LOW): `code` numérico ainda conta como "fisco" (`{"code":404,"message":"Not Found"}` de gateway) — rec.: aceitar
+  só `codigo`/`Codigo` ou `erros[]`.
+- **Q-ADV2f** (LOW): forma real do 404 do ADN não documentada — rec.: uma consulta `GET /dps` com Id inexistente na produção
+  restrita (chama o fisco — só com "vai").
+- **Q-ADV2g** (LOW): pasta não rastreada `setes-api/undefined/…` gravada por teste com STORAGE_PATH indefinido — rec.: apagar e
+  corrigir o teste; `.gitignore` como cinto.
