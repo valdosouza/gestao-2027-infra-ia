@@ -280,6 +280,12 @@ D:\Gestao2027\Infra-IA/
 - `ARQUITETURA_MODULOS.md` — ⭐ 2026-07-11: 1 interface = 1 módulo flutter_modular
   (camadas completas + bloc), app/shared (register + lookup), RouterOutlet no Home,
   regra de promoção (módulo nunca importa módulo). LER antes de criar qualquer tela.
+- `../prompts/prompt_pesquisa_avancada.md` — ⭐ Onda 1 ENTREGUE 2026-09-30 (onda separada, rascunho
+  `prompts/PromptBuscaAvancada.txt`; D-BA1…D-BA15): pesquisa avançada = `?criteria=<json>` no MESMO GET da lista,
+  lista branca `<M>_SEARCH_CRITERIA` no repository (operador pelo kind, peça `@shared/list/search-criteria`),
+  `GET /api/<m>/search-criteria` sem expressão; app `app/shared/search/` (painel + chips; botão na fábrica).
+  Pilotos customers + service-orders; gates 0.78/0.84 ✅ (HIGH: valor conferido DEPOIS de normalizado).
+  Q-BA12…Q-BA16 abertas; Onda 2 = demais telas da fábrica (medir M5 antes de listas grandes).
 - `prompt_paginacao_telas_pesquisa.md` — ⭐ FECHADO e EXECUTADO 2026-08-03 (10 decisões
   D1–D10 + notas N1–N11): paginação de TODAS as telas de pesquisa (app × api).
   Envelope `{ ok, data, page, pageSize, total }` via `setes-api/src/shared/list`

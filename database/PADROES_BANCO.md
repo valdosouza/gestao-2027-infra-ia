@@ -179,3 +179,38 @@ a ferro: cada uma nasceu de um CRITICAL/HIGH real.
    `detectLockWaitSupport`; sem suporte cai no `innodb_lock_wait_timeout` com aviso): 1 detentor lento
    não prende o pool inteiro por 50 s; quem espera mais recebe 1205 → 409 RESOURCE_BUSY e NÃO reexecuta
    (falhar cedo é o objetivo — só deadlock 1213 reexecuta).
+
+## 10. Tempo: instante em UTC, data de negócio na zona do estabelecimento (2026-09-30 — Q-TZ1)
+
+Decisão do Valdo (prompt_pesquisa_avancada.md §10): **a sessão do banco é UTC** (`timezone: 'Z'` no
+mysql2 + `SET time_zone = '+00:00'` por conexão, conferido no boot) e o **"hoje" é do estabelecimento**
+(config `time_zone` da interface establishment, peça `@shared/time-zone`).
+
+1. **INSTANTE** (created_at/updated_at, carimbo de evento, hora do caixa) = `NOW()` — fica em UTC.
+2. **DATA DE NEGÓCIO** (dt_record, dt_emission, vencimento, data de pagamento, "hoje" de uma validação)
+   NUNCA é `CURDATE()`, `CURRENT_DATE`, `DATE(NOW())` nem `new Date()` do processo: vem de
+   `todayFor(schema, institution)` como parâmetro (`?`). Aritmética de dias = calendário puro sobre
+   'YYYY-MM-DD' (`addDays`), nunca getters locais de `Date`. **DENTRO DE TRANSAÇÃO passe a conexão
+   dela** (`todayFor(schema, institution, conn)`) — nunca uma 2ª conexão do pool com locks seguros (C1
+   do gate da onda TZ-1: o padrão que já travou a API). A cerca `time-zone-fence.test.ts` reprova
+   `CURDATE(`, `CURRENT_DATE`, `DATE(NOW())`, `new Date().toISOString().slice(0, 10)` e
+   `getTimezoneOffset()` fora da peça.
+3. **Voz de terceiro** (fisco, banco) com hora: grava o INSTANTE UTC (`toUtcDb`; sem offset = hora de
+   Brasília). Idempotência por (kind, dt) casa também a forma antiga (hora de parede) — transição.
+4. **Apresentação**: instante com hora sai para o app na hora da zona (`withZoneWall`/`toZoneWall`), na
+   FRONTEIRA HTTP — a lógica interna compara em UTC. Coluna DATE sai por `DATE_FORMAT(…,'%Y-%m-%d')`.
+5. **Critério de pesquisa sobre DATETIME** (`storage: 'datetime'`) converte só as PONTAS
+   (`CONVERT_TZ(?, '+00:00', @@session.time_zone)`), nunca a coluna.
+6. Dado gravado antes de 2026-09-30 está em hora de parede de SP — **data de corte** (Q-TZ3), sem backfill.
+   ⚠️ **Q-TZ4**: o **setes-sync** (mesmo banco, outro grupo) ainda grava na hora LOCAL da sessão dele — até ele
+   adotar esta regra (tarefa do projeto setes-sync), a data de corte só vale para tabelas de autoria EXCLUSIVA da
+   API; DATETIME de tabela que o sync também escreve (ex.: `tb_customer.created_at` de cliente sincronizado) pode
+   estar em hora de SP mesmo depois do corte. **Deploy**: rodar antes `scripts/pre-deploy-tz-check.ts` (Q-TZ5 —
+   nada em voo; Q-TZ6 — fuso do MySQL do ambiente: se já for UTC, a premissa do corte muda e é registrada).
+7. Coluna de instante NUNCA tem `ON UPDATE current_timestamp()` se for fato gravado uma vez (bug do
+   `tb_cashier.hr_begin`, migration 064).
+8. **Relógio único por operação** (Q-TZ8): o middleware de `app.ts` fixa o instante da requisição
+   (`runWithOperationClock`); todo `todayFor` dela usa esse instante — um faturamento às 23:59:59 não grava
+   dias diferentes. Só DATA DE NEGÓCIO; instante real (dhEmi, created_at) segue o agora de verdade.
+9. **Pasta do arquivo fiscal** (Q-TZ7): mês contábil na zona do estabelecimento (`saveFiscalXml(…, zone)`); a busca
+   tenta o mês da zona e o da hora oficial (arquivos de antes).

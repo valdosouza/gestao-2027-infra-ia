@@ -1,0 +1,21 @@
+# Contexto
+	Nas telas de pesquisa temos a lista com o resultado e um campo filtro 
+	e isso esta prejudicando quando tempo procurar algo mais especifico.
+	
+# Objetivo
+	Adicionar ao framework  que cria as telas de consulta uma opcao para que o cliente possa buscar dados com mais criterios
+	
+# Impacto
+	## BackEnd
+		Impacto nas API onde fazemos o get que deve estar preparado para receber um json com varios parametros
+		
+	## FrontEnd
+		cada tela de pesquisa tanto nova quando as atuais deve ter um botao para chamar uma pesquisa avancada.
+			O parametros disponiveis devem ser de acordo com os dados disponiveis na lista 
+			
+# otmizacao
+	Se houver uma maneira para que o usuario possa configurar quais parametros ele quer que apareca para efetuar a buscar
+	
+Resultado Esperado
+	O Usuario podera clicar num botao de pesquisa avancaca onde devem aparecer varios parametros para buscar
+	Manter o filtro para os itens que ja tem na lista que foi carregada

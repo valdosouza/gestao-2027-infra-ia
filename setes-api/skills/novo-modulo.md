@@ -81,6 +81,18 @@ router.use('/<plural>', superGuard, <plural>Routes)   // → /api/<plural>
   (categories/financial-plans); relatórios com totais (ex.: extrato) não paginam.
   Lista com HAVING sobre alias calculado: COUNT via subquery (molde
   `settlements.listBills`).
+- **PESQUISA AVANÇADA na lista** (2026-09-30 — `Infra-IA/prompts/prompt_pesquisa_avancada.md`,
+  D-BA1…D-BA15; molde = `customers` e `service-orders`): lista nova nasce com a
+  LISTA BRANCA de critérios `export const <M>_SEARCH_CRITERIA: readonly SearchCriterion[]`
+  no `<m>.repository.ts` (o SQL mora com quem é dono do SQL; o módulo fornece só a
+  EXPRESSÃO — o operador é da peça pelo `kind`); critério sobre outra tabela =
+  SUBSELECT/EXISTS correlacionado que carrega `tb_institution_id` + `deleted='N'` do
+  alvo (NUNCA JOIN novo — duplicaria o COUNT); `options` reusa a constante do domínio
+  do dto; `labelKey` = `search.<modulo>.<key>`; `lookup` = caminho do PRÓPRIO módulo.
+  Repository anexa `${query.criteria.sql}` à `where` e `...query.criteria.params` aos
+  params (depois do escopo). Controller: `parseListQuery(req, '<modulo>', <M>_SEARCH_CRITERIA)`
+  + `GET /<m>/search-criteria` → `publicCriteria(...)` (expressão nunca sai), registrada
+  ANTES de `/:id`. Swagger declara `criteria`. Índice revisado por critério (D-BA11).
 
 ## Passo 5 — Validar
 

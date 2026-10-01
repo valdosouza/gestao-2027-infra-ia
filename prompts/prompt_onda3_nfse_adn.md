@@ -319,6 +319,16 @@ Rodada 0 da NF-e (`prompt_onda_nfe_sefaz.md`) corrigiu a recomendação daqui, v
 - **D-N13** DANFSe = PDF NOSSO nesta onda (`@shared/danfse`, render server-side do XML autorizado; motor de PDF único
   com o futuro DANFE — D-E13/D-E25).
 - **D-N14** IBS/CBS (b): fora desta onda, com data marcada (01/10/2026); a Onda 4 nasce dentro do período obrigatório.
+  > **Premissa CORRIGIDA (2026-09-30, texto oficial do Ato Conjunto RFB/CGIBS nº 4/2026, lido no PDF do CGIBS)**:
+  > o 01/10/2026 (art. 1º, III, "d") vale para o regime REGULAR. O **§ 1º põe TODO optante do Simples
+  > Nacional em 01/01/2027**, para todos os documentos, sem condição de opção — a Setes é ME/EPP (D-N19a),
+  > logo **nada muda para a Setes em 01/10**. A FAQ local (`faq-nacional.txt` 15.1) diz "optantes que
+  > aderirem voluntariamente" — está ERRADA frente ao texto; vale o Ato. Demais fatos do Ato: a obrigação é
+  > por FATO GERADOR (competência) a partir da data; 1.03/1.05/1.09/16.01, plataformas, locação e bens
+  > imateriais = 01/12/2026; NF-e/NFC-e = 03/08/2026 (monofásica 01/01/2027; não contribuinte de ICMS
+  > 01/12/2026). Até 31/12/2026 a ausência não rejeita; o Ato Conjunto nº 5/2026 (DOU 13/08) criou o
+  > programa de conformidade (adaptação assistida, retificar até 31/12/2026). Consequência: IBS/CBS vira
+  > pré-requisito de (1) o 1º cliente NÃO optante do Simples e (2) a própria Setes em 01/01/2027.
 - **D-N15** Prazo de cancelamento: lê o PAM (`GET /parametros_municipais/{cMun}/convenio`, com cache) e AVISA na tela;
   a recusa definitiva é a do fisco (E0822).
 - **D-N16** Análise fiscal (`e101103`) e substituição (`chSubstda`): fora; atos próprios futuros.

@@ -131,6 +131,18 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
   Filtro novo SEMPRE volta à página 1. Telas em ÁRVORE (SetesTreeView) e
   lookups FK NÃO paginam (D6); lista de apoio que consome endpoint paginado
   pede `pageSize=100` explícito.
+- **PESQUISA AVANÇADA em tela nova** (2026-09-30 — `Infra-IA/prompts/prompt_pesquisa_avancada.md`;
+  molde = `customers`, e `service_orders` para tela de processo): peças em
+  `app/shared/search/` (`SearchCriterion`, `SearchCriteriaValues`, `SearchCriteriaDatasource`
+  amarrado ao `/api/<modulo>` do PRÓPRIO módulo, `showAdvancedSearch`, `SearchCriteriaChips`).
+  Receita: (a) bind `SearchCriteriaDatasourceImpl(client, basePath: '/api/<modulo>')` no módulo;
+  (b) `getList(..., criteria: SearchCriteriaValues)` na cadeia datasource→repository→usecase;
+  (c) evento `<X>ListRequested(..., criteria)` — null MANTÉM os correntes; state carrega
+  `criteria`; bloc guarda `_criteria` e o repassa em TODO emit de lista (chips não piscam);
+  (d) página carrega `criteria()` no initState (falha = sem botão) e passa `searchCriteria`,
+  `searchDatasource`, `criteriaValues`, `onCriteriaChanged` à fábrica — o botão e os chips
+  são da fábrica. Tela com seleção (lote) põe `criteria` na assinatura da seleção.
+  (e) i18n `search.<modulo>.<key>` (+ `<key>Options.<valor>` para `options`) em pt/en.
 - `SetesTextField` ganhou `readOnly`, `hint`, `suffixIcon`/`onSuffixPressed`.
 - `SetesRadioGroup<T>` + `SetesRadioOption<T>` (setes_widgets, 2026-07-17 —
   Rodada 4 do customers): radiobox de escolha ÚNICA em domínio minúsculo
