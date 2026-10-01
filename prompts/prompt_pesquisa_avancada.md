@@ -488,8 +488,11 @@ compilação antiga. Roteiro e evidências:
 - **Achado CORRIGIDO no passeio** (app, commit local): ao voltar do formulário o campo "Filtro" vinha VAZIO com a lista
   ainda filtrada (o "Limpar" da pesquisa avançada parecia deixar 70 em vez de 260) — `RegisterSearchPage.filter` + as
   27 telas da fábrica passam `state.filter`; re-provado ao vivo.
-- **Achado registrado (pré-existente)**: o título do painel de configurações mostra a descrição técnica da interface em
-  inglês ("Configurações das Interfaces · My Establishment") em vez do nome traduzido do menu.
+- **Achado CORRIGIDO (pré-existente)**: o título do painel de configurações mostrava a descrição técnica da interface em
+  inglês ("Configurações das Interfaces · My Establishment") — `InterfaceVitrineEntity.displayName` (catálogo i18n do
+  menu) nos painéis de configurações e de campos (título + vitrine); re-provado ao vivo ("· Meu Estabelecimento").
+  Resíduo: ordenação e filtro dessas vitrines são da API sobre a descrição em inglês ("Bancos" não acha; ordem segue o
+  inglês) — item à parte se o Valdo quiser.
 
 ## 7. Fora de escopo (candidatas)
 
