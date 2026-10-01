@@ -473,6 +473,24 @@ Questões (Rodada 1 desta fase):
 - PADROES_BANCO §10.8 atualizado. API **1625/1625**. Gate socrático do delta **0.80 ✅** (sem questão nova; LOW: a regra
   do relógio por item não tem cerca automática → entrou no checklist da skill `novo-modulo`).
 
+## 11. Passeio logado (2026-09-30, Claude in Chrome com o Valdo autenticado)
+
+Servidor do app estava de 29/09 (antes de tudo — web-server não recompila no F5): reiniciado; tela branca era a
+compilação antiga. Roteiro e evidências:
+- **Clientes**: painel com os 6 critérios traduzidos; Cidade "Curitiba" + Pessoa jurídica + Ativo Sim → **53**
+  (conferido no banco: 53); chips + selo "3"; remover o chip Ativo → 134; filtro rápido "comercio" soma → 41; critérios
+  sobrevivem à ida/volta do formulário (D-BA8).
+- **Ordens de Serviço**: painel com 5 critérios; Valor total de "150" até "1.000,00" → chip "de R$ 150,00 até R$
+  1.000,00" (pt-BR lido como mil — M1) → 3 abertas; critério sobrevive à troca de aba (Faturadas: 28, inclusive a 7374
+  "Cancelada"); lookup de cliente "K2" + valor → 27.
+- **Meu Estabelecimento**: engrenagem no AppBar → painel com "Fuso horário do estabelecimento … Brasília (UTC-3) —
+  padrão do sistema" (não alterado).
+- **Achado CORRIGIDO no passeio** (app, commit local): ao voltar do formulário o campo "Filtro" vinha VAZIO com a lista
+  ainda filtrada (o "Limpar" da pesquisa avançada parecia deixar 70 em vez de 260) — `RegisterSearchPage.filter` + as
+  27 telas da fábrica passam `state.filter`; re-provado ao vivo.
+- **Achado registrado (pré-existente)**: o título do painel de configurações mostra a descrição técnica da interface em
+  inglês ("Configurações das Interfaces · My Establishment") em vez do nome traduzido do menu.
+
 ## 7. Fora de escopo (candidatas)
 
 Pesquisas salvas com nome · operador escolhido pelo usuário · OU entre critérios · exportar resultado
