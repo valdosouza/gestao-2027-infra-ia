@@ -456,7 +456,10 @@ Questões (Rodada 1 desta fase):
   meia-noite usa "ontem" até o fim) × por ORDEM dentro do lote; e as guardas contra o mundo externo (vencimento no
   registro do boleto, "pagamento no futuro") usam o relógio congelado × o agora real. *(Rec.: relógio por ordem no
   lote; guardas externas no agora real.)*
-- Adversarial do delta: em andamento no momento da publicação.
+- Adversarial do delta: **0.80 ✅** (91 testes; relógio sobrevive ao `express.json`, sem vazamento entre operações). MEDIUM
+  do script de pré-deploy (decidia pelo fuso do SO mesmo com o GLOBAL fixado) + LOWs (SQL quebrado virava luz verde;
+  `findFiscalXml` aceitava `../..`) corrigidos no commit de acompanhamento da api. Registrados: fila do webhook roda no
+  relógio da requisição que enfileirou (Q-TZ9); busca de H olha a pasta de P (compatibilidade Q-N38a).
 - **PUBLICADO no GitHub (main)**: api `ad42018` · app `532cd44` · sql `2a82507` · Infra-IA (este commit).
 
 ## 7. Fora de escopo (candidatas)
