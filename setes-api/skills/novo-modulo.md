@@ -81,6 +81,11 @@ router.use('/<plural>', superGuard, <plural>Routes)   // → /api/<plural>
   (categories/financial-plans); relatórios com totais (ex.: extrato) não paginam.
   Lista com HAVING sobre alias calculado: COUNT via subquery (molde
   `settlements.listBills`).
+- **TEMPO** (2026-09-30 — `database/PADROES_BANCO.md` §10): data de negócio SÓ por `todayFor(schema,
+  institution, conn)` (em transação, a conexão dela — nunca 2ª conexão do pool); zero `CURDATE()`/`new Date()`
+  como dia (a cerca `time-zone-fence.test.ts` reprova); **laço longo** (lote, rotina, fila) envolve CADA item em
+  `runWithOperationClock(new Date(), …)`; guarda contra banco/fisco passa o agora real (`todayFor(…, new Date())`);
+  instante com hora sai para o app por `withZoneWall` na fronteira HTTP.
 - **PESQUISA AVANÇADA na lista** (2026-09-30 — `Infra-IA/prompts/prompt_pesquisa_avancada.md`,
   D-BA1…D-BA15; molde = `customers` e `service-orders`): lista nova nasce com a
   LISTA BRANCA de critérios `export const <M>_SEARCH_CRITERIA: readonly SearchCriterion[]`

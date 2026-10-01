@@ -462,6 +462,17 @@ Questões (Rodada 1 desta fase):
   relógio da requisição que enfileirou (Q-TZ9); busca de H olha a pasta de P (compatibilidade Q-N38a).
 - **PUBLICADO no GitHub (main)**: api `ad42018` · app `532cd44` · sql `2a82507` · Infra-IA (este commit).
 
+### 10.5 Q-TZ9 DECIDIDA e EXECUTADA (Valdo 2026-09-30: "siga as recomendações")
+
+- **D-TZ9a** Relógio POR ORDEM nos lotes: faturamento em lote (cada ordem e a passada extra do RESOURCE_BUSY), rotina
+  mensal (a transação de cada cliente) e cada item da fila do webhook do banco (no momento em que é processado) rodam em
+  `runWithOperationClock(new Date(), …)` — um lote que cruza a meia-noite não grava o "ontem" depois dela.
+- **D-TZ9b** Guardas contra o MUNDO EXTERNO usam o AGORA real (`todayFor(…, new Date())`): vencimento no passado ao
+  registrar o boleto no banco, "pagamento no futuro" na liquidação (D-G36) e o dia de fallback quando o banco não manda a
+  data da situação. O relógio congelado vale só para os fatos internos da operação.
+- PADROES_BANCO §10.8 atualizado. API **1625/1625**. Gate socrático do delta **0.80 ✅** (sem questão nova; LOW: a regra
+  do relógio por item não tem cerca automática → entrou no checklist da skill `novo-modulo`).
+
 ## 7. Fora de escopo (candidatas)
 
 Pesquisas salvas com nome · operador escolhido pelo usuário · OU entre critérios · exportar resultado

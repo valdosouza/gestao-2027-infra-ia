@@ -212,5 +212,8 @@ mysql2 + `SET time_zone = '+00:00'` por conexão, conferido no boot) e o **"hoje
 8. **Relógio único por operação** (Q-TZ8): o middleware de `app.ts` fixa o instante da requisição
    (`runWithOperationClock`); todo `todayFor` dela usa esse instante — um faturamento às 23:59:59 não grava
    dias diferentes. Só DATA DE NEGÓCIO; instante real (dhEmi, created_at) segue o agora de verdade.
+   **Lote** (faturamento em lote, rotina mensal, fila do webhook): relógio POR ITEM (`runWithOperationClock(new
+   Date(), …)` em volta de cada item — Q-TZ9). **Guarda contra o mundo externo** (banco/fisco julgam pelo agora:
+   vencimento no passado, pagamento no futuro) passa o agora real explícito: `todayFor(…, new Date())`.
 9. **Pasta do arquivo fiscal** (Q-TZ7): mês contábil na zona do estabelecimento (`saveFiscalXml(…, zone)`); a busca
    tenta o mês da zona e o da hora oficial (arquivos de antes).
