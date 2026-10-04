@@ -179,6 +179,15 @@ a ferro: cada uma nasceu de um CRITICAL/HIGH real.
    `detectLockWaitSupport`; sem suporte cai no `innodb_lock_wait_timeout` com aviso): 1 detentor lento
    não prende o pool inteiro por 50 s; quem espera mais recebe 1205 → 409 RESOURCE_BUSY e NÃO reexecuta
    (falhar cedo é o objetivo — só deadlock 1213 reexecuta).
+8. **Sem PROMOÇÃO de trava na mesma linha** (2026-10-04 — extração fiscal, provado em banco descartável no MariaDB 10.4):
+   quem já segura uma linha por trava de REGISTRO (busca pela PK completa: `… WHERE pk = ? FOR UPDATE`, UPDATE pela PK) não
+   pede depois, na mesma transação, uma trava de FAIXA que a contenha (`… WHERE prefixo_da_pk = ? FOR UPDATE`): a faixa
+   pede next-key na mesma linha e, com um 3º já na FILA dela (ex.: um UPDATE em autocommit), o InnoDB fecha um ciclo e
+   mata a vítima menor com 1213 — que sobe cru para quem não reexecuta. Duas saídas: (a) a trava mais LARGA é o 1º lock da
+   transação; (b) **"travar todas as linhas da chave X" = PK completa por linha** (`prefixo = ? AND col IN (lista fechada
+   do domínio) FOR UPDATE`) — toda trava naquela linha fica de registro, e os valores AUSENTES levam só trava de intervalo
+   (não espera ninguém e ainda segura o INSERT concorrente da mesma chave). Caso real: `lockIssuerRows` do `fiscal-api`
+   (PUT da habilitação × aluguel do rodízio). Teste que fixa: `adversarial-f1r6.live.test.ts` §D "determinístico".
 
 ## 10. Tempo: instante em UTC, data de negócio na zona do estabelecimento (2026-09-30 — Q-TZ1)
 
@@ -217,3 +226,56 @@ mysql2 + `SET time_zone = '+00:00'` por conexão, conferido no boot) e o **"hoje
    vencimento no passado, pagamento no futuro) passa o agora real explícito: `todayFor(…, new Date())`.
 9. **Pasta do arquivo fiscal** (Q-TZ7): mês contábil na zona do estabelecimento (`saveFiscalXml(…, zone)`); a busca
    tenta o mês da zona e o da hora oficial (arquivos de antes).
+
+## 11. Banco de SERVIÇO e contrato de leitura entre serviços (2026-10-04 — extração fiscal, D-F7/D-F15/D-F27/D-F32)
+
+Origem: `prompts/prompt_apis_fiscais_isoladas.md` §14/§15 — as APIs fiscais (`nfse-api`, `nfe-api`, núcleo `fiscal-api`)
+rodam na MESMA instância MySQL do produto, com banco próprio.
+
+1. **Banco de serviço NUNCA se chama `setes_*`** (casaria com o `SCHEMA_RE` dos schemas de cliente): `fiscal_api`.
+   Escopo por LINHA (`tb_institution_id` — id global de `setes_central`), sem schema por cliente; sem FK para outro banco.
+2. **Migrations com namespace por projeto** (`_migrations (project, version)`) e trava nomeada no executor — duas
+   instâncias do serviço sobem juntas. Cada dono cria as SUAS tabelas (núcleo × família — D-F35).
+3. **Contrato de leitura entre serviços = VIEW publicada** (D-F15/D-F32): quem lê o banco do outro lê SÓ a view (versionada
+   como uma API), nunca a tabela interna. A view NÃO pode ter subconsulta na LISTA do SELECT, GROUP BY, DISTINCT ou LIMIT —
+   o MariaDB/MySQL não a FUNDE e a materializa inteira a cada leitura (com 1000 clientes, varredura). "Último evento" vai
+   no ON (`NOT EXISTS (… x.event > e.event)` ou `e.event = (SELECT MAX …)`); conferir `EXPLAIN` (select_type PRIMARY,
+   acesso por chave) antes de publicar. Tipos e regras de leitura da view saem de UMA biblioteca (D-F33), nunca duas cópias.
+4. **Serialização entre serviços = a MESMA linha travada** (D-F27): o `FOR UPDATE` na linha da nota (`tb_invoice` do
+   cliente) é o ponto comum; quem trava primeiro a nota e só depois as suas tabelas (ordem nota → linhas do serviço).
+   Leitura que decide sobre o banco do OUTRO serviço é travante (`LOCK IN SHARE MODE`) ou feita depois da trava da nota
+   (o snapshot do REPEATABLE READ nasce na 1ª leitura consistente — §9 regra 2).
+5. **Permissão por GRANT, não por disciplina** (D-F31): o usuário do serviço tem SELECT no ERP e controle total só no
+   banco dele; o INSERT no ERP pela conexão do serviço tem que falhar (prova no `nfse-api/ops/grants.sql`).
+   ⚠️ MariaDB 10.4 aceita `FOR UPDATE` só com SELECT; MySQL 8.0.22+ exige também DELETE/LOCK TABLES/UPDATE na tabela.
+6. **Segredo em coluna só CIFRADO** (D-F16): AES-256-GCM, chave-mestra fora do banco e do repositório, versão por linha,
+   AAD = identidade da linha (`<tabela>:<chave>` — a cifra copiada para outra linha não abre).
+7. **Exclusão mútua de ROTINA entre instâncias = ALUGUEL por UPDATE atômico numa linha** (coluna `*_lease_until`;
+   `UPDATE … SET lease = NOW()+n WHERE … AND (lease IS NULL OR lease < NOW())` → `affectedRows = 1` ganhou), nunca
+   `GET_LOCK` com a conexão RETIDA enquanto a rotina pede outra conexão ao pool (gates da F1 fiscal: N passadas × pool
+   de N = serviço travado para sempre). Aluguel > orçamento da rotina; queda do processo = o aluguel vence sozinho; quem
+   não obtém o aluguel PULA (`skipped`), não espera. `GET_LOCK` fica para o executor de migrations (uma conexão só).
+   **O comando do aluguel tem ESPERA CURTA** (D-F41, 2026-10-04): se outra transação segura a LINHA (escrevendo a
+   habilitação), o UPDATE não espera o lock wait padrão (50 s) — `innodb_lock_wait_timeout` curto só na sessão daquele
+   comando (UPDATE não aceita `WAIT n`) e 1205 → 409 RESOURCE_BUSY; deadlock reexecuta 1× com aviso (seguro só porque o
+   comando roda em AUTOCOMMIT — o 1213 já o desfez). Peça: `runShortCommand` do núcleo `fiscal-api`.
+8. **Candidata de rodízio/lote é filtrada INTEIRA no SQL, antes do LIMIT** — filtrar em memória depois do LIMIT deixa as
+   linhas descartadas presas no topo e o rodízio para em silêncio (gate socrático HIGH da F1 fiscal).
+9. **Fato NOSSO não carrega o instante da voz do outro sistema**: a UNIQUE `(…, kind, dh)` é a idempotência da VOZ
+   externa (o fisco); reserva/liberação que nós gravamos (K/N do cancelamento) vão com `dh` NULL — com o instante, K → N
+   → K no mesmo segundo colidia na UNIQUE (500, provado ao vivo). O "quando" do fato nosso é o `created_at`.
+10. **Migração por etapas sem dual-write**: enquanto dois sistemas PODEM escrever o mesmo fato, só um escreve por
+    institution — e QUEM escreve é um **FATO MONOTÔNICO na própria linha** que o escritor trava (D-F39: `cutover_at`
+    write-once, NULL = réplica), NUNCA configuração por processo (a lista em variável de ambiente divergia entre
+    instâncias e abria em silêncio — gates da F1). A condição vai NO COMANDO que cunha número / toma aluguel
+    (`… AND cutover_at IS NOT NULL`), não só na borda; leitura velha de um fato monotônico só RECUSA (sem TOCTOU). O ato
+    da virada trava a linha da ORIGEM como 1º comando (antes de qualquer leitura não travante) e vira TODAS as linhas da
+    institution na mesma transação. A re-sincronia origem → destino FALHA ALTO ao achar no destino fato que a origem não
+    tem ou diverge dela (`INSERT IGNORE` sozinho calaria a divergência); depois da virada a origem é CONGELADA e qualquer
+    mudança nela é dual-write. **O ato também APOSENTA a linha da ORIGEM** na mesma transação (D-F44, 2026-10-04 — `deleted='S'`
+    na habilitação SE do ERP, escrita UMA vez pelo script com a credencial do dono da origem): o lado da origem fecha POR
+    CONSTRUÇÃO (quem lá lê só linha viva não cunha mais), em vez de depender de procedimento; quando a linha da origem carrega
+    OUTRO conceito junto (a série da nota), o ato CONFERE que aposentá-la não muda esse conceito e falha alto se mudar. **Só migra o
+    que muda de casa** (D-F42): filtro POSITIVO pelo conceito do destino, nunca "tudo menos X" — a linha que é só do conceito que
+    fica na origem não vira réplica. **Domínio fechado vira CHECK** (D-F45): o 1º CHECK da casa (`ck_establishment_issuer_model`)
+    + conferência no boot de que o motor o aplica (MySQL < 8.0.16 aceita e ignora em silêncio).

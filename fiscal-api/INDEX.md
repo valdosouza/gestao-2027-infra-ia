@@ -1,49 +1,49 @@
-# fiscal-api — Índice (espelho de conhecimento)
+# fiscal-api — Índice (espelho de conhecimento do NÚCLEO COMUM)
 
-**Status**: 🧭 Fase 0 — Rodada 1 PARCIALMENTE DECIDIDA (2026-10-03): D-F1…D-F3 registradas; **nada de código até as decisões Q-F2…Q-F26 fecharem**
-**Projeto**: `D:\Gestao2027\fiscal-api` (Node.js + TypeScript, porta 3002 — repo próprio `valdosouza/gestao-2027-fiscal-api`, a criar)
-**Atende**: qualquer cliente licenciado (inclusive a Setes) e seus múltiplos aplicativos — setes-api, apps web/Android/iOS, apps de venda de terceiros — para EMITIR e AUTORIZAR documentos fiscais (NFS-e pelo ADN nacional; NF-e/NFC-e pela SEFAZ)
-**Escopo**: misto (o conceito "serviço de documento fiscal que não conhece o ERP" é método; ADN, SEFAZ, tabelas e dados da Setes são conteúdo do caso zero)
+**Status**: 🔨 F1 EXECUTADA e GATES FECHADOS (2026-10-04) + Rodada 4 EXECUTADA (D-F36…D-F40) + **Rodada 6 DECIDIDA e EXECUTADA (2026-10-04, 2ª sessão — §17 do prompt: D-F41…D-F45)** — biblioteca do núcleo com 44 testes; migrations 002 (aluguel), 003 (`cutover_at` — virada como fato write-once) e **004 (CHECK do domínio do modelo — 1º CHECK da casa, conferido no boot por `assertIssuerModelDomainEnforced`)**; `lockIssuerRows` trava POR LINHA da PK (nunca faixa — PADROES §9 regra 8); peça `runShortCommand` (D-F41 — comando curto com espera curta na sessão, restaurada; aluguel do rodízio); `openIssuer` com o schema usa o predicado COMPLETO da cerca. Pendem Q-F51…Q-F53 e o gate do delta da Rodada 6.
+**Projeto**: `D:\Gestao2027\fiscal-api` — **biblioteca** do núcleo comum (D-F17); não roda sozinha. Repo `valdosouza/gestao-2027-fiscal-api` (a criar pelo Valdo).
+**Consumida por**: `nfse-api` (porta 3002 — `Infra-IA/nfse-api/INDEX.md`) e `nfe-api` (porta 3003, futura — `Infra-IA/nfe-api/INDEX.md`)
+**Escopo**: misto (o conceito "um emitente habilitado declara um documento ao fisco e recebe a voz dele" e a separação núcleo × fonte de fatos são método; ADN, SEFAZ, tabelas e dados da Setes são conteúdo do caso zero)
 
 ---
 
 ## Comece aqui
 
-- **`../prompts/prompt_apis_fiscais_isoladas.md`** — prompt em otimização (Rodadas 0/1). Vira `prompt_fase1_fiscal_api.md` aqui quando fechar.
-  - §1 inventário MEDIDO do que hoje vive no setes-api (NFS-e em produção desde 2026-09-29) · §3 parecer do guardião conceitual · §4 fronteira (o que migra × o que fica) · §5 arquitetura (`/v1`, licenciado/app/emitente, fluxo, banco `fiscal_api`, multi-app, dimensionamento para 1000, estrutura do projeto) · §6 ondas F0–F5 com esforço + frentes irmãs S1–S3 · §7 decisões D-F · §8 questões Q-F · §10 critérios de aceite
-- Origem fiscal: `../prompts/prompt_onda3_nfse_adn.md` (NFS-e — D-N1…D-N32, produção) e `../prompts/prompt_onda_nfe_sefaz.md` (NF-e — D-E1…D-E25, Rodada 1 decidida, não executada)
-- Contratos oficiais dos fiscos: hoje em `../setes-api/integracoes/nfse-adn/` (ADN/Sefin Nacional); `nfe-sefaz/` ainda não levantado — passam para `integracoes/` aqui quando a F1 começar
+- **`../prompts/prompt_apis_fiscais_isoladas.md`** — prompt da extração fiscal (Rodadas 0–2). **§7 = D-F1…D-F26 (permanentes) · §12 = plano VIGENTE** (topologia, fronteira, modelo candidato do `fiscal_api`, serialização, auth, cofre, ondas, critérios). §3–§6/§10/§11 = registro das Rodadas 0/1 (superadas onde conflitam com o §12). Vira `prompt_fase1_*.md` aqui quando a F1 fechar.
+- Origem fiscal: `../prompts/prompt_onda3_nfse_adn.md` (NFS-e — D-N1…D-N38, produção desde 2026-09-29) e `../prompts/prompt_onda_nfe_sefaz.md` (NF-e — D-E1…D-E25)
+- Contrato oficial do ADN: hoje em `../setes-api/integracoes/nfse-adn/` (muda para `../nfse-api/integracoes/` na F1)
 
-## O conceito (parecer do guardião, 2026-10-03)
+## O desenho em uma tela (Rodada 2 do Valdo, 2026-10-03)
 
-> *Um emitente habilitado declara um documento fiscal ao fisco e recebe a voz dele.*
+| Decisão | O que fixa |
+|---|---|
+| **D-F4** | setes-api PASSIVO: nunca chama as APIs fiscais; o setes-app (e qualquer front-end) é o cliente direto |
+| **D-F9** | SaveInCloud: 1 instância MySQL (todos os schemas + `fiscal_api`) · Node setes-api · Node setes-sync · Node nfse-api · Node nfe-api · Plesk com o build Flutter apontando para as três APIs |
+| **D-F10** | a API fiscal LÊ o banco do produto (o app manda só a referência da nota) por uma **fonte de fatos** isolada; o núcleo é cego ao ERP |
+| **D-F11** | o EFEITO no ERP (C local) é do setes-api, lendo a voz direto no `fiscal_api`; sem recibo/webhook/federação |
+| **D-F12/D-F17** | três pastas: `fiscal-api` (núcleo, biblioteca) · `nfse-api` · `nfe-api` (serviços por família) |
+| **D-F13** | mesmo login do produto, JWT **RS256** (as APIs fiscais só têm a chave pública) |
+| **D-F14** | sem `tb_licensee`: licenciado = institution; licença = interface do ramo contratada |
+| **D-F15** | contrato de leitura por VIEWs + GRANT mínimo (API fiscal só SELECT no ERP; setes-api só SELECT nas views) |
+| **D-F16** | A1 CIFRADO no `fiscal_api` (AES-256-GCM, chave-mestra em variável de ambiente); XML atrás de interface de storage |
+| **D-F7/D-F8** | banco `fiscal_api` único (nunca `setes_*`); `/v1` na URL |
+| **D-F18/D-F19** | corte da Setes por migração única, H antes de P; extrair no dev, depois a Onda 4 já na topologia final |
+| **D-F20/D-F21/D-F22** | nfe-api sem código até o 1º cliente de mercadoria; série/número do 55/65 no ERP; IBS/CBS fase própria (marco 01/01/2027) |
 
-A API responde pelo **FORMATO e pela CONVERSA** (leiaute, assinatura XMLDSig, mTLS com o A1, tentativa, voz append-only, XML em arquivo, PDF). O sistema que chama responde pelo **CONTEÚDO** (o que foi vendido/prestado, por quem, a quem, com que imposto). A API **não calcula imposto** e **não conhece pedido, nota, cliente ou cadeia** de quem chama — teste do terceiro cego: o Gestao2016 não tem `tb_entity`; tudo que o contrato exigir e ele não puder mandar está do lado errado da cerca.
+## O que o núcleo guarda (§12.2 do prompt)
 
-## Decisões-chave (detalhe no prompt §7)
+transporte mTLS + XMLDSig paramétrico · `tb_emitter` (A1 cifrado) + `tb_issuer` (habilitação por modelo) · máquina tentativa × voz · storage do XML · auth pelo JWT do produto · base da fonte de fatos Gestão 2027 (SÓ-SELECT) · migrations e views do `fiscal_api`.
 
-- **D-F1** `fiscal-api` é UM projeto/serviço com famílias `/v1/nfse` e `/v1/nfe` (nome pelo conceito, não pelo documento; cofre duplicado por documento = maquete). Dois processos por família é topologia de deploy, não modelo.
-- **D-F2** Todo cliente consome direto, com múltiplos apps: `tb_licensee` (cliente) → `tb_licensee_app` (credencial por aplicativo, escopos, token curto) → `tb_emitter`/`tb_issuer` (CNPJ + A1 + habilitação por modelo). O setes-api é UM dos apps.
-- **D-F3** Escala alvo: 1000 clientes emitindo e autorizando — F3 = produção escalável (2+ instâncias, storage de objeto, cofre criptografado, worker, teste de carga como aceite).
-- Herdadas e vigentes: D-N31 (um A1 por estabelecimento), D-E1 (habilitação por MODELO), D-E6 (UMA política da voz, estratégia por ramo), D-I10/D-I25/D-I28 (voz do terceiro × efeito nosso; pendência + reaplicar), D-E20 (NF-e só com o 1º cliente de mercadoria — vale para o QUANDO; o ONDE é a API).
+## Regras inegociáveis para quem for codificar
 
-## Regras inegociáveis para quem for codificar (quando a F1 abrir)
-
-1. Nenhum import de `tb_invoice`, `tb_order`, `tb_entity*` — a cerca é testada por lint/grep (critério §10.1).
-2. Estado é DERIVADO da última voz da última tentativa — nunca coluna `status`; 2xx ilegível = ambíguo (502/K), nunca aceite; recusa de REGRA ≠ transitório.
-3. Idempotência POR CONSTRUÇÃO: UNIQUE `(licensee, emitter, external_code)` — retry acha o documento, nunca cria o segundo.
-4. Nenhum `Map/Set` de controle em memória de processo (lote/rodízio/trava) — trava no banco (`FOR UPDATE WAIT n`) ou worker.
-5. Segredo nunca em coluna, log ou resposta; A1 abre no upload (PKCS#12 → PEM), senha não persiste (D-N5).
-6. Padrões herdados do workspace: `PADROES_BANCO.md` (UTC na sessão, REPEATABLE READ, contadores sob lock), envelope de erro `{error, code, fields[]}`, Swagger obrigatório, módulo de cadastro em 6 arquivos (`ARQUITETURA_MODULOS_API.md`), gates socrático ≥ 0,70 + adversarial sem HIGH antes de "pronto".
-
-## Como vai rodar em dev (previsto para a F1)
-
-- `fiscal-api/.env` (`PORT=3002`, `DB_*` → banco `fiscal_api`, `SECRETS_PATH`, `STORAGE_PATH`, `JWT_SECRET` dos tokens de app) → `npm run dev`
-- setes-api aponta para ela por `FISCAL_API_URL` + credencial de app (`tb_licensee_app` da institution) — F2
-- Smoke: `scripts/smoke-adn-h.ts` com o A1 real da Setes (vence 08/10/2026) · Carga: `scripts/carga-fiscal.ts` contra fisco falso
+1. Nenhum `tb_invoice`/`tb_order`/`tb_entity*` FORA da fonte de fatos (cerca por teste — §12.8-1).
+2. Estado DERIVADO da última voz; 2xx ilegível = ambíguo; recusa de REGRA ≠ transitório.
+3. Nenhum `Map/Set` de controle em memória; o que cruza com o setes-api serializa pela trava nomeada da instância, tomada ANTES do BEGIN (§12.4).
+4. Segredo nunca em claro em coluna, log ou resposta; senha do PKCS#12 não persiste (D-N5).
+5. `PADROES_BANCO.md` (UTC, REPEATABLE READ, contadores sob lock) + `revisar-ddl.md` antes de DDL; gates socrático ≥ 0,70 + adversarial sem HIGH.
 
 ## Referências
 
-- Método: `../skills-genericas/refinar-prompt-arquitetura.md` · `../skills-genericas/guardiao-conceitual.md` (palavras ocupadas: emissor, transmissão, voz, autoridade, chave, segredo, canal)
-- Precedentes de desenho: apresentação × voz do boleto (`../prompts/prompt_onda2_banco_inter.md`), API key por institution do sync (D12 em `../setes-sync/prompt_revisao_sincronizador_setes_sync.md`)
-- Deploy/produção: Onda 4 em `../prompts/prompt_primeiro_cliente_setes.md` (D3 SaveInCloud; Q5/Q6 abertas)
+- Método: `../skills-genericas/refinar-prompt-arquitetura.md` · `../skills-genericas/guardiao-conceitual.md`
+- Precedentes: apresentação × voz do boleto (`../prompts/prompt_onda2_banco_inter.md`); serviço Node separado operando sobre os bancos do produto = setes-sync (`../setes-sync/`)
+- Produção: Onda 4 em `../prompts/prompt_primeiro_cliente_setes.md` (herda a topologia D-F9)

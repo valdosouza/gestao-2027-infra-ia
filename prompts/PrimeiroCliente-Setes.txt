@@ -1,5 +1,5 @@
 # contexto
-	Primeiro cliente devera ser a propria setes, com os contratos de servico de software e manutencao via suporte
+	TEla de Backup precisa tratar qual pc 
 
 # Objetivo
 	Criar tracking the entrega de ponta a ponta. checando todos os processos

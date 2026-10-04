@@ -70,6 +70,14 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
   de qualquer módulo cujo DOCUMENTO passa por eles — hoje `orders` (venda), `order_returns`
   (devolução) e `service_orders` (cancelar a nota da OS). Fora dessa lista a regra continua:
   módulo fala só com o seu `/api/<módulo>` e com lookups em `shared/lookup`.
+  **APIs fiscais (D-F4, Valdo 2026-10-03 — `Infra-IA/prompts/prompt_apis_fiscais_isoladas.md` §7/§12)**:
+  o app passa a falar com as APIs DO PRODUTO — setes-api, **nfse-api** (e a futura nfe-api) — cada uma
+  com base de URL própria (`--dart-define`, build publicado no Plesk) e **datasource DEDICADO por API e
+  por módulo**; nunca cruza datasources (o datasource da nfse-api não chama o setes-api e vice-versa).
+  O setes-api é PASSIVO diante das APIs fiscais; o mesmo JWT do login vale nas duas (RS256 — D-F13).
+  Sagas que atravessam as duas (ex.: cancelar a nota com NFS-e autorizada = nfse-api `cancel` → setes-api
+  `/api/billing/cancel`) são orquestradas pelo app, idempotentes e resumíveis. Implementação na F2b
+  (os 17 arquivos Dart do fiscal de `service_orders`/`establishment` ainda falam com `/api/billing/fiscal*`).
 - **repository** (abstract no domain + impl no data): converte exceção em
   `Either<Failure, T>` (dartz — decisão 12).
 - **usecases**: 1 arquivo por operação — `<X>Getlist`, `<X>Post`, `<X>Put`, `<X>Delete`.
