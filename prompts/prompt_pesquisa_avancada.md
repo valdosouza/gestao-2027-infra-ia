@@ -4,7 +4,7 @@
 **Origem**: rascunho do Valdo `prompts/PromptBuscaAvancada.txt` (2026-09-30) — "vamos tratar como uma onda separada"
 **Estado**: **Onda 2 ENTREGUE (2026-10-03, §12.5–§12.7)** — as 26 telas da fábrica com critérios em 2 blocos (D-BA20…D-BA28),
 gates socrático 0.78/0.80 ✅ + adversarial ao vivo com 4 achados corrigidos; API 1781/1781 · app 161/161 · smoke 520/520;
-commits locais; pendem Q-BA26…Q-BA28 e o passeio logado · antes: Rodada 0 organizada (§12) · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
+commits locais; Q-BA26…Q-BA28 DECIDIDAS (§12.8, D-BA29…D-BA31 — nenhuma questão aberta); pendem passeio logado e push · antes: Rodada 0 organizada (§12) · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
 customers + service-orders nos dois lados; gates socrático 0.68 → **0.78 ✅** · adversarial 0.66 → **0.84 ✅**; API 1497/1497 ·
 app 159/159 · smoke ao vivo 17/17 · Rodada 2 EXECUTADA (§9.3: D-BA16…D-BA19; **Q-BA16 aberta** — pedido de explicação) · fuso TZ-1 + Rodada 2 executados (§10–§10.4) · **PUBLICADO 2026-09-30** · pendem passeio logado e Q-TZ9
 **Método**: `skills-genericas/refinar-prompt-arquitetura.md` · antes do DDL/peça: `skills-genericas/guardiao-conceitual.md`
@@ -681,7 +681,7 @@ idêntico sem critério, shape 'set', users foco/Super, contracts carteira/mv) �
 (ListQuery sem `criteria`) e `providers.test` (mock parcial de `@shared/entity` — `requireActual` para os helpers;
 LIÇÃO: mock parcial de peça que participa do LOAD do módulo quebra na importação).
 
-**Questões novas (do parecer — aguardam o Valdo; executadas pela recomendação como assunção):**
+**Questões novas (do parecer — executadas pela recomendação como assunção; DECIDIDAS na §12.8 = D-BA30/D-BA31):**
 - **Q-BA27** Super SEM foco na lista de usuários: (a) servir `institution` e NÃO servir `kind` até haver foco
   (executado); (b) exigir foco para o Super (como privilégios) — `institution` viraria seletor e D-BA24 seria revista.
 - **Q-BA28** Leitura de "conviver" (D-BA21) para `users`: `institution` (pertence a X) e `institutionId` (foco) são
@@ -778,16 +778,38 @@ catálogo inteiro). i18n `search.<m>.*` reaproveita o texto dos forms (origem/fi
 **Commits locais (push só com "vai")**: api `56c3af2` · app `dbd357c` (Bloco 2); Bloco 1 em api `e7b73f9`+`84e7d1a` · app
 `7bd0aad`.
 
-**Questões abertas da onda**: **Q-BA26** (nome traduzido das vitrines), **Q-BA27** (Super sem foco em usuários),
-**Q-BA28** (leitura de "conviver" em usuários). Passeio logado da Onda 2 pendente (todas as 28 telas da fábrica têm
-o botão; roteiro sugerido: papéis com cidade/documento, contratos por valor mensal, regras de tributação "tem ICMS",
-usuários Super com/sem foco). Onda 3 (telas de processo: pedidos, títulos, boletos, cheques, devoluções, baixas) é a
-próxima — e é onde a cerca M5 vai mostrar volume de verdade.
+### 12.8 Rodada Q-BA26…Q-BA28 DECIDIDA (Valdo 2026-10-03: "siga as recomendações nas Q-BA26 a Q-BA28")
+
+As três já estavam executadas como assunção — a rodada só as CONFIRMA; nenhum código mudou.
+
+- **D-BA29 (= Q-BA26, Rec. a)** Vitrines (`interface-configs`/`interface-fields`): ordenação, filtro rápido e o
+  critério `name` seguem sobre a descrição TÉCNICA da interface (`tb_interface.description`/`i18n_key`) — quem usa os
+  painéis é Super/admin, que conhece o nome técnico; o rótulo i18n do critério diz "Nome técnico da interface". A
+  opção (b) — nome de exibição traduzido no banco (`tb_interface` ganhando o nome por idioma, DDL + seed, vale também
+  para o menu) — fica como **item próprio** em "Fora de escopo" (§7), a abrir quando o Valdo quiser o produto em
+  português de ponta a ponta; passa pelo guardião antes do DDL.
+- **D-BA30 (= Q-BA27, Rec. a)** Lista de usuários do Super SEM foco (`institutionId` ausente): serve `institution`
+  ("pertence a") e NÃO serve `kind` — perfil é atributo do VÍNCULO e sem vínculo em foco não tem significado; a rota
+  `/users/search-criteria` recebe o mesmo `institutionId` da lista (espelho da D-BA15) e, pela regra "catálogo servido
+  = catálogo aceito", `kind` mandado sem foco = 400. Nenhuma tela existente muda (a de privilégios continua exigindo
+  foco por motivo próprio).
+- **D-BA31 (= Q-BA28, confirmada)** Em `users`, o critério `institution` ("pertence à instituição X", 1:N, `shape:'set'`)
+  e o parâmetro `institutionId` (FOCO — o vínculo cujo perfil a linha mostra) são DOIS conceitos que coexistem (D-BA21
+  "conviver"): "usuários da instituição em foco Y que também pertencem a X" é pergunta legítima do Super. Conhecimento
+  negativo: não "unificar" os dois depois — o foco governa a coluna/critério `kind`; o critério só estreita.
+
+**Nenhuma questão aberta na Onda 2.** Pendências: passeio logado (todas as 28 telas da fábrica têm o botão; roteiro
+sugerido: papéis com cidade/documento, contratos por valor mensal, regras de tributação "tem ICMS", usuários Super
+com/sem foco) e o push (commits locais). Onda 3 (telas de processo: pedidos, títulos, boletos, cheques, devoluções,
+baixas) é a próxima — e é onde a cerca M5 vai mostrar volume de verdade.
 
 ## 7. Fora de escopo (candidatas)
 
 Pesquisas salvas com nome · operador escolhido pelo usuário · OU entre critérios · exportar resultado
-(CSV/planilha) · ordenação por coluna escolhida pelo usuário · pesquisa avançada nos lookups (`SetesLookupField`).
+(CSV/planilha) · ordenação por coluna escolhida pelo usuário · pesquisa avançada nos lookups (`SetesLookupField`) ·
+**nome de exibição traduzido das interfaces no banco** (D-BA29 (b) — vitrines e menu ordenam/filtram pelo nome que o
+usuário lê; DDL em `tb_interface` + seed, guardião antes) · **`ListRequest` compartilhado no `packages/core`**
+(D-BA26 — filtro + página + critérios atravessando a cadeia de uma vez; refatoração dos 28 módulos, decisão própria).
 
 ## 8. Critérios de sucesso (rascunho — fecham com a Rodada 1)
 
