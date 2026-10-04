@@ -17,6 +17,7 @@
 | `setes-app/` | Aplicativo Flutter Web e Android (repo git próprio) | usuário final |
 | `setes-sync/` | API de sincronização (repo git próprio) | sincronizador |
 | `sincronizador/` | Cliente Delphi legado — lê gestão desktop e envia ao setes-sync (repo git próprio) | setes-sync |
+| `fiscal-api/` | Serviço de documento fiscal — NFS-e (ADN) e NF-e/NFC-e (SEFAZ); porta 3002, banco `fiscal_api` (repo git próprio; criado 2026-10-03 pela D-F1, Fase 0 sem código) | qualquer cliente licenciado e seus apps (setes-api é um deles) |
 | `sql/` | Scripts canônicos do banco (repo git próprio) — conhecidos por TODOS os projetos | todos |
 
 **Regra**: arquivo novo na raiz = arquivo no lugar errado. A única exceção é o `CLAUDE.md` (função técnica: é onde o Claude Code procura).
@@ -39,6 +40,7 @@ Infra-IA/
 ├── setes-app/               ← espelho (em construção)
 ├── setes-sync/              ← espelho
 ├── Sincronizador/           ← espelho
+├── fiscal-api/              ← espelho (INDEX.md criado 2026-10-03; prompt em otimização ainda em prompts/)
 └── integration/             ← testes E2E entre projetos
 ```
 
