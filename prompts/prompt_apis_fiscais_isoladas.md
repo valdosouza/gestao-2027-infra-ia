@@ -10,9 +10,10 @@
 > **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F46 (§7); as 4 falhas ao vivo do §16.4
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
-> ERP · D-F45 CHECK do domínio do modelo, migration 004). **1º passo: gate do delta da Rodada 6** (§17.4); depois Q-F51…Q-F53
+> ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
 > (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
-> = **D-F46** (bloqueio total; código: filtrar a passada do rodízio pelos ramos contratados — §17.4), Q-F53 aguarda; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> = **D-F46** (bloqueio total; executada — §17.5), Q-F53 aguarda; **gates do delta da Rodada 6 + D-F46 FECHADOS** (§18: socrático
+> 0,76 · adversarial r8 0,80; 2 achados corrigidos); **Q-F57…Q-F59 (§8.R7) aguardam o Valdo**; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
 > + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
@@ -597,6 +598,31 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   só em código, como está. Modelo novo (57…) = migration do núcleo que estende o domínio. NÃO entra: CHECK "réplica ⇒ SE"
   (é história da migração, não fato do núcleo) nem tabela-catálogo de modelos (lê-la antes do FOR UPDATE recriaria o
   snapshot antes da trava). *(Rec.: (a), passando pelo `revisar-ddl`.)*
+
+### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — ⚠️ AGUARDA O VALDO
+
+- **Q-F57 Nota VIVA de ramo descontratado trava o emitente inteiro (consequência da D-F46).** Uma tentativa em voo / S / K de
+  um ramo que saiu do contrato nunca mais reconcilia (a passada a filtra; a rota por nota dá 403 a todos), mas
+  `countLiveTransmissions` conta TODOS os ramos — e a guarda do emitente (`emitter.service.ts`) passa a recusar PARA SEMPRE
+  trocar o ambiente, excluir a habilitação e excluir o A1, também para o ramo que continua contratado. Mesmo resolvida no
+  portal do ADN, o `fiscal_api` nunca fica sabendo. (a) `countLiveTransmissions` conta só os ramos contratados (o emitente fica
+  livre; a nota órfã fica "viva" para sempre no `fiscal_api`) · (b) refinar a D-F46: a passada continua reconciliando nota JÁ
+  VIVA de ramo cortado (não é serviço novo, é fechar o que estava em curso; consultar, cancelar e ler continuam 403) · (c) ato
+  do admin "encerrar sem reconciliar" com motivo (voz nova, auditável) · (d) manter: o cliente recontrata o ramo para
+  destravar. *(Rec.: (b) — é o mínimo que não deixa estado eterno no banco e não reabre nada da D-F46 para o usuário; (a)
+  esconde o problema; (d) depende do comercial para destravar o fiscal.)*
+- **Q-F58 A re-sincronia trava as habilitações VIRADAS de todas as institutions até o fim.** `resyncAll` usa UMA transação
+  para todas (D-F18 "tudo ou nada"); com a trava por linha do §17.2, as linhas viradas ficam FOR UPDATE até o commit final —
+  durante uma re-sincronia longa, transmitir/cancelar nelas esperam até 50 s e voltam 409, a passada volta 409 em 3 s.
+  (a) transação POR institution (o tudo-ou-nada global não protege nenhum invariante ENTRE institutions) · (b) pular as viradas
+  na passada geral e conferi-las (`assertFrozen`) numa transação curta própria · (c) manter e rodar só em janela de
+  manutenção. *(Rec.: (a) — com 1 institution hoje é igual; com várias, é a única que não para quem já virou.)*
+- **Q-F59 O ato da virada confere POR CONSTRUÇÃO que a F2a está no ar?** Até a F2a, o `upsertIssuer` do setes-api (tela
+  "Emissor fiscal", `ON DUPLICATE KEY UPDATE … deleted='N'`) REVIVE a linha SE que a D-F44 aposentou — e a tela, mostrando "sem
+  habilitação SE", convida o admin a recriá-la; o contador congelado do ERP volta a cunhar nDPS já usados (R2-2). Hoje só a
+  re-sincronia seguinte detecta e a defesa é a flag `--confirmo-setes-api-parado`. (a) o ato confere um FATO do setes-api
+  (ex.: a migration da F2a que tira a SE da tela aplicada no schema) e recusa sem ele · (b) manter procedimental + detecção.
+  *(Rec.: (a) — a virada só acontece depois da F2a de qualquer jeito; conferir custa uma leitura.)*
 ---
 
 ## 9. Fora de escopo desta fase
@@ -1177,4 +1203,28 @@ inventário dos demais achados da F1 que valem para o setes-api (A14 da D-F43). 
 
 `nfse-api` 148 unit (131 ao vivo pulados — sem banco na nuvem), `tsc` limpo. **Falta na máquina do Valdo**: rodar as suítes
 ao vivo e `npm run explain:leituras` (o plano com o JOIN novo na view de política — D-F40).
+
+## 18. Gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — nuvem; agentes que não fizeram a entrega)
+
+**Socrático 0,76 ✅** (`revisar-riscos-sistemicos`; nenhum HIGH; 2 MEDIUM + 5 LOW) · **Adversarial r8 0,80 ✅** (`testar-adversarial`;
+nenhum HIGH/CRITICAL; 2 MEDIUM + 5 LOW; `adversarial-f1r8.test.ts` no núcleo (8, todos resistidos) e na nfse-api (18)). Só
+unitário: as suítes ao vivo pedem o banco do dev.
+
+| Achado | Sev. | Destino |
+|---|---|---|
+| [r8-cancel-idem] o retrabalho do §17.2 pôs o `openIssuer` travante ANTES das saídas sem fisco: retry com voz C e A1 vencido/apagado = 409 FISCAL_CERT_* (contrato: 200 `atAuthority=false`); nota nunca transmitida = "envie o .pfx" (contrato: FISCAL_NOT_AUTHORIZED) | MEDIUM (provado) | **CORRIGIDO** (sem decisão): a conferência do A1 sob a trava foi para logo antes do K; o "nenhum K vivo sem A1" continua provado (`it` "resistiu") |
+| [r8-resync-55] re-sincronia pulava institution sem SE no ERP antes de conferir réplica de outro modelo → institution travada sem saída | LOW (provado) | **CORRIGIDO**: leitura NÃO travante das linhas antes do `continue` (travar pegaria gap lock em institution sem linha) |
+| nota viva de ramo descontratado trava o emitente para sempre | MEDIUM | **Q-F57** |
+| re-sincronia segura a trava das viradas de todas as institutions | MEDIUM | **Q-F58** |
+| setes-api revive a SE aposentada antes da F2a | MEDIUM/LOW | **Q-F59** |
+| aluguel por institution: a passada de um conjunto de ramos dá `skipped` a quem tem outro | LOW | aceito (atraso, sem dado errado) |
+| `interfaces` opcional = sem filtro em chamada interna; pendentes com 2 ramos × passada/rota com 3 | LOW | aceito; a rota sempre passa (teste); pendentes = transmissão NOVA (devolução não gera SE) |
+| boot prova que o motor aplica CHECK, não que o domínio do CHECK = `ISSUER_MODELS` instalado; 004 não reexecutável | LOW | registrar para a F4 (nfe-api estende o domínio) |
+| `runShortCommand` não encurta `lock_wait_timeout` (metadados — ALTER concorrente) | LOW | F3 (deploy rolante) |
+| `requireCutover` antes das guardas: ramo não contratado em institution não virada vê 409 da cerca, não 403 | LOW | aceito (mesma empresa; o bloqueio vale) |
+| `--cutover --dry-run` segura o FOR UPDATE da SE de produção do ERP e exige o `--confirmo` | LOW | ensaio curto; registrar no roteiro da virada |
+| regex da CERCA D-F31 não pega `UPDATE IGNORE`/`DELETE t FROM`/multi-tabela | LOW | endurecer quando mexer na cerca |
+
+Provas: `fiscal-api` 52/52 · `nfse-api` 166 unit (131 ao vivo pulados) · `tsc` limpo nos dois. **Na máquina do Valdo**: suítes
+ao vivo + `npm run explain:leituras` (JOIN novo da D-F46). Próximo: Q-F53, Q-F57…Q-F59 → F2a.
 
