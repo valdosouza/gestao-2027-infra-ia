@@ -7,13 +7,13 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F46 (§7); as 4 falhas ao vivo do §16.4
+> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F48 (§7); as 4 falhas ao vivo do §16.4
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
 > (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
 > = **D-F46** (bloqueio total; executada — §17.5), Q-F53 aguarda; **gates do delta da Rodada 6 + D-F46 FECHADOS** (§18: socrático
-> 0,76 · adversarial r8 0,80; 2 achados corrigidos); **Q-F57…Q-F59 (§8.R7) aguardam o Valdo**; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57/Q-F58 DECIDIDAS e executadas (D-F47/D-F48, §18.1); **Q-F59 em esclarecimento**; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
 > + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
@@ -464,7 +464,19 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   (`POST /v1/nfse/refresh`) hoje passa na guarda com UM ramo contratado e consulta as candidatas de TODOS os ramos — passa a
   filtrar as candidatas pelos ramos contratados em que quem pede tem o privilégio (ou é admin), no SQL antes do LIMIT (molde
   do `listPendingServiceInvoices`). *Por quê*: licença é o que se vendeu; o produto não presta serviço fiscal a ramo não
-  contratado. Risco aceito e registrado: nota em voo no momento do corte fica sem reconciliação pelo produto.
+  contratado. ~~Risco aceito e registrado: nota em voo no momento do corte fica sem reconciliação pelo produto.~~ → REFINADA pela
+  **D-F47** (a passada fecha as vivas do ramo cortado).
+- **D-F47 (= Q-F57 (b) — Valdo, 2026-10-04) — a PASSADA do rodízio continua fechando a tentativa JÁ VIVA (sem voz/S/K) de
+  ramo que saiu do contrato** (refina a D-F46): fechar o que estava em curso não é serviço novo. A autorizada (A/N) de ramo
+  cortado NÃO volta ao rodízio; consultar, cancelar e ler a nota continuam 403 para todos. Admin com NADA contratado pode rodar
+  a passada só sobre essas vivas (usuário comum sem ramo com privilégio: 403). *Por quê*: sem isso a nota órfã ficava viva para
+  sempre e `countLiveTransmissions` travava o emitente inteiro (trocar ambiente, excluir habilitação/A1) — achado MEDIUM-1 do
+  gate socrático (§18).
+- **D-F48 (= Q-F58 (a) — Valdo, 2026-10-04: "recomendação") — a re-sincronia (`migrate:setes` sem `--cutover`) usa UMA
+  TRANSAÇÃO POR INSTITUTION** (revisa o "tudo ou nada" global da D-F18 só na re-sincronia; a virada continua uma transação
+  só). A institution que falha volta sozinha (nada dela gravado), as demais seguem, e o script sai ≠ 0 listando as que
+  falharam. *Por quê*: o tudo-ou-nada global não protegia invariante entre institutions e segurava FOR UPDATE nas
+  habilitações VIRADAS de todas até o commit final (§18, MEDIUM-2).
 
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
@@ -599,9 +611,9 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   (é história da migração, não fato do núcleo) nem tabela-catálogo de modelos (lê-la antes do FOR UPDATE recriaria o
   snapshot antes da trava). *(Rec.: (a), passando pelo `revisar-ddl`.)*
 
-### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — ⚠️ AGUARDA O VALDO
+### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — Q-F57/Q-F58 DECIDIDAS (D-F47/D-F48) · ⚠️ Q-F59 em esclarecimento
 
-- **Q-F57 Nota VIVA de ramo descontratado trava o emitente inteiro (consequência da D-F46).** Uma tentativa em voo / S / K de
+- ~~**Q-F57 Nota VIVA de ramo descontratado trava o emitente inteiro (consequência da D-F46).**~~ → **DECIDIDA = D-F47** ((b)). Uma tentativa em voo / S / K de
   um ramo que saiu do contrato nunca mais reconcilia (a passada a filtra; a rota por nota dá 403 a todos), mas
   `countLiveTransmissions` conta TODOS os ramos — e a guarda do emitente (`emitter.service.ts`) passa a recusar PARA SEMPRE
   trocar o ambiente, excluir a habilitação e excluir o A1, também para o ramo que continua contratado. Mesmo resolvida no
@@ -611,7 +623,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   do admin "encerrar sem reconciliar" com motivo (voz nova, auditável) · (d) manter: o cliente recontrata o ramo para
   destravar. *(Rec.: (b) — é o mínimo que não deixa estado eterno no banco e não reabre nada da D-F46 para o usuário; (a)
   esconde o problema; (d) depende do comercial para destravar o fiscal.)*
-- **Q-F58 A re-sincronia trava as habilitações VIRADAS de todas as institutions até o fim.** `resyncAll` usa UMA transação
+- ~~**Q-F58 A re-sincronia trava as habilitações VIRADAS de todas as institutions até o fim.**~~ → **DECIDIDA = D-F48** ((a)). `resyncAll` usa UMA transação
   para todas (D-F18 "tudo ou nada"); com a trava por linha do §17.2, as linhas viradas ficam FOR UPDATE até o commit final —
   durante uma re-sincronia longa, transmitir/cancelar nelas esperam até 50 s e voltam 409, a passada volta 409 em 3 s.
   (a) transação POR institution (o tudo-ou-nada global não protege nenhum invariante ENTRE institutions) · (b) pular as viradas
@@ -1214,8 +1226,8 @@ unitário: as suítes ao vivo pedem o banco do dev.
 |---|---|---|
 | [r8-cancel-idem] o retrabalho do §17.2 pôs o `openIssuer` travante ANTES das saídas sem fisco: retry com voz C e A1 vencido/apagado = 409 FISCAL_CERT_* (contrato: 200 `atAuthority=false`); nota nunca transmitida = "envie o .pfx" (contrato: FISCAL_NOT_AUTHORIZED) | MEDIUM (provado) | **CORRIGIDO** (sem decisão): a conferência do A1 sob a trava foi para logo antes do K; o "nenhum K vivo sem A1" continua provado (`it` "resistiu") |
 | [r8-resync-55] re-sincronia pulava institution sem SE no ERP antes de conferir réplica de outro modelo → institution travada sem saída | LOW (provado) | **CORRIGIDO**: leitura NÃO travante das linhas antes do `continue` (travar pegaria gap lock em institution sem linha) |
-| nota viva de ramo descontratado trava o emitente para sempre | MEDIUM | **Q-F57** |
-| re-sincronia segura a trava das viradas de todas as institutions | MEDIUM | **Q-F58** |
+| nota viva de ramo descontratado trava o emitente para sempre | MEDIUM | Q-F57 → **D-F47 EXECUTADA** (§18.1) |
+| re-sincronia segura a trava das viradas de todas as institutions | MEDIUM | Q-F58 → **D-F48 EXECUTADA** (§18.1) |
 | setes-api revive a SE aposentada antes da F2a | MEDIUM/LOW | **Q-F59** |
 | aluguel por institution: a passada de um conjunto de ramos dá `skipped` a quem tem outro | LOW | aceito (atraso, sem dado errado) |
 | `interfaces` opcional = sem filtro em chamada interna; pendentes com 2 ramos × passada/rota com 3 | LOW | aceito; a rota sempre passa (teste); pendentes = transmissão NOVA (devolução não gera SE) |
@@ -1227,4 +1239,14 @@ unitário: as suítes ao vivo pedem o banco do dev.
 
 Provas: `fiscal-api` 52/52 · `nfse-api` 166 unit (131 ao vivo pulados) · `tsc` limpo nos dois. **Na máquina do Valdo**: suítes
 ao vivo + `npm run explain:leituras` (JOIN novo da D-F46). Próximo: Q-F53, Q-F57…Q-F59 → F2a.
+
+### 18.1 D-F47 e D-F48 executadas (2026-10-04, 3ª sessão)
+
+| Decisão | Onde | Prova |
+|---|---|---|
+| **D-F47** passada fecha as vivas do ramo cortado | `guards.ts` `passScope` (substitui `requireAnyPrivilege`: devolve `interfaces` = contratados com privilégio e `liveOnlyInterfaces` = cortados; admin com nada contratado passa só com os cortados); `listRefreshCandidates`: `AND (ramo IN (?) OR (ramo IN (?) AND (le.kind IS NULL OR le.kind IN ('S','K'))))`, antes do LIMIT | `passada-ramos.test.ts` (5), `app.test.ts`, `adversarial-f1r8.test.ts` (admin sem nada contratado → só vivas; usuário comum 403), `transmission.test.ts` |
+| **D-F48** re-sincronia por institution | `scripts/migrate-from-setes-api.ts` `resyncAll` + `resyncInstitution` (begin/commit por institution; falha = rollback dela, segue, sai ≠ 0 com a lista; relatório JSON ganha `failures`); a mensagem final do script deixou de dizer "nada gravado" sempre | `adversarial-f1r8.test.ts` "[D-F48]" (2 institutions: a 1ª volta, a 2ª grava, exit 1) |
+
+`nfse-api` 169 unit (131 ao vivo pulados), `tsc` limpo. `explain:leituras` captura o SQL mais largo (os dois grupos). **Na máquina do
+Valdo**: suítes ao vivo (as de re-sincronia — r2/r4/r5/r6 — passam a ver uma transação por institution) + `explain:leituras`.
 
