@@ -143,6 +143,11 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
   `searchDatasource`, `criteriaValues`, `onCriteriaChanged` à fábrica — o botão e os chips
   são da fábrica. Tela com seleção (lote) põe `criteria` na assinatura da seleção.
   (e) i18n `search.<modulo>.<key>` (+ `<key>Options.<valor>` para `options`) em pt/en.
+  **Onda 2 (2026-10-03)**: a receita foi repetida tal qual em 13 módulos da fábrica (D-BA26 — sem
+  `ListRequest` compartilhado); a lista de apoio de um critério `lookup` responde `{ id, name }` —
+  o `SearchLookupItem` do painel lê `name` (lookup do form que devolve `label`/`description`
+  ganha `name` ADITIVO na API, nunca o painel adivinhando o campo). TODA tela tem o critério de
+  NOME/descrição (D-BA21); `kind options` ganha `<key>Options.<valor>` no i18n.
 - `SetesTextField` ganhou `readOnly`, `hint`, `suffixIcon`/`onSuffixPressed`.
 - `SetesRadioGroup<T>` + `SetesRadioOption<T>` (setes_widgets, 2026-07-17 —
   Rodada 4 do customers): radiobox de escolha ÚNICA em domínio minúsculo

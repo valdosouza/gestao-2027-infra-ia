@@ -98,6 +98,22 @@ router.use('/<plural>', superGuard, <plural>Routes)   // → /api/<plural>
   params (depois do escopo). Controller: `parseListQuery(req, '<modulo>', <M>_SEARCH_CRITERIA)`
   + `GET /<m>/search-criteria` → `publicCriteria(...)` (expressão nunca sai), registrada
   ANTES de `/:id`. Swagger declara `criteria`. Índice revisado por critério (D-BA11).
+  **Onda 2 (2026-10-03, parecer do guardião — §12.6 do prompt)**: o ESCOPO (schema, institution,
+  vínculo em foco) vive na QUERY BASE; o critério referencia ALIAS da base ou tabela de
+  `setes_central` — a expressão NUNCA carrega `?` nem `${schemaName}` (lista branca é `const`,
+  nunca função do escopo). Relação 1:1 (vínculo em foco, soma por pai) entra como LEFT JOIN /
+  derived table na base — coluna da linha e critério viram a MESMA expressão; relação 1:N só com
+  `shape: 'set'` (lookup → `? IN (subselect escopado)`, com teste de escopo). Papel da cadeia de
+  entidade usa `entityRoleSearchCriteria(moduleKey, alias)` + `roleStatusSearchCriteria` de
+  `@shared/entity` (alias interno com prefixo próprio — `RESERVED_ALIASES`; alias igual ao da base
+  casa a tabela inteira). TODA tela tem o critério de NOME/descrição (D-BA21). Lista de apoio de
+  critério responde `{ id, name }` (coluna `name` ADITIVA se o lookup já existe para o form).
+  Lista branca nova entra em `scripts/explain-pesquisa-avancada.ts` (cerca M5 — rodar antes de
+  dar por pronto) e na matriz `search-criteria-onda2.test.ts`.
+  **Catálogo servido = catálogo aceito**: se o `/search-criteria` filtra por escopo (carteira, Super,
+  foco), a LISTA compila contra a MESMA lista filtrada (`<m>SearchCriteriaFor(scope)`) — chave não servida
+  = 400. Id opcional na query string (`?stateId=`, `?institutionId=`) SEMPRE por `parseOptionalQueryId`
+  de `@shared/http/controller-utils` (nunca `Number(req.query.x)` — NaN no SQL = 500).
 
 ## Passo 5 — Validar
 

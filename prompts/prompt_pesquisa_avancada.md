@@ -2,7 +2,9 @@
 
 **Escopo**: setes
 **Origem**: rascunho do Valdo `prompts/PromptBuscaAvancada.txt` (2026-09-30) — "vamos tratar como uma onda separada"
-**Estado**: **Onda 2 (demais telas da fábrica) — Rodada 0 ORGANIZADA 2026-10-03 (§12; Q-BA17…Q-BA25 aguardam o Valdo)** · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
+**Estado**: **Onda 2 ENTREGUE (2026-10-03, §12.5–§12.7)** — as 26 telas da fábrica com critérios em 2 blocos (D-BA20…D-BA28),
+gates socrático 0.78/0.80 ✅ + adversarial ao vivo com 4 achados corrigidos; API 1781/1781 · app 161/161 · smoke 520/520;
+commits locais; pendem Q-BA26…Q-BA28 e o passeio logado · antes: Rodada 0 organizada (§12) · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
 customers + service-orders nos dois lados; gates socrático 0.68 → **0.78 ✅** · adversarial 0.66 → **0.84 ✅**; API 1497/1497 ·
 app 159/159 · smoke ao vivo 17/17 · Rodada 2 EXECUTADA (§9.3: D-BA16…D-BA19; **Q-BA16 aberta** — pedido de explicação) · fuso TZ-1 + Rodada 2 executados (§10–§10.4) · **PUBLICADO 2026-09-30** · pendem passeio logado e Q-TZ9
 **Método**: `skills-genericas/refinar-prompt-arquitetura.md` · antes do DDL/peça: `skills-genericas/guardiao-conceitual.md`
@@ -592,6 +594,195 @@ para a Onda 3 (pedidos/títulos é onde o volume mora; as telas da fábrica são
 - **Q-BA25** Medição M5 (§12.3) como PRÉ-CONDIÇÃO do Bloco 1 × junto com o Bloco 2 (onde entram as expressões
   novas). *(Rec.: antes do Bloco 1, com as expressões dos pilotos + Bloco 1 — e o script fica como cerca
   permanente: toda lista branca nova passa por ele.)*
+
+### 12.5 Rodada 0 DECIDIDA (Valdo 2026-10-03)
+
+> "Q-BA17 - 26 | Q-BA18 - conviver, considere sempre a busca por nome que o usuario possa usar | Q-BA19 - sim |
+> Q-BA20 - tipar | Q-BA21 - sim | Q-BA22 - 2 blocos | Q-BA23 - repetir | Q-BA24 - sim | Q-BA25 - antes"
+
+- **D-BA20 (= Q-BA17 — Valdo DIVERGIU da Rec.)**: **TODAS as 26 telas** ganham critérios. As 6 que ficariam idênticas
+  entram no Bloco 2 com o mínimo que faz sentido: `countries` (name T) · `banks` (number T, description T) ·
+  `privileges` (description T) · `modules` (description T) · vitrines `interface-configs`/`interface-fields`
+  (name T sobre `i.description`/`i.i18n_key` + acquired B — a lista branca vive na peça `@shared/interface-vitrine`,
+  dona do SQL; os dois módulos a servem). ⚠️ O nome da vitrine na API é a descrição técnica em inglês (resíduo do
+  §11): o critério acha "Banks", não "Bancos", até a **Q-BA26** ser decidida.
+- **D-BA21 (= Q-BA18)**: parâmetros de rota existentes (`stateId`, `countryId`, `institutionId`) CONVIVEM com os
+  critérios. **Regra nova, lida do complemento do Valdo ("considere sempre a busca por nome que o usuário possa
+  usar")**: toda tela oferece o critério de NOME/descrição que o usuário digitaria (`name`/`description`, kind T),
+  mesmo quando o filtro rápido já o cobre — o painel da pesquisa avançada é autossuficiente, e um lookup é sempre
+  pesquisável pelo nome. Interpretação registrada como assunção reversível; na dúvida o Valdo corrige a frase.
+- **D-BA22 (= Q-BA19)**: derivados `hasIcms/hasIcmsSt/hasIpi/hasPisCofins/hasIi` em `tax-rules` entram na forma
+  `EXISTS` escopado (D-BA13) com teste de escopo.
+- **D-BA23 (= Q-BA20)**: `users.kind` tipado — constante `USER_KINDS = ['user', 'admin', 'super']` (os três que a tela
+  `user_institutions_section.dart` já oferece e `roles.ts` reconhece) no DTO e no critério `options`.
+- **D-BA24 (= Q-BA21)**: lookup "Instituição" em `users` servido só ao Super (`fetchUserSearchCriteria` filtra pela
+  função, espelho da D-BA15); admin já é escopado pelo JWT.
+- **D-BA25 (= Q-BA22)**: entrega em **2 blocos** com gates próprios — Bloco 1 (13 telas, §12.1) e Bloco 2 (7 + as 6
+  da D-BA20 = 13 telas).
+- **D-BA26 (= Q-BA23)**: app repete a receita por módulo (skill `criar-formulario-cadastro.md`); `ListRequest`
+  compartilhado fica em "Fora de escopo" (§7) como refatoração própria.
+- **D-BA27 (= Q-BA24)**: `contracts/customer-lookup` respeita a carteira (`@shared/customer-wallet`, D-BA17).
+- **D-BA28 (= Q-BA25)**: medição M5 ANTES do Bloco 1 — `scripts/explain-pesquisa-avancada.ts` nasce com os pilotos,
+  cresce com cada lista branca nova e fica como cerca permanente (o MySQL do dev foi ligado em 2026-10-03 por
+  PowerShell elevado para isso).
+
+**Questão nova:**
+- **Q-BA26** Nome traduzido das vitrines (`interface-configs`/`interface-fields`): hoje ordenação, filtro rápido e
+  o critério `name` olham `tb_interface.description` (inglês técnico) enquanto o app mostra o nome do catálogo i18n
+  do menu. Opções: (a) aceitar (Super/admin conhecem o nome técnico); (b) `tb_interface` ganha `display_name_pt`
+  (DDL + seed, decisão do guardião — vale também para o menu); (c) o app filtra/ordena localmente a vitrine (lista
+  pequena, ~60 interfaces — fura a D7 da paginação só nessa tela). *(Rec.: (a) nesta onda, (b) como item próprio se
+  o Valdo quiser o produto em português de ponta a ponta.)*
+
+### 12.6 Bloco 1 — API EXECUTADA (2026-10-03)
+
+**M5 (D-BA28) virou cerca**: `setes-api/scripts/explain-pesquisa-avancada.ts` intercepta `pool.query`, chama a função
+de lista REAL de cada módulo registrado (TODOS os critérios + cada um sozinho) e roda `EXPLAIN` da página e do COUNT;
+FALHA = `DEPENDENT SUBQUERY` com `type ALL/index` (varredura POR LINHA); varredura única da tabela que dirige ou de
+derived table = aviso. Pilotos: **APROVADO** (todo subselect chega por `eq_ref`/`ref` na PK). **Achado REAL na 1ª
+passada do Bloco 1**: `tb_provider p` × `tb_person p` no subselect → `p.id = p.id` casava a tabela inteira ("Subquery
+returns more than 1 row") — o helper ganhou aliases internos próprios (`esp/esc/esa/esci`, `RESERVED_ALIASES`) e o
+teste de matriz confere que nenhum alias interno colide com o alias da query base. Final: 15 listas, **0 falha**.
+
+**Parecer do guardião (setes-conceito, 2026-10-03) sobre expressões que dependem do ESCOPO** — executado como
+assunção reversível:
+- **REGRA (peça + skill novo-modulo)**: o ESCOPO (schema, institution, vínculo em foco) vive na QUERY BASE; o critério
+  referencia ALIAS da query base ou tabela de schema fixo (`setes_central`); a expressão NUNCA carrega `?` nem
+  `${schemaName}`. A lista branca continua `const` (catálogo — D-BA2/D-BA12); "função do escopo" foi REJEITADA
+  (catálogo deixaria de ser catálogo; `/search-criteria` e a cerca M5 teriam de inventar escopo).
+- **`users.kind`** (atributo do VÍNCULO em foco): o vínculo entra na query base como `LEFT JOIN tb_institution_has_user
+  ihu ON … tb_institution_id = ?` (1:1 pela PK) — a coluna `kind` da linha e o critério são a MESMA expressão
+  (`ihu.kind`); morreu um subselect correlacionado. Só é servido COM foco (admin sempre; Super só com `institutionId`
+  — a rota `/users/search-criteria` recebe o mesmo `institutionId` da lista). Domínio tipado `USER_KINDS =
+  ['user','admin','super']` no DTO (D-BA23 — DTO era string livre).
+- **`users.institution`** ("pertence a X", só Super — D-BA24): única extensão da peça — `shape?: 'set'` em `lookup`:
+  a expressão devolve o CONJUNTO de ids da linha e o operador vira `? IN (expr)`; `shape` fora de `lookup` = erro de
+  DECLARAÇÃO; não vaza na projeção pública; subselect escopado em `active`/`deleted` com teste de escopo (D-BA13).
+  Lookup novo `/users/institution-lookup` (403 para não Super).
+- **`contracts.monthlyValue`**: derived table 1:1 `mv` (SUM por contrato) na query base — coluna e critério usam
+  `COALESCE(mv.total, 0)`; o subselect correlacionado da lista morreu junto (M5). `contracts/customer-lookup`
+  respeita a carteira (D-BA27, `@shared/customer-wallet`); `contracts/payment-types` = formas HABILITADAS
+  (`listEnabledPaymentTypes`).
+- **`tax-rules.has*`** (Bloco 2): LEFT JOIN dos filhos + predicado `x.id IS NOT NULL` — o `HAS()` duplicado morre.
+
+**Entregue (13 módulos)**: lista branca + `${query.criteria.sql}`/params nos DOIS SELECTs + `parseListQuery(…,
+<M>_SEARCH_CRITERIA)` + `GET /<m>/search-criteria` (antes de `/:id`) + Swagger (`criteria`, 400, 422) em carriers,
+collaborators, providers, salesmen, institutions, users, contracts, bank-accounts, bank-charge-agreements,
+settlement-rules, payment-types, price-lists, services; helper `entityRoleSearchCriteria`/`roleStatusSearchCriteria`
+em `@shared/entity` (5 cópias evitadas; customers passou a usá-lo e ganhou `name` — D-BA21 vale para o piloto);
+`PAYMENT_TYPE_KINDS` em `@shared/payment-types` (domínio da migration 027, antes sem constante); lookups REUSADOS
+(`/bank-accounts/banks`, `/bank-charge-agreements/bank-accounts`, `/settlement-rules/payment-types|bank-accounts`,
+`/services/categories`) ganharam a coluna `name` ADITIVA — o painel do app lê `{ id, name }` (contrato das listas
+de apoio da pesquisa); `listBanksLookup` ganhou `escapeLike` (pré-existente). Testes: matriz
+`search-criteria-onda2.test.ts` (projeção pública, nome, aliases, fragmento depois do escopo nos dois SELECTs, SQL
+idêntico sem critério, shape 'set', users foco/Super, contracts carteira/mv) — **1710/1710** api. Smoke ao vivo
+`scripts/smoke-pesquisa-avancada-onda2.ts` **186/186** (todos os critérios, cada um sozinho, sim+não = total, lookups
+`{id,name}` e o id escolhido entra, 400/422, users foco × pertence). Testes antigos ajustados: `services.test`
+(ListQuery sem `criteria`) e `providers.test` (mock parcial de `@shared/entity` — `requireActual` para os helpers;
+LIÇÃO: mock parcial de peça que participa do LOAD do módulo quebra na importação).
+
+**Questões novas (do parecer — aguardam o Valdo; executadas pela recomendação como assunção):**
+- **Q-BA27** Super SEM foco na lista de usuários: (a) servir `institution` e NÃO servir `kind` até haver foco
+  (executado); (b) exigir foco para o Super (como privilégios) — `institution` viraria seletor e D-BA24 seria revista.
+- **Q-BA28** Leitura de "conviver" (D-BA21) para `users`: `institution` (pertence a X) e `institutionId` (foco) são
+  DOIS conceitos que coexistem — "usuários da instituição em foco Y que também pertencem a X". Se o Valdo quis "uma só
+  coisa", a saída é a opção (b) da Q-BA27.
+
+**Gate adversarial da API (ao vivo, 15 sondas — 2026-10-03)**: 2 achados corrigidos em sessão —
+- **MEDIUM (vazamento entre tenants, limitado à existência de vínculo)**: o admin podia MANDAR o critério
+  `institution` que não lhe era servido (a lista compilava contra a lista branca INTEIRA) e descobrir "quais dos meus
+  usuários também estão vinculados à instituição X". REGRA nova: **catálogo servido = catálogo aceito** — a lista
+  compila contra a MESMA lista branca filtrada pelo escopo (`userSearchCriteriaFor(scope, foco)`,
+  `customerSearchCriteriaFor(scope)`); chave fora do escopo = 400 "não existe nesta tela". A D-BA15 deixa de ser "só
+  apresentação" e vira enforcement (vendedor travado não pesquisa por outro vendedor — 400, não lista vazia).
+- **MEDIUM (pré-existente na lista de usuários)**: `GET /users?institutionId=abc` → `Number('abc')` = NaN no SQL →
+  **500**. `focusOf(req)`: ausente = sem foco; inválido (não inteiro positivo) = 400 com `fields[]`; vale para a lista
+  e para `/search-criteria`.
+- LOW: derived table `mv` dos contratos agora é escopada pela institution (`WHERE i.tb_institution_id = ?` — o
+  MariaDB passou a planejar `LATERAL DERIVED` por chave quando o cliente é critério); `price-lists.published` é
+  NULLABLE com default 'S' → `COALESCE(l.published, 'S')` (sim + não = total).
+- Resistiu: `institutionId` gigante/negativo (lista vazia), `institution: "1"` (string decimal aceita como no piloto),
+  `institution: 0` (422), opção fora do domínio (422), `%`/`_` no texto e no filtro dos lookups (escapados), módulo
+  Super com token admin (403 do guard). Checks entraram no smoke (`users` com foco em todas as chamadas; tolera o 429 do rate limit do dev) — **ao vivo
+  300/300**; matriz jest com os casos "não servido = 400". API **1711/1711**.
+
+**Gate socrático da API (2026-10-03) — score 0.78 ✅** (nenhum CRITICAL/HIGH; os 2 MEDIUM acima corrigidos em sessão).
+Pontos abertos registrados (não bloqueiam):
+- *Escala*: a derived table `mv` dos contratos agrega TODOS os itens da institution a cada requisição (varredura única,
+  63 linhas no dev); o subselect correlacionado antigo também rodava para todo contrato candidato — custo da mesma
+  ordem, mas quando `tb_contract_item` crescer (milhares de contratos) a saída é índice `(tb_institution_id,
+  tb_contract_id)` — registrado como evolução; a cerca M5 mostra o plano a cada rodada.
+- *Multi-tenant*: toda lista branca referencia alias da query base escopada (institution/carteira/soft delete) ou
+  `setes_central` — o AND só estreita; o único conjunto (`users.institution`) é Super-only e escopado em
+  `active/deleted`. `institutions` fica sob `superGuard` do gateway.
+- *Contrato*: `{ id, name }` dos lookups é ADITIVO — forms continuam lendo `label`/`description`; o dia em que um
+  lookup for só do critério, nasce já com `name`.
+- *Rate limit*: abrir uma tela = 2 requisições (lista + `/search-criteria`); 300/min por tenant comporta.
+
+**Commits locais (push só com "vai")**: api `e7b73f9` (Bloco 1 — API) + `84e7d1a` (gate adversarial) · app `7bd0aad`.
+
+**App (Bloco 1) ENTREGUE**: receita repetida nos 13 módulos por 3 agentes em paralelo (conferidos no disco: bind,
+`criteria` na cadeia, todo emit de lista com `criteria`, Q-BA16 no bloc, 4 props na fábrica); `users` recebeu
+`criteria` no datasource GLOBAL `shared/users` (único que monta `/api/users`; a aba Usuários do Estabelecimento segue
+igual); i18n `search.<m>.*` pt/en. `flutter analyze` limpo · **161/161**.
+
+### 12.7 Bloco 2 — EXECUTADO (2026-10-03)
+
+**API (13 listas)**: `tax-rules`, `service-tax-rules`, `cfop`, `cities`, `states`, `service-list`, `interfaces` +
+(D-BA20) `countries`, `banks`, `privileges`, `modules` e a vitrine dos painéis `interface-configs`/`interface-fields`.
+- **tax-rules — D-BA22 pelo desenho do guardião**: os 5 filhos entram na query base como LEFT JOIN 1:1 (`icms`,
+  `icmsst`, `ipi`, `ii` pela PK `id`; PIS/COFINS tem PK `(id, kind)` = 1:N → derived table AGRUPADA por `id`, senão
+  o COUNT duplicaria a regra); a coluna `hasX` da linha e o critério viraram a MESMA expressão (`x.id IS NOT NULL`) e
+  os 5 `EXISTS` correlacionados (`HAS()`) MORRERAM. `origin`/`purpose` reusam `TAX_RULE_ORIGINS`/`TAX_RULE_PURPOSES`
+  (constantes NOVAS no DTO — eram literais no `z.enum`); CFOP e item da LC 116 têm id VARCHAR ('5.102', '1.01') → texto
+  "contém", não lookup inteiro. Lookups novos do PRÓPRIO módulo: `/tax-rules/products`, `/tax-rules/states`,
+  `/service-tax-rules/cities`, `/cities/states-lookup`, `/states/countries-lookup` (todos `{ id, name }`, `escapeLike`).
+- **Vitrine**: lista branca na PEÇA dona do SQL (`vitrineSearchCriteria(moduleKey)` em `@shared/interface-vitrine`
+  — função pura do `moduleKey`, só o `labelKey` muda); `acquired` = presença do contrato (`ihi`, alias da base).
+  `name` olha a descrição técnica (Q-BA26 aberta: "Banks" acha, "Bancos" não — provado ao vivo).
+- **Catálogos pequenos (D-BA20)**: só o nome/descrição (+ `number` em bancos) — critério de nome em TODA tela (D-BA21).
+
+**Cerca M5 refinada**: a 1ª rodada do Bloco 2 acusou `tb_module_has_interface` varrida dentro do subselect da lista
+de módulos e da vitrine — a tabela TEM PK + `idx_mhi_interface`, o dev tinha 1 linha e o otimizador preferiu `ALL`.
+Regra nova do script: FALHA = subselect correlacionado que varre **e** não tem índice utilizável (`possible_keys`
+vazio); com índice disponível é aviso (o plano muda sozinho quando a tabela cresce). O script também passou a achar
+página e COUNT pelo conteúdo (a lista de interfaces faz uma 3ª consulta — privilégios das linhas). **27 listas
+medidas, APROVADO**.
+
+**Gate adversarial ao vivo (16 sondas) — 2 achados corrigidos**:
+- **MEDIUM (pré-existente, mesma classe do `users`)**: `GET /cities?stateId=abc` e `/states?countryId=abc` → NaN no SQL
+  → **500**. Peça nova `parseOptionalQueryId(req, name)` em `@shared/http/controller-utils` (ausente = null; não
+  inteiro positivo = 400 `INVALID_ID` com `fields[]`) — usada em cities, states e no `focusOf` do users (que deixou
+  de ter parser próprio).
+- **LOW (dado)**: `cfop.active` é NULLABLE e o catálogo tem 1 linha com `''` → ativo + inativo ≠ total (29 + 500 ≠
+  530). Critério virou o predicado `COALESCE(c.active, 'N') = 'S'` — a MESMA semântica do motor (`active = 'S'`);
+  sim + não cobre todas as linhas. (Limpar o `''` do catálogo é dado, não código — fica registrado.)
+- Resistiu: origem fora do domínio (422), `%` no CFOP (escapado), alíquota gigante (422), guard Super nos catálogos
+  (403 p/ admin), `stateId` + critério `state` divergentes (lista vazia — os dois só estreitam).
+
+**Gate socrático do Bloco 2 — 0.80 ✅** (sem CRITICAL/HIGH): o desenho do guardião REDUZIU custo (5 EXISTS por linha
+→ 5 LEFT JOIN por PK; o PIS/COFINS agrupado é varredura única do schema do cliente); escopo intacto (filhos pela PK da
+regra já escopada; catálogos centrais sob `superGuard`); contrato `{id,name}` aditivo. Pontos abertos (não
+bloqueiam): a derived table do PIS/COFINS agrega o schema inteiro — com milhares de regras, `WHERE pc0.id IN (…)`
+ou índice dedicado; `cities` (5.568 linhas) com critério de nome varre a tabela (como o filtro rápido já fazia).
+
+**Testes**: matriz `search-criteria-onda2.test.ts` com as 27 listas (+ derivados do tax-rules, PIS/COFINS agrupado,
+`parseOptionalQueryId`, `cfop.active`) — **156/156**; 3 testes antigos ganharam `criteria: NO_CRITERIA` nos literais
+de `ListQuery`. Suíte API **1781/1781** · smoke ao vivo **520/520** (29 blocos — todas as listas + gates) · cerca M5 APROVADO.
+
+**App (Bloco 2)**: receita nos 13 módulos por 3 agentes (conferidos no disco); painéis mantêm os nomes próprios
+(`vitrine(...)`, `<X>VitrineRequested`) e o atalho "abrir por chave" busca SEM critérios de propósito (precisa do
+catálogo inteiro). i18n `search.<m>.*` reaproveita o texto dos forms (origem/finalidade/sentido/alçada/incidência).
+`flutter analyze` limpo.
+
+**Commits locais (push só com "vai")**: api `56c3af2` · app `dbd357c` (Bloco 2); Bloco 1 em api `e7b73f9`+`84e7d1a` · app
+`7bd0aad`.
+
+**Questões abertas da onda**: **Q-BA26** (nome traduzido das vitrines), **Q-BA27** (Super sem foco em usuários),
+**Q-BA28** (leitura de "conviver" em usuários). Passeio logado da Onda 2 pendente (todas as 28 telas da fábrica têm
+o botão; roteiro sugerido: papéis com cidade/documento, contratos por valor mensal, regras de tributação "tem ICMS",
+usuários Super com/sem foco). Onda 3 (telas de processo: pedidos, títulos, boletos, cheques, devoluções, baixas) é a
+próxima — e é onde a cerca M5 vai mostrar volume de verdade.
 
 ## 7. Fora de escopo (candidatas)
 
