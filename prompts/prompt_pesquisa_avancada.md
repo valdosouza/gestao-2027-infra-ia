@@ -2,7 +2,7 @@
 
 **Escopo**: setes
 **Origem**: rascunho do Valdo `prompts/PromptBuscaAvancada.txt` (2026-09-30) — "vamos tratar como uma onda separada"
-**Estado**: **Onda 3 (telas de processo) — Rodada 0 ORGANIZADA 2026-10-04 (§13; Q-BA32…Q-BA44 aguardam o Valdo)** · antes: **Onda 2 ENTREGUE (2026-10-03, §12.5–§12.7)** — as 26 telas da fábrica com critérios em 2 blocos (D-BA20…D-BA28),
+**Estado**: **Onda 3 (telas de processo) ENTREGUE 2026-10-04 (§13.4–§13.5)** — 6 listas, D-BA37 (forma de lista da peça do saldo, prova de equivalência 0 divergência), gates 0.80 ✅ + adversarial com 1 MEDIUM corrigido; API 1823/1823 · app 162/162 · smoke 675/675; commits locais; pendem Q-BA45, passeio logado e push · antes: Rodada 0 (§13) · antes: **Onda 2 ENTREGUE (2026-10-03, §12.5–§12.7)** — as 26 telas da fábrica com critérios em 2 blocos (D-BA20…D-BA28),
 gates socrático 0.78/0.80 ✅ + adversarial ao vivo com 4 achados corrigidos; API 1781/1781 · app 161/161 · smoke 520/520;
 commits locais; Q-BA26…Q-BA28 DECIDIDAS (§12.8, D-BA29…D-BA31 — nenhuma questão aberta); passeio logado FEITO (§12.9, 10/10 contagens = banco); pende o push · antes: Rodada 0 organizada (§12) · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
 customers + service-orders nos dois lados; gates socrático 0.68 → **0.78 ✅** · adversarial 0.66 → **0.84 ✅**; API 1497/1497 ·
@@ -915,6 +915,95 @@ seleção.
   + baixas + boletos + cheques, com a Q-BA37). *(Rec.: sim.)*
 - **Q-BA44** Volume para a cerca M5: o dev tem a carga da Setes sincronizada (7.451 títulos, 7.608 ordens). *(Rec.:
   medir no dev, antes e depois de cada bloco, e registrar os tempos aqui; produção da Onda 4 repete a medição.)*
+
+### 13.4 Rodada 0 DECIDIDA (Valdo 2026-10-04: "siga as recomendações")
+
+Todas pela recomendação: **D-BA32** as 6 listas · **D-BA33** estado continua ABA, critério nunca repete a aba; Baixas
+ganha `status` · **D-BA34** carteira só nos lookups NOVOS de cliente (pedidos, devoluções); visibilidade das listas
+por carteira = item próprio (§7) · **D-BA35** lookup único "Cliente/Fornecedor" nos títulos, só entidades com título,
+sem carteira · **D-BA36** saldo como critério pela peça `title-balance` · **D-BA37** lista de títulos reescrita com
+derived table AGREGADA 1:1 por título, fórmula dentro da peça, prova de equivalência nos 7.451 títulos, guardião
+ANTES; coluna materializada descartada · **D-BA38** sem derivado "vencido" (atalho "Vencidos" = preset do app,
+candidato) · **D-BA39** sem derivados de evento nesta onda · **D-BA40** critério novo zera a seleção dos títulos ·
+**D-BA41** "Tem serviço" por LEFT JOIN 1:1 do ramo (morre o EXISTS do SELECT) · **D-BA42** vendedor dos pedidos: ativos
+e inativos, "(inativo)" no nome · **D-BA43** 2 blocos (A vendas · B financeiro) com gates · **D-BA44** medir antes e
+depois de cada bloco no dev; produção repete na Onda 4.
+
+### 13.5 Onda 3 EXECUTADA (2026-10-04)
+
+**Bloco A — vendas.** `orders`: 9 critérios; nota (`inv`), negociação (`ob`) e ramo de serviço (`os`) entram na query
+base por LEFT JOIN 1:1 pela PK (id + institution + terminal) — a coluna `hasService` e o critério são a mesma expressão e
+o EXISTS do SELECT morreu (D-BA41); lookups `customer-lookup` (carteira, D-BA34) e `salesman-lookup` (ativos e inativos,
+"(inativo)" no nome, D-BA42); `payment-types-lookup` ganhou `name` aditivo. `order-returns`: 6 critérios + lookup de
+cliente com carteira. Teste `search-criteria-onda3-wallet.test.ts` prova a trava nos dois lookups.
+
+**Bloco B — financeiro.** Parecer do guardião (setes-conceito, 2026-10-04) EXECUTADO na peça `title-balance`:
+- a fórmula existe UMA vez — partes internas `PAYMENT_PRINCIPAL` (principal de uma baixa), `LIVE_PAYMENT` (baixa viva,
+  `status='N' AND deleted='N'` — com aviso no JSDoc: NÃO "harmonizar" com a D-CH2, aqui o espelho 'R' é positivo) e
+  `balanceOver` (conta final), usadas pelas TRÊS formas: correlacionada (`PRINCIPAL_PAID_SQL`/`OPEN_BALANCE_SQL`),
+  travante (`getPrincipalPaidTx`) e a nova forma de LISTA;
+- forma de LISTA: `PRINCIPAL_PAID_JOIN_SQL(schema, 'f', 'pp')` — a peça emite o LEFT JOIN INTEIRO (derived table
+  agregada por institution/order/terminal/parcel + ON nas mesmas quatro colunas; um `?` = institution, antes do WHERE)
+  e `PRINCIPAL_PAID_OF('pp')` / `OPEN_BALANCE_OF('f','pp')` sobre o alias (sem schema, sem `?` — cabe na lista `const`;
+  a D-BA37 é pré-requisito da D-BA36). Só para LEITURA de lista (derived table em FOR UPDATE não trava — PADROES §9);
+- `listBills`: a aba virou predicado do WHERE, sem HAVING; COUNT simples. Títulos e baixas têm catálogo POR LISTA
+  (`/settlements/bills/search-criteria` com lookups `entity-lookup` (D-BA35) e `payment-types-lookup`;
+  `/settlements/settled/search-criteria` com `status` vigente/estornada/estorno, D-BA33) — o datasource do app é
+  amarrado ao caminho da lista;
+- `bank-slips`: "cliente" casa com QUALQUER cliente dos títulos do boleto (derived table `sc` 1:1 por boleto, escopada),
+  lookup `agreement-lookup` (ativas e inativas); `checks`: 8 critérios, `CHECK_HEADER_KINDS` na peça do cheque.
+
+**Prova de equivalência** (`scripts/prove-title-balance-list.ts`, permanente — repetir em produção na Onda 4):
+0 divergência de principal e de saldo em 7.790 títulos (inclui 339 excluídos), comparação DENTRO do SQL com `<=>`;
+36 páginas antigas × novas idênticas (abas open/settled/todas × kind × filtro, 1ª e última página); sem fan-out
+(7.451 = COUNT dos títulos); critério de saldo: faixa 0..0 + Abertos = todas (290 + 7.161 = 7.451). Casos presentes:
+sem baixa 7.334 · só estornada 146 · parcial 18 · com desconto 63 · com juros/multa 35; ausentes no dev (baixa
+excluída, `paid_value` nulo, terminal ≠ 0) cobertos por teste de ESTRUTURA (`title-balance.test`: as formas usam a mesma
+expressão e o mesmo predicado; GROUP BY e ON com as mesmas quatro colunas; um `?`).
+
+**Tempos (D-BA44, dev — 1ª chamada, como a medição de antes)**: títulos abertos **639 → 181 ms** (aquecida 182 → 83 na
+prova controlada); títulos todos 306 → 137 ms; pedidos 102 → 106 ms na 1ª, **17 ms aquecida** (o EXISTS por linha
+morreu); devoluções 47 → 32; baixas 22 → 18; cheques 12 → 7; boletos 54 → 89 ms (custo da derived table `sc` dos
+clientes — ponto aberto). Lookups de títulos abertos de boleto (87 ms) e cheque (92 ms) seguem na forma correlacionada
+por ficarem ABAIXO da lista (recomendação (a) do guardião, medida).
+
+**Cerca M5**: 33 listas, APROVADO; a lista de títulos não tem mais nenhum `DEPENDENT SUBQUERY`.
+
+**Gate adversarial (ao vivo + código) — 1 MEDIUM corrigido**: nas telas de PROCESSO a recusa de critério (400/422 com
+`fields[]`) era desviada para o caminho de "campo do dialog" — o usuário via a mensagem técnica do campo e não o aviso
+"critério removido" (no boleto o `dtExpiration` do critério casaria com o campo homônimo da emissão). Já acontecia no
+piloto da OS. Correção na peça do app: `isSearchCriteriaFailure(failure)` em `shared/search/search_criterion.dart`
+(códigos num lugar só; `withoutRejected` usa a mesma função) e aplicada em pedidos, devoluções, OS, baixas, boletos e
+cheques; teste no `search_criteria_test.dart`. Resistiu ao vivo (14 sondas): saldo gigante (422), operação/kind/opção
+fora do domínio (422), critério da OUTRA lista do mesmo módulo (400 — catálogo por lista), `kind` do parâmetro × do
+critério divergentes (lista vazia), `%`/`_` nos lookups e textos (escapados).
+
+**Gate socrático — 0.80 ✅** (sem CRITICAL/HIGH). Pontos abertos registrados: (1) a derived table `pp` agrega TODAS as
+baixas vivas da institution a cada leitura — PK `(institution, order, terminal, parcel, event)` serve o GROUP BY pelo
+prefixo; com centenas de milhares de baixas, medir na Onda 4 (a prova tem os tempos); (2) a derived `sc` dos boletos
+roda mesmo sem o critério de cliente (+35 ms) — se pesar, montá-la só quando o critério `customerName` vier;
+(3) mudança de assinatura: `listBills` passou a ter um `?` a mais (testes antigos ajustados — conhecimento para quem
+escreve teste de lista com derived table: o `?` da peça vem ANTES do WHERE).
+
+**Testes**: API **1823/1823** · app **162/162** + analyze limpo · smoke ao vivo **675/675** (35 blocos). Testes antigos
+ajustados: literais `ListQuery` sem `criteria` (tax-rules, service-list, service-tax-rules, onda2-rodada2), expectativa
+de parâmetros da lista de boletos (o `?` da `sc` vem antes), regex da leitura travante (alias `p.`).
+
+**Commits locais**: api `998caac` · app `811177b` (push só com "vai"). ⚠️ Incidente evitado: o `git add -A` da API pegou
+`src/migrations/sql/065_fiscal_policy_views.sql`, arquivo da sessão paralela do fiscal-api — o commit foi refeito sem
+ele (o arquivo segue não versionado, intocado; a 065 já estava aplicada no dev por aquela sessão — os boots desta
+sessão registraram "nenhuma pendente"). LIÇÃO: com sessão paralela no mesmo repo, `git add` só dos caminhos da tarefa.
+
+**Achado colateral do parecer (fora do alvo, item próprio)**: `shared/check/check.ts:610` e o `lockTitle` de
+`shared/bank-slip/bank-slip.ts` leem o saldo por subconsulta DENTRO de `SELECT … FOR UPDATE` — pela regra 2 do
+PADROES_BANCO §9 a subconsulta não trava as baixas lidas. Candidato ao gate adversarial do financeiro.
+
+**Questões novas:**
+- **Q-BA45** Filtro rápido na aba Títulos não zera a seleção do lote (só critério novo zera — comportamento herdado da
+  tela); na OS o filtro também zera. Uniformizar ("o que está selecionado é o que se vê")? *(Rec.: sim — uma linha no
+  bloc; a confirmação da baixa já lista os títulos, mas a regra da OS é mais segura.)*
+
+**Pendências da Onda 3**: Q-BA45, passeio logado e push.
 
 ## 7. Fora de escopo (candidatas)
 

@@ -114,6 +114,11 @@ router.use('/<plural>', superGuard, <plural>Routes)   // → /api/<plural>
   foco), a LISTA compila contra a MESMA lista filtrada (`<m>SearchCriteriaFor(scope)`) — chave não servida
   = 400. Id opcional na query string (`?stateId=`, `?institutionId=`) SEMPRE por `parseOptionalQueryId`
   de `@shared/http/controller-utils` (nunca `Number(req.query.x)` — NaN no SQL = 500).
+  **Onda 3 (2026-10-04)**: módulo com MAIS de uma lista publica um catálogo POR LISTA
+  (`/<m>/<lista>/search-criteria`, lookups sob `/<m>/<lista>/…`, labelKey `search.<m>-<lista>.*`).
+  Cálculo com peça dona (saldo do título) entra no critério pela forma SOBRE ALIAS da peça
+  (`OPEN_BALANCE_OF('f','pp')` + `PRINCIPAL_PAID_JOIN_SQL` na query base) — nunca fórmula própria,
+  nunca a forma correlacionada com `${schema}` dentro da lista branca.
 
 ## Passo 5 — Validar
 

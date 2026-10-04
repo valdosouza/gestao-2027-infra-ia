@@ -69,6 +69,20 @@ Onda 4 do Módulo Software House, 2026-07-19).
    módulo): clientes, produtos, formas de pagamento (filtrar `enable='S'`).
 7. Grupo de menu novo exige a chave `menu.groups.<Grupo>` no i18n pt/en.
 
+## Pesquisa avançada em tela de processo (Onda 3 — 2026-10-04, `prompts/prompt_pesquisa_avancada.md` §13)
+
+- **Aba de estado continua ABA** (D-BA33): o critério nunca repete a aba e soma em E com ela; trocar de aba
+  PRESERVA os critérios (D-BA8). Só a lista sem aba de status (ex.: baixas realizadas) ganha critério de `status`.
+- **Tela com seleção em lote**: critério novo (aplicar, remover chip, limpar) ZERA a seleção — os critérios entram na
+  assinatura da seleção (molde: lote da OS; títulos da tela de baixas, D-BA40).
+- **Módulo com MAIS de uma lista** (ex.: baixas = títulos + baixas realizadas): cada lista tem o SEU catálogo em
+  `/api/<m>/<lista>/search-criteria` e os SEUS lookups sob o mesmo caminho (o `SearchCriteriaDatasourceImpl` recusa
+  lookup fora do `basePath`). No app, um TIPO de datasource por lista no módulo (flutter_modular resolve por tipo) e o
+  botão da pesquisa vale para a ABA ATIVA; aba sem lista paginada (extrato) não tem botão.
+- Lista que filtra a aba por `HAVING` sobre subselect correlacionado é suspeita de lentidão: a cerca
+  `scripts/explain-pesquisa-avancada.ts` mostra; a saída aprovada é a forma de LISTA da peça dona do cálculo (derived
+  table agregada 1:1 por LEFT JOIN — ex.: `PRINCIPAL_PAID_JOIN_SQL` da `title-balance`), com prova de equivalência.
+
 ## Checklist de entrega
 
 - [ ] Swagger completo das ações (409s documentados) — memória swagger-obrigatorio
