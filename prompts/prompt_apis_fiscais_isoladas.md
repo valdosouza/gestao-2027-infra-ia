@@ -7,12 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F45 (§7); as 4 falhas ao vivo do §16.4
+> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F46 (§7); as 4 falhas ao vivo do §16.4
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). **1º passo: gate do delta da Rodada 6** (§17.4); depois Q-F51…Q-F53
-> (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52/Q-F53
-> aguardam; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
+> = **D-F46** (bloqueio total; código: filtrar a passada do rodízio pelos ramos contratados — §17.4), Q-F53 aguarda; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
 > + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
@@ -454,6 +454,16 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
 - **D-F45 (= Q-F56 (a) — Valdo: "sim") — o domínio do `model` da habilitação é FATO DO BANCO**: `CHECK (model IN ('SE','55','65'))`
   na migration 004 do núcleo (1º CHECK da casa) + o boot confere que o motor APLICA CHECK (`assertIssuerModelDomainEnforced` —
   falha alto em MySQL < 8.0.16 ou CHECK NOT ENFORCED). Modelo novo = migration do núcleo que estende o domínio.
+- **D-F46 (= Q-F52 (b) — Valdo, 2026-10-04: "bloqueio total, o cliente vai precisar arranjar outra maneira") — ramo que
+  deixa de ser contratado = BLOQUEIO TOTAL na API fiscal, inclusive do que já foi emitido**: sem a interface do ramo em
+  `tb_institution_has_interface`, transmitir, consultar, cancelar no fisco e ler XML/DANFSe devolvem 403
+  `INTERFACE_NOT_ALLOWED` — para todos, admin incluído (fecha a D-F37 pelo lado do "depois"). A obrigação fiscal já assumida
+  (cancelar no prazo do município, guardar o XML, reconciliar nota em voo/K) é do cliente fora do produto (portal do ADN,
+  contador) — o contrato comercial manda. *Consequência para o código (coerência no sentido inverso)*: a passada do rodízio
+  (`POST /v1/nfse/refresh`) hoje passa na guarda com UM ramo contratado e consulta as candidatas de TODOS os ramos — passa a
+  filtrar as candidatas pelos ramos contratados em que quem pede tem o privilégio (ou é admin), no SQL antes do LIMIT (molde
+  do `listPendingServiceInvoices`). *Por quê*: licença é o que se vendeu; o produto não presta serviço fiscal a ramo não
+  contratado. Risco aceito e registrado: nota em voo no momento do corte fica sem reconciliação pelo produto.
 
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
@@ -522,7 +532,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
 - ~~**Q-F49 O custo das leituras que crescem com o histórico entra como critério de aceite?**~~ → **DECIDIDA = D-F40** (a recomendação). (página de pendentes = COUNT + página sobre todas as notas do cliente via 3 views com NOT EXISTS por linha; candidatas do rodízio = MAX correlacionado sobre todas as tentativas da institution com OR que não usa o índice de `last_queried_at`): (a) **sim — teto de tempo por chamada (ex.: p95 < 300 ms com 200 mil notas) no teste de carga da F3 / diagnóstico da S2 (D-F23/D-F24), com `EXPLAIN` na cerca** · (b) fica para quando doer. *(Rec.: (a); medido hoje no dev: 1ª página dos pendentes 119–206 ms com 386 notas — não diz nada sobre 200 mil.)*
 
 
-### 8.R5 Rodada 5 — aberta pela execução da Rodada 4 (guardião + gates, §16) — Q-F50 DECIDIDA (D-F44) · ⚠️ Q-F51…Q-F53 AGUARDAM O VALDO
+### 8.R5 Rodada 5 — aberta pela execução da Rodada 4 (guardião + gates, §16) — Q-F50 DECIDIDA (D-F44) · Q-F51 ADIADA · Q-F52 DECIDIDA (D-F46) · ⚠️ Q-F53 AGUARDA O VALDO
 
 - ~~**Q-F50 Como fechar o LADO DO ERP na virada?**~~ → **DECIDIDA = D-F44** ("manter" a (a) refinada — §17). (refinada pelos gates da Rodada 4 — §16.4). O ato `migrate:setes
   --cutover` grava `cutover_at` no `fiscal_api`, mas o contador do setes-api NUNCA lê esse fato: uma instância esquecida ou
@@ -552,7 +562,8 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   fiscal de produção) · (c) fazer o smoke DEPOIS de renovar o A1 (a renovação entra pelo setes-api + `migrate:setes`, porque
   o `fiscal_api` é réplica) · (d) não fazer o smoke em H (Q-F45 (c)). *(Rec.: (a) com um cliente interno da própria Setes e
   valor simbólico — é o único caminho que prova o DPS montado pela regra atual; (c) se o prazo do A1 apertar.)*
-- **Q-F52 Licença (D-F37) × obrigação fiscal JÁ assumida**: quando o ramo deixa de ser contratado, o que acontece com o que
+- ~~**Q-F52 Licença (D-F37) × obrigação fiscal JÁ assumida**~~ → **DECIDIDA = D-F46** ((b) bloqueio total — Valdo,
+  2026-10-04; a recomendação era (a)). Texto original: quando o ramo deixa de ser contratado, o que acontece com o que
   já foi emitido? Hoje, nada passa: NFS-e em voo ou em K deixa de ser reconciliada pela consulta/rodízio, o cancelamento
   dentro do prazo do município e o XML/DANFSe que o cliente tem de guardar ficam bloqueados — inclusive para o admin; e a
   passada de quem tem UM ramo contratado consulta notas de ramo NÃO contratado. (a) **a licença barra só a transmissão NOVA;
@@ -1150,6 +1161,8 @@ Achado de teste: no MariaDB 10.4 um UPDATE em AUTOCOMMIT que espera trava NÃO a
 `fiscal-api` 44/44 · `nfse-api` 143 unit + **130 ao vivo** (7 suítes em cópias descartáveis — r7 20/20), zero 500 · `setes-api`
 tax-authority 24/24 · `fiscal_api` real: migration 004 aplicada, institution 1 RÉPLICA, 19 tentativas/21 vozes, nenhuma cópia sobrando.
 **Gate do delta da Rodada 6 (D-F41…D-F45 + retrabalho) NÃO rodado** — próximo passo antes de "pronto".
-Pendências: Q-F51 ADIADA (renovação do A1 programada), Q-F52 (licença × obrigação já emitida), Q-F53 (GRANT
+Pendências: Q-F51 ADIADA (renovação do A1 programada), ~~Q-F52~~ DECIDIDA = D-F46 (bloqueio total — falta o CÓDIGO: a passada
+`POST /v1/nfse/refresh` filtra as candidatas pelos ramos contratados com privilégio, no SQL antes do LIMIT, + teste unit e ao
+vivo; o `it.failing`/teste que fixar o comportamento atual vira verde), Q-F53 (GRANT
 dos ataques ao vivo); F2a (setes-api passivo: remover as 14 rotas e as 6 peças, licença para todos — D-F37, pré-condição do ato);
 inventário dos demais achados da F1 que valem para o setes-api (A14 da D-F43). PUBLICADO 2026-10-04 nos repos PRIVADOS `valdosouza/gestao-2027-fiscal-api` · `-nfse-api` · `-nfe-api` (os demais do projeto são públicos — mudar a visibilidade é decisão do Valdo).
