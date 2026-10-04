@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 8.9 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.2 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-03  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -15,7 +15,9 @@
 | **setes-sync** | 6 | 3 | — | ✅ Ativo |
 | **setes-app** | 5 | 4 | 1 | 🔨 Fase 1 em construção (fundação pronta, cadastros em evolução) |
 | **sincronizador** | 2 | 0 | 1 | ✅ Legado |
-| **fiscal-api** | 1 (INDEX) + prompt em `prompts/` | 0 | — | 🧭 NOVO 2026-10-03 (D-F1) — serviço de documento fiscal (NFS-e/ADN · NF-e/NFC-e SEFAZ) para qualquer cliente e seus apps, escala 1000 clientes; **Fase 0, sem código** até Q-F2…Q-F26 fecharem |
+| **fiscal-api** | 1 (INDEX) + prompt em `prompts/` | 0 | — | 🔨 Núcleo comum (BIBLIOTECA) das APIs fiscais — D-F17; decisões D-F1…D-F35; **F1 EXECUTADA e GATES FECHADOS 2026-10-04** (socrático 0.75 · adversarial 0.80; 29 testes); **Rodada 4 aberta (Q-F45…Q-F49)** — `prompts/prompt_apis_fiscais_isoladas.md` §8.R4/§15 |
+| **nfse-api** | 1 (INDEX) | 0 | — | 🔨 Serviço da NFS-e (ADN), porta 3002, `/v1` — **F1 EXECUTADA e GATES FECHADOS 2026-10-04** (102 testes + 45 ao vivo com fisco falso); cerca da virada `FISCAL_LEGACY_INSTITUTIONS` (D-F18) — o setes-api segue emitindo até a F2a |
+| **nfe-api** | 1 (INDEX) | 0 | — | ⏸ NOVO 2026-10-03 (D-F20) — serviço futuro da NF-e/NFC-e (SEFAZ), porta 3003; pasta SEM código até o 1º cliente de mercadoria |
 | **database** | 1 | 3 | — | ✅ Suporte (espelho de D:\Gestao2027\sql) |
 | **skills-genericas** | — | 6 | — | ✅ Qualquer projeto |
 | **git-github** | 6 | 1 script | — | ✅ Suporte |
@@ -41,8 +43,12 @@ D:\Gestao2027\Infra-IA/
 ├── README_SKILLS.md                      ← Guia de skills
 ├── GUIA_RAPIDO_SKILLS.md                 ← Start quick
 │
-├── fiscal-api/                           (Node.js + TypeScript — serviço de documento fiscal) ⭐ NOVO 2026-10-03
-│   └── INDEX.md                          ← START HERE (D-F1…D-F3; prompt em otimização: prompts/prompt_apis_fiscais_isoladas.md)
+├── fiscal-api/                           (Node.js + TypeScript — NÚCLEO COMUM das APIs fiscais, biblioteca — D-F17)
+│   └── INDEX.md                          ← START HERE (D-F1…D-F26; plano vigente: prompts/prompt_apis_fiscais_isoladas.md §12)
+├── nfse-api/                             (Node.js + TypeScript — serviço da NFS-e/ADN, porta 3002) ⭐ NOVO 2026-10-03
+│   └── INDEX.md
+├── nfe-api/                              (serviço futuro da NF-e/NFC-e/SEFAZ, porta 3003 — sem código, D-F20) ⭐ NOVO 2026-10-03
+│   └── INDEX.md
 │
 ├── setes-api/                            (Node.js + TypeScript — ERP)
 │   ├── INDEX.md                          ← START HERE
@@ -546,6 +552,9 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-04 | **Pesquisa Avançada — Onda 3 (telas de processo) Rodada 0 ORGANIZADA** (`prompts/prompt_pesquisa_avancada.md` §13): inventário das 6 listas (pedidos, devoluções, títulos, baixas, boletos, cheques) com volume e tempo medidos no dev (títulos abertos ~640 ms com 7.451 — HAVING sobre subselects correlacionados); critérios propostos por lista; abas de estado seguem como abas; carteira do vendedor só nos lookups novos (listas = item próprio); "vencido" sem derivado (critério não carrega relógio); Q-BA37 propõe derived table agregada na peça `title-balance` com prova de equivalência e guardião antes. **Q-BA32…Q-BA44** aguardam o Valdo. | 9.2 |
+| 2026-10-04 | **APIs fiscais — F0 FECHADA (Rodada 3, D-F27…D-F35) + F1 EXECUTADA + GATES FECHADOS** (`prompts/prompt_apis_fiscais_isoladas.md` §14/§15/§8.R4). Nasceram o núcleo `fiscal-api` (biblioteca: pool UTC/REPEATABLE READ, JWT RS256, cofre AES-256-GCM do A1, habilitação + ALUGUEL do rodízio — migration 002, transporte mTLS/XMLDSig, storage, contrato de leitura D-F33, fonte de fatos `erp/facts.ts`) e o serviço `nfse-api` (:3002, `/v1`, OpenAPI design-first); views de política 065 no setes-api; `fiscal_api` criado no dev e dados da Setes migrados (`migrate:setes` = re-sincronia até a virada). Gates: socrático 0.62 → **0.75 ✅**, adversarial 0.58 → 0.60 → **0.80 ✅** (3 rodadas, 3 retrabalhos; HIGH da R1: chave de P pousando em tentativa H, rodízio filtrando depois do LIMIT, `GET_LOCK` com conexão retida, dual-run sem cerca; MEDIUM da R2: DELETE do A1 × reserva pelo snapshot do REPEATABLE READ). Regras novas em `database/PADROES_BANCO.md` §11 (aluguel por UPDATE, filtro antes do LIMIT, fato nosso sem `dh`, migração sem dual-write). **Rodada 4 aberta: Q-F45…Q-F49** (smoke H, admin × licença, teto do rodízio, onde mora a cerca, custo das leituras). Nada commitado. | 9.1 |
+| 2026-10-03 | **APIs fiscais — Rodada 2 DECIDIDA, §8 ZERADA (D-F4…D-F26)** (`prompts/prompt_apis_fiscais_isoladas.md` §7 + **§12 plano vigente**). Valdo revisou o centro do desenho: setes-api PASSIVO, setes-app cliente direto (D-F4); a API fiscal LÊ o banco do produto por uma fonte de fatos isolada (D-F10); efeito no ERP pelo setes-api lendo a voz no `fiscal_api` (D-F11); **três pastas** — `fiscal-api` vira BIBLIOTECA do núcleo, nascem `nfse-api/` e `nfe-api/` (sem código) com espelhos `Infra-IA/nfse-api/` e `Infra-IA/nfe-api/` (D-F12/D-F17/D-F20); JWT RS256 do produto (D-F13); sem `tb_licensee` (D-F14); views + GRANT mínimo (D-F15); A1 cifrado no banco (D-F16); topologia SaveInCloud (D-F9). §3–§6/§10/§11 marcados SUPERADOS onde conflitam. Tabelas fixas da raiz e ORGANIZACAO_PASTAS atualizadas. F0 aberta (parecer do guardião sobre o modelo §12.3–12.5). | 9.0 |
 | 2026-10-03 | **Pesquisa Avançada — passeio logado da Onda 2** (`prompts/prompt_pesquisa_avancada.md` §12.9; Claude in Chrome com o Valdo logado como Super): contratos (valor mensal + ativo, chips, remover, limpar), regras de tributação "tem ICMS", usuários sem foco (sem Perfil) + instituição, cidades estado + filtro rápido, formas de pagamento por comportamento, vitrine adquirida, colaboradores com ida e volta do form — 10 contagens na tela = banco, somente leitura, zero erro no log. Observações de DADO: comportamento × código NF-e no catálogo de formas de pagamento; `tb_cfop.active = ''`. | 8.9 |
 | 2026-10-03 | **Pesquisa Avançada — Q-BA26…Q-BA28 DECIDIDAS** (`prompts/prompt_pesquisa_avancada.md` §12.8; Valdo: "siga as recomendações"): D-BA29 vitrines seguem filtrando/ordenando pelo nome técnico (nome traduzido no banco vira item próprio em "Fora de escopo", guardião antes do DDL); D-BA30 Super sem foco em Usuários não recebe o critério Perfil (atributo do vínculo); D-BA31 "pertence à instituição X" e o foco coexistem (não unificar). Já estavam executadas — nenhum código mudou. Onda 2 sem questão aberta. | 8.8 |
 | 2026-10-03 | **Pesquisa Avançada — Onda 2 ENTREGUE** (`prompts/prompt_pesquisa_avancada.md` §12.5–§12.7; Valdo: Q-BA17 = as 26 telas, Q-BA18…Q-BA25 pelas recomendações): critérios nas 26 telas da fábrica em 2 blocos com gates. Parecer do guardião: ESCOPO na query base e critério por ALIAS (lista branca é `const`, nunca função do escopo); 1:1 = LEFT JOIN/derived table na base (users.kind = vínculo em foco, contracts.monthlyValue = `mv`, tax-rules.hasX = filhos por LEFT JOIN — os EXISTS correlacionados morreram); 1:N = `shape:'set'` na peça (`? IN (…)`, só lookup — users.institution, Super-only). Gates ao vivo: catálogo servido = catálogo aceito (admin mandava critério não servido), `parseOptionalQueryId` (3 rotas davam 500 com id inválido), contrato `mv` escopado, `published`/`cfop.active` nulos. Cerca M5 virou script (27 listas, FALHA = subselect sem índice utilizável). API 1781/1781 · app 161/161 · smoke 520/520 · commits locais. Abertas Q-BA26…Q-BA28. | 8.7 |

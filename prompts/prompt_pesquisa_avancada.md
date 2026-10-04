@@ -2,7 +2,7 @@
 
 **Escopo**: setes
 **Origem**: rascunho do Valdo `prompts/PromptBuscaAvancada.txt` (2026-09-30) — "vamos tratar como uma onda separada"
-**Estado**: **Onda 2 ENTREGUE (2026-10-03, §12.5–§12.7)** — as 26 telas da fábrica com critérios em 2 blocos (D-BA20…D-BA28),
+**Estado**: **Onda 3 (telas de processo) — Rodada 0 ORGANIZADA 2026-10-04 (§13; Q-BA32…Q-BA44 aguardam o Valdo)** · antes: **Onda 2 ENTREGUE (2026-10-03, §12.5–§12.7)** — as 26 telas da fábrica com critérios em 2 blocos (D-BA20…D-BA28),
 gates socrático 0.78/0.80 ✅ + adversarial ao vivo com 4 achados corrigidos; API 1781/1781 · app 161/161 · smoke 520/520;
 commits locais; Q-BA26…Q-BA28 DECIDIDAS (§12.8, D-BA29…D-BA31 — nenhuma questão aberta); passeio logado FEITO (§12.9, 10/10 contagens = banco); pende o push · antes: Rodada 0 organizada (§12) · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
 customers + service-orders nos dois lados; gates socrático 0.68 → **0.78 ✅** · adversarial 0.66 → **0.84 ✅**; API 1497/1497 ·
@@ -828,6 +828,93 @@ Observações de DADO (não da pesquisa — para revisar no cadastro do Super): 
 e código 03; "1 - DINHEIRO" está como Outros (o backfill da 027 mapeou por `id_nfce`, e a linha não tinha código);
 (2) `tb_cfop` com 1 linha `active = ''` (§12.7). Resíduo conhecido (D-BA29): a vitrine ordena pelo nome técnico em
 inglês ("Bancos" aparece primeiro por ser "Bank").
+
+## 13. Onda 3 — telas de PROCESSO (Rodada 0, 2026-10-04)
+
+**Alvo (D-BA9)**: as listas das telas de processo — usam a mesma peça e o mesmo painel, mas cada uma tem ABAS de
+estado, algumas têm seleção em lote, e é onde o volume mora. Nenhum conceito novo previsto: a peça
+`@shared/list/search-criteria`, o painel `app/shared/search/` e as regras da Onda 2 (escopo na query base, critério
+por ALIAS, catálogo servido = aceito, nome sempre, `{id,name}` nos lookups, cerca M5) valem como estão. A OS
+(`service-orders`) já foi piloto na Onda 1.
+
+### 13.1 Inventário (fatos do disco e do dev, 2026-10-04)
+
+| Tela (app) | Lista (API) | Volume dev | Tempo hoje, sem critério | Abas / estado | Seleção em lote |
+|---|---|---|---|---|---|
+| Pedidos de venda | `GET /orders?status=A\|F` | 754 (328 A · 426 F) | 102 ms | Abertos · Faturados (inclui Cancelado — Q-CA7) | não |
+| Devoluções | `GET /order-returns?status=A\|F` | 9 | 47 ms | Abertas · Faturadas | não |
+| Baixas → aba Abertos/Títulos | `GET /settlements/bills?status=open\|settled&kind=` | 7.451 títulos (7.161 abertos) | 306 ms todos · **639 ms abertos** | Abertos · Baixados · Movimento | **SIM** (baixa em lote) |
+| Baixas → aba Baixados | `GET /settlements/settled` | 771 baixas | 22 ms | — (status da baixa vem na linha) | não (estorno por linha) |
+| Boletos | `GET /bank-slips?status=&pending=` | 285 | 54 ms | Abertos · Liquidados · Cancelados + "só pendências no banco" | não |
+| Cheques | `GET /checks?status=` | 155 | 12 ms | 6 estados (abas roláveis) | não |
+
+**Fora**: Movimento/extrato (D6 da paginação — não pagina), Caixa (sem lista), `state-tax-rates` (sem tela no app),
+OS (feita na Onda 1). Estado de boleto e cheque é DERIVADO do último evento (`STATE_SQL`/`LAST_CHECK_STATE_SQL`) e já
+filtra por `HAVING`; o critério entra no WHERE, antes do HAVING — estreita sem mexer no estado.
+
+Domínios lidos do dev: título `operation` C (receber, 7.419) / D (pagar, 32); `kind` RA/RM/PA/PM (rótulos já no app:
+recebimento/pagamento automático/manual) + CH (cheque devolvido, 6); `stage` N/B/C (destino da cobrança); baixa
+`status` N vigente / E estornada / R estorno (rótulos já no app); cheque `kind` P/T. Índices que dirigem: títulos
+`idx_fin_expiration (institution, dt_expiration)`; baixas `idx_payment_settled (institution, settled_code)`; pedidos
+`idx_order_sale_number (institution, number)`, `tb_customer_id`, `tb_salesman_id`.
+
+### 13.2 Critérios propostos por lista
+
+| Lista | Critérios (T texto · N número · $ dinheiro · D data · L lookup do próprio módulo · O opções · B sim/não) |
+|---|---|
+| Pedidos | customerName T · customer L (`/orders/customer-lookup` NOVO, carteira D-BA17) · salesman L (`/orders/salesman-lookup` NOVO — Q-BA42) · number N · dtRecord D · totalValue $ · invoiceNumber N (`inv.number_seq`, como a OS) · paymentType L (`/orders/payment-types-lookup` existe) · hasService B (Q-BA41) |
+| Devoluções | customerName T · customer L (`/order-returns/customer-lookup` NOVO) · number N · originNumber N (nº da venda de origem) · dtRecord D · totalValue $ |
+| Títulos | entityName T · entity L ("Cliente/Fornecedor" — `/settlements/entity-lookup` NOVO, Q-BA35) · number T · operation O (receber/pagar) · kind O (RA/RM/PA/PM/CH) · stage O · dtExpiration D · tagValue $ · balance $ (saldo pela peça — Q-BA36) · paymentType L (NOVO) |
+| Baixas | entityName T · number T · dtPayment D · dtRealPayment D · paidValue $ · settledCode N · status O (vigente/estornada/estorno) · kind O |
+| Boletos | customerName T (expressão derivada já existente `CUSTOMER_NAME_SQL`) · ourNumber T · documentNumber T · dtEmission D · dtExpiration D · value $ · agreement L (`/bank-slips/agreements` existe) |
+| Cheques | issuer T · number T · bank L (`/checks/banks` existe) · agency T · account T · dtCheck D · value $ · kind O |
+
+Receita do app = a da OS (tela de processo, skill `tela-de-processo.md`): `criteria` na cadeia, todo emit de lista com
+os critérios, troca de aba PRESERVA os critérios (D-BA8), e na tela com seleção os critérios entram na assinatura da
+seleção.
+
+### 13.3 ⚠️ Questões da Rodada 0 (aguardam o Valdo — recomendação entre parênteses)
+
+- **Q-BA32** Alcance: as 6 listas de §13.1 (5 telas) × só parte delas. *(Rec.: as 6.)*
+- **Q-BA33** Abas × critérios: o estado continua sendo ABA (e "só pendências no banco" continua checkbox); critério
+  nunca repete a aba e soma em E com ela, como na OS. Única exceção: Baixas, que não tem aba de status, ganha o critério
+  `status` (vigente/estornada/estorno). *(Rec.: sim.)*
+- **Q-BA34** Carteira do vendedor nas telas de PROCESSO: hoje as LISTAS de pedidos, OS e títulos NÃO restringem pela
+  carteira (só a lista de Clientes e os lookups de cliente restringem). (a) os lookups NOVOS de cliente (pedidos,
+  devoluções) aplicam a carteira (D-BA17 — "a carteira é da pessoa") e a visibilidade das LISTAS fica como está, item
+  próprio se o Valdo quiser; (b) as listas de processo passam a restringir pela carteira nesta onda. *(Rec.: (a) — (b)
+  muda o que o vendedor enxerga hoje, é decisão de produto, não de pesquisa.)*
+- **Q-BA35** Entidade dos títulos (cliente OU fornecedor — vem da cadeia da ordem): lookup único "Cliente/Fornecedor" no
+  módulo `settlements`, listando só entidades que TÊM título (EXISTS escopado), SEM trava de carteira (quem tem a
+  interface de baixas é o financeiro). *(Rec.: sim.)*
+- **Q-BA36** Saldo em aberto como critério de faixa nos títulos: expressão = `OPEN_BALANCE_SQL` da peça
+  `title-balance` — nunca fórmula própria (Q-G21: houve três fórmulas e o desconto sumia). *(Rec.: sim.)*
+- **Q-BA37** Desempenho da lista de títulos — o M5 com volume de verdade: a aba Abertos leva ~640 ms no dev com 7.451
+  títulos (HAVING sobre 2 subselects correlacionados por linha; o COUNT recalcula tudo). Critério não piora (estreita no
+  WHERE, antes do HAVING), mas a lista em si é o gargalo da onda. (a) só medir e registrar; (b) **reescrever a soma das
+  baixas como derived table AGREGADA 1:1 por título (LEFT JOIN — o mesmo desenho do `mv` dos contratos), com a fórmula
+  continuando DENTRO da peça `title-balance` (versão agregada da mesma expressão, uma fonte), prova de equivalência
+  título a título contra a fórmula atual nos 7.451 títulos do dev, e gates**; (c) saldo materializado em coluna.
+  *(Rec.: (b), no Bloco B, com parecer do guardião ANTES — mexe na peça do saldo. (c) contraria "saldo sempre
+  derivado" (D-A36) e fica descartada.)*
+- **Q-BA38** "Vencido" como critério: exigiria "hoje no fuso do estabelecimento" DENTRO da expressão — o critério não
+  carrega `?` nem relógio (regra da Onda 2 + onda TZ-1). *(Rec.: não criar derivado; o usuário filtra "Vencimento até
+  <data>" na aba Abertos. Atalho "Vencidos" no painel, se quiserem, é preset do APP que preenche a data — candidato.)*
+- **Q-BA39** Critérios derivados de EVENTO (título com boleto vigente, cheque em custódia há mais de N dias…): *(Rec.:
+  nenhum nesta onda — o estado por evento já é a aba de cada tela; derivado de evento como critério = peça de estado
+  dentro de EXISTS, decisão própria com o guardião.)*
+- **Q-BA40** Seleção em lote nos títulos: critério novo zera a seleção (entra na assinatura, como no lote da OS).
+  *(Rec.: sim.)*
+- **Q-BA41** Pedidos — "Tem serviço" (pedido conjugado): o ramo de serviço entra na query base como LEFT JOIN 1:1 pela
+  PK (id + institution + terminal); a coluna `hasService` da linha e o critério viram a mesma expressão e morre o
+  EXISTS do SELECT. *(Rec.: sim.)*
+- **Q-BA42** Vendedor nos pedidos: lookup só de ATIVOS (como Clientes, D-BA19) × ativos e inativos (pedido antigo de
+  vendedor desligado só se acha assim). *(Rec.: ativos e inativos, com "(inativo)" no nome — numa tela de PROCESSO a
+  pesquisa é sobre histórico; a D-BA19 continua valendo para Clientes, onde o vendedor é atribuição viva.)*
+- **Q-BA43** Entrega em 2 blocos com gates próprios: **A** = vendas (pedidos + devoluções); **B** = financeiro (títulos
+  + baixas + boletos + cheques, com a Q-BA37). *(Rec.: sim.)*
+- **Q-BA44** Volume para a cerca M5: o dev tem a carga da Setes sincronizada (7.451 títulos, 7.608 ordens). *(Rec.:
+  medir no dev, antes e depois de cada bloco, e registrar os tempos aqui; produção da Onda 4 repete a medição.)*
 
 ## 7. Fora de escopo (candidatas)
 
