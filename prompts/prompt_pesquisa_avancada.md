@@ -4,7 +4,7 @@
 **Origem**: rascunho do Valdo `prompts/PromptBuscaAvancada.txt` (2026-09-30) — "vamos tratar como uma onda separada"
 **Estado**: **Onda 2 ENTREGUE (2026-10-03, §12.5–§12.7)** — as 26 telas da fábrica com critérios em 2 blocos (D-BA20…D-BA28),
 gates socrático 0.78/0.80 ✅ + adversarial ao vivo com 4 achados corrigidos; API 1781/1781 · app 161/161 · smoke 520/520;
-commits locais; Q-BA26…Q-BA28 DECIDIDAS (§12.8, D-BA29…D-BA31 — nenhuma questão aberta); pendem passeio logado e push · antes: Rodada 0 organizada (§12) · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
+commits locais; Q-BA26…Q-BA28 DECIDIDAS (§12.8, D-BA29…D-BA31 — nenhuma questão aberta); passeio logado FEITO (§12.9, 10/10 contagens = banco); pende o push · antes: Rodada 0 organizada (§12) · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
 customers + service-orders nos dois lados; gates socrático 0.68 → **0.78 ✅** · adversarial 0.66 → **0.84 ✅**; API 1497/1497 ·
 app 159/159 · smoke ao vivo 17/17 · Rodada 2 EXECUTADA (§9.3: D-BA16…D-BA19; **Q-BA16 aberta** — pedido de explicação) · fuso TZ-1 + Rodada 2 executados (§10–§10.4) · **PUBLICADO 2026-09-30** · pendem passeio logado e Q-TZ9
 **Método**: `skills-genericas/refinar-prompt-arquitetura.md` · antes do DDL/peça: `skills-genericas/guardiao-conceitual.md`
@@ -798,10 +798,36 @@ As três já estavam executadas como assunção — a rodada só as CONFIRMA; ne
   "conviver"): "usuários da instituição em foco Y que também pertencem a X" é pergunta legítima do Super. Conhecimento
   negativo: não "unificar" os dois depois — o foco governa a coluna/critério `kind`; o critério só estreita.
 
-**Nenhuma questão aberta na Onda 2.** Pendências: passeio logado (todas as 28 telas da fábrica têm o botão; roteiro
-sugerido: papéis com cidade/documento, contratos por valor mensal, regras de tributação "tem ICMS", usuários Super
-com/sem foco) e o push (commits locais). Onda 3 (telas de processo: pedidos, títulos, boletos, cheques, devoluções,
-baixas) é a próxima — e é onde a cerca M5 vai mostrar volume de verdade.
+**Nenhuma questão aberta na Onda 2.** Pendência: o push (commits locais). Onda 3 (telas de processo: pedidos, títulos,
+boletos, cheques, devoluções, baixas) é a próxima — e é onde a cerca M5 vai mostrar volume de verdade.
+
+### 12.9 Passeio logado da Onda 2 (2026-10-03, Claude in Chrome com o Valdo autenticado como Super)
+
+Servidor do app reiniciado com o código novo (`flutter run -d web-server`, porta 5051); a aba da extensão nasceu
+OCULTA (Flutter não sobe) — o Valdo trouxe a janela para a frente e logou. Somente leitura: nenhum cadastro alterado
+(o colaborador foi aberto e fechado sem salvar). Cada contagem conferida contra o banco do dev:
+
+| Tela | Ação | Tela | Banco |
+|---|---|---|---|
+| Contratos | sem critério | 45 | 45 |
+| Contratos | Valor mensal de 100 a 300 + Ativo Sim (chips "de R$ 100,00 até R$ 300,00" e "Ativo: Sim", selo 2) | 3 | 3 |
+| Contratos | remove o chip do valor (selo 1) → "Limpar" | 15 → 45 | 15 / 45 |
+| Regras de tributação | "Tem ICMS: Sim" (coluna "ICMS" da linha intacta após o LEFT JOIN) | 1 (regra 2) | 1 |
+| Usuários (Super, sem foco) | painel SEM "Perfil" (D-BA30); Instituição = GESTAO COMPUTACIONAL SETES (chip pelo nome) | 3 | 3 |
+| Cidades | Estado = PARANÁ (PR) pelo lookup | 401 | 401 |
+| Cidades | + filtro rápido "curit" (soma em E, D-BA6) | 1 (CURITIBA) | 1 |
+| Formas de pagamento | Comportamento = Cartão | 3 | 3 |
+| Configurações (vitrine) | Adquirida = Sim | 13 de 40 | 13 |
+| Colaboradores | Nome / razão social = "vendedor" → abre o cadastro → volta | 1 → critério mantido (D-BA8) | 1 |
+
+Painéis todos em pt-BR com o texto dos forms (origens 0–8 por extenso, "Estado do Destinatário", "Nome técnico da
+interface"). Log da API sem erro no período (os dois 500 do log são das sondas adversariais ANTES da correção — hoje 400).
+
+Observações de DADO (não da pesquisa — para revisar no cadastro do Super): (1) catálogo de formas de pagamento —
+"3 - CARTAO DE DEBITO" com comportamento Cartão mas código NF-e 01 (Dinheiro) e "4 - CARTEIRA" com comportamento Cartão
+e código 03; "1 - DINHEIRO" está como Outros (o backfill da 027 mapeou por `id_nfce`, e a linha não tinha código);
+(2) `tb_cfop` com 1 linha `active = ''` (§12.7). Resíduo conhecido (D-BA29): a vitrine ordena pelo nome técnico em
+inglês ("Bancos" aparece primeiro por ser "Bank").
 
 ## 7. Fora de escopo (candidatas)
 
