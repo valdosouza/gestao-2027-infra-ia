@@ -11,9 +11,9 @@
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). **1º passo: gate do delta da Rodada 6** (§17.4); depois Q-F51…Q-F53
-> (§8.R5) aguardam o Valdo; smoke H aguarda uma OS de teste (Q-F51) + "vai" — A1 vence **08/10/2026**; F2a (setes-api passivo
-> + virada) → F2b (app). COMMITADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app publicados; fiscal-api/nfse-api/nfe-api só
-> local — repos GitHub inexistentes).
+> (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52/Q-F53
+> aguardam; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
 
@@ -542,7 +542,9 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   SE da Setes é '1'; as 903 notas SE do dev são série '1'). *(Rec. refinada: manter (a), com a condição virando CONFERÊNCIA do
   próprio ato — série SE do ERP ≠ '1' → falha alta; e registrar para a F2a que a tabela do ERP passa a significar só a série
   da nota — ambiente da SE e `dps_last_number` ficam sem consumidor e são aposentados SEM DROP.)*
-- **Q-F51 De onde vem a NOTA DE TESTE do smoke da D-F36?** Hoje há ZERO notas elegíveis (300 conferidas: 294 sem código
+- ⏸ **Q-F51 — ADIADA pelo Valdo (2026-10-04): "ignore, pois está programada a renovação" do A1** — o prazo de 08/10/2026 deixa
+  de pressionar o smoke; a origem da nota de teste volta à mesa depois da renovação. Texto original: **De onde vem a NOTA DE
+  TESTE do smoke da D-F36?** Hoje há ZERO notas elegíveis (300 conferidas: 294 sem código
   nacional — anteriores à D-N11a —, 6 com `cTribMun` "0102" — anteriores à D-N26b) e o A1 vence em 08/10/2026. (a) **faturar
   uma OS de TESTE no dev pelo setes-api** (regra de ISS atual — código nacional + código municipal vazio ou de 3 dígitos):
   consome a numeração e gera financeiro no ERP que guarda a produção da Setes — escolher cliente/serviço/valor e cancelar a
@@ -1148,7 +1150,6 @@ Achado de teste: no MariaDB 10.4 um UPDATE em AUTOCOMMIT que espera trava NÃO a
 `fiscal-api` 44/44 · `nfse-api` 143 unit + **130 ao vivo** (7 suítes em cópias descartáveis — r7 20/20), zero 500 · `setes-api`
 tax-authority 24/24 · `fiscal_api` real: migration 004 aplicada, institution 1 RÉPLICA, 19 tentativas/21 vozes, nenhuma cópia sobrando.
 **Gate do delta da Rodada 6 (D-F41…D-F45 + retrabalho) NÃO rodado** — próximo passo antes de "pronto".
-Pendências: Q-F51 (nota de teste do smoke — o A1 vence em **08/10/2026**), Q-F52 (licença × obrigação já emitida), Q-F53 (GRANT
+Pendências: Q-F51 ADIADA (renovação do A1 programada), Q-F52 (licença × obrigação já emitida), Q-F53 (GRANT
 dos ataques ao vivo); F2a (setes-api passivo: remover as 14 rotas e as 6 peças, licença para todos — D-F37, pré-condição do ato);
-inventário dos demais achados da F1 que valem para o setes-api (A14 da D-F43); repos GitHub de fiscal-api/nfse-api/nfe-api
-(inexistentes em 2026-10-04 — commits só locais nesses três).
+inventário dos demais achados da F1 que valem para o setes-api (A14 da D-F43). PUBLICADO 2026-10-04 nos repos PRIVADOS `valdosouza/gestao-2027-fiscal-api` · `-nfse-api` · `-nfe-api` (os demais do projeto são públicos — mudar a visibilidade é decisão do Valdo).

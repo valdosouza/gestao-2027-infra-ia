@@ -15,8 +15,8 @@
 | **setes-sync** | 6 | 3 | — | ✅ Ativo |
 | **setes-app** | 5 | 4 | 1 | 🔨 Fase 1 em construção (fundação pronta, cadastros em evolução) |
 | **sincronizador** | 2 | 0 | 1 | ✅ Legado |
-| **fiscal-api** | 1 (INDEX) + prompt em `prompts/` | 0 | — | 🔨 Núcleo comum (BIBLIOTECA) das APIs fiscais — F1 + Rodadas 4 e 6 EXECUTADAS (2026-10-04, §16/§17 de `prompts/prompt_apis_fiscais_isoladas.md`): 44 testes; migrations 001–004 (004 = 1º CHECK da casa, domínio do modelo — D-F45); trava da habilitação POR LINHA (PADROES §9 regra 8); `runShortCommand` (D-F41). Repo GitHub a criar (commit só local) |
-| **nfse-api** | 1 (INDEX) | 0 | — | 🔨 Serviço da NFS-e (ADN), porta 3002, `/v1` — F1 + Rodadas 4 e 6 EXECUTADAS (2026-10-04): 143 testes + 130 ao vivo em cópias descartáveis; cerca da virada = FATO `cutover_at` (D-F39); o ato da virada aposenta a habilitação SE do ERP (D-F44); `migrate:setes` só SE (D-F42). Pendem Q-F51…Q-F53, gate do delta da Rodada 6, F2a/F2b. Repo GitHub a criar (commit só local) |
+| **fiscal-api** | 1 (INDEX) + prompt em `prompts/` | 0 | — | 🔨 Núcleo comum (BIBLIOTECA) das APIs fiscais — F1 + Rodadas 4 e 6 EXECUTADAS (2026-10-04, §16/§17 de `prompts/prompt_apis_fiscais_isoladas.md`): 44 testes; migrations 001–004 (004 = 1º CHECK da casa, domínio do modelo — D-F45); trava da habilitação POR LINHA (PADROES §9 regra 8); `runShortCommand` (D-F41). Repo GitHub privado (2026-10-04) |
+| **nfse-api** | 1 (INDEX) | 0 | — | 🔨 Serviço da NFS-e (ADN), porta 3002, `/v1` — F1 + Rodadas 4 e 6 EXECUTADAS (2026-10-04): 143 testes + 130 ao vivo em cópias descartáveis; cerca da virada = FATO `cutover_at` (D-F39); o ato da virada aposenta a habilitação SE do ERP (D-F44); `migrate:setes` só SE (D-F42). Pendem o gate do delta da Rodada 6, Q-F52/Q-F53, F2a/F2b. Repo GitHub privado (2026-10-04) |
 | **nfe-api** | 1 (INDEX) | 0 | — | ⏸ NOVO 2026-10-03 (D-F20) — serviço futuro da NF-e/NFC-e (SEFAZ), porta 3003; pasta SEM código até o 1º cliente de mercadoria |
 | **database** | 1 | 3 | — | ✅ Suporte (espelho de D:\Gestao2027\sql) |
 | **skills-genericas** | — | 6 | — | ✅ Qualquer projeto |
