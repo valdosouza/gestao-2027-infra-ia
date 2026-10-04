@@ -1161,8 +1161,20 @@ Achado de teste: no MariaDB 10.4 um UPDATE em AUTOCOMMIT que espera trava NÃO a
 `fiscal-api` 44/44 · `nfse-api` 143 unit + **130 ao vivo** (7 suítes em cópias descartáveis — r7 20/20), zero 500 · `setes-api`
 tax-authority 24/24 · `fiscal_api` real: migration 004 aplicada, institution 1 RÉPLICA, 19 tentativas/21 vozes, nenhuma cópia sobrando.
 **Gate do delta da Rodada 6 (D-F41…D-F45 + retrabalho) NÃO rodado** — próximo passo antes de "pronto".
-Pendências: Q-F51 ADIADA (renovação do A1 programada), ~~Q-F52~~ DECIDIDA = D-F46 (bloqueio total — falta o CÓDIGO: a passada
-`POST /v1/nfse/refresh` filtra as candidatas pelos ramos contratados com privilégio, no SQL antes do LIMIT, + teste unit e ao
-vivo; o `it.failing`/teste que fixar o comportamento atual vira verde), Q-F53 (GRANT
-dos ataques ao vivo); F2a (setes-api passivo: remover as 14 rotas e as 6 peças, licença para todos — D-F37, pré-condição do ato);
+Pendências: Q-F51 ADIADA (renovação do A1 programada), ~~Q-F52~~ DECIDIDA = D-F46 (bloqueio total — CÓDIGO FEITO, ver §17.5),
+Q-F53 (GRANT dos ataques ao vivo); F2a (setes-api passivo: remover as 14 rotas e as 6 peças, licença para todos — D-F37, pré-condição do ato);
 inventário dos demais achados da F1 que valem para o setes-api (A14 da D-F43). PUBLICADO 2026-10-04 nos repos PRIVADOS `valdosouza/gestao-2027-fiscal-api` · `-nfse-api` · `-nfe-api` (os demais do projeto são públicos — mudar a visibilidade é decisão do Valdo).
+
+### 17.5 D-F46 executada (2026-10-04, 3ª sessão — nuvem)
+
+| O quê | Onde | Prova |
+|---|---|---|
+| `requireAnyPrivilege` passa a DEVOLVER os ramos em que quem pede pode agir (contratado + TRANSMITIR; admin = todos os contratados); nenhum → 403 como antes | `nfse-api/src/modules/guards.ts` | `app.test.ts` "D-F46: a PASSADA só consulta…" |
+| a passada usa o MESMO domínio da rota por nota (`service-orders`, `orders`, `order-returns` — `erp.orderInterface`); antes a guarda olhava só os 2 primeiros e a passada consultava TODAS as notas | `nfse.routes.ts` (`PASS_INTERFACES`) | idem (devolução contratada com privilégio entra) |
+| filtro no SQL das candidatas, ANTES do LIMIT: `LEFT JOIN vw_order_interface` (D-F32) + `COALESCE(interface_key,'orders') IN (?)`; lista vazia = nenhuma consulta; sem a opção = SQL de antes (chamada interna) | `nfse/repository.ts` `listRefreshCandidates`, `transmission.ts` | `passada-ramos.test.ts` (3), `transmission.test.ts` (1) |
+| `explain:leituras` captura o SQL da passada COM o filtro (D-F40) | `scripts/explain-leituras.ts` | — |
+| contrato `/v1/nfse/refresh` descreve a regra | `openapi/nfse-api.v1.yaml` | cerca contrato × rotas verde |
+
+`nfse-api` 148 unit (131 ao vivo pulados — sem banco na nuvem), `tsc` limpo. **Falta na máquina do Valdo**: rodar as suítes
+ao vivo e `npm run explain:leituras` (o plano com o JOIN novo na view de política — D-F40).
+
