@@ -2,7 +2,7 @@
 
 **Escopo**: setes
 **Origem**: rascunho do Valdo `prompts/PromptBuscaAvancada.txt` (2026-09-30) — "vamos tratar como uma onda separada"
-**Estado**: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
+**Estado**: **Onda 2 (demais telas da fábrica) — Rodada 0 ORGANIZADA 2026-10-03 (§12; Q-BA17…Q-BA25 aguardam o Valdo)** · Onda 1 + fuso + passeio logado PUBLICADOS 2026-09-30 — antes: **Onda 1 ENTREGUE + Rodada 2 + Q-BA16 + onda TZ-1 do fuso (gates 0.76/0.78 ✅) (2026-09-30)** — antes: **Onda 1 ENTREGUE (2026-09-30)** — D-BA1…D-BA11 (Valdo) + D-BA12…D-BA15 (assunção do guardião); pilotos
 customers + service-orders nos dois lados; gates socrático 0.68 → **0.78 ✅** · adversarial 0.66 → **0.84 ✅**; API 1497/1497 ·
 app 159/159 · smoke ao vivo 17/17 · Rodada 2 EXECUTADA (§9.3: D-BA16…D-BA19; **Q-BA16 aberta** — pedido de explicação) · fuso TZ-1 + Rodada 2 executados (§10–§10.4) · **PUBLICADO 2026-09-30** · pendem passeio logado e Q-TZ9
 **Método**: `skills-genericas/refinar-prompt-arquitetura.md` · antes do DDL/peça: `skills-genericas/guardiao-conceitual.md`
@@ -493,6 +493,105 @@ compilação antiga. Roteiro e evidências:
   menu) nos painéis de configurações e de campos (título + vitrine); re-provado ao vivo ("· Meu Estabelecimento").
   Resíduo: ordenação e filtro dessas vitrines são da API sobre a descrição em inglês ("Bancos" não acha; ordem segue o
   inglês) — item à parte se o Valdo quiser.
+
+## 12. Onda 2 — demais telas da FÁBRICA (Rodada 0, 2026-10-03)
+
+**Alvo (D-BA9)**: as telas de cadastro construídas com `RegisterSearchPage` que ainda não têm critérios. Telas de
+PROCESSO (pedidos, títulos, boletos, cheques, devoluções, baixas) são a Onda 3 — ficam de fora aqui; árvores também.
+**Nenhum conceito novo**: a peça `@shared/list/search-criteria` e `app/shared/search/` já existem; cada tela só
+DECLARA a sua lista branca (D-BA12) e liga a receita do app (skill `criar-formulario-cadastro.md`). Sem DDL previsto
+(D-BA11 revisada por tela abaixo). Parecer do guardião da Onda 1 (D-BA12…D-BA15) continua valendo — só volta ao
+guardião se um critério derivado novo (D-BA13) sair da forma `EXISTS` escopado.
+
+### 12.1 Inventário — 26 telas da fábrica fora os pilotos (fatos do disco, 2026-10-03)
+
+Legenda do kind: T texto (contém) · N número (faixa) · $ dinheiro (faixa) · D data (faixa) · L lookup do PRÓPRIO módulo ·
+O opções · B sim/não · B* sim/não DERIVADO (EXISTS escopado, D-BA13). "(filtro)" = já coberto pelo filtro rápido, não
+vira critério. Volume do dev **a medir** (serviço `mysql` do dev estava PARADO em 2026-10-03 — exige administrador).
+
+**Bloco 1 — molde pronto (papéis de entidade, acesso, financeiro do cliente) — 13 telas**
+
+| Tela (API) | Base | Critérios propostos | Lookup | Índice (D-BA11) |
+|---|---|---|---|---|
+| `carriers` | tb_carrier × cadeia central | document T(dígitos) · city T(GROUP_CONCAT dos `main='S'`, D-BA16) · personType O(`PERSON_TYPES`) · active B · createdAt D(datetime) | — | = customers: subselects pela PK da cadeia |
+| `collaborators` | tb_collaborator | idem carriers | — | idem |
+| `providers` | tb_provider | idem carriers | — | idem |
+| `salesmen` | tb_salesman | idem carriers | — | idem |
+| `institutions` (Super) | tb_institution × cadeia | document T(dígitos) · city T · active B · createdAt D(datetime) — schema já é (filtro) | — | idem |
+| `users` | tb_user × cadeia | active B · createdAt D(datetime) · **kind** O (perfil do vínculo na institution do JWT — Q-BA20) · **institution** L (só Super — Q-BA21) — nome/e-mail (filtro) | novo `/users/institution-lookup` (Super) | kind = EXISTS em `tb_institution_has_user` (PK user × institution) |
+| `contracts` | tb_contract | customer L · dtStart D · dtEnd D · monthlyValue $ (expressão = o SUM correlacionado que a lista já calcula) · active B · paymentType L (forma do contrato, D14) | novo `/contracts/customer-lookup` (reusa `@shared/customer-wallet`, D-BA17) · `/contracts/payment-types` novo | `idx_tb_contract_customer (institution, customer, active)` cobre customer+active; datas/valor = filtro residual |
+| `bank-accounts` | tb_bank_account × tb_bank | bank L · agency T · number T · manager T · limitValue $ | `/bank-accounts/banks` (existe) | tabela pequena, filtro residual |
+| `bank-charge-agreements` | tb_bank_charge_agreement | bankAccount L · active B | `/bank-charge-agreements/bank-accounts` (existe) | residual |
+| `settlement-rules` | tb_settlement_rule | paymentType L · bankAccount L · feeRate N · paymentTerm N · expirationDate D | `/settlement-rules/payment-types` e `/bank-accounts` (existem) | residual (≤ nº de formas) |
+| `payment-types` (vínculos) | tb_institution_has_payment_types × catálogo | enable B · appMobile B · tef B · maxParcels N · **kind** O (kind tipado da `tb_payment_types` — constante do domínio a REUSAR, Fase Faturamento) | — | residual |
+| `price-lists` | tb_price_list | validity D · published B (conferir domínio S/N na execução) | — | residual |
+| `services` | tb_product kind='S' × tb_category | category L · active B — descrição/identificador (filtro) | `/services/categories` (existe) | `tb_category_id` é FK (verificar índice na execução) |
+
+**Bloco 2 — tributação e catálogos centrais — 7 telas**
+
+| Tela (API) | Base | Critérios propostos | Lookup | Índice (D-BA11) |
+|---|---|---|---|---|
+| `tax-rules` | tb_tax_rule × produto × estado | ncm T · origin O(0–8) · purpose O(0–7) · st B · finalConsumer B · simples B · product L · state L · cfop L · **hasIcms / hasIcmsSt / hasIpi / hasPisCofins / hasIi B\*** (o `HAS()` que a lista já exibe em `_rowPieces` — Q-BA19) | `/tax-rules/cfops` (existe) · product e state: verificar `/catalogs` ou criar lookups próprios | `idx_tax_rule_cfop`; `tb_state_id`/`tb_product_id` FK (verificar índice); B* = EXISTS pela PK do filho |
+| `service-tax-rules` | tb_service_tax_rule × cidade × item | city L · serviceList L · aliq N · nationalCode T · active B | `/service-tax-rules/service-list` (existe) · city: lookup NOVO no módulo (regra: lookup do próprio módulo) | `idx_service_tax_rule_fact (institution, city, service_list)` cobre os dois lookups |
+| `cfop` (Super) | tb_cfop | way O(E/S) · jurisdiction O(E/N/X) · active B — código/descrição (filtro) | — | catálogo central pequeno |
+| `cities` (Super) | tb_city × tb_state | state L · ibge T · population N — o parâmetro `stateId` da rota CONTINUA (é dos lookups de outros módulos, Q-BA18) | lookup NOVO `/cities/states-lookup` | `tb_state_id` FK; 5.570 linhas |
+| `states` (Super) | tb_state × tb_country | country L · aliquota N — `countryId` continua como parâmetro | lookup NOVO `/states/countries-lookup` | 27 linhas |
+| `service-list` (Super) | tb_service_list (LC 116) | localIncidence O(P/E) · active B | — | ~200 linhas |
+| `interfaces` (Super) | tb_interface | kind O(T/R) — descrição/i18n/grupo (filtro) | — | pequeno |
+
+**Sem critérios (ficam IDÊNTICAS — critério 5 de sucesso) — 6 telas**: `countries`, `banks`, `privileges`, `modules`
+(catálogos pequenos: o filtro rápido já resolve e a lista cabe em poucas páginas — D-BA3 não encontra "dado que o
+usuário reconhece" além do que o filtro cobre) e as vitrines `interface-configs` / `interface-fields` (não são
+cadastros: listam o catálogo de interfaces; o resíduo da ordenação/filtro em inglês (§11) é item próprio).
+
+### 12.2 O que a execução repete por tela (receita das skills, molde = `customers`)
+
+API: `<M>_SEARCH_CRITERIA` no `<m>.repository.ts` + `${query.criteria.sql}`/params na `where` dos DOIS SELECTs +
+`parseListQuery(req, '<m>', <M>_SEARCH_CRITERIA)` + `GET /<m>/search-criteria` ANTES de `/:id` (service filtra o que
+não deve ser servido, como o `salesman` travado) + Swagger (`criteria`, 400, 422) + lookups novos com `escapeLike` e
+`pageSize=100`. App: bind do `SearchCriteriaDatasourceImpl(basePath: '/api/<m>')` + `criteria` na cadeia
+datasource → repository → usecase → evento/estado/bloc (`_criteria` em TODO emit; `withoutRejected` no 422, Q-BA16) +
+página (`_loadSearchCriteria` no initState, 4 props da fábrica) + i18n `search.<m>.*` pt/en. Custo medido no piloto:
+~10 arquivos e ~100 linhas por módulo (commit app 532cd44).
+
+### 12.3 M5 antes de executar — medição
+
+O resíduo M5 (§9.1) diz: subselects correlacionados custam ~5 buscas por PK por linha, nos dois SELECTs. Plano:
+script somente leitura `scripts/explain-pesquisa-avancada.ts` que compila CADA lista branca (pilotos + Onda 2) com
+valores de amostra e roda `EXPLAIN` no dev, reprovando se alguma tabela correlacionada sair de `eq_ref`/`const`/`ref`
+(varredura `ALL` dentro do subselect = índice faltando → migration na mesma entrega, D-BA11). Carga sintética fica
+para a Onda 3 (pedidos/títulos é onde o volume mora; as telas da fábrica são cadastros — o maior é `cities`, 5.570).
+**Pré-requisito**: serviço `mysql` do dev ligado (parado em 2026-10-03; precisa de administrador).
+
+### 12.4 ⚠️ Questões da Rodada 0 (aguardam o Valdo — recomendação entre parênteses)
+
+- **Q-BA17** Alcance: as 20 telas de §12.1 com critérios + 6 idênticas × TODAS as 26 com algo. *(Rec.: as 20 — tela
+  sem critério fica idêntica e pode ganhar depois sem custo de método; critério sem "dado que o usuário reconhece"
+  é ruído no painel.)*
+- **Q-BA18** Parâmetros que já existem nas rotas (`stateId` em cities, `countryId` em states, `institutionId` em
+  users): virar critério e MORRER como parâmetro × conviver. *(Rec.: conviver — o parâmetro serve aos lookups de
+  outros módulos e a telas-mãe; o critério é do usuário na tela. Nenhum contrato muda.)*
+- **Q-BA19** Critérios DERIVADOS em `tax-rules` (tem ICMS / ST / IPI / PIS-COFINS / II): entrar agora na forma
+  `EXISTS` escopado (D-BA13, com teste de escopo) × só colunas. *(Rec.: entrar — é exatamente o que a linha mostra
+  em `_rowPieces`; a forma é a já aprovada pelo guardião.)*
+- **Q-BA20** `users.kind` é `string` livre (max 20) no DTO; o critério `options` exige domínio tipado. Tipar como
+  `['admin','user']` (conhecimento negativo: `roles.ts` só reconhece `admin`) e servir o critério × não oferecer
+  `kind`. *(Rec.: tipar — é correção colateral pequena no DTO; se o Valdo souber de outro perfil em uso, entra na
+  constante.)*
+- **Q-BA21** Lookup "Instituição" em `users`: só para Super (admin já é escopado pelo JWT) — espelho da D-BA15.
+  *(Rec.: sim; `fetchUserSearchCriteria` filtra pela função, como `customers` faz com `salesman`.)*
+- **Q-BA22** Entrega em DOIS blocos com gates próprios (§12.1) × tudo numa entrega. *(Rec.: dois — o Bloco 1 é
+  cópia do molde e libera as telas de maior uso (papéis, contratos, financeiro); o Bloco 2 tem lookups novos e os
+  derivados; cada bloco fecha com suíte verde + smoke ao vivo + socrático ≥ 0.70 + adversarial sem HIGH.)*
+- **Q-BA23** App: repetir a receita por módulo (~10 arquivos/módulo, 20 módulos) × introduzir um `ListRequest`
+  (filtro + página + critérios) compartilhado no `packages/core` que atravessa a cadeia de uma vez. *(Rec.: repetir
+  a receita — a Onda 2 não muda estrutura; `ListRequest` é refatoração dos 28 módulos, decisão própria com o
+  guardião, candidata ao "Fora de escopo". Registro aqui para não se perder.)*
+- **Q-BA24** `contracts.customer`: lookup próprio do módulo respeitando a carteira (D-BA17) × lista aberta. *(Rec.:
+  carteira — "a carteira é da PESSOA", já decidido.)*
+- **Q-BA25** Medição M5 (§12.3) como PRÉ-CONDIÇÃO do Bloco 1 × junto com o Bloco 2 (onde entram as expressões
+  novas). *(Rec.: antes do Bloco 1, com as expressões dos pilotos + Bloco 1 — e o script fica como cerca
+  permanente: toda lista branca nova passa por ele.)*
 
 ## 7. Fora de escopo (candidatas)
 
