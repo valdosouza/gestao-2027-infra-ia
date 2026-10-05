@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.6 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.7 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-04  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-04 | **APIs fiscais — gate do delta D-F47/D-F48 FECHADO** (§18.2: socrático 0,74 · adversarial r9 0,78). Corrigido: rollback protegido na re-sincronia. Aberta Q-F60 (a passada grava F "sem resposta" por consulta? — sem isso a D-F47 não fecha em voo sem DPS no fisco). | 9.7 |
 | 2026-10-04 | **APIs fiscais — D-F47 e D-F48 DECIDIDAS e EXECUTADAS** (`prompts/prompt_apis_fiscais_isoladas.md` §7/§18.1). D-F47 (Q-F57 (b)): a passada do rodízio fecha as tentativas JÁ VIVAS de ramo cortado (destrava o emitente); D-F48 (Q-F58 (a)): re-sincronia com uma transação por institution. Q-F59 em esclarecimento. | 9.6 |
 | 2026-10-04 | **APIs fiscais — gates do delta da Rodada 6 + D-F46 FECHADOS** (`prompts/prompt_apis_fiscais_isoladas.md` §18): socrático 0,76 · adversarial r8 0,80, nenhum HIGH. Corrigidos: idempotência do cancelamento com A1 ausente ([r8-cancel-idem]) e réplica de outro modelo em institution sem SE ([r8-resync-55]). Abertas Q-F57 (nota viva de ramo cortado trava o emitente), Q-F58 (trava da re-sincronia), Q-F59 (setes-api revive a SE aposentada) — §8.R7. | 9.5 |
 | 2026-10-04 | **APIs fiscais — Q-F52 DECIDIDA = D-F46** (`prompts/prompt_apis_fiscais_isoladas.md` §7/§8.R5/§17.4; Valdo: "bloqueio total, o cliente vai precisar arranjar outra maneira"). Ramo que deixa de ser contratado = 403 em TUDO na API fiscal (transmitir, consultar, cancelar no fisco, XML/DANFSe), admin incluído — inclusive o já emitido. Código feito (§17.5): a passada `POST /v1/nfse/refresh` filtra as candidatas pelos ramos contratados com privilégio. | 9.4 |

@@ -13,7 +13,7 @@
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
 > (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
 > = **D-F46** (bloqueio total; executada — §17.5), Q-F53 aguarda; **gates do delta da Rodada 6 + D-F46 FECHADOS** (§18: socrático
-> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57/Q-F58 DECIDIDAS e executadas (D-F47/D-F48, §18.1); **Q-F59 em esclarecimento**; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57/Q-F58 DECIDIDAS e executadas (D-F47/D-F48, §18.1); **Q-F59 em esclarecimento**, **Q-F60 aguarda** (gate §18.2); F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
 > + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
@@ -611,7 +611,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   (é história da migração, não fato do núcleo) nem tabela-catálogo de modelos (lê-la antes do FOR UPDATE recriaria o
   snapshot antes da trava). *(Rec.: (a), passando pelo `revisar-ddl`.)*
 
-### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — Q-F57/Q-F58 DECIDIDAS (D-F47/D-F48) · ⚠️ Q-F59 em esclarecimento
+### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — Q-F57/Q-F58 DECIDIDAS (D-F47/D-F48) · ⚠️ Q-F59 em esclarecimento · ⚠️ Q-F60 aguarda
 
 - ~~**Q-F57 Nota VIVA de ramo descontratado trava o emitente inteiro (consequência da D-F46).**~~ → **DECIDIDA = D-F47** ((b)). Uma tentativa em voo / S / K de
   um ramo que saiu do contrato nunca mais reconcilia (a passada a filtra; a rota por nota dá 403 a todos), mas
@@ -635,6 +635,17 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   re-sincronia seguinte detecta e a defesa é a flag `--confirmo-setes-api-parado`. (a) o ato confere um FATO do setes-api
   (ex.: a migration da F2a que tira a SE da tela aplicada no schema) e recusa sem ele · (b) manter procedimental + detecção.
   *(Rec.: (a) — a virada só acontece depois da F2a de qualquer jeito; conferir custa uma leitura.)*
+  **Resposta do Valdo (2026-10-04), em esclarecimento:** "considere que o schema central e o schema de cliente permanecem o
+  mesmo, estamos apenas usando APIs separadas para dar escala — serviços de autorização de NFS-e e NF-e precisam ser
+  turbinados quando forem muito requisitados, e não uma API monobloco."
+- **Q-F60 (gate do delta D-F47/D-F48, §18.2) A passada grava F "sem resposta" por CONSULTA?** A D-F47 não destrava o emitente
+  num subcaso: tentativa EM VOO cujo DPS o fisco não conhece (envio que nunca chegou). A consulta só marca `last_queried_at`; o
+  único escritor do F "sem resposta" é `reconcileInterrupted`, que roda só no TRANSMITIR — 403 para ramo cortado. A órfã fica
+  viva para sempre, trava o emitente e volta ao topo do rodízio a cada 5 min com uma chamada ao ADN. (a) a passada grava o F
+  por consulta depois de `IN_FLIGHT_MINUTES` com o fisco sem o DPS, como o transmitir já faz — para TODO ramo · (b) só para
+  ramo cortado · (c) não; a D-F47 registra o subcaso como risco aceito. Mexe na regra herdada "F só conclusivo" (D-N) — o
+  mesmo critério que o transmitir já usa. *(Rec.: (a) — um veredito conclusivo só, nos dois caminhos; (b) cria regra
+  diferente por licença para o mesmo fato do fisco.)*
 ---
 
 ## 9. Fora de escopo desta fase
@@ -1249,4 +1260,16 @@ ao vivo + `npm run explain:leituras` (JOIN novo da D-F46). Próximo: Q-F53, Q-F5
 
 `nfse-api` 169 unit (131 ao vivo pulados), `tsc` limpo. `explain:leituras` captura o SQL mais largo (os dois grupos). **Na máquina do
 Valdo**: suítes ao vivo (as de re-sincronia — r2/r4/r5/r6 — passam a ver uma transação por institution) + `explain:leituras`.
+
+### 18.2 Gate do delta D-F47/D-F48 (socrático 0,74 ✅ · adversarial r9 0,78 ✅ — nenhum HIGH)
+
+`adversarial-f1r9.test.ts` (19): precedência AND/OR do filtro novo provada por um oráculo que traduz o WHERE real (o filtro não
+escapa da institution nem do bloco de idade); `passScope` com listas disjuntas; `--dry-run` com várias institutions desfaz todas;
+o FOR UPDATE de cada institution vive só na transação dela. Achados: **[r9-inflight-never-closes] MEDIUM (provado)** — em voo
+sem DPS no fisco nunca fecha pela passada → **Q-F60**; **[r9-resync-rollback-throws] LOW (provado) — CORRIGIDO**: o rollback
+da institution é protegido (conexão que não desfaz é descartada; a próxima institution usa outra) e o relatório sai sempre;
+LOWs aceitos: `countLiveTransmissions` sem filtro de vida/terminal × candidatas da vida vigente (anterior ao delta — depende do
+setes-api recusar vida nova com tentativa viva); admin sem nada contratado ainda abre o A1 e consulta o prazo do município
+antes de saber se há viva; commit gravado com confirmação perdida relatado como falha (re-sincronia idempotente).
+`nfse-api` 187 unit (131 ao vivo pulados), `tsc` limpo.
 
