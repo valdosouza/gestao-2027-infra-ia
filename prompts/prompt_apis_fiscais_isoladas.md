@@ -7,13 +7,13 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F52 (§7); as 4 falhas ao vivo do §16.4
+> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F53 (§7); as 4 falhas ao vivo do §16.4
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
 > (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
 > = **D-F46** (bloqueio total; executada — §17.5), Q-F53 aguarda; **gates do delta da Rodada 6 + D-F46 FECHADOS** (§18: socrático
-> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57…Q-F60 DECIDIDAS e executadas (D-F47/D-F48/D-F50/D-F51 — §18.1/§18.3); Q-F61 = D-F52 (§18.4); **Q-F53 aguarda**; próximo grande: F2a; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57…Q-F60 DECIDIDAS e executadas (D-F47/D-F48/D-F50/D-F51 — §18.1/§18.3); Q-F61 = D-F52 (§18.4); Q-F53 = D-F53 (GRANT no `ops/grants.sql`; falta trocar o harness com rodada ao vivo); **nenhuma questão aberta** — próximo: F2a; próximo grande: F2a; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
 > + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
@@ -506,6 +506,14 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   privilégio (cortado = não — D-F46), dentro do teto da D-F38; "uma vez" = `last_queried_at` anterior ao F + 24 h (a revisita
   carimba depois). Achou a NFS-e → A (A depois de F é permitido); não achou → só carimba. *Por quê*: fecha a única janela em que
   a voz F pode mentir (ADN com atraso de propagação) antes que o cliente fature outra nota para o mesmo serviço.
+- **D-F53 (= Q-F53 (a) — Valdo, 2026-10-04: "crie no seed essas permissões para que ao implantar em produção eu não tenha
+  problemas") — o usuário `fiscal_api` tem controle TOTAL nas cópias descartáveis `fiscal_api_adv_*`, e só nelas**: `GRANT ALL
+  PRIVILEGES ON \`fiscal\_api\_adv\_%\`.* TO 'fiscal_api'@'%'` no script de implantação `nfse-api/ops/grants.sql` (seção 1b,
+  idempotente, roda antes do 1º boot; inócuo em produção, onde não há cópias; conferência no item 3 do script). *Por quê*: os
+  ataques ao vivo podem rodar com o usuário que só LÊ o ERP — teste errado fica impedido de escrever no ERP por construção (hoje
+  é só detecção pelo CHECKSUM). **Pendente**: trocar o harness (`live-harness.ts`) para atacar com o `fiscal_api` — o usuário dono
+  do ERP fica só para criar/apagar a cópia e para o ENSAIO da virada (a aposentadoria da SE no ERP exige o dono — D-F44); fazer
+  junto de uma rodada ao vivo na máquina do Valdo, depois de aplicar o GRANT no dev.
 
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
@@ -574,7 +582,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
 - ~~**Q-F49 O custo das leituras que crescem com o histórico entra como critério de aceite?**~~ → **DECIDIDA = D-F40** (a recomendação). (página de pendentes = COUNT + página sobre todas as notas do cliente via 3 views com NOT EXISTS por linha; candidatas do rodízio = MAX correlacionado sobre todas as tentativas da institution com OR que não usa o índice de `last_queried_at`): (a) **sim — teto de tempo por chamada (ex.: p95 < 300 ms com 200 mil notas) no teste de carga da F3 / diagnóstico da S2 (D-F23/D-F24), com `EXPLAIN` na cerca** · (b) fica para quando doer. *(Rec.: (a); medido hoje no dev: 1ª página dos pendentes 119–206 ms com 386 notas — não diz nada sobre 200 mil.)*
 
 
-### 8.R5 Rodada 5 — aberta pela execução da Rodada 4 (guardião + gates, §16) — Q-F50 DECIDIDA (D-F44) · Q-F51 ADIADA · Q-F52 DECIDIDA (D-F46) · ⚠️ Q-F53 AGUARDA O VALDO
+### 8.R5 Rodada 5 — aberta pela execução da Rodada 4 (guardião + gates, §16) — Q-F50 DECIDIDA (D-F44) · Q-F51 ADIADA · Q-F52 DECIDIDA (D-F46) · Q-F53 DECIDIDA (D-F53)
 
 - ~~**Q-F50 Como fechar o LADO DO ERP na virada?**~~ → **DECIDIDA = D-F44** ("manter" a (a) refinada — §17). (refinada pelos gates da Rodada 4 — §16.4). O ato `migrate:setes
   --cutover` grava `cutover_at` no `fiscal_api`, mas o contador do setes-api NUNCA lê esse fato: uma instância esquecida ou
@@ -612,7 +620,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   consulta, cancelamento no fisco e leitura do já emitido continuam** (a obrigação nasceu quando o ramo era contratado) · (b)
   como está — bloqueio total · (c) leitura sobrevive, ações não. *(Rec.: (a) — o contrato comercial não pode impedir o
   cumprimento de obrigação fiscal já assumida; a passada filtra as candidatas pelos ramos contratados OU com NFS-e viva.)*
-- **Q-F53 Os ataques ao vivo voltam a rodar com o usuário de SELECT MÍNIMO da D-F31?** O harness das cópias descartáveis
+- ~~**Q-F53 Os ataques ao vivo voltam a rodar com o usuário de SELECT MÍNIMO da D-F31?**~~ → **DECIDIDA = D-F53** ((a)). O harness das cópias descartáveis
   usa o usuário do setes-api (ALL PRIVILEGES ON *.* — escreve no ERP que guarda a produção da Setes); hoje a defesa é
   DETECÇÃO (o `drop()` confere o CHECKSUM do `fiscal_api` real, da `_migrations` e de 8 tabelas do ERP). (a) **GRANT ALL em
   `fiscal\_api\_adv\_%`.* para o usuário `fiscal_api`** (só as cópias; o do setes-api só cria/apaga a cópia) — a defesa
