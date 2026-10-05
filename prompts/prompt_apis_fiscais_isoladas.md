@@ -7,13 +7,13 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F51 (§7); as 4 falhas ao vivo do §16.4
+> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F52 (§7); as 4 falhas ao vivo do §16.4
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
 > (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
 > = **D-F46** (bloqueio total; executada — §17.5), Q-F53 aguarda; **gates do delta da Rodada 6 + D-F46 FECHADOS** (§18: socrático
-> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57…Q-F60 DECIDIDAS e executadas (D-F47/D-F48/D-F50/D-F51 — §18.1/§18.3); **Q-F61 e Q-F53 aguardam**; próximo grande: F2a; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57…Q-F60 DECIDIDAS e executadas (D-F47/D-F48/D-F50/D-F51 — §18.1/§18.3); Q-F61 = D-F52 (§18.4); **Q-F53 aguarda**; próximo grande: F2a; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
 > + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
@@ -501,6 +501,11 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   nos dois caminhos (refina a regra herdada "F só conclusivo": este é o conclusivo da Onda 2, HIGH-3). Quem perde a corrida
   devolve a voz lida sob a trava e não carimba `last_queried_at` (a prova da D-F29 exige consulta POSTERIOR à voz). *Por quê*:
   sem isso a em voo de ramo cortado nunca fechava e travava o emitente (D-F47; gate r9).
+- **D-F52 (= Q-F61 (a) — Valdo, 2026-10-04: "recomendação") — o F "sem resposta" gravado por CONSULTA volta ao rodízio UMA vez,
+  24 h depois** (`F_REVISIT_HOURS`): só F de source Q, sem chave, na ÚLTIMA tentativa da vida (retransmitida = fora), de ramo com
+  privilégio (cortado = não — D-F46), dentro do teto da D-F38; "uma vez" = `last_queried_at` anterior ao F + 24 h (a revisita
+  carimba depois). Achou a NFS-e → A (A depois de F é permitido); não achou → só carimba. *Por quê*: fecha a única janela em que
+  a voz F pode mentir (ADN com atraso de propagação) antes que o cliente fature outra nota para o mesmo serviço.
 
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
@@ -635,7 +640,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   (é história da migração, não fato do núcleo) nem tabela-catálogo de modelos (lê-la antes do FOR UPDATE recriaria o
   snapshot antes da trava). *(Rec.: (a), passando pelo `revisar-ddl`.)*
 
-### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — Q-F57…Q-F60 DECIDIDAS (D-F47/D-F48/D-F50/D-F51) · ⚠️ Q-F61 aguarda
+### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — Q-F57…Q-F61 DECIDIDAS (D-F47/D-F48/D-F50/D-F51/D-F52)
 
 - ~~**Q-F57 Nota VIVA de ramo descontratado trava o emitente inteiro (consequência da D-F46).**~~ → **DECIDIDA = D-F47** ((b)). Uma tentativa em voo / S / K de
   um ramo que saiu do contrato nunca mais reconcilia (a passada a filtra; a rota por nota dá 403 a todos), mas
@@ -671,7 +676,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   ramo cortado · (c) não; a D-F47 registra o subcaso como risco aceito. Mexe na regra herdada "F só conclusivo" (D-N) — o
   mesmo critério que o transmitir já usa. *(Rec.: (a) — um veredito conclusivo só, nos dois caminhos; (b) cria regra
   diferente por licença para o mesmo fato do fisco.)*
-- **Q-F61 (gate r10, §18.3) A tentativa fechada com F POR CONSULTA volta ao rodízio uma vez para pegar NFS-e gerada tarde?**
+- ~~**Q-F61 (gate r10, §18.3) A tentativa fechada com F POR CONSULTA volta ao rodízio uma vez para pegar NFS-e gerada tarde?**~~ → **DECIDIDA = D-F52** ((a)).
   Depois da D-F51 o 1º E2404 com ≥ 10 min fecha a tentativa e a passada não a olha mais; se o ADN gerar a NFS-e com atraso de
   propagação, só a reconfirmação da D-F29, uma consulta manual ou uma retransmissão (o MESMO Id — D-N3) a acham. Risco: o cliente
   vê "falhou" e fatura OUTRA nota para o mesmo serviço. (a) F de source Q sem chave volta ao rodízio UMA vez depois de 24 h
@@ -1317,4 +1322,12 @@ voz lida e não carimba). LOWs aceitos: F2a em mais de um arquivo (o nome vai no
 deploy e rollback de deploy = procedimento; dry-run com bloqueio sai 0 (o roteiro lê o JSON); "10 min ⇒ o POST acabou" é
 premissa (timeout do transporte é de ociosidade — anterior ao delta). Nova: **Q-F61** (revisita única do F por consulta).
 `nfse-api` 223 unit (131 ao vivo pulados), `tsc` limpo.
+
+### 18.4 D-F52 executada (2026-10-04)
+
+`nfse/repository.ts` `listRefreshCandidates`: 4º grupo do OR — `le.kind = 'F' AND le.source = 'Q' AND t.access_key IS NULL`, F há ≥ 24 h e
+dentro do teto, `last_queried_at < F + 24 h`, `NOT EXISTS` tentativa posterior na vida; ordenado junto das autorizadas. Literais
+(constante e teto já dentro do domínio) — nenhum parâmetro novo. Prova: `adversarial-f1r9.test.ts` "D-F52" (o oráculo que traduz o
+WHERE real ganhou os átomos novos; matriz de 9 linhas). `nfse-api` 224 unit, `tsc` limpo. Na máquina do Valdo: `explain:leituras`
+(o `NOT EXISTS` correlacionado usa a PK da tentativa).
 
