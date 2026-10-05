@@ -7,13 +7,13 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F49 (§7); as 4 falhas ao vivo do §16.4
+> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F51 (§7); as 4 falhas ao vivo do §16.4
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
 > (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
 > = **D-F46** (bloqueio total; executada — §17.5), Q-F53 aguarda; **gates do delta da Rodada 6 + D-F46 FECHADOS** (§18: socrático
-> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57/Q-F58 DECIDIDAS e executadas (D-F47/D-F48, §18.1); **Q-F59 em esclarecimento**, **Q-F60 aguarda** (gate §18.2); F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
+> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57…Q-F60 DECIDIDAS e executadas (D-F47/D-F48/D-F50/D-F51 — §18.1/§18.3); **Q-F61 e Q-F53 aguardam**; próximo grande: F2a; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
 > + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
 
 ---
@@ -487,6 +487,20 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   e poriam a chave privada do A1 ao alcance de tudo que mexe no ERP; (3) já feito e provado — voltar custaria semanas antes do
   marco do IBS/CBS (01/01/2027). Critério do Valdo para quando a dúvida voltar: "estratégia por estratégia, prefiro junto" —
   separar só com ganho concreto, como estes. O custo próprio (cópia/réplica/virada) é de TRANSIÇÃO e morre depois da virada.
+- **D-F50 (= Q-F59 (a) — Valdo, 2026-10-04: "segue recomendações") — a virada exige o FATO de que a F2a do setes-api está
+  aplicada no schema do cliente**: `migrate:setes --cutover` lê `<schema>._migrations` procurando o nome FIXO
+  **`f2a_fiscal_passivo`** (arquivo `NNN_f2a_fiscal_passivo.sql` da F2a — contrato entre os dois repos; se a F2a sair em mais de
+  um arquivo, ESTE nome vai no ÚLTIMO) em autocommit, antes da transação. Ausente = o ato real recusa sem escrever; o
+  `--dry-run` segue e reporta "bloqueios" (sai 0 — o roteiro da virada lê o JSON). Permissão negada/conexão perdida sobem cruas.
+  *Por quê*: antes da F2a a tela "Emissor fiscal" do setes-api regrava a SE (`deleted='N'`) e reviveria a linha que a D-F44
+  aposenta (nDPS repetido — R2-2). Continua procedimental: o rollback do DEPLOY do setes-api depois da virada, e aplicar a
+  migration por `db:migrate` antes do código da F2a estar servindo.
+- **D-F51 (= Q-F60 (a) — Valdo, 2026-10-04) — a CONSULTA grava F "sem resposta" com o mesmo critério do transmitir**: tentativa
+  EM VOO (sem voz) há ≥ `IN_FLIGHT_MINUTES` cujo DPS o fisco NÃO conhece (E2404 estruturado — 404 ilegível, 5xx ou fisco fora
+  continuam ambíguos) recebe F (source Q) sob a trava da nota — na rota por nota e na passada, para TODO ramo. Um veredito só
+  nos dois caminhos (refina a regra herdada "F só conclusivo": este é o conclusivo da Onda 2, HIGH-3). Quem perde a corrida
+  devolve a voz lida sob a trava e não carimba `last_queried_at` (a prova da D-F29 exige consulta POSTERIOR à voz). *Por quê*:
+  sem isso a em voo de ramo cortado nunca fechava e travava o emitente (D-F47; gate r9).
 
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
@@ -621,7 +635,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   (é história da migração, não fato do núcleo) nem tabela-catálogo de modelos (lê-la antes do FOR UPDATE recriaria o
   snapshot antes da trava). *(Rec.: (a), passando pelo `revisar-ddl`.)*
 
-### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — Q-F57/Q-F58 DECIDIDAS (D-F47/D-F48) · ⚠️ Q-F59 em esclarecimento · ⚠️ Q-F60 aguarda
+### 8.R7 Rodada 7 — aberta pelos gates do delta da Rodada 6 + D-F46 (2026-10-04, 3ª sessão — §18) — Q-F57…Q-F60 DECIDIDAS (D-F47/D-F48/D-F50/D-F51) · ⚠️ Q-F61 aguarda
 
 - ~~**Q-F57 Nota VIVA de ramo descontratado trava o emitente inteiro (consequência da D-F46).**~~ → **DECIDIDA = D-F47** ((b)). Uma tentativa em voo / S / K de
   um ramo que saiu do contrato nunca mais reconcilia (a passada a filtra; a rota por nota dá 403 a todos), mas
@@ -639,7 +653,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   (a) transação POR institution (o tudo-ou-nada global não protege nenhum invariante ENTRE institutions) · (b) pular as viradas
   na passada geral e conferi-las (`assertFrozen`) numa transação curta própria · (c) manter e rodar só em janela de
   manutenção. *(Rec.: (a) — com 1 institution hoje é igual; com várias, é a única que não para quem já virou.)*
-- **Q-F59 O ato da virada confere POR CONSTRUÇÃO que a F2a está no ar?** Até a F2a, o `upsertIssuer` do setes-api (tela
+- ~~**Q-F59 O ato da virada confere POR CONSTRUÇÃO que a F2a está no ar?**~~ → **DECIDIDA = D-F50** ((a)). Até a F2a, o `upsertIssuer` do setes-api (tela
   "Emissor fiscal", `ON DUPLICATE KEY UPDATE … deleted='N'`) REVIVE a linha SE que a D-F44 aposentou — e a tela, mostrando "sem
   habilitação SE", convida o admin a recriá-la; o contador congelado do ERP volta a cunhar nDPS já usados (R2-2). Hoje só a
   re-sincronia seguinte detecta e a defesa é a flag `--confirmo-setes-api-parado`. (a) o ato confere um FATO do setes-api
@@ -649,7 +663,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   mesmo, estamos apenas usando APIs separadas para dar escala — serviços de autorização de NFS-e e NF-e precisam ser
   turbinados quando forem muito requisitados, e não uma API monobloco."
   Esclarecido na mesma sessão: o banco fiscal FICA (D-F49); a Q-F59 volta à pergunta original ((a) × (b)).
-- **Q-F60 (gate do delta D-F47/D-F48, §18.2) A passada grava F "sem resposta" por CONSULTA?** A D-F47 não destrava o emitente
+- ~~**Q-F60 (gate do delta D-F47/D-F48, §18.2) A passada grava F "sem resposta" por CONSULTA?**~~ → **DECIDIDA = D-F51** ((a)). A D-F47 não destrava o emitente
   num subcaso: tentativa EM VOO cujo DPS o fisco não conhece (envio que nunca chegou). A consulta só marca `last_queried_at`; o
   único escritor do F "sem resposta" é `reconcileInterrupted`, que roda só no TRANSMITIR — 403 para ramo cortado. A órfã fica
   viva para sempre, trava o emitente e volta ao topo do rodízio a cada 5 min com uma chamada ao ADN. (a) a passada grava o F
@@ -657,6 +671,12 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   ramo cortado · (c) não; a D-F47 registra o subcaso como risco aceito. Mexe na regra herdada "F só conclusivo" (D-N) — o
   mesmo critério que o transmitir já usa. *(Rec.: (a) — um veredito conclusivo só, nos dois caminhos; (b) cria regra
   diferente por licença para o mesmo fato do fisco.)*
+- **Q-F61 (gate r10, §18.3) A tentativa fechada com F POR CONSULTA volta ao rodízio uma vez para pegar NFS-e gerada tarde?**
+  Depois da D-F51 o 1º E2404 com ≥ 10 min fecha a tentativa e a passada não a olha mais; se o ADN gerar a NFS-e com atraso de
+  propagação, só a reconfirmação da D-F29, uma consulta manual ou uma retransmissão (o MESMO Id — D-N3) a acham. Risco: o cliente
+  vê "falhou" e fatura OUTRA nota para o mesmo serviço. (a) F de source Q sem chave volta ao rodízio UMA vez depois de 24 h
+  (dentro do teto da D-F38) · (b) risco aceito. *(Rec.: (a) — uma consulta a mais por nota interrompida, e fecha a única
+  janela em que a voz F pode mentir.)*
 ---
 
 ## 9. Fora de escopo desta fase
@@ -1053,7 +1073,8 @@ não-nullable.
 
 1. **Smoke no ADN de HOMOLOGAÇÃO com o A1 real** (critério §12.8-4) — fala com o fisco (sandbox): QUANDO e COMO = **Q-F45**; depois da escolha, **"vai" do Valdo**; e o A1 vence em **08/10/2026**.
 2. **Dual-run até a virada**: o setes-api continua transmitindo em produção; a nfse-api NÃO emite por estabelecimento cuja habilitação é RÉPLICA (`cutover_at` NULL — D-F39; 409 `FISCAL_CUTOVER_PENDING`, recusado também no núcleo). A virada (F2a) = parar o caminho antigo → `npm run migrate:setes -- --cutover <id> --confirmo-setes-api-parado` (re-sincronia final + `cutover_at` na MESMA transação; falha alto em dual-write ou transmissão viva na origem; Q-F50 decide se aposenta a habilitação SE do ERP no mesmo ato) → setes-api passa a ler as views e a assinar RS256 → app (F2b) aponta para a nfse-api.
-3. **F2a (setes-api passivo)**: RS256 + par de chaves (o de dev já está em `setes-api/secrets/jwt/`, fora do git), leitor das views pela biblioteca (D-F33) com leitura travante, `buildCancelPlan.fiscal` + prova da reconfirmação (D-F29), selo da lista, `resolveOrderInterface`/vida lendo as views da 065 (D-F32), remoção das 14 rotas e peças fiscais, cerca "zero chamada às APIs fiscais".
+3. **F2a (setes-api passivo)** — ⚠️ D-F50: a F2a cria a migration de nome EXATO `NNN_f2a_fiscal_passivo.sql` (sem ela a virada
+   recusa): RS256 + par de chaves (o de dev já está em `setes-api/secrets/jwt/`, fora do git), leitor das views pela biblioteca (D-F33) com leitura travante, `buildCancelPlan.fiscal` + prova da reconfirmação (D-F29), selo da lista, `resolveOrderInterface`/vida lendo as views da 065 (D-F32), remoção das 14 rotas e peças fiscais, cerca "zero chamada às APIs fiscais".
 4. **Repos GitHub** `valdosouza/gestao-2027-fiscal-api` e `-nfse-api` (e `-nfe-api`) — criar (Valdo); hoje git local.
 
 
@@ -1283,4 +1304,17 @@ LOWs aceitos: `countLiveTransmissions` sem filtro de vida/terminal × candidatas
 setes-api recusar vida nova com tentativa viva); admin sem nada contratado ainda abre o A1 e consulta o prazo do município
 antes de saber se há viva; commit gravado com confirmação perdida relatado como falha (re-sincronia idempotente).
 `nfse-api` 187 unit (131 ao vivo pulados), `tsc` limpo.
+
+### 18.3 D-F50/D-F51 executadas + gate do delta (socrático 0,80 ✅ · adversarial r10 0,84 ✅ — nenhum HIGH/MEDIUM)
+
+| Decisão | Onde | Prova |
+|---|---|---|
+| **D-F50** virada confere a F2a | `scripts/migrate-from-setes-api.ts` (`F2A_MIGRATION_NAME`, `setesApiF2aApplied` antes da transação; `bloqueios` no dry-run); `r4.live` aceita a recusa pela F2a (o "já VIRADA" segue provado no `r5.live`) | `adversarial-f1r8` "[D-F50]" (2), `adversarial-f1r10` (1146/1142/conexão, dry-run, schema hostil) |
+| **D-F51** F por consulta | `transmission.ts` `recordInterruptedFailure` (comum a transmitir e consultar) + `refreshServiceTransmission`; OpenAPI do `/refresh` por nota | `transmission.test.ts` (3), `adversarial-f1r9` "[r9-inflight-never-closes][corrigido]", `adversarial-f1r10` (fisco lento/fora não fecha; só E2404 estruturado; borda 9/10 min; H × P; irmã com chave; ordem de travas; corrida com o transmitir) |
+
+Gate r10 (`adversarial-f1r10.test.ts`, 34): **[r10-lost-race-stale] LOW (provado) — CORRIGIDO** (quem perde a corrida do F devolve a
+voz lida e não carimba). LOWs aceitos: F2a em mais de um arquivo (o nome vai no último); migration por `db:migrate` antes do
+deploy e rollback de deploy = procedimento; dry-run com bloqueio sai 0 (o roteiro lê o JSON); "10 min ⇒ o POST acabou" é
+premissa (timeout do transporte é de ociosidade — anterior ao delta). Nova: **Q-F61** (revisita única do F por consulta).
+`nfse-api` 223 unit (131 ao vivo pulados), `tsc` limpo.
 

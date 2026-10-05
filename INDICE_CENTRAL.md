@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.8 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.9 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-04  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-04 | **APIs fiscais — D-F50 e D-F51 DECIDIDAS e EXECUTADAS** (§7/§18.3; gate socrático 0,80 · adversarial r10 0,84). D-F50: a virada exige a migration `f2a_fiscal_passivo` do setes-api no schema (contrato da F2a); D-F51: a consulta grava F "sem resposta" com o critério do transmitir. Aberta Q-F61 (revisita do F por consulta). | 9.9 |
 | 2026-10-04 | **APIs fiscais — D-F49: banco `fiscal_api` próprio CONFIRMADO** (`prompts/prompt_apis_fiscais_isoladas.md` §7). Motivo registrado sem maquiar: não é desempenho (mesma instância MySQL); é migração única em vez de uma por schema, GRANT por construção (A1 fora do alcance do ERP) e custo de voltar antes do IBS/CBS. Critério do Valdo: "estratégia por estratégia, prefiro junto". | 9.8 |
 | 2026-10-04 | **APIs fiscais — gate do delta D-F47/D-F48 FECHADO** (§18.2: socrático 0,74 · adversarial r9 0,78). Corrigido: rollback protegido na re-sincronia. Aberta Q-F60 (a passada grava F "sem resposta" por consulta? — sem isso a D-F47 não fecha em voo sem DPS no fisco). | 9.7 |
 | 2026-10-04 | **APIs fiscais — D-F47 e D-F48 DECIDIDAS e EXECUTADAS** (`prompts/prompt_apis_fiscais_isoladas.md` §7/§18.1). D-F47 (Q-F57 (b)): a passada do rodízio fecha as tentativas JÁ VIVAS de ramo cortado (destrava o emitente); D-F48 (Q-F58 (a)): re-sincronia com uma transação por institution. Q-F59 em esclarecimento. | 9.6 |
