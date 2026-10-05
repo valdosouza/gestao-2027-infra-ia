@@ -7,15 +7,18 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F53 (§7); as 4 falhas ao vivo do §16.4
-> RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
-> curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
-> ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
-> (§8.R5): Q-F51 ADIADA pelo Valdo (renovação do A1 programada — o prazo de 08/10/2026 deixa de pressionar), Q-F52 DECIDIDA
-> = **D-F46** (bloqueio total; executada — §17.5), Q-F53 aguarda; **gates do delta da Rodada 6 + D-F46 FECHADOS** (§18: socrático
-> 0,76 · adversarial r8 0,80; 2 achados corrigidos); Q-F57…Q-F60 DECIDIDAS e executadas (D-F47/D-F48/D-F50/D-F51 — §18.1/§18.3); Q-F61 = D-F52 (§18.4); Q-F53 = D-F53 (GRANT no `ops/grants.sql`; falta trocar o harness com rodada ao vivo); **nenhuma questão aberta** — próximo: F2a; próximo grande: F2a; F2a (setes-api passivo + virada) → F2b (app). COMMITADO e PUBLICADO em 2026-10-04 (setes-api/sql/Infra-IA/setes-app
-> + fiscal-api/nfse-api/nfe-api em repos GitHub PRIVADOS criados nesta data).
-
+> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 3ª sessão — §17.5 e §18)**: decisões **D-F1…D-F53** (§7). **Nenhuma questão aberta**
+> (Q-F51 segue ADIADA até a renovação do A1). Feito na 3ª sessão: D-F46 ramo cortado = bloqueio total · D-F47 a passada fecha as
+> vivas do ramo cortado · D-F48 re-sincronia com uma transação por institution · D-F49 banco `fiscal_api` CONFIRMADO (motivo real:
+> não é desempenho — migração única, GRANT por construção, prazo) · D-F50 a virada exige a migration `f2a_fiscal_passivo` do
+> setes-api no schema · D-F51 a consulta grava F "sem resposta" (critério do transmitir) · D-F52 revisita única do F em 24 h ·
+> D-F53 GRANT do `fiscal_api` nas cópias `fiscal_api_adv_*` (`ops/grants.sql` 1b — APLICADO no dev pelo Valdo) e ataques ao vivo
+> com o usuário do serviço. Gates: Rodada 6 + D-F46 (socrático 0,76 · r8 0,80), D-F47/48 (0,74 · r9 0,78), D-F50/51 (0,80 · r10
+> 0,84) — nenhum HIGH; achados provados corrigidos. Provas na nuvem: `fiscal-api` 52 · `nfse-api` 224 unit (131 ao vivo pulados).
+> **1º passo da próxima sessão (na máquina do Valdo)**: `.env` da nfse-api com `DB_USER=fiscal_api`; `$env:NFSE_ADV_LIVE=1; npx jest
+> live --runInBand` (1ª rodada ao vivo com o harness da D-F53 e tudo da 3ª sessão) + `npm run explain:leituras` (JOIN da view de
+> ramo e o NOT EXISTS da D-F52). Verde → **F2a** (§15.5-3: setes-api passivo; a F2a cria `NNN_f2a_fiscal_passivo.sql` — D-F50) →
+> virada → **F2b** (app). Marco duro: IBS/CBS em 01/01/2027 (F0–F2 até meados de novembro — §12.7). Tudo COMMITADO e PUBLICADO.
 ---
 
 ## 1. Contexto — fatos verificados no disco (2026-10-03)
