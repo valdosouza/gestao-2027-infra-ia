@@ -511,9 +511,11 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   PRIVILEGES ON \`fiscal\_api\_adv\_%\`.* TO 'fiscal_api'@'%'` no script de implantação `nfse-api/ops/grants.sql` (seção 1b,
   idempotente, roda antes do 1º boot; inócuo em produção, onde não há cópias; conferência no item 3 do script). *Por quê*: os
   ataques ao vivo podem rodar com o usuário que só LÊ o ERP — teste errado fica impedido de escrever no ERP por construção (hoje
-  é só detecção pelo CHECKSUM). **Pendente**: trocar o harness (`live-harness.ts`) para atacar com o `fiscal_api` — o usuário dono
-  do ERP fica só para criar/apagar a cópia e para o ENSAIO da virada (a aposentadoria da SE no ERP exige o dono — D-F44); fazer
-  junto de uma rodada ao vivo na máquina do Valdo, depois de aplicar o GRANT no dev.
+  é só detecção pelo CHECKSUM). GRANT aplicado no dev pelo Valdo (2026-10-04). Harness trocado: o ATAQUE (pool
+  da cópia e migrations dela) roda com o usuário do SERVIÇO (DB_USER do .env da nfse-api — se for o dono do ERP, a suíte falha
+  alto); o DONO fica só para a faxina (copiar, apagar, CHECKSUM) e os processos filhos (ensaio da virada — D-F44). Prova nova no
+  `r5.live` §G: DELETE/UPDATE no ERP pelo pool do ataque = 1142. Limitação aceita: o serviço é dono do `fiscal_api` real (lá
+  segue a detecção por CHECKSUM — `it.failing [Q-F53]`). **Falta a 1ª rodada ao vivo com o harness novo.**
 
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
