@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.7 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.8 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-04  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-04 | **APIs fiscais — D-F49: banco `fiscal_api` próprio CONFIRMADO** (`prompts/prompt_apis_fiscais_isoladas.md` §7). Motivo registrado sem maquiar: não é desempenho (mesma instância MySQL); é migração única em vez de uma por schema, GRANT por construção (A1 fora do alcance do ERP) e custo de voltar antes do IBS/CBS. Critério do Valdo: "estratégia por estratégia, prefiro junto". | 9.8 |
 | 2026-10-04 | **APIs fiscais — gate do delta D-F47/D-F48 FECHADO** (§18.2: socrático 0,74 · adversarial r9 0,78). Corrigido: rollback protegido na re-sincronia. Aberta Q-F60 (a passada grava F "sem resposta" por consulta? — sem isso a D-F47 não fecha em voo sem DPS no fisco). | 9.7 |
 | 2026-10-04 | **APIs fiscais — D-F47 e D-F48 DECIDIDAS e EXECUTADAS** (`prompts/prompt_apis_fiscais_isoladas.md` §7/§18.1). D-F47 (Q-F57 (b)): a passada do rodízio fecha as tentativas JÁ VIVAS de ramo cortado (destrava o emitente); D-F48 (Q-F58 (a)): re-sincronia com uma transação por institution. Q-F59 em esclarecimento. | 9.6 |
 | 2026-10-04 | **APIs fiscais — gates do delta da Rodada 6 + D-F46 FECHADOS** (`prompts/prompt_apis_fiscais_isoladas.md` §18): socrático 0,76 · adversarial r8 0,80, nenhum HIGH. Corrigidos: idempotência do cancelamento com A1 ausente ([r8-cancel-idem]) e réplica de outro modelo em institution sem SE ([r8-resync-55]). Abertas Q-F57 (nota viva de ramo cortado trava o emitente), Q-F58 (trava da re-sincronia), Q-F59 (setes-api revive a SE aposentada) — §8.R7. | 9.5 |

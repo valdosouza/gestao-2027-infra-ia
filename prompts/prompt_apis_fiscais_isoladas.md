@@ -7,7 +7,7 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F48 (§7); as 4 falhas ao vivo do §16.4
+> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 2ª sessão — §17)**: decisões D-F1…D-F49 (§7); as 4 falhas ao vivo do §16.4
 > RESOLVIDAS; gates do delta FECHADOS (socrático 0.80 · adversarial r7 0.78); **Rodada 6 DECIDIDA e EXECUTADA** (D-F41 espera
 > curta no aluguel · D-F42 migrate:setes só SE · D-F43 porte ao setes-api no dual-run · D-F44 o ato da virada aposenta a SE do
 > ERP · D-F45 CHECK do domínio do modelo, migration 004). Gate do delta da Rodada 6 FEITO (§18); Q-F51…Q-F53
@@ -477,6 +477,16 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   só). A institution que falha volta sozinha (nada dela gravado), as demais seguem, e o script sai ≠ 0 listando as que
   falharam. *Por quê*: o tudo-ou-nada global não protegia invariante entre institutions e segurava FOR UPDATE nas
   habilitações VIRADAS de todas até o commit final (§18, MEDIUM-2).
+- **D-F49 (Valdo, 2026-10-04: "vamos manter") — a D-F7 (banco `fiscal_api` próprio) está CONFIRMADA, com o motivo VERDADEIRO
+  registrado: NÃO é desempenho.** Na mesma instância MySQL (D-F9) um banco à parte não muda memória, disco nem CPU, e a consulta
+  que cruza `fiscal_api` × `setes_*` custa o mesmo; nem prepara servidor próprio no futuro (as leituras da nfse-api JUNTAM os
+  dois bancos — só funcionam na mesma instância). A ESCALA vem das instâncias Node separadas (D-F9/D-F12), independente de onde
+  as tabelas vivem. O que o banco próprio dá: (1) as tabelas fiscais existem UMA vez (escopo por linha) — coluna nova = 1 ALTER,
+  não 1 por schema de cliente; (2) segurança por construção — o MySQL não concede privilégio por TABELA num padrão `setes\_%`,
+  então tabelas fiscais dentro dos schemas exigiriam escrita da API fiscal no ERP inteiro de todos os clientes (desfaz a D-F15)
+  e poriam a chave privada do A1 ao alcance de tudo que mexe no ERP; (3) já feito e provado — voltar custaria semanas antes do
+  marco do IBS/CBS (01/01/2027). Critério do Valdo para quando a dúvida voltar: "estratégia por estratégia, prefiro junto" —
+  separar só com ganho concreto, como estes. O custo próprio (cópia/réplica/virada) é de TRANSIÇÃO e morre depois da virada.
 
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
@@ -638,6 +648,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   **Resposta do Valdo (2026-10-04), em esclarecimento:** "considere que o schema central e o schema de cliente permanecem o
   mesmo, estamos apenas usando APIs separadas para dar escala — serviços de autorização de NFS-e e NF-e precisam ser
   turbinados quando forem muito requisitados, e não uma API monobloco."
+  Esclarecido na mesma sessão: o banco fiscal FICA (D-F49); a Q-F59 volta à pergunta original ((a) × (b)).
 - **Q-F60 (gate do delta D-F47/D-F48, §18.2) A passada grava F "sem resposta" por CONSULTA?** A D-F47 não destrava o emitente
   num subcaso: tentativa EM VOO cujo DPS o fisco não conhece (envio que nunca chegou). A consulta só marca `last_queried_at`; o
   único escritor do F "sem resposta" é `reconcileInterrupted`, que roda só no TRANSMITIR — 403 para ramo cortado. A órfã fica
