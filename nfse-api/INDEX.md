@@ -11,6 +11,12 @@
 
 ## Comece aqui
 
+- ⭐ **Fase IBS/CBS (2026-10-10 — Rodadas 1–2 DECIDIDAS, D-IB1…D-IB27; IB-0 executada; IB-1 FECHADA no dev — retomar pelo §11.5/§11.6; a nfse-api entra na IB-3)**: `../prompts/prompt_fase_ibs_cbs.md` — o grupo `IBSCBS` do DPS (só CLASSIFICAÇÃO; o fisco
+  calcula pela Calculadora e devolve os valores na NFS-e), obrigatório para a Setes (Simples) desde a competência 01/2027 (Ato Conjunto
+  nº 4/2026 § 1º). Toca a nfse-api em: fonte de fatos (classificação congelada + enquadramento pela competência), builder do grupo,
+  calendário de leiaute por ambiente × data, leitura do `IBSCBS` do retorno (voz write-once + VIEW), DANFSe (bloco da NT 008). Dual-run:
+  D-IB15 (corte 30/11 para a F2a).
+
 - **`../prompts/prompt_apis_fiscais_isoladas.md` §12** (plano vigente) e §7 (D-F1…D-F26).
 - Regras da NFS-e que MIGRAM junto com o código: `../prompts/prompt_onda3_nfse_adn.md` (D-N1…D-N38 — ambíguo nunca fecha, F só conclusivo, vigente = quem detém a chave, vida da nota, cancelamento autorizado) e `../prompts/prompt_cancelamento_nota.md` §15 (D3/D4 — nota com registro fiscal cancelada FICA viva).
 - Contrato oficial do ADN/Sefin Nacional: `../setes-api/integracoes/nfse-adn/` (muda para `integracoes/nfse-adn/` aqui na F1).

@@ -326,7 +326,9 @@ Rodada 0 da NF-e (`prompt_onda_nfe_sefaz.md`) corrigiu a recomendação daqui, v
   > aderirem voluntariamente" — está ERRADA frente ao texto; vale o Ato. Demais fatos do Ato: a obrigação é
   > por FATO GERADOR (competência) a partir da data; 1.03/1.05/1.09/16.01, plataformas, locação e bens
   > imateriais = 01/12/2026; NF-e/NFC-e = 03/08/2026 (monofásica 01/01/2027; não contribuinte de ICMS
-  > 01/12/2026). Até 31/12/2026 a ausência não rejeita; o Ato Conjunto nº 5/2026 (DOU 13/08) criou o
+  > 01/12/2026). Até 31/12/2026 a ausência não rejeita *(CORRIGIDO 2026-10-10 — `prompt_fase_ibs_cbs.md` §1.1/§9: o Ato nº 4 não
+  > trata de rejeição; a não-rejeição hoje é por tempo indeterminado e 31/12/2026 é o prazo de RETIFICAÇÃO do programa de
+  > conformidade do Ato nº 5, de 12/08/2026)*; o Ato Conjunto nº 5/2026 (DOU 13/08) criou o
   > programa de conformidade (adaptação assistida, retificar até 31/12/2026). Consequência: IBS/CBS vira
   > pré-requisito de (1) o 1º cliente NÃO optante do Simples e (2) a própria Setes em 01/01/2027.
 - **D-N15** Prazo de cancelamento: lê o PAM (`GET /parametros_municipais/{cMun}/convenio`, com cache) e AVISA na tela;

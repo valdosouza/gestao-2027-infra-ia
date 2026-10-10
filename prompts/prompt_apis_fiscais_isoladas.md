@@ -957,7 +957,7 @@ Chave-mestra `FISCAL_MASTER_KEY` (32 bytes, base64) por ambiente, fora do repo; 
 
 **Total F0–F3 ≈ 23–35 sessões (5–7 semanas)**. Mais barato que o §11.4 (30–43) porque a leitura direta do banco (D-F10/D-F11) dispensa recibo assinado, federação e webhook; mais caro que mover dentro do mesmo processo porque o app muda (F2b) e nascem três projetos.
 
-**Riscos com data**: (1) o A1 real da Setes **vence em 08/10/2026** — sem renovação não há smoke em H na F1 nem emissão em produção *(2026-10-10: VENCEU e foi RENOVADO — novo vence 05/10/2027; §19.1)*; (2) **01/01/2027** — IBS/CBS na NFS-e da Setes: F0–F2 precisam terminar até meados de novembro para o builder entrar na nfse-api a tempo, ou o builder entra provisoriamente no setes-api (decidir se a F1 atrasar); (3) MySQL da SaveInCloud (MariaDB × MySQL 8) muda detalhes de GRANT/trava — conferir na F0.
+**Riscos com data**: (1) o A1 real da Setes **vence em 08/10/2026** — sem renovação não há smoke em H na F1 nem emissão em produção *(2026-10-10: VENCEU e foi RENOVADO — novo vence 05/10/2027; §19.1)*; (2) **01/01/2027** — IBS/CBS na NFS-e da Setes: F0–F2 precisam terminar até meados de novembro para o builder entrar na nfse-api a tempo, ou o builder entra provisoriamente no setes-api (decidir se a F1 atrasar) *(DECIDIDO 2026-10-10 — D-IB15 de `prompt_fase_ibs_cbs.md`: F2a antes de dezembro e o grupo só na nfse-api; corte 30/11/2026 — sem virada até lá, o grupo entra nas duas cópias do montador)*; (3) MySQL da SaveInCloud (MariaDB × MySQL 8) muda detalhes de GRANT/trava — conferir na F0.
 
 ### 12.8 Critérios de sucesso revistos (substituem §10 onde conflitarem)
 

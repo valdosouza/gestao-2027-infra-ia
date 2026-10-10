@@ -84,6 +84,33 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
   só como exceção documentada no código. Convergir o schema inteiro é projeto
   próprio (não decidido). FK cross-schema para a central continua exigindo
   `utf8mb4_unicode_ci` (item acima).
+  **Coluna nova que REFERENCIA catálogo central nasce `utf8mb4_unicode_ci` POR
+  COLUNA, mesmo dentro de tabela general_ci do baseline** (D-IB25, fase IBS/CBS,
+  Valdo 2026-10-10): o par natural de JOIN dela é o catálogo central (unicode_ci),
+  não as colunas vizinhas — `CHAR(6) CHARACTER SET utf8mb4 COLLATE
+  utf8mb4_unicode_ci`. Caso real: `classification_code`/`place_indicator_code`/`nbs`
+  em `tb_invoice_service` (o `national_code` antigo da mesma tabela ficou general_ci —
+  armadilha 1267 latente, sem JOIN hoje).
+- **Banco SEM modo estrito no dev** (MariaDB 10.4: `@@sql_mode = IGNORE_SPACE,
+  NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION`, constatado na IB-0 da fase
+  IBS/CBS): VARCHAR/CHAR acima do tamanho TRUNCAM em silêncio e `INSERT IGNORE`
+  rebaixa até erro de FK a aviso. Regras: **nunca `INSERT IGNORE` em migration/backfill**
+  (use `INSERT … SELECT … WHERE NOT EXISTS`); **loader de catálogo confere forma e
+  tamanho antes de gravar** ("o que valida é o que grava"); **domínio fechado = CHECK**
+  (D-IB26 — o boot confere que o motor aplica CHECK: `assertCheckConstraintsEnforced` em
+  `@shared/db/connection`, INSERT fora do domínio numa transação desfeita tem de ser
+  RECUSADO, senão a API não sobe); flag de catálogo `NOT NULL` SEM default (ausência de
+  dado não pode virar "não exige"). Coluna SNAPSHOT sem FK (ex.: código congelado na
+  nota) ganha CHECK de FORMATO (`col IS NULL OR col REGEXP '^[0-9]{6}$'`) — mas o CHECK
+  vê o valor JÁ truncado: quem grava continua conferindo o tamanho.
+- **Carga de catálogo central a partir de fonte EXTERNA é um ATO com PLANO** (IB-1 da
+  fase IBS/CBS, gates de 2026-10-10 — molde `scripts/load-ibscbs-catalog.ts`): ENSAIO por
+  padrão (transação + ROLLBACK, relatório com as CHAVES que perdem presença); o ato só
+  grava com o hash do plano que o ensaio mostrou (fonte, leitura ou data mudou = nada
+  gravado); fonte VAZIA ou com estrutura mudada = recusa da carga inteira (nunca "tudo
+  vira ausente"); presença (some da fonte → `deleted='S'`, volta → revive) e linha de
+  vigência nunca apagada; arquivo baixado é dado não confiável — leitor com teto de
+  bytes E orçamento de memória.
 
 - **Catálogo central INICIADO PELO CLIENTE** (3º padrão de catálogo — Formas de
   Pagamento, Valdo 2026-07-18): a tabela vive em `setes_central` mas quem

@@ -94,7 +94,10 @@ precisa constar no CNC da restrita e se a parametrização de Curitiba está rep
 SN. **Prazos oficiais (CGNFS-e 07/08/2026)**: destaque IBS/CBS obrigatório em **01/10/2026** para a
 lista LC 116 em geral · **01/12/2026** para plataformas, subitens 1.03/1.05/1.09 e 16.01, bens
 imateriais, condomínios, locações · **01/01/2027** SN optante pelo destaque · **até 31/12/2026 a
-ausência não rejeita a nota**. ME/EPP do SN: a partir de 01/11/2026 só pelo Emissor Nacional. DANFSe:
+ausência não rejeita a nota**. *(CORRIGIDO 2026-10-10 — `prompts/prompt_fase_ibs_cbs.md` §1.1/§9: pelo § 1º do Ato Conjunto
+RFB/CGIBS nº 4/2026 TODO optante do Simples entra em 01/01/2027, sem condição de opção; o Ato não trata de rejeição — a
+não-rejeição é hoje por tempo indeterminado e 31/12/2026 é o prazo de retificação do Ato nº 5.)* ME/EPP do SN: a partir de
+01/11/2026 só pelo Emissor Nacional (Web **ou API** — a API da Sefin que a Setes já usa atende; FAQ 20.1). DANFSe:
 NT 008 v1.02 (PDF só com dados do XML, bloco IBS/CBS, QR Code ≥ 1,52 cm → consulta pública
 https://www.nfse.gov.br/consultapublica).
 

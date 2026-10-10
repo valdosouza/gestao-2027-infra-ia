@@ -209,3 +209,25 @@ Lookup novo que leia catálogo central: conferir se o guard do módulo permite
 GET para o perfil que vai usar a tela — senão o dialog recebia 403.
 O `showSetesLookup` agora captura falha da consulta (mostra a mensagem em vez
 de loading infinito) — mas guard errado continua sendo bug de API.
+
+## Lookup de CÓDIGO OFICIAL textual (2026-10-10 — aba IBS/CBS de services)
+
+Catálogos oficiais (NBS 9 dígitos, cClassTrib 6, cIndOp 6, CST 3...) têm
+chave TEXTUAL em que o zero à esquerda importa ('000001') — a API responde
+`{ code, description }` (NÃO `{ id }`), com `description` já formatada para
+exibir ("código — descrição").
+
+- Entidade do lookup com `code: String` (nunca `int`); o form guarda o
+  CÓDIGO (String?) e a descrição exibida, e manda o código no payload.
+- `showSetesLookup` ganhou `itemAvatar` (opcional, setes_widgets): texto do
+  CircleAvatar quando o código não é inteiro curto — ex.: CST '000' (com
+  `int.tryParse` viraria "0"), capítulo da NBS '1.01', grupo do cIndOp '10'.
+  `itemId` continua obrigatório (`int.tryParse(code) ?? 0`), mas não aparece.
+- Na edição a tela monta a exibição no MESMO formato da lista de apoio
+  (getter na entidade), para o campo não "mudar de cara" ao trocar.
+- Par de códigos que vão JUNTOS (cClassTrib + cIndOp): regra pura em
+  `domain/<x>_rules.dart` devolvendo a chave i18n da pendência ancorada no
+  campo VAZIO (PendencyField com o path do fields[] da API —
+  `ibscbs.classificationCode`); meio par nunca vai para a API.
+- Molde: `modules/services` (aba IBS/CBS) + teste
+  `apps/web/test/service_ibscbs_entity_test.dart`.
