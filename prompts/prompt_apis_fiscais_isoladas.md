@@ -7,9 +7,10 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21 (Q-F62 fechada: 1ª autorização da nfse-api em H; aberta a Q-F68 — leitura de eventos que a
+> Sefin não atende, afeta a PRODUÇÃO do setes-api). Antes, §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F59** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F60** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -556,6 +557,10 @@ branch `sessao-2026-10-10`):**
   HOMOLOGAÇÃO**: é FATO do emitente (`tb_company.im`); o AMBIENTE da habilitação decide (H exige — E0116; P recusa — E0120,
   Q-N35), nos DOIS montadores (setes-api, porte do dual-run — D-F43; nfse-api). §19.6. O CNC de H ainda não reconhece a IM
   gravada — **Q-F62**.
+- **D-F60 (= Q-F62 (a) — Valdo 2026-10-10: "IM: 50136779") — a IM da Setes no CNC de HOMOLOGAÇÃO de Curitiba é `50136779`**
+  (o "Indicador Municipal" do Emissor Nacional de produção restrita: 8 dígitos e contém o 501.367-7 do alvará — forma do CNC,
+  não dado de teste) → gravada como FATO do emitente (`setes_central.tb_company.im`, era `01065013677`); o DPS só a envia em H
+  (D-F59) e P segue sem IM (Q-N35). Provada pela 1ª AUTORIZAÇÃO da nfse-api em homologação (§21).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -758,11 +763,23 @@ branch `sessao-2026-10-10`):**
   PASSADA (D-F47 + D-F51; provado ao vivo no r11 §A).
 - ~~**Q-F67**~~ → **D-F59** (executada; o CNC de H ainda recusa a IM — **Q-F62**, §19.6). A autorização em H exige a IM (E0116) e
   P a recusa (E0120): IM como fato do emitente, enviada só em H. *(Rec.: (a).)*
-- ⚠️ **Q-F62 — Qual é a IM que o CNC de HOMOLOGAÇÃO tem para a Setes em Curitiba?** (§19.6, refinada no §19.7) O Valdo lê o
-  campo "Indicador Municipal" no Emissor Nacional de produção restrita (https://www.producaorestrita.nfse.gov.br/EmissorNacional/,
-  e-CNPJ, emissão completa → Prestador → Curitiba → competência). Conforme o valor: (a) forma do MESMO número → vai ao cadastro;
-  (b) número DIFERENTE (dado de teste) → IM de homologação vira dado PRÓPRIO da habilitação H, não do emitente; (c) campo VAZIO →
-  pedir à Prefeitura (nif@curitiba.pr.gov.br) o ajuste do registro complementar de H. *(Não se chutam mais formas contra o fisco.)*
+- ~~**Q-F62 — Qual é a IM que o CNC de HOMOLOGAÇÃO tem para a Setes em Curitiba?**~~ → **DECIDIDA = D-F60** ((a) — Valdo
+  2026-10-10 leu o "Indicador Municipal" no Emissor Nacional de produção restrita: `50136779`; provada no smoke em H, §21).
+
+### 8.R10 Rodada 10 — aberta pelo smoke em H da Q-F62 (2026-10-10, §21) — ⚠️ Q-F68 AGUARDA O VALDO
+
+- ⚠️ **Q-F68 — Corrigir a leitura dos eventos de cancelamento nos adaptadores ADN?** Os DOIS adaptadores (setes-api — PRODUÇÃO
+  hoje — e nfse-api) leem o cancelamento por `GET /nfse/{chave}/eventos`, que a Sefin Nacional NÃO atende (405, `Allow: POST`
+  — cravado ao vivo em H, §21.2): toda consulta de NFS-e AUTORIZADA falha (rodízio de 24 h da D-N21, "consultar" da tela "No
+  fisco", reconsulta da nfse-api) e o cancelamento feito FORA do produto nunca é visto. (a) **corrigir nos dois adaptadores
+  AGORA (porte D-F43 ao setes-api): para cada código de cancelamento (101101, 105102, 105104, 305101) `GET
+  /nfse/{chave}/eventos/{tipo}/1` (para no 1º 200); 200 = `eventos[]` com `arquivoXml` em base64 do texto gzip+base64 → o
+  mesmo `parseEventXml` + `isGeneratedEventFor`; 404 SÓ com o envelope JSON da Sefin (`versaoAplicativo`, sem `eventos`) =
+  "sem esse evento"; 404 HTML ou qualquer outra forma = ambíguo (erro, nunca voz — molde do E2404); o 405 de rota deixa de sair
+  como "DPS rejeitado"** — com testes das respostas cravadas, gate do delta e reinício do setes-api · (b) só na nfse-api (o
+  setes-api perde as rotas fiscais na F2a) · (c) só registrar. *(Rec.: (a) — o setes-api é a produção até a F2a (corte 30/11)
+  e o rodízio dele é a única rede que pega cancelamento feito no portal; a forma correta é dada pelo fisco, não por
+  preferência. Custo: até 4 GETs a mais por autorizada consultada, só enquanto não houver cancelamento.)*
 
 ## 9. Fora de escopo desta fase
 
@@ -1698,7 +1715,7 @@ pedir, SÓ os caminhos desta sessão (há uma SESSÃO PARALELA mexendo na Infra-
 TSString/D-F59 (socrático + adversarial — mudança em produção); (4) D-NE: NE-0 (levantamento oficial da SEFAZ) e NE-1 (núcleo
 generalizado ANTES da F2a); (5) F2a/F2b; (6) conferir com a sessão paralela o prompt IBS/CBS (D-NE4).
 
-## 20. Reconciliação dos dois históricos (2026-10-10) — ⏯ RETOMAR POR AQUI
+## 20. Reconciliação dos dois históricos (2026-10-10)
 
 **Escopo**: misto (o método — reconciliar dois históricos de decisão por SIGNIFICADO, não por número — é portável; o conteúdo é
 do caso Setes)
@@ -1771,9 +1788,58 @@ de `EXPLAIN_DB_USER` — o usuário do serviço não tem EXPLAIN nas views) · `
 
 ### 20.5 Próximos passos (ordem)
 
-1. **Q-F62** — o Valdo lê o "Indicador Municipal" no Emissor Nacional de produção restrita e informa; aplicar (a)/(b)/(c) do
+1. ~~**Q-F62**~~ — FEITO (D-F60, §21): o Valdo leu o "Indicador Municipal" no Emissor Nacional de produção restrita; aplicado (a) do
    §8.R9 e refazer o smoke em H com uma OS NOVA (a 7223 é 'C'; candidatas: OS 7226 Autophox, 7222 — Curitiba, regra 2, R$ 10).
 2. Gate do delta do TSString/D-F59 (mudança em produção) + da reconciliação (socrático + adversarial).
 3. D-NE: NE-0 (levantamento oficial da SEFAZ) e NE-1 (núcleo generalizado ANTES da F2a).
 4. **F2a** (setes-api passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 5. Pendências da 3ª sessão que seguem: LOWs aceitos do §18 (registro para a F3/F4).
+
+## 21. Q-F62 fechada — 1ª AUTORIZAÇÃO da nfse-api em homologação (2026-10-10) + achado na leitura de eventos — ⏯ RETOMAR POR AQUI
+
+**Escopo**: misto (o método — cravar ao vivo o contrato real do fisco antes de corrigir, e só em homologação — é portável; dados e
+números são do caso Setes)
+
+### 21.1 Execução (Valdo: "Q-F62 - IM: 50136779" · "vai, pode seguir com a OS 7226")
+
+| Passo | Resultado |
+|---|---|
+| IM no cadastro (D-F60) | `setes_central.tb_company.im` `01065013677` → **`50136779`** (UPDATE guardado pelo valor anterior; 1 linha). ⚠️ o 1º carimbo saiu com `NOW()` numa sessão crua = horário LOCAL; refeito com `UTC_TIMESTAMP()` (PADROES §10 — script avulso no banco também segue a regra) |
+| Faturamento | OS **7226** (pedido 7863, Autophox Comercial LTDA / "STRONIC", 1 × R$ 10,00, serviço 1) pelo setes-api — `POST /api/service-orders/7863/invoice` (forma 6 boleto, 1 parcela, venc. 20/10) → nota **6793**, sem baixa automática nem boleto |
+| Conferência | `smoke:adn-h -- --nota 7863` → pré-condições OK (A1 até 05/10/2027, H, série 900, nada enviado) |
+| **Smoke com `--vai`** | banco descartável `fiscal_api_smoke`, H, série 900, DPS com `<IM>50136779</IM>` → **NFS-e de homologação nº 2 AUTORIZADA** (chave `41069022207742094000113000000000000226101344429240`, DPS `DPS410690220774209400011300900000001791668584`) → XML + DANFSe → **cancelamento NO FISCO de H aceito** (e101101) → consulta final = voz C. Vida da tentativa A,K,C; banco descartável APAGADO; `fiscal_api` real intocado; evidência em `nfse-api/storage-smoke/2026-10-10T21-43-03-050Z` |
+| Desfazer no ERP | `POST /api/billing/cancel` (nota pendente → soft delete): vida da nota E,C; **OS 7226 de volta a 'A'**; 0 nota viva, 0 título vivo |
+
+**Provado**: o pipeline INTEIRO da nfse-api contra o fisco real em H — mTLS, DPS assinado com a IM por ambiente (D-F59),
+autorização, XML/DANFSe, evento de cancelamento. A regra "IM do CNC = 8 dígitos" de Curitiba (relatos de integradores) se
+confirmou: nem o nº do alvará (11 dígitos) nem os 7 últimos dígitos com DV passavam; o "Indicador Municipal" do Emissor Nacional é
+a fonte.
+
+### 21.2 Achado: a Sefin Nacional NÃO atende `GET /nfse/{chave}/eventos` (cravado ao vivo em H, `SefinNacional_1.6.0`)
+
+O passo 2 do smoke ("consultar" a NFS-e autorizada) falhou com `FISCAL_DPS_REJECTED — Fisco rejeitou (405)`. Diagnóstico SÓ DE
+LEITURA, em homologação, sobre a NFS-e de teste nº 2 (A1 do cofre do setes-api, mTLS):
+
+| GET (base `…/SefinNacional`) | Resposta |
+|---|---|
+| `/nfse/{chave}` | **200** — `nfseXmlGZipB64` (a consulta da NFS-e em si funciona) |
+| `/nfse/{chave}/eventos` | **405**, `Allow: POST`, `{"message":"The requested resource does not support http method 'GET'."}` — o item (b) do manual da API do contribuinte NÃO existe na Sefin |
+| `/nfse/{chave}/eventos/101101` | 404 em **HTML** (página do servidor — rota inexistente) |
+| `/nfse/{chave}/eventos/101101/1` | **200** — `{ dataHoraProcessamento, tipoAmbiente, versaoAplicativo, eventos: [{ chaveAcesso, tipoEvento: 101101, numeroPedidoRegistroEvento: 1, dataHoraRecebimento, arquivoXml }] }` |
+| `/nfse/{chave}/eventos/105102/1`, `…/105104/1`, `…/305101/1`, `…/101101/2` | **404 com o envelope JSON da Sefin** (`dataHoraProcessamento`, `tipoAmbiente`, `versaoAplicativo`; sem `eventos`) = "esse evento não existe" |
+
+`arquivoXml` = **base64 do TEXTO gzip+base64** (duas camadas de base64; decodificado uma vez começa com `H4sI`) → `<evento versao="1.01">`
+com `infEvento Id="EVT…101101001"`, `dhProc` e `chNFSe` = a chave pedida — o `parseEventXml` + `isGeneratedEventFor` de hoje servem.
+
+**Consequência (os DOIS adaptadores — setes-api, que é PRODUÇÃO hoje, e nfse-api — têm o mesmo código e os mesmos hosts)**: toda
+consulta de NFS-e AUTORIZADA falha — o rodízio de 24 h das autorizadas (D-N21), o "consultar" da tela "No fisco" e a reconsulta da
+nfse-api —, e um cancelamento feito FORA do produto (portal do ADN, de ofício) nunca é visto. Nenhuma voz espúria é gravada (a
+consulta falha antes de escrever — conferido na linha do tempo do smoke), mas a mensagem engana: um 405 de rota sai como
+"Fisco rejeitou" com código de DPS rejeitado. Decisão aberta: **Q-F68** (§8.R10).
+
+### 21.3 Próximos passos (ordem)
+
+1. **Q-F68** (Valdo) — corrigir a leitura de eventos (recomendado: nos dois adaptadores, já).
+2. Gate do delta (TSString/D-F59 + reconciliação + correção da Q-F68), socrático + adversarial.
+3. D-NE: NE-0 (levantamento oficial da SEFAZ) e NE-1 (núcleo generalizado ANTES da F2a).
+4. **F2a** (setes-api passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50) → virada → F2b. Corte da F2a: 30/11 (D-IB15).

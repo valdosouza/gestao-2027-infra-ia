@@ -144,6 +144,14 @@ HTTP **404**, `Content-Type: application/json; charset=utf-8`, corpo
 
 - RN 198/E0116: com registro complementar no CNC (CNPJ + `cLocEmi`), a IM da DPS tem de IDENTIFICAR esse registro; RN 200/E0120:
   sem registro, a IM não pode ir. Cada AMBIENTE tem o seu CNC — Curitiba: PRODUÇÃO sem registro (E0120 → sem IM — Q-N35);
-  PRODUÇÃO RESTRITA com registro (E0116). Regra no código (D-F59): IM do prestador só em H.
+  PRODUÇÃO RESTRITA com registro (E0116). Regra no código (D-F59): IM do prestador só em H. **IM do CNC de H da Setes = `50136779`** (D-F60 — o "Indicador Municipal" do
+  Emissor Nacional de produção restrita; 8 dígitos; nem o nº do alvará nem os 7 últimos dígitos passam). Autorizou em H (prompt
+  das APIs fiscais §21).
+- **Eventos — contrato REAL cravado ao vivo em H (2026-10-10, `SefinNacional_1.6.0`)**: `GET /nfse/{chave}/eventos` = **405**
+  (`Allow: POST` — o item (b) do manual NÃO existe na Sefin); `GET /nfse/{chave}/eventos/{tipo}` = 404 HTML (rota inexistente);
+  `GET /nfse/{chave}/eventos/{tipo}/{nSeq}` = **200** `{…, eventos: [{ chaveAcesso, tipoEvento, numeroPedidoRegistroEvento,
+  dataHoraRecebimento, arquivoXml }]}` com `arquivoXml` = base64 do TEXTO gzip+base64 (duas camadas) → `<evento>` com `infEvento
+  Id="EVT…"`, `dhProc`, `chNFSe`; evento inexistente = **404 com envelope JSON** (`dataHoraProcessamento`, `tipoAmbiente`,
+  `versaoAplicativo`, sem `eventos`). Correção dos adaptadores = Q-F68.
 - A IM do CNC de produção restrita não se deriva do alvará (`01065013677` e `5013677` recusadas): ler o "Indicador Municipal"
   no Emissor Nacional de produção restrita com o e-CNPJ. O contribuinte não tem API para ler o próprio CNC.
