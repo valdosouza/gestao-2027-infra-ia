@@ -1,6 +1,6 @@
 # nfe-api — Índice (espelho de conhecimento)
 
-**Status**: ⏸ pasta SEM código por decisão (D-F20, Valdo 2026-10-03) — código só com o 1º cliente de mercadoria (D-E20) e depois do IBS/CBS (D-F22).
+**Status**: ⏸ pasta SEM código por decisão (D-F20, Valdo 2026-10-03) — código só com o 1º cliente de mercadoria (D-E20) e depois do IBS/CBS (D-F22). **2026-10-10: Rodada 0 da nfe-api ORGANIZADA** (`../prompts/prompt_onda_nfe_sefaz.md` §11 — pedido do Valdo "vamos nos preparar para montar a api-nfe"; **Rodada 1 DECIDIDA** — D-NE1…D-NE26 no §11.7: D-F20 suspensa em parte (NE-0…NE-3 liberadas); próximo: NE-0 = levantamento oficial em `integracoes/nfe-sefaz/`).
 **Projeto**: `D:\Gestao2027\nfe-api` — serviço futuro (NF-e 55 / NFC-e 65 pela SEFAZ), porta prevista **3003**, contrato `/v1`, sobre o núcleo `D:\Gestao2027\fiscal-api`.
 **Escopo**: misto
 

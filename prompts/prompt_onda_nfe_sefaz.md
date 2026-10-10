@@ -5,7 +5,7 @@
 **Molde**: `prompt_onda3_nfse_adn.md` §3–§7 (mesma tabela de conceitos, mesmos nomes de peça) e `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates: ambíguo nunca fecha, reconciliar antes de reapresentar, transitório ≠ recusa).
 **Legado** (vault `D:\Gestao2016\Infra-IA\Gestao`, Decisão 65): `proc-faturamento-venda` E07, `proc-cancelamento-nfe` C00–C05, Lote 6 §2–§5, Lote 8 §2, NUM-01/02/03, AUT-01/02/03/04, CAN-01, CAN-V5/V6/V7, NF-01, `geracao-nfe-hierarquia` §3–§4 (diagnóstico: variação por MODELO duplicada = maior fonte de retrabalho; variação por PROCESSO pequena e sadia; operações do ciclo — inutilizar/consultar — são comandos, não "geradores").
 **Aberto em**: 2026-09-21 (Rodada 0 = parecer do guardião conceitual, agente `setes-conceito`, a pedido do Valdo: "desenhar o processo da NF-e mantendo a simetria de controles com a NFS-e, para que o desenho fique, se não o mesmo, seguindo o mesmo fluxo"). Fatos do parecer conferidos no disco pelo condutor (billing.service.ts:672–677, baseline 001, produtores em api/sync).
-**Estado**: **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
+**Estado**: **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
 
 ---
 
@@ -346,3 +346,207 @@ do emitente (**E**) ficam na aba Tributação do Meu Estabelecimento, que já ex
   própria "fiscal". *(Rec.: `billing` — é a interface que produz a nota; `cashier_block_on_pending_fiscal` na do caixa.)*
 - **Q-E25** Configs de render do DANFE (`danfe_*`) nascem com a peça `@shared/danfe` (Q-E13/Q-E20a) ou só quando houver
   cliente de mercadoria? *(Rec.: junto com a peça; até lá não existem — nada de coluna/catálogo antecipado.)*
+
+---
+
+## 11. Rodada 0 da `nfe-api` — preparação (Valdo, 2026-10-10: "vamos nos preparar para montar a api-nfe")
+
+> Este bloco NÃO decide: organiza o que existe, mede o esforço e numera as escolhas (Q-NE1…Q-NE26) com recomendação.
+> Insumo: inventário de 2026-10-10 (só leitura, conferido por amostragem no disco — fatos marcados ✔ abaixo). Vale por
+> cima das §3–§10 onde conflitar com as decisões das APIs isoladas (`prompt_apis_fiscais_isoladas.md` §7 — D-F1…D-F59, numeração unificada na reconciliação de 2026-10-10, §20 de lá).
+
+### 11.1 O pedido e o que ele muda
+
+A D-F20 (2026-10-03) diz "nfe-api sem código até o 1º cliente de mercadoria". O pedido é de **PREPARAÇÃO** — Rodada 0,
+levantamento e o que dá para adiantar sem cliente —, não de código de emissão. Suspender a D-F20 (toda ou em parte) é a
+Q-NE1. Nenhum cliente de mercadoria foi identificado no acervo.
+
+### 11.2 Fatos (2026-10-10)
+
+1. ✔ `D:\Gestao2027\nfe-api` só tem `CLAUDE.md`, `README.md`, `.gitignore` (1 commit). Repo `valdosouza/gestao-2027-nfe-api`
+   privado. Nenhum material oficial da SEFAZ no acervo — `integracoes/nfe-sefaz/` não existe em nenhum dos três caminhos que
+   os documentos citam (Q-NE19).
+2. **D-E1…D-E25 todas decididas** (§8); nenhuma Q-E aberta. As D-F mudaram o ONDE (a NF-e nasce na nfe-api — D-F12/D-F17),
+   a fronteira (a API lê o ERP e não aplica efeito — D-F10/D-F11/D-F28) e a série/número do 55/65 (ficam no ERP — D-F21).
+3. **Núcleo `fiscal-api` que serve sem mudança**: pool/transação/`runShortCommand`, executor de migrations com namespace,
+   JWT RS256, cofre AES-256-GCM do A1, habilitação por modelo (CHECK `SE/55/65` — D-F45), aluguel do rodízio por modelo,
+   storage `<cnpj>/<H|P>/<ano>/<mês>`, fuso, e o `xmldsig` (enveloped, C14N inclusiva, Signature último filho do pai — confere
+   com `infNFe`, `infEvento` e `infInut`).
+4. **Núcleo com semântica de NFS-e** (a generalizar antes de a nfe-api nascer):
+   - ✔ vocabulário da voz `S A R C K F N` (`fiscal-api/src/voice/kinds.ts`) sem **P** (em processamento, 103/105) nem **D**
+     (denegada, 110/301/302/303 — D-E7);
+   - contrato de leitura (`voice/reading.ts`) decide a vigente por "quem detém a chave" e o setes-api decide "registro
+     fiscal" por `!!accessKey` — na NF-e a chave é NOSSA desde o envio;
+   - ✔ `TLS_CREDENTIAL_CODES` (`transport/https-json.ts:104-109`) inclui `UNABLE_TO_GET_ISSUER_CERT_LOCALLY` e
+     `SELF_SIGNED_CERT_IN_CHAIN`: falha da cadeia do SERVIDOR da SEFAZ viraria "fisco recusou o certificado do emissor";
+   - transporte só JSON/ADN (`authorityJson`) — a SEFAZ é SOAP 1.2 com HTTP 200 + `cStat`;
+   - cerca da virada por INSTITUTION (`emissionStillInErp`/`assertEmitterWritable`): a réplica SE da Setes bloquearia o 55
+     (é a mesma lacuna do achado L5 do gate da Rodada 6 = **Q-F64** — era a Q-F58 desta máquina —, absorvida pela Q-NE10);
+   - `terminal = 0` fixo na fonte de fatos base (`erp/facts.ts`);
+   - a "máquina tentativa × voz" prometida ao núcleo (§12.1 das APIs isoladas) vive em `nfse-api/src/nfse/transmission.ts`
+     (945 linhas); motor de PDF (`pdfkit`) só na nfse-api; `/v1/emitter` (A1 + habilitação) só na nfse-api e só SE.
+5. **Lado do produto (ERP)**: o motor por item já congela ICMS/CSOSN/ST/FCP/IPI/PIS/COFINS/II em 6 snapshots, financeiro e
+   `tPag`. **Faltam**: IBS/CBS (bloqueia produção do regime regular), DIFAL, ST retido, valor do ICMS desonerado,
+   GTIN/unidade congelados, transporte/volumes sem produtor web, ✔ `finality` não gravado pelo `issueInvoice`, `indPres` fixo
+   0, `dt_exit`, `natOp` sem fonte, `cBenef` sem leitor, o 65 nunca é cunhado, numeração que respeite faixas inutilizadas,
+   TRANSMITIR em `order-returns` (seed 59 só liga `service-orders`/`orders`).
+6. ✔ **A Setes não tem IE** (`setes_central.tb_company.ie` NULL — é prestadora de serviço): a homologação COMPLETA da NF-e
+   (autorização) com o A1 da Setes é duvidosa — a SEFAZ costuma recusar emitente sem IE (230/209). Serviços sem emitente
+   (status, consulta) servem para provar o adaptador. → Q-NE18.
+7. ✔ Referência local de TERCEIRO (não oficial): `D:\Componentes\acbr\Exemplos\ACBrDFe\Schemas\NFe\` (201 XSD, inclusive com
+   `IBSCBS`) e `ACBrNFeServicos.ini` (URLs por UF × ambiente) — serve para conferir o levantamento oficial, nunca substitui.
+8. **IBS/CBS (D-F22/D-E17) — a fase própria NÃO tem prompt.** O marco de 01/01/2027 já obriga pela NFS-e da Setes (Simples),
+   independente da NF-e. Recomendação desta rodada: abrir o prompt da fase IBS/CBS já, em paralelo.
+
+### 11.3 Superado ou em conflito (D-E × D-F)
+
+| D-E (este prompt) | D-F (APIs isoladas) | Vale |
+|---|---|---|
+| D-E2 série no emissor por modelo | D-F21 série/nº do 55/65 no ERP; D-F42 linha 55/65 do ERP = série da nota | **D-F21** → Q-NE11 |
+| D-E6 UMA composição no setes-api | D-F12/D-F17 duas famílias + núcleo | **D-F** — a política comum vai ao NÚCLEO (Q-NE13) |
+| D-E9 cabeçalho espelha `dt_emission` no A | D-F31 API fiscal não escreve dado do ERP; D-F28 sem job | **conflito sem dono** → Q-NE21 |
+| §3.5/§3.9 voz C + C local na mesma transação | D-F11/D-F28 C local é do setes-api; pendência derivada | **D-F** |
+| §3.3 coluna `invoice_event` na voz | D-F28/D-F30 sem coluna de efeito; `life_event` na tentativa | **D-F** → Q-NE7 |
+| §3.8 interface genérica de autoridade no setes-api | D-F17 dialeto na família | **D-F** → Q-NE5 |
+| §4 rotas `/api/billing/*` | D-F4/D-F8 app chama `/v1/nfe/*` na família | **D-F** |
+| §3.11 plano de cancelamento lê transmissões locais | D-F11/D-F33 setes-api lê VIEWs do `fiscal_api` | **D-F** (F2a precisa ler também a view da NF-e) |
+| D-E20 (a) peças comuns no setes-api agora | D-F20 pasta sem código | D-F20 para o ONDE; o QUANDO = Q-NE1 |
+
+### 11.4 Ondas e esforço (sessão ≈ 4 h com testes verdes; ±40 %)
+
+| Onda | Entrega | Sessões | Depende de |
+|---|---|---|---|
+| **NE-0** | Rodada 1 (Q-NE*); levantamento oficial em `integracoes/nfe-sefaz/` (MOC 7.0, NTs vigentes incl. RTC, pacote PL, WSDL dos 6 serviços, autorizadores, cStat, prazos, cadeia TLS, homologação PR); parecer do guardião + `revisar-ddl` do DDL da família; OpenAPI `nfe-api.v1.yaml` design-first | 3–4 | Valdo |
+| **NE-1** | núcleo generalizado: cerca por família (Q-NE10), emitter no núcleo (Q-NE9), `terminal` (Q-NE12), vocabulário P/D + contrato de leitura (Q-NE14), máquina comum (Q-NE13), TLS `ca` (Q-NE17), base de PDF (Q-NE20) — re-prova da nfse-api inteira + gate do delta | 4–6 | gate da Rodada 6 fechado; dual-run |
+| **NE-2** | esqueleto da nfe-api (molde da nfse-api) + DDL da família (transmissão, voz, inutilização) + views para o setes-api | 2–3 | NE-0, NE-1 |
+| **NE-3** | adaptador SEFAZ (SOAP 1.2, `authorizers.ts`, autorização síncrona + recibo, consulta, evento 110111, inutilização, XSD) + smoke H parcial | 5–7 | NE-2; credencial (Q-NE18) |
+| **NE-4** | fonte de fatos da mercadoria + builder NF-e 4.00 + chave 44/cDV | 5–7 | NE-3; NE-6 |
+| **NE-5** | composição (transmitir/consultar/reconfirmar/cancelar/inutilizar/rodízio) + DANFE A4 + rotas `/v1/nfe` + gates (≥ 3 rodadas) | 5–8 | NE-4 |
+| **NE-6** | ERP: lacunas de conteúdo (Q-NE15), numeração × inutilização (Q-NE8), plano de cancelamento lendo a NF-e, TRANSMITIR em `order-returns` | 4–6 | F2a |
+| **NE-7** | setes-app: datasource da nfe-api, "No fisco" no pedido, numeração, DANFE | 3–5 | F2b |
+| **F4 total** | | **31–46** (≈ 7–10 semanas) | acima dos 25–35 do §12.7: o núcleo precisa generalizar e o ERP tem lacunas de conteúdo |
+| parte SEM cliente de mercadoria | NE-0…NE-3 | **14–20** | A1 vigente para o smoke |
+| **F5 — NFC-e 65** | QR/CSC cifrado, off-line tpEmis 9, série por terminal, DANFE bobina | 15–25 | F4 + onda do PDV |
+
+### 11.5 ⚠️ Rodada 1 da nfe-api — questões para o Valdo (recomendação entre parênteses)
+
+**A. Estratégicas — decidem o rumo**
+
+- **Q-NE1 Suspender a D-F20?** (a) manter integral — só documentos (NE-0) · (b) **suspender em PARTE: NE-0…NE-3**
+  (levantamento, núcleo generalizado, esqueleto, DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com
+  IE) — sem builder de autorização em produção · (c) suspender inteira. *(Rec.: (b), com NE-1 ANTES da F2a: o contrato de
+  leitura que a F2a vai importar no setes-api é hoje só-NFS-e — generalizar depois custa o dobro. (c) está bloqueada por IE
+  e IBS/CBS.)*
+- **Q-NE2 55 antes do 65?** (a) **55 primeiro (F4); 65 com a onda do PDV (F5 — D-E16)**, generalizando já o que vira
+  migration depois (`terminal`, casa cifrada do CSC) · (b) juntos · (c) 65 primeiro (a escala da NFC-e). *(Rec.: (a) — o PDV
+  não existe e o faturamento nunca cunha 65.)*
+- **Q-NE3 Autorizadora/UF.** (a) **tabela completa (27 UF + SVRS/SVAN + SVC-AN/RS + AN) como constante versionada;
+  homologação na UF do 1º cliente** · (b) só PR + SVRS · (c) esperar o cliente. *(Rec.: (a) — é dado, não código.)* Fato a
+  obter: UF e regime (Simples × regular) do 1º cliente de mercadoria.
+- **Q-NE4 IBS/CBS.** (a) **fase própria ANTES da produção (D-E17/D-F22), com prompt aberto JÁ** — motor no ERP + builder do
+  grupo em cada família · (b) builder dentro da F4, motor na fase própria · (c) 1º cliente Simples vai à produção sem IBS/CBS
+  até 31/12/2026. *(Rec.: (a); a fase é obrigatória de qualquer jeito pela NFS-e da Setes em 01/01/2027.)*
+- **Q-NE18 Credencial para homologação.** (a) Setes obtém IE (não faz sentido para prestadora) · (b) A1 + IE de um
+  cliente-piloto de mercadoria · (c) **H parcial com o A1 da Setes renovado (status/consulta; inutilização se aceita sem IE)
+  e autorização em H com o cliente-piloto**. *(Rec.: (c).)*
+- **Q-NE25 Escopo do 1º release da F4.** (a) **venda (finNFe 1) + devolução (finNFe 4, `refNFe` da âncora — D-E15)** ·
+  (b) só venda · (c) + entrada própria. CC-e, complementar, manifestação e DF-e seguem fora. *(Rec.: (a) — a devolução já
+  tem módulo; exige TRANSMITIR em `order-returns`.)*
+
+**B. Desenho — o guardião opina antes do DDL**
+
+- **Q-NE7 Identidade da declaração.** (a) **`life_event` na tentativa (molde D-N27/D-F30) + chave nova por tentativa só
+  depois de a anterior estar resolvida (R ou F conclusiva)** · (b) chave por vida com `dhEmi` congelado · (c) chave por
+  tentativa sem vida. *(Rec.: (a); a chave carrega o AAMM do `dhEmi` e o nº do ERP pode ser reaproveitado no revive — D4.)*
+- **Q-NE8 Inutilização × numeração do ERP.** (a) **faixa inutilizada no `fiscal_api` (dono = nfe-api, ato ao fisco) +
+  VIEW; o setes-api lê a view ao cunhar** (leitura passiva, molde D-F11/D-F33) · (b) faixa como fato do ERP (nfe-api
+  escreveria no ERP — lista da D-F31) · (c) só se inutilizam buracos internos. *(Rec.: (a).)*
+- **Q-NE9 Dono do A1 e da habilitação com duas famílias.** (a) cada família com seu `/v1/emitter` · (b) A1 só pela
+  nfse-api · (c) **módulo emitter no NÚCLEO, montado pelas duas, com "transmissões vivas" por família na guarda do DELETE do
+  A1** (resíduo do §15.4 das APIs isoladas). *(Rec.: (c).)*
+- **Q-NE10 Cerca da virada por família (absorve a Q-F64 — ex-Q-F58 — do gate da Rodada 6).** (a) **55/65 nascem virados e não dependem
+  da SE; a lacuna (b) olha a LINHA SE; escrita do A1 (comum) segue barrada enquanto houver réplica** · (b) nfe-api só para
+  institution já virada na NFS-e ou sem SE no ERP. *(Rec.: (a) — coerente com a D-F42.)*
+- **Q-NE11 Série do 55.** (a) **linha 55/65 do `fiscal_api` SEM série (regra/CHECK) + série editada no ERP (Meu
+  Estabelecimento)**; a nfe-api só exibe · (b) série no `fiscal_api` lida pelo ERP (contradiz a D-F21). *(Rec.: (a).)*
+- **Q-NE12 `terminal ≠ 0`.** (a) **parametrizar já as assinaturas do núcleo (comportamento 0 até a F5)** · (b) na F5.
+  *(Rec.: (a) — antes de a F2a importar o contrato.)*
+- **Q-NE13 Máquina tentativa × voz.** (a) **extrair a política comum para o núcleo ANTES da nfe-api, provada pela suíte da
+  nfse-api e gate do delta** · (b) a nfe-api escreve a sua e extrai depois (regra dos 3 casos) · (c) nfe-api importa da
+  nfse-api. *(Rec.: (a), depois do gate da Rodada 6 e com a nfse-api ainda em dual-run — risco controlado pela suíte.)*
+- **Q-NE14 Vocabulário e leitura da voz para duas famílias.** (a) **vocabulário comum estendido (P, D) + "registro fiscal"
+  por FATO (protocolo/voz A ou D em P) + `TransmissionView` com parte comum e parte da família** · (b) contrato por família.
+  *(Rec.: (a) — uma fonte só; decidir ANTES da F2a.)*
+- **Q-NE21 `dhEmi` × cabeçalho do ERP (D-E9 × D-F31).** (a) setes-api espelha `dt_emission` ao ler a voz A · (b) **não
+  espelhar: a data fiscal é DERIVADA da view; o cabeçalho guarda a data do faturamento** · (c) a nfe-api escreve (lista
+  D-F31). *(Rec.: (b) — fato fiscal derivado, nunca copiado; conferir relatórios/SPED.)*
+- **Q-NE22 Cancelar nota conjugada entre DUAS APIs (D-E11).** (a) **saga do app: plano (setes-api) → cancel na nfe-api →
+  cancel na nfse-api → C local quando nenhum ramo restar autorizado; parcial = pendência derivada nas duas views** · (b)
+  setes-api orquestra (viola D-F4). *(Rec.: (a).)*
+
+**C. Técnicas — com recomendação; "siga as recomendações" basta**
+
+- **Q-NE5 SOAP:** (a) **núcleo ganha só o comum ao TLS de cliente (`ca`, agent, separar falha de cadeia do servidor de
+  falha de credencial); envelope SOAP 1.2 e tradução cStat na nfe-api** · (b) `authoritySoap` genérico no núcleo · (c) lib
+  SOAP de terceiros. *(Rec.: (a).)*
+- **Q-NE6 Contingência:** (a) **fora da F4 (D-E12); SVC reabre antes da produção do 1º cliente** · (b) SVC na F4 · (c) EPEC.
+  *(Rec.: (a).)*
+- **Q-NE15 Lacunas de conteúdo no ERP:** (a) onda ERP própria congelando tudo · (b) nfe-api lê na transmissão com defaults
+  legais · (c) **misto: estrutural no ERP (finality, indPres, dt_exit, transporte, DIFAL, ST retido, fatos de produto usados no
+  cálculo); cosmético por default/config ("SEM GTIN", natOp do CFOP)**. *(Rec.: (c) — conteúdo é do ERP.)*
+- **Q-NE16 Validação XSD local:** validar SEMPRE antes de enviar (o legado validava; rejeição custa `attempt + 1`); a
+  ferramenta (libxmljs2 × xmllint × JVM) se escolhe depois do levantamento. *(Rec.: validar.)*
+- **Q-NE17 TLS do servidor da SEFAZ:** (a) **cadeia ICP-Brasil versionada no adaptador (`ca` por chamada) + classificação
+  separada** · (b) `NODE_EXTRA_CA_CERTS` · (c) `rejectUnauthorized: false` — NUNCA (conhecimento negativo). *(Rec.: (a).)*
+- **Q-NE19 Casa do levantamento oficial:** (a) **`Infra-IA/nfe-api/integracoes/nfe-sefaz/`** e mover `nfse-adn` para
+  `Infra-IA/nfse-api/integracoes/` (promessa antiga do INDEX do núcleo) · (b) `Infra-IA/setes-api/integracoes/`. ACBr local só
+  como conferência. *(Rec.: (a).)*
+- **Q-NE20 PDF:** (a) **base de PDF no núcleo (fontes, carimbo CANCELADA, código de barras), DANFE na nfe-api** · (b) cada
+  família com o seu. *(Rec.: (a) — D-E13 "motor único".)*
+- **Q-NE23 E-mail pós-autorização (D-E10):** (a) **nfe-api (tem XML e DANFE; configs lidas do ERP)** · (b) setes-api ·
+  (c) o app anexa. *(Rec.: (a), sempre ato explícito — D-F5.)*
+- **Q-NE24 Resíduos do baseline com segredo em claro** (`tb_config_nfe.certificate_pass`, `tb_config_nfe_65.token_nfce`,
+  `tb_msg_return_nfe`): (a) **regra da D-E18 (ficam, a emissão nativa nunca toca) + contar conteúdo (sem expor) e expurgar
+  segredo se houver** · (b) DROP. *(Rec.: (a) — tabela sem consumidor não é morta, mas segredo em claro é achado de
+  segurança.)*
+- **Q-NE26 Rodízio da NF-e (análogo D-F38):** (a) **teto = prazo de cancelamento da UF + margem; autorizadas só sob
+  demanda; vivas/ambíguas com intervalo mínimo (cStat 656 — consumo indevido)** · (b) igual à NFS-e. *(Rec.: (a).)*
+
+### 11.6 Correções de documentação achadas (sem decisão — feitas nesta rodada)
+
+`nfe-api/CLAUDE.md` citava D-F1…D-F26 e "não escreve no ERP" (a D-F31 admite a trava da nota); `Infra-IA/fiscal-api/INDEX.md`
+falava de `tb_emitter`/`tb_issuer` (mortos pela D-F34) e "trava nomeada" (morta pela D-F27).
+
+### 11.7 Rodada 1 da `nfe-api` DECIDIDA (Valdo 2026-10-10: "siga as recomendações") — D-NE1…D-NE26
+
+Cada D-NE*n* = a recomendação da Q-NE*n* (§11.5). As que mudam o rumo:
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE1** | a **D-F20 fica SUSPENSA EM PARTE**: NE-0…NE-3 têm código (levantamento, núcleo generalizado, esqueleto + DDL da família, adaptador SEFAZ provado em H nos serviços sem emitente com IE); builder de autorização em produção espera o 1º cliente de mercadoria. **O núcleo generalizado (NE-1) vem ANTES da F2a** |
+| **D-NE2** | 55 primeiro (F4); 65 com a onda do PDV (F5) — mas `terminal` e a casa cifrada do CSC já nascem generalizados |
+| **D-NE3** | `authorizers.ts` = tabela COMPLETA (27 UF + SVRS/SVAN + SVC-AN/RS + AN) como constante versionada; homologação na UF do 1º cliente |
+| **D-NE4** | IBS/CBS = fase PRÓPRIA antes de qualquer produção, **prompt aberto JÁ** (o marco de 01/01/2027 já obriga pela NFS-e da Setes) |
+| **D-NE18** | homologação PARCIAL com o A1 da Setes (status/consulta; inutilização se aceita sem IE); autorização em H com um cliente-piloto de mercadoria (a Setes não tem IE) |
+| **D-NE25** | 1º release = venda (finNFe 1) + devolução (finNFe 4, `refNFe` da âncora); exige TRANSMITIR em `order-returns` |
+
+Desenho (o guardião opina no DDL da NE-2): **D-NE7** `life_event` na tentativa + chave nova só com a anterior resolvida ·
+**D-NE8** faixa inutilizada no `fiscal_api` + VIEW lida pelo setes-api ao cunhar · **D-NE9** módulo emitter no NÚCLEO com
+"transmissões vivas" por família · **D-NE10** cerca por família (55/65 independentes da SE; a lacuna (b) pela linha SE já é a
+D-F57) · **D-NE11** linha 55/65 do `fiscal_api` sem série; série editada no ERP · **D-NE12** `terminal` parametrizado já ·
+**D-NE13** máquina tentativa × voz extraída para o núcleo antes da nfe-api (provada pela suíte da nfse-api + gates) · **D-NE14**
+vocabulário comum com P e D + "registro fiscal" por FATO · **D-NE21** `dhEmi` NÃO espelhado no cabeçalho (derivado da view) ·
+**D-NE22** cancelamento da conjugada = saga do app.
+
+Técnicas: **D-NE5** núcleo só com o comum ao TLS de cliente; SOAP e cStat na nfe-api · **D-NE6** contingência fora da F4 (SVC
+reabre antes da produção do 1º cliente) · **D-NE15** lacunas do ERP: estrutural no ERP, cosmético por default/config · **D-NE16**
+validação XSD local sempre (ferramenta após o levantamento) · **D-NE17** cadeia ICP-Brasil versionada no adaptador, falha de cadeia
+do servidor ≠ credencial; `rejectUnauthorized: false` NUNCA · **D-NE19** levantamento em `Infra-IA/nfe-api/integracoes/nfe-sefaz/`
+(e `nfse-adn` muda para `Infra-IA/nfse-api/integracoes/`); ACBr local só como conferência · **D-NE20** base de PDF no núcleo, DANFE
+na nfe-api · **D-NE23** e-mail pós-autorização pela nfe-api, sempre ato explícito · **D-NE24** resíduos com segredo em claro
+ficam (regra D-E18), conteúdo contado sem expor e segredo expurgado se houver · **D-NE26** rodízio com teto pelo prazo de
+cancelamento da UF + intervalo mínimo (cStat 656).
+
+**Próximos passos (ordem)**: (1) gate adversarial do delta fiscal desta sessão (APIs isoladas §17.8); (2) **prompt da fase
+IBS/CBS** (D-NE4 — Rodada 0); (3) **NE-0**: levantamento oficial (D-NE19) + OpenAPI design-first + parecer do guardião sobre o
+DDL; (4) **NE-1** (núcleo generalizado — antes da F2a); (5) F2a/F2b da NFS-e em paralelo com NE-2/NE-3.

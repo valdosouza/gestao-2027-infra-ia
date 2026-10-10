@@ -1,5 +1,6 @@
 # fiscal-api — Índice (espelho de conhecimento do NÚCLEO COMUM)
 
+**⏯ Retomar (2026-10-10, reconciliação — §20 do prompt)**: D-F1…D-F59 (numeração unificada da 3ª sessão de 2026-10-04 com a sessão de 2026-10-10). No núcleo: D-F57 (lacuna (b) pela LINHA SE) e a cerca D-F31 por LISTA BRANCA (`src/__tests__/fence.ts`); 78 testes (inclui o `adversarial-f1r8` da 3ª sessão e o `adversarial-r8` de 10/10). Aberta da frente: Q-F62 (IM do CNC de H — nfse-api). Próximo do núcleo: NE-1 (generalizar para 55/65 ANTES da F2a — D-NE).
 **Status**: 🔨 F1 EXECUTADA e GATES FECHADOS (2026-10-04) + Rodada 4 EXECUTADA (D-F36…D-F40) + **Rodada 6 DECIDIDA e EXECUTADA (2026-10-04, 2ª sessão — §17 do prompt: D-F41…D-F45)** — biblioteca do núcleo com 44 testes; migrations 002 (aluguel), 003 (`cutover_at` — virada como fato write-once) e **004 (CHECK do domínio do modelo — 1º CHECK da casa, conferido no boot por `assertIssuerModelDomainEnforced`)**; `lockIssuerRows` trava POR LINHA da PK (nunca faixa — PADROES §9 regra 8); peça `runShortCommand` (D-F41 — comando curto com espera curta na sessão, restaurada; aluguel do rodízio); `openIssuer` com o schema usa o predicado COMPLETO da cerca. Pendem Q-F51…Q-F53 e o gate do delta da Rodada 6.
 **Projeto**: `D:\Gestao2027\fiscal-api` — **biblioteca** do núcleo comum (D-F17); não roda sozinha. Repo `valdosouza/gestao-2027-fiscal-api` (PRIVADO, criado e publicado 2026-10-04).
 **Consumida por**: `nfse-api` (porta 3002 — `Infra-IA/nfse-api/INDEX.md`) e `nfe-api` (porta 3003, futura — `Infra-IA/nfe-api/INDEX.md`)
@@ -32,13 +33,13 @@
 
 ## O que o núcleo guarda (§12.2 do prompt)
 
-transporte mTLS + XMLDSig paramétrico · `tb_emitter` (A1 cifrado) + `tb_issuer` (habilitação por modelo) · máquina tentativa × voz · storage do XML · auth pelo JWT do produto · base da fonte de fatos Gestão 2027 (SÓ-SELECT) · migrations e views do `fiscal_api`.
+transporte mTLS + XMLDSig paramétrico · `tb_establishment_certificate` (A1 cifrado — D-F34) + `tb_establishment_issuer` (habilitação por modelo, CHECK `SE/55/65` — D-F45) · contrato de leitura da voz (`voice/`) · storage do XML · auth pelo JWT do produto · base da fonte de fatos Gestão 2027 (leitura; a única "escrita" no ERP é a trava da nota — D-F27/D-F31) · migrations e views do `fiscal_api`. *(2026-10-10: a máquina tentativa × voz e o motor de PDF prometidos aqui ainda vivem na nfse-api — Q-NE13/Q-NE20 da Rodada 0 da nfe-api.)*
 
 ## Regras inegociáveis para quem for codificar
 
 1. Nenhum `tb_invoice`/`tb_order`/`tb_entity*` FORA da fonte de fatos (cerca por teste — §12.8-1).
 2. Estado DERIVADO da última voz; 2xx ilegível = ambíguo; recusa de REGRA ≠ transitório.
-3. Nenhum `Map/Set` de controle em memória; o que cruza com o setes-api serializa pela trava nomeada da instância, tomada ANTES do BEGIN (§12.4).
+3. Nenhum `Map/Set` de controle em memória; o que cruza com o setes-api serializa pelo `FOR UPDATE` na linha da nota do ERP (D-F27 — a trava nomeada do §12.4 morreu); rodízio por ALUGUEL na linha da habilitação (UPDATE atômico, `runShortCommand` — D-F41).
 4. Segredo nunca em claro em coluna, log ou resposta; senha do PKCS#12 não persiste (D-N5).
 5. `PADROES_BANCO.md` (UTC, REPEATABLE READ, contadores sob lock) + `revisar-ddl.md` antes de DDL; gates socrático ≥ 0,70 + adversarial sem HIGH.
 

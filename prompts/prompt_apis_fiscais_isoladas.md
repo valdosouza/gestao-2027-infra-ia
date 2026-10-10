@@ -1,24 +1,25 @@
 # APIs Fiscais Isoladas — `nfse-api` (NFS-e/ADN) e `nfe-api` (NF-e/NFC-e/SEFAZ)
 
-**Status**: Rodada 2 DECIDIDA (2026-10-03) — §8 zerada; **Rodada 4 (gates da F1) DECIDIDA 2026-10-04 → D-F36…D-F40, execução no §16**: D-F1…D-F26 (§7). A Rodada 2 mudou o centro do desenho: setes-api PASSIVO (D-F4); a API fiscal LÊ o banco do produto por uma fonte de fatos isolada (D-F10); o efeito no ERP é do setes-api lendo a voz no `fiscal_api` (D-F11); **três pastas** — `fiscal-api` (núcleo, biblioteca), `nfse-api`, `nfe-api` (D-F12/D-F17); mesmo login com JWT assimétrico (D-F13); sem `tb_licensee` (D-F14); views + GRANT mínimo (D-F15); A1 cifrado no banco (D-F16). Plano vigente: **§12**. Em execução: **F0** — parecer do guardião sobre o modelo (§13) abriu a Rodada 3 — **ZERADA em 2026-10-04 (D-F27…D-F35)**; modelo final no **§14**. **F0 FECHADA; F1 EXECUTADA (2026-10-04, §15)** — núcleo `fiscal-api` (29 testes) + `nfse-api` (102 + 45 ao vivo), `fiscal_api` criado e dados da Setes migrados; **GATES FECHADOS** (socrático 0.75 · adversarial 0.80 — 3 rodadas, 3 retrabalhos, §15.4). **Rodada 6 (2026-10-04, 2ª sessão — §17)**: 4 falhas ao vivo resolvidas (promoção de trava → trava POR LINHA), gates do delta 0.80/0.78, D-F41…D-F45 decididas e executadas (aluguel com espera curta, migrate:setes só SE, porte ao setes-api, o ato da virada aposenta a SE do ERP, CHECK do domínio do modelo); fiscal-api 44 · nfse-api 143 + 130 ao vivo.
+**Status**: Rodada 2 DECIDIDA (2026-10-03) — §8 zerada; **Rodada 4 (gates da F1) DECIDIDA 2026-10-04 → D-F36…D-F40, execução no §16**: D-F1…D-F26 (§7). A Rodada 2 mudou o centro do desenho: setes-api PASSIVO (D-F4); a API fiscal LÊ o banco do produto por uma fonte de fatos isolada (D-F10); o efeito no ERP é do setes-api lendo a voz no `fiscal_api` (D-F11); **três pastas** — `fiscal-api` (núcleo, biblioteca), `nfse-api`, `nfe-api` (D-F12/D-F17); mesmo login com JWT assimétrico (D-F13); sem `tb_licensee` (D-F14); views + GRANT mínimo (D-F15); A1 cifrado no banco (D-F16). Plano vigente: **§12**. Em execução: **F0** — parecer do guardião sobre o modelo (§13) abriu a Rodada 3 — **ZERADA em 2026-10-04 (D-F27…D-F35)**; modelo final no **§14**. **F0 FECHADA; F1 EXECUTADA (2026-10-04, §15)** — núcleo `fiscal-api` (29 testes) + `nfse-api` (102 + 45 ao vivo), `fiscal_api` criado e dados da Setes migrados; **GATES FECHADOS** (socrático 0.75 · adversarial 0.80 — 3 rodadas, 3 retrabalhos, §15.4). **Rodada 6 (2026-10-04, 2ª sessão — §17)**: 4 falhas ao vivo resolvidas (promoção de trava → trava POR LINHA), gates do delta 0.80/0.78, D-F41…D-F45 decididas e executadas (aluguel com espera curta, migrate:setes só SE, porte ao setes-api, o ato da virada aposenta a SE do ERP, CHECK do domínio do modelo); fiscal-api 44 · nfse-api 143 + 130 ao vivo. **Reconciliação 2026-10-10 (§20)**: os dois históricos — a 3ª sessão de 2026-10-04 (outro clone, D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta máquina (renumerada D-F54…D-F59, §19) — unificados; Q-F52 = (b) bloqueio total; revive da SE com os dois fechamentos (D-F50 + D-F56/D-F58); **Q-F62 aberta**. fiscal-api 78 · nfse-api 240 + 150 ao vivo.
 **Origem**: pedido do Valdo em 2026-10-03, ao fechar a fase de emissão de NFS-e: *"isolar as APIs do sistema porque o consumo pode ser feito por outras aplicações e eu posso dar escala para elas"*
 **Referências**: `prompt_onda3_nfse_adn.md` (NFS-e — ENTREGUE, produção desde 2026-09-29) · `prompt_onda_nfe_sefaz.md` (NF-e — Rodadas 0/1 decididas, nada executado além das peças comuns do §10) · `prompt_primeiro_cliente_setes.md` (Onda 4 — produção na SaveInCloud, ainda INEXISTENTE) · `skills-genericas/guardiao-conceitual.md` · `setes-sync/prompt_revisao_sincronizador_setes_sync.md` D12 (API key por institution — precedente de API consumida por terceiro) · método: `skills-genericas/refinar-prompt-arquitetura.md`
 **Escopo**: misto (o conceito "serviço de documento fiscal que não conhece o ERP" é método portável; tabelas, ADN, SEFAZ e dados da Setes são conteúdo do caso zero)
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI (salvo 2026-10-04, 3ª sessão — §17.5 e §18)**: decisões **D-F1…D-F53** (§7). **Nenhuma questão aberta**
-> (Q-F51 segue ADIADA até a renovação do A1). Feito na 3ª sessão: D-F46 ramo cortado = bloqueio total · D-F47 a passada fecha as
-> vivas do ramo cortado · D-F48 re-sincronia com uma transação por institution · D-F49 banco `fiscal_api` CONFIRMADO (motivo real:
-> não é desempenho — migração única, GRANT por construção, prazo) · D-F50 a virada exige a migration `f2a_fiscal_passivo` do
-> setes-api no schema · D-F51 a consulta grava F "sem resposta" (critério do transmitir) · D-F52 revisita única do F em 24 h ·
-> D-F53 GRANT do `fiscal_api` nas cópias `fiscal_api_adv_*` (`ops/grants.sql` 1b — APLICADO no dev pelo Valdo) e ataques ao vivo
-> com o usuário do serviço. Gates: Rodada 6 + D-F46 (socrático 0,76 · r8 0,80), D-F47/48 (0,74 · r9 0,78), D-F50/51 (0,80 · r10
-> 0,84) — nenhum HIGH; achados provados corrigidos. Provas na nuvem: `fiscal-api` 52 · `nfse-api` 224 unit (131 ao vivo pulados).
-> **1º passo da próxima sessão (na máquina do Valdo)**: `.env` da nfse-api com `DB_USER=fiscal_api`; `$env:NFSE_ADV_LIVE=1; npx jest
-> live --runInBand` (1ª rodada ao vivo com o harness da D-F53 e tudo da 3ª sessão) + `npm run explain:leituras` (JOIN da view de
-> ramo e o NOT EXISTS da D-F52). Verde → **F2a** (§15.5-3: setes-api passivo; a F2a cria `NNN_f2a_fiscal_passivo.sql` — D-F50) →
-> virada → **F2b** (app). Marco duro: IBS/CBS em 01/01/2027 (F0–F2 até meados de novembro — §12.7). Tudo COMMITADO e PUBLICADO.
+> **⏯ RETOMAR POR AQUI — §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
+> sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F59** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
+> e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
+> reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
+> `explain:leituras` OK. **Aberta: Q-F62** (o "Indicador Municipal" do Emissor Nacional de produção restrita — o Valdo lê e
+> informa; §19.7/§20.5). Depois: smoke em H com OS nova → gate do delta (TSString/D-F59 + reconciliação) → NE-0/NE-1 → **F2a**
+> (com a migration `NNN_f2a_fiscal_passivo.sql` — D-F50) → virada → F2b. Marco duro: IBS/CBS em 01/01/2027.
+>
+> *Histórico dos pontos de retomada anteriores*: 3ª sessão de 2026-10-04 → §17.5/§18; sessão de 2026-10-10 → §19.8; 2ª sessão
+> de 2026-10-04 → §17.4.
+
 ---
 
 ## 1. Contexto — fatos verificados no disco (2026-10-03)
@@ -520,6 +521,45 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   `r5.live` §G: DELETE/UPDATE no ERP pelo pool do ataque = 1142. Limitação aceita: o serviço é dono do `fiscal_api` real (lá
   segue a detecção por CHECKSUM — `it.failing [Q-F53]`). **Falta a 1ª rodada ao vivo com o harness novo.**
 
+**Decisões da sessão de 2026-10-10 desta máquina — RENUMERADAS na reconciliação (§20.2; a numeração original está no §19 e no
+branch `sessao-2026-10-10`):**
+
+- **D-F54 (= Q-F51 (a) — Valdo 2026-10-10: "o restante pode seguir as recomendações"; era a D-F46 desta máquina) — a nota do
+  smoke em homologação (D-F36) vem de uma OS de TESTE faturada AGORA pelo setes-api** (regra de ISS atual: código nacional +
+  código municipal vazio ou de 3 dígitos), para um cliente INTERNO da Setes e valor simbólico; depois do smoke, a nota é
+  cancelada localmente. É o único caminho que prova o DPS montado pela regra atual. Pré-condição: o A1 RENOVADO no cofre e na
+  réplica (§19.1). Escolher o cliente/serviço e falar com o fisco (`smoke:adn-h … --vai`) continuam pedindo o "vai" na hora.
+  (Na prática a OS escolhida foi de cliente externo — Blessing Chocolates, §19.4 — porque a Setes como tomadora cai na RN 238.)
+- ~~**D-F55 (= Q-F52 (a) — era a D-F47 desta máquina) — a LICENÇA barra só a TRANSMISSÃO NOVA**~~ → **REVOGADA na reconciliação
+  (Valdo 2026-10-10: "(b) bloqueio total")**: a Q-F52 já tinha sido decidida em 2026-10-04 como (b) (D-F46 — "o cliente vai
+  precisar arranjar outra maneira"); a (a) entrou aqui pelo "siga as recomendações" sem a (b) à vista. O código da D-F55
+  (`hasFiscalObligation`, `licensedOrCommitted`, `{ newTransmission }`) SAIU da nfse-api; valem D-F46/D-F47/D-F51/D-F52.
+- *(a D-F48 desta máquina = **D-F53** acima — mesma decisão (Q-F53 (a)); o GRANT foi completado nos quatro hosts do usuário com o
+  "vai" de 2026-10-10 — `ops/grants.sql` item 5, só no dev — e o harness unificado ataca com o serviço e só o ENSAIO do ato leva o
+  dono, por `ownerEnv` explícito.)*
+- **D-F56 (= Q-F63 (a) — Valdo 2026-10-10: "siga as recomendações"; era a D-F49) — a habilitação SE com numeração emitida só sai
+  pelo ATO da virada**: o setes-api (guarda portada no dual-run, molde D-F43) recusa REVIVER a SE excluída (409
+  `FISCAL_ISSUER_RETIRED`) e recusa EXCLUÍ-LA (409, código renomeado para `FISCAL_ISSUER_CUTOVER_ONLY` pela D-F58). Revê o "sem
+  mudar código do setes-api" da D-F44. **Convive com a D-F50** (escolha do Valdo na reconciliação — "os dois"): a guarda fecha a
+  janela até a F2a em toda versão que a contenha; a D-F50 garante a ordem F2a → virada. §19.3.
+- **D-F57 (= Q-F64 (a) — idem; era a D-F50) — a lacuna (b) da cerca da virada olha a LINHA SE** ("sem linha SE no `fiscal_api` +
+  SE no ERP"), no predicado `emissionStillInErp`, na guarda `assertEmitterWritable` e na decisão réplica × congelada da
+  re-sincronia (agora dentro da `resyncInstitution` da D-F48); o "ato por institution" da D-F39 fica para réplica. A cerca por
+  família (55/65 independentes da SE) é a D-NE10 (onda NE-1 da nfe-api). §19.3.
+- **D-F58 (= Q-F65 (a) — Valdo 2026-10-10: "siga as recomendações"; era a D-F51) — no dual-run a habilitação SE do ERP só muda
+  pelo ATO**: o setes-api não REVIVE a SE excluída nem EXCLUI a SE, QUALQUER que seja o contador (substitui o critério
+  `dps_last_number > 0` da D-F56 — o ato também aposenta SE com contador 0, ADV-R8-01). Custo aceito: trocar a SE de um cliente no
+  dual-run = ato ou SQL. §19.5.
+- *(a D-F52 desta máquina = **D-F51** acima — mesma decisão (a consulta fecha com F a tentativa interrompida); fica a
+  implementação da 3ª sessão, `recordInterruptedFailure`, que também trata a corrida perdida — gate r10.)*
+- **D-F59 (= Q-F67 (a) — Valdo 2026-10-10, IM "01 06 501.367-7"; era a D-F53) — a IM do PRESTADOR vai ao DPS só em
+  HOMOLOGAÇÃO**: é FATO do emitente (`tb_company.im`); o AMBIENTE da habilitação decide (H exige — E0116; P recusa — E0120,
+  Q-N35), nos DOIS montadores (setes-api, porte do dual-run — D-F43; nfse-api). §19.6. O CNC de H ainda não reconhece a IM
+  gravada — **Q-F62**.
+- **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
+  generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
+  builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
+
 **§8 ZERADA em 2026-10-03 (Rodada 2).** O plano consolidado que substitui §4–§6/§10/§11 onde houver conflito está no §12.
 
 ---
@@ -587,7 +627,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
 - ~~**Q-F49 O custo das leituras que crescem com o histórico entra como critério de aceite?**~~ → **DECIDIDA = D-F40** (a recomendação). (página de pendentes = COUNT + página sobre todas as notas do cliente via 3 views com NOT EXISTS por linha; candidatas do rodízio = MAX correlacionado sobre todas as tentativas da institution com OR que não usa o índice de `last_queried_at`): (a) **sim — teto de tempo por chamada (ex.: p95 < 300 ms com 200 mil notas) no teste de carga da F3 / diagnóstico da S2 (D-F23/D-F24), com `EXPLAIN` na cerca** · (b) fica para quando doer. *(Rec.: (a); medido hoje no dev: 1ª página dos pendentes 119–206 ms com 386 notas — não diz nada sobre 200 mil.)*
 
 
-### 8.R5 Rodada 5 — aberta pela execução da Rodada 4 (guardião + gates, §16) — Q-F50 DECIDIDA (D-F44) · Q-F51 ADIADA · Q-F52 DECIDIDA (D-F46) · Q-F53 DECIDIDA (D-F53)
+### 8.R5 Rodada 5 — aberta pela execução da Rodada 4 (guardião + gates, §16) — FECHADA: Q-F50 = D-F44 · Q-F51 = D-F54 (2026-10-10; ADIADA em 2026-10-04) · Q-F52 = D-F46 ((b), 2026-10-04; a (a) de 2026-10-10 — D-F55 — REVOGADA na reconciliação) · Q-F53 = D-F53
 
 - ~~**Q-F50 Como fechar o LADO DO ERP na virada?**~~ → **DECIDIDA = D-F44** ("manter" a (a) refinada — §17). (refinada pelos gates da Rodada 4 — §16.4). O ato `migrate:setes
   --cutover` grava `cutover_at` no `fiscal_api`, mas o contador do setes-api NUNCA lê esse fato: uma instância esquecida ou
@@ -607,7 +647,7 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   SE da Setes é '1'; as 903 notas SE do dev são série '1'). *(Rec. refinada: manter (a), com a condição virando CONFERÊNCIA do
   próprio ato — série SE do ERP ≠ '1' → falha alta; e registrar para a F2a que a tabela do ERP passa a significar só a série
   da nota — ambiente da SE e `dps_last_number` ficam sem consumidor e são aposentados SEM DROP.)*
-- ⏸ **Q-F51 — ADIADA pelo Valdo (2026-10-04): "ignore, pois está programada a renovação" do A1** — o prazo de 08/10/2026 deixa
+- ~~**Q-F51**~~ → **DECIDIDA = D-F54** (2026-10-10, (a); o A1 foi renovado — §19.1). ⏸ **Q-F51 — ADIADA pelo Valdo (2026-10-04): "ignore, pois está programada a renovação" do A1** — o prazo de 08/10/2026 deixa
   de pressionar o smoke; a origem da nota de teste volta à mesa depois da renovação. Texto original: **De onde vem a NOTA DE
   TESTE do smoke da D-F36?** Hoje há ZERO notas elegíveis (300 conferidas: 294 sem código
   nacional — anteriores à D-N11a —, 6 com `cTribMun` "0102" — anteriores à D-N26b) e o A1 vence em 08/10/2026. (a) **faturar
@@ -618,14 +658,15 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   o `fiscal_api` é réplica) · (d) não fazer o smoke em H (Q-F45 (c)). *(Rec.: (a) com um cliente interno da própria Setes e
   valor simbólico — é o único caminho que prova o DPS montado pela regra atual; (c) se o prazo do A1 apertar.)*
 - ~~**Q-F52 Licença (D-F37) × obrigação fiscal JÁ assumida**~~ → **DECIDIDA = D-F46** ((b) bloqueio total — Valdo,
-  2026-10-04; a recomendação era (a)). Texto original: quando o ramo deixa de ser contratado, o que acontece com o que
+  2026-10-04; a recomendação era (a); **reconfirmada na reconciliação de 2026-10-10** — a (a) dada na sessão desta máquina,
+  D-F55, foi REVOGADA, §20.3). Texto original: quando o ramo deixa de ser contratado, o que acontece com o que
   já foi emitido? Hoje, nada passa: NFS-e em voo ou em K deixa de ser reconciliada pela consulta/rodízio, o cancelamento
   dentro do prazo do município e o XML/DANFSe que o cliente tem de guardar ficam bloqueados — inclusive para o admin; e a
   passada de quem tem UM ramo contratado consulta notas de ramo NÃO contratado. (a) **a licença barra só a transmissão NOVA;
   consulta, cancelamento no fisco e leitura do já emitido continuam** (a obrigação nasceu quando o ramo era contratado) · (b)
   como está — bloqueio total · (c) leitura sobrevive, ações não. *(Rec.: (a) — o contrato comercial não pode impedir o
   cumprimento de obrigação fiscal já assumida; a passada filtra as candidatas pelos ramos contratados OU com NFS-e viva.)*
-- ~~**Q-F53 Os ataques ao vivo voltam a rodar com o usuário de SELECT MÍNIMO da D-F31?**~~ → **DECIDIDA = D-F53** ((a)). O harness das cópias descartáveis
+- ~~**Q-F53 Os ataques ao vivo voltam a rodar com o usuário de SELECT MÍNIMO da D-F31?**~~ → **DECIDIDA = D-F53** ((a); a D-F48 desta máquina é a MESMA decisão — §20.2). O harness das cópias descartáveis
   usa o usuário do setes-api (ALL PRIVILEGES ON *.* — escreve no ERP que guarda a produção da Setes); hoje a defesa é
   DETECÇÃO (o `drop()` confere o CHECKSUM do `fiscal_api` real, da `_migrations` e de 8 tabelas do ERP). (a) **GRANT ALL em
   `fiscal\_api\_adv\_%`.* para o usuário `fiscal_api`** (só as cópias; o do setes-api só cria/apaga a cópia) — a defesa
@@ -696,6 +737,32 @@ Q-F50 ("manter" — refinada pelo guardião) e Q-F56 ("sim") → D-F44/D-F45; Q-
   (dentro do teto da D-F38) · (b) risco aceito. *(Rec.: (a) — uma consulta a mais por nota interrompida, e fecha a única
   janela em que a voz F pode mentir.)*
 ---
+
+### 8.R8 Rodada 8 — aberta pelo gate socrático do delta da sessão de 2026-10-10 desta máquina (§19.2) — DECIDIDA 2026-10-10 ("siga as recomendações" → D-F56/D-F57)
+
+> Nesta máquina estas questões eram Q-F57/Q-F58 (Rodada 7) — renumeradas na reconciliação (§20.2), porque a 3ª sessão de
+> 2026-10-04 já tinha usado Q-F57…Q-F61 para outras perguntas (§8.R7 acima).
+
+- ~~**Q-F63**~~ → **D-F56**. Fechar o REVIVE da habilitação SE aposentada pelo ato (guarda portada ao setes-api × procedimento ×
+  remoção das rotas antes do ato). *(Rec.: (a) guarda no setes-api — texto no §19.2.)* Mesmo problema da Q-F59 da 3ª sessão
+  (→ D-F50, outra solução); na reconciliação o Valdo ficou com AS DUAS.
+- ~~**Q-F64**~~ → **D-F57**. A lacuna (b) da cerca olha a LINHA SE (= Q-NE10 da Rodada 0 da nfe-api). *(Rec.: (a) — texto no §19.2.)*
+
+### 8.R9 Rodada 9 — aberta pelo gate adversarial do delta (r8 desta máquina = r11 na sequência unificada) e pelo smoke em H (2026-10-10, §19.4) — Q-F65/Q-F66/Q-F67 DECIDIDAS (D-F58/D-F51/D-F59) · ⚠️ Q-F62 (§19.6) AGUARDA O VALDO
+
+> Nesta máquina eram Q-F59/Q-F60/Q-F61 (Rodada 8); a Q-F62 manteve o número.
+
+- ~~**Q-F65**~~ → **D-F58**. A SE do ERP imutável no dual-run qualquer que seja o contador (ADV-R8-01 MEDIUM). *(Rec.: (a).)*
+- ~~**Q-F66**~~ → **= D-F51** (mesma resposta da Q-F60 da 3ª sessão). A consulta fecha com F a tentativa em voo sem NFS-e quando o
+  ramo saiu do contrato (ADV-R8-02). *(Rec.: (a).)* Com a (b) da Q-F52 a rota por nota de ramo cortado é 403 — quem fecha é a
+  PASSADA (D-F47 + D-F51; provado ao vivo no r11 §A).
+- ~~**Q-F67**~~ → **D-F59** (executada; o CNC de H ainda recusa a IM — **Q-F62**, §19.6). A autorização em H exige a IM (E0116) e
+  P a recusa (E0120): IM como fato do emitente, enviada só em H. *(Rec.: (a).)*
+- ⚠️ **Q-F62 — Qual é a IM que o CNC de HOMOLOGAÇÃO tem para a Setes em Curitiba?** (§19.6, refinada no §19.7) O Valdo lê o
+  campo "Indicador Municipal" no Emissor Nacional de produção restrita (https://www.producaorestrita.nfse.gov.br/EmissorNacional/,
+  e-CNPJ, emissão completa → Prestador → Curitiba → competência). Conforme o valor: (a) forma do MESMO número → vai ao cadastro;
+  (b) número DIFERENTE (dado de teste) → IM de homologação vira dado PRÓPRIO da habilitação H, não do emitente; (c) campo VAZIO →
+  pedir à Prefeitura (nif@curitiba.pr.gov.br) o ajuste do registro complementar de H. *(Não se chutam mais formas contra o fisco.)*
 
 ## 9. Fora de escopo desta fase
 
@@ -873,7 +940,7 @@ Chave-mestra `FISCAL_MASTER_KEY` (32 bytes, base64) por ambiente, fora do repo; 
 
 **Total F0–F3 ≈ 23–35 sessões (5–7 semanas)**. Mais barato que o §11.4 (30–43) porque a leitura direta do banco (D-F10/D-F11) dispensa recibo assinado, federação e webhook; mais caro que mover dentro do mesmo processo porque o app muda (F2b) e nascem três projetos.
 
-**Riscos com data**: (1) o A1 real da Setes **vence em 08/10/2026** — sem renovação não há smoke em H na F1 nem emissão em produção; (2) **01/01/2027** — IBS/CBS na NFS-e da Setes: F0–F2 precisam terminar até meados de novembro para o builder entrar na nfse-api a tempo, ou o builder entra provisoriamente no setes-api (decidir se a F1 atrasar); (3) MySQL da SaveInCloud (MariaDB × MySQL 8) muda detalhes de GRANT/trava — conferir na F0.
+**Riscos com data**: (1) o A1 real da Setes **vence em 08/10/2026** — sem renovação não há smoke em H na F1 nem emissão em produção *(2026-10-10: VENCEU e foi RENOVADO — novo vence 05/10/2027; §19.1)*; (2) **01/01/2027** — IBS/CBS na NFS-e da Setes: F0–F2 precisam terminar até meados de novembro para o builder entrar na nfse-api a tempo, ou o builder entra provisoriamente no setes-api (decidir se a F1 atrasar); (3) MySQL da SaveInCloud (MariaDB × MySQL 8) muda detalhes de GRANT/trava — conferir na F0.
 
 ### 12.8 Critérios de sucesso revistos (substituem §10 onde conflitarem)
 
@@ -1130,7 +1197,7 @@ vivo viram a habilitação real só durante o ataque e a devolvem réplica no `a
 1. **Smoke da D-F36**: falta uma **OS de TESTE faturada agora** pelo setes-api (regra de ISS com código nacional e código
    municipal vazio ou de 3 dígitos — a regra 2 do dev já está corrigida) — escrita no ERP da Setes, **decisão do Valdo**
    (qual cliente/serviço/valor) = **Q-F51**; depois, `npm run smoke:adn-h -- --nota <id>` (confere) e, com o **"vai"**,
-   `… --nota <id> --vai`. O A1 vence em **08/10/2026**.
+   `… --nota <id> --vai`. O A1 vence em **08/10/2026**. *(2026-10-10: venceu e foi renovado — novo vence 05/10/2027; a origem da nota = D-F54; §19.1.)*
 2. **Q-F50, Q-F51, Q-F52, Q-F53** (§8.R5) — aguardam o Valdo.
 3. **F2a** (lista do §15.5 + D-F37): setes-api aplica a licença para todos; ato da virada com o setes-api parado.
 4. Gates do delta da Rodada 4: §16.4.
@@ -1344,3 +1411,369 @@ dentro do teto, `last_queried_at < F + 24 h`, `NOT EXISTS` tentativa posterior n
 WHERE real ganhou os átomos novos; matriz de 9 linhas). `nfse-api` 224 unit, `tsc` limpo. Na máquina do Valdo: `explain:leituras`
 (o `NOT EXISTS` correlacionado usa a PK da tentativa).
 
+
+## 19. Sessão de 2026-10-10 desta máquina (renumerada na reconciliação — §20)
+
+> Esta seção era o §17.5…§17.12 desta máquina. Na reconciliação com a 3ª sessão de 2026-10-04 (§17.5/§18, outro clone) os
+> números de decisão, de questão e de seção foram convertidos para a numeração unificada (tabela §20.2) — inclusive no texto
+> abaixo. O gate adversarial que aqui se chama "r8" é o **r11** da sequência unificada (ids ADV-R8-xx mantidos). A D-F55
+> (licença só na transmissão nova) foi REVOGADA na reconciliação.
+
+### 19.1 Retomada de 2026-10-10 — A1 renovado, Rodada 5 fechada, D-F55 executada (REVOGADA na reconciliação — §20.3), preparação da nfe-api
+
+**1. O A1 — conferido no disco (2026-10-10).**
+
+| Onde | Certificado | Validade |
+|---|---|---|
+| Cofre do setes-api (`secrets/setes_setes/establishment/1/P/certificate.pem`) — o caminho de PRODUÇÃO até a virada | o ANTIGO (e-CNPJ A1, CN …:07742094000113) | 08/10/2025 → **08/10/2026 20:05 UTC — VENCIDO** |
+| Réplica no `fiscal_api` (cópia do cofre pela `migrate:setes`) | o ANTIGO | idem |
+| Repositório de certificados do Windows (CurrentUser\My) | **RENOVADO** — e-CNPJ A1, AC SAFEWEB RFB v5, CN …:07742094000113, chave privada presente | **05/10/2026 → 05/10/2027** |
+| `D:\Modelos\Setes\Certificado Digital e-CPF A1 -F. D. SOUZA … - 1011666973.pfx` (gravado 10/10/2026 12:29) | o arquivo da renovação (o nome diz "e-CPF", o certificado instalado é e-CNPJ; o setes-api confere o CNPJ do emitente — D-N29) | — |
+
+Entre 08/10 20:05 UTC e o envio do novo, o setes-api recusa transmitir (409 "Certificado digital A1 do emissor expirou") — a
+Setes não emite NFS-e nesse intervalo. **Caminho da renovação no dual-run** (o `fiscal_api` é RÉPLICA — D-F39): (a) o Valdo
+envia o `.pfx` + senha pela aba "Emissor fiscal" do setes-api (o agente NUNCA digita a senha — D-N5); (b) `npm run
+migrate:setes -- --dry-run` e depois `npm run migrate:setes` na nfse-api (SEM `--cutover`): fingerprint diferente → recifra o
+A1 novo na réplica; (c) re-rodar as suítes ao vivo. Achado da sessão: com o A1 vencido na réplica, 20 dos 51 ataques ao vivo das
+suítes f1 e r4 falham (409 do emissor no lugar do 422 esperado, e a cascata) — IGUAL com e sem a D-F55 (conferido com `git
+stash`), ou seja, é o certificado, não o código.
+
+**Feito no mesmo dia (13:27):** o Valdo enviou o `.pfx` pela aba "Emissor fiscal"; cofre conferido (CN …:07742094000113, AC
+SAFEWEB RFB v5, 05/10/2026 → 05/10/2027, SHA-256 `48:15:23:3C:…`, par certificado × chave conferido); `migrate:setes
+--dry-run` → "RENOVADO (CNPJ 07742094000113, vence 2027-10-05)", 0 XML faltando; `migrate:setes` real → commit; réplica no
+`fiscal_api` com a mesma impressão digital e `cutover_at` NULL (continua réplica). Re-prova: f1 + r4 **51/51** (as 20 falhas
+eram o certificado) e as 7 suítes ao vivo **131/131** — já com a D-F55 e as correções do gate (§19.2).
+
+**2. Rodada 5 FECHADA (D-F54, D-F55 [revogada na reconciliação] e D-F53 — nesta máquina eram D-F46…D-F48; §7).**
+
+**3. D-F55 executada (nfse-api, não commitada) — REVOGADA na reconciliação; o código saiu (§20.4):** `src/nfse/repository.ts` (`hasFiscalObligation`,
+`institutionHasFiscalObligation`), `src/modules/guards.ts` (`licensedOrCommitted`; `requireBranchPrivilege(…, { newTransmission })`
+obrigatório; `requireBranchInterface` e `requireAnyPrivilege` aceitam obrigação assumida), `nfse.routes.ts` (transmit = nova;
+refresh/reconfirm/cancel = sobre o já declarado). Testes: `app.test.ts` +2 (D-F55 por nota e na passada; privilégio continua;
+admin não passa a licença da transmissão nova), `adversarial-f1.live` (expectativa por nova × assumida), `adversarial-f1r4.live`
+(título: "sem obrigação assumida"). nfse-api 145/145 unit, typecheck limpo. Gate do delta da D-F55 junto com o da Rodada 6.
+
+**4. Pedido do Valdo (2026-10-10): "vamos nos preparar para montar a api-nfe".** A D-F20 dizia "nfe-api sem código até o 1º
+cliente de mercadoria" — o pedido é de PREPARAÇÃO (Rodada 0 da nfe-api: inventário + questões), não de código. Rodada 0
+ORGANIZADA em `prompt_onda_nfe_sefaz.md` §11 (Q-NE1…Q-NE26; Q-NE1 = suspender a D-F20 em parte; Q-NE10 = Q-F64).
+
+**5. Pendências (ordem):** ~~envio do A1 (Valdo) → re-sincronia da réplica → re-rodar os ataques ao vivo~~ (FEITO — item 1) → gate
+ADVERSARIAL do delta (Rodada 6 + D-F55 + correções; socrático FEITO — §19.2) → Q-F63/Q-F64 → D-F53 com o "vai" (GRANT + harness) → D-F54 (OS de teste + smoke em H com o "vai") → F2a → F2b.
+
+### 19.2 Gate socrático do delta da Rodada 6 + D-F55 (2026-10-10) — **0.72 ✅**, sem HIGH/CRITICAL
+
+Revisão (agente, só leitura; achados conferidos no código antes de aceitar): `runShortCommand` restaura a espera ou descarta a
+conexão; a trava por linha da PK não deixou promoção no SERVIÇO; a ordem é nota → habilitação → A1 em todos os caminhos
+(inclusive nfse-api × setes-api no dual-run); CHECK aplicado e conferido no boot; filtro só SE na cópia e no ato; a escrita no
+ERP é uma só, na transação da virada. Achados:
+
+| Id | Sev. | Achado (conferido) | Destino |
+|---|---|---|---|
+| **M1** | MEDIUM | o PUT da habilitação do setes-api REVIVE a linha SE que o ato aposentou (`ON DUPLICATE KEY UPDATE … deleted='N'`, `setes-api/src/shared/fiscal-issuer/fiscal-issuer.repository.ts:57-73`) com o contador congelado — instância esquecida/rollback + um clique na aba "Emissor fiscal" = mesmos nDPS que a nfse-api já cunhou (R2-2 reaberto) | **Q-F63** (decisão) |
+| **M2** | MEDIUM | o cancelamento abria o emissor INTEIRO (A1 + chave-mestra) ANTES de olhar a voz C → com cancelamento já feito e A1 vencido, o ok idempotente da D-F28 virava 409/503 | **CORRIGIDO** (`nfse-api/src/nfse/transmission.ts`: estado primeiro, `openIssuer` travante logo antes do K — mesma ordem de travas) + teste |
+| **M3** | MEDIUM | o ATO gravava por padrão e argumento desconhecido era ignorado — um `--dry-run` digitado errado aposentaria a SE de produção | **CORRIGIDO** (`migrate-from-setes-api.ts`: lista FECHADA de argumentos; o ato é ENSAIO por padrão e só grava com `--vai`; `--vai` + `--dry-run` = erro) + `migrate-args.test.ts` |
+| L1 | LOW | passo 5 do `--cutover` fazia UPDATE pela FAIXA da institution depois de travar por registro (regra 8 violada no próprio script) | **CORRIGIDO** (UPDATE pela PK: `model IN (ISSUER_MODELS)`) |
+| L2 | LOW | porte parcial da D-F43: o `normalizeCancelMotive` do setes-api media o piso de 15 ANTES de tirar o controle → Error cru (500) | **CORRIGIDO** no setes-api + `cancel-motive-control.test.ts` |
+| L3 | LOW | a trava "por linha" depende do PLANO (`range` de 3 pontos na PK); o teste prova um plano numa tabela quase vazia | pendência: `lockIssuerRows` na cerca de `EXPLAIN` (`scripts/explain-leituras.ts`) |
+| L4 | LOW | a re-sincronia é UMA transação e agora trava as linhas SE de todas as viradas até o commit | pendência (escala: 1000 institutions — transação por institution na re-sincronia) |
+| L5 | LOW | a lacuna (b) não distingue modelo — uma linha 55 da futura nfe-api esconde uma SE do ERP | **Q-F64** (= Q-NE10 da Rodada 0 da nfe-api — decide-se uma vez) |
+| L6 | LOW | a cerca D-F31 vivia só na nfse-api | **CORRIGIDO**: cerca de escrita no ERP também no NÚCLEO (`fiscal-api/src/__tests__/contrato.test.ts`, com prova de que a regex não é cega) |
+| L7 | LOW | domínio do modelo em dois lugares (CHECK × `ISSUER_MODELS`) e versões diferentes do núcleo por serviço | pendência (o boot confere a versão do núcleo × migrations aplicadas) |
+| L8 | LOW | o produto JÁ exige MariaDB (002/003 usam `ADD COLUMN IF NOT EXISTS`); Galera multi-primário não é detectado | pendência da F3 (escrever "MariaDB ≥ 10.3, primário único" e conferir na SaveInCloud) |
+| L9 | LOW | o ato usa a credencial do DONO com os mesmos nomes de variável do serviço; o boot não confere que o serviço só LÊ o ERP | pendência (assert de GRANT no boot; variáveis próprias do ato) |
+
+**Q-F63 — Fechar o REVIVE da habilitação SE aposentada pelo ato (M1)?** (a) **portar ao setes-api AGORA (molde D-F43) a
+guarda: o PUT da SE recusa (409) reviver linha `deleted='S'` com `dps_last_number > 0`** — vira pré-condição do ato (rollback
+para versão anterior proibido por procedimento) · (b) só procedimento (rollback proibido; re-sincronia detecta) · (c) a F2a
+remove as rotas `/api/establishment/issuer` antes do ato. *(Rec.: (a) — uma guarda fecha por construção para toda versão que a
+contenha; revê o "sem mudar código do setes-api" da D-F44.)*
+
+**Q-F64 — Lacuna (b) olha a LINHA SE?** (a) **sim: "sem linha SE no `fiscal_api` + SE no ERP", no predicado e na re-sincronia**;
+o "ato por institution" da D-F39 fica para réplica · (b) como está + conhecimento negativo estendido à nfe-api · (c) cerca
+inteira por modelo. *(Rec.: (a), com o guardião; o resto da cerca por família = Q-NE10.)*
+
+**Provas depois das correções**: `fiscal-api` 45/45 · `nfse-api` 149/149 unit (131 ao vivo pulados) · `setes-api`
+cancelamento/autoridade 58/58 · typecheck limpo nos três. **Gate ADVERSARIAL do delta: pendente** — os ataques ao vivo dependem
+do A1 vigente na réplica (hoje 20/51 falham pelo certificado) e, pela D-F53, do GRANT com o "vai".
+
+### 19.3 Rodada 7 DECIDIDA (Valdo 2026-10-10: "siga as recomendações e rode o gate adversarial") — D-F56/D-F57 executadas
+
+| Decisão | Execução | Prova |
+|---|---|---|
+| **D-F56** (= Q-F63 (a)) | setes-api: peça `lockIssuerHistory` (`@shared/fiscal-issuer` — história da linha SE travada pela PK, 1ª instrução da transação: `deleted` + `dps_last_number`); `saveIssuer` recusa reviver SE excluída COM numeração (409 `FISCAL_ISSUER_RETIRED`); **`removeIssuer` recusa excluir SE com numeração (409 `FISCAL_ISSUER_HAS_HISTORY`) — assunção A15 (contestável): fechar só o revive deixaria sem volta uma exclusão por engano no dual-run (a emissão da empresa pararia); com as duas guardas, `deleted='S'` + numeração só nasce do ATO da virada**. A linha travada é a MESMA que o ato trava primeiro (PK) — sem ABBA. SE sem numeração e o 55 seguem livres | `fiscal-issuer.test.ts` +3 (24/24) |
+| **D-F57** (= Q-F64 (a)) | núcleo: `lockIssuerRows`/`issuerRowsState` devolvem `serviceRows` (linhas SE) na MESMA leitura; `assertEmitterWritable` e `emissionStillInErp` decidem a lacuna (b) pela LINHA SE; `resyncAll` decide réplica × congelada pela LINHA SE (uma 55/65 virada não congela nem esconde a SE). O resto da cerca por família (55/65 independentes da SE) = Q-NE10 → D-NE10, executada na onda NE-1 | `cofre.test.ts` (+4 asserções: 55 virada + SE no ERP = ainda do ERP); fiscal-api 45/45 · nfse-api 149/149; `dist/` do núcleo reconstruído; `migrate:setes --dry-run` sem mudança para a Setes |
+
+**D-F53 — GRANT EXECUTADO ("vai" do Valdo, 2026-10-10)**: `GRANT ALL PRIVILEGES ON fiscal\_api\_adv%.* TO 'fiscal_api'` nos
+quatro hosts do usuário (localhost, 127.0.0.1, ::1, %) — padrão = o que o validador do harness aceita (`^fiscal_api_adv[a-z0-9_]*$`,
+inclui `fiscal_api_adv4`/`fiscal_api_advr6`; o `adv\_%` da recomendação original não os cobria). Achado: o `fiscal_api@%` já tinha
+`fiscal\_api\_adv\_%` (origem não registrada — subconjunto, mantido) e as conexões locais usam o `@localhost`, que NÃO tinha nada.
+Provado com o próprio usuário: cria/escreve/apaga a cópia; `UPDATE setes_setes…` → ER_TABLEACCESS_DENIED_ERROR; banco fora do
+padrão → ER_DBACCESS_DENIED_ERROR. Documentado em `nfse-api/ops/grants.sql` item 5 (só dev). **Pendente da D-F53: o HARNESS**
+(`live-harness.ts`) passar a atacar com o `fiscal_api` — o usuário do setes-api só cria/apaga a cópia; o ENSAIO do ato (`--cutover`
+sem `--vai`) e qualquer preparação que hoje escreva no ERP real precisam de credencial separada e explícita (inventariar antes de
+trocar; feito depois do gate adversarial, que usa o harness agora).
+
+**Gate ADVERSARIAL do delta inteiro** (D-F55, M2, M3, L1, L2, L6, D-F56, D-F57): **0.76 ✅** — §19.4.
+
+### 19.4 Gate ADVERSARIAL do delta (2026-10-10) — **0.76 ✅**, sem HIGH/CRITICAL · correções · harness D-F53 · OS de teste (D-F54)
+
+**Gate** (agente, só cópias descartáveis `fiscal_api_adv_r11`, nenhum `--vai`, fisco falso; CHECKSUM do real e do ERP iguais):
+refutados com prova — 6 cancelamentos simultâneos = 1 pedido ao fisco; voz C + A1 apagado = ok idempotente (M2); 8 rodadas
+cancelar × DELETE do A1 × PUT/DELETE da habilitação sem K órfão, 500, 1213 ou 1205; L1 (passo 5 pela PK — a forma antiga dá
+1213); D-F57 coerente em 22 estados (travante × contagem × predicado × guarda); ato sem `--vai` = ensaio; "obrigação" não fura a
+licença (transmissão nova, tentativa excluída, outra institution). Achados (conferidos no código):
+
+| Id | Sev. | Achado | Destino |
+|---|---|---|---|
+| ADV-R8-01 | MEDIUM | o ATO aposenta a SE com `dps_last_number = 0` (cliente que nunca emitiu pelo ERP) — fica igual a "SE excluída sem história" e o PUT do setes-api a REVIVE: o setes-api cunharia nDPS 1, 2… na mesma série que a nfse-api já usa (mesmo Id de DPS em duas notas). Precondição = a do M1 (rotas fiscais do setes-api presentes depois do ato) | **Q-F65** |
+| ADV-R8-02 | LOW | tentativa EM VOO sem NFS-e no fisco não fecha (F) quando o ramo saiu do contrato: só a transmissão (passo 0b) grava o F, e a licença barra a transmissão (provado ao vivo) | **Q-F66** |
+| ADV-R8-03 | LOW | argumento repetido / id não canônico (`--cutover 1 --cutover abc`, `0x1`) viravam o ato da institution 1 | **CORRIGIDO** (repetido falha; id `^[1-9][0-9]{0,9}$`) |
+| ADV-R8-04 | LOW | `npm run migrate:setes --dry-run` SEM o `--`: o npm engolia a flag e a re-sincronia GRAVAVA | **CORRIGIDO** (`npmSwallowedFlags` — flag deste script em `npm_config_*` = recusa) |
+| ADV-R8-05 | LOW | obrigação da institution sem `terminal = 0` (a da nota tinha) | **CORRIGIDO** |
+| ADV-R8-06 | LOW | 12 formas de escrita qualificada passavam pela cerca D-F31 do núcleo | **CORRIGIDO**: peça de teste `fiscal-api/src/__tests__/fence.ts` — LISTA BRANCA (alvo de escrita = nome simples de tabela), maiúsc./minúsc., modificadores, DDL, UPDATE…JOIN, `??`; comentários tirados pelo COMPILADOR (string com `//` intacta) |
+| ADV-R8-07 | LOW | U+FFFE/U+FFFF, surrogate solto (inclusive o do corte em 255 no meio de emoji) e largura zero chegavam ao xMotivo assinado | **CORRIGIDO** nas duas `normalizeCancelMotive` (setes-api e nfse-api) |
+| ADV-R8-08 | LOW | `--cutover` no estado "55 virada + SE só no ERP" falhava "já VIRADA" (passo 2 contava qualquer linha) | **CORRIGIDO** (passo 2 pela LINHA SE, como a re-sincronia — D-F57) |
+
+**Q-F65 — A SE do ERP fica imutável (nem revive nem exclusão) durante o dual-run, qualquer que seja o contador?** (a) **sim — a
+guarda da D-F56 deixa de olhar `dps_last_number`: com a nfse-api no produto, a SE do ERP só muda pelo ATO** · (b) o ATO grava uma
+marca na linha aposentada (ex.: `tb_user_id` nulo + `updated_at` do ato) e a guarda olha a marca · (c) como está (a precondição é a
+mesma do M1 — rotas fiscais do setes-api presentes depois do ato). *(Rec. do gate: (a) — fecha por construção; custo: um admin que
+quiser trocar a SE de um cliente sem emissão no dual-run passa pelo ato ou por SQL.)*
+
+**Q-F66 — Quem fecha a tentativa EM VOO sem NFS-e quando o ramo saiu do contrato?** (a) **a CONSULTA (refresh) fecha com F "envio
+interrompido" pela MESMA regra E2404 que a transmissão usa no passo 0b** — consulta é obrigação já assumida (D-F55) · (b) liberar só o
+passo 0b da transmissão para ramo não contratado · (c) como está (fica "em andamento" até recontratar). *(Rec. do gate: (a).)*
+
+**Provas depois das correções**: fiscal-api 70/70 · nfse-api 160 unit · setes-api suítes tocadas 90/90 (gate rodou a suíte inteira:
+1837/1837) · ao vivo **150/150** (8 suítes; `it.failing` restantes = ADV-R8-01/Q-F65, ADV-R8-02/Q-F66 e o limite da D-F53).
+
+**D-F53 — harness EXECUTADO**: `live-harness.ts` ataca com o usuário do SERVIÇO (`fiscal_api` do `.env` da nfse-api; recusa
+subir com o dono); o DONO só cria/copia/apaga a cópia e vigia os CHECKSUMs; `env` (re-sincronia na cópia) = serviço; **`ownerEnv`
+EXPLÍCITO só para o ENSAIO do ato** (`--cutover` — r4/r5/r6/r11) e para criar o banco do smoke; observação (PROCESSLIST/INNODB_TRX)
+segue com o dono (o serviço não tem `PROCESS`). Prova r5 §G: pool do ataque = `fiscal_api@localhost`, sem escrita global nem em
+`setes*`. **Limite fixado (`it.failing` "[D-F53 — limite]")**: o `fiscal_api` REAL é o banco do próprio serviço — ali a defesa segue
+DETECÇÃO (CHECKSUM); prevenção exigiria um usuário de teste próprio (decisão nova, se quiser).
+
+**D-F54 — OS de teste (Valdo: "utilize uma das OS abertas e não faturadas"; escolha: OS 7223, Blessing Chocolates LTDA, Curitiba,
+1 item regra 2, R$ 10,00 — a Setes como tomadora foi descartada: RN 238/E0202 "prestador = tomador" no Anexo I da DPS)**:
+faturada pelo setes-api (nota 6792, "6 - BOLETO", venc. 20/10, sem baixa automática nem boleto) → `smoke:adn-h --nota 7860`
+(conferência OK) → `--vai` em banco descartável (`fiscal_api_smoke`, H, série 900): **o fisco de HOMOLOGAÇÃO recusou com E0116
+— "A IM deve ser informada para o emitente prestador… conforme informações complementares registradas no CNC NFS-e do
+município"** (o mesmo de 2026-09-28; em PRODUÇÃO é o contrário — E0120, CNC sem registro complementar → Q-N35 tirou a IM) → nota
+cancelada localmente (evento C; OS 7223 de volta a 'A', trava D5 restaurada, 0 nota viva, 0 título vivo). Pipeline da nfse-api
+provado contra o fisco real até a recusa de regra (envio mTLS, DPS assinado, leitura da voz R, consulta); a AUTORIZAÇÃO em H
+depende da IM → **Q-F67**.
+
+**Q-F67 — Como provar a AUTORIZAÇÃO da nfse-api em homologação, se o CNC de H exige a IM e o de P a recusa?** (a) **informar a IM
+da Setes só em H**: a IM entra como FATO do emitente (`tb_company.im`, hoje NULL) e o DPS a inclui quando o ambiente da habilitação
+é H (P segue sem IM — Q-N35); exige o número da IM da Setes em Curitiba · (b) aceitar a recusa E0116 como prova do pipeline em H e
+deixar a 1ª autorização pela nfse-api para a VIRADA em P (com o setes-api pronto para voltar) · (c) homologar com outro emitente
+que tenha IM no CNC de H. *(Rec.: (a) — é a única que prova a autorização ANTES da virada; a regra "IM por ambiente" é dado do
+fisco, não preferência.)*
+
+### 19.5 Rodada 8 (parcial) DECIDIDA e EXECUTADA (Valdo 2026-10-10: "siga as recomendações nas Q-F65 e Q-F66") — D-F58/D-F51
+
+| Decisão | Execução | Prova |
+|---|---|---|
+| **D-F58** (= Q-F65 (a)) | setes-api `saveIssuer`: SE EXCLUÍDA não revive, qualquer que seja o contador (409 `FISCAL_ISSUER_RETIRED`); `removeIssuer`: a SE não se exclui pelo ERP (409 `FISCAL_ISSUER_CUTOVER_ONLY` — o código `FISCAL_ISSUER_HAS_HISTORY` da D-F56 foi RENOMEADO, nunca publicado); a história da linha segue sendo a 1ª trava (a mesma do ato); a guarda de "transmissão viva" no DELETE da SE ficou inalcançável e SAIU; SE nova (sem linha) e 55/65 seguem livres | `fiscal-issuer.test.ts` + `adversarial-r8-delta-fiscal.test.ts` (ADV-R8-01 virou `it`) — 31/31 |
+| **D-F51** (= Q-F66 (a); era a D-F52 desta máquina — na reconciliação ficou a implementação da 3ª sessão, `recordInterruptedFailure`, mesma regra) | nfse-api: peça `closeInterruptedSend` — UMA regra para os dois caminhos (passo 0b da transmissão e a CONSULTA): reserva sem voz ≥ `IN_FLIGHT_MINUTES` + fisco sem NFS-e para o Id (E2404) = F "envio interrompido"; em voo recente a consulta segue só marcando `last_queried_at`. Efeito colateral desejado: a PASSADA do rodízio também conclui a interrompida | `transmission.test.ts` +1; ao vivo r8 A2 (ramo fora do contrato: a consulta conclui com F, cancelamento → 409 `FISCAL_NOT_AUTHORIZED`, nada declarado ao fisco); ao vivo 150/150 |
+
+Q-F67 (IM só em H) segue aberta — espera o número da IM da Setes.
+
+### 19.6 D-F59 (= Q-F67 (a), Valdo 2026-10-10: IM "01 06 501.367-7… pode seguir") — executada; o CNC de H ainda recusa
+
+**Risco achado ANTES de gravar a IM**: os dois montadores de DPS (setes-api `branches/service.ts` e nfse-api
+`facts/service-facts.ts`) mandavam a IM do prestador SEMPRE que `tb_company.im` existisse — a Q-N35 ("sem IM") era cumprida só
+pelo campo vazio. Gravar a IM primeiro faria a PRODUÇÃO da Setes (setes-api, habilitação P) receber E0120. Ordem seguida:
+(1) código nos dois montadores — a IM do PRESTADOR entra no DPS só quando o ambiente da habilitação é **H** (a do tomador não
+muda) + testes "P sai sem `<IM>`" nos dois (setes-api `invoice-transmission.test.ts` 33/33 · nfse-api `transmission.test.ts`
+44/44); o setes-api estava PARADO (nenhuma emissão em voo) e subiu já com a regra; (2) **IM gravada**:
+`setes_central.tb_company.im = '01065013677'` (id 1, CNPJ 07742094000113 — dígitos, sem máscara; a linha estava NULL).
+
+**Smoke em H, 2ª vez** (OS 7223 refaturada — nota 6792 de novo, nº reaproveitado (D3/D4); DPS evidência em
+`nfse-api/storage-smoke/2026-10-10T20-10-08-035Z`): o DPS levou `<prest><CNPJ>07742094000113</CNPJ><IM>01065013677</IM>…` com
+`tpAmb 2` e **o fisco recusou de novo com E0116**. Pela RN 198 do Anexo I, a E0116 vale também quando a IM informada **não
+identifica** o registro complementar no CNC (CNPJ + `cLocEmi` + IM): o CNC de HOMOLOGAÇÃO tem um registro complementar da Setes
+em Curitiba, mas com a IM em OUTRA forma (sem o DV? com máscara?) ou outro número. A API do contribuinte não consulta o CNC
+(`parametros_municipais` só traz convênio/alíquotas/retenções/benefícios). Nota cancelada localmente de novo (vida E,C,E,C; OS
+7223 em 'A', trava D5, 0 título vivo). **Não** se tentaram formatos às cegas contra o fisco.
+
+**Q-F62 — Qual é a IM que o CNC de HOMOLOGAÇÃO tem para a Setes em Curitiba?** O Valdo confere no Emissor Nacional
+(produção restrita, entrando com o e-CNPJ) o registro complementar (cadastro → IM) e diz a forma exata · alternativa: tentar 2–3
+formas (sem DV `0106501367`, com máscara `01.06.501.367-7`) em H, uma por smoke. *(Rec.: conferir no Emissor Nacional — o valor
+gravado no cadastro é FATO e não pode ser chutado; se a forma de H for diferente da real, decidir se o DPS adapta ou se o
+município corrige o CNC.)*
+
+### 19.7 Pesquisa aprofundada — IM × CNC de Curitiba na PRODUÇÃO RESTRITA (Valdo 2026-10-10: "procure na internet… para resolvermos de vez")
+
+**O que a regra diz** (Anexo I, RN 198 / E0116): havendo registro complementar no CNC para CNPJ + `cLocEmi`, a DPS tem de levar a
+IM **que identifica unicamente** esse registro — IM ausente OU que não casa = E0116. Sem registro complementar = E0120 (RN 200).
+
+**Fatos achados**
+- Produção de Curitiba: DANFSe real (mar/2026, CNPJ 40.560.449/0001-29, Curitiba) com "Inscrição Municipal: -" — Curitiba NÃO
+  carrega registro complementar no CNC de PRODUÇÃO (coerente com a nossa E0120 → Q-N35).
+- Produção RESTRITA de Curitiba TEM registro complementar da Setes (E0116 sem IM). Nem `01065013677` (11 dígitos — o número do
+  alvará "01 06 501.367-7") nem `5013677` (forma da ajuda do Cadastro Sincronizado da Receita: em Curitiba "preencher com os 7
+  (sete) últimos dígitos incluindo o dígito verificador") identificaram o registro — as duas recusadas com E0116 em 2026-10-10
+  (evidência: `nfse-api/storage-smoke/2026-10-10T20-10-08-035Z` e `…T20-19-53-407Z`).
+- Relatos de integradores em Curitiba (fórum ACBr, dez/2025–jan/2026): zeros à esquerda NÃO resolvem ("Fui testando colocando um
+  zero de cada vez"); "aqui está aprovando com 8 dígitos"; a solução confirmada: **"entra pelo emissor nacional e simula o
+  preenchimento de uma nfse, após selecionar a competência vai ter um campo 'indicador municipal', essa é a inscrição que vc vai
+  passar"**; outro resolveu porque "cadastrou no portal nacional o CNPJ e IM". Em Manaus a forma aceita foi 15 dígitos com zeros.
+  Na Nuvem Fiscal, um caso de Curitiba concluiu que a homologação "não tem as empresas (ou a IM enviada)".
+- O manual de Curitiba para o Emissor Nacional: escolhido o município emissor, "o sistema automaticamente preencherá o Indicador
+  Municipal (inscrição municipal- IMU)" — o valor vem do CNC.
+- A API do CNC (`distribCNC`/`cncUnico`, manual "Municípios CNC API") é de MUNICÍPIO — o contribuinte não lê o próprio registro
+  complementar por API. A API de parâmetros municipais não traz IM.
+
+**Conclusão**: a IM do CNC de produção restrita NÃO é derivável do número do alvará — a única fonte confiável é o campo
+"Indicador Municipal" do Emissor Nacional de produção restrita (https://www.producaorestrita.nfse.gov.br/EmissorNacional/) com o
+e-CNPJ da Setes. **Não se chutam mais formas contra o fisco.** O cadastro voltou à IM informada pelo Valdo (`01065013677`).
+
+**Q-F62 (refinada) — o Valdo lê o "Indicador Municipal" no Emissor Nacional de produção restrita.** Conforme o valor: (a) se for
+uma forma do MESMO número (ex.: só a parte `501.367-7`, ou com zeros) → a forma vai ao cadastro e vale para H; (b) se for número
+DIFERENTE (dado de teste da prefeitura) → a IM de homologação vira dado PRÓPRIO da habilitação H (não do emitente), porque P
+segue sem IM e o cadastro real não pode carregar dado de teste; (c) se o campo vier VAZIO → o CNC de H está incoerente; pedir à
+Prefeitura de Curitiba (nif@curitiba.pr.gov.br) o ajuste do registro complementar de homologação.
+
+Fontes: ajuda do Cadastro Sincronizado (Receita) — www38.receita.fazenda.gov.br/cadsincnac/…/Numero_da_Inscricao_Municipal.htm ·
+fórum ACBr tópicos 85976, 88679, 89172 · manual Curitiba mid.curitiba.pr.gov.br/2025/00461932.pdf · Nuvem Fiscal tópicos 4324,
+4959 (só pelos resumos — o site barra leitura automática) · gov.br/nfse "manual-municipios-cnc-api" v1.2 · pynfse-nacional (GitHub).
+
+### 19.8 Teste em PRODUÇÃO (Valdo 2026-10-10: "faça a emissão em produção e depois o teste de cancelamento com o motivo teste") — ponto de retomada daquela sessão (SUBSTITUÍDO pelo §20)
+
+**Emissão e cancelamento em PRODUÇÃO pelo setes-api** (caminho de produção até a virada; tomador escolhido pelo Valdo: OS 7223,
+Blessing Chocolates LTDA, R$ 10,00): faturada (nota 6792) → `POST /api/billing/transmit` → **NFS-e nº 706 AUTORIZADA** (chave
+`41069022207742094000113000000000070626100245979187`, DPS nº 4 série 1, dhProc 2026-10-10 17:23:21 UTC, SEM `<IM>` — D-F59 em P)
+→ 1º `POST /api/billing/fiscal/cancel` com motivo "teste" **RECUSADO 400 sem detalhe**.
+
+**Achado de PRODUÇÃO (corrigido na sessão)**: o motivo curto ganhava o complemento `" — Cancelamento solicitado pelo emissor"` com o
+TRAVESSÃO U+2014 — fora do `TSString` do XSD (`[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}`, só U+0020–U+00FF) → o fisco recusava o evento pelo esquema.
+Valia para TODO motivo < 15 caracteres e, por tabela, para qualquer texto livre do DPS com caractere acima de U+00FF (travessão, aspas
+curvas, emoji). Correção nos DOIS projetos (setes-api `tax-authority/dps-builder.ts` + `branches/service.ts`; nfse-api
+`authority/dps-builder.ts` + `nfse/transmission.ts`): peça `toTsString` (tipografia → ASCII, resto acima de U+00FF sai) dentro do
+`text()` de todo campo do DPS/evento e no `normalizeCancelMotive` (antes do piso de 15); complemento com hífen ASCII. Testes:
+`ts-string.test.ts` nos dois + 4 expectativas que fixavam o travessão + `onda3-adversarial (21)` (o texto com "—" e "日本" não "volta
+igual" — o fisco o recusaria). setes-api 117/117 nas suítes tocadas · nfse-api 164 unit.
+→ 2º `fiscal/cancel` "teste" (motivo enviado: `teste - Cancelamento solicitado pelo emissor`) **ACEITO pelo fisco de produção** (voz C);
+o setes-api aplicou o C LOCAL no mesmo ato (D3/D4): OS 7223 = **'C' para sempre** (nota 6792 fica registrada como cancelada; 0 título
+vivo; vida da nota `…7:E,8:C`). Réplica re-sincronizada (`migrate:setes`, sem `--cutover`: +1 DPS, +1 tentativa, +2 vozes A/C, XML ok).
+A **1ª tentativa de cancelamento em produção** desta fase passou a ter prova real (a 704 de 2026-09-29 tinha motivo ≥ 15).
+
+**Dados de produção tocados nesta sessão (para auditoria)**: `setes_central.tb_company.im` da Setes = `01065013677` (era NULL;
+testado `5013677` e revertido); OS 7223 (pedido 7860): faturada/cancelada 3× em H (nota pendente, nº 6792 reaproveitado) e 1× em P
+(NFS-e 706 autorizada + cancelada → OS 'C'); contador `dps_last_number` da SE do ERP 3 → 4; `fiscal_api` réplica em dia.
+
+#### Ponto de retomada daquela sessão (histórico — substituído pelo §20)
+
+**Abertas para o Valdo**: **Q-F62** — ler o "Indicador Municipal" no Emissor Nacional de PRODUÇÃO RESTRITA
+(https://www.producaorestrita.nfse.gov.br/EmissorNacional/, e-CNPJ, emissão completa → Prestador → município Curitiba →
+competência) e informar o valor exato (§19.7 — a forma não é derivável). Depois: ajustar conforme o caso (a)/(b)/(c) e refazer o
+smoke em H com uma OS NOVA (a 7223 agora é 'C'; candidatas do mesmo perfil — Curitiba, regra 2, R$ 10: **OS 7226 Autophox**, 7222).
+
+**Nada foi commitado nesta sessão** (depois: publicado no branch `sessao-2026-10-10` e reconciliado no `main` — §20) (o Valdo pediu "salve tudo" — arquivos no disco + Infra-IA/memória). A commitar quando ele
+pedir, SÓ os caminhos desta sessão (há uma SESSÃO PARALELA mexendo na Infra-IA — ver abaixo):
+- **setes-api**: `establishment.issuer.service.ts`, `error-codes.ts`, `fiscal-issuer.repository.ts`, `branches/service.ts`,
+  `tax-authority/dps-builder.ts`, testes `fiscal-issuer`, `invoice-transmission`, `onda3-adversarial`, novos `adversarial-r8-delta-fiscal`,
+  `cancel-motive-control`, `ts-string`.
+- **nfse-api**: `CLAUDE.md`, `ops/grants.sql`, `scripts/migrate-from-setes-api.ts`, `src/authority/dps-builder.ts`,
+  `src/facts/service-facts.ts`, `src/modules/guards.ts`, `src/modules/nfse/nfse.routes.ts`, `src/nfse/repository.ts`,
+  `src/nfse/transmission.ts`, `src/__tests__/live-harness.ts` + testes (app, transmission, adversarial f1/r4/r5/r6/r7 live e r5 unit,
+  novos r8 live/unit, `migrate-args`, `ts-string`).
+- **fiscal-api**: `establishment.repository.ts`, `establishment.ts`, testes `cofre`, `contrato`, novos `adversarial-r8`, `fence.ts`.
+  (`dist/` reconstruído depois da D-F57 — `npm run build` de novo se o núcleo mudar.)
+- **nfe-api**: `CLAUDE.md`.
+- **Infra-IA** (desta sessão): `INDICE_CENTRAL.md`, `fiscal-api/INDEX.md`, `nfe-api/INDEX.md`, `nfse-api/INDEX.md`,
+  `prompts/prompt_apis_fiscais_isoladas.md`, `prompts/prompt_onda_nfe_sefaz.md`, `setes-api/integracoes/nfse-adn/README.md`.
+  ⚠️ **NÃO são desta sessão** (sessão paralela — provavelmente a fase IBS/CBS): `prompts/prompt_fase_ibs_cbs.md` (novo — a D-NE4
+  pedia esse prompt), `prompts/prompt_onda3_nfse_adn.md`, `prompts/prompt_fase_faturamento_financeiro.md`,
+  `prompts/rascunho_engine_modernizacao.md`, `nfe-api/referencia-acbr/`, `setes-api/integracoes/nfse-adn/legislacao-ibs-cbs/`,
+  `…/rtc-2026-10/`. Conferir com o Valdo antes de commitá-los.
+- Banco: nada de DDL nesta sessão; GRANT do dev (D-F53) já aplicado; `sql/` sem mudança.
+
+**Provas no fim da sessão**: fiscal-api 70/70 · nfse-api 164 unit + **150/150 ao vivo** (com o usuário do serviço) · setes-api
+1837/1837 (suíte inteira antes das correções do TSString; suítes tocadas depois 117/117 — rodar a inteira de novo ao retomar).
+
+**Próximos passos (ordem)**: (1) Q-F62 → smoke em H com OS nova; (2) commit (só os caminhos acima) com o "vai"; (3) gate do delta do
+TSString/D-F59 (socrático + adversarial — mudança em produção); (4) D-NE: NE-0 (levantamento oficial da SEFAZ) e NE-1 (núcleo
+generalizado ANTES da F2a); (5) F2a/F2b; (6) conferir com a sessão paralela o prompt IBS/CBS (D-NE4).
+
+## 20. Reconciliação dos dois históricos (2026-10-10) — ⏯ RETOMAR POR AQUI
+
+**Escopo**: misto (o método — reconciliar dois históricos de decisão por SIGNIFICADO, não por número — é portável; o conteúdo é
+do caso Setes)
+
+### 20.1 O que aconteceu
+
+A 3ª sessão de 2026-10-04 rodou num OUTRO clone (nuvem, só testes unitários) e publicou no `main` de nfse-api, fiscal-api e
+Infra-IA as decisões D-F46…D-F53 (§17.5/§18, §8.R7). Esta máquina partiu do `main` ANTERIOR a ela e, em 2026-10-10, numerou
+D-F46…D-F53 com OUTROS significados (§19); publicou no branch `sessao-2026-10-10` dos cinco repositórios sem tocar o `main`.
+Pedido do Valdo (2026-10-10): "reconciliando o branch `sessao-2026-10-10` com o `origin/main` … me traga as decisões
+conflitantes D-F46…D-F53 para eu escolher e depois siga pela Q-F62".
+
+**Lição de método (conhecimento negativo)**: número de decisão NÃO é identidade — a comparação foi por significado. Das oito
+colisões, só DUAS eram conflito de verdade; duas eram a MESMA decisão com número diferente; quatro eram complementares.
+
+### 20.2 Tabela de equivalência (numeração unificada)
+
+| Esta máquina (2026-10-10) | Unificada | Situação |
+|---|---|---|
+| D-F46 = Q-F51 (a) — OS de teste do smoke em H | **D-F54** | vale |
+| D-F47 = Q-F52 (a) — licença barra só a transmissão nova | **D-F55** | **REVOGADA** — vale a D-F46 (b) da 3ª sessão |
+| D-F48 = Q-F53 (a) — ataques com o usuário de SELECT mínimo | **= D-F53** | mesma decisão; execução unificada (GRANT nos 4 hosts do dev) |
+| D-F49 = Q-F57 → **Q-F63** — guarda da SE com numeração no setes-api | **D-F56** | vale (critério substituído pela D-F58); convive com a D-F50 |
+| D-F50 = Q-F58 → **Q-F64** — lacuna (b) pela LINHA SE | **D-F57** | vale |
+| D-F51 = Q-F59 → **Q-F65** — SE do ERP imutável no dual-run | **D-F58** | vale |
+| D-F52 = Q-F60 → **Q-F66** — a consulta fecha a interrompida | **= D-F51** | mesma decisão; fica a implementação da 3ª sessão |
+| D-F53 = Q-F61 → **Q-F67** — IM do prestador só em H | **D-F59** | vale |
+| Q-F62 — IM do CNC de H | **Q-F62** | aberta (número mantido) |
+| §17.5…§17.12 · §8.R7/§8.R8 | §19.1…§19.8 · §8.R8/§8.R9 | — |
+| gate adversarial "r8" (`adversarial-f1r8[.live]`, `fiscal_api_adv_r8`) | **r11** (`adversarial-f1r11[.live]`, `fiscal_api_adv_r11`) | ids ADV-R8-xx mantidos |
+
+Commits desta máquina continuam no branch `sessao-2026-10-10` com a numeração ORIGINAL (história); o `main` tem a unificada.
+
+### 20.3 Decisões do Valdo na reconciliação (2026-10-10)
+
+1. **Q-F52 → (b) bloqueio total** (opção recomendada na rodada de reconciliação: era a resposta EXPLÍCITA de 2026-10-04 e não
+   havia fato novo). Ramo fora do contrato = 403 para todos em transmitir, consultar, reconferir, cancelar e ler; a passada do
+   admin só fecha as tentativas JÁ VIVAS (D-F47); a obrigação fiscal já assumida é do cliente fora do produto (portal do ADN).
+   A D-F55 vira registro revogado; o código dela saiu.
+2. **Revive da SE aposentada → os DOIS fechamentos**: D-F50 (o ato `--vai` exige `f2a_fiscal_passivo` em `_migrations`) +
+   D-F56/D-F58 (guarda no setes-api, já em uso). Contrato para a F2a: a migration da F2a tem o nome FIXO
+   `NNN_f2a_fiscal_passivo.sql` (se a F2a sair em mais de um arquivo, este nome vai no último).
+3. Publicar no `main` com os testes verdes ("Sim, push no main").
+
+### 20.4 Execução da reconciliação
+
+| Repo | O que foi feito |
+|---|---|
+| fiscal-api | merge sem conflito (`adversarial-f1r8` da nuvem + `adversarial-r8`/`fence.ts` daqui) + renumeração D-F50→D-F57; `dist/` reconstruído |
+| nfse-api | 9 conflitos. **guards/rotas/repositório = 3ª sessão** (passScope; D-F55 fora). **transmission.ts** = `recordInterruptedFailure` da 3ª sessão + `normalizeCancelMotive` com TSString (correção de produção daqui). **Script do ato** = junção: re-sincronia por institution (D-F48) + `[r8-resync-55]` + conferência da F2a (D-F50) + ensaio por padrão e `--vai` (M3) + passo 5 pela PK (L1) + decisão pela linha SE (D-F57/ADV-R8-08); as funções puras de argumento (ADV-R8-03/04) foram para `scripts/migrate-args.ts` (os testes da 3ª sessão carregam o script esperando o `main()`; os daqui importam as funções sem dispará-lo). **Harness** = o daqui (ataque com o serviço; o dono só no ENSAIO por `ownerEnv`) — o da nuvem passava o dono a todo processo filho. **`ops/grants.sql`**: seção 1b com `fiscal\_api\_adv%` (cobre adv4/advr6/adv_r11) + item 5 só dev (hosts locais). Gate r8 daqui → **r11**, seção A reescrita para provar a (b) AO VIVO |
+| setes-api | renumeração (D-F49/51/53 → D-F56/58/59) commitada SÓ nos 7 arquivos desta frente, pelo índice (o working copy tem trabalho NÃO commitado da sessão paralela de IBS/CBS — `error-codes.ts` inclusive — que ficou intacto) |
+| nfe-api | `CLAUDE.md` → D-F1…D-F59 |
+| Infra-IA | este documento (§7, §8.R5/R8/R9, §19, §20), INDICE_CENTRAL, `nfse-api/INDEX.md`, `prompt_onda_nfe_sefaz.md`, README da integração ADN — feito numa worktree à parte: o working copy da Infra-IA tem trabalho NÃO commitado da sessão paralela (ACBr/IBS-CBS) |
+
+**Achados ao rodar ao vivo pela 1ª vez o código da 3ª sessão** (nenhum de produção):
+- r4: o teste da D-F37 esperava 403 na passada do admin sem nada contratado — a D-F47 mudou isso de propósito (a passada roda
+  só sobre as vivas; aqui nenhuma) e a nuvem não podia rodar o teste. Ajustado (passada 200, `checked` 0).
+- Testes de script da 3ª sessão chamavam o "ato real" sem `--vai` — com o M3 isso virou ensaio; passaram a usar `--vai`.
+- r11 §C extraía o SQL do passo 2 do script — a refatoração `apiIssuerRows` da 3ª sessão o moveu; extração ajustada.
+- r11 §D6: o fixture fixava o contador da SE em 3; a NFS-e 706 de produção (§19.8) levou o ERP a 4 e a re-sincronia acusou
+  — corretamente — "dual-write". O fixture passou a ler o contador real.
+- **f1: "o ERP mudou durante o ataque"** — a sessão paralela aplicou a migration `ibscbs_service_classification` (066) no
+  `setes_setes` às 18:07:36 (local), no meio da suíte; o `tb_invoice_service` foi reconstruído (colunas
+  `classification_code`, `place_indicator_code`, `nbs`). O harness acusou certo; a re-rodada passou. **Lição**: suíte ao vivo
+  e migration de outra frente no MESMO dev se atropelam — combinar a janela quando houver sessão paralela.
+
+**Provas**: `fiscal-api` 78/78 · `nfse-api` 240 unit + **150/150 ao vivo** (8 suítes; a 1ª rodada ao vivo do código da 3ª
+sessão) · `explain:leituras` OK (rodízio 3,0 ms; o `NOT EXISTS` da D-F52 por `idx_invoice_service_transmission_life`; precisa
+de `EXPLAIN_DB_USER` — o usuário do serviço não tem EXPLAIN nas views) · `setes-api` suítes tocadas 68/68 · typecheck limpo.
+
+### 20.5 Próximos passos (ordem)
+
+1. **Q-F62** — o Valdo lê o "Indicador Municipal" no Emissor Nacional de produção restrita e informa; aplicar (a)/(b)/(c) do
+   §8.R9 e refazer o smoke em H com uma OS NOVA (a 7223 é 'C'; candidatas: OS 7226 Autophox, 7222 — Curitiba, regra 2, R$ 10).
+2. Gate do delta do TSString/D-F59 (mudança em produção) + da reconciliação (socrático + adversarial).
+3. D-NE: NE-0 (levantamento oficial da SEFAZ) e NE-1 (núcleo generalizado ANTES da F2a).
+4. **F2a** (setes-api passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+5. Pendências da 3ª sessão que seguem: LOWs aceitos do §18 (registro para a F3/F4).
