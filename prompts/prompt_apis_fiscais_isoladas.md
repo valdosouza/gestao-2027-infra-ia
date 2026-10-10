@@ -7,10 +7,10 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21 (Q-F62 fechada: 1ª autorização da nfse-api em H; aberta a Q-F68 — leitura de eventos que a
-> Sefin não atende, afeta a PRODUÇÃO do setes-api). Antes, §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21.6 (D-F61…D-F66 executadas e publicadas; aberta a Rodada 12: Q-F74…Q-F76). Antes: §21 (Q-F62 /
+> 1ª autorização da nfse-api em H) e §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F60** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F66** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -561,6 +561,23 @@ branch `sessao-2026-10-10`):**
   (o "Indicador Municipal" do Emissor Nacional de produção restrita: 8 dígitos e contém o 501.367-7 do alvará — forma do CNC,
   não dado de teste) → gravada como FATO do emitente (`setes_central.tb_company.im`, era `01065013677`); o DPS só a envia em H
   (D-F59) e P segue sem IM (Q-N35). Provada pela 1ª AUTORIZAÇÃO da nfse-api em homologação (§21).
+- **D-F61 (= Q-F68 (a) — Valdo 2026-10-10: "(a) Nos dois, já") — a leitura dos eventos de cancelamento segue o contrato REAL da
+  Sefin** (cravado ao vivo em H e P, §21.2/§21.4): `GET /nfse/{chave}/eventos/{tipo}/1` para cada código de cancelamento (101101,
+  105102, 105104, 305101); 404 só com o envelope JSON da Sefin = "sem esse evento"; `arquivoXml` = base64 do texto gzip+base64; 405
+  (e 406/415 — Rodada 11) = contrato do adaptador → 502 ambíguo, nunca "DPS rejeitado". Nos DOIS adaptadores (porte D-F43).
+- **D-F62 (= Q-F69 (a) — Valdo 2026-10-10: "siga as recomendações") — manter os 4 GETs tipados** (único contrato provado ao vivo) e o
+  aluguel da passada da nfse-api cobrir o PIOR caso de uma candidata (6 idas × 30 s + folga = **210 s**); o orçamento de 20 s do
+  setes-api fica como está (estoura numa nota lenta — morre na F2a).
+- **D-F63 (= Q-F70 — idem) — no GET tipado, 200 que não se confere como cancelamento GERADO desta chave é AMBÍGUO** (ilegível, outra
+  chave, eco, outro tipo; `eventos: []`) — nunca "autorizada" (gravaria N falso num K). A R2-2 (d) "segue autorizada" era da LISTA
+  `GET /eventos`, que a Sefin não tem.
+- **D-F64 (= Q-F71 — idem) — cancelamento por SUBSTITUIÇÃO (e105102) lido por consulta: voz C SIM, efeito local automático NÃO**
+  (existe uma NFS-e substituta que o ERP não conhece): pendência visível, só ação humana; a suspensão é pegajosa e guarda o motivo do
+  fisco. `NfseQuery.cancelled.eventCode` nos dois serviços. Fim da pendência = Q-F74; contrato da F2a = Q-F75.
+- **D-F65 (= Q-F72 — idem) — 401/403 numa rota de EVENTO depois do 200 do GET /nfse da mesma nota é falha DA NOTA** (502 ambíguo: o
+  rodízio carimba e segue); 401/403 no GET /nfse e 5xx/timeout continuam parando a passada.
+- **D-F66 (= Q-F73 (a) — idem) — TSString: NFC antes do filtro; fora do Latin-1, a letra-base** (Š→S, č→c; sem base Latin-1, sai); o
+  filtro Latin-1 vale para TODO texto livre do DPS/evento (escolha registrada).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -766,9 +783,9 @@ branch `sessao-2026-10-10`):**
 - ~~**Q-F62 — Qual é a IM que o CNC de HOMOLOGAÇÃO tem para a Setes em Curitiba?**~~ → **DECIDIDA = D-F60** ((a) — Valdo
   2026-10-10 leu o "Indicador Municipal" no Emissor Nacional de produção restrita: `50136779`; provada no smoke em H, §21).
 
-### 8.R10 Rodada 10 — aberta pelo smoke em H da Q-F62 (2026-10-10, §21) — ⚠️ Q-F68 AGUARDA O VALDO
+### 8.R10 Rodada 10 — aberta pelo smoke em H da Q-F62 (2026-10-10, §21) — Q-F68 DECIDIDA (D-F61)
 
-- ⚠️ **Q-F68 — Corrigir a leitura dos eventos de cancelamento nos adaptadores ADN?** Os DOIS adaptadores (setes-api — PRODUÇÃO
+- ~~**Q-F68 — Corrigir a leitura dos eventos de cancelamento nos adaptadores ADN?**~~ → **DECIDIDA = D-F61** ((a), executada — §21.4). Os DOIS adaptadores (setes-api — PRODUÇÃO
   hoje — e nfse-api) leem o cancelamento por `GET /nfse/{chave}/eventos`, que a Sefin Nacional NÃO atende (405, `Allow: POST`
   — cravado ao vivo em H, §21.2): toda consulta de NFS-e AUTORIZADA falha (rodízio de 24 h da D-N21, "consultar" da tela "No
   fisco", reconsulta da nfse-api) e o cancelamento feito FORA do produto nunca é visto. (a) **corrigir nos dois adaptadores
@@ -780,6 +797,20 @@ branch `sessao-2026-10-10`):**
   setes-api perde as rotas fiscais na F2a) · (c) só registrar. *(Rec.: (a) — o setes-api é a produção até a F2a (corte 30/11)
   e o rodízio dele é a única rede que pega cancelamento feito no portal; a forma correta é dada pelo fisco, não por
   preferência. Custo: até 4 GETs a mais por autorizada consultada, só enquanto não houver cancelamento.)*
+
+### 8.R11 Rodada 11 — aberta pelos gates do delta da D-F61 (2026-10-10, §21.5) — DECIDIDA ("siga as recomendações" → D-F62…D-F66)
+
+- ~~**Q-F69** custo/fonte dos eventos no rodízio~~ → **D-F62** ((a) 4 GETs tipados + aluguel 210 s; (b) era sondar a lista do host ADN).
+- ~~**Q-F70** 200 tipado que não fala desta chave~~ → **D-F63** (ambíguo).
+- ~~**Q-F71** C de substituição (e105102) por consulta~~ → **D-F64** (voz sim, efeito automático não).
+- ~~**Q-F72** 401/403 numa rota de evento~~ → **D-F65** (falha da nota).
+- ~~**Q-F73** TSString~~ → **D-F66** ((a) NFC + letra-base; Latin-1 em todo texto livre).
+
+### 8.R12 Rodada 12 — aberta pelo re-gate da Rodada 11 (2026-10-10, §21.6) — ⚠️ Q-F74…Q-F76 AGUARDAM O VALDO
+
+Texto completo e recomendações no §21.6: **Q-F74** fim da pendência da substituição (Rec.: ato humano "ciência — manter a nota" +
+chave da substituta na tela) · **Q-F75** contrato da F2a para a substituição (Rec.: `event_code` estruturado na voz do `fiscal_api`) ·
+**Q-F76** rota × código do XML divergentes (Rec.: ambíguo, salvo quando o XML diz substituição).
 
 ## 9. Fora de escopo desta fase
 
@@ -1795,7 +1826,7 @@ de `EXPLAIN_DB_USER` — o usuário do serviço não tem EXPLAIN nas views) · `
 4. **F2a** (setes-api passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 5. Pendências da 3ª sessão que seguem: LOWs aceitos do §18 (registro para a F3/F4).
 
-## 21. Q-F62 fechada — 1ª AUTORIZAÇÃO da nfse-api em homologação (2026-10-10) + achado na leitura de eventos — ⏯ RETOMAR POR AQUI
+## 21. Q-F62 fechada — 1ª AUTORIZAÇÃO da nfse-api em homologação (2026-10-10) + achado na leitura de eventos (D-F61…D-F66)
 
 **Escopo**: misto (o método — cravar ao vivo o contrato real do fisco antes de corrigir, e só em homologação — é portável; dados e
 números são do caso Setes)
@@ -1839,7 +1870,89 @@ consulta falha antes de escrever — conferido na linha do tempo do smoke), mas 
 
 ### 21.3 Próximos passos (ordem)
 
-1. **Q-F68** (Valdo) — corrigir a leitura de eventos (recomendado: nos dois adaptadores, já).
+1. ~~**Q-F68**~~ — FEITO (D-F61, §21.4; Rodada 11 no §21.5).
 2. Gate do delta (TSString/D-F59 + reconciliação + correção da Q-F68), socrático + adversarial.
 3. D-NE: NE-0 (levantamento oficial da SEFAZ) e NE-1 (núcleo generalizado ANTES da F2a).
 4. **F2a** (setes-api passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.4 D-F61 executada (= Q-F68 (a), Valdo 2026-10-10: "(a) Nos dois, já")
+
+| O quê | Onde | Prova |
+|---|---|---|
+| Leitura do cancelamento por TIPO + SEQUÊNCIA: para cada código (101101, 105102, 105104, 305101) `GET /nfse/{chave}/eventos/{tipo}/1`, parando no 1º que existir; 404 só com o envelope JSON da Sefin = "sem esse evento" (`isSefinNoEventEnvelope`); 404 em HTML/fora do envelope = 502 ambíguo; 200 sem `eventos[]` = 502; `arquivoXml` decodificado em 2 camadas, tolerando 1 camada e XML cru (`decodeEventFile`); lista que não se lê = `unknown`; evento de OUTRA chave/ecoado = não é voz sobre esta (R2-2 (d), semântica de antes — segue para o próximo código e fica `authorized`) | `setes-api/src/shared/tax-authority/adapters/adn.ts` e `nfse-api/src/authority/adn.ts` (`cancelEventXmls`, laço do `queryNfse`) — mesmo texto nos dois (porte D-F43) | `tax-authority.test.ts` (setes-api) e `authority.test.ts` (nfse-api): +4 testes cada com as respostas CRAVADAS ao vivo; helper `sefinTypedEvents` no `onda3-adversarial-r3` traduz as listas antigas para a forma real |
+| **405 deixa de ser "DPS rejeitado"**: 405 = método inexistente na rota = contrato do adaptador → 502 `FISCAL_AUTHORITY_UNKNOWN_RESPONSE` (numa transmissão fica EM VOO e é reconciliada pelo `GET /dps`, nunca R); o 501 já caía no 5xx (503) | `setes-api/src/shared/tax-authority/https-json.ts` e `fiscal-api/src/transport/https-json.ts` | idem (+ transmit com 405 → 502; 501 → 503) |
+| Sonda só de leitura do adaptador corrigido contra o fisco real | `nfse-api/scripts/probe-query.ts <chave> [H\|P]` | **H**: NFS-e de teste nº 2 → `cancelled` (dhEvento 18:43:04, motivo do smoke) · **P**: NFS-e **706** → `cancelled` (dhEvento 17:29:54, "teste - Cancelamento solicitado pelo emissor") |
+
+**Contrato de PRODUÇÃO conferido igual ao de H** (só leitura, sobre a 706): `GET …/eventos` = 405 `Allow: POST`; `…/eventos/101101/1` = 200
+(`tipoAmbiente: 1`, `SefinNacional_1.6.0`); `…/eventos/105102/1` = 404 com o envelope JSON.
+
+**Fato do fisco (registrado, sem correção)**: o evento DEVOLVIDO pela Sefin de H traz texto com acentuação DUPLA — o pedido que
+enviamos tem `ç` = `c3 a7` (conferido no XML guardado pelo smoke), o evento gerado devolve `c3 83 c2 a7` ("Ã§") com `encoding="utf-8"`.
+Efeito: o motivo lido de volta pode vir com acentos estragados (cosmético; a voz C e a conferência por chave não dependem do texto).
+Não se aplica heurística de reparo; se incomodar na tela, decidir à parte.
+
+⚠️ **O setes-api do dev roda em `tsx watch`** (processo da porta 3000 = `tsx watch … src/server.ts`): toda edição em `src/` RECARREGA o
+serviço que atende a produção da Setes — a D-F61 entrou no ar ao ser salva (antes do gate), junto com o trabalho NÃO commitado da
+sessão paralela de IBS/CBS. Risco avaliado como baixo (o código antigo falhava em TODA consulta de autorizada; o novo falha para o lado
+seguro). **Lição**: em produção o setes-api não pode rodar em modo watch — registrar na F3 (deploy) e, até lá, editar o setes-api
+sabendo que é "deploy ao salvar".
+
+**Provas**: fiscal-api 78 · nfse-api 242 unit · setes-api suítes do fisco 247 · suíte inteira do setes-api: 1920/1920 · gates do
+delta (D-F61 + TSString/D-F59 + junção do script do ato): socrático 0,74 ✅ (re-gate da Rodada 11: 0,76 ✅) · adversarial 0,72 ✅ (re-gate: 0,77 ✅).
+
+### 21.5 Gates do delta da D-F61 e Rodada 11 (Valdo 2026-10-10: "siga as recomendações" → D-F62…D-F66)
+
+**Gates do delta (D-F61 + TSString/D-F59 + junção do script do ato), agentes que não fizeram a entrega**: socrático **0,74 ✅** ·
+adversarial **0,72 ✅** — nenhum HIGH/CRITICAL; 5 MEDIUM do socrático (M1 aluguel/orçamento × 6 idas ao fisco; M2 falha de UMA rota de
+evento parando a passada para sempre; M3 = DF61-01/02 do adversarial: 200 tipado que não se confere virava "autorizada" e gravava N
+falso num K; M4 o C por consulta liga pela 1ª vez em produção — e o 105102; M5 quebra de contrato invisível) + LOWs (DF61-03…09,
+L1…L8). Testes: `adversarial-df61-gate.test.ts` nos dois projetos.
+
+**Rodada 11** (questões propostas pelo socrático, recomendações minhas aceitas em bloco):
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F62** (= Q-F69 (a)) | manter os 4 GETs tipados (o ÚNICO contrato provado ao vivo, H e P); aluguel da passada da nfse-api **90 → 210 s** (6 idas × 30 s + folga); o orçamento de 20 s do setes-api fica (estoura numa nota lenta — DF61-08 — e morre na F2a) | `nfse-api/src/nfse/transmission.ts` `REFRESH_LEASE_SECONDS` |
+| **D-F63** (= Q-F70) | no GET TIPADO um 200 diz "o evento existe": o que não se confere como cancelamento GERADO desta chave (ilegível mesmo com gzip válido, outra chave, eco, outro tipo) = `unknown` (502, nada gravado — sem N falso); 200 com `eventos: []` = 502. A R2-2 (d) "segue autorizada" era da LISTA `GET /eventos`, que a Sefin não tem | os dois `adn.ts` |
+| **D-F64** (= Q-F71) | cancelamento por **SUBSTITUIÇÃO (e105102)** lido por consulta: a VOZ C fica (texto "por SUBSTITUIÇÃO (e105102)"), o efeito local NÃO é automático — pendência visível, só por ação humana; a suspensão é PEGAJOSA (re-consulta contraditória não aplica sozinha) e a nota dela carrega o motivo do fisco. `NfseQuery.cancelled.eventCode` nos dois | setes-api `invoice-transmission.ts` (`recordCancelVoice`, `SUBSTITUTION_EFFECT_SUSPENDED`); nfse-api grava só a voz com o texto (o efeito é do setes-api — D-F28) |
+| **D-F65** (= Q-F72) | 401/403 numa rota de EVENTO depois do 200 do GET /nfse da MESMA nota = falha DA NOTA (502 ambíguo, `logger.error` próprio): o rodízio carimba e segue; 401/403 no GET /nfse e 5xx/timeout continuam parando a passada | os dois `adn.ts` |
+| **D-F66** (= Q-F73 (a)) | `toTsString` normaliza **NFC** antes do filtro; fora do Latin-1 cai na **letra-base** (Š→S, č→c; o "í" fica) e o que não tem base Latin-1 sai; o filtro Latin-1 vale para TODO texto livre do DPS/evento (escolha registrada — o fisco serializa mal fora do ASCII) | os dois `dps-builder.ts` |
+| técnicos | envelope do 404 só vale no AMBIENTE perguntado (`tipoAmbiente` 1=P, 2=H) e sem `erro`/`erros`/`eventos` (L8); `cut()` — corte sem espaço final (L2/DF61-05); **405/406/415 → 502** com `logger.error` "Contrato do fisco divergente" (DF61-09/M5); rollback do ATO protegido (L6) | `adn.ts`, `dps-builder.ts`, `https-json.ts` (setes-api + núcleo), `migrate-from-setes-api.ts` |
+
+**Re-gate do retrabalho**: socrático **0,76 ✅** · adversarial **0,77 ✅** — sem regressão (setes-api 281 nas suítes do fisco, nfse-api
+260, núcleo 78). 7 LOW: corrigidos na sessão R11-02 (a nota da suspensão apagava o motivo), R11-03b (suspensão pegajosa), R11-04 (o NFC
+juntava letra + marca fora do Latin-1 e o filtro apagava a LETRA — "Ševčík" → "evík"; agora "Sevcík"), R11-05 (log de erro do 200 que
+não se confere; mensagem certa do 401/403 de evento); ficam R11-01, R11-03a, R11-06 (= Q-F74…Q-F76) e R11-07 (o XML do e105102 é
+arquivado como `-evt101101.xml`). Testes: `adversarial-r11-gate.test.ts` nos dois projetos (`it.failing` = pendentes).
+
+**Provas finais**: fiscal-api 78 · nfse-api 273 unit + ao vivo 150/150 (8 suítes; o r7 tinha o aluguel antigo de 90 s fixo na asserção — passou a ler a constante) · setes-api suítes do fisco 298 e suíte inteira 1920/1920 (antes
+das correções R11-xx) · sondas só de leitura com o código final: H nº 2 e P **706** → `cancelled`.
+
+⚠️ Lição de ferramenta: `jest --runInBand` do setes-api termina os testes e NÃO sai (handle aberto) — rodar com `--forceExit`.
+
+### 21.6 Pendências e questões abertas — ⏯ RETOMAR POR AQUI
+
+**Rodada 12 (aberta pelo re-gate — aguardam o Valdo)**:
+- ⚠️ **Q-F74 (R11-01)** — a pendência da substituição (D-F64) não tem fim: a voz C suspensa volta ao fisco a cada 15 min PARA SEMPRE
+  (3 idas por passada) e aparece no lote "Transmitir pendentes" com 409. (a) **ato humano "ciência — manter a nota"** que encerra a
+  pendência sem cancelar (grava o desfecho na voz) e a tira do rodízio e do lote; a tela mostra a chave da SUBSTITUTA (`chSubstituta`
+  do e105102) · (b) só tirar do rodízio (fica no lote) · (c) como está. *(Rec.: (a).)*
+- ⚠️ **Q-F75 (R11-06, só na F2a)** — na nfse-api a C de substituição responde `localCancelPending: true`, que pela D-F28 manda o app
+  aplicar o C local sem humano. (a) **o código do evento vira FATO estruturado na voz do `fiscal_api` (coluna `event_code` — DDL no
+  núcleo, guardião + revisar-ddl) e `localCancelPending` exclui a substituição** · (b) só `localCancelPending` lendo o texto da voz.
+  *(Rec.: (a) — texto livre não é contrato; decidir antes da F2a.)*
+- ⚠️ **Q-F76 (R11-03a)** — rota perguntada × código do XML divergentes (pedi 105102, veio um e101101 desta chave; ou o contrário).
+  (a) **ambíguo, SALVO quando o XML diz substituição** (fica a marca mais restritiva — sem efeito automático) · (b) sempre ambíguo ·
+  (c) vale o XML, como hoje. *(Rec.: (a).)*
+
+**LOW registrados (sem decisão nova)**: DF61-03 (campo obrigatório esvaziado pelo TSString → recusa R do fisco em vez de 422 local) ·
+DF61-04 (tamanho do XSD não conferido: bairro 62 > 60, IM 20 > 15) · DF61-07 (corrida do ambiente da IM — H lido fora, P na reserva:
+E0120 → R; a retransmissão se corrige) · DF61-08 (orçamento do setes-api estoura numa nota lenta) · R11-07 (nome do XML do e105102) ·
+L3/L7 do socrático (ambiente congelado só na assinatura; setes-api antigo como escritor ativo depois do ato — procedimento da virada) ·
+M5 → alarme por padrão de log na F3 · **o setes-api do dev roda em `tsx watch` (deploy ao salvar) — produção não pode rodar assim (F3)**.
+
+**Pede o Valdo**: prova ao vivo do C POR CONSULTA (M4) — cancelar uma NFS-e de H pelo Emissor Nacional (fora do produto) e ver o
+rodízio achar e aplicar o efeito (101101) ou suspender (105102).
+
+**Próximos passos (ordem)**: Q-F74…Q-F76 → D-NE: NE-0/NE-1 (núcleo generalizado ANTES da F2a) → **F2a** (setes-api passivo; migration
+`NNN_f2a_fiscal_passivo.sql` — D-F50; Q-F75 antes) → virada → F2b. Corte da F2a: 30/11 (D-IB15).

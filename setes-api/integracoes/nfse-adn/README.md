@@ -155,6 +155,10 @@ HTTP **404**, `Content-Type: application/json; charset=utf-8`, corpo
   `GET /nfse/{chave}/eventos/{tipo}/{nSeq}` = **200** `{…, eventos: [{ chaveAcesso, tipoEvento, numeroPedidoRegistroEvento,
   dataHoraRecebimento, arquivoXml }]}` com `arquivoXml` = base64 do TEXTO gzip+base64 (duas camadas) → `<evento>` com `infEvento
   Id="EVT…"`, `dhProc`, `chNFSe`; evento inexistente = **404 com envelope JSON** (`dataHoraProcessamento`, `tipoAmbiente`,
-  `versaoAplicativo`, sem `eventos`). Correção dos adaptadores = Q-F68.
+  `versaoAplicativo`, sem `eventos`); `tipoAmbiente` = **1 em produção, 2 em homologação** (cravado nos dois). Correção dos adaptadores =
+  D-F61…D-F66 (prompt das APIs fiscais §21.4–§21.5), provada ao vivo em H e P.
+- **O evento DEVOLVIDO pela Sefin vem com acentuação DUPLA** (H, 2026-10-10): o pedido enviado tem `ç` = `c3 a7`, o evento gerado
+  devolvido traz `c3 83 c2 a7` ("Ã§") com `encoding="utf-8"` — o motivo lido de volta pode vir estragado (cosmético). O evento da
+  RESPOSTA do POST veio correto. Não há reparo heurístico.
 - A IM do CNC de produção restrita não se deriva do alvará (`01065013677` e `5013677` recusadas): ler o "Indicador Municipal"
   no Emissor Nacional de produção restrita com o e-CNPJ. O contribuinte não tem API para ler o próprio CNC.
