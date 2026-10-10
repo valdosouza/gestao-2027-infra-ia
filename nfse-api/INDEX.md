@@ -20,4 +20,4 @@ O app manda a REFERÊNCIA da nota (`/v1/nfse/invoices/{invoiceId}/…`); a nfse-
 
 ## Como vai rodar em dev (previsto para a F1)
 
-`nfse-api/.env`: `PORT=3002`, `DB_*` (usuário com SELECT no ERP + controle do `fiscal_api`), `JWT_PUBLIC_KEY_PATH`, `FISCAL_MASTER_KEY`, `STORAGE_PATH` (o MESMO do setes-api no dev — os XMLs da Setes ficam onde estão) → `npm run dev`. Smoke no ADN H com o A1 real da Setes (**vence 08/10/2026**).
+`nfse-api/.env`: `PORT=3002`, `DB_*` (usuário com SELECT no ERP + controle do `fiscal_api`), `JWT_PUBLIC_KEY_PATH`, `FISCAL_MASTER_KEY`, `STORAGE_PATH` (o MESMO do setes-api no dev — os XMLs da Setes ficam onde estão) → `npm run dev`. Smoke no ADN H com o A1 real da Setes (venceu 08/10/2026; **RENOVADO 2026-10-10, vence 05/10/2027 — no cofre do setes-api e na réplica** — prompt §17.5; nota do smoke = D-F46).

@@ -32,13 +32,13 @@
 
 ## O que o núcleo guarda (§12.2 do prompt)
 
-transporte mTLS + XMLDSig paramétrico · `tb_emitter` (A1 cifrado) + `tb_issuer` (habilitação por modelo) · máquina tentativa × voz · storage do XML · auth pelo JWT do produto · base da fonte de fatos Gestão 2027 (SÓ-SELECT) · migrations e views do `fiscal_api`.
+transporte mTLS + XMLDSig paramétrico · `tb_establishment_certificate` (A1 cifrado — D-F34) + `tb_establishment_issuer` (habilitação por modelo, CHECK `SE/55/65` — D-F45) · contrato de leitura da voz (`voice/`) · storage do XML · auth pelo JWT do produto · base da fonte de fatos Gestão 2027 (leitura; a única "escrita" no ERP é a trava da nota — D-F27/D-F31) · migrations e views do `fiscal_api`. *(2026-10-10: a máquina tentativa × voz e o motor de PDF prometidos aqui ainda vivem na nfse-api — Q-NE13/Q-NE20 da Rodada 0 da nfe-api.)*
 
 ## Regras inegociáveis para quem for codificar
 
 1. Nenhum `tb_invoice`/`tb_order`/`tb_entity*` FORA da fonte de fatos (cerca por teste — §12.8-1).
 2. Estado DERIVADO da última voz; 2xx ilegível = ambíguo; recusa de REGRA ≠ transitório.
-3. Nenhum `Map/Set` de controle em memória; o que cruza com o setes-api serializa pela trava nomeada da instância, tomada ANTES do BEGIN (§12.4).
+3. Nenhum `Map/Set` de controle em memória; o que cruza com o setes-api serializa pelo `FOR UPDATE` na linha da nota do ERP (D-F27 — a trava nomeada do §12.4 morreu); rodízio por ALUGUEL na linha da habilitação (UPDATE atômico, `runShortCommand` — D-F41).
 4. Segredo nunca em claro em coluna, log ou resposta; senha do PKCS#12 não persiste (D-N5).
 5. `PADROES_BANCO.md` (UTC, REPEATABLE READ, contadores sob lock) + `revisar-ddl.md` antes de DDL; gates socrático ≥ 0,70 + adversarial sem HIGH.
 

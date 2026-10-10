@@ -139,3 +139,11 @@ HTTP **404**, `Content-Type: application/json; charset=utf-8`, corpo
 
 - `erro` no **SINGULAR** (objeto), diferente das rejeições do `POST /nfse`, que vêm em `erros[]`.
 - **E2404** é o único sinal conclusivo de "DPS sem NFS-e" (`adn.ts` `isDpsNotGenerated`); qualquer outro 404 é ambíguo.
+
+## Inscrição Municipal × CNC — o que vale (pesquisa 2026-10-10; detalhe em `prompts/prompt_apis_fiscais_isoladas.md` §17.11)
+
+- RN 198/E0116: com registro complementar no CNC (CNPJ + `cLocEmi`), a IM da DPS tem de IDENTIFICAR esse registro; RN 200/E0120:
+  sem registro, a IM não pode ir. Cada AMBIENTE tem o seu CNC — Curitiba: PRODUÇÃO sem registro (E0120 → sem IM — Q-N35);
+  PRODUÇÃO RESTRITA com registro (E0116). Regra no código (D-F53): IM do prestador só em H.
+- A IM do CNC de produção restrita não se deriva do alvará (`01065013677` e `5013677` recusadas): ler o "Indicador Municipal"
+  no Emissor Nacional de produção restrita com o e-CNPJ. O contribuinte não tem API para ler o próprio CNC.
