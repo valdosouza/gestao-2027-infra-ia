@@ -705,3 +705,56 @@ CONFIRMAÇÃO das assunções A-IB1/A-IB2 (o item da rodada era "confirmar").
   recarga) ou venceu? Com a D-IB30 o usuário salva sem saber até faturar. *(Rec.: o GET devolve `acceptedToday` e a tela mostra um selo.)*
 - **Q-IB38 Limite de encolhimento bruto × líquido**: uma correção de dIniVig em massa desativa N linhas e insere N novas e é recusada sem
   `--aceita-encolher`. *(Rec.: manter bruto — conservador; registrar.)*
+
+### 11.10 Rodada 4 DECIDIDA (Valdo 2026-10-10: "siga as recomendações na Rodada 4") — D-IB34…D-IB38
+
+Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB34** | Serviço classificado com linha que só começa a valer DEPOIS da data do faturamento: ANTES da obrigação (envio voluntário — D-IB13/D-IB16) a nota sai SEM o grupo IBS/CBS (nunca 422, inclusive no lote mensal); DEPOIS da obrigação, o 422 da D-IB8. Executa na IB-2 (congelamento único no ramo) |
+| **D-IB35** | A data da obrigação (janela do cadastro D-IB29 e 422 da D-IB8) passa a ser lida pelo enquadramento datado do emitente (D-IB7) na IB-2; até lá vale a constante do Simples (`NFSE_IBSCBS_SIMPLES_OBLIGATION_START`, já com o nome do Simples) |
+| **D-IB36** | Linha de vigência que SOME da fonte (ex.: dIniVig corrigida pelo IT): a carga grava o FATO "ausente da fonte desde a versão X" (`absent_since_version` na história do cClassTrib) sem apagar nada; volta na fonte = o fato é limpo; a peça IGNORA a linha superada em toda resolução (data do fato, cadastro, lista) — a exibição de um código gravado ainda a mostra se não houver outra |
+| **D-IB37** | O GET do serviço devolve `acceptedToday` (a classificação gravada é aceita hoje pela regra do cadastro: linha com presença na NFS-e, sem tributação regular, e cIndOp aceito) e a tela mostra um SELO quando não é — o usuário sabe antes de faturar |
+| **D-IB38** | O limite de encolhimento da D-IB28 (c) conta desativações BRUTAS (lado conservador): correção de dIniVig em massa exige `--aceita-encolher`, com o ensaio mostrando as chaves |
+
+**Execução**: §11.11.
+
+### 11.11 Rodada 4 — execução (2026-10-10)
+
+- **D-IB36**: script `sql/63_ibscbs_validity_absent_since.sql` (coluna `absent_since_version` na história do cClassTrib, espelhada no
+  `61` e no canônico `01`; aplicado no `setes_central` do dev, re-executável — **ordem de deploy: o 63 antes do setes-api**, a peça lê a
+  coluna). Guardião: atributo da peça de HISTÓRIA (fato gerador = carga de uma versão do IT sem a linha), sem FK nem regra nova. A carga
+  (`apply.ts`) grava a versão em que a linha sumiu e limpa o fato quando ela volta (`validity.deactivated`/`revived` + chaves); a peça
+  ignora a linha superada em `findClassificationAt`, `pickForRegistration` e na lista; a exibição do código gravado só a mostra se não
+  houver outra. Ensaio real: 173 linhas inalteradas, 0 marcadas (o IT v1.70 traz todas), mesmo plano.
+- **D-IB37**: peça `classificationAcceptedToday` (regra do cadastro + cIndOp aceito); o GET do serviço devolve `ibscbs.acceptedToday`
+  (null = não avaliado) e a aba mostra o SELO "não é mais aceita na NFS-e hoje — escolha outra antes de faturar"; escolher outra na lista
+  tira o selo. Ao vivo: classificação boa = `true`; gravada 000006 (sem presença) = `false`.
+- **D-IB34/D-IB35**: desenho da IB-2 (faturamento sem o grupo antes da obrigação; obrigação pelo enquadramento datado) — registrado,
+  executa na IB-2. **D-IB38**: registrado (limite bruto).
+- **Gates do delta da Rodada 4**: socrático **0.76 ✅** · adversarial **0.80 ✅** (sem HIGH; ~40 requisições, 11 ensaios offline, catálogo
+  intacto por CHECKSUM). Os 2 MEDIUM coincidentes CORRIGIDOS: (1) a exibição caía na linha SUPERADA nos recursos de reserva mesmo havendo
+  outra → reservas olham primeiro as não superadas (harness: 000924 mostra a viva fora da janela, 000925 a expirada viva; só-superada cai
+  nela como último recurso); (2) o selo juntava cClassTrib e cIndOp num booleano só e a tela culpava a classificação → peça
+  `classificationAcceptance` POR COMPONENTE, o GET devolve `acceptedToday` + `classificationAcceptedToday` + `placeIndicatorAcceptedToday`
+  e a aba mostra o selo sob o campo certo (ao vivo: cIndOp morto = `cClassTrib true / cIndOp false`). LOWs: Swagger do GET com os campos
+  novos; **o boot confere a coluna do script 63** (`assertIbscbsCatalogSchema` — sem ela a API não sobe e diz qual script aplicar; antes
+  o boot passava e o cadastro dava 500); os fakes de teste EXIGEM o filtro `absent_since_version IS NULL` no SQL; resíduo dos smokes
+  limpo (4 peças 1:1 vivas de serviços de teste excluídos). **Registrado** (limite conhecido, sem decisão): excluir o serviço não mata a
+  peça 1:1 `tb_service_ibscbs` — todo leitor e o impacto exigem o produto vivo; o custo do GET por id (+2 consultas centrais indexadas;
+  a lista não chama a peça) fica como está.
+
+### 11.12 ⚠️ Rodada 5 — questões para o Valdo (dos gates do delta da Rodada 4; recomendação entre parênteses)
+
+- **Q-IB39 Encolhimento da história**: as marcações "ausente da fonte" (`relatorio.validity.deactivated`) entram no limite da D-IB28 (c),
+  em bruto como na D-IB38, com o mesmo `--aceita-encolher`? (o adversarial provou: IT antigo + Calculadora offline sem os 103 códigos sem
+  NFS-e marcaria 103 de 173 linhas sem aviso; com a Calculadora real a A-IB1 recusa) *(Rec.: sim — uma linha no laço do limite; cobre as
+  linhas sem presença SE, que pesam na F4.)*
+- **Q-IB40 NBS no selo**: a NBS que perde a presença numa recarga entra no impacto mas não no selo (o GET mostra a descrição dela sem
+  sinal). O GET passa a dizer se a NBS gravada é aceita (`nbsAcceptedToday`) e a IB-2 barra NBS sem presença? *(Rec.: sim, campo próprio
+  para a tela apontar o campo.)*
+- **Q-IB41 (IB-2, antes de dezembro) Linha VIGENTE sem presença com linha futura com presença**: na data do fato, `findClassificationAt`
+  devolve uma linha que não se aplica, enquanto o selo (regra do cadastro) diz "aceita". *(Rec.: tratar igual à D-IB34 — antes da
+  obrigação a nota sai sem o grupo; depois, o 422 da D-IB8 — e registrar na IB-2 que `acceptedToday` é sinal de CADASTRO, não decide o
+  faturamento, e que a nota congelada nunca reconsulta o catálogo.)*

@@ -46,6 +46,8 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
    - `conferencia.blocked` — linhas cujo ATRIBUTO diverge na Calculadora (aceitação na NFS-e, tributação regular) — perdem a
      aplicabilidade na NFS-e (D-IB28 (a));
    - `conferencia.divergences` — só informativo (o IT não aceita e a Calculadora aceita — vale o IT);
+   - `relatorio.validity.deactivated` + chaves — linhas de vigência que SUMIRAM da fonte e ganham o fato "ausente desde a versão"
+     (D-IB36; nunca são apagadas; a peça passa a ignorá-las) — ex.: o IT corrigiu a dIniVig de um código;
    - `relatorio.*.deactivatedKeys` — o que PERDE a presença nesta carga; `relatorio.impact` — serviços de cada cliente que usam
      cClassTrib/cIndOp que ficam SEM nenhuma aplicabilidade na NFS-e ou NBS que perde a presença (só no ensaio); `relatorio.shrink` + `AVISO_ENCOLHIMENTO` — perda > 10 % de alguma lista (D-IB28 (c)).
 4. **Ato**: o ensaio imprime `--vai --plano <hash>`. Rodar o MESMO comando com esse sufixo. Se a fonte, a leitura ou a data mudaram
@@ -57,7 +59,8 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
 
 - A migration **066** só vai a produção depois de o grupo do sync confirmar que o `/service/sincronize` NÃO faz REPLACE nem DELETE físico
   em `tb_service` (a FK `tb_service_ibscbs → tb_service` faria a sincronia desses serviços falhar com 1451).
-- Ordem: `sql/61` em `setes_central` → carga do catálogo (este procedimento) → deploy do setes-api com a 066.
+- Ordem: `sql/61` e `sql/63` (fato "ausente da fonte" — D-IB36) em `setes_central` → carga do catálogo (este procedimento) →
+  deploy do setes-api com a 066 (a peça de classificação LÊ a coluna do script 63: sem ela o cadastro de serviços dá 500).
 
 ## 5. Casos reais
 
