@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.32 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.33 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-11  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-11 | **Fase IBS/CBS — Rodada 10 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.28–§11.30; Valdo: "siga as recomendações na Rodada 10"): D-IB57 a regra do cadastro (`pickForRegistration` — lista, salvar e selo) prefere a linha ACEITA antes da só aplicável (no catálogo real nada muda; agora tudo o que a lista mostra o salvar aceita); D-IB54 o aviso prospectivo traz `lostAgainFrom` (2ª perda depois da volta); D-IB56 sem volta aceita, `pendingReturnFrom` (sucessora da fonte ainda não conferida pela Calculadora); D-IB55 pré-voo da IB-2 na data da obrigação (roteiro do §4). Skill `setes-api/skills/carregar-catalogo-ibscbs.md` atualizada. Gates do delta 0.76/0.80 ✅ (harness triplo × HEAD). Rodada 11 Q-IB58…Q-IB60 aberta (§11.30). | 9.33 |
 | 2026-10-11 | **APIs fiscais — Rodada 20 EXECUTADA e PUBLICADA (D-F100…D-F101)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.14): nada da resposta trocada é guardado — conhecimento negativo, e o erro dela já não carrega o corpo do terceiro; a prova da reconferência falha fechado com tentativa VIVA da mesma identidade (o predicado do `isLiveTransmission`; `lastKind` obrigatório no tipo). Gates 0,82/0,84 ✅. **Rodada 21 aberta: Q-F108…Q-F110**. | 9.32 |
 | 2026-10-11 | **Fase IBS/CBS — Rodada 9 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.25–§11.27; Valdo: "siga as recomendações na Rodada 9"): D-IB51 o aviso prospectivo da carga do catálogo traz `acceptedAgainFrom` (o código volta a ser aceito dentro do horizonte — buraco temporário); D-IB53 o impacto compara também o veredito do CADASTRO antes × depois para o que a data do fato já recusava (`registrationOnly` — linha futura que some/perde presença/exige tributação regular, e a sobreposição); D-IB52 pré-voo do faturamento registrado no roteiro da IB-2. Skill `setes-api/skills/carregar-catalogo-ibscbs.md` atualizada. Gates do delta 0.80/0.86 ✅ (harness duplo × HEAD: 88 de 88 cenários antigos iguais). Rodada 10 Q-IB54…Q-IB57 aberta (§11.27). | 9.31 |
 | 2026-10-11 | **APIs fiscais — Rodada 19 EXECUTADA e PUBLICADA (D-F98…D-F99)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.13): o Id do DPS de terceiro nunca entra em mensagem e o alarme do ambíguo leva uma CAUSA de lista fechada (`AMBIGUOUS_CAUSES` — `tagAmbiguous` em todo produtor, `ambiguousCauseOf` no alarme; espelho no setes-api); a prova da reconferência falha fechado com tentativa da mesma identidade em voo. Gates 0,80/0,80 ✅; corrigidos na sessão: irmã sem identidade falha fechado, a chave do `GET /dps` é conferida contra o emitente (layout provado nas chaves reais), rollback guardado no setes-api, causas finas do GET tipado, XML ilegível = ambíguo. **Rodada 20 aberta: Q-F106…Q-F107**. | 9.30 |

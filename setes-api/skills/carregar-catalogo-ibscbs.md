@@ -1,9 +1,9 @@
 # Skill: Carregar o catálogo IBS/CBS (rotina do Super)
 
-**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB53)
+**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB57)
 **Objetivo**: Carregar/recarregar em `setes_central` o catálogo oficial do IBS/CBS (CST, cClassTrib com vigência e aplicabilidade
 por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o que não foi conferido
-**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50), §11.25 (D-IB51…D-IB53);
+**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50), §11.25 (D-IB51…D-IB53), §11.28 (D-IB54…D-IB57);
 `Infra-IA/database/PADROES_BANCO.md` §5 ("carga de catálogo externo = ato com plano"); código: `setes-api/scripts/load-ibscbs-catalog.ts`
 + peça `setes-api/src/shared/ibscbs-catalog/`
 **Tempo**: ~10 min (o ensaio leva ~1–2 min: a conferência consulta a Calculadora por par NFS-e × cClassTrib)
@@ -76,10 +76,13 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
      aceito até o horizonte `relatorio.impactAheadUntil` (o maior entre a obrigação e a data + 90 dias; depois de 01/01/2027, data + 90),
      com `lossDate` e `reason` — conferir a cada carga: `no-line` = depois da perda não há linha que valha dentro do horizonte →
      reclassificar o serviço antes de `lossDate`; `not-applicable` de uma sucessora ainda NÃO confirmada pela Calculadora (A-IB1) =
-     esperar a próxima carga antes de reclassificar. Só a 1ª perda aparece; D-IB51: `acceptedAgainFrom` = o dia em que o código VOLTA
+     esperar a próxima carga antes de reclassificar. D-IB51: `acceptedAgainFrom` = o dia em que o código VOLTA
      a ser aceito dentro do horizonte (buraco temporário — não reclassificar por ele se o intervalo não tem faturamento; ausente = não
-     volta dentro do horizonte). ⚠️ Só a 1ª perda e a 1ª volta aparecem: a volta NÃO garante o aceite até o horizonte (uma 2ª perda
-     depois dela só aparece numa carga feita depois da volta — Q-IB54); antes de deixar de reclassificar, conferir no IT a linha da volta.
+     volta dentro do horizonte). D-IB54: `lostAgainFrom` = a 1ª perda DEPOIS da volta — com ele, a volta é só um intervalo: reclassificar
+     antes dele. D-IB56: `pendingReturnFrom` = sem volta aceita, a linha da FONTE que voltaria se a Calculadora a conferisse (A-IB1) —
+     esperar a próxima carga em vez de reclassificar — mas ele não diz até quando essa linha vale (conferir a vigência no IT: uma
+     linha curta também perde depois de conferida) e não pega linha não conferida que começa ANTES da perda (o erro é para o lado de
+     reclassificar). Só a 1ª volta e a 1ª perda depois dela aparecem: uma 3ª perda não (reclassificar antes de `lostAgainFrom`).
    - D-IB53: linha do `impact` com `registrationOnly: true` = a data do fato JÁ recusava o código antes da carga, e esta carga tirou a
      aceitação que o CADASTRO dava (a linha futura da janela sumiu, perdeu a presença ou passou a exigir tributação regular — ou, na
      SOBREPOSIÇÃO, a linha vigente mais antiga com presença perdeu a presença ou acabou) — o selo da aba muda de "aceita" para "não
