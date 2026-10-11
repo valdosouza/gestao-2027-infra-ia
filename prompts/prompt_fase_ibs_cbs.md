@@ -232,8 +232,10 @@ nota sai sem o grupo, nunca 422 — inclusive no lote mensal; depois, 422) · D-
 datado) · D-IB40 (NBS sem presença barra o faturamento; regra única `nbsAcceptedSql` da peça) · D-IB41 (linha vigente SEM presença = mesmo
 caminho da D-IB34; `acceptedToday` é sinal de CADASTRO, nunca decide o faturamento; a nota congelada nunca reconsulta o catálogo) ·
 limite TOCTOU do §11.8 (PUT que leu o catálogo antes de uma carga pode gravar código que acabou de perder a presença — a IB-2 barra) ·
-limite do §11.11 (excluir o serviço não mata a peça 1:1 `tb_service_ibscbs` — todo leitor exige o produto vivo) · Q-IB42 (calendário
-da barreira da NBS — §11.15).
+limite do §11.11 (excluir o serviço não mata a peça 1:1 `tb_service_ibscbs` — todo leitor exige o produto vivo) · D-IB42 (calendário
+da barreira da NBS: antes da obrigação a nota sai SEM o `cNBS`, nunca 422 — inclusive no lote; depois, 422 também para NBS ausente do
+catálogo — §11.16). Fato de 2026-10-11: hoje NINGUÉM preenche o `cNBS` do DPS (os dois montadores têm o campo; nenhum produtor) — a
+IB-2 congela a NBS no ramo e a IB-3 a leva ao DPS.
 
 ## 5. Fora de escopo desta fase (1º release — sujeito à Q-IB17)
 
@@ -834,3 +836,70 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
   limite (bruto, mesmo `--aceita-encolher`) as linhas que deixam de valer HOJE por mudança de `valid_until` e pôr no impacto os serviços
   cujo código fica sem linha vigente na data? *(Rec.: sim nas duas — mesma regra da D-IB39 aplicada a "deixa de valer hoje"; o impacto
   já roda na data do ensaio.)*
+
+### 11.16 Rodada 6 DECIDIDA (Valdo 2026-10-11: "siga as recomendações na Rodada 6") — D-IB42…D-IB44
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB42** | (IB-2) Calendário da barreira da NBS no faturamento — o mesmo da D-IB34/D-IB41: ANTES da obrigação (envio voluntário), serviço com NBS sem presença na lista oficial FATURA e a nota sai SEM o `cNBS` (nunca 422, inclusive no lote mensal); DEPOIS da obrigação, 422 — também para NBS ausente do catálogo. A regra de presença é a `nbsAcceptedSql` da peça (D-IB40); a data da obrigação vem da D-IB35 |
+| **D-IB43** | Sem guarda de versão do IT agora: carregar um IT mais antigo que o gravado NÃO é recusado pela versão (o rótulo é texto livre do operador); quem pega o caso real é o limite de encolhimento (D-IB28 (c)/D-IB39/D-IB44) + `codeVanished` no relatório. Limite conhecido registrado na skill; reabrir se a Receita publicar versões fora de ordem |
+| **D-IB44** | Linha da história VIGENTE na data da carga (presente na fonte) cuja vigência a fonte encerrou ANTES dessa data (dFimVig < data) conta no limite de encolhimento da história — somada às marcações "ausente da fonte", em BRUTO, com o mesmo `--aceita-encolher` (base = linhas presentes antes da carga) — e o código que fica SEM linha vigente na data entra no relatório de impacto (D-IB28 (b)). Fim na própria data, fim futuro, linha que já não valia e linha superada não contam |
+
+**Execução**: §11.17.
+
+### 11.17 Rodada 6 — execução (2026-10-11)
+
+- **D-IB44** `setes-api/src/shared/ibscbs-catalog/apply.ts` (só a rotina do Super carrega — o servidor não importa a peça): no UPDATE
+  da linha existente, se ela era vigente na data da carga (`valid_from ≤ data ≤ valid_until` ou aberta, sem `absent_since_version`) e a
+  fonte traz `dFimVig` antes da data, a chave entra em `relatorio.validityEnded`; o limite da história soma
+  `validity.deactivated + validityEnded` sobre `validity.aliveBefore`; a linha de encolhimento ganha `endedBeforeDate` e o rótulo
+  "história do cClassTrib (linhas ausentes da fonte ou com a vigência encerrada antes da data da carga)"; o impacto passa a ter como
+  candidato o código encerrado (a consulta pela linha VIGENTE na data com aplicabilidade SE decide). Sem data na carga, nada muda.
+  Testes jest: limite (1 de 2 = aviso no ensaio, recusa no ato, grava com o argumento), 5 casos que NÃO contam, impacto com e sem outra
+  linha vigente. Prova AO VIVO só por ensaio (rollback, sem `--vai`): o IT forjado do gate adversarial R5 (169 de 173 linhas com
+  dFimVig 2026-10-09) agora dá **AVISO_ENCOLHIMENTO — 169 de 173, 169 com a vigência encerrada** (antes: sem aviso, shrink vazio); o
+  impacto vazio é correto (a Setes usa 000001, não encerrado); controle com o IT oficial v1.70 = 173 inalteradas, sem aviso,
+  `validityEnded` 0; catálogo central conferido depois (173 linhas, 0 ausentes, versão v1.70, 70 aceitas na NFS-e).
+- **D-IB42**: registrada para a IB-2 (roteiro do §4) — nenhum código nesta rodada (hoje nenhum produtor preenche o `cNBS`).
+- **D-IB43**: limite conhecido na skill `carregar-catalogo-ibscbs.md` — nenhum código.
+
+- **Gate socrático do delta R6: 0.74 ✅** (sem CRITICAL/HIGH) — correções sem decisão feitas na sessão: (1) teste que exige a consulta
+  central do impacto ANTES do rollback, pela linha vigente na data (predicado e parâmetros `[códigos, data, data]` conferidos pelo
+  fake); o impacto POSITIVO foi provado ao vivo pelo harness do gate adversarial (transação externa com commit proibido e serviço de
+  teste 67 revivido só dentro dela): o 000001 encerrado com sucessora só em 01/11 lista o serviço 67 — antes o §11.17 sugeria prova ao
+  vivo do positivo, que só existia pelo stub; (2) desdobramento das encerradas em `endedWithSuccessor` (o código tem outra linha
+  vigente na data — substituição) × `endedNoSuccessor` (o código deixa de valer) — ao vivo, o IT forjado dá 169 encerradas, 0 com
+  sucessora, 169 sem; skill com o critério do `--aceita-encolher` (fim de ano com sucessoras = legítimo; `endedNoSuccessor` alto =
+  parar); (6) a recusa diz "tiraria … (desativadas; na história, ausentes da fonte ou com a vigência encerrada)" e mostra a data; o JSON
+  do script ganha `data` e `AVISO_DATA` quando `--date` não é hoje (provado ao vivo); `shrink[].deactivated` da história documentado
+  (= ausentes + encerradas); (7) fronteiras: fim que já estava no futuro ou na própria data, encurtado para antes dela, conta; (8)
+  skill: cabeçalho, referências até a D-IB44 e o impacto "pela linha vigente na data da carga" (o selo do cadastro pode discordar).
+- **Gate adversarial do delta R6: 0.86 ✅** (sem HIGH/CRITICAL; 25 ensaios com IT/Calculadora forjados em transação desfeita; catálogo
+  central conferido por `CHECKSUM TABLE` antes/depois — iguais, conferidos de novo depois das provas da sessão). Provado: borda da data
+  exata, as duas causas somando no limite (9 + 9 = 18 de 173 recusa; 8 + 9 = 17 passa), sem dupla contagem, linha que já não valia e
+  superada fora, 1ª carga sem recusa, impacto ponta a ponta (só linha futura entra; sucessora vigente não; sucessora sem conferência
+  entra), plano recusa `--date` diferente entre ensaio e ato, D-IB39 sem regressão. 3 LOW: `--date` livre no passado escapa do limite →
+  `AVISO_DATA` feito + **Q-IB48**; encerramento NA data ou em data futura próxima passa → mesma família da **Q-IB45**; desdobramento →
+  feito (e skill: `codeInSource`/`endedWithSuccessor` só são benignos com `codeVanished` ≈ 0 e `endedNoSuccessor` ≈ 0). Casos não
+  testados que viraram jest: as duas causas cruzando o limite (9 + 9 = 18 de 180 grava; 9 + 10 recusa) e o mesmo código com uma linha
+  marcada e outra encerrada (2 linhas, sem dupla contagem).
+- Suíte: as 19 falhas da suíte completa em 2026-10-11 são bomba-relógio dos testes do Banco Inter (fixture com vencimento fixo
+  2026-10-10 × relógio real — a guarda `BANK_SLIP_EXPIRATION_PAST` está certa); fora desta frente, tarefa separada (chip).
+
+### 11.18 ⚠️ Rodada 7 — questões para o Valdo (dos gates do delta da Rodada 6; recomendação entre parênteses)
+
+- **Q-IB45** — Aviso PROSPECTIVO: o ensaio passa a listar, só como informação e FORA do limite, os serviços cujo código perde a linha
+  vigente com presença na NFS-e até o fim da janela do cadastro (`registrationWindowEnd`, hoje a obrigação 01/01/2027), com a data da
+  perda — inclusive o encerramento NA data da carga ou em data futura próxima (gate adversarial LOW 2: 160 linhas com fim na própria
+  data passam caladas e deixam de valer no dia seguinte)? *(Rec.: sim — a consulta do impacto rodada no dia seguinte a cada fim de
+  vigência dentro da janela; o limite da D-IB44 não muda.)*
+- **Q-IB46** — Base do limite para encerramentos: manter "linhas presentes antes da carga" (D-IB44) ou usar "vigentes na data" para a
+  parte encerrada (a história cresce e dilui a base)? *(Rec.: manter e registrar como limite conhecido; o relatório passa a mostrar as
+  vigentes na data ao lado da base; reabrir quando vigentes/presentes ficar abaixo de 80 % — hoje 170 de 173.)*
+- **Q-IB47** — Uma regra só para o impacto: ele passa a perguntar à peça de classificação (`findClassificationAt(conn, código, 'SE',
+  data)` com `applicable && !requiresRegularTaxation`, na conexão da transação) em vez do predicado SQL próprio, e a flag de tributação
+  regular ligada numa linha vigente usada vira candidata ao impacto? *(Rec.: sim, pela data do fato — o que a IB-2 vai usar; mesmo
+  princípio da D-IB40; o relatório marca quando o cadastro ainda aceita por linha futura.)*
+- **Q-IB48** — `--date` diferente de hoje no ATO: hoje só avisa (`AVISO_DATA`) e o plano garante ensaio = ato. O ato com `--vai` deve
+  RECUSAR `--date` diferente de hoje (o ensaio segue aceitando, para reproduzir uma carga)? *(Rec.: sim — o único uso legítimo de
+  `--date` é reproduzir; gravar com outra data é fugir do limite e do impacto.)*

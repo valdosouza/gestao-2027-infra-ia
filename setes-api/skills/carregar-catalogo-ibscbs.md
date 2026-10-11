@@ -1,9 +1,9 @@
 # Skill: Carregar o catálogo IBS/CBS (rotina do Super)
 
-**Status**: Vigente (2026-10-10 — D-IB32 da fase IBS/CBS)
+**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite e impacto até a D-IB44)
 **Objetivo**: Carregar/recarregar em `setes_central` o catálogo oficial do IBS/CBS (CST, cClassTrib com vigência e aplicabilidade
 por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o que não foi conferido
-**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33);
+**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44);
 `Infra-IA/database/PADROES_BANCO.md` §5 ("carga de catálogo externo = ato com plano"); código: `setes-api/scripts/load-ibscbs-catalog.ts`
 + peça `setes-api/src/shared/ibscbs-catalog/`
 **Tempo**: ~10 min (o ensaio leva ~1–2 min: a conferência consulta a Calculadora por par NFS-e × cClassTrib)
@@ -49,18 +49,30 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
    - `relatorio.validity.deactivated` + chaves — linhas de vigência que SUMIRAM da fonte e ganham o fato "ausente desde a versão"
      (D-IB36; nunca são apagadas; a peça passa a ignorá-las) — ex.: o IT corrigiu a dIniVig de um código;
    - `relatorio.*.deactivatedKeys` — o que PERDE a presença nesta carga; `relatorio.impact` — serviços de cada cliente que usam
-     cClassTrib/cIndOp que ficam SEM nenhuma aplicabilidade na NFS-e ou NBS que perde a presença (só no ensaio); `relatorio.shrink` + `AVISO_ENCOLHIMENTO` — perda > 10 % de alguma lista (D-IB28 (c)),
+     cClassTrib/cIndOp que ficam SEM nenhuma aplicabilidade na NFS-e — pela linha VIGENTE na data da carga (data do fato; o selo do
+     cadastro usa a janela até a obrigação e pode discordar, ex.: código encerrado com sucessora futura) — ou NBS que perde a presença
+     (só no ensaio); `relatorio.shrink` + `AVISO_ENCOLHIMENTO` — perda > 10 % de alguma lista (D-IB28 (c)),
      em BRUTO (D-IB38). As listas que contam: presença do cClassTrib por modelo, presença do cIndOp, NBS e — desde a D-IB39 — a
      **história do cClassTrib** (linhas marcadas "ausente da fonte"; base = linhas presentes na fonte antes da carga — linha já marcada
      numa carga anterior não entra na base nem conta de novo). Na história, o relatório separa `codeInSource` (o código SEGUE na fonte
      com outra linha — ex.: o IT corrigiu a dIniVig) de `codeVanished` (o código sumiu da fonte — suspeita de IT antigo/errado).
-     ⚠️ Limite conhecido (Q-IB44): ENCERRAR vigência em massa (dFimVig no passado) não marca linha ausente — não conta no limite nem
-     aparece no impacto; conferir `relatorio.validity.updated` alto no ensaio.
+     Desde a D-IB44 também contam as linhas VIGENTES na data da carga cuja vigência a fonte encerrou antes dela
+     (`relatorio.validityEnded` + `endedBeforeDate` na linha do encolhimento, desdobrado em `endedWithSuccessor` — o código tem outra
+     linha vigente na data — × `endedNoSuccessor`) — encerramento em massa por IT errado é pego; o código que fica sem linha vigente
+     na data entra no `relatorio.impact`. Na linha do encolhimento da história, `deactivated` = ausentes + encerradas.
+   - `data` no JSON = a data em que limite e impacto foram avaliados; `AVISO_DATA` quando `--date` não é hoje — `--date` serve só
+     para reproduzir uma carga, NUNCA para fugir do limite.
+   - ⚠️ Limite conhecido (D-IB43): nada recusa um IT MAIS ANTIGO que o gravado pelo número da versão (`--it-version` é texto livre).
+     Conferir a versão contra a do catálogo (`source_version`) antes do ato; o limite de encolhimento e o `codeVanished` pegam o caso
+     real.
 4. **Ato**: o ensaio imprime `--vai --plano <hash>`. Rodar o MESMO comando com esse sufixo. Se a fonte, a leitura ou a data mudaram
    entre o ensaio e o ato, o plano não bate e NADA é gravado — rodar o ensaio de novo.
 5. **Encolhimento intencional**: ensaio E ato com `--aceita-encolher` (o argumento entra no plano). Casos legítimos: a Receita extinguiu
-   NBS em massa; o IT corrigiu a dIniVig de muitos códigos de uma vez (a história mostra `codeInSource` alto e `codeVanished` ≈ 0 — as linhas
-   antigas ganham o fato "ausente desde a versão" e as novas entram). `codeVanished` alto sem nota da Receita = parar e conferir a versão do
+   NBS em massa; a Receita encerrou códigos com sucessoras (fim de ano: `endedWithSuccessor` ≈ todas, `endedNoSuccessor` ≈ 0, com nota
+   da Receita — `endedNoSuccessor` alto = parar); o IT corrigiu a dIniVig de muitos códigos de uma vez (a história mostra `codeInSource` alto e `codeVanished` ≈ 0 — as linhas
+   antigas ganham o fato "ausente desde a versão" e as novas entram). ⚠️ `codeInSource` e `endedWithSuccessor` só são
+   benignos com `codeVanished` ≈ 0 E `endedNoSuccessor` ≈ 0: um código cuja linha antiga sumiu (conta em `codeInSource`) e cuja
+   única linha restante foi encerrada nesta carga aparece em `endedNoSuccessor` — é ele que diz "o código deixa de valer". `codeVanished` alto sem nota da Receita = parar e conferir a versão do
    IT antes de aceitar.
 6. Conferir depois: 2ª passada do ensaio = 100 % `unchanged`.
 
