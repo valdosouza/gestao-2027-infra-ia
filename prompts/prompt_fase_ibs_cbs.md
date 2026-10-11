@@ -686,8 +686,9 @@ CONFIRMAÇÃO das assunções A-IB1/A-IB2 (o item da rodada era "confirmar").
   A-IB1 em TODA data consultada, impacto com os ids dos serviços (até 50) e as institutions inativas (`institutionActive`).
   Provas finais: ensaio real 47 s, 70 pares, 0 bloqueados, mesmo plano; **setes-api 1997/1997 (121 suítes, inclui testes em andamento de
   outra sessão) · app 200/200 · analyze limpo**; smoke ao vivo (lista com validFrom, troca só do cIndOp = 200, cIndOp inválido = 422 no
-  campo, D-IB30 com classificação inalterada vencida = 200). Nada commitado — commit SÓ pelos caminhos da Rodada 3 (os de billing/
-  invoice/tax-authority/error-codes/migration 067 no working tree são de OUTRA sessão).
+  campo, D-IB30 com classificação inalterada vencida = 200). **PUBLICADO 2026-10-10** só pelos caminhos da Rodada 3: api 6cee5a3 ·
+  app 6819734 (traduções: só as 2 chaves IBS/CBS) · infra 4b5b97e; sql sem alteração nesta rodada. Os de billing/invoice/tax-authority/
+  error-codes/migration 067/service_orders no working tree são de OUTRA sessão (não commitados por esta).
 
 ### 11.9 ⚠️ Rodada 4 — questões para o Valdo (do gate socrático do delta; recomendação entre parênteses)
 
