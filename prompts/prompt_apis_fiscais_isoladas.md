@@ -7,11 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.11 (D-F67…D-F93 executadas e publicadas: a substituição e105102 ganhou fim humano, a prova da
-> reconferência é o E2404 explícito — D-F90 — e o alarme do ambíguo cobre toda porta — D-F91; aberta a Rodada 18: Q-F100…Q-F103).
-> Antes: §21.7–§21.10, §21 (Q-F62 / 1ª autorização da nfse-api em H) e §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21.12 (D-F67…D-F97 executadas e publicadas: substituição e105102 com fim humano, prova da
+> reconferência = E2404 explícito posterior à ÚLTIMA apresentação do Id — D-F90/D-F97 —, alarme do ambíguo em toda porta com origem
+> explícita e sem documento — D-F91/D-F94/D-F95; aberta a Rodada 19: Q-F104…Q-F105). Antes: §21.7–§21.11, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F93** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F97** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -665,6 +665,20 @@ branch `sessao-2026-10-10`):**
   do F o "não gerada" é conclusivo. Não inventar janela; reabrir só se a prova ao vivo M4 mostrar NFS-e gerada tarde.
 - **D-F93 (= Q-F99 (a) — idem) — a assinatura do evento (D-F89) soma `nDFSe`, o autor (`CNPJAutor`/`CPFAutor`), `ambGer` e `tpAmb`**:
   divergência FORA dos 8 campos decidia, pela ordem da lista, qual XML ia para o arquivo fiscal (R16-01).
+- **D-F94 (= Q-F100 (b) — Valdo 2026-10-11: "siga as recomendações") — o alarme leva só o CÓDIGO e um rótulo SEM DÍGITOS**
+  (`reason` = a mensagem com toda sequência de dígitos trocada por `#`, até 160): a mensagem inteira podia levar o Id de DPS de OUTRA
+  nota, que embute o CPF/CNPJ de outro prestador (R17-02). Nunca a chave, nunca documento.
+- **D-F95 (= Q-F101 (b) — idem) — a origem do alarme é dita EXPLICITAMENTE por quem chama** (`AmbiguousOrigin`): a consulta da tela
+  passa `origin: 'consulta'`; o transmitir registra `transmissao` no passo 0b (GET /dps e a consulta pela chave); rodízio e
+  reconferência seguem registrando por si — nunca deduzida pela ausência de flags (R17-03).
+- **D-F96 (= Q-F102 (a)+(c) — idem) — a assinatura do evento usa o MESMO leitor do parse** (`firstText`, exportado pelo montador —
+  atributos e escapes iguais aos do resto do adaptador) **e, na repetição, o XML arquivado é escolhido de forma DETERMINÍSTICA** (o
+  menor na ordem do texto) — nunca a ordem da lista do fisco (R17-01; `verAplic` segue fora da assinatura, mas o arquivo não depende
+  mais da ordem).
+- **D-F97 (= Q-F103 (b) — idem; corrige a premissa da D-F92) — o E2404 tem de ser POSTERIOR à ÚLTIMA apresentação do Id do DPS em
+  QUALQUER tentativa da vida** (o maior entre a reserva e a última voz de cada tentativa com o MESMO Id e ambiente): as tentativas da
+  vida reapresentam o MESMO Id (D-N3/D-F30) — "o DPS foi enviado uma vez" era falso. `reconfirmationProven(candidata, vida)` no
+  núcleo; a F2a passa a vida inteira.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -930,12 +944,18 @@ Texto completo e recomendações no §21.10: **Q-F97** alcance do alarme (Rec.: 
 nota) · **Q-F98** validade da prova (Rec.: "posterior ao F" + conhecimento negativo) · **Q-F99** assinatura da D-F89 (Rec.: somar
 `nDFSe`, autor, `ambGer`, `tpAmb`).
 
-### 8.R18 Rodada 18 — aberta pelos gates da Rodada 17 (2026-10-11, §21.11) — ⚠️ AGUARDA O VALDO
+### 8.R18 Rodada 18 — aberta pelos gates da Rodada 17 (2026-10-11, §21.11) — DECIDIDA ("siga as recomendações" → D-F94…D-F97)
 
 Texto completo e recomendações no §21.11: **Q-F100** o que o alarme leva do erro (Rec.: só código + rótulo sem dígitos) · **Q-F101**
 rótulo do ambíguo do transmitir (Rec.: origem explícita "transmissao", também no GET /dps do passo 0b) · **Q-F102** leitor da
 assinatura do evento (Rec.: o mesmo `firstText` do parse + arquivar de forma determinística no empate) · **Q-F103** prova × nova
 apresentação do mesmo Id (Rec.: o E2404 tem de ser posterior à ÚLTIMA apresentação do Id na vida).
+
+### 8.R19 Rodada 19 — aberta pelos gates da Rodada 18 (2026-10-11, §21.12) — ⚠️ AGUARDA O VALDO
+
+Texto completo e recomendações no §21.12: **Q-F104** o Id do terceiro na mensagem do "NFS-e de OUTRO DPS" (Rec.: a mensagem nunca
+interpola o Id + rótulo fechado por causa) · **Q-F105** tentativa da mesma identidade em voo (Rec.: a prova falha fechado com tentativa
+sem voz).
 
 ## 9. Fora de escopo desta fase
 
@@ -2237,7 +2257,7 @@ corretamente) — fora deste delta; tarefa própria sugerida ao Valdo.
 **Seguem**: LOW da §21.8, prova ao vivo M4 (Valdo), nota de implantação da F2a (a nfse-api com a migration 003 sobe ANTES do setes-api
 com o núcleo novo — a view muda), e os próximos passos: Rodada 17 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 
-### 21.11 Rodada 17 — D-F91…D-F93 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+### 21.11 Rodada 17 — D-F91…D-F93 (Valdo 2026-10-11: "siga as recomendações") — Rodada 18 DECIDIDA no §21.12
 
 | Decisão | O quê | Onde |
 |---|---|---|
@@ -2267,3 +2287,38 @@ testes do boleto (fora desta frente), e os próximos passos: Rodada 18 → NE-0/
 - ⚠️ **Q-F103 (D-F92 × D-N3)** — a premissa da D-F92 ("o DPS foi enviado UMA vez") é falsa: tentativas da mesma vida reapresentam o MESMO
   Id do DPS (D-N3/D-F30); uma tentativa nova recusada não invalida a prova antiga da candidata. (a) manter e corrigir só o comentário ·
   (b) **o E2404 tem de ser POSTERIOR à ÚLTIMA apresentação do Id em QUALQUER tentativa da vida** (barato, falha fechado). *(Rec.: (b).)*
+
+### 21.12 Rodada 18 — D-F94…D-F97 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F94** (= Q-F100 (b)) | o alarme leva `code` + `reason` (mensagem com dígitos trocados por `#`) — nunca a mensagem inteira | `logAmbiguousFiscal` (setes-api, nfse-api) |
+| **D-F95** (= Q-F101 (b)) | origem EXPLÍCITA (`AmbiguousOrigin`): a tela passa `origin: 'consulta'` (`billing.fiscal.service.ts`, `nfse.routes.ts`); o transmitir registra `transmissao` no passo 0b (envolve o `reconcileInterrupted`) | `invoice-transmission.ts` · `nfse/transmission.ts` |
+| **D-F96** (= Q-F102 (a)+(c)) | assinatura do evento pelo `firstText` do parse (exportado pelos `dps-builder.ts`); na repetição, o XML arquivado é o menor na ordem do texto | os dois `adn.ts` |
+| **D-F97** (= Q-F103 (b)) | `reconfirmationProven(candidata, vida)`: o E2404 posterior à ÚLTIMA apresentação do Id (reserva ou última voz) em qualquer tentativa da vida com o mesmo Id e ambiente | `fiscal-api/src/voice/reading.ts` |
+
+**Gates do delta**: socrático **0,76 ✅** · adversarial **0,78 ✅** (nenhum HIGH+; nenhum chamador de produção perdeu o alarme — cerca
+estática; sem duplicata no 0b; escolha determinística nunca escolhe eco/outra chave). Corrigidos na sessão (sem decisão nova):
+**R18-03 (MEDIUM latente — entra com a F2a)** a identidade da candidata (Id do DPS + ambiente) ausente fazia a prova voltar à regra
+anterior em silêncio → sem identidade = falha FECHADO; **R18-04** `lifeList` virou OBRIGATÓRIA (o padrão `[candidata]` falhava aberto);
+**R18-06** instante fora do formato `YYYY-MM-DD HH:MM:SS` = falha FECHADO; **R18-07** XML do fisco que o leitor não consegue ler
+(entidade numérica fora do Unicode — inclusive no `xMotivo`, anterior ao delta) virava RangeError cru (500 na tela; no rodízio sem
+alarme nem carimbo) → resposta ILEGÍVEL = ambígua (502). Testes: `adversarial-r18-gate.test.ts` nos TRÊS projetos (os `it.failing` que
+ficam = Q-F104/Q-F105); os testes antigos de `reconfirmationProven` com 1 argumento passam por um helper com identidade + vida.
+
+**Provas**: setes-api **2148**/2167 (as 19 falhas são a bomba-relógio de data dos testes do boleto — fora desta frente) · nfse-api 403 unit + ao vivo **150/150** · núcleo 94.
+
+**Rodada 19 (aberta pelos gates da Rodada 18 — aguardam o Valdo)**:
+- ⚠️ **Q-F104 (R18-01/R18-02)** — a mensagem do erro "NFS-e de OUTRO DPS" interpola o Id do DPS do TERCEIRO: o `reason` da D-F94 só tira
+  dígitos (um CNPJ ALFANUMÉRICO — emitido desde 07/2026 — sobra como letras) e o Id inteiro (com CPF/CNPJ do terceiro) segue no `warn`
+  do adaptador e no corpo do 502 que o app mostra. (a) manter a máscara · (b) rótulo FECHADO por causa (lista de valores), sem texto da
+  resposta · (c) **a mensagem nunca interpola o Id do terceiro — só "Id divergente"**. *(Rec.: (c) + (b) — fecha os três destinos.)*
+- ⚠️ **Q-F105 (R18-05)** — tentativa da MESMA identidade EM VOO na vida: só tem o instante da RESERVA; um E2404 que caia entre a reserva e
+  a chegada do POST conta como prova (hoje quem segura é o plano de cancelamento — `isLiveTransmission`). (a) manter · (b)
+  **`reconfirmationProven` falha fechado sempre que houver tentativa da mesma identidade sem voz** · (c) além disso, a reconferência da
+  nfse-api recusa 409 com tentativa viva. *(Rec.: (b) — barato e coerente com o "falha fechado" da D-F97.)*
+
+**Seguem**: LOW da §21.8, prova ao vivo M4 (Valdo), o ALARME da F3 (agrega "Fisco ambíguo persistente" por nota — D-F87/D-F91/D-F94),
+nota de implantação da F2a (nfse-api com a migration 003 sobe ANTES do setes-api com o núcleo novo; a F2a chama
+`reconfirmationProven(candidata, vida)` com a linha COMPLETA da view), a tarefa da bomba-relógio de data dos testes do boleto (fora
+desta frente), e os próximos passos: Rodada 19 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).

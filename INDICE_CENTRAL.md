@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.27 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.28 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-11  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-11 | **APIs fiscais — Rodada 18 EXECUTADA e PUBLICADA (D-F94…D-F97)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.12): o alarme do ambíguo leva só código + rótulo sem dígitos e a origem é dita por quem chama (transmissão no passo 0b); a assinatura do evento usa o leitor do parse e o XML arquivado é determinístico; a prova da reconferência exige o E2404 posterior à ÚLTIMA apresentação do Id na vida (`reconfirmationProven(candidata, vida)` — vida e identidade obrigatórias, formato do instante conferido). XML ilegível do fisco = ambíguo (nunca 500). Gates 0,76/0,78 ✅. **Rodada 19 aberta: Q-F104…Q-F105**. | 9.28 |
 | 2026-10-11 | **Fase IBS/CBS — Rodada 7 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.19–§11.21; Valdo: "siga as recomendações na Rodada 7"): D-IB47 "aceito" é UM veredito com motivo na peça `@shared/ibscbs-classification` (`verdictOf`, portas em lote — a pergunta do faturamento da IB-2) e o impacto da carga do catálogo é a DIFERENÇA do veredito antes × depois da gravação (os gates acharam que a inferência por tipo de mudança perdia a linha nova/revivida/estendida sobreposta sem presença — corrigido e re-provado ao vivo); D-IB45 aviso prospectivo `impactAhead` (fora do limite, com data e motivo da perda até a obrigação); D-IB46 vigentes na data ao lado da base; D-IB48 o ato recusa `--date` diferente de hoje (`assertActDate`). Skill `setes-api/skills/carregar-catalogo-ibscbs.md` atualizada. Gates do delta 0.72/0.78 ✅. Rodada 8 Q-IB49…Q-IB50 aberta (§11.21). | 9.27 |
 | 2026-10-11 | **APIs fiscais — Rodada 17 EXECUTADA e PUBLICADA (D-F91…D-F93)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.11): o alarme "Fisco ambíguo persistente" cobre toda porta que pergunta ao fisco (rodízio, consulta da tela, reconferência) com a origem e a nota; a prova da reconferência não tem prazo (conhecimento negativo); a assinatura do evento soma nDFSe, autor, ambGer e tpAmb. Gates 0,78/0,80 ✅. **Rodada 18 aberta: Q-F100…Q-F103**. | 9.26 |
 | 2026-10-11 | **APIs fiscais — Rodada 16 EXECUTADA e PUBLICADA (D-F86…D-F90)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.10): a prova da reconferência (D-F29) passa a ser o E2404 EXPLÍCITO — coluna `nfse_not_generated_at` (migration 003 da nfse-api + view; parecer do guardião: fato da tentativa, escritor próprio guardado pela voz vista), nunca o carimbo do rodízio; o laço tipado para no 1º tipo (conhecimento negativo); evento de outro tipo ou conteúdo divergente no mesmo GET = ambíguo; alarme "Fisco ambíguo persistente" com a nota. Gates 0,80/0,82 ✅. LIÇÃO: a forma REAL do E2404 traz `tipoAmbiente: 0`. **Rodada 17 aberta: Q-F97…Q-F99**. | 9.25 |
