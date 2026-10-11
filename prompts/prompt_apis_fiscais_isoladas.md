@@ -7,10 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.6 (D-F61…D-F66 executadas e publicadas; aberta a Rodada 12: Q-F74…Q-F76). Antes: §21 (Q-F62 /
-> 1ª autorização da nfse-api em H) e §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21.8 (D-F67…D-F82 executadas e publicadas: a substituição e105102 ganhou fim humano — "manter a
+> nota"; aberta a Rodada 15: A-F80, Q-F90, Q-F91). Antes: §21.7, §21 (Q-F62 / 1ª autorização da nfse-api em H) e §20
+> (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F66** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F82** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -578,6 +579,53 @@ branch `sessao-2026-10-10`):**
   rodízio carimba e segue); 401/403 no GET /nfse e 5xx/timeout continuam parando a passada.
 - **D-F66 (= Q-F73 (a) — idem) — TSString: NFC antes do filtro; fora do Latin-1, a letra-base** (Š→S, č→c; sem base Latin-1, sai); o
   filtro Latin-1 vale para TODO texto livre do DPS/evento (escolha registrada).
+- **D-F67 (= Q-F74 (a) — Valdo 2026-10-10: "siga as recomendações") — fim da pendência da SUBSTITUIÇÃO (e105102) = ato humano
+  "manter a nota"**: a decisão é FATO da nota (`tb_invoice_cancel_waiver` — motivo e autor, D-F72/D-F73), tira a voz da pendência,
+  do rodízio de 15 min e do lote "Transmitir pendentes"; a tela "No fisco" mostra a chave da NFS-e SUBSTITUTA; a outra saída é cancelar
+  a nota (o cancelamento liga a voz como efeito). Voz C VIGENTE com a nota viva nunca se reapresenta ao fisco: 409
+  `FISCAL_NFSE_SUBSTITUTED` (105102) / `FISCAL_EFFECT_PENDING` (demais). Rota `POST /api/billing/cancel-waiver` (setes-api).
+- **D-F68 (= Q-F75 (a) — idem) — na nfse-api o código do evento é FATO estruturado na voz do `fiscal_api`** e
+  `localCancelPending` (núcleo) exclui a substituição — contrato da F2a: o app nunca aplica sozinho o C de um e105102;
+  `isSubstitutionCancel` no núcleo; 409 `FISCAL_NFSE_SUBSTITUTED` no transmit; a tela recebe `substitution.substituteAccessKey`.
+- **D-F69 (= Q-F76 (a) — idem) — rota perguntada × código do XML divergentes = AMBÍGUO** (`unknown`/502), **salvo quando o XML diz
+  substituição** (fica a marca mais restritiva — sem efeito automático), nos dois adaptadores.
+- **D-F70 (= Q-F77 — Valdo 2026-10-10: "Sim, siga tudo", parecer do guardião) — o DDL da voz é da FAMÍLIA** (migration 002 da
+  nfse-api — a voz nasce na 001 da família, D-F35), nunca do núcleo.
+- **D-F71 (= Q-F78 — idem) — sem coluna nova: `authority_code` da voz C guarda o TIPO do evento de cancelamento** (101101 · 105102
+  · 105104 · 305101 — `tiposEventos_v1.01.xsd`; CHECK de domínio só na voz C; resposta direta ao nosso pedido = 101101). Backfill
+  determinístico IGUAL nos dois bancos (067 do setes-api · 002 da nfse-api): marca de texto "(e105102)" → 105102; source P → 101101;
+  C de consulta sem marca → NULL (lida como cancelamento comum).
+- **D-F72 (= Q-F79 — idem) — "manter a nota" exige o privilégio CANCELAR na interface do RAMO** (mesmo resolvedor do cancelamento).
+- **D-F73 (= Q-F80 — idem) — motivo obrigatório** (1–255), gravado com o autor.
+- **D-F74 (= Q-F81 — idem) — só a SUBSTITUIÇÃO se dispensa** (voz C vigente 105102, nota viva, sem efeito aplicado); 101101/105104/
+  305101 seguem o caminho do efeito (aplicar ou cancelar manualmente) — 409 `INVOICE_CANCEL_WAIVER_NOT_APPLICABLE`.
+- **D-F75 (= Q-F82 — idem) — o código só SOBE para 105102, nunca volta** (`setCancelEventCode` no setes-api; promoção de mão única e
+  conferência de divergência também no `migrate:setes`).
+- **D-F76 (= Q-F83 — idem) — a chave da SUBSTITUTA não tem coluna**: deriva do `chSubstituta` do XML do evento arquivado
+  (`<chave>-evt101101.xml` — nome herdado, R11-07), validada `^[0-9A-Z]{50}$`, só exibição (ausente = "indisponível").
+- **D-F77 (= Q-F84 (a) — Valdo 2026-10-10: "siga as recomendações", gate socrático da Rodada 13) — a voz C que é a resposta ao
+  NOSSO pedido (source P, e101101 provado) NUNCA é promovida**: leitura posterior que diga outro tipo é contradição do fisco (502
+  `FISCAL_AUTHORITY_UNKNOWN_RESPONSE` + `logger.error`, nada gravado) — a "marca mais restritiva" (D-F69/D-F75) abriria o "manter a
+  nota" (D-F67) para uma nota sem NFS-e válida e sem substituta; e o efeito LOCAL pendente dessa voz é retentado SEM o fisco
+  (`retryLocalCancelEffect` — o fato do fisco já está provado). A D-F75 segue valendo para vozes por CONSULTA (Q).
+- **D-F78 (= Q-F85 (a) — idem) — a consulta HUMANA de uma voz C relê o fisco SÓ para arquivar o XML do evento que faltou** (Q-N38;
+  na substituição, também a chave da substituta — D-F76): grava o arquivo se a resposta for o cancelamento DESTE código; a voz nunca
+  muda por aí; o rodízio nunca relê por um arquivo (`fromRun`). Nos dois serviços (setes-api e nfse-api).
+- **D-F79 (= Q-F86 (a) — idem) — a dispensa é FATO DO ERP; a pendência é UM predicado**: no setes-api tela, transmissão e rodízio
+  contam pelo mesmo SQL (`countPendingEffects`) — a cópia em memória da tela saiu. Plano da F2a: o setes-api expõe `cancelWaiver` e
+  `pendingEffects` em rota própria por pedido; a nfse-api fica só com o fisco (`localCancelPending`, `substitution`); o app compõe
+  as duas leituras (nunca degrada em silêncio).
+- **D-F80 (= Q-F87 (a) — idem) — homologação não se mantém**: em H a dispensa é recusada (409 `INVOICE_CANCEL_WAIVER_NOT_APPLICABLE`
+  — "sem valor jurídico, cancele a nota") e o app esconde o "Manter a nota". **Assunção A-F80 (desvio técnico da letra "a voz de H
+  não bloqueia a transmissão em P")**: o Id do DPS é da VIDA da nota, não do ambiente (D-N3: o nDPS é write-once por vida) — uma
+  tentativa em P na MESMA vida reusaria o Id da tentativa de H e colidiria com o leitor único pela chave (D-N26) e com a
+  reconciliação de órfã (R3-1). A saída que não bloqueia é a da Q-CA5b: cancelar a nota de H (cancelável localmente) abre vida nova,
+  que transmite em P com DPS novo; o 409 de H passa a apontar esse caminho.
+- **D-F81 (= Q-F88 (a) — idem) — a dispensa é HISTÓRIA**: a linha fica; os leitores só a apresentam como decisão vigente enquanto a
+  nota está viva (`findCurrentCancelWaiver` — cabeçalho vivo e último evento ≠ C).
+- **D-F82 (= Q-F89 — idem) — o cancelamento DE OFÍCIO (e305101) espera o humano**: voz C sim, efeito local suspenso (pendência —
+  "cancele a nota"), sem caminho de "manter" (não há substituta); sai do rodízio junto com a substituição (`HUMAN_EFFECT_CANCEL_CODES`
+  no núcleo e no setes-api; `localCancelPending` exclui os dois). O e105104 (deferido a pedido do contribuinte) segue automático.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -806,11 +854,29 @@ branch `sessao-2026-10-10`):**
 - ~~**Q-F72** 401/403 numa rota de evento~~ → **D-F65** (falha da nota).
 - ~~**Q-F73** TSString~~ → **D-F66** ((a) NFC + letra-base; Latin-1 em todo texto livre).
 
-### 8.R12 Rodada 12 — aberta pelo re-gate da Rodada 11 (2026-10-10, §21.6) — ⚠️ Q-F74…Q-F76 AGUARDAM O VALDO
+### 8.R12 Rodada 12 — aberta pelo re-gate da Rodada 11 (2026-10-10, §21.6) — DECIDIDA ("siga as recomendações" → D-F67…D-F69)
 
 Texto completo e recomendações no §21.6: **Q-F74** fim da pendência da substituição (Rec.: ato humano "ciência — manter a nota" +
 chave da substituta na tela) · **Q-F75** contrato da F2a para a substituição (Rec.: `event_code` estruturado na voz do `fiscal_api`) ·
 **Q-F76** rota × código do XML divergentes (Rec.: ambíguo, salvo quando o XML diz substituição).
+
+### 8.R13 Rodada 13 — aberta pelo parecer do guardião sobre o "manter a nota" (2026-10-10, §21.7) — DECIDIDA ("Sim, siga tudo" → D-F70…D-F76)
+
+- ~~**Q-F77** onde mora o DDL da voz~~ → **D-F70** (família) · ~~**Q-F78** coluna nova × reuso~~ → **D-F71** (`authority_code`) ·
+  ~~**Q-F79** privilégio~~ → **D-F72** (CANCELAR do ramo) · ~~**Q-F80** motivo~~ → **D-F73** (obrigatório) · ~~**Q-F81** quais
+  cancelamentos se dispensam~~ → **D-F74** (só 105102) · ~~**Q-F82** o código muda?~~ → **D-F75** (só sobe para 105102) ·
+  ~~**Q-F83** chave da substituta~~ → **D-F76** (do XML, sem coluna).
+
+### 8.R14 Rodada 14 — aberta pelo gate socrático da Rodada 13 (2026-10-10, §21.7) — DECIDIDA ("siga as recomendações" → D-F77…D-F82)
+
+- ~~**Q-F84** proveniência da voz × promoção/dispensa~~ → **D-F77** · ~~**Q-F85** recuperar o XML do e105102~~ → **D-F78** ·
+  ~~**Q-F86** quem serve a decisão depois da F2a~~ → **D-F79** · ~~**Q-F87** homologação~~ → **D-F80** (+ assunção A-F80) ·
+  ~~**Q-F88** a dispensa é história ou estado~~ → **D-F81** · ~~**Q-F89** efeito do 305101/105104~~ → **D-F82**.
+
+### 8.R15 Rodada 15 — aberta pelos gates da Rodada 13 (2026-10-10, §21.8) — ⚠️ AGUARDA O VALDO
+
+Texto completo no §21.8: **A-F80** (confirmar: em H a saída é cancelar a nota — o Id do DPS é da vida) · **Q-F90** (GET tipado com o
+tipo perguntado E um e105102 — Rec.: ambíguo) · **Q-F91** (`chSubstituta` × CNPJ da chave — Rec.: sim, baixo valor).
 
 ## 9. Fora de escopo desta fase
 
@@ -1930,9 +1996,9 @@ das correções R11-xx) · sondas só de leitura com o código final: H nº 2 e 
 
 ⚠️ Lição de ferramenta: `jest --runInBand` do setes-api termina os testes e NÃO sai (handle aberto) — rodar com `--forceExit`.
 
-### 21.6 Pendências e questões abertas — ⏯ RETOMAR POR AQUI
+### 21.6 Pendências e questões abertas (Rodada 12 DECIDIDA — D-F67…D-F69; execução no §21.7)
 
-**Rodada 12 (aberta pelo re-gate — aguardam o Valdo)**:
+**Rodada 12 (aberta pelo re-gate) — DECIDIDA em 2026-10-10 ("siga as recomendações" → D-F67…D-F69, §21.7)**:
 - ⚠️ **Q-F74 (R11-01)** — a pendência da substituição (D-F64) não tem fim: a voz C suspensa volta ao fisco a cada 15 min PARA SEMPRE
   (3 idas por passada) e aparece no lote "Transmitir pendentes" com 409. (a) **ato humano "ciência — manter a nota"** que encerra a
   pendência sem cancelar (grava o desfecho na voz) e a tira do rodízio e do lote; a tela mostra a chave da SUBSTITUTA (`chSubstituta`
@@ -1956,3 +2022,61 @@ rodízio achar e aplicar o efeito (101101) ou suspender (105102).
 
 **Próximos passos (ordem)**: Q-F74…Q-F76 → D-NE: NE-0/NE-1 (núcleo generalizado ANTES da F2a) → **F2a** (setes-api passivo; migration
 `NNN_f2a_fiscal_passivo.sql` — D-F50; Q-F75 antes) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.7 Rodadas 12, 13 e 14 — a substituição (e105102) ganha fim humano (D-F67…D-F82), 2026-10-10 — ⏯ RETOMAR POR AQUI
+
+**Rodada 12** (Valdo: "siga as recomendações" → **D-F67** (= Q-F74 (a)), **D-F68** (= Q-F75 (a)), **D-F69** (= Q-F76 (a))). O
+desenho do "manter a nota" passou pelo **guardião** (parecer: a decisão humana é FATO da NOTA, não coluna da voz — a voz é do
+fisco; sem coluna nova na voz: `authority_code` já é "o código cru do fisco"; o DDL da voz é da família), que abriu Q-F77…Q-F83 —
+**Rodada 13** (Valdo: "Sim, siga tudo (Recomendado)" — incluindo a migration 067 aplicada no banco de PRODUÇÃO ao salvar) →
+**D-F70…D-F76**. Os gates da Rodada 13 abriram Q-F84…Q-F89 — **Rodada 14** (Valdo: "siga as recomendações") → **D-F77…D-F82**.
+
+| Onde | O quê |
+|---|---|
+| setes-api **067** (`067_fiscal_cancel_code_and_cancel_waiver.sql`) | backfill do código nas vozes C (marca de texto só em voz de CONSULTA → 105102; source P → 101101); MODIFY do comentário; CHECK `ck_invoice_service_transmission_event_cancel_code` (domínio só na voz C); tabela **`tb_invoice_cancel_waiver`** (PK nota × chave; motivo + autor obrigatórios; CHECK da chave 44/50; FK → `tb_invoice`). **Aplicada em PRODUÇÃO 2026-10-10 21:00** (provada antes 2× num schema descartável com o split do runner; backfill = 3 vozes C → 101101). Espelho no `sql/03` |
+| nfse-api **002** (`002_cancel_event_code.sql`) | o mesmo backfill/MODIFY/CHECK na voz do `fiscal_api` (D-F70) — aplicada no dev (réplica = origem) |
+| núcleo (`fiscal-api/src/voice`) | `CANCEL_EVENT_CODES`, `SUBSTITUTION_CANCEL_CODE`, `EX_OFFICIO_CANCEL_CODE`, `HUMAN_EFFECT_CANCEL_CODES`; `localCancelPending` exclui o efeito humano; `isSubstitutionCancel`/`isHumanEffectCancel`; erro `FISCAL_NFSE_SUBSTITUTED` |
+| setes-api composição | `recordCancelVoice` grava o código (P = 101101), promoção de mão única (`setCancelEventCode`), voz P nunca promovida (D-F77 → 502), suspensão de 105102 e 305101; transmit: voz C vigente = SEMPRE 409 (`FISCAL_NFSE_SUBSTITUTED` / `FISCAL_EFFECT_PENDING`; em H aponta "cancele a nota"); refresh: C de efeito humano não se retenta, C P pendente retenta o efeito SEM o fisco (`retryLocalCancelEffect`), consulta humana arquiva o XML do evento que faltou (`archiveCancelEventIfMissing`, nunca no rodízio — `fromRun`); rodízio e lote excluem C de efeito humano / C vigente; tela: `substitution {substituteAccessKey, waived}` + `cancelWaiver` (só vigente — D-F81) + `pendingEffects` pelo SQL único |
+| setes-api peça + rota | `@shared/invoice/invoice-cancel-waiver` (`waiveSubstitutedCancel` · `findCancelWaiver` · `findCurrentCancelWaiver`) + **`POST /api/billing/cancel-waiver`** `{orderId, reason}` (CANCELAR do ramo — D-F72; Swagger); erros `FISCAL_NFSE_SUBSTITUTED` e `INVOICE_CANCEL_WAIVER_NOT_APPLICABLE` |
+| nfse-api | voz C com o código (D-F68); transmit 409 `FISCAL_NFSE_SUBSTITUTED`; tela com `substitution.substituteAccessKey`; consulta humana de C arquiva o XML que faltou (best-effort — R13-06); `migrate:setes` espelha a regra de mão única (preenche NULL, sobe para 105102) e confere o código na divergência |
+| adaptadores ADN (os dois) | D-F69 (tipo perguntado × XML: ambíguo salvo 105102); L6 (bloco `<e101101>` embutido leva o código); L7 (entre os itens, o do tipo perguntado) |
+| setes-app (`service_orders`) | seção "No fisco": aviso da substituição + chave da SUBSTITUTA (copiar; "indisponível" sem XML), botão **"Manter a nota"** (CANCELAR; só P — D-F80; dialog com motivo 1–255), linha "Nota mantida em … — motivo"; "Transmitir" escondido em toda voz C vigente (L4); i18n pt/en |
+
+**Gates**: Rodada 13 — socrático **0,74 ✅** (M1 → D-F77, M2 → D-F78, M3 → D-F79; L1 → D-F81, L5 → D-F80; L2/L3/L4/L6/L7 corrigidos
+na sessão) · adversarial **0,80 ✅** sem HIGH (R13-01/R13-05 corrigidos durante o gate; R13-02 backfill por texto só em voz de
+consulta, R13-04 a própria chave não é a substituta, R13-06 arquivar é best-effort na nfse-api — corrigidos na sessão; **R13-03 →
+Q-F90**). Testes: `adversarial-r13-gate.test.ts` nos dois serviços (o `it.failing` que fica = Q-F90) + blocos "RODADA 13/14" no
+`adversarial-r11-gate.test.ts` + `invoice-cancel-waiver.test.ts`.
+
+**Provas**: fiscal-api 80 · nfse-api 307 unit + ao vivo 150/150 · setes-api **2020/2020** (a suíte inteira; a única suíte que não
+compila é WIP da sessão paralela de IBS/CBS — `ibscbs-classification.test.ts` à frente do código dela, fora deste delta) · app
+**203/203**, analyze limpo. Sondas na API de produção só de recusa (409/400/404, nada gravado).
+
+**Lições**: (1) setes-api em `tsx watch` = deploy ao salvar e a migration roda no boot sem transação — **DDL provado antes num schema
+descartável, e o DDL antes do código** (falha de migration no boot = `process.exit(1)` = produção fora); (2) backfill por TEXTO livre só
+vale onde o texto é nosso — o motivo digitado pelo usuário pode conter a marca (R13-02); (3) a "marca mais restritiva" deixa de ser
+segura quando a marca abre uma porta MENOS restritiva (o "manter") — proveniência decide (D-F77).
+
+### 21.8 Pendências e questões abertas — ⏯ RETOMAR POR AQUI
+
+**Rodada 15 (aberta pelos gates da Rodada 13 — aguardam o Valdo)**:
+- ⚠️ **A-F80 (confirmar)** — a letra da Q-F87 (a) dizia "a voz de H não bloqueia a transmissão em P"; executado como "em H, cancele a
+  nota (cancelável localmente) e fature de novo" porque o Id do DPS é da VIDA, não do ambiente (uma tentativa em P na mesma vida
+  reusaria o Id da de H — D-N3/D-N26/R3-1). *(Rec.: confirmar.)*
+- ⚠️ **Q-F90 (R13-03)** — o GET tipado de `/eventos/101101/1` traz o tipo perguntado E um e105102 da mesma chave: vale a marca mais
+  restritiva (D-F69), o tipo perguntado (L7 + D-F77) ou é AMBÍGUO? *(Rec.: ambíguo — 502, nenhuma marca, nenhum efeito, como a D-F63;
+  forma de resposta não cravada da Sefin.)*
+- **Q-F91 (R13-04, só exibição)** — validar `chSubstituta` também contra o CNPJ do emitente embutido na chave? (a igual à própria chave
+  já é recusada). *(Rec.: sim, quando a chave nacional for conferível; baixo valor.)*
+
+**LOW registrados**: os da §21.6 seguem (DF61-03/04/07/08, R11-07 — o XML do e105102 é arquivado como `-evt101101.xml`, L3/L7 do
+socrático da Rodada 11, M5 → alarme na F3, `tsx watch` em produção). Novos: lista de OS sem selo "substituída — aguardando decisão"
+(L4b do socrático da Rodada 13 — só se descobre abrindo a OS); ordem de travas "manter" (nota → transmissão) × rota fiscal de
+cancelamento (transmissão → nota) — ciclo 1213 absorvido pelo retry (L2).
+
+**Pede o Valdo**: prova ao vivo do C POR CONSULTA (M4 da Rodada 11) — cancelar uma NFS-e de H pelo Emissor Nacional (por
+substituição, para ver a tela nova; ou 101101) e ver a consulta suspender (105102) ou aplicar (101101).
+
+**Próximos passos (ordem)**: Rodada 15 (A-F80, Q-F90, Q-F91) → D-NE: NE-0/NE-1 (núcleo generalizado ANTES da F2a) → **F2a** (setes-api
+passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50; contrato da tela pela D-F79: o setes-api expõe `cancelWaiver`/`pendingEffects`
+em rota própria por pedido, a nfse-api só o fisco) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
