@@ -10,7 +10,7 @@ Ato Conjunto nº 4/2026) · D-NE4 ("prompt aberto JÁ") · D-NE31 (vigência de 
 XSD 1.01, NT 007/008/009, anexos I e II, FAQ) · (B) inventário do produto (setes-api, nfse-api, fiscal-api, sql) · (C) fotografia do legado
 Gestao2016 (agente legacy-analyst) · (D) legislação e documentos oficiais na web (fontes primárias, datadas) · + `Infra-IA/nfe-api/referencia-acbr/03-ibs-cbs-rtc.md`
 (ACBr, terceiro — só conferência).
-**Estado**: **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
+**Estado**: **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
 guardião). Antes: Rodada 1 DECIDIDA (2026-10-10, "siga as recomendações" — §8, D-IB1…D-IB21).
 ⚠️ A opção de regime da Setes (D-IB1) segue com o Valdo e o contador até **30/10/2026**; o patch do legado (D-IB3) está COMMITADO (SVN r1300) e
 compilado — falta só a versão aos clientes (conferência dispensada: nenhum cliente de serviço emitiu com a reforma).
@@ -635,3 +635,72 @@ do ACBr da nfe-api): `prompt_onda_nfe_sefaz.md`, `nfe-api/`, `rascunho_engine_mo
 
 **Valdo**: opção de regime até **30/10**; NBS/classificação de cada serviço da Setes (com o contador); Rodada 3 (§11.5). **Depois**: IB-2
 (congelamento único no ramo billing+OS, 422 de obrigação D-IB8, enquadramento datado + leitores).
+
+### 11.7 Rodada 3 DECIDIDA (Valdo 2026-10-10: "siga as recomendações na Rodada 3") — D-IB28…D-IB33 + A-IB1/A-IB2 confirmadas
+
+Cada D-IB*n* = a recomendação da Q-IB*n* (§11.5). Numeração permanente (continua o §10.5). "Siga as recomendações" foi lido também como a
+CONFIRMAÇÃO das assunções A-IB1/A-IB2 (o item da rodada era "confirmar").
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB28** | Conferência e encolhimento do catálogo: (a) além da presença do código, a carga confere na Calculadora os DOIS atributos que o código consome — aceitação na NFS-e (`tiposDfeClassificacao` tipo 91 da lista + `validoParaSiglaDfeInformado` do par NFS-e × cClassTrib) e tributação regular (`exigeGrupoTributacaoRegular` do par × `ind_gTribRegular` do IT); divergência = a LINHA perde a aplicabilidade na NFS-e e é listada (mesmo fail-closed da A-IB1); IT que NÃO aceita e Calculadora que aceita = só listado (o IT governa a presença); (b) código que perde a confirmação/aplicabilidade e está EM USO: desativa (presença) e o ensaio lista os serviços afetados por schema; (c) perda > 10 % das linhas vivas de qualquer lista (aplicabilidade de cClassTrib, de cIndOp, NBS) = carga RECUSADA, salvo argumento explícito do ato `--aceita-encolher` (que entra no plano); (d) correção de dIniVig que deixa a linha antiga aberta: manter (linha nunca apagada; perde a aplicabilidade; o resolvedor pega a mais nova vigente) |
+| **D-IB29** | Cadastro do serviço aceita classificação VIGENTE HOJE ou com dIniVig FUTURA até a data da obrigação da NFS-e (01/01/2027 — Ato Conjunto nº 4/2026 § 1º; depois dela, só a vigente); a tela mostra "vale a partir de" (e "válida até", quando houver fim) |
+| **D-IB30** | O salvar do serviço reconfere só a NBS/classificação que MUDOU (precedente D-G34); a inalterada não bloqueia uma edição de preço — quem barra a classificação vencida é o faturamento (D-IB8, IB-2) |
+| **D-IB31** | Obrigatoriedade comercial em campo "ausente = não mexe" valida o ESTADO resultante (gravado + payload), não só o payload — vale para a peça field-config inteira; executa junto com a tarefa do caminho do payload nos demais catálogos (chip) |
+| **D-IB32** | Carga em produção: o Valdo, da máquina dele, com usuário de banco que só ESCREVE em `setes_central` (e só LÊ `tb_service`/`tb_service_ibscbs`/`tb_product` dos clientes para o relatório de impacto da D-IB28 (b)); ensaio fora do horário comercial (segura FOR UPDATE na aplicabilidade SE); lembrete mensal de recarga até os 9 códigos da A-IB1 entrarem na Calculadora. Procedimento: skill `setes-api/skills/carregar-catalogo-ibscbs.md` |
+| **D-IB33** | A migration 066 só vai a produção depois de o grupo do sync confirmar que o `/service/sincronize` não faz REPLACE nem DELETE físico em `tb_service` (FK viva `tb_service_ibscbs → tb_service`) — pré-condição do DEPLOY, não do dev |
+| **A-IB1** | CONFIRMADA: código só na Calculadora = IT desatualizado → carga recusada; código só no IT = identidade/vigência sem aplicabilidade até a Calculadora tê-lo |
+| **A-IB2** | CONFIRMADA: cada linha de vigência é conferida na data em que vale mais perto da carga (futura na própria dIniVig); sem lista dessa data = sem aplicabilidade |
+
+**Execução**: §11.8.
+
+### 11.8 Rodada 3 — execução (2026-10-10)
+
+- **D-IB28 (a)** `reconcile.ts`: lista da Calculadora com os documentos de cada código (`tiposDfeClassificacao`, NFS-e = tipo 91) +
+  par NFS-e × cClassTrib (`validoParaSiglaDfeInformado`, `exigeGrupoTributacaoRegular`); linha que o IT aceita na NFS-e e a Calculadora
+  não (lista ou par), par não consultado ou tributação regular divergente = `blocked` (sem aplicabilidade SE); IT não aceita × Calculadora
+  aceita = só `divergences`. A conferência é OBRIGATÓRIA na assinatura. Loader: ritmo de 250 ms, 4 tentativas com espera crescente,
+  `Connection: close`; esgotadas = fonte fora do ar, nada gravado. 1ª conferência real: 70 pares, 0 bloqueados, 1 divergência
+  informativa (410028).
+- **D-IB28 (b)** `apply.ts`: no ENSAIO, o que fica SEM nenhuma aplicabilidade SE (cClassTrib e cIndOp — código que segue aceito por
+  outra linha não conta) e a NBS que perde presença; a leitura dos schemas dos clientes acontece DEPOIS do rollback (nenhuma trava
+  central segura N schemas) e não roda no ato; erro de leitura = `impactProblems`.
+- **D-IB28 (c)**: perda > 10 % das linhas vivas (aplicabilidade cClassTrib, cIndOp, NBS) decidida ANTES de ler clientes; ensaio avisa
+  (`AVISO_ENCOLHIMENTO`), ato recusa salvo `--aceita-encolher` (no plano).
+- **D-IB29** peça `@shared/ibscbs-classification`: constante `NFSE_IBSCBS_SIMPLES_OBLIGATION_START` (2027-01-01); regra ÚNICA do
+  cadastro `pickForRegistration` para lista, salvar e exibição (vigente com presença → futura com presença → vigente sem presença); GET
+  e lista com `validFrom`/`validUntil`; a tela mostra "Vale a partir de … / Vale de … até …" sob o campo e "(vale a partir de …)" na
+  lista (texto da tela — i18n).
+- **D-IB30** `services.repository.ts`: o salvar compara NBS e par com o GRAVADO (na transação, depois do FOR UPDATE do tb_product) e
+  reconfere só o que mudou. Ao vivo: classificação inalterada que perdeu a aplicabilidade = 200; trocar para inválida = 422.
+- **D-IB31**: tarefa separada (chip) junto com o caminho do payload. **D-IB32/D-IB33**: skill `setes-api/skills/carregar-catalogo-ibscbs.md`.
+- **Limite conhecido registrado**: um PUT que leu o catálogo antes do commit de uma carga pode gravar código que acabou de perder a
+  presença (TOCTOU) — não aparece no impacto daquela carga; a IB-2 barra no faturamento.
+- **Gates do delta**: socrático **0.72 ✅** (correções sem decisão feitas: regra única lista × salvar × exibição, impacto com cIndOp e
+  fora do lock, NBS gravada só da linha viva, conferência de atributos obrigatória, texto da API sem português, constante com o nome do
+  Simples, documentação); adversarial **0.74 ✅** sem HIGH (~70 requisições, zero 500, catálogo central intacto por CHECKSUM) — 2 MEDIUM
+  da mesma raiz (D-IB28 (d) — linha antiga aberta numa correção de dIniVig para o futuro) CORRIGIDOS com teste: o impacto passa a
+  olhar a linha VIGENTE na data da carga (antes: "ainda aceito" pela linha futura → impact []), e lista × salvar concordam pela regra
+  única (o harness de 7 casos fictícios, em transação desfeita, não mostra mais divergência). LOWs corrigidos: D-IB30 por COMPONENTE do
+  par (trocar só o cIndOp não reconfere o cClassTrib inalterado), `pares` do JSON offline validados (objeto com chaves de 6 dígitos),
+  A-IB1 em TODA data consultada, impacto com os ids dos serviços (até 50) e as institutions inativas (`institutionActive`).
+  Provas finais: ensaio real 47 s, 70 pares, 0 bloqueados, mesmo plano; **setes-api 1997/1997 (121 suítes, inclui testes em andamento de
+  outra sessão) · app 200/200 · analyze limpo**; smoke ao vivo (lista com validFrom, troca só do cIndOp = 200, cIndOp inválido = 422 no
+  campo, D-IB30 com classificação inalterada vencida = 200). Nada commitado — commit SÓ pelos caminhos da Rodada 3 (os de billing/
+  invoice/tax-authority/error-codes/migration 067 no working tree são de OUTRA sessão).
+
+### 11.9 ⚠️ Rodada 4 — questões para o Valdo (do gate socrático do delta; recomendação entre parênteses)
+
+- **Q-IB34 Classificação que só vale depois da data do faturamento (dezembro, envio voluntário — D-IB13/D-IB16)**: (a) faturar SEM o
+  grupo (voluntário é opcional); (b) 422; (c) usar a linha anterior. Vale também para o lote mensal. *(Rec.: (a) antes da obrigação;
+  depois dela, o 422 da D-IB8.)* ⚠️ é desenho da IB-2 — precisa estar decidida antes de dezembro.
+- **Q-IB35 Obrigação por regime**: a constante 2027-01-01 é do Simples (§ 1º do Ato nº 4); o não optante tem obrigação desde 01/10/2026
+  (01/12 para alguns subitens). A janela da D-IB29 e o 422 da D-IB8 saem do enquadramento datado (D-IB7) na IB-2, ou fica a constante
+  única até o 1º cliente não optante? *(Rec.: a IB-2 lê pelo enquadramento; a constante já foi renomeada para deixar claro que é do Simples.)*
+- **Q-IB36 Linha órfã de correção de dIniVig no resolvedor da DATA DO FATO** (o cadastro já prefere a linha com presença): (a) o
+  resolvedor só escolhe entre as linhas COM presença no modelo; (b) a carga grava o fato "ausente da fonte desde a versão X" sem apagar
+  nada e a peça ignora a linha superada; (c) a carga fecha o `valid_until`. *(Rec.: (b).)*
+- **Q-IB37 Aviso ao usuário**: o GET e a tela dizem que a classificação gravada deixou de ser aceita na NFS-e (presença perdida numa
+  recarga) ou venceu? Com a D-IB30 o usuário salva sem saber até faturar. *(Rec.: o GET devolve `acceptedToday` e a tela mostra um selo.)*
+- **Q-IB38 Limite de encolhimento bruto × líquido**: uma correção de dIniVig em massa desativa N linhas e insere N novas e é recusada sem
+  `--aceita-encolher`. *(Rec.: manter bruto — conservador; registrar.)*

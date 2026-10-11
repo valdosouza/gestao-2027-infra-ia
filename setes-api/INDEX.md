@@ -15,6 +15,15 @@ Padrão vigente: 1 cadastro = 1 módulo SIMÉTRICO com o setes-app
 
 ---
 
+### ⭐ **skills/carregar-catalogo-ibscbs.md** (2026-10-10 — fase IBS/CBS, D-IB32/D-IB33)
+Rotina do Super que carrega/recarrega o catálogo IBS/CBS em `setes_central` (IT 2025.002 + Anexo VII + NBS, conferidos na
+Calculadora oficial): ensaio → plano → `--vai --plano`, conferência de atributos (D-IB28), limite de encolhimento, impacto por
+cliente, credencial e horário de produção, pré-condições de deploy da migration 066.
+
+**Leia se:** Vai rodar a carga (dev ou produção) ou mexer em `scripts/load-ibscbs-catalog.ts` / `@shared/ibscbs-catalog`
+
+---
+
 ### 0. **AGENTE_ESPECIALIZADO.md** 🆕
 Guia do agente Delphi → TypeScript
 - O que é o agente
