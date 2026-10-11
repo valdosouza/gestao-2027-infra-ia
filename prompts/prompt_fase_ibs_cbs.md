@@ -231,6 +231,9 @@ E OS) · D-IB13 (três fatos datados: leiaute, obrigação, rejeição) · D-IB3
 nota sai sem o grupo, nunca 422 — inclusive no lote mensal; depois, 422) · D-IB35 (a data da obrigação passa a vir do enquadramento
 datado) · D-IB40 (NBS sem presença barra o faturamento; regra única `nbsAcceptedSql` da peça) · D-IB41 (linha vigente SEM presença = mesmo
 caminho da D-IB34; `acceptedToday` é sinal de CADASTRO, nunca decide o faturamento; a nota congelada nunca reconsulta o catálogo) ·
+**D-IB58** (serviço salvo com a vigente que exige tributação regular + futura ACEITA na janela — salvável desde a D-IB57: ANTES da
+obrigação a nota sai SEM o grupo IBS/CBS, nunca 422, como na D-IB34/D-IB41; DEPOIS, a futura já vale — ou o 422 da D-IB8) · **D-IB59**
+(entre as VIGENTES o cadastro olha só a MAIS NOVA — a mesma linha da data do fato: selo e faturamento concordam para as vigentes) ·
 D-IB47 (a pergunta do faturamento é o VEREDITO da peça na data do fato — `classificationVerdictAt`/`classificationVerdictsAt` (lote),
 com o MOTIVO `no-line`/`not-applicable`/`requires-regular` para o 422 legível; a MESMA que a carga do catálogo usa no impacto; o selo
 usa `classificationAcceptedForRegistration`; "aceito" = `verdictOf`, UMA definição — nunca re-derivar `applicable && !requiresRegular`) ·
@@ -1155,3 +1158,36 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
   que acaba antes de 01/01/2027 salva hoje e vira "não aceita" no meio do caminho (a variante "vigente sem presença" já existia antes da
   D-IB57). O cadastro deve exigir que a linha escolhida valha em 01/01/2027 (ou, depois dela, na data de hoje)? *(Rec.: não — o aviso
   prospectivo (D-IB45/D-IB50) já lista a perda com data; registrar como limite conhecido na skill.)*
+
+### 11.31 Rodada 11 DECIDIDA (Valdo 2026-10-11: "siga as recomendações na Rodada 11") — D-IB58…D-IB60
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB58** | (IB-2) Serviço salvo com a vigente que exige tributação regular + futura ACEITA na janela (salvável desde a D-IB57): ANTES da obrigação a nota sai SEM o grupo IBS/CBS (nunca 422 — como na D-IB34/D-IB41); DEPOIS, a futura já vale (ou o 422 da D-IB8). Registrado no roteiro do §4 |
+| **D-IB59** | (b) Entre as VIGENTES o cadastro (`pickForRegistration` — lista, salvar, selo, exibição) olha só a MAIS NOVA — a mesma linha que a data do fato usa (`findClassificationAt`); a preferência pela ACEITA (D-IB57) vale só na janela FUTURA. Fecha a divergência selo × faturamento na sobreposição de vigentes — a da D-IB57 e a antiga da D-IB52 no selo |
+| **D-IB60** | O cadastro NÃO exige que a linha escolhida valha na obrigação: a futura aceita que acaba antes de 01/01/2027 salva hoje e vira "não aceita" no meio do caminho — o aviso prospectivo (D-IB45/D-IB50) lista a perda com data. Limite conhecido na skill |
+
+**Execução**: §11.32.
+
+### 11.32 Rodada 11 — execução (2026-10-11)
+
+- **D-IB59** na peça `@shared/ibscbs-classification` (carregada pelo servidor — trocada de uma vez, `/health` ok): `pickForRegistration`
+  usa só a vigente mais nova (`current[0]`) e tenta `accepts` nas futuras. No catálogo REAL, só leitura: 173 códigos × 173 dias (2026-10-11
+  a 2027-04-01), nenhuma sobreposição de vigentes, nenhuma diferença contra a regra da Rodada 10.
+- **Achado na prova ao vivo, corrigido sem decisão** (mantém a invariante da D-IB29 "lista e salvar nunca discordam"): a lista de apoio
+  filtrava LINHAS pelo nome antes da escolha — filtrando pelo nome da linha antiga de uma sobreposição, a escolha só via essa linha e
+  oferecia o código que o salvar recusa. Agora o filtro escolhe CÓDIGOS (subconsulta por qualquer linha do código) e a escolha vê todas as
+  linhas. Ao vivo no MariaDB real: sem filtro = 68 códigos (= os aceitos), filtros por código e por nome certos, 1–56 ms; pela ferramenta
+  do gate adversarial R10 (estado forjado em transação desfeita): o filtro pelo nome da linha antiga não oferece mais o 000001 (o HEAD
+  oferecia). O fake de teste passou a emular o filtro (por código na forma nova, por linha na antiga) — o teste pega a regressão.
+- Testes ajustados à D-IB59 (o comportamento antigo da sobreposição era fixado por eles): R7-S1 e ADV-R7-01 → `registrationStillAccepts:
+  false` (o selo também deixa de aceitar); a "sobreposição" da D-IB53 → impacto vazio (o cadastro nunca aceitou pela antiga); o lote do
+  cadastro → a vigente mais nova sem presença decide; novos: vigente aceita antiga × mais nova com tributação regular → a mais nova (recusa);
+  mais nova sem presença × antiga aceita × futura aceita → a futura; a lista não oferece a sobreposição nem filtrando pelo nome da antiga.
+  IBS/CBS + serviços 149/149.
+- **Provas ao vivo** (harness do gate — transação externa, commit proibido): s5a (sobreposição) → impacto com `registrationStillAccepts:
+  false` (antes `true`); p1-overlap-reg (o MEDIUM do gate R10) → cadastro, salvar, selo, exibição e data do fato concordam
+  (`requires-regular`) em 11/10, 15/11, 01/12/2026 e 01/01/2027; controle com o IT oficial v1.70 = sem limite, impacto ou aviso, plano igual
+  (`edb2c381d29e316e`); catálogo conferido depois (os 7 `CHECKSUM TABLE` iguais), produtos 65–68 excluídos.
+- **D-IB58** no roteiro da IB-2 (§4); **D-IB60** limite conhecido na skill — nenhum código.
+- **Gates do delta R11**: socrático e adversarial EM EXECUÇÃO no momento do commit — o Valdo pediu "save tudo" (commit e push antes do resultado; as 19 falhas da bomba-relógio do Banco Inter ficam para outra sessão). O resultado dos dois gates entra na próxima rodada (§11.33) e, se trouxer achado objetivo, vira correção com teste num commit próprio.
