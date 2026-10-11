@@ -7,12 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.13 (D-F67…D-F99 executadas e publicadas: substituição e105102 com fim humano, prova da
-> reconferência = E2404 explícito posterior à ÚLTIMA apresentação do Id e sem tentativa da mesma identidade em voo — D-F90/D-F97/D-F99 —,
-> alarme do ambíguo em toda porta com origem explícita e CAUSA de lista fechada, nunca documento de terceiro — D-F91/D-F95/D-F98;
-> aberta a Rodada 20: Q-F106…Q-F107). Antes: §21.7–§21.12, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21.14 (D-F67…D-F101 executadas e publicadas: substituição e105102 com fim humano, prova da
+> reconferência = E2404 explícito posterior à ÚLTIMA apresentação do Id e sem tentativa VIVA da mesma identidade — D-F90/D-F97/D-F99/D-F101 —,
+> alarme do ambíguo em toda porta com origem explícita e CAUSA de lista fechada, nunca documento de terceiro nem a resposta dele —
+> D-F91/D-F95/D-F98/D-F100; aberta a Rodada 21: Q-F108…Q-F110). Antes: §21.7–§21.13, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F99** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F101** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -691,6 +691,13 @@ branch `sessao-2026-10-10`):**
   falha FECHADO enquanto houver na vida tentativa com o mesmo Id do DPS e ambiente e sem voz (`lastEventAt` nulo — em voo: só há o
   instante da RESERVA e o POST pode chegar ao fisco depois do E2404). A reconferência da nfse-api segue carimbando o E2404 (a opção (c),
   recusar 409, não foi escolhida); quem LÊ a prova (a F2a) não a aceita até a tentativa ganhar voz.
+- **D-F100 (= Q-F106 (a) — Valdo 2026-10-11: "siga as recomendações") — CONHECIMENTO NEGATIVO: nada da "resposta trocada" é
+  guardado** (nem hash do Id alheio — CPF se quebra por força bruta —, nem o corpo cru): o alarme (institution, nota, causa, instante)
+  basta para o chamado à Sefin e o caso se reproduz consultando de novo. Reabrir só se a resposta trocada acontecer de verdade.
+  Comentário nos dois `adn.ts` e nas duas composições.
+- **D-F101 (= Q-F107 (b) — idem; estende a D-F99) — "em voo" = tentativa VIVA**: `reconfirmationProven` falha FECHADO com tentativa
+  da mesma identidade sem voz FINAL (`FINAL_TRANSMISSION_KINDS` — A/R/C/F/N; S "enviado" e K são vivas; `lastKind` ausente = viva) —
+  o MESMO predicado do `isLiveTransmission` (barreira do plano de cancelamento e do rodízio). `lastKind` entrou no contrato da prova.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -969,10 +976,16 @@ Texto completo e recomendações no §21.12: **Q-F104** o Id do terceiro na mens
 interpola o Id + rótulo fechado por causa) · **Q-F105** tentativa da mesma identidade em voo (Rec.: a prova falha fechado com tentativa
 sem voz).
 
-### 8.R20 Rodada 20 — aberta pelos gates da Rodada 19 (2026-10-11, §21.13) — ⚠️ AGUARDA O VALDO
+### 8.R20 Rodada 20 — aberta pelos gates da Rodada 19 (2026-10-11, §21.13) — DECIDIDA ("siga as recomendações" → D-F100…D-F101)
 
 Texto completo e recomendações no §21.13: **Q-F106** guardar evidência da "resposta trocada" (Rec.: não — conhecimento negativo) ·
 **Q-F107** o que conta como "em voo" na D-F99 (Rec.: tentativa da mesma identidade VIVA, incluindo a voz S).
+
+### 8.R21 Rodada 21 — aberta pelos gates da Rodada 20 (2026-10-11, §21.14) — ⚠️ AGUARDA O VALDO
+
+Texto completo e recomendações no §21.14: **Q-F108** a voz S não tem saída (Rec.: conhecimento negativo — quem criar produtor de S dá a
+ela a saída da D-F51) · **Q-F109** `kind` sem CHECK de domínio (Rec.: conhecimento negativo até a F2a; CHECK binário na migration dela) ·
+**Q-F110** (opcional) o contrato da prova para a F2a (Rec.: manter o booleano; o veredito com motivo se decide na F2a).
 
 ## 9. Fora de escopo desta fase
 
@@ -2340,7 +2353,7 @@ nota de implantação da F2a (nfse-api com a migration 003 sobe ANTES do setes-a
 `reconfirmationProven(candidata, vida)` com a linha COMPLETA da view), a tarefa da bomba-relógio de data dos testes do boleto (fora
 desta frente), e os próximos passos: Rodada 19 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 
-### 21.13 Rodada 19 — D-F98…D-F99 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+### 21.13 Rodada 19 — D-F98…D-F99 (Valdo 2026-10-11: "siga as recomendações") — Rodada 20 DECIDIDA no §21.14
 
 | Decisão | O quê | Onde |
 |---|---|---|
@@ -2393,3 +2406,53 @@ passa a vir só da nfse-api; a F3 agrega por institution + nota + causa + origem
 **Seguem**: LOW registrados (o log do transporte grava a URL com a NOSSA chave/Id em 405/rede — R17/R19-S7; os da §21.8), prova ao vivo M4
 (Valdo), o ALARME da F3, a tarefa da bomba-relógio de data dos testes do boleto (fora desta frente), e os próximos passos: Rodada 20 →
 NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.14 Rodada 20 — D-F100…D-F101 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F100** (= Q-F106 (a)) | CONHECIMENTO NEGATIVO: nada da resposta trocada é guardado — nem hash do Id alheio, nem corpo cru; o alarme basta | comentário nos dois `adn.ts`, nas duas composições, no `AuthorityHttpError.body` (núcleo + espelho) e no `logAmbiguousFiscal` |
+| **D-F101** (= Q-F107 (b)) | "em voo" = tentativa VIVA: a prova falha FECHADO com irmã da mesma identidade sem voz FINAL (`FINAL_TRANSMISSION_KINDS`; S e K vivas; `lastKind` ausente/null = viva) — o predicado do `isLiveTransmission` | `fiscal-api/src/voice/reading.ts` |
+
+**Gates do delta**: socrático **0,82 ✅** · adversarial **0,84 ✅** (nenhum HIGH+; o delta só acrescenta `return false` — o único risco
+é falso negativo permanente, e ele só aparece no R20-01, latente; candidata montada pelo leitor real prova sem irmã viva; varredura A–Z/a–z
+mostra que o predicado da prova é exatamente `!isLiveTransmission`; a D-F100 se confirma em transmitir, consulta, 0b e reconferência, com
+agulhas que incluem o blob gzip+base64 da NFS-e alheia). Corrigidos na sessão (sem decisão nova):
+- **S1 (socrático)**: a resposta TROCADA ainda VIAJAVA no erro — `AuthorityHttpError.body` com o envelope da NFS-e do terceiro (gzip+base64,
+  invisível à busca por texto do r19); nada o gravava, mas nada fixava → `unknownResponse(…, { foreign: true })` entrega o `body` VAZIO
+  (transmitir: outro DPS/sem Id/chave JSON≠XML; consultar: outra chave/sem identidade; GET /dps: chave de outro emitente) + teste.
+- **R20-02 / S2**: `lastKind` era opcional no tipo da prova — projeção sem `last_kind` compilava e nunca provava (laço "reconfira" na
+  F2a) → obrigatório no tipo (`null` aceito = viva); o fallback de execução segue falhando fechado.
+- **S3**: título do teste do R19-02 citava Q-F106 (era a Q-F107).
+Testes: `adversarial-r20-gate.test.ts` no núcleo (67) e na nfse-api (20; o `it.failing` que fica = Q-F108); o contexto que fixava o corpo cru
+no erro virou regressão.
+
+**Provas**: setes-api 2209 (as 19 falhas = bomba-relógio de data do boleto, fora desta frente) · nfse-api 472 unit + ao vivo 150/150 · núcleo 191.
+
+**Nota de implantação da F2a — somam-se aos itens (1)–(4) do §21.13**: (5) `lastKind` faz parte da prova — a vida e a candidata vêm SÓ de
+`transmissionViewSelect` + `mapTransmissionView` (nunca SELECT próprio); a suíte da F2a precisa de pelo menos um caso POSITIVO (prova =
+true) com linha real da view, porque a falha fechada esconde erro de projeção; (6) barreira e prova têm o mesmo PREDICADO mas não o mesmo
+CONJUNTO (a barreira olha o `currentOf`, a prova todas as irmãs da identidade) — hoje dá no mesmo porque a reserva só deixa viva a última
+tentativa; vida migrada pelo `migrate:setes` ou produtor de S numa tentativa antiga quebra a equivalência (laço "reconfira" no app) —
+ver Q-F110.
+
+**Rodada 21 (aberta pelos gates da Rodada 20 — aguardam o Valdo)**:
+- ⚠️ **Q-F108 (adversarial R20-01, LOW latente)** — a voz S não tem SAÍDA: a D-F51 (`isInterruptedInFlight`) só fecha tentativa SEM voz; com
+  uma irmã S sem chave, o rodízio a revisita para sempre (ouve E2404 e não fecha), a reconferência carimba o E2404 mas o núcleo diz "não
+  provado" para sempre e o transmitir fica em 409. Hoje S não tem produtor (teste "resistiu" confere). (a) **conhecimento negativo junto da
+  voz S em `kinds.ts` e da D-F101: quem criar produtor de S dá a ela a saída da D-F51** · (b) estender a D-F51 já (S com idade ≥
+  `IN_FLIGHT_MINUTES` + E2404) · (c) tirar S do vocabulário. *(Rec.: (a) — barato; (c) contraria "tabela sem consumidor não é morta".)*
+- ⚠️ **Q-F109 (adversarial R20-03, LOW, só com dado gravado por fora)** — `kind` é `CHAR(1)` sem CHECK de domínio em colação `_ci`: um "f"
+  minúsculo é F para o SQL do rodízio e VIVA para o código; candidata "f" com uma R depois faz o seletor devolver null e a barreira passar (a
+  F2a cancelaria localmente sem a reconferência da D-F29 — anterior ao delta). (a) conhecimento negativo (os escritores são tipados) · (b)
+  CHECK de `kind` em colação binária, conferido no boot (molde da D-F45), na próxima migration da nfse-api · (c) normalizar no leitor.
+  *(Rec.: (a) até a F2a, (b) na migration dela.)*
+- ⚠️ **Q-F110 (socrático, opcional)** — o contrato da prova para a F2a: (a) **manter `reconfirmationProven` booleano + itens (5)/(6) na nota
+  da F2a** · (b) o núcleo expõe já `reconfirmationVerdict(candidata, vida)` com motivo (`provada`, `irma-viva`, `apresentada-depois`,
+  `sem-e2404`, `sem-identidade`, `instante-invalido`) — barreira e prova numa chamada só (molde `verdictOf`, D-IB47) · (c) só a barreira
+  do plano passa a usar `some(isLiveTransmission)` sobre a vida. *(Rec.: (a) — sem consumidor antes da F2a; a rodada da F2a decide (b) com
+  o caso real na mão.)*
+
+**Seguem**: LOW registrados (log do transporte com a NOSSA chave/Id na URL; os da §21.8), prova ao vivo M4 (Valdo), o ALARME da F3, a
+tarefa da bomba-relógio de data dos testes do boleto (fora desta frente), e os próximos passos: Rodada 21 → NE-0/NE-1 → **F2a** → virada →
+F2b. Corte da F2a: 30/11 (D-IB15).
