@@ -7,12 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.14 (D-F67…D-F101 executadas e publicadas: substituição e105102 com fim humano, prova da
+> **⏯ RETOMAR POR AQUI — §21.15 (D-F67…D-F104 executadas e publicadas: substituição e105102 com fim humano, prova da
 > reconferência = E2404 explícito posterior à ÚLTIMA apresentação do Id e sem tentativa VIVA da mesma identidade — D-F90/D-F97/D-F99/D-F101 —,
-> alarme do ambíguo em toda porta com origem explícita e CAUSA de lista fechada, nunca documento de terceiro nem a resposta dele —
-> D-F91/D-F95/D-F98/D-F100; aberta a Rodada 21: Q-F108…Q-F110). Antes: §21.7–§21.13, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
+> alarme do ambíguo com CAUSA de lista fechada, nunca documento nem resposta de terceiro — D-F98/D-F100; voz S sem saída e `kind`
+> sem CHECK como conhecimento negativo, com cerca por AST — D-F102/D-F103; aberta a Rodada 22: Q-F111…Q-F112). Antes: §21.7–§21.14, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F101** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F104** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -698,6 +698,17 @@ branch `sessao-2026-10-10`):**
 - **D-F101 (= Q-F107 (b) — idem; estende a D-F99) — "em voo" = tentativa VIVA**: `reconfirmationProven` falha FECHADO com tentativa
   da mesma identidade sem voz FINAL (`FINAL_TRANSMISSION_KINDS` — A/R/C/F/N; S "enviado" e K são vivas; `lastKind` ausente = viva) —
   o MESMO predicado do `isLiveTransmission` (barreira do plano de cancelamento e do rodízio). `lastKind` entrou no contrato da prova.
+- **D-F102 (= Q-F108 (a) — Valdo 2026-10-11: "siga as recomendações") — CONHECIMENTO NEGATIVO: a voz S ("enviado") não tem
+  produtor nem SAÍDA**: a D-F51 (`isInterruptedInFlight`) só fecha tentativa SEM voz. Quem criar produtor de S dá a ela, NA MESMA
+  ENTREGA, a saída da D-F51 (idade da voz S ≥ `IN_FLIGHT_MINUTES` + E2404 → F) — senão a prova da reconferência (D-F101) fica falsa
+  para sempre e o transmitir em 409. Cerca: "nenhum produtor de voz S" (adversarial-r20-gate da nfse-api) + o teste que afirma que a
+  consulta NÃO fecha a irmã S (troca-se pelo veredito F no dia do produtor). S fica no vocabulário (tabela sem consumidor não é morta).
+- **D-F103 (= Q-F109 (a) até a F2a, (b) na migration dela — idem) — o domínio de `kind` não é conferido no banco**: `CHAR(1)` sem CHECK
+  em colação `_ci` (migration 001 da nfse-api — um "f" é F para o SQL e VIVA para o código). Até a F2a: os escritores são tipados, NUNCA
+  gravar voz por fora do código. **A migration da F2a ganha o CHECK do domínio em colação binária, conferido no boot (molde da D-F45).**
+- **D-F104 (= Q-F110 (a) — idem) — a prova da reconferência fica BOOLEANA até a F2a**: o veredito com MOTIVO (barreira e prova numa
+  chamada só — molde `verdictOf`, D-IB47) se decide na rodada da F2a, com o caso real; até lá valem os itens (5)/(6) da nota de
+  implantação (§21.14).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -981,11 +992,17 @@ sem voz).
 Texto completo e recomendações no §21.13: **Q-F106** guardar evidência da "resposta trocada" (Rec.: não — conhecimento negativo) ·
 **Q-F107** o que conta como "em voo" na D-F99 (Rec.: tentativa da mesma identidade VIVA, incluindo a voz S).
 
-### 8.R21 Rodada 21 — aberta pelos gates da Rodada 20 (2026-10-11, §21.14) — ⚠️ AGUARDA O VALDO
+### 8.R21 Rodada 21 — aberta pelos gates da Rodada 20 (2026-10-11, §21.14) — DECIDIDA ("siga as recomendações" → D-F102…D-F104)
 
 Texto completo e recomendações no §21.14: **Q-F108** a voz S não tem saída (Rec.: conhecimento negativo — quem criar produtor de S dá a
 ela a saída da D-F51) · **Q-F109** `kind` sem CHECK de domínio (Rec.: conhecimento negativo até a F2a; CHECK binário na migration dela) ·
 **Q-F110** (opcional) o contrato da prova para a F2a (Rec.: manter o booleano; o veredito com motivo se decide na F2a).
+
+### 8.R22 Rodada 22 — aberta pelos gates da Rodada 21 (2026-10-11, §21.15) — ⚠️ AGUARDA O VALDO
+
+Texto completo e recomendações no §21.15: **Q-F111** a D-F102 vale para qual família (Rec.: só a NFS-e — a NF-e define a saída do S dela
+na própria rodada; decidir antes da NE-1a) · **Q-F112** proteção do domínio do escritor da NFS-e (Rec.: tipo da família — sem S já agora,
+sem P/D na NE-1a; CHECK na F2a).
 
 ## 9. Fora de escopo desta fase
 
@@ -2407,7 +2424,7 @@ passa a vir só da nfse-api; a F3 agrega por institution + nota + causa + origem
 (Valdo), o ALARME da F3, a tarefa da bomba-relógio de data dos testes do boleto (fora desta frente), e os próximos passos: Rodada 20 →
 NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 
-### 21.14 Rodada 20 — D-F100…D-F101 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+### 21.14 Rodada 20 — D-F100…D-F101 (Valdo 2026-10-11: "siga as recomendações") — Rodada 21 DECIDIDA no §21.15
 
 | Decisão | O quê | Onde |
 |---|---|---|
@@ -2456,3 +2473,60 @@ ver Q-F110.
 **Seguem**: LOW registrados (log do transporte com a NOSSA chave/Id na URL; os da §21.8), prova ao vivo M4 (Valdo), o ALARME da F3, a
 tarefa da bomba-relógio de data dos testes do boleto (fora desta frente), e os próximos passos: Rodada 21 → NE-0/NE-1 → **F2a** → virada →
 F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.15 Rodada 21 — D-F102…D-F104 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F102** (= Q-F108 (a)) | CONHECIMENTO NEGATIVO: a voz S não tem produtor nem saída; quem criar produtor de S abre, na mesma entrega, os DOIS portões da D-F51 (o predicado `isInterruptedInFlight` E a reconferência sob a trava) | `kinds.ts` do núcleo, `transmission-kinds.ts` do setes-api, os dois `isInterruptedInFlight`; cerca `nfse-api/src/__tests__/voice-kind-fence.ts` |
+| **D-F103** (= Q-F109 (a) → (b) na F2a) | `kind` sem CHECK de domínio: escritores tipados (exceto a cópia do `migrate:setes`, que herda o domínio da origem); CHECK binário na migration da F2a — item (7) abaixo | `kinds.ts`, `reconfirmationCandidate` |
+| **D-F104** (= Q-F110 (a)) | a prova fica BOOLEANA até a F2a; o veredito com motivo se decide na rodada da F2a | `reading.ts` |
+
+**Gates do delta**: socrático **0,72 ✅** · adversarial **0,80 ✅** (nenhum HIGH+; delta sem mudança de comportamento; hoje NENHUM caminho grava S
+nem `kind` fora de {A,R,C,K,F,N} — conferido por AST em todas as chamadas ao escritor; o teste de conhecimento negativo passa pelo motivo
+certo). Corrigidos na sessão (sem decisão nova):
+- **R21-01 / S3 (LOW)**: a cerca da D-F102 era uma regex sobre o texto com comentários tirados por outra regex — 10 grafias de produtor de S
+  passavam (aspas duplas, crase, ternário, cast, computada, `ev.kind = 'S'`, SQL cru…), o `/*` do XPath `//*[@Id=…]` do `xmldsig.ts` a
+  deixava CEGA a 17 linhas reais, e 4 escritores da voz ficavam fora da varredura (a cópia do `migrate:setes`, a migration 002, o
+  repositório e as migrations do setes-api) → **peça de teste compartilhada `voice-kind-fence.ts`**: AST do TypeScript (lição ADV-R8-06 —
+  comentário sai pelo compilador; qualquer grafia), `.sql` statement a statement, escopo = TODO lugar que escreve na voz da NFS-e
+  (nfse-api src/scripts/migrations, núcleo, setes-api — pasta + migrations); zero falso positivo no código real. O aviso do `kinds.ts` diz
+  exatamente o que ela vê (e que NÃO vê produtor semântico — Q-F112).
+- **R21-03 (LOW)**: o aviso apontava só UM dos dois portões da saída de S → os três lugares nomeiam o predicado E a reconferência sob a
+  trava (`recordInterruptedFailure` / `reconcileInterrupted` — abrir só o predicado faz a S monopolizar o rodízio no ramo "perdeu a corrida").
+- **R21-04 / S4 (LOW)**: o teste de conhecimento negativo engolia exceção (`settle`) e ficava verde sem a decisão → aguarda a chamada e
+  ancora `{changed:false, kind:'S'}` + o carimbo "nós olhamos".
+- **R21-05 (LOW)**: "os escritores são tipados" esquecia a cópia do `migrate:setes` → nomeada no aviso e no item (7).
+- **S6 (LOW)**: o vocabulário próprio do setes-api (`transmission-kinds.ts`) ganhou a nota.
+Testes: `adversarial-r21-gate.test.ts` no núcleo (9) e na nfse-api (34; os `it.failing` que ficam = produtores semânticos, Q-F112).
+Resíduo LOW registrado: a cerca de LOGS do r20 ainda usa a regex `uncomment` (mesma janela cega do `xmldsig.ts`, linhas 55–71 — hoje sem
+nenhum log ali); trocar pela AST quando for tocada. Instabilidade observada: `adversarial-f1r2` falhou UMA vez sob carga ("Cannot log after
+tests are done") e passou isolado e na repetição.
+
+**Provas**: setes-api 2219 (as 19 falhas = bomba-relógio de data do boleto, fora desta frente) · nfse-api 506 unit + ao vivo 150/150 · núcleo 200.
+
+**Nota de implantação da F2a — item (7) (D-F103)**: a migration da **nfse-api** (família de serviço, banco `fiscal_api`) que a F2a trouxer
+ganha o CHECK do domínio de `kind` em colação BINÁRIA, conferido no boot (molde da D-F45). Antes do ALTER: conferir `kind` fora do domínio
+ou da caixa no `fiscal_api` **e na origem do setes-api**; conferir no MariaDB 10.4 se o `INSERT IGNORE` da cópia do `migrate:setes`
+rebaixa a violação do CHECK a AVISO (a linha some e o passo 6 falha com a mensagem "dual-write", que engana); a sonda do boot usa `'f'`
+(nunca `'ZZ'` — um CHECK `_ci` passaria na sonda).
+
+**Rodada 22 (aberta pelos gates da Rodada 21 — aguardam o Valdo)**:
+- ⚠️ **Q-F111 (socrático S1, MEDIUM latente mas planejado)** — a D-F102 vale para QUAL família? A NE-1a (D-NE13/D-NE14, ANTES da F2a)
+  leva a máquina de transmissão para o núcleo e a NE-3 produz S na NF-e: se o S da NF-e ficar no núcleo, a cerca dispara contra um
+  produtor LEGÍTIMO (pressão para apagá-la); se ficar na nfe-api, ela é cega — e a saída que a D-F102 pede (E2404) a SEFAZ não tem.
+  (a) **só a NFS-e** (`tb_invoice_service_transmission_event`): a cerca mira o escritor dessa família; a NF-e define a saída do S DELA na
+  própria rodada (consulta pela chave/recibo — D-NE33) · (b) regra GLOBAL: toda família que produzir S dá a saída na mesma entrega, cada
+  uma com o veredito conclusivo do seu fisco, e a cerca varre nfse-api, nfe-api e núcleo · (c) manter o texto atual. *(Rec.: (a), decidida
+  antes da NE-1a.)*
+- ⚠️ **Q-F112 (socrático S2 + adversarial R21-02)** — quando e como entra a proteção do domínio do escritor da NFS-e? Hoje o tipo do
+  escritor (`TransmissionEventInput.kind: TransmissionEventKind`) ACEITA S — produtor semântico (constante, shorthand, mapa, parâmetro)
+  escapa de qualquer cerca textual; e na NE-1a o tipo comum ganha P/D (vivas e sem saída na NFS-e) antes do CHECK da F2a. (a) CHECK
+  binário já na 1ª migration da nfse-api que a NE-1a trouxer · (b) **o escritor da NFS-e é tipado pelo vocabulário DA FAMÍLIA — sem S
+  já agora (`Exclude<…,'S'>`, uma linha de tipo, com o aviso da D-F102 no próprio tipo) e sem P/D quando a NE-1a vier; o CHECK fica na
+  F2a (item (7))** · (c) manter tudo na F2a. *(Rec.: (b) — pega toda forma TypeScript sem DDL antes da F2a; se a NE-1a já tiver migration,
+  (a).)*
+
+**Seguem**: LOW registrados (log do transporte com a NOSSA chave/Id na URL; a cerca de logs com a regex antiga; os da §21.8), prova ao vivo M4
+(Valdo), o ALARME da F3, a tarefa da bomba-relógio de data dos testes do boleto (fora desta frente — outra sessão, decisão do Valdo), e os
+próximos passos: Rodada 22 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).

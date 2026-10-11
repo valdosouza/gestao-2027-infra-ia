@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.34 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.35 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-11  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-11 | **APIs fiscais — Rodada 21 EXECUTADA e PUBLICADA (D-F102…D-F104)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.15): a voz S sem saída e o domínio de `kind` sem CHECK viram conhecimento negativo — a cerca da D-F102 virou peça de teste por AST (`nfse-api/src/__tests__/voice-kind-fence.ts`: qualquer grafia, `.sql`, todo escritor da voz); o CHECK binário entra na migration da F2a (item (7) da nota de implantação); a prova fica booleana até a F2a. Gates 0,72/0,80 ✅. **Rodada 22 aberta: Q-F111…Q-F112**. | 9.35 |
 | 2026-10-11 | **Fase IBS/CBS — Rodada 11 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.31–§11.32; Valdo: "siga as recomendações na Rodada 11"): D-IB59 entre as VIGENTES o cadastro (`pickForRegistration` — lista, salvar, selo, exibição) olha só a mais nova, a mesma da data do fato — selo e faturamento concordam na sobreposição; a preferência pela aceita (D-IB57) fica só na janela futura; achado na prova ao vivo corrigido: o filtro da lista de apoio escolhe CÓDIGOS (antes filtrava linhas e oferecia o que o salvar recusa); D-IB58 (faturamento do caso salvável pela D-IB57) no roteiro da IB-2; D-IB60 limite conhecido na skill `setes-api/skills/carregar-catalogo-ibscbs.md`. Gates do delta em execução no commit ("save tudo" do Valdo — resultado na próxima rodada). | 9.34 |
 | 2026-10-11 | **Fase IBS/CBS — Rodada 10 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.28–§11.30; Valdo: "siga as recomendações na Rodada 10"): D-IB57 a regra do cadastro (`pickForRegistration` — lista, salvar e selo) prefere a linha ACEITA antes da só aplicável (no catálogo real nada muda; agora tudo o que a lista mostra o salvar aceita); D-IB54 o aviso prospectivo traz `lostAgainFrom` (2ª perda depois da volta); D-IB56 sem volta aceita, `pendingReturnFrom` (sucessora da fonte ainda não conferida pela Calculadora); D-IB55 pré-voo da IB-2 na data da obrigação (roteiro do §4). Skill `setes-api/skills/carregar-catalogo-ibscbs.md` atualizada. Gates do delta 0.76/0.80 ✅ (harness triplo × HEAD). Rodada 11 Q-IB58…Q-IB60 aberta (§11.30). | 9.33 |
 | 2026-10-11 | **APIs fiscais — Rodada 20 EXECUTADA e PUBLICADA (D-F100…D-F101)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.14): nada da resposta trocada é guardado — conhecimento negativo, e o erro dela já não carrega o corpo do terceiro; a prova da reconferência falha fechado com tentativa VIVA da mesma identidade (o predicado do `isLiveTransmission`; `lastKind` obrigatório no tipo). Gates 0,82/0,84 ✅. **Rodada 21 aberta: Q-F108…Q-F110**. | 9.32 |
