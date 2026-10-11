@@ -5,7 +5,7 @@
 **Molde**: `prompt_onda3_nfse_adn.md` §3–§7 (mesma tabela de conceitos, mesmos nomes de peça) e `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates: ambíguo nunca fecha, reconciliar antes de reapresentar, transitório ≠ recusa).
 **Legado** (vault `D:\Gestao2016\Infra-IA\Gestao`, Decisão 65): `proc-faturamento-venda` E07, `proc-cancelamento-nfe` C00–C05, Lote 6 §2–§5, Lote 8 §2, NUM-01/02/03, AUT-01/02/03/04, CAN-01, CAN-V5/V6/V7, NF-01, `geracao-nfe-hierarquia` §3–§4 (diagnóstico: variação por MODELO duplicada = maior fonte de retrabalho; variação por PROCESSO pequena e sadia; operações do ciclo — inutilizar/consultar — são comandos, não "geradores").
 **Aberto em**: 2026-09-21 (Rodada 0 = parecer do guardião conceitual, agente `setes-conceito`, a pedido do Valdo: "desenhar o processo da NF-e mantendo a simetria de controles com a NFS-e, para que o desenho fique, se não o mesmo, seguindo o mesmo fluxo"). Fatos do parecer conferidos no disco pelo condutor (billing.service.ts:672–677, baseline 001, produtores em api/sync).
-**Estado**: **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
+**Estado**: **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
 
 ---
 
@@ -550,3 +550,246 @@ cancelamento da UF + intervalo mínimo (cStat 656).
 **Próximos passos (ordem)**: (1) gate adversarial do delta fiscal desta sessão (APIs isoladas §17.8); (2) **prompt da fase
 IBS/CBS** (D-NE4 — Rodada 0); (3) **NE-0**: levantamento oficial (D-NE19) + OpenAPI design-first + parecer do guardião sobre o
 DDL; (4) **NE-1** (núcleo generalizado — antes da F2a); (5) F2a/F2b da NFS-e em paralelo com NE-2/NE-3.
+*(Ajustado pelo §12.4 — NE-1 partida em 1a/1b; o calendário com um executor é serial. Refinadas pela Rodada 2 (§12.7): D-NE3 →
+D-NE37 (rota pela tentativa, dimensão serviço/evento) · D-NE16 → D-NE43 (pré-validação em três camadas) · D-NE20 → D-NE32 (lib
+única de barras/QR) · D-NE23 → D-NE53 (anexo = XML da voz). A tabela de ondas do §11.4 vale pelo §12.3.)*
+
+## 12. Planejamento da `nfe-api` a partir da leitura do ACBr (2026-10-10) — Rodada 2 da nfe-api
+
+> Pedido do Valdo (2026-10-10): "vamos fazer o planejamento da api-nfe lendo um componente conhecido do acbr, use os agentes de
+> legacy system". Este bloco NÃO decide: ajusta as ondas NE-0…NE-7 (§11.4) às decisões D-NE1…D-NE26 (§11.7) com o que a leitura
+> revelou e numera o que pede decisão (Q-NE27…Q-NE54). Fonte: `Infra-IA/nfe-api/referencia-acbr/` (`00-INDEX.md` + 5 relatórios
+> + catálogo de 198 regras em JSON), feita pelos agentes do plugin `code-modernization` (legacy-analyst ×4,
+> business-rules-extractor ×1) no método `assess-legacy-repo`; o rascunho deste § passou pelo **architecture-critic** (1 Blocker,
+> 5 High, 8 Medium — todos incorporados ou respondidos; afirmações do crítico conferidas no disco). O ACBr é referência de
+> TERCEIRO (D-NE19): nada aqui vira regra sem o oficial.
+
+### 12.1 O que a leitura mudou no entendimento
+
+1. **O builder não calcula nada.** O writer do ACBr só formata o que recebe — imposto, totais e `vNF` chegam prontos (02 §8
+   item 1). A nfe-api, idem (D-NE15). Mas o ERP hoje congela só 11 campos do ramo (`setes-api/src/shared/invoice/invoice.ts:211-225`
+   — `insurance_value` e `indPres` fixos em 0) e o `ICMSTot` tem 29: ~2/3 dos totais não têm dono → Q-NE27.
+2. **O legado nunca pré-validou regra de negócio.** O ACBr tem ~155 regras de negócio, opt-in; o Gestao2016 nunca as chamou —
+   só XSD (04 §7). Leitura certa do fato (architecture-critic H1): o legado viveu anos só com XSD, então a rejeição da SEFAZ no 55
+   é TOLERÁVEL (não queima número, volta em segundos); o catálogo é ÍNDICE para escolher regras, não semente a implementar
+   inteira → Q-NE43.
+3. **18 itens de conhecimento NEGATIVO** (`referencia-acbr/00-INDEX.md` N1–N18): cadeia TLS do servidor nunca verificada (N1 —
+   confirma D-NE17); lote parcial e 103 morto (N2); retorno não conferido contra a pergunta (N3); denegada não guardada (N4);
+   evento decidido pelo 128 do lote (N7); proc do evento tirado do 1º evento do lote (N8); e-mail com o XML do pedido (N9);
+   cancelamento gravado dentro do XML autorizado (N10); fuso global (N11); gerador que muta a nota (N13); leiaute RTC divergente e
+   revertido dentro do próprio pacote (N16); parser por recorte textual (N17 — **vale também para a nfse-api em produção**:
+   `attrOf` por regex só com aspas duplas em `nfse-api/src/authority/dps-builder.ts:228-231` e o DANFSe lê grupos por regex).
+4. **O núcleo já cobre a assinatura** de NF-e, evento e inutilização sem mudança (`fiscal-api/src/transport/xmldsig.ts` — 02 item
+   8, 05 item 12; conferir no MOC se SHA-1 segue exigido). Parser XML de verdade já está na árvore (`@xmldom/xmldom`, via
+   `xml-crypto`).
+5. **Eventos têm identidade própria** `(tpEvento, chave, nSeqEvento)` (Id de 54) e **roteamento por serviço**, não só por UF:
+   cancelamento/CC-e → autorizadora; manifestação/EPEC → AN; eventos da reforma → SVRS (05 itens 3 e 10; 03 C3) — o
+   `authorizers.ts` da D-NE3 ganha a dimensão serviço/evento.
+6. **A inutilização não leva IE** (05 item 6) → serviço mais promissor para o smoke H com o A1 da Setes (hipótese da D-NE18 a
+   provar). A AUTORIZAÇÃO com a Setes cai no XSD local antes da SEFAZ (`IE` vazia — 02 item 13; regras 209/229): a D-NE18 (c) está
+   certa por dois caminhos.
+7. **IBS/CBS na NFS-e — HIPÓTESE para o prompt da fase (D-NE4)**, já com base no OFICIAL que está no acervo
+   (`Infra-IA/setes-api/integracoes/nfse-adn/`: XSD 1.01 + NT 007/008/009): o grupo `IBSCBS` do DPS é opcional hoje
+   (`tiposComplexos_v1.01.xsd:838`) e leva classificação e contexto (CST, cClassTrib, cIndOp, indDest… `:2207-2272`), **nenhuma
+   alíquota nem valor de IBS/CBS calculado** (`gDif` leva %, `gReeRepRes` leva valor — `:2388-2423`); os valores aparecem no XML da
+   NFS-e devolvida (03 B1/B3). Se confirmado, o marco de 01/01/2027 da Setes exige **classificação congelada no ERP + leitura do
+   retorno**, não o motor de cálculo — o que re-escopa a D-F22/D-NE4 (o motor segue pré-requisito da NF-e do regime regular, onde o
+   emitente informa VALORES — 42 unidades, 03 §3). A NT 007 (`nt007.txt:199-241`) suprime `tpRetPisCofins` 1/2 quando o IBSCBS
+   virar obrigatório (a nfse-api hoje não emite o campo — sem risco). O ACBr não trata ME/EPP em ramo nenhum (03 B5).
+8. **CNPJ alfanumérico** (IN RFB 2.229/2024; ACBr ajustou a chave em 30/07/2026): o produto inteiro assume 14 DÍGITOS e hoje
+   **recusa (falha fechada) com diagnóstico errado** — cadastro (`setes-api/src/shared/validation/validators.ts:33`,
+   `setes-app/packages/setes_validators/lib/src/validators.dart:124` + máscaras), fiscal (`setes-api/src/shared/fiscal/fiscal.dto.ts:21`,
+   `setes-api/src/shared/fiscal-issuer/fiscal-issuer.ts:93`), núcleo (`fiscal-api/src/secret/certificate.ts:34,143`,
+   `fiscal-api/src/storage/fiscal-storage.ts:33-34`), nfse-api (`dps-builder.ts:59-63`, `facts/service-facts.ts:147-148`) e, fora do
+   grupo, o Sincronizador/setes-sync (indexa a entity por CPF/CNPJ — não lido, regra dos dois grupos). O XSD oficial 1.01 da NFS-e
+   ainda exige `[0-9]{14}` (`tiposSimples_v1.01.xsd:357-365`) → a nfse-api não PODE aceitar antes do leiaute. Lacuna de PRODUTO →
+   Q-NE29.
+
+### 12.2 Restrição que ordena o plano (architecture-critic B1)
+
+**A única obrigação com data é o IBS/CBS na NFS-e da Setes em 01/01/2027** (~12 semanas), que depende de F2a/F2b, Onda 4 e de
+uma fase IBS/CBS sem prompt. Regra: **nada da nfe-api entra antes da F2a se não for pré-requisito dela.** A D-NE1 pôs a NE-1 antes
+da F2a por UM motivo — o contrato de leitura que a F2a importa é só-NFS-e; documento alfanumérico, Code128 e versão de leiaute
+não fazem parte desse contrato → saem do caminho crítico (NE-1b).
+
+### 12.3 As ondas ajustadas (substitui a tabela do §11.4 onde conflitar)
+
+| Onda | Entrega (acréscimos da leitura em **negrito**) | Sessões | Depende de |
+|---|---|---|---|
+| **NE-0** | levantamento oficial (D-NE19) + OpenAPI design-first + parecer do guardião sobre o DDL; **conferir: a tabela de autorizadores contra a "Relação de Web Services" (o INI do ACBr dá a forma — 127 seções, redirecionamentos; 01 item 1); a coluna (d) dos §8 dos relatórios 01/02/05; se existe consulta de inutilização (Q-NE40); a NT do CNPJ alfanumérico na NF-e (insumo da Q-NE29)** | 3–4 | Valdo; depois do prompt IBS/CBS |
+| **NE-1a** (antes da F2a) | EXATAMENTE o escopo do §11.4: cerca por família (D-NE10), emitter no núcleo (D-NE9), `terminal` (D-NE12), vocabulário P/D + leitura (D-NE14), máquina comum extraída (D-NE13), `ca` + falha de cadeia do servidor ≠ credencial (D-NE17); **assinatura SEM mudança; dívida N17 da nfse-api (regex → parser XML) paga na extração da máquina** | 4–6 | gate do delta fiscal (§11.7 passo 1) |
+| **NE-1b** (depois da F2a) | **base de PDF (D-NE20) com código de barras (Q-NE32), "Folha n/N", marca d'água por página; documento alfanumérico no núcleo conforme a frente de produto (Q-NE29)** | 1–2 | F2a; Q-NE29/Q-NE32 |
+| **NE-2** | esqueleto + DDL da família (transmissão, voz, inutilização) + views — **+ voz do EVENTO com identidade `(tpEvento, chave, nSeq)` (Q-NE39); autorizador e `tpEmis` na tentativa (Q-NE37); cNF/cDV/chave persistidos write-once na tentativa (02 item 6); UNIQUE da chave natural da inutilização (cUF, ano, CNPJ, mod, série, faixa — 05 item 5); nomes de arquivo (Q-NE50)** | 2–4 | NE-0, NE-1a |
+| **NE-3** | adaptador SEFAZ: **envelope SOAP 1.2 mínimo sem Header (01 item 2); 1 NF-e por lote síncrono (Q-NE33); 1 evento por envio (Q-NE39); parser XML de verdade + resposta conferida contra a pergunta (Q-NE42); timeouts por serviço (Q-NE38); Fault/HTTP 500 classificados (Q-NE34)**; `authorizers.ts` com dimensão serviço/evento; XSD de toda mensagem (inclusive `inutNFe`/`consSitNFe`); smoke H parcial: status, consulta cadastro, **inutilização** | 5–7 | NE-2; A1 vigente |
+| **NE-4** | fonte de fatos da mercadoria (**tabela do 02 §8.1**) + builder 4.00 PURO (**formatadores tipados 2/3/4/10 casas; obrigatório vazio = recusa local; chave/cNF/cDV — 02 item 6; textos de homologação — Q-NE45; `infRespTec` — Q-NE44; SEM grupo ISSQN — a conjugada do legado morreu, §1**) + **pré-validação camada 1 (Q-NE43), começando pela conferência no MOC do SUBCONJUNTO do catálogo que vale para o 1º release na UF e no regime do cliente** | 6–8 | NE-3; NE-6 |
+| **NE-5** | composição (transmitir/consultar/reconfirmar/cancelar/inutilizar/rodízio) + DANFE A4 + rotas + gates — **+ candidato montado em memória, validado e gravado igual (Q-NE43); reconciliação com `digVal` (Q-NE41); 204/539 (Q-NE36); 563 (Q-NE40); denegada com `nfeProc` (Q-NE35); e-mail com o XML da voz (Q-NE53); OPERAÇÃO (Q-NE54)** | 6–8 | NE-4 |
+| **NE-6** | ERP: lacunas de conteúdo (D-NE15) — **mapa lacuna → regras sem dado no 04 §8.3** (finality, indPres, dt_exit, transporte, GTIN/unidade, ST retido/desonerado/DIFAL **+ diferimento e ICMS efetivo; conferir se o motor produz CST monofásico 02/15/53/61 com CRT 1 — 02 itens 14–16**) + **camada 2 da pré-validação no `validate` do faturamento (Q-NE43)** + totais (Q-NE27) + **`tPag 90` na devolução (Q-NE48) + tamanho máximo (Q-NE49) + plano de cancelamento lendo a voz D (número queimado — D-E7/D-E8, §6 item 3)** + numeração × inutilização (D-NE8) + TRANSMITIR em `order-returns` (D-NE25) | 5–7 | F2a |
+| **NE-7** | setes-app: datasource da nfe-api, "No fisco" no pedido, numeração, DANFE | 3–5 | F2b |
+| **F4 total** | | **35–51** (era 31–46) | a leitura tirou incerteza do transporte e da assinatura; somou ERP (camada 2, totais) e operação |
+| parte SEM cliente (NE-0…NE-3) | | **15–23** (era 14–20) | |
+
+NE-4 depende de NE-6, que depende de F2a — não é circular, mas com UM executor o calendário é SERIAL: prompt IBS/CBS → NE-0 →
+NE-1a → F2a/F2b + fase IBS/CBS da NFS-e (caminho crítico de 01/01/2027) → NE-1b/NE-2/NE-3 → NE-6 → NE-4 → NE-5 → NE-7.
+
+### 12.4 Próximos passos (substitui o §11.7 onde conflitar)
+
+(1) gate adversarial do delta fiscal (APIs isoladas §17.8) · (2) prompt da fase IBS/CBS — **começar pelas NT 007/008/009 e pelo
+XSD 1.01 oficiais (`Infra-IA/setes-api/integracoes/nfse-adn/`) e pela hipótese do item 7 do §12.1; o `referencia-acbr/03` §8 A/B é
+conferência** · (3) NE-0 · (4) NE-1a (antes da F2a) · (5) F2a/F2b · (6) NE-1b/NE-2/NE-3. **Bloqueios da Rodada 2**: Q-NE29 abre
+frente própria (não espera rodada); Q-NE32 bloqueia só a NE-1b; Q-NE31 vai para a fase IBS/CBS; as demais bloqueiam a NE-2 em
+diante — nenhuma bloqueia a NE-0 nem a NE-1a.
+
+### 12.5 ⚠️ Rodada 2 da nfe-api — questões para o Valdo (recomendação entre parênteses)
+
+**A. Núcleo e produto**
+
+- **Q-NE27 Dono dos totais** (`ICMSTot`, `vNF`; depois `vNFTot`). (a) só o snapshot do ERP · (b) nfe-api deriva tudo ·
+  (c) **`vNF` do ramo (`tb_invoice_merchandise.total_value` — os títulos nasceram dele) é do ERP; os demais campos são SOMA dos
+  snapshots de item feita pela nfe-api com a fórmula oficial (W16); a conferência "`vNF` derivado × `vNF` do ERP" usa a
+  tolerância OFICIAL, nunca uma mais estrita; divergência = 422 com código de DEFEITO DO MOTOR + alarme operacional; a NE-6
+  decide se o ERP passa a congelar o resto**. *(Rec.: (c) — o ERP não congela ~2/3 do `ICMSTot` hoje; recusar por diferença de
+  arredondamento seria punir o usuário por defeito do motor.)*
+- **Q-NE28 Texto.** (a) **UTF-8 com acentos, sem caracteres de controle, espaços colapsados, escape XML** · (b) transliterar
+  para ASCII como o legado (quebra de linha vira `|`). *(Rec.: (a), salvo vedação no MOC — "sem legado no sistema".)*
+- **Q-NE29 CNPJ alfanumérico.** (a) **frente de PRODUTO própria, aberta JÁ — 1º passo: inventário (§12.1 item 8), vigência e o
+  que cada leiaute oficial aceita hoje; a nfe-api nasce aceitando no SEU builder o que o leiaute da NF-e aceitar (código novo,
+  custo ~zero); núcleo e nfse-api seguem a versão oficial de cada leiaute** · (b) só no núcleo, quando a nfe-api nascer · (c)
+  esperar o 1º cliente com CNPJ alfanumérico. *(Rec.: (a) — se a vigência de jul/2026 se confirmar, um cliente novo com CNPJ
+  alfanumérico já não entra no ERP; o Sincronizador/setes-sync entra pelo grupo dele.)*
+- **Q-NE30 A1 da matriz para a filial** (o ACBr aceita mesma raiz de 8 — N15). *(Rec.: NÃO decidir agora — sem fato gerador
+  (nenhum cliente com filial); o núcleo segue exigindo CNPJ idêntico; reabrir com o 1º cliente que tiver filial.)*
+- **Q-NE31 Versão de leiaute com vigência por data e ambiente.** *(Rec.: transferida para a fase IBS/CBS — o fato gerador é ligar
+  o IBSCBS da NFS-e em 01/01/2027 sem deploy à meia-noite; na nfe-api a versão é constante do adaptador por ambiente (01 item 15).)*
+- **Q-NE32 Código de barras / QR na base de PDF.** (a) **UMA lib escolhida uma vez para Code128 (DANFE) e QR (NFC-e, F5)** ·
+  (b) Code128-C próprio no núcleo, com teste que DECODIFICA a imagem; QR decide lib depois. *(Rec.: (a) — o "sem lib nova" da
+  DANFSe não vale na nfe-api: o validador XSD (D-NE16) e o QR trazem lib de qualquer jeito.)*
+
+**B. Transporte e ciclo (nfe-api)**
+
+- **Q-NE33 Lote.** **1 NF-e por lote, `indSinc=1` sempre; 103 → P + consulta do recibo; 105 → P.** *(Rec.: sim — N2.)*
+- **Q-NE34 SOAP Fault / HTTP 500.** (a) **ambíguo (em voo, reconcilia pela chave); R só com retorno SEFAZ legível e cStat de
+  rejeição; Fault REPRODUZÍVEL = defeito nosso: para o rodízio daquela nota e alarma** · (b) R. *(Rec.: (a) — "ambíguo nunca fecha".)*
+- **Q-NE35 Denegada.** **guardar o `nfeProc` da denegada (voz D com prova).** *(Rec.: sim — N4.)*
+- **Q-NE36 Duplicidade 204/539.** **204 (mesma chave) → pousar A pela consulta da chave. 539 (mesmo número, chave diferente) →
+  consultar as chaves de TODAS as nossas tentativas da nota (nunca recortar o `xMotivo` — Q-NE42); A numa tentativa já fechada (R/F)
+  = a D-NE7 foi violada = INCIDENTE crítico (o conteúdo autorizado pode diferir da nota atual no ERP); nenhuma é nossa → número usado
+  fora (legado em transição) → ação na numeração do ERP (D-F21), nunca chave nova automática.** *(Rec.: sim.)*
+- **Q-NE37 Rota pela tentativa.** **autorizador e `tpEmis` gravados na tentativa; consulta/evento/recibo vão a ele.** *(Rec.: sim — N6.)*
+- **Q-NE38 Timeout por serviço** (autorização síncrona longa; status curto); timeout = ambíguo. *(Rec.: sim; valores do MOC/`tMed`.)*
+- **Q-NE39 Eventos.** **1 evento por `envEvento`; decide o cStat do `retEvento` (135/136/155), nunca o 128 do lote; voz do evento
+  com identidade `(tpEvento, chave, nSeq)`.** *(Rec.: sim — N7/N8.)*
+- **Q-NE40 Inutilização 563.** **o 563 é o FATO "a faixa está inutilizada", seja quem for o autor → pousa como inutilizada, com o
+  próprio 563 (e o protocolo, se vier) como prova; nunca segura a numeração em pendência.** *(Rec.: sim; NE-0 confere o 563 e se
+  existe consulta de inutilização.)*
+- **Q-NE41 Reconciliação com prova.** **`digVal` do `protNFe` = DigestValue do XML guardado; divergência = pendência crítica, nunca
+  sobrescreve; roteiro: procurar entre os XMLs write-once das tentativas o que casa com o `digVal` (a consulta não devolve a NF-e;
+  DistDFe está fora da F4).** *(Rec.: sim.)*
+- **Q-NE42 Leitura do retorno.** **parser XML de verdade (`@xmldom/xmldom`, já na árvore), tolerante a apóstrofos (SEFAZ-PR);
+  `chNFe` do retorno ≠ chave enviada NUNCA vira A (N3); a dívida igual da nfse-api (N17) é paga na extração da máquina comum
+  (NE-1a).** *(Rec.: sim.)*
+
+**C. Conteúdo e builder**
+
+- **Q-NE43 Pré-validação (refina a D-NE16).** (a) **TRÊS CAMADAS — (1) na nfe-api, só regras sobre o que ELA deriva (chave/cDV/cNF,
+  `dhEmi` × relógio, coerência de totais da Q-NE27, textos de H, limites de tamanho) + XSD oficial, bloqueantes, sobre o CANDIDATO
+  montado em memória que a reserva grava IGUAL (teste prova validado = gravado); (2) regras de CONTEÚDO (finNFe, indPres, dest,
+  transporte, GTIN…) no `validate` do faturamento do ERP, onde o usuário corrige antes da nota existir (NE-6); (3) o resto fica com
+  a SEFAZ. O catálogo do ACBr é ÍNDICE, não semente: cresce por EVIDÊNCIA (rejeição vista em H/P vira regra + teste); cada regra
+  com `moc_version`, dono nomeado e revisão a cada NT nova; listas versionadas (CFOP, CST, prefixos GTIN, tolerâncias, prazos — 04
+  §8.4) idem; violação = 422 com a lista inteira, sem tentativa, sem alerta silencioso** · (b) catálogo inteiro (~150 regras do 55)
+  bloqueante na nfe-api. *(Rec.: (a) — no 55 a rejeição não queima número e volta em segundos; catálogo sem dono deriva e passa a
+  recusar nota que a SEFAZ aceitaria, sem recurso.)*
+- **Q-NE44 Responsável técnico (`infRespTec`).** **a Setes como responsável técnica; dados = config da plataforma; CSRT por UF =
+  segredo de PLATAFORMA da nfe-api (credencial da Setes, igual para todos os clientes — NÃO o cofre do estabelecimento, D-F34);
+  nasce só quando a UF do 1º cliente exigir.** *(Rec.: sim; conferir NT 2018.005.)*
+- **Q-NE45 Homologação.** **o builder aplica os textos padrão do fisco (`dest/xNome`, `xProd` do item 1) quando `tpAmb=2`.**
+  *(Rec.: sim; conferir no MOC.)*
+- **Q-NE46 Emitente pessoa física** (CPF, séries 910–969). *(Rec.: fora da F4 — o arquivo fiscal exige CNPJ; nenhum cliente.)*
+- **Q-NE47 finNFe 5/6** (crédito/débito da reforma). *(Rec.: fora da F4 — D-NE25 = 1 e 4; entra pela fase IBS/CBS.)*
+- **Q-NE48 Pagamento na devolução.** A devolução HERDA `tb_order_billing` da venda (D-A4), mas a finNFe 4 sai com **`tPag=90` (sem
+  pagamento) e sem `cobr`** (02 item 19; regra 871). *(Rec.: sim — o builder deriva da finalidade; conferir no MOC.)*
+- **Q-NE49 Texto acima do tamanho máximo** (xProd, infCpl…). (a) **recusar no `validate` do faturamento com o campo (camada 2)** ·
+  (b) truncar em silêncio. *(Rec.: (a) — documento fiscal nunca é cortado em silêncio.)*
+- **Q-NE50 Nomes de arquivo** dentro de `<cnpj>/<H|P>/<ano>/<mês>`. **molde da nfse-api: `<chave>-nfe.xml` (assinado enviado),
+  `<chave>-procNFe.xml` (com protocolo — o da voz), `<chave>-evt<tpEvento>-<nSeq>.xml` (proc do evento), `<Id43>-inut.xml`
+  (proc da inutilização).** *(Rec.: sim.)*
+
+**D. DANFE e e-mail**
+
+- **Q-NE51 Configs `danfe_*` no 1º release.** **o mínimo legal + logo; o resto (canhoto, pagamento em quadro, casas decimais,
+  detalhamentos) sob demanda.** *(Rec.: sim.)*
+- **Q-NE52 Cancelamento no PDF.** **só carimbo CANCELADA no DANFE pela voz (como a DANFSe) + XML do evento; PDF do evento depois,
+  se pedido.** *(Rec.: sim — N10.)*
+- **Q-NE53 E-mail.** **anexo = XML da VOZ com protocolo (`procNFe`/proc do evento) + PDF; assunto/corpo = config com modelo padrão.**
+  *(Rec.: sim — N9.)*
+
+**E. Operação (architecture-critic H5 — "o que o plantonista precisa às 3h")**
+
+- **Q-NE54 Operação da nfe-api (NE-5).** (a) **cadeia ICP do servidor (D-NE17) como DADO recarregável sem build, com alarme próprio
+  ("cadeia do servidor") e roteiro — troca de certificado de uma autorizadora não pode virar parada até deploy; (b) disjuntor por
+  CNPJ × cStat (rejeições iguais repetidas viram recusa local) contra o 656, que bloqueia o CNPJ inteiro — além do rodízio da
+  D-NE26; (c) estado por autorizador no `/health` (`consStatServ` com teto de frequência) — "SEFAZ-PR fora" × "defeito nosso";
+  (d) canal de alerta para pendência crítica (Q-NE36/Q-NE41): e-mail ao suporte da Setes + log estruturado agora, monitor externo
+  na Onda 4.** *(Rec.: sim aos quatro.)*
+
+**F. Vão ao prompt da fase IBS/CBS (D-NE4), não a esta rodada**: Q-RTC1 casa do catálogo CST/cClassTrib (ERP × núcleo) · Q-RTC2 =
+Q-NE31 · Q-RTC3 onde moram cClassTrib/cIndOp do serviço · Q-RTC4 valores devolvidos pelo fisco na NFS-e viram fato do ERP? ·
+Q-RTC5 classificação do ME/EPP por regime ou por serviço · Q-RTC6 NFS-e de crédito/débito fora do 1º release · quadro IBS/CBS do
+DANFE/DANFSe · eventos RTC (15, via SVRS) · `tpRetPisCofins` (NT 007) · a hipótese do item 7 do §12.1 (re-escopo da D-F22).
+
+### 12.6 Números provisórios dos relatórios → numeração deste § (os do relatório ficam SUPERADOS)
+
+| Relatório | Sugerida lá | Aqui |
+|---|---|---|
+| 01 transporte | Q-NE-S1 · S2 · S3 · S4 · S5 · S6 · S7 · S8 · S9 | Q-NE34 · 33 · 35 · 36 · 37 · 40 · 39 · 38 · 50 |
+| 02 modelo/XML | Q-NE27 totais · 28 texto · 29 alfanumérico · 30 resp. técnico · 31 pré-validação · "A1 de mesma raiz" | Q-NE27 · 28 · 29 · 44 · 43 · 30 |
+| 03 IBS/CBS | Q-RTC1…Q-RTC7 | §12.5 F (Q-RTC2 = Q-NE31; Q-RTC7 = Q-NE47) |
+| 04 regras | "refinar a D-NE16" | Q-NE43 |
+| 05 eventos/DANFE | Q-NE27 · 28 · 29 · 30 · 31 · 32 · 33 · 34 · 35 · 36 | Q-NE39 · 41 · 42 · 32 · §12.5 F · 51 · 53 · 46 · 52 · §12.5 F |
+
+**Respondido sem questão nova**: efeito da voz D no ERP (crítico M4) — já coberto pela D-E7/D-E8 e pelo §6 item 3 (cancelamento
+local mantém a nota, pedido 'C' + cópia, número nem reaproveitável nem inutilizável); entra só como item da NE-6. NF-e conjugada
+com ISSQN — morta pelo §1 (cada ramo no seu documento): o builder nasce SEM o grupo ISSQN (corte registrado).
+
+### 12.7 Rodada 2 da `nfe-api` DECIDIDA (Valdo 2026-10-10: "siga as recomendações") — D-NE27…D-NE54
+
+Cada D-NE*n* = a recomendação da Q-NE*n* (§12.5), na íntegra. Numeração permanente; código e testes citam o nº.
+
+| Decisão | O que fixa | Onda |
+|---|---|---|
+| **D-NE27** | `vNF` do ramo (`tb_invoice_merchandise.total_value`) é do ERP; os demais totais = SOMA dos snapshots de item pela nfe-api com a fórmula oficial (W16); conferência `vNF` derivado × ERP na tolerância OFICIAL; divergência = 422 "defeito do motor" + alarme; a NE-6 decide se o ERP congela o resto | NE-4/NE-6 |
+| **D-NE28** | texto em UTF-8 com acentos, sem controle, espaços colapsados, escape XML (salvo vedação no MOC — NE-0 confere) | NE-4 |
+| **D-NE29** | CNPJ alfanumérico = **frente de PRODUTO própria, aberta já** (1º passo: inventário, vigência, leiautes oficiais); a nfe-api nasce aceitando no seu builder o que o leiaute da NF-e aceitar; núcleo e nfse-api seguem a versão oficial de cada leiaute; Sincronizador/setes-sync pelo grupo dele | frente própria + NE-1b |
+| **D-NE30** | A1 da matriz para a filial **NÃO decidido** (sem fato gerador); o núcleo segue exigindo CNPJ idêntico; reabre com o 1º cliente com filial | — |
+| **D-NE31** | versão de leiaute com vigência por data/ambiente **vai à fase IBS/CBS** (*decidida lá como D-IB13, 2026-10-10*); na nfe-api a versão é constante do adaptador por ambiente | fase IBS/CBS |
+| **D-NE32** | UMA lib de código de barras escolhida uma vez para Code128 (DANFE) e QR (NFC-e) na base de PDF do núcleo — **refina a D-NE20**; o "sem lib nova" da DANFSe não vale na nfe-api | NE-1b |
+| **D-NE33** | 1 NF-e por lote, `indSinc=1` sempre; 103 → P + consulta do recibo; 105 → P | NE-3 |
+| **D-NE34** | SOAP Fault/HTTP 500 = ambíguo (em voo, reconcilia pela chave); R só com retorno SEFAZ legível e cStat de rejeição; Fault reproduzível = defeito nosso → para o rodízio da nota e alarma | NE-3/NE-5 |
+| **D-NE35** | denegada guarda o `nfeProc` (voz D com prova) | NE-5 |
+| **D-NE36** | 204 → pousa A pela consulta da chave; 539 → consultar as chaves de TODAS as nossas tentativas (nunca recortar `xMotivo`); A em tentativa fechada = violação da D-NE7 = incidente crítico; nenhuma nossa → ação na numeração do ERP (D-F21), nunca chave nova automática | NE-5 |
+| **D-NE37** | autorizador e `tpEmis` gravados na tentativa; consulta/evento/recibo vão a ele — **refina a D-NE3** (`authorizers.ts` com dimensão serviço/evento) | NE-2/NE-3 |
+| **D-NE38** | timeout por serviço (valores do MOC/`tMed`); timeout = ambíguo | NE-3 |
+| **D-NE39** | 1 evento por `envEvento`; decide o cStat do `retEvento` (135/136/155), nunca o 128; voz do evento com identidade `(tpEvento, chave, nSeq)` | NE-2/NE-3 |
+| **D-NE40** | 563 = FATO "faixa inutilizada" → pousa como inutilizada com o 563 (e o protocolo, se vier) como prova; nunca segura a numeração | NE-5 |
+| **D-NE41** | reconciliação com prova: `digVal` = DigestValue do XML guardado; divergência = pendência crítica, nunca sobrescreve; roteiro = procurar entre os XMLs write-once das tentativas | NE-5 |
+| **D-NE42** | parser XML de verdade (`@xmldom/xmldom`), tolerante a apóstrofos; `chNFe` ≠ enviada nunca vira A; a dívida igual da nfse-api (regex em `dps-builder.ts:228-231` e na DANFSe) é paga na extração da máquina comum | NE-1a/NE-3 |
+| **D-NE43** | pré-validação em TRÊS CAMADAS (nfe-api valida só o que deriva + XSD, sobre o candidato que a reserva grava igual · conteúdo no `validate` do ERP · resto com a SEFAZ); catálogo do ACBr = ÍNDICE que cresce por evidência, cada regra com `moc_version` + dono + revisão por NT; violação = 422 com a lista inteira, sem tentativa, sem alerta silencioso — **refina a D-NE16** | NE-4/NE-6 |
+| **D-NE44** | Setes como responsável técnica: dados = config da plataforma; CSRT por UF = segredo de PLATAFORMA da nfe-api (não o cofre do estabelecimento — D-F34), nasce só quando a UF do 1º cliente exigir | NE-4 |
+| **D-NE45** | em `tpAmb=2` o builder aplica os textos padrão do fisco (`dest/xNome`, `xProd` do item 1) | NE-4 |
+| **D-NE46** | emitente pessoa física (CPF, séries 910–969) fora da F4 | — |
+| **D-NE47** | finNFe 5/6 (crédito/débito da reforma) fora da F4 — entra pela fase IBS/CBS | — |
+| **D-NE48** | devolução (finNFe 4) sai com `tPag=90` e sem `cobr`, mesmo herdando `tb_order_billing` (D-A4) — o builder deriva da finalidade | NE-4 |
+| **D-NE49** | texto acima do tamanho máximo é RECUSADO no `validate` do faturamento com o campo; nunca truncado em silêncio | NE-6 |
+| **D-NE50** | nomes de arquivo no molde da nfse-api: `<chave>-nfe.xml` (enviado), `<chave>-procNFe.xml` (com protocolo), `<chave>-evt<tpEvento>-<nSeq>.xml`, `<Id43>-inut.xml` | NE-2 |
+| **D-NE51** | `danfe_*` do 1º release = mínimo legal + logo; o resto sob demanda (ajusta a D-E25) | NE-5 |
+| **D-NE52** | cancelamento no PDF = só carimbo CANCELADA pela voz + XML do evento; PDF do evento depois, se pedido | NE-5 |
+| **D-NE53** | e-mail anexa o XML da VOZ com protocolo + PDF; assunto/corpo = config com modelo padrão — **refina a D-NE23/D-E10** | NE-5 |
+| **D-NE54** | operação: cadeia ICP do servidor como DADO recarregável sem build + alarme + roteiro; disjuntor CNPJ × cStat contra o 656; estado por autorizador no `/health`; alerta de pendência crítica por e-mail ao suporte da Setes + log estruturado (monitor externo na Onda 4) | NE-5 |
+
+**Não decidido aqui (vai ao prompt da fase IBS/CBS — D-NE4; ABERTO em 2026-10-10: `prompt_fase_ibs_cbs.md`, Q-IB1…Q-IB21 — Q-RTC1 = Q-IB5,
+Q-RTC3 = Q-IB6, Q-RTC4 = Q-IB10, Q-RTC5 ≈ Q-IB7, Q-RTC6 → §5, D-NE31 = Q-IB13, D-NE18 revisitada = Q-IB20)**: o bloco F do §12.5 (Q-RTC1…Q-RTC6, quadro IBS/CBS do DANFE/DANFSe,
+eventos RTC, `tpRetPisCofins` da NT 007, hipótese do §12.1 item 7) e a D-NE31.
+
+**Próximos passos (ordem do §12.4, inalterada)**: (1) gate adversarial do delta fiscal (APIs isoladas §17.8) · (2) prompt da fase
+IBS/CBS (Rodada 0 — começar pelas NT 007/008/009 + XSD 1.01 do acervo) · (3) NE-0 · (4) NE-1a · (5) F2a/F2b · (6) NE-1b/NE-2/NE-3.
+A frente do CNPJ alfanumérico (D-NE29) corre à parte, no grupo de cada sistema.
