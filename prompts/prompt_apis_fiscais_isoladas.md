@@ -7,11 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.9 (D-F67…D-F85 executadas e publicadas: a substituição e105102 ganhou fim humano — "manter a
-> nota"; aberta a Rodada 16: Q-F92…Q-F96). Antes: §21.7–§21.8, §21 (Q-F62 / 1ª autorização da nfse-api em H) e §20
-> (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21.11 (D-F67…D-F93 executadas e publicadas: a substituição e105102 ganhou fim humano, a prova da
+> reconferência é o E2404 explícito — D-F90 — e o alarme do ambíguo cobre toda porta — D-F91; aberta a Rodada 18: Q-F100…Q-F103).
+> Antes: §21.7–§21.10, §21 (Q-F62 / 1ª autorização da nfse-api em H) e §20 (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F85** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F93** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -410,7 +410,7 @@ Entrou nas tabelas fixas da raiz (CLAUDE.md, `ORGANIZACAO_PASTAS.md`) e no `INDI
 
 - **D-F27 (Valdo, 2026-10-03, Rodada 3 — correção de premissa na resposta à Q-F35) — as APIs fiscais PODEM ESCREVER no ERP.** Texto fiel: *"na verdade a nfse-api e nfe-api podem escrever no ERP (schemas central e cliente)"*. REVISA a **D-F15** na parte "usuário MySQL só com SELECT em `setes_central`/`setes_*`" (a parte das VIEWs publicadas para o setes-api segue valendo). Consequências: (1) a garantia "a API fiscal nunca escreve no ERP" deixa de ser de BANCO — o que a API escreve no ERP passa a ser lista explícita com cerca por teste (escopo na Q-F44); (2) a serialização transmitir × cancelar local VOLTA a ser o `FOR UPDATE` na linha da nota (`tb_invoice`), provado pelos gates da Onda 3 — a trava nomeada `GET_LOCK` do §12.4 deixa de ser necessária (os três riscos que o guardião apontou nela, §13.1-5 (a)/(b), morrem com ela); a transação da nfse-api cruza `setes_<cliente>` e `fiscal_api` na MESMA conexão (mesma instância — D-F9); (3) a Q-F35 (onde mora o nDPS) é reaberta com a premissa corrigida.
 - **D-F28 (Valdo, 2026-10-03, Rodada 3 — Q-F37 e Q-F38) — o cancelamento é uma OPERAÇÃO EM LINHA conduzida pelo app; nada de vínculo gravado nem job.** Texto fiel: *"considere uma operação em linha: app solicita o cancelamento da nfe/nfse via api própria (nfe/nfse); o retorno deve retornar para o App com a mensagem de ok ou não ok; conforme a mensagem o app avança com o envio do cancelamento para a setes-api"* e, na Q-F38, *"considere a resposta da pergunta anterior"*. Leitura: (1) `POST /v1/nfse/invoices/{id}/cancel` responde ok (voz C gravada) ou não ok (recusa/indisponível — o app NÃO avança); (2) com ok, o app envia o cancelamento ao setes-api (`POST /api/billing/cancel`), que confere a voz C e aplica o C local (D-F11); (3) **nenhuma tabela/coluna de vínculo do efeito** — pendência DERIVADA (voz C na vida vigente × nota ainda não-C), motivo recalculado pelo plano na hora (= Q-F37 (c)); (4) **nenhum job/worker de efeito** (= Q-F38 sem (a)): a voz C que chega sem humano (cancelada no portal, descoberta por consulta) fica como pendência VISÍVEL na lista/detalhe e é aplicada quando o app, num contato seguinte, recebe a voz e envia o cancelamento ao setes-api. **Conhecimento negativo**: não criar job de efeito no setes-api nem efeito aplicado pela API fiscal sem decisão nova.
-- **D-F29 (Valdo, 2026-10-03, Rodada 3 — Q-F39 (a)) — pré-condições do cancelamento: o app CONSULTA o plano no setes-api antes de pedir o cancelamento à API fiscal (consultivo — mudou no meio = pendência, como a D-F11 aceita), e o setes-api EXIGE prova LIDA NO BANCO da reconfirmação**: para tentativa vigente com F por consulta em produção (Q-ADV1b), só cancela localmente se a view mostrar conferência no fisco (`last_queried_at`) POSTERIOR ao F — nunca a palavra do app. A nfse-api NÃO reimplementa o plano (bifurcaria a política).
+- **D-F29 (Valdo, 2026-10-03, Rodada 3 — Q-F39 (a)) — pré-condições do cancelamento: o app CONSULTA o plano no setes-api antes de pedir o cancelamento à API fiscal (consultivo — mudou no meio = pendência, como a D-F11 aceita), e o setes-api EXIGE prova LIDA NO BANCO da reconfirmação**: para tentativa vigente com F por consulta em produção (Q-ADV1b), só cancela localmente se a view mostrar conferência no fisco (~~`last_queried_at`~~ → **`nfse_not_generated_at`, o E2404 EXPLÍCITO — D-F90 SUPERA em parte este texto, 2026-10-11**) POSTERIOR ao F — nunca a palavra do app. A nfse-api NÃO reimplementa o plano (bifurcaria a política).
 
 - **D-F30 (Valdo, 2026-10-04, Rodada 3 — Q-F35 reaberta (b)) — o DPS de cada VIDA da nota mora no `fiscal_api`: peça `tb_invoice_service_dps`.** Uma linha por vida (nota × terminal × evento E que abriu a vida): série + nDPS + Id do DPS gravados UMA vez (write-once), UNIQUE `(tb_institution_id, dps_id)` de volta; o contador continua no emissor SE (D-N18). Tudo o que é da DECLARAÇÃO fica junto no `fiscal_api`; o ramo do ERP fica só com fatos comerciais — `tb_invoice_service.dps_number` deixa de ser lido e escrito (coluna APOSENTADA, sem DROP até decisão — "tabela sem consumidor não é morta"). Fecha por construção as duas armadilhas do guardião (§13.1-2): vida nova = linha nova (nunca herda o Id de vida cancelada) e a série fica congelada na vida (trocar a série no emissor não muda o Id de quem já tem DPS). A chave do fisco continua na TENTATIVA (D-N26 e R3-1 intactas); a opção (c) (chave também no DPS) fica registrada para rodada futura.
 - **D-F31 (Valdo, 2026-10-04, Rodada 3 — Q-F44 (a)) — o que as APIs fiscais escrevem no ERP é LISTA FECHADA com cerca por teste.** Com a D-F30, a lista hoje é: **nenhuma escrita de dado** — só a trava de linha (`SELECT … FOR UPDATE` na `tb_invoice` da nota) que serializa transmitir × cancelar local (D-F27). O C local continua do setes-api (D-F11/D-F28). Escrever qualquer coisa nova no ERP a partir de uma API fiscal = decisão nova (entra na lista + no teste). Usuário MySQL das APIs fiscais: escrita permitida pelo GRANT (D-F27), disciplina garantida pelo teste.
@@ -636,6 +636,35 @@ branch `sessao-2026-10-10`):**
 - **D-F85 (= Q-F91 — idem) — a chave da SUBSTITUTA só é exibida se for do MESMO emitente**: posições 9–23 da chave de 50 (tipo de
   inscrição + inscrição) iguais às da substituída (`sameIssuerKey`), além do formato e de ser ≠ da própria chave (R13-04). Só exibição
   (D-F76) — nunca regra.
+- **D-F86 (= Q-F92 (a) — Valdo 2026-10-11: "siga as recomendações") — o laço dos GETs tipados PARA no primeiro tipo achado**:
+  CONHECIMENTO NEGATIVO — premissa da D-F61 ("o fisco registra UM cancelamento por NFS-e"); contradição ENTRE rotas não é procurada
+  de propósito (até 3 GETs a mais por nota cancelada contra uma impossibilidade fiscal). Reabrir só se a prova ao vivo M4 mostrar
+  dois cancelamentos para a mesma chave. Comentário no laço dos dois adaptadores + teste que fixa.
+- **D-F87 (= Q-F93 (a) — idem) — a nota "ambígua para sempre" segue FAIL-CLOSED; a saída é o ALARME da F3**: o rodízio (setes-api e
+  nfse-api) registra `logger.error('Fisco ambíguo persistente: …', {institutionId, invoiceId, attempt, lastKind})` — só a composição
+  sabe QUAL nota (o log do adaptador não tem esse contexto e não leva a chave). Ato humano com evidência só com caso real; teto de
+  tentativas NÃO ("ambíguo nunca fecha").
+- **D-F88 (= Q-F94 (a) — idem) — no GET tipado conta TODO evento GERADO desta chave**: tipo fora do domínio de cancelamento (e105105
+  indeferido, e101103…) junto de outro também é contradição → ambíguo (o GET por tipo + sequência só deveria devolver o tipo).
+- **D-F89 (= Q-F95 — idem) — "mesmo tipo repetido vale" só com o MESMO conteúdo**: código, Id, dhProc, dhEvento, nSeq, cMotivo,
+  xMotivo e chSubstituta iguais (`eventSignature`); divergente → ambíguo (o que se exibe/aplica não depende da ordem da lista).
+- **D-F90 (= Q-F96 (c) — idem; SUPERA em parte a D-F29) — a prova da reconfirmação exige o "NFS-e não gerada" EXPLÍCITO**: coluna
+  `nfse_not_generated_at` na tentativa (`fiscal_api`, migration 003 da nfse-api + view `vw_invoice_service_transmission`), gravada
+  SÓ na resposta E2404, por escritor próprio (`recordNfseNotGenerated`) e só se a última voz da tentativa ainda é a que a pergunta viu
+  (resposta velha não pousa — gate r10); relógio NOSSO; sem backfill. `reconfirmationProven = nfse_not_generated_at > last_event_at`
+  (núcleo). `last_queried_at` volta a ser SÓ o throttle do rodízio (o 502 persistente o carimba e nunca prova). Parecer do guardião
+  (§21.10): fato da TENTATIVA, nunca voz (E2404 depois do F não muda o estado derivado); nome pelo próprio E2404 — "não consta" é
+  palavra ocupada (voz N) e `not_found` convidaria a gravar em qualquer 404.
+- **D-F91 (= Q-F97 (a) — Valdo 2026-10-11: "siga as recomendações") — o alarme do ambíguo cobre TODA porta que pergunta ao fisco**:
+  `logAmbiguousFiscal(origin, {institutionId, invoiceId, attempt, lastKind})` (setes-api e nfse-api) registra "Fisco ambíguo
+  persistente" com a ORIGEM — `rodizio` (com tentativa e última voz), `consulta` (a consulta pedida pela tela — invólucro do
+  `refreshServiceTransmission`) e `reconferencia` (antes do cancelamento local, com a tentativa); um registro por ocorrência, nunca a
+  chave. O alarme da F3 AGREGA por nota (primeira/última vez, contagem), sem depender da janela do rodízio (D-F38/D-F52).
+- **D-F92 (= Q-F98 (a) — idem) — a prova da reconferência NÃO tem prazo de validade** (CONHECIMENTO NEGATIVO): qualquer E2404
+  POSTERIOR ao F vale, inclusive o da revisita de 24 h (D-F52) semanas antes do cancelamento — o DPS foi enviado uma vez; 24 h depois
+  do F o "não gerada" é conclusivo. Não inventar janela; reabrir só se a prova ao vivo M4 mostrar NFS-e gerada tarde.
+- **D-F93 (= Q-F99 (a) — idem) — a assinatura do evento (D-F89) soma `nDFSe`, o autor (`CNPJAutor`/`CPFAutor`), `ambGer` e `tpAmb`**:
+  divergência FORA dos 8 campos decidia, pela ordem da lista, qual XML ia para o arquivo fiscal (R16-01).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -888,12 +917,25 @@ chave da substituta na tela) · **Q-F75** contrato da F2a para a substituição 
 Texto completo no §21.8: **A-F80** (confirmar: em H a saída é cancelar a nota — o Id do DPS é da vida) · **Q-F90** (GET tipado com o
 tipo perguntado E um e105102 — Rec.: ambíguo) · **Q-F91** (`chSubstituta` × CNPJ da chave — Rec.: sim, baixo valor).
 
-### 8.R16 Rodada 16 — aberta pelos gates da Rodada 15 (2026-10-10, §21.9) — ⚠️ AGUARDA O VALDO
+### 8.R16 Rodada 16 — aberta pelos gates da Rodada 15 (2026-10-10, §21.9) — DECIDIDA ("siga as recomendações", 2026-10-11 → D-F86…D-F90)
 
 Texto completo e recomendações no §21.9: **Q-F92** contradição ENTRE rotas tipadas (Rec.: manter "para no primeiro" + conhecimento
 negativo) · **Q-F93** saída da nota "ambígua para sempre" (Rec.: fail-closed + alarme da F3 com institution e nota) · **Q-F94** tipo
 fora do domínio no mesmo GET tipado (Rec.: ambíguo) · **Q-F95** mesmo tipo com conteúdo divergente (Rec.: ambíguo) · **Q-F96** prova da
 D-F29 forjada pelo carimbo do rodízio na nfse-api (Rec.: a prova exige o "não achou" explícito — antes da F2a).
+
+### 8.R17 Rodada 17 — aberta pelos gates da Rodada 16 (2026-10-11, §21.10) — DECIDIDA ("siga as recomendações" → D-F91…D-F93)
+
+Texto completo e recomendações no §21.10: **Q-F97** alcance do alarme (Rec.: também reconferência e consulta por nota, agregado por
+nota) · **Q-F98** validade da prova (Rec.: "posterior ao F" + conhecimento negativo) · **Q-F99** assinatura da D-F89 (Rec.: somar
+`nDFSe`, autor, `ambGer`, `tpAmb`).
+
+### 8.R18 Rodada 18 — aberta pelos gates da Rodada 17 (2026-10-11, §21.11) — ⚠️ AGUARDA O VALDO
+
+Texto completo e recomendações no §21.11: **Q-F100** o que o alarme leva do erro (Rec.: só código + rótulo sem dígitos) · **Q-F101**
+rótulo do ambíguo do transmitir (Rec.: origem explícita "transmissao", também no GET /dps do passo 0b) · **Q-F102** leitor da
+assinatura do evento (Rec.: o mesmo `firstText` do parse + arquivar de forma determinística no empate) · **Q-F103** prova × nova
+apresentação do mesmo Id (Rec.: o E2404 tem de ser posterior à ÚLTIMA apresentação do Id na vida).
 
 ## 9. Fora de escopo desta fase
 
@@ -2098,7 +2140,7 @@ substituição, para ver a tela nova; ou 101101) e ver a consulta suspender (105
 passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50; contrato da tela pela D-F79: o setes-api expõe `cancelWaiver`/`pendingEffects`
 em rota própria por pedido, a nfse-api só o fisco) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 
-### 21.9 Rodada 15 — D-F83…D-F85 (Valdo 2026-10-10: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+### 21.9 Rodada 15 — D-F83…D-F85 (Valdo 2026-10-10: "siga as recomendações") — Rodada 16 DECIDIDA no §21.10
 
 | Decisão | O quê | Onde |
 |---|---|---|
@@ -2140,3 +2182,88 @@ nos dois serviços + blocos "RODADA 14" (L7 → D-F84) e R13-03/R13-04 do `adver
 
 **Seguem da §21.8**: LOW registrados, prova ao vivo M4 (Valdo), e os próximos passos: Rodada 16 → NE-0/NE-1 → **F2a** (contrato da
 tela pela D-F79) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.10 Rodada 16 — D-F86…D-F90 (Valdo 2026-10-11: "siga as recomendações") — Rodada 17 DECIDIDA no §21.11
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F86** (= Q-F92 (a)) | o laço dos GETs tipados para no primeiro tipo achado — conhecimento negativo no código (premissa da D-F61) + teste que fixa | os dois `adn.ts` |
+| **D-F87** (= Q-F93 (a)) | fail-closed; o rodízio registra "Fisco ambíguo persistente" com institution, nota, tentativa e última voz (para o alarme da F3) | `runRefresh` (setes-api) · passada da nfse-api |
+| **D-F88** (= Q-F94 (a)) | todo evento GERADO desta chave conta no GET tipado — tipo fora do domínio de cancelamento também é contradição | os dois `adn.ts` |
+| **D-F89** (= Q-F95) | mesmo tipo repetido só vale com conteúdo idêntico (`eventSignature`) | os dois `adn.ts` |
+| **D-F90** (= Q-F96 (c)) | prova da D-F29 = E2404 EXPLÍCITO: `nfse_not_generated_at` (migration **003** da nfse-api + view; aplicada no dev, `explain:leituras` OK), escritor `recordNfseNotGenerated` guardado pela última voz vista, chamado só no E2404 (reconferência e consulta pelo Id do DPS); `reconfirmationProven` no núcleo lê a coluna nova | `fiscal-api/src/voice/reading.ts` · `nfse-api/src/nfse/{repository,transmission}.ts` · `migrate-from-setes-api.ts` (cabeçalho) |
+
+**Parecer do guardião (D-F90)**: aprovado com 3 correções aplicadas — (1) nome `nfse_not_generated_at` (repete o E2404 e a constante
+`DPS_NOT_GENERATED_CODE`; `not_found` convidaria a gravar em qualquer 404 — a armadilha da Q-ADV1a; "não consta" é da voz N; prefixo
+`last_` na view é "da última voz"); (2) escritor PRÓPRIO, nunca parâmetro no `touchQueriedAt` (uma peça, um conceito); (3) guarda de
+resposta velha no próprio UPDATE (`COALESCE(MAX(e.event),0) = voz vista` — o defeito do gate r10 sobre a coluna que libera o
+cancelamento). Fato da TENTATIVA, nunca voz (um E2404 depois do F não muda o estado derivado — voz nova quebraria `fiscalStateOf`,
+`isLiveTransmission` e `reconfirmationCandidate`); relógio NOSSO; sem backfill; sem índice (lida pela PK); sem janela de validade
+(conhecimento negativo: a D-F29 nunca teve — não inventar). `migrate:setes` não copia a coluna (nasce NULL na réplica: F do ERP migrado
+exige reconferência nova depois da virada).
+
+**Gates do delta**: socrático **0,80 ✅** (nenhum MEDIUM+; corrigidos na sessão: LOW-1 contrato do adaptador — `queryDpsAccessKey` devolve
+`null` SÓ com E2404 explícito (o `null` virou prova); LOW-2 o teste ao vivo confere a prova pela coluna nova; LOW-4 a reconferência com a
+guarda recusada responde 409 `RESOURCE_BUSY` "consulte de novo", nunca "reconferido"; LOW-3 → Q-F97; validade da prova → Q-F98) ·
+adversarial **0,82 ✅** (nenhum HIGH+; R16-02 = LOW-4, resistiu; R16-03 — o E2404 de OUTRO ambiente valia como prova — corrigido na
+sessão aplicando a regra do L8 ao E2404; R16-01 → Q-F99). Testes: `adversarial-r16-gate.test.ts` nos dois serviços (o `it.failing` que
+fica = Q-F99) + bloco "RODADA 16" do `adversarial-r11-gate.test.ts` + D-F90 no `adversarial-r15-gate.test.ts`/`transmission.test.ts`.
+
+**LIÇÃO (produção, ~8 min)**: a 1ª versão da correção R16-03 recusava todo E2404 cujo `tipoAmbiente` não fosse o do ambiente perguntado —
+mas a forma REAL do E2404 (sonda de 2026-09-30, Q-ADV2f) traz **`"tipoAmbiente": 0`**: o adaptador do setes-api (produção, deploy ao
+salvar) passaria a tratar o "DPS sem NFS-e" verdadeiro como ambíguo. O teste que fixa a forma real pegou na hora; corrigido em ~8 min
+(só 1/2 explícito do OUTRO ambiente é ambíguo; 0/ausente seguem aceitos). Banco de produção conferido: nenhuma voz e nenhuma consulta
+no intervalo. REGRA: conferir o envelope REAL cravado antes de endurecer um leitor de resposta do fisco.
+
+**Provas**: setes-api **2087**/2106 (as 19 falhas são a bomba-relógio de data do boleto — fora deste delta) · nfse-api 329 unit + ao vivo **150/150** · núcleo 80. ⚠️ A suíte inteira do setes-api acusa 19 falhas em 3
+suítes do BOLETO (Onda 2) — bomba-relógio de DATA nos testes (vencimento fixo `2026-10-10`, vencido em 11/10; o código recusa
+corretamente) — fora deste delta; tarefa própria sugerida ao Valdo.
+
+**Rodada 17 (aberta pelos gates da Rodada 16 — aguardam o Valdo)**:
+- ⚠️ **Q-F97 (LOW-3 do socrático)** — o alarme da D-F87 só cobre o rodízio: a consulta/reconferência pedida pela TELA devolve 502 sem log
+  com a nota, o F candidato sai do rodízio depois da única revisita (D-F52) e a autorizada ambígua some no teto da D-F38. (a) **registrar
+  "Fisco ambíguo persistente" (institution, nota, tentativa) também na reconferência e na consulta por nota; o alarme agrega por nota
+  (primeira/última vez, contagem), sem depender da janela do rodízio** · (b) só o rodízio. *(Rec.: (a) — a Q-F93 prometeu a reconferência.)*
+- ⚠️ **Q-F98 (socrático)** — validade da prova: a D-F29/D-F90 aceita qualquer E2404 POSTERIOR ao F, inclusive o da revisita automática de
+  24 h; na F2a o cancelamento local pode se apoiar numa prova de semanas. (a) **manter "posterior ao F" e registrar como conhecimento
+  negativo (o DPS foi enviado uma vez; 24 h depois o E2404 é conclusivo)** · (b) exigir prova recente (o app reconfere imediatamente
+  antes). *(Rec.: (a) — reabrir só se a prova ao vivo M4 mostrar NFS-e gerada tarde.)*
+- ⚠️ **Q-F99 (R16-01 do adversarial)** — a assinatura da D-F89 compara 8 campos: dois e101101 do mesmo Id que divergem FORA deles (ex.:
+  `nDFSe` 1 × 2) passam como repetição, e o XML arquivado depende da ordem (a voz C sai igual). (a) **somar `nDFSe`, autor, `ambGer`,
+  `tpAmb` à assinatura** · (b) comparar o `infEvento` inteiro normalizado (risco de ambíguo falso por formatação) · (c) manter os 8 campos
+  e arquivar de forma DETERMINÍSTICA (ex.: o menor XML canônico), sem depender da ordem. *(Rec.: (a) — os campos do XSD que o fisco
+  preenche são poucos; (c) se (a) prender nota por ruído.)*
+
+**Seguem**: LOW da §21.8, prova ao vivo M4 (Valdo), nota de implantação da F2a (a nfse-api com a migration 003 sobe ANTES do setes-api
+com o núcleo novo — a view muda), e os próximos passos: Rodada 17 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.11 Rodada 17 — D-F91…D-F93 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F91** (= Q-F97 (a)) | "Fisco ambíguo persistente" com a ORIGEM em toda porta que pergunta ao fisco: rodízio (tentativa + última voz), consulta da tela (invólucro do `refreshServiceTransmission`), reconferência (`reconfirmBeforeLocalCancel` → `reconfirmCandidate`); helper único `logAmbiguousFiscal`; nunca a chave | `invoice-transmission.ts` (setes-api) · `nfse/transmission.ts` (nfse-api) |
+| **D-F92** (= Q-F98 (a)) | a prova da reconferência não tem prazo — conhecimento negativo no `reconfirmationProven` + teste | `fiscal-api/src/voice/reading.ts` |
+| **D-F93** (= Q-F99 (a)) | assinatura do evento + `nDFSe`, autor, `ambGer`, `tpAmb` (`tagText`) | os dois `adn.ts` |
+
+**Gates do delta**: socrático **0,78 ✅** · adversarial **0,80 ✅** (nenhum HIGH+; o invólucro é transparente — mesmo retorno, a MESMA exceção; nenhum log duplicado; nunca a chave de acesso no alarme; LOW-4 e D-F90 preservadas no split da reconferência). Achados LOW que dependem de decisão: R17-01 (o `tagText` não lê atributo/CDATA como o `firstText` — a R16-01 reabre por outra forma; `verAplic` fora da assinatura) → Q-F102 · R17-02 (o alarme leva a mensagem inteira — o erro "NFS-e de OUTRO DPS" embute o CPF/CNPJ de outro prestador) → Q-F100 · R17-03 (o ambíguo do TRANSMITIR — passo 0b — sai rotulado "consulta" e o GET /dps ambíguo do 0b não alarma) → Q-F101; e a premissa da D-F92 ("o DPS foi enviado UMA vez" — falsa pela D-N3/D-F30) → Q-F103. Testes: `adversarial-r17-gate.test.ts` nos dois serviços (`it.failing` = os pendentes) + blocos "RODADA 17" no `adversarial-r11-gate.test.ts` e no `adversarial-r15-gate.test.ts`. Fora do delta, registrado: o log do transporte para 405/406/415 (`fiscal-api/src/transport/https-json.ts`) grava a URL, que contém a chave de acesso.
+
+**Provas**: setes-api **2091**/2110 (idem — 19 da bomba-relógio do boleto) · nfse-api 358 unit + ao vivo **150/150** · núcleo 80.
+
+**Seguem**: LOW da §21.8, prova ao vivo M4 (Valdo), o ALARME da F3 (agrega "Fisco ambíguo persistente" por nota — D-F87/D-F91), nota de
+implantação da F2a (a nfse-api com a migration 003 sobe ANTES do setes-api com o núcleo novo), a tarefa da bomba-relógio de data dos
+testes do boleto (fora desta frente), e os próximos passos: Rodada 18 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+**Rodada 18 (aberta pelos gates da Rodada 17 — aguardam o Valdo)**:
+- ⚠️ **Q-F100 (R17-02)** — o que o alarme leva do erro: (a) a mensagem inteira (hoje — o "NFS-e de OUTRO DPS" traz o Id do DPS alheio,
+  que embute o CPF/CNPJ de outro prestador) · (b) **só o código + um rótulo sem dígitos** · (c) mascarar sequências de 11+ dígitos.
+  *(Rec.: (b).)*
+- ⚠️ **Q-F101 (R17-03)** — o ambíguo do TRANSMITIR (passo 0b, `reconcileInterrupted`) sai rotulado "consulta" pela ausência de flags, e o
+  GET /dps ambíguo do 0b não alarma: (a) aceitar "consulta" · (b) **origem EXPLÍCITA passada pelo chamador ("transmissao"), também no
+  GET /dps do 0b — a origem deixa de ser deduzida por ausência** · (c) não alarmar no transmitir. *(Rec.: (b).)*
+- ⚠️ **Q-F102 (R17-01)** — dois leitores do mesmo XML no adaptador (o `tagText` novo × o `firstText` do parse): atributo/CDATA divergentes
+  leem `null` dos dois lados e passam como repetição (a R16-01 reabre); `verAplic` ficou fora. (a) **o `tagText` passa a ser o `firstText`
+  do parse** · (b) assinatura = o XML canônico inteiro (fecha o `verAplic`; risco de ambíguo falso) · (c) **escolher o XML arquivado de
+  forma determinística quando as assinaturas empatam**. *(Rec.: (a) + (c).)*
+- ⚠️ **Q-F103 (D-F92 × D-N3)** — a premissa da D-F92 ("o DPS foi enviado UMA vez") é falsa: tentativas da mesma vida reapresentam o MESMO
+  Id do DPS (D-N3/D-F30); uma tentativa nova recusada não invalida a prova antiga da candidata. (a) manter e corrigir só o comentário ·
+  (b) **o E2404 tem de ser POSTERIOR à ÚLTIMA apresentação do Id em QUALQUER tentativa da vida** (barato, falha fechado). *(Rec.: (b).)*
