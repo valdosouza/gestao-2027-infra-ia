@@ -7,11 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.8 (D-F67…D-F82 executadas e publicadas: a substituição e105102 ganhou fim humano — "manter a
-> nota"; aberta a Rodada 15: A-F80, Q-F90, Q-F91). Antes: §21.7, §21 (Q-F62 / 1ª autorização da nfse-api em H) e §20
+> **⏯ RETOMAR POR AQUI — §21.9 (D-F67…D-F85 executadas e publicadas: a substituição e105102 ganhou fim humano — "manter a
+> nota"; aberta a Rodada 16: Q-F92…Q-F96). Antes: §21.7–§21.8, §21 (Q-F62 / 1ª autorização da nfse-api em H) e §20
 > (reconciliação, 2026-10-10)**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F82** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F85** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -626,6 +626,16 @@ branch `sessao-2026-10-10`):**
 - **D-F82 (= Q-F89 — idem) — o cancelamento DE OFÍCIO (e305101) espera o humano**: voz C sim, efeito local suspenso (pendência —
   "cancele a nota"), sem caminho de "manter" (não há substituta); sai do rodízio junto com a substituição (`HUMAN_EFFECT_CANCEL_CODES`
   no núcleo e no setes-api; `localCancelPending` exclui os dois). O e105104 (deferido a pedido do contribuinte) segue automático.
+- **D-F83 (= A-F80 confirmada — Valdo 2026-10-10: "siga as recomendações") — em HOMOLOGAÇÃO a saída da voz C é cancelar a nota**
+  (cancelável localmente — Q-CA5b) e faturar de novo: a vida nova transmite em P com DPS novo. O Id do DPS é da VIDA, não do ambiente
+  (D-N3) — uma tentativa em P na mesma vida colidiria com o leitor único pela chave (D-N26) e com a reconciliação de órfã (R3-1).
+- **D-F84 (= Q-F90 — idem; supera a escolha do L7 da Rodada 14) — GET tipado que traz TIPOS DIFERENTES de cancelamento desta chave é
+  AMBÍGUO** (`unknown` → 502, nada gravado, `logger.error` de contrato divergente) — nenhuma marca, nenhum efeito (como a D-F63): nem o
+  tipo perguntado (a marca menos restritiva) nem a substituição (abriria o "manter a nota" sobre uma resposta que se contradiz). Itens
+  repetidos do MESMO tipo valem. Nos dois adaptadores.
+- **D-F85 (= Q-F91 — idem) — a chave da SUBSTITUTA só é exibida se for do MESMO emitente**: posições 9–23 da chave de 50 (tipo de
+  inscrição + inscrição) iguais às da substituída (`sameIssuerKey`), além do formato e de ser ≠ da própria chave (R13-04). Só exibição
+  (D-F76) — nunca regra.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -873,10 +883,17 @@ chave da substituta na tela) · **Q-F75** contrato da F2a para a substituição 
   ~~**Q-F86** quem serve a decisão depois da F2a~~ → **D-F79** · ~~**Q-F87** homologação~~ → **D-F80** (+ assunção A-F80) ·
   ~~**Q-F88** a dispensa é história ou estado~~ → **D-F81** · ~~**Q-F89** efeito do 305101/105104~~ → **D-F82**.
 
-### 8.R15 Rodada 15 — aberta pelos gates da Rodada 13 (2026-10-10, §21.8) — ⚠️ AGUARDA O VALDO
+### 8.R15 Rodada 15 — aberta pelos gates da Rodada 13 (2026-10-10, §21.8) — DECIDIDA ("siga as recomendações" → D-F83…D-F85)
 
 Texto completo no §21.8: **A-F80** (confirmar: em H a saída é cancelar a nota — o Id do DPS é da vida) · **Q-F90** (GET tipado com o
 tipo perguntado E um e105102 — Rec.: ambíguo) · **Q-F91** (`chSubstituta` × CNPJ da chave — Rec.: sim, baixo valor).
+
+### 8.R16 Rodada 16 — aberta pelos gates da Rodada 15 (2026-10-10, §21.9) — ⚠️ AGUARDA O VALDO
+
+Texto completo e recomendações no §21.9: **Q-F92** contradição ENTRE rotas tipadas (Rec.: manter "para no primeiro" + conhecimento
+negativo) · **Q-F93** saída da nota "ambígua para sempre" (Rec.: fail-closed + alarme da F3 com institution e nota) · **Q-F94** tipo
+fora do domínio no mesmo GET tipado (Rec.: ambíguo) · **Q-F95** mesmo tipo com conteúdo divergente (Rec.: ambíguo) · **Q-F96** prova da
+D-F29 forjada pelo carimbo do rodízio na nfse-api (Rec.: a prova exige o "não achou" explícito — antes da F2a).
 
 ## 9. Fora de escopo desta fase
 
@@ -2057,7 +2074,7 @@ descartável, e o DDL antes do código** (falha de migration no boot = `process.
 vale onde o texto é nosso — o motivo digitado pelo usuário pode conter a marca (R13-02); (3) a "marca mais restritiva" deixa de ser
 segura quando a marca abre uma porta MENOS restritiva (o "manter") — proveniência decide (D-F77).
 
-### 21.8 Pendências e questões abertas — ⏯ RETOMAR POR AQUI
+### 21.8 Pendências e questões abertas (Rodada 15 DECIDIDA — D-F83…D-F85; execução no §21.9)
 
 **Rodada 15 (aberta pelos gates da Rodada 13 — aguardam o Valdo)**:
 - ⚠️ **A-F80 (confirmar)** — a letra da Q-F87 (a) dizia "a voz de H não bloqueia a transmissão em P"; executado como "em H, cancele a
@@ -2080,3 +2097,46 @@ substituição, para ver a tela nova; ou 101101) e ver a consulta suspender (105
 **Próximos passos (ordem)**: Rodada 15 (A-F80, Q-F90, Q-F91) → D-NE: NE-0/NE-1 (núcleo generalizado ANTES da F2a) → **F2a** (setes-api
 passivo; migration `NNN_f2a_fiscal_passivo.sql` — D-F50; contrato da tela pela D-F79: o setes-api expõe `cancelWaiver`/`pendingEffects`
 em rota própria por pedido, a nfse-api só o fisco) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.9 Rodada 15 — D-F83…D-F85 (Valdo 2026-10-10: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F83** (= A-F80 confirmada) | em H a saída da voz C é cancelar a nota e faturar de novo (o Id do DPS é da vida) — nada de código novo; o 409 de H já aponta | — |
+| **D-F84** (= Q-F90) | GET tipado com TIPOS DIFERENTES de cancelamento desta chave = `unknown` (502, nada gravado, `logger.error`) — supera o L7; mesmo tipo repetido vale; a D-F69 segue depois | os dois `adn.ts` |
+| **D-F85** (= Q-F91) | chave da substituta só exibida se do MESMO emitente (`sameIssuerKey`: posições 9–23 da chave 50) | `substituteKeyOf` nos dois serviços |
+
+**Gates do delta**: socrático **0,80 ✅** (nenhum MEDIUM+; L3 — JSDoc órfão na nfse-api, comentários de "hoje" no teste do R13-03,
+teste da ordem inversa — corrigidos na sessão; L1 → Q-F92, L2 → Q-F93) · adversarial **0,80 ✅** (nenhum HIGH+; R15-01 LOW → Q-F94; R15-02 MEDIUM ANTERIOR ao delta, latente até a F2a → Q-F96; a
+nota cosmética do JSDoc já estava corrigida pelo L3). Testes: `adversarial-r15-gate.test.ts`
+nos dois serviços + blocos "RODADA 14" (L7 → D-F84) e R13-03/R13-04 do `adversarial-r13-gate.test.ts`.
+
+**Provas**: setes-api **2047/2047** (suíte inteira, com a Rodada 4 do IBS/CBS da sessão paralela) · nfse-api 309 unit + ao vivo
+**150/150** · núcleo 80 (sem mudança). Nada de DDL nesta rodada.
+
+**Rodada 16 (aberta pelos gates da Rodada 15 — aguardam o Valdo)**:
+- ⚠️ **Q-F92 (L1)** — a D-F84 só pega contradição DENTRO de um GET tipado; o laço pergunta 101101 → 105102 → 105104 → 305101 e PARA no
+  primeiro achado: rota 101101 limpa + um e105102 na rota dele = "cancelada 101101" e o C local nasce. (a) **manter "para no primeiro"
+  e registrar a premissa da D-F61 ("cancelamento é único por nota") como conhecimento negativo, com teste que fixa o comportamento** ·
+  (b) perguntar as rotas restantes (até 3 GETs a mais, só nas achadas canceladas). *(Rec.: (a) — impossibilidade fiscal; reabrir só se
+  a prova ao vivo M4 mostrar outra coisa.)*
+- ⚠️ **Q-F93 (L2)** — saída para a nota "ambígua para sempre" em produção (K em voo ou reconferência presos em 502 por resposta
+  contraditória PERSISTENTE da Sefin): (a) **manter fail-closed e fazer do alarme da F3 a saída — o rodízio registra o 502 persistente
+  COM institution e nota (o log do adaptador não tem esse contexto)** · (b) ato humano com evidência, no molde do "manter a nota" ·
+  (c) teto de tentativas no K ambíguo. *(Rec.: (a) agora; (b) só com caso real; (c) não — "ambíguo nunca fecha".)*
+- ⚠️ **Q-F94 (R15-01 do adversarial)** — a D-F84 só conta tipos de CANCELAMENTO: um evento gerado desta chave de tipo fora do domínio
+  (e105105 indeferido, e101103…) no mesmo GET tipado é filtrado antes — `[e105105, e105104]` na rota 105104 vira "cancelled 105104" e o
+  C local nasce. (a) **conta como contradição (ambíguo)** · (b) filtrado, como hoje. *(Rec.: (a) — o GET por tipo + sequência só deveria
+  devolver o tipo perguntado.)*
+- ⚠️ **Q-F95 (contexto do adversarial)** — "mesmo tipo repetido vale" vale também com CONTEÚDO divergente? Hoje dois e105102 com
+  `chSubstituta` diferentes dão cancelled 105102 com o XML do primeiro (a substituta exibida depende da ordem). *(Rec.: conteúdo
+  divergente também é ambíguo.)*
+- ⚠️ **Q-F96 (R15-02 do adversarial — MEDIUM ANTERIOR ao delta, D-F52 × D-F63; latente até a F2a)** — na nfse-api o rodízio revisita
+  um F de envio interrompido em P; GET /dps acha a chave mas a consulta pela chave volta AMBÍGUA (502) → falha persistente carimba
+  `last_queried_at` fora da transação → `reconfirmationProven` vira `true` = a prova que LIBERA o cancelamento local, embora o fisco
+  tenha acabado de mostrar a NFS-e ("não se prova no escuro"). Hoje nenhum código do setes-api lê essa prova (o cancelamento atual
+  reconfere na hora e falha fechado — provado). (a) não carimbar a candidata F em erro persistente · (b) marca própria de "não achou" ·
+  (c) **a prova exige o "não achou" registrado explicitamente**. *(Rec.: (c) — decidir antes da F2a.)*
+
+**Seguem da §21.8**: LOW registrados, prova ao vivo M4 (Valdo), e os próximos passos: Rodada 16 → NE-0/NE-1 → **F2a** (contrato da
+tela pela D-F79) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
