@@ -1,7 +1,7 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.22 (acompanha a tabela "Histórico de Atualizações")  
-**Última atualização**: 2026-10-10  
+**Versão**: 9.23 (acompanha a tabela "Histórico de Atualizações")  
+**Última atualização**: 2026-10-11  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
 
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-11 | **Fase IBS/CBS — Rodada 5 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.13–§11.15; Valdo: "siga as recomendações na Rodada 5"): D-IB39 as linhas da história do cClassTrib marcadas "ausente da fonte" entram no limite de encolhimento de 10 % (bruto; a recusa diz o que é cada lista e a história separa `codeInSource` × `codeVanished`); D-IB40 o GET do serviço diz se a NBS gravada segue na lista oficial (`nbsAcceptedToday`) e a aba mostra o selo — regra ÚNICA `nbsAcceptedSql` na peça `@shared/ibscbs-classification` (salvar, lista, selo e a IB-2); o título da aba ganha aviso quando há selo; D-IB41 registrada para a IB-2 (linha vigente sem presença = caminho da D-IB34) + roteiro de leitura da IB-2 no §4. Skill `setes-api/skills/carregar-catalogo-ibscbs.md` atualizada (a história conta no limite; dIniVig em massa = `--aceita-encolher` legítimo). Gates do delta 0.78/0.84 ✅. Rodada 6 Q-IB42…Q-IB44 aberta (§11.15). | 9.23 |
 | 2026-10-10 | **APIs fiscais — Rodada 15 EXECUTADA e PUBLICADA (D-F83…D-F85)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.9): em homologação a saída da voz C é cancelar a nota (A-F80 confirmada); GET tipado com TIPOS DIFERENTES de cancelamento = ambíguo (502, supera o L7); chave da substituta só exibida se do MESMO emitente. Gates do delta 0,80/0,80 ✅. **Rodada 16 aberta: Q-F92…Q-F96** (Q-F96 = prova da D-F29 forjável pelo rodízio da nfse-api — decidir antes da F2a). | 9.22 |
 | 2026-10-10 | **Fase IBS/CBS — Rodada 4 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.10–§11.12; Valdo: "siga as recomendações na Rodada 4"): D-IB36 fato "ausente da fonte desde a versão X" na história do cClassTrib (script `sql/63` ⭐ NOVO; a peça ignora a linha superada; o boot confere a coluna); D-IB37 aceite HOJE por componente no GET (`acceptedToday` + por código) e selo na aba; D-IB34/D-IB35 registradas para a IB-2 (faturar sem o grupo antes da obrigação; obrigação pelo enquadramento datado); D-IB38 limite bruto. Gates do delta 0.76/0.80 ✅. Rodada 5 Q-IB39…Q-IB41 aberta (§11.12). | 9.21 |
 | 2026-10-10 | **APIs fiscais — Rodadas 12–14 EXECUTADAS e PUBLICADAS (D-F67…D-F82)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.7): a NFS-e cancelada por SUBSTITUIÇÃO no fisco (e105102) ganha fim HUMANO — "manter a nota" = fato da NOTA (`tb_invoice_cancel_waiver`, motivo + autor, CANCELAR do ramo, só em P) via `POST /api/billing/cancel-waiver` + botão no app, ou cancelar a nota; o TIPO do evento vira fato na voz C (`authority_code`, CHECK; migration **067 aplicada em PRODUÇÃO** + 002 da nfse-api); o código só sobe para 105102 e a voz do NOSSO pedido nunca sobe; voz C vigente nunca se retransmite (409 `FISCAL_NFSE_SUBSTITUTED`); de ofício (305101) espera o humano; consulta humana arquiva o XML do evento que faltou; um predicado de pendência. Gates 0,74/0,80 ✅. Palavra ocupada nova: **dispensa** (guardião). **Rodada 15 aberta: A-F80, Q-F90, Q-F91**. | 9.20 |

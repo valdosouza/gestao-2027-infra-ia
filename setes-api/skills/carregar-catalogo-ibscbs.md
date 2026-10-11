@@ -49,10 +49,19 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
    - `relatorio.validity.deactivated` + chaves — linhas de vigência que SUMIRAM da fonte e ganham o fato "ausente desde a versão"
      (D-IB36; nunca são apagadas; a peça passa a ignorá-las) — ex.: o IT corrigiu a dIniVig de um código;
    - `relatorio.*.deactivatedKeys` — o que PERDE a presença nesta carga; `relatorio.impact` — serviços de cada cliente que usam
-     cClassTrib/cIndOp que ficam SEM nenhuma aplicabilidade na NFS-e ou NBS que perde a presença (só no ensaio); `relatorio.shrink` + `AVISO_ENCOLHIMENTO` — perda > 10 % de alguma lista (D-IB28 (c)).
+     cClassTrib/cIndOp que ficam SEM nenhuma aplicabilidade na NFS-e ou NBS que perde a presença (só no ensaio); `relatorio.shrink` + `AVISO_ENCOLHIMENTO` — perda > 10 % de alguma lista (D-IB28 (c)),
+     em BRUTO (D-IB38). As listas que contam: presença do cClassTrib por modelo, presença do cIndOp, NBS e — desde a D-IB39 — a
+     **história do cClassTrib** (linhas marcadas "ausente da fonte"; base = linhas presentes na fonte antes da carga — linha já marcada
+     numa carga anterior não entra na base nem conta de novo). Na história, o relatório separa `codeInSource` (o código SEGUE na fonte
+     com outra linha — ex.: o IT corrigiu a dIniVig) de `codeVanished` (o código sumiu da fonte — suspeita de IT antigo/errado).
+     ⚠️ Limite conhecido (Q-IB44): ENCERRAR vigência em massa (dFimVig no passado) não marca linha ausente — não conta no limite nem
+     aparece no impacto; conferir `relatorio.validity.updated` alto no ensaio.
 4. **Ato**: o ensaio imprime `--vai --plano <hash>`. Rodar o MESMO comando com esse sufixo. Se a fonte, a leitura ou a data mudaram
    entre o ensaio e o ato, o plano não bate e NADA é gravado — rodar o ensaio de novo.
-5. **Encolhimento intencional** (ex.: a Receita extinguiu NBS em massa): ensaio E ato com `--aceita-encolher` (o argumento entra no plano).
+5. **Encolhimento intencional**: ensaio E ato com `--aceita-encolher` (o argumento entra no plano). Casos legítimos: a Receita extinguiu
+   NBS em massa; o IT corrigiu a dIniVig de muitos códigos de uma vez (a história mostra `codeInSource` alto e `codeVanished` ≈ 0 — as linhas
+   antigas ganham o fato "ausente desde a versão" e as novas entram). `codeVanished` alto sem nota da Receita = parar e conferir a versão do
+   IT antes de aceitar.
 6. Conferir depois: 2ª passada do ensaio = 100 % `unchanged`.
 
 ## 4. Pré-condições de deploy da fase (D-IB33)

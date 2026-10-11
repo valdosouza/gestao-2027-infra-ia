@@ -225,6 +225,16 @@ datada reúne). **Livres**: `classification`, `ibscbs`, `nbs`. Colunas-chave: `c
 | **IB-N** (dentro da F4) | porta de cálculo + Calculadora oficial (prova de conceito, topologia D-F9) + `tb_tax_rule_ibscbs` + `tb_order_item_ibscbs` + builder do grupo na nfe-api (NE-4/NE-6) | 6–10 | 1º cliente de mercadoria; Q-IB11 |
 | **Caminho até 01/01/2027 (IB-0…IB-4)** | | **10–15** (≈ 3–4 semanas de trabalho) | concorre com a F2a (um executor = serial); Q-IB15 |
 
+**⚠️ Roteiro de leitura ANTES de abrir a IB-2** (decisões e limites que a IB-1 deixou para ela — gate socrático do delta R5):
+D-IB8 (sem classificação depois da obrigação = 422) · D-IB9 (colunas congeladas no ramo `tb_invoice_service`, UMA função da peça, billing
+E OS) · D-IB13 (três fatos datados: leiaute, obrigação, rejeição) · D-IB34 (linha que só vale depois do faturamento: antes da obrigação a
+nota sai sem o grupo, nunca 422 — inclusive no lote mensal; depois, 422) · D-IB35 (a data da obrigação passa a vir do enquadramento
+datado) · D-IB40 (NBS sem presença barra o faturamento; regra única `nbsAcceptedSql` da peça) · D-IB41 (linha vigente SEM presença = mesmo
+caminho da D-IB34; `acceptedToday` é sinal de CADASTRO, nunca decide o faturamento; a nota congelada nunca reconsulta o catálogo) ·
+limite TOCTOU do §11.8 (PUT que leu o catálogo antes de uma carga pode gravar código que acabou de perder a presença — a IB-2 barra) ·
+limite do §11.11 (excluir o serviço não mata a peça 1:1 `tb_service_ibscbs` — todo leitor exige o produto vivo) · Q-IB42 (calendário
+da barreira da NBS — §11.15).
+
 ## 5. Fora de escopo desta fase (1º release — sujeito à Q-IB17)
 
 Notas de ajuste (finNFSe 1/2 — Q-RTC6; finNFe 5/6 — D-NE47) · compra governamental/`tpEnteGov` (salvo Q-IB18) · imóveis/locação ·
@@ -758,3 +768,69 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
   devolve uma linha que não se aplica, enquanto o selo (regra do cadastro) diz "aceita". *(Rec.: tratar igual à D-IB34 — antes da
   obrigação a nota sai sem o grupo; depois, o 422 da D-IB8 — e registrar na IB-2 que `acceptedToday` é sinal de CADASTRO, não decide o
   faturamento, e que a nota congelada nunca reconsulta o catálogo.)*
+
+### 11.13 Rodada 5 DECIDIDA (Valdo 2026-10-10: "siga as recomendações na Rodada 5") — D-IB39…D-IB41
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB39** | As marcações "ausente da fonte" da história do cClassTrib (`relatorio.validity.deactivated`) entram no limite de encolhimento da D-IB28 (c), em BRUTO como na D-IB38, com o mesmo `--aceita-encolher` (base = linhas de vigência presentes na fonte antes da carga) — cobre o IT antigo carregado por engano também nas linhas sem presença na NFS-e (que pesam na F4) |
+| **D-IB40** | O GET do serviço diz se a NBS GRAVADA é aceita hoje (`nbsAcceptedToday` — presente na lista oficial) e a aba mostra o selo sob a NBS; a descrição continua exibida (o GET nunca esconde o que está gravado). A IB-2 barra o faturamento de serviço com NBS sem presença |
+| **D-IB41** | (IB-2) Linha VIGENTE na data do fato SEM presença na NFS-e (com ou sem linha futura que tenha) = mesmo tratamento da D-IB34: ANTES da obrigação a nota sai sem o grupo IBS/CBS; DEPOIS, o 422 da D-IB8. Registrado na IB-2: `acceptedToday` é sinal de CADASTRO e não decide o faturamento; a nota congelada nunca reconsulta o catálogo (as colunas congeladas de `tb_invoice_service` são a verdade da nota) |
+
+**Execução**: §11.14.
+
+### 11.14 Rodada 5 — execução (2026-10-10)
+
+- **D-IB39** `apply.ts`: a lista `validity` entra no laço do limite da D-IB28 (c) — base = linhas de vigência PRESENTES na fonte antes da
+  carga (`absent_since_version` nulo); ensaio avisa, ato recusa salvo `--aceita-encolher`. Teste: 1 de 3 marcada (33 %) = aviso no ensaio,
+  recusa no ato, grava com o argumento.
+- **D-IB40** `services.repository.ts`: o GET devolve `nbsAcceptedToday` (NBS gravada presente na lista oficial; null = sem NBS) — a descrição
+  segue exibida; a aba mostra o selo sob a NBS e escolher outra o tira. Ao vivo: com NBS = `true`, sem NBS = `null`. O `false` NÃO foi
+  provado ao vivo pelo GET (não se mexe no catálogo central de produção para provar): o teste unitário só lê a coluna pronta, e quem
+  prova o SQL é o par do gate socrático abaixo (teste que fixa o JOIN e o predicado + consulta ao vivo do predicado em tabela derivada).
+  O bloqueio no faturamento é da IB-2.
+- **D-IB41**: registrado para a IB-2 (§11.13) — nenhum código nesta rodada.
+- **Gate socrático do delta R5: 0.78 ✅** — correções sem decisão feitas na sessão:
+  (1) "NBS aceita" tem UM dono: `nbsAcceptedSql(alias)` na peça `@shared/ibscbs-classification` (alias validado) — usado pelo
+  `nbsExists` (salvar), pela lista de apoio e pelo selo do GET; a IB-2 lê o mesmo;
+  (2) testes que protegem o SQL: o JOIN com `tb_nbs` no GET é só `nb.code = sv.nbs` (não filtra `deleted` — a descrição da NBS que saiu
+  segue) e o selo usa o predicado da peça; `nbsExists` recusa NBS com `deleted = 'S'`. Prova ao vivo do predicado (só leitura, tabela
+  derivada no MySQL do dev): presente = 1 · saiu da lista = 0 com descrição · fora do catálogo = 0 · sem NBS = nulo; catálogo real: 920
+  NBS, 920 aceitas;
+  (3) teste da base do limite da D-IB39: linha já marcada ausente numa carga anterior fica fora da base (`aliveBefore` 2) e não conta de
+  novo (shrink vazio);
+  (4) a recusa de encolhimento diz o que é cada lista ("história do cClassTrib (linhas marcadas ausentes da fonte) [validity]: 1 de 3 —
+  1 de código que segue na fonte (ex.: vigência corrigida), 0 de código que sumiu da fonte"); o relatório da história separa
+  `codeInSource` × `codeVanished`;
+  (5) skill `carregar-catalogo-ibscbs.md`: a história conta no limite; correção em massa da dIniVig é `--aceita-encolher` legítimo
+  (`codeInSource` alto, `codeVanished` ≈ 0); `codeVanished` alto sem nota da Receita = parar;
+  (6) roteiro de leitura da IB-2 no §4 + comentário do `findClassificationAt` (`applicable = false` segue a D-IB34 pela D-IB41, nunca
+  "sem classificação");
+  (7) o título da aba IBS/CBS ganha um ícone de aviso (com dica) quando algum selo da aba está ligado.
+- **Gate adversarial do delta R5: 0.84 ✅** (nenhum HIGH/CRITICAL; 14 ensaios offline sem `--vai` + ~60 requests ao vivo em série; catálogo
+  central intacto por `CHECKSUM TABLE` antes/depois; resíduo limpo). Provado: fronteira do limite na história (17 de 173 passa, 18 de 173
+  avisa; no ato com proxy de commit, 18 de 180 grava e 19 de 180 recusa), IT antigo da Rodada 4 agora avisa (103 de 173), plano muda com
+  e sem `--aceita-encolher`; D-IB40 ao vivo com a NBS retirada numa transação desfeita (GET `false` com descrição, lookup não oferece,
+  PUT inalterado = OK, troca/POST = 422); sem regressão das Rodadas 3/4 (lista × salvar × selo concordam nos 173 cClassTrib e 40 cIndOp).
+  4 LOW: (2) o 422 da NBS retirada dizia "não existe no catálogo" enquanto a tela mostra a descrição → CORRIGIDO ("não está na lista
+  oficial", a língua do selo; descrição do código de erro idem); (3) skill/§11.14 → já feitos acima; (4) rótulo "substituída por nova
+  vigência" presumia vigência nova → CORRIGIDO (`codeInSource` = "de código que segue na fonte"); (1) encerramento de vigência em massa
+  fora do limite e do impacto → **Q-IB44** (§11.15). Casos não testados que viraram teste jest: fronteira exata no ato (18/180 × 19/180) e
+  "limpar a NBS e reenviar a mesma" reconfere. Ficam registrados (sem teste automatizado): widget test do selo da NBS e encolhimento em
+  fatias (cada carga com o seu ensaio — é do desenho).
+
+### 11.15 ⚠️ Rodada 6 — questões para o Valdo (do gate socrático do delta da Rodada 5; recomendação entre parênteses)
+
+- **Q-IB42** — Calendário da barreira da NBS no faturamento (D-IB40 diz "a IB-2 barra", sem data): ANTES da obrigação (envio
+  voluntário — D-IB13/D-IB34), serviço com NBS sem presença na lista oficial fatura e a nota sai SEM o `cNBS`/grupo, nunca 422 (inclusive
+  no lote mensal)? DEPOIS da obrigação, 422 — também para NBS ausente do catálogo? *(Rec.: sim nas duas — é o mesmo calendário da D-IB34/
+  D-IB41; a NBS nunca derruba o lote antes de 01/01/2027.)*
+- **Q-IB43** — Guarda de versão do IT: hoje nada impede carregar um IT MAIS ANTIGO que o já carregado (só o limite de encolhimento
+  pega, se passar de 10 %). Recusar versão anterior à gravada? *(Rec.: não agora — a versão é texto livre do operador e o limite +
+  `codeVanished` no relatório cobrem o caso real; registrar como limite conhecido e reabrir se a Receita publicar versões fora de ordem.)*
+- **Q-IB44** — Encerramento de vigência em massa (gate adversarial do delta R5, LOW 1, provado offline): um IT com dFimVig no passado em
+  169 de 173 linhas (e Calculadora coerente) passa sem aviso — a linha não fica "ausente", só muda o `valid_until` — e o impacto não
+  lista os serviços que perdem a linha vigente. Com a Calculadora real a A-IB1 recusa; a família de risco é a mesma da D-IB39. Contar no
+  limite (bruto, mesmo `--aceita-encolher`) as linhas que deixam de valer HOJE por mudança de `valid_until` e pôr no impacto os serviços
+  cujo código fica sem linha vigente na data? *(Rec.: sim nas duas — mesma regra da D-IB39 aplicada a "deixa de valer hoje"; o impacto
+  já roda na data do ensaio.)*
