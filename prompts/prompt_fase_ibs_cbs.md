@@ -231,6 +231,9 @@ E OS) · D-IB13 (três fatos datados: leiaute, obrigação, rejeição) · D-IB3
 nota sai sem o grupo, nunca 422 — inclusive no lote mensal; depois, 422) · D-IB35 (a data da obrigação passa a vir do enquadramento
 datado) · D-IB40 (NBS sem presença barra o faturamento; regra única `nbsAcceptedSql` da peça) · D-IB41 (linha vigente SEM presença = mesmo
 caminho da D-IB34; `acceptedToday` é sinal de CADASTRO, nunca decide o faturamento; a nota congelada nunca reconsulta o catálogo) ·
+D-IB47 (a pergunta do faturamento é o VEREDITO da peça na data do fato — `classificationVerdictAt`/`classificationVerdictsAt` (lote),
+com o MOTIVO `no-line`/`not-applicable`/`requires-regular` para o 422 legível; a MESMA que a carga do catálogo usa no impacto; o selo
+usa `classificationAcceptedForRegistration`; "aceito" = `verdictOf`, UMA definição — nunca re-derivar `applicable && !requiresRegular`) ·
 limite TOCTOU do §11.8 (PUT que leu o catálogo antes de uma carga pode gravar código que acabou de perder a presença — a IB-2 barra) ·
 limite do §11.11 (excluir o serviço não mata a peça 1:1 `tb_service_ibscbs` — todo leitor exige o produto vivo) · D-IB42 (calendário
 da barreira da NBS: antes da obrigação a nota sai SEM o `cNBS`, nunca 422 — inclusive no lote; depois, 422 também para NBS ausente do
@@ -903,3 +906,73 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
 - **Q-IB48** — `--date` diferente de hoje no ATO: hoje só avisa (`AVISO_DATA`) e o plano garante ensaio = ato. O ato com `--vai` deve
   RECUSAR `--date` diferente de hoje (o ensaio segue aceitando, para reproduzir uma carga)? *(Rec.: sim — o único uso legítimo de
   `--date` é reproduzir; gravar com outra data é fugir do limite e do impacto.)*
+
+### 11.19 Rodada 7 DECIDIDA (Valdo 2026-10-11: "siga as recomendações na Rodada 7") — D-IB45…D-IB48
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB45** | Aviso PROSPECTIVO no ensaio: `relatorio.impactAhead` lista, só como informação e FORA do limite, os serviços cujo código ACEITO na data da carga deixa de ser aceito até o fim da janela do cadastro (`registrationWindowEnd` — hoje a obrigação 01/01/2027), com a data da perda (`lossDate`) — inclusive o encerramento NA data da carga (perde no dia seguinte). Datas candidatas = dia seguinte a cada fim de vigência e o início de cada linha nova dentro da janela; depois da obrigação não há janela. O limite da D-IB44 não muda |
+| **D-IB46** | A base do limite da história segue "linhas presentes antes da carga" (D-IB44); o relatório mostra ao lado as VIGENTES na data (`validityVigentOnDate`, `vigentOnDate` na linha do encolhimento). Limite conhecido: a história cresce com os encerramentos e dilui a base — reabrir quando vigentes/presentes ficar abaixo de 80 % (2026-10-11: 170 de 173) |
+| **D-IB47** | Uma regra só para "aceito": o impacto (e o aviso da D-IB45) pergunta à PEÇA de classificação na data do fato — `classificationAcceptedAt` (linha vigente com presença e sem exigir tributação regular), na conexão da transação da carga — em vez do predicado SQL próprio; a flag de tributação regular LIGADA numa linha vigente vira candidata ao impacto (`validityRegularOn`); a linha do impacto marca `registrationStillAccepts` quando o cadastro ainda aceita o código por linha futura (o selo diz "aceita") |
+| **D-IB48** | O ATO com `--vai` recusa `--date` diferente de hoje (antes de abrir o banco); o ensaio segue aceitando, com `AVISO_DATA`, para reproduzir uma carga |
+
+**Execução**: §11.20.
+
+### 11.20 Rodada 7 — execução (2026-10-11)
+
+- **Peça `@shared/ibscbs-classification`** (carregada pelo servidor — trocada de uma vez, `/health` em 6 s): "aceito" ganhou UMA definição
+  (`accepts`: presença e sem tributação regular) com duas portas — `classificationAcceptedAt` (data do fato: impacto da carga e,
+  na IB-2, o faturamento) e `classificationAcceptedForRegistration` (regra do cadastro: o selo — `classificationAcceptance` passa a
+  usá-la, comportamento idêntico). Testes da peça e dos serviços 34/34.
+- **D-IB45/D-IB46/D-IB47** `apply.ts`: `lostAfterLoad` com data pergunta à peça (candidatos = perdeu presença, vigência encerrada,
+  tributação regular ligada); sem data, o comportamento antigo; `lossesAhead` (consulta marcada `/* ibscbs-ahead */` + a peça em cada
+  data candidata) alimenta `impactAhead`, lido nos clientes DEPOIS do rollback como o impacto; `validityVigentOnDate`/`vigentOnDate`.
+- **D-IB48** `scripts/load-ibscbs-catalog.ts`: `--vai` com `--date` ≠ hoje recusado antes de ler fontes e abrir o banco.
+- Testes jest: a conexão falsa responde às perguntas da peça (`__piece`, emulando `findClassificationAt`/linhas do código) e à
+  consulta do aviso (`__ahead`); migrados os 4 testes do impacto pela data; novos: flag regular → impacto com
+  `registrationStillAccepts` false; aviso prospectivo (perda em 01/01/2027, fim NA data → perde amanhã, sucessora com presença não
+  perde, linha nova sem presença dentro da janela perde, depois da obrigação não consulta, não roda no ato nem sem data). Catálogo
+  64/64.
+- **Provas ao vivo** (só ensaio, sem `--vai`): o ato com `--date 2026-10-10` é recusado com a mensagem da D-IB48 antes do banco; pelo
+  harness do gate adversarial (transação externa, commit proibido, serviço de teste 67 revivido só dentro dela) um IT que encerra o
+  000001 em 31/12/2026 dá limite e impacto de hoje vazios e **`impactAhead` = serviço 67 com perda em 2027-01-01**, vigentes na data 170;
+  controle com o IT oficial v1.70 = sem limite, impacto ou aviso, plano igual ao de antes (`edb2c381d29e316e`); catálogo central
+  conferido depois (`CHECKSUM TABLE` iguais) e o serviço 67 segue excluído.
+- **Gate socrático do delta R7: 0.72 ✅** e **adversarial: 0.78 ✅** (sem HIGH/CRITICAL). Os DOIS acharam, por caminhos diferentes, o mesmo
+  furo MEDIUM (R7-S1 = ADV-R7-01, provado por sonda e por 4 variantes no harness): o impacto inferia os candidatos pelo TIPO da mudança
+  (presença perdida, vigência encerrada, flag regular) e perdia a linha NOVA sobreposta, REVIVIDA ou ESTENDIDA que passa a ser a vigente
+  mais nova sem presença — a peça dizia "não aceito", impacto e aviso vazios, e o selo seguia "aceita". **Retrabalho feito na sessão**
+  (cumpre a D-IB47, sem decisão nova):
+  (1) **impacto = DIFERENÇA do veredito da peça ANTES × DEPOIS da gravação**, na mesma transação, para todo código que a carga pode tocar
+  (o catálogo inteiro ∪ a fonte; o "antes" é lido logo depois do FOR UPDATE, antes de qualquer gravação); `validityEnded`/`validityRegularOn`
+  seguem só como informação;
+  (2) a peça devolve o VEREDITO com o motivo (`verdictOf` → `no-line`/`not-applicable`/`requires-regular`); `accepts`, a lista de apoio e o
+  422 do cadastro leem dele (textos e códigos de erro iguais); a linha do impacto e a do aviso trazem `reason`;
+  (3) portas em LOTE na peça (`classificationVerdictsAt` — mesma regra do `findClassificationAt`, blocos de 500; `classificationRegistrationVerdicts`)
+  — o ensaio faz 1 consulta antes + 1 depois + 1 por data candidata do aviso (antes: 2 por código, em série);
+  (4) sem data o ensaio com impacto é RECUSADO (a 2ª definição de "aceito" do ramo antigo morreu);
+  (5) D-IB48 virou `assertActDate` em `plan.ts` (testada); o ensaio com `--date` diferente de hoje diz que o plano NÃO é gravável (LOW do
+  adversarial: oferecia `--vai --plano X` que o ato recusaria); limite conhecido: o ato que cruza a meia-noite grava com a data de ontem;
+  (6) testes: a conexão falsa responde pelo estado ANTES (`__pieceBefore`, até a 1ª gravação) e DEPOIS (`__piece`), emula o lote; novos: R7-S1
+  (sobreposta), ADV-R7-01 (revivida e estendida), SQL/parâmetros/ordem da consulta do aviso (R7-S4), fronteiras do aviso (volta para a linha
+  antiga sem presença → perda em 12-01; fim em 2027-01-01 → sem aviso; carga em 31/12 com fim no mesmo dia → perda na obrigação), veredito
+  e lotes na peça, `assertActDate`;
+  (7) texto: `registrationStillAccepts` = o cadastro ainda aceita (linha futura na janela OU outra linha vigente com presença —
+  `pickForRegistration`).
+  IBS/CBS jest 111/111 + catálogo de campos; tsc limpo. **Re-prova AO VIVO** pelo harness do adversarial (transação externa, commit
+  proibido): s5a/s5r/s5x/s5y → o serviço 67 aparece no impacto com `reason: not-applicable` e `registrationStillAccepts: true` (antes:
+  vazio); r7a → aviso com perda em 2027-01-01 `no-line`; 169 encerradas → limite com `vigentOnDate` 170; IT oficial → sem limite, impacto
+  ou aviso, plano igual (`edb2c381d29e316e`); catálogo conferido depois — os 7 `CHECKSUM TABLE` iguais aos do gate, produtos 65–68
+  excluídos, nenhuma transação aberta. Provado também pelo adversarial: o selo do GET não mudou (11.591 comparações HEAD × novo, 0
+  divergências) e a D-IB48 recusa antes de ler fontes e de abrir o banco.
+
+### 11.21 ⚠️ Rodada 8 — questões para o Valdo (dos gates do delta da Rodada 7; recomendação entre parênteses)
+
+- **Q-IB49** — Horizonte do aviso prospectivo DEPOIS da obrigação: hoje (D-IB45) ele vai até 01/01/2027 e some daí em diante —
+  justamente quando a perda vira 422 (D-IB8; o gate adversarial provou: em 01/01/2027 e depois, um encerramento na data ou dias à frente
+  passa calado). Desacoplar da janela do cadastro — horizonte = o MAIOR entre o fim da janela e a data da carga + 90 dias, sempre FORA do
+  limite? *(Rec.: sim, data + 90 dias; o custo continua limitado pelas linhas do IT dentro do horizonte.)*
+- **Q-IB50** — Serviço classificado por linha FUTURA (aceito pelo cadastro, ainda não na data da carga) cuja linha acaba antes da
+  obrigação: o aviso só olha código aceito na data da carga e esse caso passa calado. O aviso deve partir de "aceito pelo cadastro"
+  (a janela que o selo mostra) e não só de "aceito hoje"? *(Rec.: sim — caso raro, consulta barata, e é o que o usuário vê no selo.)*
+

@@ -1,9 +1,9 @@
 # Skill: Carregar o catálogo IBS/CBS (rotina do Super)
 
-**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite e impacto até a D-IB44)
+**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB48)
 **Objetivo**: Carregar/recarregar em `setes_central` o catálogo oficial do IBS/CBS (CST, cClassTrib com vigência e aplicabilidade
 por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o que não foi conferido
-**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44);
+**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48);
 `Infra-IA/database/PADROES_BANCO.md` §5 ("carga de catálogo externo = ato com plano"); código: `setes-api/scripts/load-ibscbs-catalog.ts`
 + peça `setes-api/src/shared/ibscbs-catalog/`
 **Tempo**: ~10 min (o ensaio leva ~1–2 min: a conferência consulta a Calculadora por par NFS-e × cClassTrib)
@@ -61,7 +61,21 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
      linha vigente na data — × `endedNoSuccessor`) — encerramento em massa por IT errado é pego; o código que fica sem linha vigente
      na data entra no `relatorio.impact`. Na linha do encolhimento da história, `deactivated` = ausentes + encerradas.
    - `data` no JSON = a data em que limite e impacto foram avaliados; `AVISO_DATA` quando `--date` não é hoje — `--date` serve só
-     para reproduzir uma carga, NUNCA para fugir do limite.
+     para reproduzir uma carga no ENSAIO (o `modo` diz que o plano NÃO é gravável): o ato com `--vai` RECUSA `--date` diferente de hoje
+     (D-IB48). O ensaio com impacto EXIGE a data (o script sempre passa). Limite conhecido: ato que cruza a meia-noite grava com a data
+     em que começou.
+   - D-IB47: o impacto do cClassTrib é a DIFERENÇA do veredito da peça de classificação na data da carga ANTES × DEPOIS da gravação
+     (qualquer causa: presença perdida, vigência encerrada, tributação regular ligada, linha nova/revivida/estendida sobreposta sem
+     presença); a linha traz `reason` (`no-line` sem linha vigente · `not-applicable` sem presença na NFS-e ou não confirmada pela
+     Calculadora · `requires-regular` exige o grupo de tributação regular) e `registrationStillAccepts: true` quando o cadastro ainda
+     aceita (linha futura na janela ou outra linha vigente com presença — o selo diz "aceita"), mas o faturamento na data já não.
+     `relatorio.validityRegularOn` = só informação (linhas vigentes em que a fonte LIGOU a tributação regular).
+   - D-IB45: `relatorio.impactAhead` (informativo, FORA do limite) = serviços cujo código aceito hoje deixa de ser aceito até a
+     obrigação, com `lossDate` e `reason` — conferir antes de dezembro: `no-line` = reclassificar o serviço; `not-applicable` de uma
+     sucessora ainda NÃO confirmada pela Calculadora (A-IB1) = esperar a próxima carga antes de reclassificar. ⚠️ Depois de 01/01/2027
+     o aviso fica vazio (não há janela do cadastro) até a Q-IB49 ser decidida.
+   - D-IB46: `validityVigentOnDate` (e `vigentOnDate` na linha do encolhimento) = vigentes na data ao lado da base — se cair abaixo
+     de 80 % das presentes, a base do limite está diluída: avisar o Valdo (reabre a D-IB46).
    - ⚠️ Limite conhecido (D-IB43): nada recusa um IT MAIS ANTIGO que o gravado pelo número da versão (`--it-version` é texto livre).
      Conferir a versão contra a do catálogo (`source_version`) antes do ato; o limite de encolhimento e o `codeVanished` pegam o caso
      real.
