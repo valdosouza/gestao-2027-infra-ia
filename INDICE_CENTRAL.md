@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.28 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.29 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-11  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-11 | **Fase IBS/CBS — Rodada 8 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.22–§11.24; Valdo: "siga as recomendações na Rodada 8"): D-IB49 o aviso prospectivo da carga do catálogo olha até o maior entre o fim da janela do cadastro e a data + 90 dias (`aheadHorizon`, `impactAheadUntil`) — segue funcionando depois de 01/01/2027; D-IB50 o aviso parte também do código aceito só pelo cadastro (linha futura — o que o selo mostra), com `acceptedFrom`; skill `setes-api/skills/carregar-catalogo-ibscbs.md` com a leitura de impacto × aviso juntos e o limite da recusa herdada. Gates do delta 0.80/0.82 ✅ (harness duplo novo × HEAD, 31 cenários sem regressão). Rodada 9 Q-IB51…Q-IB53 aberta (§11.24). | 9.29 |
 | 2026-10-11 | **APIs fiscais — Rodada 18 EXECUTADA e PUBLICADA (D-F94…D-F97)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.12): o alarme do ambíguo leva só código + rótulo sem dígitos e a origem é dita por quem chama (transmissão no passo 0b); a assinatura do evento usa o leitor do parse e o XML arquivado é determinístico; a prova da reconferência exige o E2404 posterior à ÚLTIMA apresentação do Id na vida (`reconfirmationProven(candidata, vida)` — vida e identidade obrigatórias, formato do instante conferido). XML ilegível do fisco = ambíguo (nunca 500). Gates 0,76/0,78 ✅. **Rodada 19 aberta: Q-F104…Q-F105**. | 9.28 |
 | 2026-10-11 | **Fase IBS/CBS — Rodada 7 DECIDIDA e EXECUTADA** (`prompts/prompt_fase_ibs_cbs.md` §11.19–§11.21; Valdo: "siga as recomendações na Rodada 7"): D-IB47 "aceito" é UM veredito com motivo na peça `@shared/ibscbs-classification` (`verdictOf`, portas em lote — a pergunta do faturamento da IB-2) e o impacto da carga do catálogo é a DIFERENÇA do veredito antes × depois da gravação (os gates acharam que a inferência por tipo de mudança perdia a linha nova/revivida/estendida sobreposta sem presença — corrigido e re-provado ao vivo); D-IB45 aviso prospectivo `impactAhead` (fora do limite, com data e motivo da perda até a obrigação); D-IB46 vigentes na data ao lado da base; D-IB48 o ato recusa `--date` diferente de hoje (`assertActDate`). Skill `setes-api/skills/carregar-catalogo-ibscbs.md` atualizada. Gates do delta 0.72/0.78 ✅. Rodada 8 Q-IB49…Q-IB50 aberta (§11.21). | 9.27 |
 | 2026-10-11 | **APIs fiscais — Rodada 17 EXECUTADA e PUBLICADA (D-F91…D-F93)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.11): o alarme "Fisco ambíguo persistente" cobre toda porta que pergunta ao fisco (rodízio, consulta da tela, reconferência) com a origem e a nota; a prova da reconferência não tem prazo (conhecimento negativo); a assinatura do evento soma nDFSe, autor, ambGer e tpAmb. Gates 0,78/0,80 ✅. **Rodada 18 aberta: Q-F100…Q-F103**. | 9.26 |

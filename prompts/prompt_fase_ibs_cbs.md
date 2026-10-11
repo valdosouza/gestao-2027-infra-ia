@@ -976,3 +976,58 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
   obrigação: o aviso só olha código aceito na data da carga e esse caso passa calado. O aviso deve partir de "aceito pelo cadastro"
   (a janela que o selo mostra) e não só de "aceito hoje"? *(Rec.: sim — caso raro, consulta barata, e é o que o usuário vê no selo.)*
 
+### 11.22 Rodada 8 DECIDIDA (Valdo 2026-10-11: "siga as recomendações na Rodada 8") — D-IB49…D-IB50
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB49** | Horizonte do aviso prospectivo (D-IB45) DESACOPLADO da janela do cadastro: o MAIOR entre o fim da janela (a obrigação, enquanto ela não chega) e a data da carga + 90 dias (`AHEAD_DAYS`), sempre FORA do limite; o relatório mostra o horizonte (`impactAheadUntil`). Depois de 01/01/2027 o aviso segue funcionando (data + 90) — é quando a perda vira 422 |
+| **D-IB50** | O aviso parte também do código aceito só pelo CADASTRO na data da carga (linha futura na janela — o que o selo mostra) e não só do aceito na data do fato: entra quando, depois de passar a valer, deixa de ser aceito dentro do horizonte (a linha do aviso traz `acceptedFrom`). Código que ninguém aceita não entra |
+
+**Execução**: §11.23.
+
+### 11.23 Rodada 8 — execução (2026-10-11)
+
+- `setes-api/src/shared/ibscbs-catalog/apply.ts` (só a rotina do Super carrega): `AHEAD_DAYS = 90` + `aheadHorizon(date)` (o maior entre
+  `registrationWindowEnd` e data + 90); `lossesAhead` parte dos códigos aceitos na data do fato OU (D-IB50) pelo cadastro —
+  `classificationRegistrationVerdicts` em LOTE só para os códigos da consulta do aviso que não são aceitos hoje —, conta a perda do aceito
+  só pelo cadastro DEPOIS de passar a valer (`acceptedFrom`) e grava o horizonte em `relatorio.impactAheadUntil`.
+- Testes jest (IBS/CBS 112/112): horizonte da carga de 10/10/2026 = 2027-01-08 (parâmetros da consulta do aviso conferidos); fim em
+  01/01/2027 → perda em 02/01 (antes: fora da janela); fim em 08/01 → perda em 09/01, fora; depois da obrigação (carga em 05/01/2027 →
+  horizonte 05/04/2027): fim em 31/03 → perda em 01/04, fim em 05/04 → fora; D-IB50: código sem presença hoje com linha futura do
+  cadastro de 01/11 a 15/12 → aviso com `acceptedFrom` 2026-11-01 e perda em 2026-12-16; código que ninguém aceita não entra.
+- **Provas ao vivo** (harness do gate adversarial: transação externa, commit proibido, serviço de teste 67 revivido só dentro dela):
+  r8a — carga em 05/01/2027 com o 000001 encerrado em 31/03/2027 → aviso = serviço 67, perda em 2027-04-01, horizonte 2027-04-05
+  (antes da D-IB49: vazio); r8b — 000001 encerrado antes da carga com linha futura de 01/11 a 15/12/2026 → impacto de hoje = serviço 67
+  (`no-line`, `registrationStillAccepts: true`) E aviso = serviço 67 com `acceptedFrom` 2026-11-01 e perda em 2026-12-16; controle com
+  o IT oficial v1.70 = sem limite, impacto ou aviso, horizonte 2027-01-08, plano igual (`edb2c381d29e316e`); catálogo conferido depois
+  (os 7 `CHECKSUM TABLE` iguais), produtos 65–68 excluídos, nenhuma transação aberta.
+
+- **Gate socrático do delta R8: 0.80 ✅** (nenhum defeito de correção) — correções sem decisão feitas: comentários de `impactAhead`/`lossDate`
+  alinhados à D-IB49/D-IB50 (S8-1); título do teste de fronteira corrigido + testes do TOPO inclusivo do horizonte (perda no próprio dia do
+  horizonte e linha nova que começa nele entram; um dia depois, não) + teste unitário de `aheadHorizon` (02→03→04/10/2026, depois da
+  obrigação, 29/02/2028) (S8-2); três testes da D-IB50 — o mesmo serviço no impacto e no aviso, a consulta do cadastro que não roda quando
+  todo código do aviso já é aceito hoje, aceito pelo cadastro que não perde não entra (S8-3); skill com a leitura das DUAS listas juntas e
+  "no-line" qualificado (S8-4); limite conhecido da SOBREPOSIÇÃO e da recusa herdada (S8-5 → Q-IB52); campo morto `aheadUntil` removido
+  (S8-6); nota de que desde 2026-10-03 o horizonte real é data + 90 (S8-7).
+- **Gate adversarial do delta R8: 0.82 ✅** (sem HIGH/CRITICAL; harness DUPLO — o `apply.ts` novo e uma cópia do HEAD na mesma transação
+  desfeita: 31 cenários "IGUAL fora do aviso", 169 encerradas conferidas contra o esperado; bordas do horizonte todas certas, inclusive
+  virada de ano e 29/02; pior caso de custo 15.300 linhas no horizonte = +91 consultas e +345 ms numa carga de 6,4 s; catálogo central e
+  produtos 65–68 conferidos antes/depois). MEDIUM (decisão → **Q-IB53**): carga que tira a aceitação de um código aceito SÓ pelo cadastro
+  antes dela (linha futura some, perde presença ou passa a exigir tributação regular) não aparece em lista nenhuma — o HEAD também calava;
+  LOW corrigido: `aheadHorizon` perto do fim do calendário não estoura para o ano 10000 (fica em 9999-12-31; teste); LOW do comentário =
+  S8-1. Casos não testados que viraram jest: `impactAheadUntil` null no ato, `acceptedFrom` ausente quando o aviso parte da data do fato,
+  bordas de `aheadHorizon`. IBS/CBS jest 117/117. Re-conferido ao vivo depois das correções: controle oficial igual (horizonte 2027-01-08,
+  plano `edb2c381d29e316e`) e r8b igual.
+
+### 11.24 ⚠️ Rodada 9 — questões para o Valdo (dos gates do delta da Rodada 8; recomendação entre parênteses)
+
+- **Q-IB51** — O aviso mostra só a 1ª perda. Trazer também `acceptedAgainFrom` (o dia em que o código VOLTA a ser aceito dentro do
+  horizonte)? O veredito de todas as datas candidatas já é calculado — custo zero — e evita reclassificar por um buraco temporário com
+  sucessora já publicada (mais provável depois da obrigação). *(Rec.: sim.)*
+- **Q-IB52** — "Estoque" de recusas herdadas: o impacto mede só o que ESTA carga mudou; serviço já recusado no faturamento por carga
+  anterior (inclusive a sobreposição em que o selo diz "aceita") não reaparece em lista nenhuma. *(Rec.: não na carga — levar para a IB-2
+  como PRÉ-VOO do faturamento antes de 01/01/2027, uma consulta por schema pela pergunta da peça; até lá, limite conhecido na skill — feito.)*
+- **Q-IB53** — Carga que tira a aceitação de um código aceito SÓ pelo cadastro antes dela (linha futura da janela some da fonte, perde a
+  presença ou passa a exigir tributação regular — o selo muda de "aceita" para "não aceita" e, depois da obrigação, a nota daria 422)
+  deve aparecer no impacto? *(Rec.: sim — comparar também o veredito do CADASTRO antes × depois para os códigos que a data do fato já
+  recusava antes, com `reason` e a marca `registrationOnly: true`, fora do limite; o caso do gate adversarial (adv8-d1…d3) vira teste jest.)*
