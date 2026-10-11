@@ -7,11 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.12 (D-F67…D-F97 executadas e publicadas: substituição e105102 com fim humano, prova da
-> reconferência = E2404 explícito posterior à ÚLTIMA apresentação do Id — D-F90/D-F97 —, alarme do ambíguo em toda porta com origem
-> explícita e sem documento — D-F91/D-F94/D-F95; aberta a Rodada 19: Q-F104…Q-F105). Antes: §21.7–§21.11, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21.13 (D-F67…D-F99 executadas e publicadas: substituição e105102 com fim humano, prova da
+> reconferência = E2404 explícito posterior à ÚLTIMA apresentação do Id e sem tentativa da mesma identidade em voo — D-F90/D-F97/D-F99 —,
+> alarme do ambíguo em toda porta com origem explícita e CAUSA de lista fechada, nunca documento de terceiro — D-F91/D-F95/D-F98;
+> aberta a Rodada 20: Q-F106…Q-F107). Antes: §21.7–§21.12, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F97** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F99** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -679,6 +680,17 @@ branch `sessao-2026-10-10`):**
   QUALQUER tentativa da vida** (o maior entre a reserva e a última voz de cada tentativa com o MESMO Id e ambiente): as tentativas da
   vida reapresentam o MESMO Id (D-N3/D-F30) — "o DPS foi enviado uma vez" era falso. `reconfirmationProven(candidata, vida)` no
   núcleo; a F2a passa a vida inteira.
+- **D-F98 (= Q-F104 (c)+(b) — Valdo 2026-10-11: "siga as recomendações"; SUPERA a D-F94 no conteúdo do `reason`) — o Id do DPS de
+  TERCEIRO nunca entra em mensagem, e o alarme leva uma CAUSA de lista FECHADA**: (c) a mensagem "NFS-e de OUTRO DPS" — o warn do
+  adaptador e o 502 que o app mostra — diz só "Id divergente"; (b) o `reason` do alarme "Fisco ambíguo persistente" é a causa marcada
+  no erro por quem PRODUZ o ambíguo (`tagAmbiguous`), lida por `ambiguousCauseOf` só da lista `AMBIGUOUS_CAUSES` (fora dela ou sem
+  marca = `nao-classificada`; a marca é um Symbol, nunca serializa). A máscara de dígitos da D-F94 deixava passar as LETRAS de um CNPJ
+  alfanumérico (R18-01/R18-02). Núcleo `fiscal-api/src/errors/ambiguous-cause.ts`; espelho no setes-api
+  (`shared/tax-authority/ambiguous-cause.ts`).
+- **D-F99 (= Q-F105 (b) — idem) — tentativa da MESMA identidade SEM VOZ derruba a prova da reconferência**: `reconfirmationProven`
+  falha FECHADO enquanto houver na vida tentativa com o mesmo Id do DPS e ambiente e sem voz (`lastEventAt` nulo — em voo: só há o
+  instante da RESERVA e o POST pode chegar ao fisco depois do E2404). A reconferência da nfse-api segue carimbando o E2404 (a opção (c),
+  recusar 409, não foi escolhida); quem LÊ a prova (a F2a) não a aceita até a tentativa ganhar voz.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -951,11 +963,16 @@ rótulo do ambíguo do transmitir (Rec.: origem explícita "transmissao", també
 assinatura do evento (Rec.: o mesmo `firstText` do parse + arquivar de forma determinística no empate) · **Q-F103** prova × nova
 apresentação do mesmo Id (Rec.: o E2404 tem de ser posterior à ÚLTIMA apresentação do Id na vida).
 
-### 8.R19 Rodada 19 — aberta pelos gates da Rodada 18 (2026-10-11, §21.12) — ⚠️ AGUARDA O VALDO
+### 8.R19 Rodada 19 — aberta pelos gates da Rodada 18 (2026-10-11, §21.12) — DECIDIDA ("siga as recomendações" → D-F98…D-F99)
 
 Texto completo e recomendações no §21.12: **Q-F104** o Id do terceiro na mensagem do "NFS-e de OUTRO DPS" (Rec.: a mensagem nunca
 interpola o Id + rótulo fechado por causa) · **Q-F105** tentativa da mesma identidade em voo (Rec.: a prova falha fechado com tentativa
 sem voz).
+
+### 8.R20 Rodada 20 — aberta pelos gates da Rodada 19 (2026-10-11, §21.13) — ⚠️ AGUARDA O VALDO
+
+Texto completo e recomendações no §21.13: **Q-F106** guardar evidência da "resposta trocada" (Rec.: não — conhecimento negativo) ·
+**Q-F107** o que conta como "em voo" na D-F99 (Rec.: tentativa da mesma identidade VIVA, incluindo a voz S).
 
 ## 9. Fora de escopo desta fase
 
@@ -2288,7 +2305,7 @@ testes do boleto (fora desta frente), e os próximos passos: Rodada 18 → NE-0/
   Id do DPS (D-N3/D-F30); uma tentativa nova recusada não invalida a prova antiga da candidata. (a) manter e corrigir só o comentário ·
   (b) **o E2404 tem de ser POSTERIOR à ÚLTIMA apresentação do Id em QUALQUER tentativa da vida** (barato, falha fechado). *(Rec.: (b).)*
 
-### 21.12 Rodada 18 — D-F94…D-F97 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+### 21.12 Rodada 18 — D-F94…D-F97 (Valdo 2026-10-11: "siga as recomendações") — Rodada 19 DECIDIDA no §21.13
 
 | Decisão | O quê | Onde |
 |---|---|---|
@@ -2322,3 +2339,57 @@ ficam = Q-F104/Q-F105); os testes antigos de `reconfirmationProven` com 1 argume
 nota de implantação da F2a (nfse-api com a migration 003 sobe ANTES do setes-api com o núcleo novo; a F2a chama
 `reconfirmationProven(candidata, vida)` com a linha COMPLETA da view), a tarefa da bomba-relógio de data dos testes do boleto (fora
 desta frente), e os próximos passos: Rodada 19 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.13 Rodada 19 — D-F98…D-F99 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F98** (= Q-F104 (c)+(b)) | a mensagem "NFS-e de OUTRO DPS" diz só "Id divergente" (warn do adaptador e 502 do app); o `reason` do alarme é a CAUSA da lista FECHADA `AMBIGUOUS_CAUSES` — `tagAmbiguous` em todo produtor do 502 ambíguo, `ambiguousCauseOf` no alarme (fora da lista/sem marca = `nao-classificada`; marca em Symbol) | núcleo `errors/ambiguous-cause.ts` + espelho `setes-api/shared/tax-authority/ambiguous-cause.ts`; os dois `adn.ts`, os dois transportes (405/406/415), as duas composições |
+| **D-F99** (= Q-F105 (b)) | `reconfirmationProven` falha FECHADO com tentativa da MESMA identidade sem voz (`lastEventAt` nulo — em voo); a reconferência da nfse-api segue carimbando o E2404 ((c) não escolhida) | `fiscal-api/src/voice/reading.ts` |
+
+**Gates do delta**: socrático **0,80 ✅** · adversarial **0,80 ✅** (nenhum HIGH+; a causa chega ao alarme por TODO caminho real — catch
+que relança, contenção/retry, `withTransaction` do núcleo, rodízio, 0b, reconferência; o Id/CPF/CNPJ alfanumérico do terceiro não sai por
+nenhuma porta; cerca estática nos três projetos: todo produtor do código nasce dentro de `tagAmbiguous` com causa literal da lista).
+Corrigidos na sessão (sem decisão nova):
+- **R19-01 (MEDIUM latente — entra com a F2a)**: irmã da vida SEM identidade (projeção sem Id do DPS/ambiente) era descartada como "outra
+  identidade" e a prova passava (o R18-03 do lado da vida) → falha FECHADO.
+- **R19-03 (LOW, nos dois adaptadores)**: a chave do `GET /dps` não era conferida contra o emitente — numa resposta trocada a chave de
+  OUTRO emitente (com o CPF/CNPJ dele) virava URL do `GET /nfse/{chave}` (e o transporte grava a URL no log em 405/rede) e, se a NFS-e
+  alheia viesse sem `infDPS/@Id`, POUSAVA na nossa tentativa com voz A → `key.slice(8,23)` (tpInsc + inscrição) tem de ser o do Id do DPS
+  (`slice(10,25)`), senão `dps-fora-do-contrato`. **Layout conferido nas 3 chaves REAIS de produção antes de endurecer** (lição do
+  R16-03); a chave de teste dos gates r17/r19 não tinha o tpInsc — corrigida para o layout real.
+- **R19-04 / S6 (LOW, setes-api)**: o rollback do `withInvoiceTx` sem guarda trocava o ambíguo pelo erro do rollback (500, sem alarme,
+  sem carimbo) → mesmo idioma do `withTransaction` do núcleo.
+- **S3 (LOW)**: seis saídas `unknown` do GET tipado caíam todas em `situacao-ilegivel` → o adaptador diz a causa (`unknownCause`):
+  `evento-contraditorio` (D-F84/D-F88/D-F89/D-F69, além da D-F77), `evento-ilegivel` e `evento-nao-conferido` (D-F63) — 2 causas novas
+  nas duas cópias; `situacao-ilegivel` fica como reserva.
+- **S5 (LOW, anterior ao delta)**: XML ilegível no POST /nfse e na resposta ao pedido de cancelamento virava exceção crua (500) → 502
+  ambíguo (`nfse-ilegivel` / `evento-ilegivel`).
+- **S1 (LOW)**: o espelho do setes-api ganhou o teste do núcleo (`ambiguous-cause.test.ts`) e a cerca de igualdade (no r19 do setes-api).
+Testes: `adversarial-r19-gate.test.ts` nos TRÊS projetos (o `it.failing` que fica = Q-F107) + `ambiguous-cause.test.ts` (núcleo e setes-api).
+
+**Provas**: setes-api 2203 (as 19 falhas = bomba-relógio de data do boleto, fora desta frente) · nfse-api 451 unit + ao vivo 150/150 · núcleo 124.
+
+**Nota de implantação da F2a (dos gates)**: (1) conferir a tentativa VIVA (barreira do plano — `isLiveTransmission`) ANTES de
+`reconfirmationProven`, para o 409 dizer "transmissão em andamento" e não "reconfira" (a nfse-api ainda carimba a prova com tentativa em
+voo — o app mostra a recusa do setes-api, senão entra em laço); (2) passar a VIDA inteira com as linhas COMPLETAS da view, incluindo as
+em voo — nunca filtrar por "tem voz"; se a tela precisar do MOTIVO de "não provado", pedir ao núcleo um veredito com motivo (molde
+`verdictOf` da D-IB47); (3) o espelho do setes-api (lista de causas, adaptador, transporte, `logAmbiguousFiscal`) MORRE na F2a — o alarme
+passa a vir só da nfse-api; a F3 agrega por institution + nota + causa + origem e trata `nao-classificada` como defeito; (4) o
+`migrate:setes` não copia a prova (D-F90): todo F migrado exige reconferência nova; tentativa migrada em voo segura a prova até o rodízio.
+
+**Rodada 20 (aberta pelos gates da Rodada 19 — aguardam o Valdo)**:
+- ⚠️ **Q-F106 (socrático)** — guardar alguma EVIDÊNCIA da "resposta trocada"? Pela D-F98 (c) nada da resposta alheia fica. (a) **manter
+  assim e registrar como conhecimento negativo** (o alarme leva institution, nota, causa e instante — basta para chamado à Sefin; o caso se
+  reproduz consultando de novo) · (b) HMAC-SHA256 do Id alheio no log do adaptador (segredo do servidor — hash simples de CPF se quebra
+  por força bruta) · (c) corpo cru em área de acesso restrito com prazo de descarte. *(Rec.: (a) — reabrir se acontecer de verdade.)*
+- ⚠️ **Q-F107 (adversarial R19-02 = socrático S4)** — o que conta como "em voo" na D-F99? A voz S ("enviado") é VIVA para o
+  `isLiveTransmission` e para o SQL do rodízio, mas tem instante: com uma irmã S, um E2404 2 s depois dela prova contra uma apresentação
+  que pode ainda não ter chegado (hoje S não tem produtor — latente). (a) manter "sem voz" literal + conhecimento negativo (quem criar
+  produtor de S revisita a D-F99) · (b) **falha FECHADO com tentativa da mesma identidade VIVA** (`!lastEventAt ||
+  !FINAL_TRANSMISSION_KINDS.has(lastKind)`; `lastKind` entra no contrato, ausente = viva) · (c) (b) + falha fechado com irmã que detém a
+  chave (hoje só o `reconfirmationCandidate` barra). *(Rec.: (b) — barato e alinha a prova ao `isLiveTransmission` e ao rodízio.)*
+
+**Seguem**: LOW registrados (o log do transporte grava a URL com a NOSSA chave/Id em 405/rede — R17/R19-S7; os da §21.8), prova ao vivo M4
+(Valdo), o ALARME da F3, a tarefa da bomba-relógio de data dos testes do boleto (fora desta frente), e os próximos passos: Rodada 20 →
+NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
