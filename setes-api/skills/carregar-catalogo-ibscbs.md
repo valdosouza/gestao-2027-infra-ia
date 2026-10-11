@@ -1,9 +1,9 @@
 # Skill: Carregar o catálogo IBS/CBS (rotina do Super)
 
-**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB50)
+**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB53)
 **Objetivo**: Carregar/recarregar em `setes_central` o catálogo oficial do IBS/CBS (CST, cClassTrib com vigência e aplicabilidade
 por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o que não foi conferido
-**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50);
+**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50), §11.25 (D-IB51…D-IB53);
 `Infra-IA/database/PADROES_BANCO.md` §5 ("carga de catálogo externo = ato com plano"); código: `setes-api/scripts/load-ibscbs-catalog.ts`
 + peça `setes-api/src/shared/ibscbs-catalog/`
 **Tempo**: ~10 min (o ensaio leva ~1–2 min: a conferência consulta a Calculadora por par NFS-e × cClassTrib)
@@ -49,7 +49,8 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
    - `relatorio.validity.deactivated` + chaves — linhas de vigência que SUMIRAM da fonte e ganham o fato "ausente desde a versão"
      (D-IB36; nunca são apagadas; a peça passa a ignorá-las) — ex.: o IT corrigiu a dIniVig de um código;
    - `relatorio.*.deactivatedKeys` — o que PERDE a presença nesta carga; `relatorio.impact` — serviços de cada cliente que usam
-     cClassTrib/cIndOp que ficam SEM nenhuma aplicabilidade na NFS-e — pela linha VIGENTE na data da carga (data do fato; o selo do
+     cClassTrib/cIndOp que esta carga deixa de aceitar na NFS-e — pela linha VIGENTE na data da carga e, para o que a data do fato
+     já recusava, pela regra do CADASTRO (linhas `registrationOnly`, D-IB53) (data do fato; o selo do
      cadastro usa a janela até a obrigação e pode discordar, ex.: código encerrado com sucessora futura) — ou NBS que perde a presença
      (só no ensaio); `relatorio.shrink` + `AVISO_ENCOLHIMENTO` — perda > 10 % de alguma lista (D-IB28 (c)),
      em BRUTO (D-IB38). As listas que contam: presença do cClassTrib por modelo, presença do cIndOp, NBS e — desde a D-IB39 — a
@@ -75,16 +76,23 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
      aceito até o horizonte `relatorio.impactAheadUntil` (o maior entre a obrigação e a data + 90 dias; depois de 01/01/2027, data + 90),
      com `lossDate` e `reason` — conferir a cada carga: `no-line` = depois da perda não há linha que valha dentro do horizonte →
      reclassificar o serviço antes de `lossDate`; `not-applicable` de uma sucessora ainda NÃO confirmada pela Calculadora (A-IB1) =
-     esperar a próxima carga antes de reclassificar. Só a 1ª perda aparece (um buraco temporário com sucessora já publicada também —
-     conferir a linha seguinte do código no IT; Q-IB51).
+     esperar a próxima carga antes de reclassificar. Só a 1ª perda aparece; D-IB51: `acceptedAgainFrom` = o dia em que o código VOLTA
+     a ser aceito dentro do horizonte (buraco temporário — não reclassificar por ele se o intervalo não tem faturamento; ausente = não
+     volta dentro do horizonte). ⚠️ Só a 1ª perda e a 1ª volta aparecem: a volta NÃO garante o aceite até o horizonte (uma 2ª perda
+     depois dela só aparece numa carga feita depois da volta — Q-IB54); antes de deixar de reclassificar, conferir no IT a linha da volta.
+   - D-IB53: linha do `impact` com `registrationOnly: true` = a data do fato JÁ recusava o código antes da carga, e esta carga tirou a
+     aceitação que o CADASTRO dava (a linha futura da janela sumiu, perdeu a presença ou passou a exigir tributação regular — ou, na
+     SOBREPOSIÇÃO, a linha vigente mais antiga com presença perdeu a presença ou acabou) — o selo da aba muda de "aceita" para "não
+     aceita"; reclassificar o serviço (o `reason` diz por quê, pela regra do cadastro).
    - **O mesmo serviço nas DUAS listas** (só acontece com o aceito pelo cadastro): `impact` = o faturamento já recusa HOJE (antes da
      obrigação a nota sai sem o grupo IBS/CBS — D-IB34/D-IB41; depois, 422) e o selo diz "aceita" porque o cadastro aceita uma linha
      futura (`registrationStillAccepts: true`); `impactAhead` = essa linha futura passa a valer em `acceptedFrom` e também acaba em
      `lossDate`. Ler juntas: até `acceptedFrom` o serviço fatura sem o grupo; depois de `lossDate` fica sem classificação aceita —
      reclassificar para um código que valha nas duas pontas, ou aceitar o intervalo se a obrigação ainda não chegou.
-   - ⚠️ Limite conhecido (Q-IB52): o impacto mostra só o que ESTA carga mudou. Serviço já recusado no faturamento por carga anterior
+   - ⚠️ Limite conhecido (D-IB52 — o PRÉ-VOO do faturamento na IB-2 cobre antes de 01/01/2027): o impacto mostra só o que ESTA carga mudou. Serviço já recusado no faturamento por carga anterior
      não reaparece em lista nenhuma — inclusive a SOBREPOSIÇÃO (linha vigente mais antiga com presença × vigente mais nova sem
-     presença: o selo diz "aceita", o faturamento recusa, e o aviso não fala dele porque ele nunca é aceito na data do fato).
+     presença: o selo diz "aceita", o faturamento recusa, e o aviso não fala dele porque ele nunca é aceito na data do fato) — salvo
+     quando ESTA carga tira a aceitação do cadastro (D-IB53).
    - D-IB46: `validityVigentOnDate` (e `vigentOnDate` na linha do encolhimento) = vigentes na data ao lado da base — se cair abaixo
      de 80 % das presentes, a base do limite está diluída: avisar o Valdo (reabre a D-IB46).
    - ⚠️ Limite conhecido (D-IB43): nada recusa um IT MAIS ANTIGO que o gravado pelo número da versão (`--it-version` é texto livre).

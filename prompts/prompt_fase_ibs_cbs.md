@@ -235,7 +235,10 @@ D-IB47 (a pergunta do faturamento é o VEREDITO da peça na data do fato — `cl
 com o MOTIVO `no-line`/`not-applicable`/`requires-regular` para o 422 legível; a MESMA que a carga do catálogo usa no impacto; o selo
 usa `classificationAcceptedForRegistration`; "aceito" = `verdictOf`, UMA definição — nunca re-derivar `applicable && !requiresRegular`) ·
 limite TOCTOU do §11.8 (PUT que leu o catálogo antes de uma carga pode gravar código que acabou de perder a presença — a IB-2 barra) ·
-limite do §11.11 (excluir o serviço não mata a peça 1:1 `tb_service_ibscbs` — todo leitor exige o produto vivo) · D-IB42 (calendário
+limite do §11.11 (excluir o serviço não mata a peça 1:1 `tb_service_ibscbs` — todo leitor exige o produto vivo) · **D-IB52 (PRÉ-VOO do
+faturamento antes de 01/01/2027: listar, por schema, os serviços cuja classificação gravada a data do fato JÁ recusa — o "estoque" que o
+impacto da carga não mostra, inclusive a sobreposição em que o selo diz "aceita"; uma consulta por schema pela pergunta da peça —
+`classificationVerdictsAt` — antes de ligar a barreira)** · D-IB42 (calendário
 da barreira da NBS: antes da obrigação a nota sai SEM o `cNBS`, nunca 422 — inclusive no lote; depois, 422 também para NBS ausente do
 catálogo — §11.16). Fato de 2026-10-11: hoje NINGUÉM preenche o `cNBS` do DPS (os dois montadores têm o campo; nenhum produtor) — a
 IB-2 congela a NBS no ramo e a IB-3 a leva ao DPS.
@@ -1031,3 +1034,61 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
   presença ou passa a exigir tributação regular — o selo muda de "aceita" para "não aceita" e, depois da obrigação, a nota daria 422)
   deve aparecer no impacto? *(Rec.: sim — comparar também o veredito do CADASTRO antes × depois para os códigos que a data do fato já
   recusava antes, com `reason` e a marca `registrationOnly: true`, fora do limite; o caso do gate adversarial (adv8-d1…d3) vira teste jest.)*
+
+### 11.25 Rodada 9 DECIDIDA (Valdo 2026-10-11: "siga as recomendações na Rodada 9") — D-IB51…D-IB53
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB51** | O aviso prospectivo traz também `acceptedAgainFrom` — o dia em que o código VOLTA a ser aceito dentro do horizonte (buraco temporário com sucessora já publicada); ausente = não volta dentro do horizonte. Sai dos vereditos já calculados (custo zero) |
+| **D-IB52** | O "estoque" de recusas herdadas (serviço que a data do fato já recusa por carga anterior — inclusive a sobreposição com o selo "aceita") NÃO entra na carga: vira PRÉ-VOO do faturamento na IB-2, antes de 01/01/2027 (uma consulta por schema pela pergunta da peça); até lá, limite conhecido na skill |
+| **D-IB53** | O impacto compara também o veredito do CADASTRO antes × depois para os códigos que a data do fato já recusava antes da carga: o que o cadastro aceitava (linha futura da janela) e deixa de aceitar — a linha some, perde a presença ou passa a exigir tributação regular — entra no impacto com `registrationOnly: true` e o motivo, fora do limite |
+
+**Execução**: §11.26.
+
+### 11.26 Rodada 9 — execução (2026-10-11)
+
+- `setes-api/src/shared/ibscbs-catalog/apply.ts` (só a rotina do Super carrega): D-IB53 — no "antes" (logo depois do FOR UPDATE, antes de
+  gravar), além do veredito na data do fato, o veredito do CADASTRO em lote para os códigos que a data do fato recusa; no "depois", o
+  cadastro é perguntado de novo só para os que ele aceitava — o que deixou de aceitar entra em `impact` com `registrationOnly: true`,
+  `registrationStillAccepts: false` e o `reason`; D-IB51 — no laço do aviso, depois da perda, a 1ª data candidata seguinte com veredito
+  aceito vira `acceptedAgainFrom`. D-IB52 no roteiro da IB-2 (§4) — nenhum código nesta rodada.
+- Testes jest (IBS/CBS 119/119): D-IB51 buraco temporário (perda em 01/01/2027, volta em 05/01) × perda definitiva (sem o campo); D-IB53 as
+  três causas (linha futura some → `no-line`, perde presença → `not-applicable`, exige tributação regular → `requires-regular`) +
+  controle (futura de pé → nada no impacto); o teste da guarda de custo da D-IB50 passou a medir só o que o AVISO acrescenta.
+- **Provas ao vivo** (harness do gate adversarial — transação externa, commit proibido): os casos do gate R8 adv8-d1/d2/d3 (antes
+  calados) → impacto = serviço 67 com `registrationOnly: true` e `no-line`/`not-applicable`/`requires-regular`; controle adv8-d0 igual
+  (aviso com `acceptedFrom` 2026-11-01 e perda em 2027-01-01); r9a (fim em 31/12/2026 e sucessora em 05/01/2027) → aviso com perda em
+  2027-01-01 e `acceptedAgainFrom` 2027-01-05; controle com o IT oficial v1.70 = sem limite, impacto ou aviso, horizonte 2027-01-08,
+  plano igual (`edb2c381d29e316e`); catálogo conferido depois (os 7 `CHECKSUM TABLE` iguais), produtos 65–68 excluídos, nenhuma
+  transação aberta.
+- **Gate socrático do delta R9: 0.80 ✅** (nenhum defeito de correção) — correções sem decisão feitas: comentários do `apply.ts` alinhados
+  (`reason` com duas semânticas — data do fato × regra do cadastro nas linhas `registrationOnly`; "só a 1ª perda e a 1ª volta"; D-IB52 no
+  lugar da Q-IB52; `lostAfterLoad` com a D-IB53); a D-IB53 pega também a SOBREPOSIÇÃO por construção (compara o veredito do cadastro, não o
+  tipo da linha) — escrito no código e na skill; skill: `impact` agora também tem linhas pela regra do cadastro, "a volta NÃO garante o
+  aceite até o horizonte", a sobreposição herdada segue fora "salvo quando esta carga tira a aceitação do cadastro"; testes novos:
+  `registrationOnly` fora do aviso mesmo com linhas na consulta dele, D-IB53 na sobreposição antes e depois da obrigação, `acceptedAgainFrom`
+  junto com `acceptedFrom`, volta NO horizonte entra e um dia depois não.
+- **Gate adversarial do delta R9: 0.86 ✅** (sem HIGH/CRITICAL; harness DUPLO estrito × HEAD ed8aba1 — 88 de 88 cenários antigos iguais, mais os
+  4 de volume; 20 ataques novos; ordem provada ao vivo: a leitura "antes" do cadastro é a 4ª consulta, antes da 1ª gravação; custo +1 consulta
+  da peça por ensaio, +2 quando há código só do cadastro; catálogo e produtos 65–68 conferidos antes/depois). 2 LOW → **Q-IB54** (volta e
+  perde de novo dentro do horizonte: a 2ª perda não aparece) e **Q-IB56** (volta por linha ainda não conferida pela Calculadora aparece como
+  "não volta"); observação fora do delta → **Q-IB57**. Testes que fixam a semântica ATUAL até a decisão: só a 1ª volta; linha não conferida não
+  é volta; o ato não compara o cadastro. IBS/CBS jest 124/124.
+
+### 11.27 ⚠️ Rodada 10 — questões para o Valdo (dos gates do delta da Rodada 9; recomendação entre parênteses)
+
+- **Q-IB54** — Trazer no aviso também `lostAgainFrom` (a 1ª perda DEPOIS da volta, dentro do horizonte)? O gate adversarial provou o caso
+  (fim em 31/12, sucessora só de 05/01 a 06/01, horizonte 08/01: o aviso diz "volta em 05/01" e cala a perda de 07/01 — e a skill manda não
+  reclassificar por buraco temporário). Sai dos vereditos já calculados, custo zero. *(Rec.: sim; a skill já avisa que a volta não garante o
+  aceite até o horizonte.)*
+- **Q-IB55** — Em que data o PRÉ-VOO da D-IB52 (IB-2) pergunta à peça? Perguntando "hoje", ele acusa o código cuja linha futura só começa
+  depois e deixa passar o que vale hoje e acaba antes da obrigação. *(Rec.: na data da obrigação — depois dela, na competência a faturar —,
+  mostrando ao lado o veredito de hoje e o selo: "recusa hoje → a nota sai sem o grupo" × "recusa na obrigação → vai dar 422".)*
+- **Q-IB56** — Separar no aviso "não volta" de "volta, mas a sucessora ainda não foi conferida pela Calculadora" (A-IB1 — a linha está no IT
+  mas sem presença)? Hoje sai `no-line` sem `acceptedAgainFrom` e a skill manda reclassificar (erro conservador). *(Rec.: sim —
+  `pendingReturnFrom` com a data da linha não conferida, quando ela existe dentro do horizonte; o operador espera a próxima carga.)*
+- **Q-IB57** — Regra do cadastro (D-IB29, anterior a esta rodada; observação do gate adversarial): com uma linha VIGENTE com presença que exige
+  tributação regular e uma FUTURA aceitável na janela, `pickForRegistration` escolhe a vigente e recusa (`requires-regular`), embora a futura
+  seria aceita — coerente com lista/salvar/selo. Preferir a linha ACEITA (presença e sem tributação regular) antes da só aplicável, nas duas
+  pontas (vigente aceita → futura aceita → vigente aplicável → …)? *(Rec.: sim — "aceito" é `verdictOf` (D-IB47); muda a regra única de lista ×
+  salvar × selo junto, com teste; nenhum serviço da Setes é afetado hoje.)*
