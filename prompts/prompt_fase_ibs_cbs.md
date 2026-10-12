@@ -1234,3 +1234,33 @@ D-A28 — para ninguém "consertar" sem nova decisão) + o limite escrito na ski
 de reabertura. Gates socrático/adversarial NÃO rodados nesta rodada: o delta não toca código de produção (só um teste que fixa o
 comportamento já provado pelos gates da Rodada 11 e documentação). Nenhuma questão aberta na fase depois desta rodada — próximo passo
 da fase: a IB-2 (roteiro de leitura no §4).
+
+## 12. IB-2 — Rodada 0 ABERTA (Valdo 2026-10-11: "vamos abrir a IB-2") — ⚠️ RETOMAR AQUI
+
+**Escopo** (§4 + decisões já tomadas): (1) **congelamento ÚNICO** da classificação no ramo `tb_invoice_service` (`classification_code`,
+`place_indicator_code`, `nbs` — colunas JÁ criadas pela migration 066 na IB-1, sem produtor; CST e indDest derivados) por UMA função da
+peça `@shared/ibscbs-classification`, chamada pelos dois produtores — `buildServiceBranch` (billing) e `freezeServiceOrderIss` (OS; a Setes
+fatura pela OS) — D-IB9; (2) **barreira por calendário** — antes da obrigação, sem classificação aceita a nota sai SEM o grupo IBS/CBS (nunca
+422, inclusive no lote mensal); depois, 422 (D-IB8/D-IB34/D-IB41/D-IB42/D-IB58); a pergunta é o VEREDITO da peça na data do fato
+(`classificationVerdictAt`/`classificationVerdictsAt` — D-IB47; `acceptedToday` é sinal de cadastro e nunca decide); a nota congelada nunca
+reconsulta o catálogo (D-IB41); NBS pela regra única `nbsAcceptedSql` (D-IB40/D-IB42); (3) **obrigação pelo ENQUADRAMENTO DATADO** do
+emitente (D-IB7/D-IB35 — `tb_establishment_tax_regime`, item B3 adiado da IB-1 porque troca os leitores de `tb_entity_tax` na fiscal-api
+`src/erp/facts.ts`, na nfse-api `src/facts/service-facts.ts` e na cópia do dual-run no setes-api — FRENTE DA OUTRA SESSÃO: combinar antes);
+(4) **PRÉ-VOO** do faturamento (D-IB52/D-IB55 — antes de 01/01/2027 listar, por schema, os serviços cuja classificação gravada a data da
+OBRIGAÇÃO recusa, com o veredito de hoje e o selo ao lado).
+
+**Estado em 2026-10-11 (fim da sessão)**: dois levantamentos SÓ DE LEITURA foram lançados e INTERROMPIDOS a pedido do Valdo (nova sessão) —
+nada foi integrado nem alterado. **Primeiro passo da próxima sessão: relançá-los em paralelo**:
+- **Inventário** (agente Explore, very thorough): os dois produtores do ramo de serviço e a peça `@shared/invoice` (`issueInvoice`) — onde
+  gravam `tb_invoice_service` e se alguém lê/escreve as 3 colunas da 066; o lote mensal e o faturamento individual da OS (como erros por
+  ordem são reportados; onde um 422 da classificação apareceria); data do fato × competência (`dCompet`) na venda e na OS e o "hoje do
+  estabelecimento"; colunas de `tb_entity_tax` e TODOS os seus leitores (setes-api, fiscal-api, nfse-api, views do `fiscal_api`) e se há
+  rascunho de `tb_establishment_tax_regime` (`prompt_fase_ibs_cbs-ddl-ib1-rascunho.sql`); campos de IBS/CBS que os dois montadores do DPS
+  já têm; o que falta na peça para congelar (veredito do cIndOp e da NBS na data); se o reenvio reconsulta o ramo; testes existentes.
+- **Parecer do guardião** (agente `setes-conceito`): a peça do congelamento (nome, assinatura, o que congela, o "nada" antes da
+  obrigação — coluna NULL × fato próprio com motivo), em que ponto da transação, como os dois produtores a chamam sem duplicar regra; a data
+  que a peça recebe (emissão × COMPETÊNCIA — a obrigação é pela competência, Ato Conjunto nº 4/2026 § 1º); se o enquadramento datado entra
+  já (D-IB35) ou fica a constante do Simples até o 1º cliente não optante — DDL mínimo pelo PADROES_BANCO, quem escreve, o que pedir à frente
+  fiscal; o pré-voo como peça × relatório × script do Super; nomes (glossário de palavras ocupadas) e o que vira maquete.
+- Depois: consolidar aqui (fatos com caminho:linha + modelo + **Rodada 1 da IB-2 — Q-IB62 em diante**, cada uma com recomendação) e
+  combinar com a sessão das APIs fiscais o que tocar nos leitores dela. Nenhum código antes das decisões do Valdo.

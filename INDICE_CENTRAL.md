@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.37 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.38 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-11  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-11 | **Fase IBS/CBS — IB-2 ABERTA (Rodada 0)** (`prompts/prompt_fase_ibs_cbs.md` §12 ⭐ ponto de retomada; Valdo: "vamos abrir a IB-2"): escopo = congelamento ÚNICO da classificação no ramo `tb_invoice_service` (billing e OS), barreira por calendário (antes da obrigação sem o grupo, depois 422 — veredito da peça na data do fato), obrigação pelo enquadramento datado (`tb_establishment_tax_regime` — troca leitores da frente das APIs fiscais: combinar) e pré-voo do faturamento; inventário do código e parecer do guardião lançados e interrompidos (nova sessão) — relançar no início da próxima sessão; nada de código antes da Rodada 1 (Q-IB62+). | 9.38 |
 | 2026-10-11 | **Fase IBS/CBS — Rodada 12 DECIDIDA** (`prompts/prompt_fase_ibs_cbs.md` §11.35; Valdo: "siga as recomendações na Rodada 12"): D-IB61 a linha antiga que volta a valer dentro da janela (sobreposição de vigentes) é limite conhecido — falha para o lado seguro, zero sobreposições no catálogo real; teste que fixa a semântica + limite e gatilho de reabertura na skill `setes-api/skills/carregar-catalogo-ibscbs.md`; sem código de produção. **Nenhuma questão aberta na fase** — próximo passo: a IB-2 (roteiro do §4). | 9.37 |
 | 2026-10-11 | **Fase IBS/CBS — gates do delta da Rodada 11 + correções** (`prompts/prompt_fase_ibs_cbs.md` §11.33–§11.34): rodaram depois do commit da Rodada 11 ("save tudo" do Valdo) — socrático 0.77 · adversarial 0.84 ✅ (enumeração exaustiva sem banco, 221.566 conjuntos × 4 datas, zero violação da D-IB59); correções sem decisão: a lista de apoio não oferece mais código cortado pelo LIMIT de linhas e o filtro só casa com linha da janela; testes de propriedade (depois da obrigação o cadastro escolhe a linha da data do fato). Rodada 12 Q-IB61 aberta (§11.34 — linha antiga que volta a valer dentro da janela). | 9.36 |
 | 2026-10-11 | **APIs fiscais — Rodada 21 EXECUTADA e PUBLICADA (D-F102…D-F104)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.15): a voz S sem saída e o domínio de `kind` sem CHECK viram conhecimento negativo — a cerca da D-F102 virou peça de teste por AST (`nfse-api/src/__tests__/voice-kind-fence.ts`: qualquer grafia, `.sql`, todo escritor da voz); o CHECK binário entra na migration da F2a (item (7) da nota de implantação); a prova fica booleana até a F2a. Gates 0,72/0,80 ✅. **Rodada 22 aberta: Q-F111…Q-F112**. | 9.35 |
