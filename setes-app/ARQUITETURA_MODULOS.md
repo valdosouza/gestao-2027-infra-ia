@@ -66,7 +66,8 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
 
 - **datasource** (abstract + impl): fala com a setes-api via ApiClient; lança Failure.
   **Exceção nomeada (Q-G24 do cancelamento de nota, Valdo 2026-09-09)**: os endpoints de
-  PROCESSO compartilhado `/api/billing/validate|invoice|cancel|cancel-waiver` podem ser chamados pelo datasource
+  PROCESSO compartilhado `/api/billing/validate|invoice|cancel|cancel-waiver` — e, desde a F2a (D-F115, A3), as
+  leituras `/api/billing/:orderId/cancel-plan|fiscal-effect` — podem ser chamados pelo datasource
   de qualquer módulo cujo DOCUMENTO passa por eles — hoje `orders` (venda), `order_returns`
   (devolução) e `service_orders` (cancelar a nota da OS; `cancel-waiver` = "manter a nota" diante da NFS-e
   substituída no fisco — D-F67, 2026-10-10). Fora dessa lista a regra continua:

@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.1 (2026-10-12 — §11 regras 11 e 12, F2a)
+**Versão**: 1.2 (2026-10-13 — §11 regra 15 ampliada e regra 16, gates da A3 da F2a; 1.1 em 2026-10-12 — regras 11 e 12)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -356,3 +356,18 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     (`setes-api/scripts/prove-f2a-passivo.ts`): cada escrita barrada pelo errno 1644, o ato permitido passa, o que é livre segue livre.
     ⚠️ Com `log_bin` ligado e sem SUPER, `CREATE TRIGGER` exige `log_bin_trust_function_creators=1` (no dev: `log_bin`=0) — conferir no
     MySQL da F3 antes da janela.
+    **Gates da A3 (2026-10-13 — provado ao vivo no MariaDB 10.4.20)**: trava de linha cuja IDENTIDADE é o fato compara também a PK
+    (`NOT (NEW.pk <=> OLD.pk)` — trocar o dono da linha SE é DELETE + INSERT disfarçados, F2A3-ADV-05). ⚠️ CONHECIMENTO NEGATIVO:
+    `TRUNCATE` NÃO dispara gatilho de DELETE (e com `foreign_key_checks=0` apaga a tabela-mãe também) e quem tem ALL faz `DROP TRIGGER`
+    — o gatilho protege contra o CÓDIGO, não contra o dono do banco; por isso quem depende do congelamento confere os gatilhos pelo NOME
+    no `information_schema.TRIGGERS` (o ato da virada — `nfse-api/scripts/cutover-erp.ts`, `f2aFreezeTriggersMissing`: tabela, BEFORE,
+    evento e corpo com `SIGNAL 45000`) e a perda por TRUNCATE é acusada pela re-sincronia ("fato que a origem não tem"). O
+    `information_schema` só lista gatilho de tabela em que o usuário tem o privilégio TRIGGER — a conferência com usuário sem ele vê
+    lista VAZIA e tem de RECUSAR (falha fechada), nunca "conferido".
+16. **CHECK de domínio por igualdade de texto não é exato em colação PAD SPACE** (gates da A3 da F2a, F2A3-ADV-02 — provado ao vivo no
+    MariaDB 10.4.20): `'105102 ' IN ('105102')` é VERDADE em `utf8mb4_unicode_ci` e também em `utf8mb4_bin` (no MariaDB 10.4 o `_bin`
+    é PAD SPACE) — o CHECK aceita o valor com espaço no fim e o código (que compara exato) o lê como outro. Domínio de CÓDIGO em
+    VARCHAR = comprimento + lista binária (`CHAR_LENGTH(c) = n AND c COLLATE utf8mb4_bin IN (…)`; o `CHAR_LENGTH` conta o espaço do
+    VARCHAR); domínio de CHAR(1) segue com `COLLATE utf8mb4_bin` (regra 11). A sonda do boot grava o valor com espaço e exige a recusa
+    pelo CHECK de NOME certo (`nfse-api` migration 006, `assertServiceVoiceDomainsEnforced`); a cópia `INSERT IGNORE … SELECT` confere
+    o MESMO domínio na origem antes (ela rebaixa a violação a aviso — F2A1-08).

@@ -7,7 +7,10 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.12 (PROMPT DE RETOMADA) — etapa A3 da F2a EXECUTADA na WORKTREE `setes-api-f2a` (branch `f2a`, 2026-10-13 —
+> **⏯ RETOMAR POR AQUI — §22.15 (PROMPT DE RETOMADA) — GATES DA A3 FEITOS (2026-10-13, §22.13: socrático 0,73 · adversarial 0,72, sem HIGH;
+> correções na sessão; roteiro da janela REVISTO) + F2b Rodada 0 (§22.14: inventário + guardião). AGUARDAM o Valdo: Q-F138…Q-F144 (Rodada 4 da
+> F2a, §22.13.2) e Q-F145…Q-F155 (Rodada 1 da F2b, §22.14.3).**
+> *Antes:* **§22.12 — etapa A3 da F2a EXECUTADA na WORKTREE `setes-api-f2a` (branch `f2a`, 2026-10-13 —
 > §22.11; D-F128/D-F129): porta da voz, plano/dispensa/selo/efeito pelo núcleo, 14 rotas removidas, `069_f2a_fiscal_passivo` (gatilhos),
 > prova de aceite 0 divergência. PENDENTES: os GATES da A3 (lançados e interrompidos na troca de sessão — relançar), a F2b (Rodada 0) e a
 > janela. Antes: A2 PUBLICADA (main f5eee3b; RS256 em produção — D-F124…D-F127).**
@@ -3301,4 +3304,274 @@ PASSO 2 — F2b (setes-app) Rodada 0: inventário dos 2 datasources que chamam a
   (setes-conceito) e Rodada 1 de questões para o Valdo. F2b em worktree do app.
 PASSO 3 — a JANELA pelo roteiro do §22.11 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15).
 Ao fim de cada passo: docs (§22.13+), INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
+```
+
+
+### 22.13 Gates da A3 (2026-10-13) — socrático **0,73 ✅** · adversarial **0,72 ✅** (nenhum CRITICAL/HIGH) — correções da sessão + Rodada 4 da F2a (Q-F138…Q-F144)
+
+> Valdo (2026-10-13, prompt do §22.12): "PASSO 1 — gates da A3 (em paralelo, agentes independentes)". Agentes que NÃO fizeram a entrega;
+> alvo = `f5eee3b..f2a` da worktree + núcleo c2cd4c6 + nfse-api 8541025. Achado confirmado vira teste em
+> `setes-api/src/__tests__/adversarial-f2a-a3-gate.test.ts` (parte viva opt-in `F2A_ADV_LIVE=1`, bancos `f2a_adv_a3_*` criados e apagados).
+
+**Socrático 0,73** (checklist da skill, peso igual + item "janela executável"): núcleo da A3 sólido (predicados do núcleo, leitura pela vida,
+trava da nota antes da voz, 1 linha da view de vida); notas baixas em falha externa (0,55 — o boot depende do `fiscal_api`; em execução vira
+500), concorrência (0,60 — o GET do plano trava) e janela (0,60 — o intervalo entre o `migrate:setes` do passo 3 e o `--vai`). Limites
+ADV-01c/ADV-06/ADV-02b/ADV-09 da A2 confirmados MORTOS. **Adversarial 0,72** (42/42 com a parte viva): resistiram vidas misturadas, prova
+forjada (E2404 anterior/igual/fora do formato), irmã viva, minúsculas (`a`/`c`/`se`/`p`/`s` falham alto ou viram vivas), D-F126 (2 linhas
+→ 409), "manter a nota" fora da substituição em P (409 sem escrita em 11 casos), rotas novas (403/400/404/409 sem transação nem escrita;
+deadlock 3× → 409), selo em lote, e os gatilhos da 069 contra INSERT IGNORE (VALUES/SELECT), REPLACE, ON DUPLICATE KEY UPDATE, UPDATE/DELETE
+IGNORE e multi-tabela, UPDATE sem mudança, LOAD DATA LOCAL, `sql_mode=''`/`foreign_key_checks`/`check_constraint_checks`/`unique_checks`,
+'SE'/'se'/'Se'/'SE '/'ＳＥ'/'SEX' truncado; o ATO exato do `cutover-erp.ts` passa e é idempotente.
+
+| Achado | Sev. | O quê | Destino |
+|---|---|---|---|
+| F2A3-SOC-01 | MEDIUM | entre o `migrate:setes` do passo 3 e o `--vai` nada garante réplica = origem (voz A gravada no intervalo fica fora; o app velho ainda chama `POST /billing/cancel`, que lê a réplica) | **roteiro revisto** (abaixo): ensaio do ato ANTES do merge, re-sincronia + contagens depois do boot, uso parado até o `--vai` |
+| F2A3-SOC-02 · ADV-03 | MEDIUM | `fiscal_api` ilegível em EXECUÇÃO → a lista de OS INTEIRA (Faturadas/Todas) e as 4 rotas de billing caem em 500 com crashlytics | **Q-F138** |
+| F2A3-SOC-03 · Q-F141-ADV | MEDIUM | `GET …/cancel-plan` só exige a licença e trava X (pedido, nota, OS + trava D5, títulos — inclusive de OUTROS pedidos no boleto agrupado) por até 50 s | **Q-F139** |
+| F2A3-SOC-04 | MEDIUM | o setes-api conecta como `setes` com ALL `*.*`; o usuário `setes_api` do `grants.sql` não nasce em passo nenhum — a D-F15 fica só na cerca por AST | **Q-F140** |
+| F2A3-SOC-05 | MEDIUM | R13 em produção: `file:../fiscal-api` aponta para o `dist` da árvore onde a NE-1b desenvolve — recompilar o núcleo muda a produção no próximo restart | **Q-F141** |
+| F2A3-SOC-06 | LOW | sem plano de aborto antes do `--vai` (reverter o código sobe, mas toda escrita fiscal do código velho bate no gatilho → 500) | **Q-F142** |
+| F2A3-SOC-07 | MEDIUM | a prova de aceite cobre 2 classes do dado real (C já aplicado em P; F 403 em H) — fidelidade da cópia/mapa, não o comportamento | **critério de entrada da janela** = prova de aceite + as classes sintéticas do gate adversarial AO VIVO (vidas misturadas, prova forjada, irmã viva, substituição, de ofício, dispensa) |
+| F2A3-SOC-08 | LOW | ainda decidia pela chave (`!tx.accessKey` no "manter a nota"; `current?.accessKey ?` no `fiscal-effect`) e pela letra (`lastKind === 'K'`/`!== 'C'`) | **corrigido**: `fiscalRecordKey` (a chave é IDENTIDADE, lida só depois de `isFiscalRecord`; registro sem chave falha alto); estado pelo `fiscalStateOf` do núcleo; cerca (d) ampliada por AST — a chave como CONDIÇÃO (`!x`, `x ?`, `if (x)`, `&&`/`\|\|`/`??`) e letra exclusiva da voz (S/A/N/K/R/F) comparada à mão; exceção NOMEADA só dentro de `fiscalRecordKey`; meta-teste das formas |
+| F2A3-SOC-09 | LOW | `scripts/repair-authorized-cancel.ts` decide "registro fiscal" pela coluna crua sobre a origem congelada | **corrigido**: com a F2a aplicada no schema o script RECUSA (aposentado — §22.5 item 14) |
+| F2A3-SOC-10 | LOW | `f2a-passivo-migration.test.ts` exigia a 069 como ÚLTIMA do REPOSITÓRIO (a 1ª migration da IB-2 depois da janela quebraria a suíte) | **corrigido**: "a última DA F2a" (068 `order_interface_view_bin` < 069); o número contra o `main` segue conferido no passo 4 da janela |
+| F2A3-SOC-11 | LOW | `merge --ff-only` de ~90 arquivos sob o `tsx watch` pode subir árvore parcial | **roteiro**: parar o processo → merge → subir → ler o log |
+| F2A3-SOC-12 | LOW | `cancellable` do GET ignorava a D16 (caixa aberto) — o app iria ao fisco e o POST pararia em `NO_OPEN_CASHIER` | **corrigido**: `effects.cashierOpen` (o caixa do OPERADOR, null quando não toca o caixa) e `cancellable` = sem bloqueio E caixa aberto quando preciso; Swagger |
+| F2A3-ADV-01 | MEDIUM | voz A/N em PRODUÇÃO numa tentativa SEM `authority_recorded` (linha incoerente — nenhum CHECK "A ⇒ registro") → barreira `none` → o POST soft-deleta a nota e libera o número. 0 linhas assim hoje; o código da nfse-api não produz | **Q-F144** |
+| F2A3-ADV-02 | LOW | '105102 ' passava no CHECK do código da voz C (colação PAD SPACE — o `_bin` do MariaDB 10.4 também) e o ERP lia `apply` em vez de `decide` | **corrigido**: migration **006** da nfse-api (`CHAR_LENGTH = 6` + lista binária, re-executável), sonda do boot ('105102 ' e '1051020' recusados pelo CHECK de NOME certo), conferência da ORIGEM no `migrate:setes` (o `INSERT IGNORE … SELECT` rebaixaria a violação a aviso); dado conferido antes: 3 vozes C, todas '101101' (6 caracteres), nos dois lados; PADROES §11 regra 16 |
+| F2A3-ADV-04 | MEDIUM | o ATO conferia só `_migrations.name`; `DROP TRIGGER` (o `setes` tem ALL) deixa a escrita voltar | **corrigido no ATO** (é o texto da D-F110: "o ensaio da virada confere os triggers"): `f2aFreezeTriggersMissing` em `scripts/cutover-erp.ts` — os 9 pelo NOME no `information_schema.TRIGGERS` (tabela, BEFORE, evento, corpo com `SIGNAL 45000`); faltando = bloqueio no ensaio, recusa no ato; usuário sem o privilégio TRIGGER vê lista vazia → recusa (falha fechada); cerca: a lista = a da 069 quando a F2a está no `SETES_API_DIR`; prova VIVA (o gate chama a função real contra o banco descartável depois do DROP). O BOOT do setes-api conferir também = **Q-F143** |
+| F2A3-ADV-05 | LOW | trocar o dono da linha SE (`tb_institution_id`) passava no gatilho (DELETE + INSERT disfarçados) | **corrigido** na 069 (`NOT (NEW.tb_institution_id <=> OLD.tb_institution_id)`); prova em `prove-f2a-passivo.ts` e no gate ao vivo |
+| F2A3-ADV-06 | LOW | `TRUNCATE` não dispara gatilho de DELETE (com `foreign_key_checks=0` apaga a tentativa também) | **conhecimento negativo**: PADROES §11 regra 15 + teste que FIXA a semântica (a perda é acusada pela re-sincronia do ato) |
+
+**Correções sem decisão também feitas**: OpenAPI da nfse-api — `FiscalView.substitution` (o código devolvia e o contrato não dizia —
+achado do guardião da F2b); `ARQUITETURA_MODULOS.md` do app — a exceção nomeada inclui `cancel-plan|fiscal-effect` (D-F115).
+
+**Provas depois das correções**: ver §22.13.1.
+
+**Roteiro da JANELA (B) — REVISTO pelos gates** (substitui o do §22.11; cada passo irreversível com o "vai"):
+1. **Critério de entrada**: F2b pronta (build que fala com a nfse-api e com o setes-api só em `cancel-plan`/`fiscal-effect`/`cancel`/
+   `cancel-waiver`; 401 global); suítes verdes; gate adversarial da A3 com `F2A_ADV_LIVE=1` verde (as classes sintéticas — SOC-07);
+   Q-F138…Q-F144 decididas e executadas.
+2. Avisar e PARAR o uso (o app velho chama `POST /billing/cancel` até o build novo — SOC-01); nfse-api no ar com as migrations 001–006
+   (D-F113); GRANT de SELECT na view de tentativas ao usuário do setes-api (`nfse-api/ops/grants.sql`).
+3. **ENSAIO do ato ANTES do merge**: `npm run migrate:setes -- --cutover 1 --confirmo-setes-api-parado` (dry-run — o bloqueio D-F50 é
+   esperado aqui; o resto do ato roda e desfaz sobre o dado de hoje). Prova de aceite: lado velho (árvore viva) → `npm run migrate:setes` →
+   lado novo (worktree) = 0 divergência fora do "reconfirm" esperado.
+4. Conferir o número da `NNN_f2a_fiscal_passivo` contra o `main` (a IB-2); **PARAR o processo do setes-api** → `git -C setes-api merge
+   --ff-only f2a` (rebase antes se o `main` andou) → SUBIR → ler o log: "Voz do fisco (views): fiscal_api — família(s) service" +
+   "Migration aplicada: 069 - f2a_fiscal_passivo" (SOC-11).
+5. `npm run migrate:setes` (re-sincronia sobre a origem AGORA congelada) + conferir as contagens de tentativas/vozes origem × réplica;
+   ensaio `--cutover 1 --confirmo-setes-api-parado` de novo — **sem bloqueio** (D-F50 e os 9 gatilhos, F2A3-ADV-04) → com o "vai":
+   `… --vai` (D-F44). **Ponto sem volta.** Até aqui o uso continua PARADO (SOC-01).
+6. Publicar o build da F2b com `no-cache` em `index.html`/`flutter_bootstrap.js`/`main.dart.js` (Q-F155); relogin.
+7. Trilha (`scripts/trilha-primeiro-cliente.ts` — P8b pela nfse-api) → reabrir.
+8. Depois: apagar o A1 do cofre do setes-api (D-F116, "vai"); push dos repos; F3 (Onda 4).
+Aborto entre 4 e 5: Q-F142.
+
+#### 22.13.1 Provas (2026-10-13)
+
+- **setes-api (worktree `f2a`)**: `tsc` limpo; suíte **1.748 ok + as MESMAS 20 falhas pré-existentes** (nome a nome: 19 da bomba-relógio do
+  boleto em `bank-slip-registration`/`onda2-adversarial`/`onda2-gate-rework` + 1 da cerca de fuso); gate adversarial da A3 **42/42 com
+  `F2A_ADV_LIVE=1`** (restam como `it.failing` só a ADV-01 e a ADV-03, que dependem da Rodada 4); `scripts/prove-f2a-passivo.ts` em banco
+  descartável **26/26** (o caso novo do dono da linha SE incluído).
+- **nfse-api**: `tsc` limpo; **697/697** com `SETES_API_DIR` na worktree E na árvore viva; ao vivo **150/150** (`NFSE_ADV_LIVE=1 npx jest
+  live --runInBand`, cópias `fiscal_api_adv_*`); testes novos: `f2a-a3-gatilhos.test.ts` (conferência dos 9 gatilhos + cerca da lista ×
+  069), `f1r10` (ato real recusa / ensaio relata o bloqueio D-F110 com gatilho faltando ou nenhum visível), `f2a-a1-nfse` (sonda do código).
+- **núcleo**: **466/466** nas duas árvores (a cerca r21 passou a conhecer a 006).
+- Nenhum banco `f2a_*`/`fiscal_api_adv_*` sobrou; a nfse-api do dev NÃO está no ar — a 006 não foi aplicada no `fiscal_api` do dev (entra no
+  próximo `db:migrate`/boot, no passo 2 da janela).
+
+#### 22.13.2 Rodada 4 da F2a — questões abertas pelos gates da A3 (Q-F138…Q-F144) — AGUARDAM o Valdo
+
+- **Q-F138 — o `fiscal_api` ilegível em EXECUÇÃO (SOC-02 + ADV-03)**: (a) manter o 500 · (b) **a lista de OS DEGRADA (as linhas voltam; o
+  selo vira `unavailable` + alarme com a referência do crash) e as rotas que DECIDEM (`cancel`, `cancel-waiver`, `cancel-plan`,
+  `fiscal-effect`) respondem 503 `FISCAL_VOICE_UNAVAILABLE` (falha fechada TIPADA, nunca 500 genérico)** · (c) 503 para a lista inteira.
+  *(Rec.: (b) — o selo é informativo e não decide; quem decide falha fechado com código próprio. O boot continua não subindo sem as views
+  — D-F113.)*
+- **Q-F139 — o `GET …/cancel-plan` travante (SOC-03)**: (a) **exigir o privilégio CANCELAR do ramo (a MESMA guarda do POST) + espera curta
+  de trava só na sessão da consulta (molde da D-F41 — `innodb_lock_wait_timeout` curto; estourou = 409 `RESOURCE_BUSY` em segundos)** ·
+  (b) só a espera curta · (c) manter a D-F128 como está. *(Rec.: (a) — quem não pode cancelar não precisa do plano, e quem só olha não
+  segura a nota que a nfse-api trava como 1º comando; a tela não faz polling do plano.)*
+- **Q-F140 — menor privilégio do setes-api no banco (SOC-04)**: (a) criar o usuário `setes_api` NA janela · (b) **adiar para a F3:
+  conhecimento negativo no §22.11 + sonda no boot da F3 ("INSERT no `fiscal_api` negado ao usuário do setes-api")** · (c) manter.
+  *(Rec.: (b) — trocar o usuário de produção sob a pressão da janela traz mais risco que ganho; a cerca por AST cobre o código até lá.)*
+- **Q-F141 — pino do núcleo (SOC-05, R13)**: (a) tarball/tag versionado como dependência do setes-api e da nfse-api JÁ · (b) **checklist
+  na janela (HEAD e `dist` do núcleo conferidos e registrados) + proibido recompilar o núcleo na máquina de produção até a F3; (a) na F3**
+  · (c) deixar o R13 para a F3. *(Rec.: (b) agora e (a) na F3.)*
+- **Q-F142 — aborto antes do `--vai` (SOC-06)**: (a) **roteiro/script de aborto válido SÓ até o passo 5 (DROP dos 9 gatilhos, remover a
+  linha `f2a_fiscal_passivo` do `_migrations`, reverter o código, re-sincronizar), escrito e ensaiado em banco descartável antes da janela**
+  · (b) só conserto para frente. *(Rec.: (a) — depois do `--vai` o rollback continua proibido pela D-F50.)*
+- **Q-F143 — os 9 gatilhos conferidos também no BOOT do setes-api (ADV-04, extensão)**: (a) **sim — depois do runner, no molde das sondas
+  de CHECK (D-F45/D-IB26): gatilho faltando ou diferente = o setes-api não sobe** · (b) só o ato (feito nesta sessão) · (c) só conhecimento
+  negativo. *(Rec.: (a) — o congelamento protege a VIDA INTEIRA depois da virada, não só o instante do ato.)*
+- **Q-F144 — invariante "voz A/N ⇒ registro" (ADV-01)**: (a) **no mapa da família no núcleo (`mapTransmissionView`): voz A/N sem
+  `authority_recorded` falha ALTO, como a D-NE61 faz com a D** — o plano cai em erro (fechado), nunca libera o cancelamento local ·
+  (b) predicado novo do núcleo para a barreira (autorizada barra salvo registro de homologação) · (c) só conhecimento negativo.
+  *(Rec.: (a) — o mesmo molde já decidido para a NF-e; 0 linhas hoje.)*
+
+
+### 22.14 F2b — setes-app CLIENTE da nfse-api: Rodada 0 (2026-10-13) — inventário + parecer do guardião + Rodada 1 (Q-F145…Q-F155)
+
+> Valdo (2026-10-13, prompt do §22.12): "PASSO 2 — F2b (setes-app) Rodada 0". Fontes: agente Explore (só leitura) e agente `setes-conceito`
+> (só leitura); os fatos que decidem foram conferidos no disco (`api_client.dart`, `app_config.dart`, `nfse-api/.env` CORS, rotas da
+> nfse-api, `getOrderFiscalEffect`). Nada foi editado no setes-app. A F2b se desenvolve em WORKTREE do app (a criar com a Rodada 1 decidida).
+
+#### 22.14.1 Fatos do inventário (`APP` = `setes-app/apps/web/lib/app`, `CORE` = `setes-app/packages/core/lib/src`, `NF` = `nfse-api`)
+
+- **Só DOIS datasources chamam as 14 rotas**: `APP/modules/service_orders/data/datasource/service_order_fiscal_datasource.dart` (visão,
+  transmit, refresh, xml, danfse, cancel no fisco, cancel-waiver — este FICA no setes-api —, pendentes, lote) e
+  `APP/modules/establishment/data/datasource/establishment_issuer_datasource.dart` (emissor + A1). O app NÃO chama `cancel-plan` nem
+  `fiscal-effect`. `POST /api/billing/cancel` está em `service_order_datasource.dart:147` e `orders/.../order_datasource.dart:246`.
+- **Rede**: `ApiClient` com base ÚNICA (`AppConfig.baseApiUrl` = `String.fromEnvironment('API_URL')`, compilação; dev `run-dev.ps1`
+  `--dart-define-from-file=.env`, porta 5051); `Bind.singleton<ApiClient>` e todo módulo `i.get<ApiClient>()`; **token = campo da
+  INSTÂNCIA** (`api_client.dart:17`), gravado em 4 lugares (`auth_bloc.dart:170`, `login_page.dart:38`, `setes_auth_guard.dart:22`) e limpo
+  no logout (`user_badge.dart:41`); **401 → `UnauthorizedFailure` que NINGUÉM captura** (vira diálogo; só o guard confere `exp` ao trocar
+  de rota); sem timeout nem retry.
+- **nfse-api** (`NF/openapi/nfse-api.v1.yaml`, `src/modules/nfse/nfse.routes.ts`, `emitter/emitter.routes.ts`): o MESMO token serve (RS256
+  com kid; a pública é a do setes-api); **CORS = `http://localhost:5000,http://localhost:8080` no `.env` do dev — o app roda em 5051** (cai
+  em "Failed to fetch"); emitente só admin (403 `ADMIN_REQUIRED`); antes da virada toda ação/escrita do emitente = 409
+  `FISCAL_CUTOVER_PENDING`. Pares: transmit → `POST /v1/nfse/invoices/{id}/transmit` (201 só com A; ambíguo 502/503) · lote → **SEM PAR**
+  · pendentes → `GET /v1/nfse/invoices/pending` (PAGINADO 25/100, com `interfaceKey` — mistura `orders` e `service-orders`) · cancelar no
+  fisco → `POST …/cancel {reason}` + depois `POST /api/billing/cancel` (`nextStep: apply-local-cancel`) · consulta → `POST …/refresh` ·
+  visão → `GET …/{id}` + `GET /api/billing/:id/fiscal-effect` · XML/DANFSe → `GET …/xml|danfse` · emissor → `/v1/emitter*` (**só SE**: 55/65
+  = 422 `FISCAL_MODEL_NOT_SUPPORTED`) · NOVO `POST …/reconfirm`.
+- **O que a tela perde/ganha**: `pendingEffects` (int), `substitution.waived`, `cancelWaiver` e `events[].invoiceEvent` NÃO vêm da
+  nfse-api → efeito/dispensa vêm do `fiscal-effect` (`effect` none/apply/decide/cancel + `cancelWaiver`); kind **N** (autorizada depois de
+  K) sem rótulo e `isAuthorized` só aceita 'A'; cancel no fisco sem `kind` (`atAuthority`, `transmissionEvent`, `warnings`, `nextStep`); o
+  `CancelResult` assume 'C' por padrão; com registro fiscal a OS vira 'C' mas o bloc força a aba Abertas e a mensagem diz "voltou a
+  aberta"; emitente com `cutoverAt` e `enabled` = virada feita E A1 vigente (antes da virada o selo "sem certificado" mente); série 1–49999
+  (o app aceita 0 e 50000+); o app não tem catálogo `code`→i18n (os códigos novos chegam como mensagem PT da API).
+- **setes-api (A3)**: `cancel-plan` `{orderId, invoiceNumber, cancellable, blocks[], fiscalRecord, effects{…, touchesCash, cashierOpen}}`;
+  `fiscal-effect` `{orderId, lifeEvent, invoiceCancelled, effect, cancelWaiver}`; `POST cancel` e `cancel-waiver` compatíveis com o app.
+- **Testes**: 74 em 8 arquivos leem a forma antiga; NÃO existe teste de widget da seção "No fisco". **Build web**: `index.html` padrão, sem
+  service worker próprio; produção = build no Plesk (sem config de deploy no repo). **i18n**: 59 `forms.serviceOrder.fiscal*`, 34
+  `forms.establishment.issuer*`; mortas/enganosas: `fiscalEffectRow`, `fiscalSent`, `fiscalCancelInFlight`, `fiscalPendingRow`,
+  `fiscalCancelled`, `issuerModel55`.
+- **Riscos R-B1…R-B16**: token por instância · CORS · `NFSE_API_URL` · cancelamento em 3 passos retomável · `/reconfirm` sem UI · visão de
+  duas fontes com uma falha só · kind N · lote no cliente paginado e misturado · transmit 201 só A · emissor só SE e pré-virada · destino da
+  OS · 401 · datasource que mistura APIs · 74 testes da forma antiga · deploy/cache · i18n.
+
+#### 22.14.2 Parecer do guardião (`setes-conceito`, 2026-10-13)
+
+**Conceito**: o app é o **portador do ato humano** sobre a nota até as duas autoridades que o julgam — o fisco (pela nfse-api) e o ERP
+(pelo setes-api). **Fato gerador**: a VIRADA + a remoção das 14 rotas (o leitor segue o escritor, agora no cliente). É COMPOSIÇÃO de
+apresentação — nenhuma peça de domínio nova. Orquestra só a ORDEM (D-F28: o fisco fala primeiro); quem decide é a API que recebe cada ato;
+a retomada é por DERIVAÇÃO (reler `fiscal-effect` = `apply`), nunca diário no cliente.
+
+**O app NUNCA vira**: juiz do cancelamento local por coluna crua (`blocksLocalCancel` por `environment != 'H'` — entity:337 — é exatamente o
+que a cerca da A3 proíbe no setes-api); juiz da dispensa (`canWaiveCancel` — o `effect=decide` responde); reimplementação do `currentOf`
+(`transmissions.last` ≠ D-N26); tabela de semântica de kinds (`finals`, `isAuthorized` só 'A'); cache/diário de estado fiscal; botão
+escondido por regra própria; erro de rede num POST fiscal tratado como "não aconteceu" (é "desfecho desconhecido — releia").
+
+**Peças**: `ProductToken` em `packages/core/.../auth/` (o JWT do login, um para N APIs, lido a CADA requisição; as 4 escritas passam por
+ele) · `ApiClient` × N instâncias (tipo fino `NfseApiClient` para a injeção, base `AppConfig.nfseApiUrl`) · expiração global (401 numa
+requisição que LEVOU token = sessão morta → limpa e vai ao login; 401 sem token segue para a tela) · `service_order_nfse_datasource.dart`
+(só nfse-api) + `service_order_invoice_datasource.dart` (só `/api/billing`: plano, efeito, cancel, waiver — exceção nomeada) — o
+`service_order_fiscal_datasource.dart` MORRE (mistura duas APIs sob "fiscal") · saga do cancelamento = usecase de composição no módulo
+sobre DOIS repositórios · `establishment_nfse_issuer_datasource.dart` (`/v1/emitter*`) · painel "No fisco" com DUAS fontes e DUAS falhas
+(falhar o `fiscal-effect` = "efeito indisponível", nunca "nada pendente" — D-F79). **`app/shared/fiscal/` NÃO agora** (regra de promoção:
+nasce em `service_orders`; sobe no 2º consumidor — NFS-e da venda conjugada em `orders` ou a NF-e); o cliente HTTP nasce no core (infra
+com 2 consumidores desde o 1º dia).
+
+**Achado (lacuna da A3)**: o bloco `fiscal` do plano só traz TEXTO (`invoice-cancel.ts:366-372`) — a tela precisa saber QUAL ação oferecer
+(Cancelar NFS-e / Consultar / aguarde / Reconferir); o tipo já existe (`FiscalCancelBarrier`) — falta serializar (Q-F149).
+
+**Sagas**: (a) cancelar com NFS-e autorizada = `GET cancel-plan` → `POST /v1/…/cancel` → `POST /api/billing/cancel` (falha no 3º = reler
+`fiscal-effect` → `apply`; repetir o 3º = 409 `INVOICE_NOT_CANCELLABLE` "já cancelada" = já feito, reler; 502/503 no 2º = o K fica,
+reler; o destino da tela vem do STATUS relido do pedido, nunca do "Abertas" fixo) · (b) reconferir = barreira `reconfirm` → `/reconfirm` →
+reler o PLANO (o `verdict` só escolhe a frase; `nao-exigida` ≠ "pode cancelar") · (c) manter a nota = `effect=decide` → motivo →
+`cancel-waiver` · (d) `effect=cancel` = texto + "Cancelar nota" (abre o plano) · (e) transmitir = 201 autorizada / 422 E0xxx / 409 / 502-503
+ou timeout = "resultado incerto, consulte" (sem retry automático, nunca) · (f) lote (Q-F153). Botões pelo `state` do servidor + `effect` +
+barreira tipada + `CurrentInterface.can` — o servidor dá a última palavra.
+
+**Vocabulário**: `effect` na UI — `apply` "O fisco cancelou a NFS-e; falta cancelar a nota no sistema" (ação "Aplicar o cancelamento na
+nota"), `decide` "NFS-e substituída no fisco; decida" (Manter · Cancelar nota), `cancel` "O fisco cancelou (de ofício / homologação);
+cancele a nota", desconhecido = neutro sem ação; enum Dart com fallback `unknown` (o `state` também — núcleo 9 × contrato 7). Kind N só
+rótulo ("cancelamento não aconteceu; a NFS-e segue autorizada"). "Transmitir pendentes" → **"Transmitir notas sem NFS-e"**; nunca
+"pendente" sozinho. i18n novas: `kindN`, `effect.*`, reconferir + motivos do veredito, `applyLocalCancel`, `outcomeUnknown`,
+`issuerAwaitingCutover`. Selo do emissor pelos FATOS (`cutoverAt` nulo → "aguardando a migração da emissão"; A1 ausente/vencido → "sem
+certificado"). Evitar "fiscal" sozinho, "sessão" (AuthSession/SessionContext/caixa), "réplica"/"virada" na tela de usuário comum.
+
+**Maquete se**: entidade única "visão fiscal" fundindo as duas APIs num `fromJson` (duas fontes, uma falha, degrada calado); `app/shared/
+fiscal` genérico antes da NF-e; diário da saga no LocalPrefs; filtro por `interfaceKey` no CLIENTE sobre página paginada (a página 1 esconde
+notas); botão sumindo por regra própria; catálogo COMPLETO de códigos no app (2ª cópia das mensagens); portar os 27 testes da entidade que
+fixam derivações que morrem; lápide/compatibilidade nas 14 rotas. **Não entra**: tela Super de licenciado/app (D-F14/D-F13); 55/65 no
+emissor; webhook/recibo (D-F11); rodízio pelo app; "No fisco" na venda (`orders` — ⚠️ lacuna que já existe hoje: venda conjugada com NFS-e
+autorizada não tem como cancelar a NFS-e pela tela de pedidos); A1 por duas APIs (decidir com a nfe-api).
+
+#### 22.14.3 Rodada 1 da F2b — questões (Q-F145…Q-F155) — AGUARDAM o Valdo
+
+- **Q-F145 — o modelo 55 na aba "Emissor fiscal"**: (a) **sai da aba: só SE + A1 pela nfse-api; a série do 55 fica só-leitura no ERP, sem
+  tela (D-F112)** · (b) card 55 só-leitura por uma rota nova do ERP · (c) card "em breve". *(Rec.: (a).)*
+- **Q-F146 — cliente HTTP multi-API e sessão**: (a) **uma classe `ApiClient`, N instâncias por base de URL (tipos distintos para a
+  injeção), token num `ProductToken` ÚNICO lido a cada requisição, 401 global só quando a requisição levou token** · (b) um `ApiClient` só,
+  roteando por prefixo de URL · (c) token copiado em cada cliente. *(Rec.: (a) — a (c) é perigosa: trocar de institution deixaria o 2º
+  cliente agindo com o token velho, no estabelecimento errado.)*
+- **Q-F147 — onde fica o orquestrador da saga do cancelamento**: (a) **usecase de composição no módulo sobre dois repositórios, retomada por
+  derivação** · (b) o bloc chama as duas APIs direto · (c) `app/shared/fiscal` por família desde já. *(Rec.: (a).)*
+- **Q-F148 — `effect=apply` sem humano no fisco** (voz C que chegou por consulta/portal): (a) **botão "Aplicar o cancelamento na nota" que
+  abre o PLANO; o humano confirma, digita o motivo e precisa de caixa aberto se `touchesCash` (agora `cashierOpen` no plano)** · (b) o app
+  aplica sozinho ao abrir o detalhe · (c) só mensagem. *(Rec.: (a) — o C local cancela boleto, estorna cheque e mexe no caixa: nunca sem
+  confirmação humana.)*
+- **Q-F149 — barreira fiscal TIPADA no plano** (achado do guardião — lacuna da A3): (a) **o bloco `fiscal` do `cancel-plan` ganha
+  `barrier {kind: authorized|in-flight|cancel-in-flight|reconfirm, reason?, attempt}`, serializando o `FiscalCancelBarrier` que já existe —
+  mudança na worktree `f2a`, antes da janela** · (b) o app interpreta a mensagem · (c) o app deduz a barreira das tentativas da nfse-api.
+  *(Rec.: (a) — (b)/(c) recriam o plano em Dart.)*
+- **Q-F150 — como a tela escolhe os botões do fisco**: (a) **pelo `state` da nfse-api + `currentAttempt` (campo NOVO e aditivo na visão —
+  a vigente pelo `currentOf` do núcleo) + `effect` + barreira; kind só como rótulo** · (b) a nfse-api devolve `actions` (booleanos) · (c)
+  pelos kinds, como hoje. *(Rec.: (a) — a (b) aumenta o contrato e ainda depende do privilégio local.)*
+- **Q-F151 — `FISCAL_CUTOVER_PENDING` no app**: (a) **sem estado próprio: a mensagem da API passa direto e o build sai DEPOIS do ato
+  (passo 5 → 6 da janela); o selo do emissor usa `cutoverAt`** · (b) "modo consulta" na seção ao receber o código · (c) a nfse-api expõe
+  `cutoverPending` na visão. *(Rec.: (a) — institution NOVA não nasce presa à virada: `requireCutover` olha a linha SE do ERP.)*
+- **Q-F152 — códigos de erro → i18n**: (a) **a mensagem da API passa direto (Framework de Mensagens); constantes só para os códigos que
+  MUDAM o comportamento da tela** (`INVOICE_CANCEL_BLOCKED`, `INVOICE_CANCEL_WAIVER_NOT_APPLICABLE`, `INVOICE_NOT_CANCELLABLE`,
+  `FISCAL_DPS_REJECTED`, `FISCAL_AUTHORITY_UNKNOWN_RESPONSE`/`UNAVAILABLE`, `RESOURCE_BUSY`, `FISCAL_CUTOVER_PENDING`) · (b) catálogo
+  completo no core · (c) a nfse-api traduz por `Accept-Language`. *(Rec.: (a).)*
+- **Q-F153 — o lote de transmissão** (fato: o lote de hoje transmite também notas de `orders` — a rota antiga aceita os dois ramos):
+  (a) **escopo = notas da OS, filtro `interfaceKey` NO SERVIDOR (parâmetro novo da nfse-api); a lista é fotografada na confirmação (todas
+  as páginas, até um teto); 1 por vez, na ordem da API; segue em erro DA nota (422/409/502 → "consulte"); PARA em erro sistêmico (401, 403,
+  `FISCAL_CERT_*`, `FISCAL_ISSUER_MISSING`, `FISCAL_CUTOVER_PENDING`, N× 503 seguidos)** · (b) a (a) sem filtro (todas as que o usuário
+  pode transmitir, como hoje) · (c) transmissão paralela. *(Rec.: (a), conferindo no dado da janela quantas notas sem NFS-e não são de OS —
+  a Setes fatura pela OS.)*
+- **Q-F154 — CORS e `NFSE_API_URL`**: (a) **`--dart-define NFSE_API_URL` no `AppConfig` (molde do `API_URL`), build sem o define FALHA
+  ALTO; `CORS_ORIGINS` explícita por ambiente (dev `:5051`; produção a origem do Plesk); o boot de produção da nfse-api recusa lista vazia
+  ou `*`** · (b) `config.json` em tempo de execução · (c) proxy de mesma origem no Plesk. *(Rec.: (a), coerente com a D-F4.)*
+- **Q-F155 — cache do Flutter web na janela**: (a) **cabeçalho `no-cache` em `index.html`, `flutter_bootstrap.js` e `main.dart.js` no
+  Plesk + aviso de recarregar; a integridade já está no servidor (o build velho só recebe 404 e o "Cancelar nota" dele passa pelo plano)**
+  · (b) a (a) + checagem de versão mínima · (c) lápide 410 nas 14 rotas. *(Rec.: (a).)*
+
+**Esforço da F2b** (§22.3: 4–6 sessões) — mantido: core (token/cliente/401) ≈ 1 · datasources + entidades + sagas de `service_orders` ≈
+2 · emissor ≈ 0,5 · lote ≈ 0,5 · testes de widget da seção + gates ≈ 1–1,5.
+
+
+#### 22.15 ⏯ PROMPT DE RETOMADA — Rodada 4 da F2a + Rodada 1 da F2b → execução → janela (colar numa sessão nova)
+
+```
+Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22.13 (gates da A3 + roteiro da JANELA REVISTO + Q-F138…Q-F144) e o §22.14
+(F2b Rodada 0 + Q-F145…Q-F155); §22.11 (A3) e §22.2/§22.3 só quando precisar. A2 PUBLICADA (setes-api main f5eee3b — RS256 em produção).
+A3 + correções dos gates na worktree D:\Gestao2027\setes-api-f2a (branch f2a — commit local; push só com o "vai"); núcleo e nfse-api
+com as correções dos gates em commit local no main deles (006 da nfse-api NÃO aplicada em banco nenhum fora dos descartáveis).
+
+REGRAS DURAS
+- D:\Gestao2027\setes-api roda em tsx watch e É a produção da Setes (salvar = deploy; o boot aplica migrations). A A3 SÓ entra na JANELA,
+  junto da F2b. Nunca npm run dev na worktree (o .env aponta para o MySQL de produção). Nunca migrate:setes --cutover … --vai fora da
+  janela. Testes ao vivo só em bancos descartáveis (f2a_*, fiscal_api_adv_*), apagados no fim.
+- Suíte do setes-api SEM editar arquivos durante a execução; base = 20 falhas pré-existentes (19 boleto + 1 cerca de fuso). Cercas do
+  núcleo/nfse-api com SETES_API_DIR nas DUAS árvores.
+- Edição em UTF-8 pela ferramenta de edição (heredoc/`node -e` com barras invertidas FALHAM — script em arquivo); commit só dos caminhos
+  da frente, mensagem em arquivo (git commit -F); push só com o "vai". Decisões de arquitetura são do Valdo.
+
+PASSO 1 — com as respostas do Valdo às Q-F138…Q-F155: registrar D-F130+ no §7 e executar o que cabe ANTES da janela:
+  setes-api (worktree f2a): Q-F138 (degradação da voz em execução), Q-F139 (guarda/espera do cancel-plan), Q-F143 (boot confere os 9
+  gatilhos), Q-F149 (barreira tipada no plano); núcleo: Q-F144 (A/N ⇒ registro no mapa); nfse-api: Q-F150 (currentAttempt na visão),
+  Q-F153 (filtro interfaceKey nas pendentes), Q-F154 (CORS explícito, boot recusa vazio/*); Q-F142 (roteiro/script de aborto ensaiado em
+  banco descartável); Q-F141 (checklist do núcleo na janela). Gates do DELTA (socrático ≥ 0,70 + adversarial sem HIGH).
+PASSO 2 — F2b em WORKTREE do app (D:\Gestao2027\setes-app-f2b, branch f2b): ProductToken + ApiClient por API + 401 global (core),
+  datasources dedicados (nfse × invoice) de service_orders, saga do cancelamento (usecase de composição, retomada por derivação),
+  "No fisco" com duas fontes/duas falhas, emissor SE pela nfse-api, lote no cliente, i18n (mortas saem; novas entram), testes de widget
+  da seção; agente setes-form-builder só com conferência no disco; passeio logado (Claude in Chrome, o Valdo logado) contra a nfse-api
+  e a worktree em portas de teste (nunca a produção); gates.
+PASSO 3 — a JANELA pelo roteiro REVISTO do §22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15).
+Ao fim de cada passo: docs (§22.16+), INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```

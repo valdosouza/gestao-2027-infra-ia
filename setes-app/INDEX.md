@@ -5,6 +5,8 @@
 **Atende**: usuário final, consumindo `setes-api` (`/auth/*` e `/api/*` com JWT)
 **Escopo**: setes
 
+> **⏯ F2b — o app cliente DIRETO da nfse-api (D-F4) — Rodada 0 FEITA (2026-10-13 — `../prompts/prompt_apis_fiscais_isoladas.md` §22.14)**: inventário (2 datasources chamam as 14 rotas que morrem; token = campo da instância do `ApiClient` único; 401 sem tratamento global; CORS da nfse-api sem a 5051) + parecer do guardião (app = portador do ato humano; `ProductToken` + `ApiClient` por API + 401 global no core; datasources nfse × invoice; saga do cancelamento por derivação). **Rodada 1 Q-F145…Q-F155 aguarda o Valdo**; a F2b entra na JANELA única da F2a.
+
 ---
 
 ## Comece aqui
