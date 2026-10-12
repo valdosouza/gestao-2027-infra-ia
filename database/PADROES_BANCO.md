@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.0
+**Versão**: 1.1 (2026-10-12 — §11 regras 11 e 12, F2a)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -310,3 +310,20 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     que muda de casa** (D-F42): filtro POSITIVO pelo conceito do destino, nunca "tudo menos X" — a linha que é só do conceito que
     fica na origem não vira réplica. **Domínio fechado vira CHECK** (D-F45): o 1º CHECK da casa (`ck_establishment_issuer_model`)
     + conferência no boot de que o motor o aplica (MySQL < 8.0.16 aceita e ignora em silêncio).
+11. **Domínio fechado = CHECK BINÁRIO, provado no boot pelo NOME da constraint** (F2a, Rodada 1 e gates da A1 — 2026-10-12;
+    D-NE84/D-F107/D-F120 de `prompts/prompt_apis_fiscais_isoladas.md` §22): coluna CHAR/VARCHAR de domínio fechado ganha
+    `CHECK (col COLLATE utf8mb4_bin IN (...))` — um CHECK na colação `_ci` da tabela aceita a minúscula ('se', 'f', 'q', 'p') que o
+    código lê como OUTRO valor. A sonda do boot (`assertCheckRefuses` do núcleo) grava um valor FORA do domínio E a minúscula de um
+    válido, cada linha com PK PRÓPRIA (com a mesma PK, um motor sem CHECK faz a 2ª sonda colidir na 1ª e o diagnóstico vira
+    "Duplicate entry"), e só conta a recusa vinda da constraint ESPERADA (o nome na mensagem do motor — a violação de outro CHECK não
+    prova o domínio). **Conhecimento negativo, provado no MariaDB 10.4.20**: (a) `INSERT IGNORE … VALUES` dá ERRO na violação do
+    CHECK, mas `INSERT IGNORE … SELECT` a REBAIXA a AVISO e a linha SOME calada (no MySQL 8, pela documentação dele, as duas formas rebaixam — conferir na F3) — cópia que
+    precisa do domínio confere a ORIGEM antes de inserir; (b) a SESSÃO pode desligar o CHECK (`SET SESSION check_constraint_checks =
+    0`, sem privilégio extra) — nenhum código usa essa variável (D-F122, cerca por AST no núcleo); (c) `ADD CONSTRAINT IF NOT EXISTS` /
+    `DROP CONSTRAINT IF EXISTS` tornam a migration RE-EXECUTÁVEL (processo morto entre o ALTER e o registro em `_migrations` — D-F123),
+    mas são SÓ do MariaDB: a ida para MySQL 8 (F3) revê a cadeia inteira.
+12. **Quem LÊ o fato de outro serviço para decidir lê DEPOIS da trava** (D-F121, 2026-10-12): sob REPEATABLE READ a 1ª leitura
+    consistente fixa o retrato da transação — uma leitura antes do `FOR UPDATE` da nota não vê a voz que outra conexão gravou no meio
+    (provado ao vivo nos gates da A1 da F2a); o `FOR UPDATE` da linha que serializa (a nota no ERP) é o 1º comando da transação que
+    decide (regra 2 do §9 aplicada à leitura entre serviços). E o leitor entre serviços é ESCOPADO pelo fato que decide (a VIDA da
+    nota — D-F119): devolver "tudo da nota" deixava misturar uma vida antiga registrada com a nova e liberar o cancelamento local.

@@ -7,7 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.17 — Rodada 23 DECIDIDA (D-F107…D-F108, 2026-10-11): o CHECK da F2a protege a lista da família e, na NE-1a,
+> **⏯ RETOMAR POR AQUI — §22 — F2a ABERTA (Rodada 0, 2026-10-12): inventário do setes-api + parecer do guardião + ordem proposta
+> (A1 núcleo/nfse-api → A2 setes-api sem depender de onde a voz mora → A3 lote da janela em WORKTREE → janela única com a virada e a F2b,
+> antes de 30/11); Rodada 1 DECIDIDA (D-F109…D-F117, §22.6); etapa A1 EXECUTADA com gates 0,74/0,72 → Rodada 2 DECIDIDA (D-F118…D-F123, §22.7) e PUBLICADA (núcleo 1cc8e99 · nfse a930827); próximo:
+> etapa A2 — ⏯ PROMPT DE RETOMADA no §22.8 (setes-api em WORKTREE; inclui a `vw_order_interface` com COLLATE binário). A NE-1a está COMPLETA (parte 2b publicada — `prompt_onda_nfe_sefaz.md` §12.9.7.4).**
+>
+> *Antes:* **§21.17 — Rodada 23 DECIDIDA (D-F107…D-F108, 2026-10-11): o CHECK da F2a protege a lista da família e, na NE-1a,
 > o descritor da família carrega a lista de escrita — as duas se EXECUTAM na F2a e na NE-1a (nota da NE-1a no `prompt_onda_nfe_sefaz.md`
 > §12.8); nenhuma questão aberta nesta frente; próximo: NE-1a (Rodada 0 aberta — `prompt_onda_nfe_sefaz.md` §12.9) → F2a (corte 30/11)
 > → NE-0 (D-NE55: o levantamento da SEFAZ saiu do caminho crítico). (D-F67…D-F106 publicadas: prova da
@@ -736,6 +741,51 @@ branch `sessao-2026-10-10`):**
   declara a família de serviço com `SERVICE_VOICE_WRITE_KINDS`; a NF-e declara a dela (pode ter S/P/D com saída — D-F105). Rejeitadas:
   (b) invólucro tipado na nfse-api + cerca de import (o genérico seguiria aberto a S); (c) só o CHECK da F2a (o domínio comum tem S).
   Nota de implantação em `prompt_onda_nfe_sefaz.md` §12.8.
+- **D-F109 (= Q-F115 (b) — Valdo 2026-10-12: "siga as recomendações" — Rodada 1 da F2a, §22.4) — o núcleo expõe o VEREDITO da reconferência com motivo**: `reconfirmationVerdict(vida)` em
+  `fiscal-api/reading` (`provada` · `irma-viva` · `apresentada-depois` · `sem-e2404` · `sem-identidade` · `instante-invalido` ·
+  `nao-exigida`), usado pelo plano do setes-api e pelo `/reconfirm` da nfse-api — a ordem "irmã viva primeiro" (nota (1) da F2a) fica num
+  lugar só; `reconfirmationProven` passa a ser `verdict === 'provada'`. REVÊ a D-F104 (booleano até a F2a). A política do ERP (Q-CA5b, destino
+  da nota) segue no plano do ERP.
+- **D-F110 (= Q-F116 (a) — idem) — `068_f2a_fiscal_passivo` CONGELA a escrita fiscal do ERP por construção**: triggers BEFORE INSERT/UPDATE com
+  SIGNAL nas tabelas de tentativa e voz do ERP e na linha SE de `tb_establishment_issuer` (sem revive S→N, sem mudar `environment`/
+  `dps_last_number`, sem INSERT de SE; N→S permitido — o ato da D-F44) + COMMENTs de aposentadoria sem DROP (`environment`, `dps_last_number`,
+  `tb_invoice_service.dps_number`, as duas tabelas = "origem congelada"). O nome passa a significar "o ERP deixou de escrever a voz fiscal".
+  1º trigger de TRAVA da casa → regra nova no PADROES + `revisar-ddl`; o ensaio da virada confere os triggers. DROP = decisão futura.
+- **D-F111 (= Q-F117 (c) — idem) — transição pela FONTE da voz**: antes da janela só o que não depende de onde a voz mora (A1 núcleo/nfse-api;
+  A2 setes-api — views da 065, D-F37, RS256, conferência no boot); janela ÚNICA para congelamento + troca dos leitores + remoção das 14 rotas +
+  virada + F2b, antes de 30/11. Conhecimento negativo: leitor do setes-api pelas views ANTES da virada lê a RÉPLICA atrasada (duas verdades).
+- **D-F112 (= Q-F118 (a) — idem) — a SÉRIE da nota por modelo é leitura só no ERP**: peça `@shared/invoice-series` (`invoiceSerieFor` — o que
+  sobra de `@shared/fiscal-issuer`) sobre a tabela do ERP; sem tela até o 1º cliente de mercadoria; a SE fica '1' depois do ato. A forma
+  definitiva (config × tabela) se decide com o leiaute real da NF-e.
+- **D-F113 (= Q-F119 (a) — idem) — família INSTALADA = o catálogo `VOICE_READINGS` da versão da biblioteca**: o boot do setes-api confere a view
+  de cada família do catálogo (com `authority_recorded` — nota (9)); ordem de deploy: serviço da família ANTES do setes-api. Sem view-catálogo,
+  sem GRANT nas tabelas base.
+- **D-F114 (= Q-F120 (a) — idem) — a pendência do EFEITO no ERP é UMA classificação derivada**: `fiscalEffectOf` sobre a vigente da vida vigente
+  → `none` · `apply` (= `localCancelPending` do núcleo) · `decide` (substituição sem dispensa) · `cancel` (de ofício), mais a dispensa vigente.
+  A contagem por `invoice_event IS NULL` (forma do vínculo morto — D-F28) sai. "Pendência" nunca sozinha (glossário).
+- **D-F115 (= Q-F121 (b) — idem) — duas rotas do ERP para o app**: `GET /api/billing/:orderId/cancel-plan` (consultiva, não travante — D-F29) e
+  `GET /api/billing/:orderId/fiscal-effect` (D-F79/D-F114); o app compõe com a nfse-api (fisco).
+- **D-F116 (= Q-F122 (a) — idem) — a cópia do A1 no cofre do setes-api é APAGADA na janela**, depois que o `/v1/health` da nfse-api decifrar o A1
+  do `fiscal_api` — com o "vai" do Valdo (rollback proibido pela D-F50; 2ª chave privada = só exposição).
+- **D-F117 (= Q-F123 (a) — idem) — a F2a se desenvolve numa WORKTREE** (`D:\Gestao2027\setes-api-f2a`, branch `f2a`) com `.env`/`secrets`/
+  `node_modules` próprios; as cercas dos irmãos que leem `D:/Gestao2027/setes-api/src` passam a ler `SETES_API_DIR` (padrão: a árvore viva) e
+  FALHAM ALTO quando o arquivo esperado some (hoje `existsSync` pula calado); merge na árvore viva só por item aprovado (A2) e, o lote A3, só na
+  janela. Conhecimento negativo: a árvore `setes-api/` roda em `tsx watch` e É a produção da Setes — salvar = deploy; o boot aplica migrations.
+- **D-F118 (= Q-F124 — Valdo 2026-10-12 — Rodada 2 da F2a, gates da A1, §22.7; os gates divergiram: perguntada à parte, "tirar da superfície") — o booleano `reconfirmationProven` NÃO sai pela
+  superfície `fiscal-api/reading`**: segue a prova de UMA candidata (sem a barreira da vida, como os gates R18–R21 o fixaram) e fica no barrel
+  (nfse-api, testes); quem decide o cancelamento (setes-api) enxerga, por compilação, só o VEREDITO (D-F109). Corrige o texto da D-F109 ("Proven =
+  verdict === provada"): o booleano é o motivo `provada` da MESMA regra para UMA candidata, sem a barreira.
+- **D-F119 (= Q-F125 (b) — idem) — o leitor público é ESCOPADO PELA VIDA**: `readFamilyTransmissions(q, família, db, ref, vida)`; o lote por
+  PARES nota × vida (as vidas vigentes vêm da `vw_invoice_life` do ERP); linha de vida não pedida = falha alta; o veredito, como o `currentOf`,
+  recusa lista que mistura notas ou vidas. O histórico de vidas é da tela "No fisco" (nfse-api).
+- **D-F120 (= Q-F131 (a) — idem) — `environment` (tentativa e habilitação) e `source` (voz) são domínio fechado BINÁRIO**: CHECK H/P e P/Q nas
+  mesmas migrations 005 (núcleo e nfse-api), sondas no boot; o mapa interno da nfse-api recusa ambiente fora de H/P (antes virava H).
+- **D-F121 (= Q-F130 (a) — idem) — quem decide lê a voz DEPOIS do `FOR UPDATE` da nota**: o 1º comando da transação que decide é a trava da
+  nota no ERP (PADROES_BANCO §11 regra 12); o leitor do núcleo não trava; cerca no plano da A3.
+- **D-F122 (= Q-F132 (a) — idem) — nenhum código desliga o CHECK na sessão** (`SET SESSION check_constraint_checks = 0` — o MariaDB deixa,
+  sem privilégio extra): PADROES_BANCO §11 regra 11 + cerca por AST no núcleo (núcleo, nfse-api, setes-api, nfe-api).
+- **D-F123 (= Q-F133 (a) — idem) — as migrations 005 são RE-EXECUTÁVEIS** (`DROP/ADD CONSTRAINT IF [NOT] EXISTS`): processo morto entre o
+  ALTER e o registro em `_migrations` não trava o próximo boot. Só MariaDB (como as 002/003) — a ida para MySQL 8 na F3 revê a cadeia.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -2689,3 +2739,332 @@ instalada no `fiscal_api` como 0 — nenhum serviço condiciona o boot às migra
 **Próximo**: nenhuma questão aberta nesta frente. Ordem (D-NE55, Valdo 2026-10-11 — `prompt_onda_nfe_sefaz.md` §12.9: a NE-0 saiu do
 caminho crítico): NE-1a (núcleo generalizado, com a D-F108 — Rodada 0 aberta no §12.9 de lá) → **F2a** (setes-api passivo, com a D-F107)
 → virada → F2b → NE-0. Corte da F2a: 30/11 (D-IB15).
+
+
+## 22. F2a — setes-api PASSIVO: Rodada 0 (2026-10-12) — inventário + parecer do guardião + ordem proposta — Rodada 1 DECIDIDA (D-F109…D-F117, §22.6)
+
+> Valdo (2026-10-12, depois de publicar a NE-1a parte 2b): *"pode seguir para a F2a"*. Corte: **30/11/2026** (D-IB15). Nada foi editado no
+> setes-api nesta rodada — ele roda em `tsx watch` na árvore servida e É a produção da Setes (salvar = deploy). Fontes: agente Explore (só
+> leitura, 11 itens) e agente `setes-conceito` (só leitura); os pontos que decidem foram conferidos no código antes de entrar aqui
+> (`invoice-cancel.ts:329-350`, `require-privilege.ts:63`, `migrations/runner.ts`, `src/migrations/sql/065…067`).
+
+### 22.1 Fatos do inventário (Explore, 2026-10-12 — só leitura; `SA` = setes-api, `NF` = nfse-api, `FA` = fiscal-api)
+
+**As 14 rotas** (`SA/src/gateway/router.ts:145` `/billing`, `:87` `/establishment`): billing — `POST /billing/transmit` (routes:233), `POST
+/billing/fiscal/transmit-batch` (:261, `runningBatch` — **sem par na nfse-api**), `GET /fiscal/pending` (:275), `POST /fiscal/refresh` (:302, rodízio
+— o app NÃO usa), `POST /fiscal/cancel` (:337), `POST /fiscal/:orderId/refresh` (:355), `GET /fiscal/:orderId` (:369), `…/xml` (:384), `…/danfse`
+(:399); establishment — `GET /issuer` (:120), `PUT|DELETE /issuer/certificate` (:159/:160), `PUT|DELETE /issuer/:model` (:206/:207). Todas têm par
+em `NF/src/modules/nfse/nfse.routes.ts` / `emitter/emitter.routes.ts`, exceto o lote. **Fora das 14, fala com o fisco**: `POST /billing/cancel` →
+`reconfirmBeforeLocalCancel` consulta o ADN direto (`invoice-transmission.ts:351/:357`) e pode gravar voz pelo refresh (:360) — a rota FICA.
+
+**Ponto de corte (o que FICA depende do que MORRE)**: `invoice-cancel.ts:14-16` e `invoice-cancel-waiver.ts:7-9` → `transmission.repository`
+(`latestTransmission`, `isLiveTransmission`, `isAuthorized`, `findTransmissionEventByKind`, **`setTransmissionEventEffect` = ESCRITA na voz**
+— `invoice-cancel.ts:461`); `billing.service.ts:858` → `reconfirmBeforeLocalCancel` (adaptador ADN); `service-orders.service.ts:48` →
+`getServiceFiscalSummaries` (selo); `billing.service.ts:688` e `service-orders.repository.ts:1076` → `getIssuer` (SÉRIE da nota) no módulo
+`fiscal-issuer` que morre (puxa `secret-store`/`node-forge`); `applyCancelEffect` (`invoice-transmission.ts:404`) fica pelo §12.2 mas **todos os
+chamadores morrem** (`recordCancelVoice`, `retryLocalCancelEffect`); ciclo de import `invoice-transmission` ↔ `@shared/invoice`.
+
+**Leituras × views**: `TX_SELECT` → `transmissionViewSelect`/`mapTransmissionView` (a view NÃO tem `ageMinutes`/`lastEventAgeMinutes`);
+`LIFE_WHERE` (aceita `invoice_event IS NULL`) → `vw_invoice_life` + `inLife` (no `fiscal_api` a vida é NOT NULL); `latestTransmission` →
+`currentOf` (por `authorityRecorded`); `countPendingEffects` + `WAIVED_SQL` → **sem coluna equivalente** (D-F28: sem coluna de efeito no
+`fiscal_api`) — o `localCancelPending` do núcleo NUNCA marca pendente 305101/105102 e não conhece a dispensa; `findTransmissionEventByKind` lê
+`invoice_event` (a view de eventos NÃO o tem); `fiscalRecord = !!tx?.accessKey && …` (`invoice-cancel.ts:350` — nota (8): não portar);
+`fiscalStateOf` 7 estados → 9 no núcleo; **prova da reconferência** hoje não é LIDA — o setes-api pergunta ao fisco; `nfse_not_generated_at` só
+existe no `fiscal_api` (003/004). Views da nfse-api: `vw_invoice_service_transmission` (004 — com `authority_recorded` bin) e
+`vw_invoice_service_transmission_event` (001 — sem `invoice_event`); núcleo sem views; GRANT do `setes_api` COMENTADO em `NF/ops/grants.sql:32-33`.
+`fiscal-api/reading` exporta vocabulário, projeção, predicados, `familyViewQuery/Many`, família de serviço (`reconfirmationCandidate/Proven`,
+`localCancelPending`), `InvoiceRef`; **`readFamilyTransmissions` (notas (8)/(10)) NÃO existe**; `erp.invoiceLife/orderInterface` só no barrel.
+
+**Dual-run**: `FISCAL_ISSUER_RETIRED`/`_CUTOVER_ONLY` (D-F56/D-F58) morrem com as rotas 13/14 (a D-F50 assume); portes da D-F43, funil D-F106,
+`transmission-kinds.ts`, espelho `ambiguous-cause` + `logAmbiguousFiscal` morrem (nota (3)); `connection.ts` só cita o `fiscal_api` em comentário.
+
+**JWT**: assina HS256 com `JWT_SECRET` (`auth.service.ts:43-45/:63`, seleção :88/:96); valida em `gateway/auth.middleware.ts:13-14` sem `algorithms`;
+par de dev em `SA/secrets/jwt/` (fora do git); a nfse-api só aceita RS256 com `kid` (`FA/src/auth/product-jwt.ts`) e recusa o token de seleção;
+`mint-dev-token.ts` existe "só até a F2a"; scripts (trilha, smokes, generate-token) e ~20 testes assinam HS256.
+
+**Views D-F32**: JÁ EXISTEM (`065_fiscal_policy_views.sql`: `vw_order_interface`, `vw_invoice_life`) — **ninguém no setes-api as lê**; a nfse-api
+e o núcleo leem. `resolveOrderInterface` (`billing.interface-resolver.ts:16-23`) usa `tb_service_order` direto; a view parte de `tb_order`.
+
+**Migrations**: `SA/src/migrations/sql/`, última 067 → próxima **068**; runner decide pela VERSÃO (número), grava `name` = resto do nome, SEM
+transação; aplica no BOOT da API (`server.ts:21`) em todo schema ativo, no `db:migrate` e no onboarding. A nfse-api confere
+`name = 'f2a_fiscal_passivo'` (`migrate-from-setes-api.ts:377-404`).
+
+**Testes**: 28 arquivos (~470 `it`) cobrem o que morre; 7 (~113) ficam e leem transmissão; 5 (~75) ficam mas mockam `fiscal-issuer` com `requireActual`.
+
+**setes-app (F2b)**: 2 datasources chamam 13 das 14 rotas (`service_order_fiscal_datasource.dart`, `establishment_issuer_datasource.dart`); base de
+URL ÚNICA; nenhuma referência à nfse-api; a entidade lê `pendingEffects`, `events[].invoiceEvent`, `cancelWaiver`, `substitution.waived` — a nfse-api
+devolve `localCancelPending` e `substitution` sem `waived`, sem `cancelWaiver`. **Trilha**: só o P8b usa rotas fiscais; assina HS256.
+
+**Dev**: `npm run dev` = `tsx watch` na árvore servida (porta 3000 no ar); setes-api NÃO depende de `fiscal-api` hoje; `package-lock.json` no
+`.gitignore`; sem worktrees.
+
+**Riscos levantados**: R1 `applyCancelEffect` órfão · R2 `cancelInvoice` grava na voz (sem coluna no `fiscal_api`, setes-api só SELECT) · R3
+`getIssuer` (série) mora no módulo que morre · R4 a série do 55 perde o único editor (rota 13) · R5 pendência diverge (`countPendingEffects` ×
+`localCancelPending`) — D-F79 pede predicado único · R6 `readFamilyTransmissions` não existe · R7 leitura TRAVANTE sobre view DEFINER com só
+SELECT [INCERTO] · R8 migration roda no BOOT da produção, sem transação, decidida pelo NÚMERO · R9 cercas dos irmãos leem o caminho fixo do
+setes-api (`existsSync` pula em silêncio se o arquivo some) · R10 F2a sem F2b quebra o app (13 rotas; lote sem par; payload diferente) · R11
+`/billing/cancel` fala com o fisco hoje · R12 tudo que assina HS256 muda · R13 dependência `file:` sem lock versionado · R14 "migration da F2a" =
+duas coisas (CHECKs no `fiscal_api` × `068_f2a_fiscal_passivo` no ERP) · R15 divergências pequenas (resolver × view, vida NULL, 7 → 9 estados).
+
+### 22.2 Parecer do guardião (`setes-conceito`, 2026-10-12)
+
+**Conceito**: o setes-api passa a LER a voz do fisco ONDE ela é escrita, para decidir os fatos do ERP sobre a nota. **Fato gerador da F2a = a
+VIRADA** (D-F39 — muda quem escreve a voz) ⇒ regra que responde quase tudo: **o leitor segue o escritor** (regra 10 do PADROES §11 espelhada).
+É COMPOSIÇÃO: o ERP compõe os predicados do núcleo (`fiscal-api/reading`) com fatos dele (nota, vida, dispensa); a ÚNICA peça nova do ERP é a
+**porta de leitura do `fiscal_api`** (`src/shared/fiscal-voice/` — único lugar que lê o `fiscal_api`, importa só o subpath — D-NE77).
+
+| O que fica | Fato gerador | Veredito |
+|---|---|---|
+| efeito (C local) | ato humano no ERP condicionado à voz | peça existente (`cancelInvoice`); o "vínculo do efeito" (`setTransmissionEventEffect`, `invoice-cancel.ts:457-464`) é RESÍDUO do modelo que a D-F28 matou — sai |
+| plano | pedido de cancelamento (ERP) | composição do ERP (D-F29); bloco fiscal montado pelos predicados do núcleo |
+| prova (E2404) | resposta do fisco gravada pela nfse-api | a regra JÁ está no núcleo (`families/service.ts:101-160`) — o ERP exige, nunca reimplementa |
+| dispensa | decisão de uma pessoa (ERP — D-F79) | fica; `invoice-cancel-waiver.ts` reescrita sobre a porta |
+| pendência do efeito | voz C vigente × nota não-C × dispensa | UMA função derivada (`src/shared/invoice/invoice-fiscal-effect.ts` — `fiscalEffectOf`); a contagem por `e.invoice_event IS NULL` de hoje é **maquete** (forma do vínculo morto; a coluna não existe no `fiscal_api`) |
+| selo da lista de OS | voz mostrada numa lista do ERP | fica (SQL do ERP na mesma instância, pela porta) |
+
+**Duas "pendências" que NÃO são a mesma**: `localCancelPending` do núcleo = "o app pode aplicar o C sozinho" (exclui substituição e de ofício)
+× pendência do ERP = "voz C esperando efeito OU decisão humana" (inclui as duas) — nomes diferentes (Q-F120). **Decidem por COLUNA crua hoje**
+(além do `fiscalRecord` da nota (8)): `invoice-cancel.ts:333` `homologationAuthorized = isAuthorized(tx) && tx.environment === 'H'` → barreira
+pelos fatos do núcleo `isLiveTransmission(cur) || (isAuthorized(cur) && isFiscalRecord(cur))` (⚠️ `isLive || isFiscalRecord` NÃO serve: barraria a
+voz C em produção, que é o caminho do efeito); `invoice-cancel-waiver.ts:97/101` (`!tx.accessKey`, `environment !== 'P'`) →
+`isSubstitutionCancel(cur)`/`isFiscalRecord(cur)`; `transmission.repository.ts:251-254` (`currentOf` pela chave) → `currentOf` do núcleo (pelo
+registro); `LIFE_WHERE` (vida que aceita NULL) morre por construção; prosa `invoice-cancel.ts:36` "pendente (sem chave)" → "sem registro fiscal".
+**Fato que a view NÃO publica**: "família instalada?" (D-NE76) — com GRANT só nas views o setes-api não distingue "view ausente" (falha
+fechado) de "família não instalada" (Q-F119). O setes-api NÃO precisa da view de eventos (a tela "No fisco" é da nfse-api) — GRANT mínimo = só
+a view de tentativas.
+
+**Views D-F32**: já existem (065 — `vw_order_interface`, `vw_invoice_life`) e são lidas pelo núcleo/nfse-api; a vida vigente JÁ tem dono. A F2a
+faz a 2ª metade: o setes-api passa a LER delas (`resolveOrderInterface` → `vw_order_interface`; `lockInvoice`/`LAST_INVOICE_EVENT_KIND_SQL` →
+`vw_invoice_life`). **Maquete**: views novas por consumidor; view no ERP com JOIN no `fiscal_api` (amarra deploys, DDL ×1000); manter o resolver TS
+"provado igual" à view (duas verdades com um teste de cola); levar "admin passa"/fuso/Anexo I para SQL; coluna de estado fiscal em `tb_invoice`.
+
+**`f2a_fiscal_passivo` honesto**: o runner grava `_migrations` depois dos statements e o BOOT aplica — com `tsx watch`, o `.sql` salvo na árvore
+viva entra no próximo restart com o código ANTIGO servindo; um marcador vazio MENTE. O fato que a D-F50 protege é **"o ERP deixou de escrever a
+voz fiscal"**, garantido pelo banco seja qual for o código (Q-F116). Não entram nela: CHECK de `kind` (migration da nfse-api — D-F107), CHECK
+binário de `model` (migration do NÚCLEO — a tabela é dele, D-F35; o item (11) da nota dizia nfse-api), GRANTs (operação).
+
+**Transição**: "leitores pelas views com as rotas antigas ainda escrevendo" é **maquete** — antes da virada a voz vive no ERP e o `fiscal_api` tem
+só a RÉPLICA (atrasada até o próximo `migrate:setes`): o plano lendo a réplica pode liberar o cancelamento local (soft-delete, número liberado) de
+uma NFS-e recém-autorizada na origem. "Tudo numa janela" pesa demais. Rec.: **cortar pela FONTE da voz** (Q-F117). Riscos de "duas verdades" no
+dual-run: leitor na réplica × escritor na origem; política em dois códigos (resolver TS × view — JÁ existe); vocabulário/predicados copiados
+(`transmission-kinds.ts`, `currentOf` pela chave, espelho do `ambiguous-cause`); A1 em dois cofres; contador do nDPS em dois lugares; coluna de
+vínculo no ERP × pendência derivada no núcleo.
+
+**Palavras ocupadas**: *pendência/pendente* (5 sentidos — nunca sozinha) · *vigente* (tentativa · vida · dispensa) · *viva* (tentativa ·
+cabeçalho · nota não cancelada) · *selo* (fiscal da OS × classificação IBS/CBS) · *réplica* (depois da virada as tabelas do ERP são a **origem
+congelada**, não réplica) · *recibo* (morto com a D-F11; dono na NF-e — nRec) · *emissor/issuer* (a tabela do ERP deixa de ser habilitação) ·
+*fiscal* (`@shared/fiscal` = cadeia de documentos da entidade) · *reconferência* (prosa) = `reconfirm*` (código). **Nomes**: `src/shared/fiscal-
+voice/` · `src/shared/invoice/invoice-fiscal-effect.ts` (`fiscalEffectOf`) · `src/shared/invoice-series/` (`invoiceSerieFor` — o que sobra de
+`@shared/fiscal-issuer`) · `GET /api/billing/:orderId/cancel-plan` e `GET /api/billing/:orderId/fiscal-effect` · `068_f2a_fiscal_passivo.sql`
+(combinar o número com a IB-2). **Não entra**: vínculo do efeito, job de efeito, reconferência pelo setes-api (D-F4), view cruzada entre bancos,
+leitura das tabelas internas do `fiscal_api` (D-F15), leitor de fonte dupla pela `cutover_at`, DROP.
+
+### 22.3 Ordem interna (VIGENTE — D-F111 + D-F117)
+
+| Etapa | O quê | Onde | Publica quando |
+|---|---|---|---|
+| **A1 — núcleo e nfse-api** | `readFamilyTransmissions` (nota (8)/(10)) + `reconfirmationVerdict` (Q-F115) no subpath `fiscal-api/reading`; migration do NÚCLEO com o CHECK binário de `model` (D-NE84); migration 005 da nfse-api com o CHECK binário de `kind` A/R/C/K/F/N + sonda do boot `'S'` e `'f'` (D-F107; contar antes fora da lista/caixa no `fiscal_api` E na origem; conferir o `INSERT IGNORE` do `migrate:setes` no MariaDB 10.4); GRANT do `setes_api` só na view de tentativas (`ops/grants.sql`) | repos do núcleo e da nfse-api (não servem produção) | gate do delta → publicar |
+| **A2 — setes-api, o que NÃO depende de onde a voz mora** | dependência `fiscal-api` (só o subpath; cerca de import); `resolveOrderInterface` e vida pelas views da 065 (prova de equivalência no molde da 065 — elimina a duplicidade que JÁ existe); D-F37 nas rotas do ERP (conferir antes, no dado, quem perde acesso — molde da D-F37 de 2026-10-04); RS256 com `kid` no token final e no de seleção (relogin; scripts e ~20 testes); conferência no boot da view com `authority_recorded` + família instalada (nota (9), Q-F119) | worktree da F2a → merge na árvore viva POR ITEM aprovado | cada item: testes + gate do delta → merge (= deploy) |
+| **A3 — setes-api, o lote da janela** | porta `fiscal-voice`; plano, dispensa, selo e `fiscalEffectOf` pela porta (predicados do núcleo, nada por coluna crua); rotas `cancel-plan`/`fiscal-effect` (Q-F121); `invoice-series` (Q-F118); remoção das 14 rotas + peças + espelhos + `setTransmissionEventEffect`; migration `068_f2a_fiscal_passivo` (Q-F116); cercas da F2a; **prova de aceite: leitor novo na réplica recém-sincronizada × leitor velho na origem = 0 divergência** (selo, bloco fiscal do plano, pendência, prova) | worktree — NÃO entra na árvore viva antes da janela | gates socrático + adversarial ANTES da janela |
+| **F2b — setes-app** (Rodada 0 própria) | datasources dedicados da nfse-api; a tela "No fisco" compõe nfse-api (fisco) + setes-api (`fiscal-effect`, dispensa — D-F79); lote no cliente; emissor/A1 direto na nfse-api; série da nota pelo ERP | worktree do app | junto da janela |
+| **Janela (B)** | parar o uso → merge do A3 na árvore viva (o boot aplica a 068) → `migrate:setes -- --cutover 1 --confirmo-setes-api-parado --vai` (com o "vai") → build da F2b publicado (cuidado com o cache do Flutter web) → trilha (front-end das duas APIs) → reabrir | árvore viva | **antes de 30/11** |
+| **Depois** | apagar o A1 do cofre do setes-api (Q-F122, "vai"); F3 (Onda 4) | — | — |
+
+Esforço: A1 ≈ 1 sessão · A2 ≈ 1–2 · A3 ≈ 2–3 · F2b ≈ 4–6 · janela ≈ 1 → **9–13 sessões** até 30/11 (≈ 7 semanas de calendário).
+
+### 22.4 Questões da Rodada 1 da F2a — DECIDIDAS (§22.6)
+
+- ⚠️ **Q-F115 — contrato da prova da reconferência agora que existe consumidor (revisita a D-F104)**: (a) manter `reconfirmationProven`
+  booleano; o ERP compõe a ordem "irmã viva primeiro" (nota (1)) · (b) **o núcleo expõe `reconfirmationVerdict(vida)` com motivo** (`provada` ·
+  `irma-viva` · `apresentada-depois` · `sem-e2404` · `sem-identidade` · `instante-invalido` · `nao-exigida`), usado pelo plano do ERP e pelo
+  `/reconfirm` da nfse-api · (c) o bloco fiscal inteiro do plano vai para o núcleo. *(Rec.: (b) — a ordem fica num lugar só e acaba o laço
+  "reconfira"; (c) tira do ERP uma política dele — Q-CA5b, destino da nota, D-F29.)*
+- ⚠️ **Q-F116 — o que a `068_f2a_fiscal_passivo` CONTÉM (D-F50)**: (a) **congela a escrita fiscal do ERP por construção** — triggers BEFORE
+  INSERT/UPDATE com SIGNAL nas tabelas de tentativa e voz do ERP e na linha SE de `tb_establishment_issuer` (sem revive S→N, sem mudar
+  `environment`/`dps_last_number`, sem INSERT de SE; **N→S permitido** — é o ato da D-F44) + COMMENTs de aposentadoria sem DROP
+  (`environment`, `dps_last_number`, `tb_invoice_service.dps_number`, as duas tabelas = "origem congelada"); o nome passa a significar "o ERP
+  deixou de escrever a voz fiscal" · (b) só COMMENTs (garantia por procedimento) · (c) renomear as tabelas do ERP (quebra a re-sincronia final).
+  *(Rec.: (a) — custo: 1º trigger de TRAVA da casa → regra nova no PADROES + `revisar-ddl`; o ensaio da virada confere os triggers; ganhos: a
+  re-sincronia lê origem congelada, rollback de código pós-virada falha fechado, a lacuna (b) fica inalcançável, a D-F56/D-F58 vira fato de banco.)*
+- ⚠️ **Q-F117 — desenho da transição (produção ao vivo + o app chama 13 das 14 rotas)**: (a) tudo junto numa janela · (b) 2a-i leitores pelas
+  views com as rotas antigas servindo + 2a-ii remoção na janela · (c) **antecipar só o que não depende de onde a voz mora (A1/A2); janela única
+  para congelamento + troca dos leitores + remoção das rotas + virada + F2b**. *(Rec.: (c) — a (b) cria duas verdades: plano lendo a réplica
+  atrasada pode liberar o cancelamento local de NFS-e recém-autorizada.)*
+- ⚠️ **Q-F118 — a SÉRIE da nota por modelo depois que saem as 5 rotas do emissor (D-F21/D-F44)** — a tabela do ERP já mistura habilitação com
+  série (a 058 semeou a linha 55 de `invoice_serie`); a rota 13 era o ÚNICO editor da série do 55: (a) **leitor só-leitura `@shared/invoice-
+  series` sobre a tabela, sem tela até o 1º cliente de mercadoria; SE fica '1' depois do ato** · (b) a série vira config do Framework na
+  interface billing, por modelo · (c) rota fina só para a série. *(Rec.: (a) — a forma definitiva se decide com o leiaute real da NF-e.)*
+- ⚠️ **Q-F119 — "família instalada" com GRANT mínimo (D-NE76)**: (a) **o catálogo `VOICE_READINGS` da versão da biblioteca É a lista das
+  famílias instaladas; o boot do setes-api confere a view de cada uma; ordem de deploy: serviço da família antes do setes-api** · (b) view-catálogo
+  publicada no `fiscal_api` · (c) GRANT de leitura nas tabelas base. *(Rec.: (a) — generaliza o item (9) sem peça nova.)*
+- ⚠️ **Q-F120 — forma do predicado ÚNICO da pendência do efeito no ERP (D-F79)**: (a) **classificação derivada da vigente da vida vigente:
+  `none` · `apply` (= `localCancelPending` do núcleo) · `decide` (substituição sem dispensa) · `cancel` (de ofício), mais a dispensa vigente** · (b)
+  contagem (`pendingEffects: number`, como hoje) · (c) booleano. *(Rec.: (a) — a contagem era a forma do vínculo morto e o app precisa saber
+  QUAL ação mostrar.)*
+- ⚠️ **Q-F121 — rotas do ERP para o app (D-F29 + D-F79)**: (a) uma rota com plano + efeito · (b) **duas: `GET /api/billing/:orderId/cancel-plan`
+  (consultiva, não travante) e `GET /api/billing/:orderId/fiscal-effect`** · (c) só a do efeito; o plano segue só no POST. *(Rec.: (b) — plano e
+  estado do efeito são dois conceitos.)*
+- ⚠️ **Q-F122 — a cópia do A1 no cofre do setes-api depois da virada**: (a) **apagar na janela, depois que o `/v1/health` da nfse-api decifrar o
+  A1 do `fiscal_api`** (com o "vai") · (b) manter N dias como rollback · (c) manter. *(Rec.: (a) — o rollback é proibido pela D-F50; 2ª chave
+  privada é só exposição.)*
+- ⚠️ **Q-F123 (condução) — onde a F2a é desenvolvida, com a árvore do setes-api servindo a produção em `tsx watch`**: (a) **worktree git
+  `D:\Gestao2027\setes-api-f2a` (branch `f2a`) com `.env`/`secrets`/`node_modules` próprios (cópias locais, fora do git); testes ali (mocks e cópias
+  descartáveis); as cercas dos irmãos que leem `D:/Gestao2027/setes-api/src` passam a ler `SETES_API_DIR` (padrão: a árvore viva) e FALHAM ALTO
+  quando o arquivo esperado some (hoje `existsSync` pula em silêncio — R9); merge na árvore viva só por item aprovado (A2) e, o lote A3, só na
+  janela** · (b) desenvolver na árvore viva com o código novo inerte atrás de flag (cada save publica; erro de import derruba a produção) · (c)
+  trocar o serviço do dev de `tsx watch` para build congelado durante a F2a (salvar não publica, mas o restart ainda aplica as migrations do disco).
+  *(Rec.: (a).)*
+
+### 22.5 Sem decisão (correções óbvias da execução)
+
+1. Comentário "Tabela ausente (depois da F2a)" em `fiscal-api/src/erp/facts.ts:284-294` contradiz a D-F44 (sem DROP) — corrigir o texto.
+2. Item (11) da nota: o CHECK binário de `model` é migration do NÚCLEO (tabela dele — D-F35), não da nfse-api.
+3. `vw_order_interface.interface_key` vem de literais (CASE) sem COLLATE e a nfse-api o compara no SQL (`service-facts.ts:333`) — conferir com
+   `SET NAMES` em duas colações (PADROES §11 regra 3); se cair, recriar no molde da 004 da nfse-api (`COLLATE utf8mb4_bin`).
+4. Tirar `dps_number = NULL` do revive em `setes-api/src/shared/invoice/invoice.ts:251` (coluna aposentada — D-F30).
+5. `nfse-api/ops/grants.sql:29-33`: o `setes_api` só precisa da view de TENTATIVAS.
+6. RS256: `gateway/auth.middleware.ts:13-14` fixa `algorithms: ['RS256']`; o token de seleção (`auth.service.ts:88/96`) ganha marca própria (a
+   nfse-api já o recusa) e nunca vale como token final.
+7. Leitura fiscal do plano travante (LOCK IN SHARE MODE) ou DEPOIS da trava da nota (PADROES §11 regra 4); conferir no MySQL 8 da F3 a leitura
+   travante numa view DEFINER tendo só SELECT [INCERTO no inventário — R7].
+8. Cercas da F2a: zero HTTP para as APIs fiscais; só o subpath `fiscal-api/reading`; nenhum `accessKey`/`environment === 'H'|'P'`/
+   `last_queried_at` decidindo registro ou prova fora do núcleo; nenhuma leitura das tabelas congeladas no `src`.
+9. Nota conjugada: o plano percorre `VOICE_READINGS` pelos ramos presentes (a NE-2 confere o que a D produz no plano).
+10. Combinar o número 068 com a IB-2 (também cria migrations no setes-api); pela D-F50 o nome fixo vai no ÚLTIMO arquivo da F2a.
+11. Os três serviços rodam a MESMA tag do núcleo (checklist de deploy da F3); a `package-lock.json` do setes-api está no `.gitignore` — a
+    dependência `file:../fiscal-api` precisa de pino na F3 (R13).
+12. Glossário da skill do guardião: entram pendência, vigente, viva, selo e origem congelada.
+13. Os testes que mockam `../shared/fiscal-issuer` com `requireActual` (5 suítes que ficam) passam a mockar `@shared/invoice-series` (R3).
+14. Scripts que leem as tabelas de transmissão do ERP (`pre-deploy-tz-check.ts:53-61`, `repair-authorized-cancel.ts:59`) — conferir na A3
+    (origem congelada: leitura histórica continua válida; decisão nova, nunca).
+
+### 22.6 Rodada 1 da F2a — DECIDIDA (Valdo 2026-10-12: "siga as recomendações")
+
+| Questão | Decisão |
+|---|---|
+| Q-F115 (b) | **D-F109** veredito da reconferência com motivo no núcleo |
+| Q-F116 (a) | **D-F110** `068_f2a_fiscal_passivo` congela a escrita fiscal do ERP (triggers + COMMENTs, sem DROP) |
+| Q-F117 (c) | **D-F111** transição pela fonte da voz — A1/A2 antes, janela única para o resto |
+| Q-F118 (a) | **D-F112** série da nota = `@shared/invoice-series` só-leitura |
+| Q-F119 (a) | **D-F113** família instalada = `VOICE_READINGS` da biblioteca; boot confere as views |
+| Q-F120 (a) | **D-F114** pendência do efeito = classificação `none/apply/decide/cancel` |
+| Q-F121 (b) | **D-F115** `GET …/cancel-plan` + `GET …/fiscal-effect` |
+| Q-F122 (a) | **D-F116** A1 do cofre do setes-api apagado na janela (com o "vai") |
+| Q-F123 (a) | **D-F117** worktree `setes-api-f2a`; cercas por `SETES_API_DIR` e falhando alto |
+
+**Próximo**: etapa **A1** (núcleo + nfse-api — §22.3). Corte da F2a: 30/11 (D-IB15).
+
+
+### 22.7 Etapa A1 — executada + gates do delta (2026-10-12) — socrático **0,74 ✅** · adversarial **0,72 ✅** (nenhum CRITICAL/HIGH; 2 MEDIUM) — Rodada 2 da F2a DECIDIDA (D-F118…D-F123)
+
+**O que a A1 entregou (antes dos gates)**: núcleo — `reconfirmationVerdict(vida)` com motivo (D-F109; o booleano virou o motivo `provada`
+de `proofReason`), leitor que já mapeia `readFamilyTransmissions`/`…Many` (D-NE66 (b); `familyViewQuery*` saiu do caminho público para
+`voice/view-query.ts`), `assertCheckRefuses` (sonda genérica de CHECK), migration 005 (CHECK binário de `model` — D-NE84); nfse-api —
+migration 005 (CHECK binário de `kind` — D-F107), sonda do boot, `nfseNotGeneratedAt` na linha interna, `/reconfirm` pelo veredito
+(tentativa viva → 409 com a mensagem do transmitir, sem ir ao fisco; `verdict` relido DEPOIS), OpenAPI, GRANT mínimo (só a view de
+tentativas). Fatos medidos (só leitura / banco descartável `fiscal_api_adv_*`): MariaDB 10.4.20; dados reais todos no domínio (`kind`
+A/C/F/R, `source` P, `environment` H/P, `model` SE — no `fiscal_api` e na origem `setes_setes`). **Achado para a A2**: a
+`vw_order_interface` da 065 do setes-api dá erro 1267 numa conexão `utf8mb4_general_ci` (`interface_key` vem de literais sem COLLATE; o
+padrão do mysql2 é `unicode_ci`, por isso hoje passa) — recriar no molde da 004 da nfse-api (`COLLATE utf8mb4_bin`), migration do setes-api.
+
+**Gate socrático (agente independente) — 0,74**: três achados confirmados por sonda — (1) vidas MISTURADAS liberavam o cancelamento (vida
+H registrada + cancelada local + vida nova em P com F por consulta → `nao-exigida`; o `currentOf` recusava a mistura, o veredito não);
+(2) duas respostas públicas que discordavam (o booleano `true`, o veredito `irma-viva` com tentativa viva de outra identidade); (3)
+`irma-viva` com candidata (irmã final sem `lastEventAt`) → `find(isLive)!` undefined → TypeError/500 no `/reconfirm`. Correções sugeridas:
+veredito recusa lista mista; irmã sem instante = `instante-invalido`; sonda com PK própria; ROLLBACK que falha → destruir a conexão;
+`mapTx` estrito para a prova; OpenAPI com os dois códigos; comentários vencidos; doc "depois da trava"; MySQL 8 como conhecimento
+negativo; D-F117 nas cercas e D-F113 no núcleo (eram da A1). Questões Q-F124/Q-F125.
+
+**Gate adversarial (agente independente — gates `fiscal-api/src/__tests__/adversarial-f2a-a1-gate.test.ts` e
+`nfse-api/src/__tests__/adversarial-f2a-a1-gate.test.ts`, parte viva em `fiscal_api_adv_gatea1*`) — 0,72**: **F2A1-01 MEDIUM** (o mesmo
+(1) do socrático, provado com a view 004 e o mapa reais); **F2A1-08 MEDIUM** — na forma da cópia do `migrate:setes` (`INSERT IGNORE …
+SELECT`) o MariaDB 10.4.20 **REBAIXA** a violação do CHECK a aviso 4025 e a voz some calada (a 005 afirmava o contrário — a sonda da
+sessão só tinha testado a forma `VALUES`); LOW F2A1-02 (o (3)), 03 (o (2)), 04 (o SELECT cru `familyViewSelect`/`transmissionViewSelect`
+ainda saía pela superfície), 05 (a sonda aceitava a recusa de QUALQUER CHECK), 06 (OpenAPI × K), 07 (as duas linhas da sonda do `kind` com
+a mesma PK). Resistiu: barreira antes do fisco em todos os vivos; veredito relido honesto; varredura de 2.100 vidas incoerentes; CHECK
+binário ao vivo nas duas tabelas; sondas não sujam a sessão; 005 sobre dado fora do domínio falha e não registra; caso positivo pela view
+004 real. Questões Q-F130…Q-F133.
+
+**Decisões (Valdo, 2026-10-12)** — Q-F124 dividiu os gates (socrático: manter o booleano + cerca; adversarial: booleano = veredito) e foi
+perguntada à parte; as outras pelas recomendações:
+
+| Decisão | O quê |
+|---|---|
+| **D-F118** (= Q-F124 — "tirar da superfície") | o booleano `reconfirmationProven` segue a prova de UMA candidata (sem a barreira da vida — como os gates R18–R21 o fixaram) e SAI da superfície `fiscal-api/reading` (fica no barrel — nfse-api e testes): quem decide o cancelamento enxerga, por compilação, só o VEREDITO |
+| **D-F119** (= Q-F125 (b)) | o leitor público é ESCOPADO PELA VIDA: `readFamilyTransmissions(q, família, db, ref, vida)` e o lote por PARES nota × vida (o setes-api lê as vidas vigentes na `vw_invoice_life`); linha de vida não pedida = falha alta; o veredito (como o `currentOf`) recusa lista mista |
+| **D-F120** (= Q-F131 (a)) | `environment` (tentativa e habilitação) e `source` (voz) com CHECK BINÁRIO (H/P, P/Q) nas mesmas 005 + sondas do boot; o `mapTx` também passa a recusar ambiente fora de H/P |
+| **D-F121** (= Q-F130 (a)) | quem decide lê a voz DEPOIS do `FOR UPDATE` da nota (o 1º comando da transação — PADROES §11 regra 12); o leitor não trava; cerca no plano da A3 |
+| **D-F122** (= Q-F132 (a)) | nenhum código usa `check_constraint_checks` (a sessão desligaria o CHECK) — PADROES §11 regra 11 + cerca por AST no núcleo |
+| **D-F123** (= Q-F133 (a)) | as 005 são RE-EXECUTÁVEIS (`DROP/ADD CONSTRAINT IF [NOT] EXISTS` — só MariaDB; a F3 revê a cadeia se o motor for MySQL 8) |
+
+**Correções de sessão (sem decisão nova)**: veredito com `assertOneInvoiceLife` (nota e vida na linha, no tipo); `irma-viva` ⇔
+`isLiveTransmission` (irmã final sem instante = `instante-invalido`); `/reconfirm` sem `!` (guarda com 409); superfície `fiscal-api/reading`
+virou LISTA EXPLÍCITA (fora: `familyViewSelect`, `transmissionViewSelect`, `reconfirmationProven`, `assertOneInvoiceLife`; a cerca confere
+"módulos − lista de fora" — export novo quebra até alguém decidir); `CheckProbe` com o NOME da constraint (recusa de outro CHECK = falha com
+diagnóstico), PK própria por sonda, valor anterior de `foreign_key_checks` restaurado, BEGIN antes de mexer na sessão, ROLLBACK que falha →
+conexão destruída; `assertIssuerEnvironmentDomainEnforced` e `assertServiceVoiceDomainsEnforced` (kind/source/ambiente) no boot da nfse-api,
+mais `assertFamilyViewsReadable` (D-F113 — a view de cada família do catálogo responde ao SELECT publicado; também para o boot do setes-api
+na A2); lote com estabelecimento e terminal conferidos; `migrate:setes` confere o domínio da ORIGEM (kind da família, source P/Q, binários)
+ANTES da cópia das vozes (F2A1-08); `mapTx` estrito (`nfseNotGeneratedAt` presente, ambiente H/P); OpenAPI do `/reconfirm` com
+FISCAL_TRANSMISSION_IN_PROGRESS e FISCAL_CANCEL_IN_FLIGHT e o aviso "`nao-exigida` ≠ pode cancelar"; comentários vencidos (`kinds.ts`,
+`issuer-models.ts`, `establishment.repository.ts`, `facts.ts`, `service.ts`); as 005 renomeadas (`005_issuer_domains_binary.sql` do núcleo,
+`005_service_transmission_domains.sql` da nfse-api — nada publicado antes). **D-F117 nas cercas**: helper `SETES_API_DIR`/`setesApiPath`/
+`mustExist`/`relWorkspace` (`fiscal-api/src/__tests__/setes-api-dir.ts` e `nfse-api/src/__tests__/voice-kind-fence.ts`); as cercas que
+vigiam o setes-api (r13, r19, r21, r22 dos dois lados, `voice-kind-fence`, `ne1a-superficie`) leem a worktree quando `SETES_API_DIR` aponta e
+FALHAM ALTO quando o que vigiam some (a A3 revisa cada uma na mesma entrega que remove o arquivo).
+
+**Testes convertidos**: gates da A1 (núcleo e nfse-api) — `it.failing` → `[CORRIGIDO na sessão]`/`[CORRIGIDO — D-F119]`/`[DECIDIDO — D-F118…]`;
+contextos Q-F130…Q-F133 → `[DECIDIDO]`; r8/cofre (recusa pelo nome da constraint; a do CHECK _ci antigo NÃO prova); r21 (a cópia confere a
+origem; CHECK por expressão isolada); r18/r20/`transmission.test.ts` (o `/reconfirm` pelo veredito); `ne1a-leitura` (lote por pares);
+`ne1a-registro`/`adversarial-ne1a-gate` (linha interna com a prova); `ne1a-superficie` (lista explícita); `f2a-a1` (núcleo — D-F113,
+D-F120, D-F122) e `f2a-a1-nfse` reescrito.
+
+**Provas**: núcleo **463/463** (`tsc` limpo, `dist/` refeito) · nfse-api **691 unit** + ao vivo **183/183** (as 150 + o gate da A1 com a parte viva em `fiscal_api_adv_gatea1*`, criados do zero e apagados) · nada aplicado no `fiscal_api` do dev (as 005 entram no próximo boot/`db:migrate` da nfse-api, depois de publicadas).
+
+
+**PUBLICADA a A1 (Valdo: "salva tudo e vamos abrir uma nova seção", 2026-10-12)** — núcleo 1cc8e99 · nfse a930827 · infra INFRA_HASH.
+
+#### 22.8 ⏯ PROMPT DE RETOMADA — etapa A2 da F2a (colar numa sessão nova)
+
+```
+Retome a F2a (setes-api PASSIVO) do Gestão 2027 pela etapa A2. Leia primeiro D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22 inteiro (Rodada 0 → §22.1–§22.5; Rodada 1 → §22.6; A1 + gates +
+Rodada 2 → §22.7) e as decisões D-F109…D-F123 no §7. A1 PUBLICADA (núcleo 1cc8e99 · nfse a930827). Nenhuma questão aberta.
+
+REGRAS DURAS (não negociar):
+- A árvore D:\Gestao2027\setes-api roda em `tsx watch` e É a produção da Setes: salvar um arquivo = deploy; o boot aplica as
+  migrations do disco. NADA da F2a se escreve nela fora do merge de um item APROVADO (D-F117).
+- A F2a se desenvolve na WORKTREE D:\Gestao2027\setes-api-f2a (branch `f2a`, criada a partir do `main` do setes-api) com .env,
+  secrets/ e node_modules PRÓPRIOS (cópias locais, fora do git — nunca imprimir conteúdo deles). Testes ali (mocks e bancos
+  descartáveis); as cercas do núcleo e da nfse-api leem SETES_API_DIR (padrão: a árvore viva) e falham alto quando o arquivo
+  vigiado some — rodar as suítes do núcleo/nfse com SETES_API_DIR=D:\Gestao2027\setes-api-f2a para ver a worktree.
+- Ordem (D-F111, §22.3): A2 = só o que NÃO depende de onde a voz mora, item a item, cada um com testes + gate do delta e
+  merge na árvore viva (= deploy) só com o "pode publicar" do Valdo; A3 (porta fiscal-voice, plano/dispensa/selo/fiscalEffectOf,
+  rotas cancel-plan/fiscal-effect, invoice-series, remoção das 14 rotas, migration 068_f2a_fiscal_passivo com os triggers da
+  D-F110) fica na worktree e só entra na JANELA única da virada (com a F2b), antes de 30/11.
+- NUNCA `migrate:setes --cutover … --vai` fora da janela decidida; testes ao vivo só em cópias descartáveis.
+- Decisões de arquitetura são do Valdo; recomendações que se contradizem entre os gates são perguntadas à parte.
+- Commit só dos caminhos da frente, mensagem em arquivo UTF-8 sem BOM (`git commit -F`); editar com ferramenta de edição ou
+  Node em UTF-8 (nunca Set-Content; o heredoc do Bash corta barras invertidas — script por arquivo).
+
+ITENS DA A2 (§22.3 + §22.5 + o achado da A1):
+1. Worktree `setes-api-f2a` + dependência `fiscal-api` SÓ pelo subpath `fiscal-api/reading` (cerca D-NE77 já existe no núcleo);
+   a package-lock do setes-api está no .gitignore — anotar o pino da dependência para a F3.
+2. `vw_order_interface` (migration 065) com `interface_key` COLLATE utf8mb4_bin — dá erro 1267 numa conexão
+   utf8mb4_general_ci (achado da A1, §22.7) — migration NOVA do setes-api (combinar o número com a IB-2; a 068 fica reservada
+   para o `f2a_fiscal_passivo` — D-F50 quer o nome fixo no ÚLTIMO arquivo da F2a).
+3. `resolveOrderInterface` e o leitor da VIDA (`lockInvoice`/`LAST_INVOICE_EVENT_KIND_SQL`) lendo `vw_order_interface` e
+   `vw_invoice_life` (D-F32 — elimina a duplicidade que JÁ existe), com prova de equivalência no molde da 065.
+4. D-F37 nas rotas do ERP (o admin passa só o privilégio, nunca a licença do ramo — `require-privilege.ts:63/97/139`):
+   conferir ANTES, no dado, quem perderia acesso (molde da D-F37 de 2026-10-04).
+5. JWT RS256 com `kid` (D-F13) no token final e no de seleção (marca própria; nunca vale como final); `auth.middleware`
+   com `algorithms: ['RS256']`; scripts (trilha, smokes, generate-token) e ~20 testes que assinam HS256; relogin dos usuários.
+6. Boot do setes-api: `assertFamilyViewsReadable` (D-F113) com o usuário de leitura do `fiscal_api` — exige o GRANT do
+   `setes_api` na view de tentativas (`nfse-api/ops/grants.sql`) e a conexão ao `fiscal_api`; ordem de deploy: nfse-api antes.
+   ⚠️ Pesar com o Valdo se este item entra antes da janela (o boot do setes-api passaria a depender do `fiscal_api` no ar).
+7. Antes de tudo: aplicar no `fiscal_api` do DEV as migrations 005 da A1 (`npm run db:migrate` na nfse-api — a habilitação de
+   lá é RÉPLICA; dados conferidos dentro dos domínios) e rodar `npm run migrate:setes -- --dry-run` para ver a re-sincronia
+   com a conferência nova da origem.
+Para cada item: testes, gates do delta (socrático ≥ 0,70 + adversarial sem HIGH), docs (§22.9+), e só então o merge.
+Corte da F2a: 30/11 (D-IB15).
+```
