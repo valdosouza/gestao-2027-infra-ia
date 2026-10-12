@@ -1,9 +1,9 @@
 # Skill: Carregar o catálogo IBS/CBS (rotina do Super)
 
-**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB60)
+**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB61)
 **Objetivo**: Carregar/recarregar em `setes_central` o catálogo oficial do IBS/CBS (CST, cClassTrib com vigência e aplicabilidade
 por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o que não foi conferido
-**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50), §11.25 (D-IB51…D-IB53), §11.28 (D-IB54…D-IB57), §11.31 (D-IB58…D-IB60);
+**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50), §11.25 (D-IB51…D-IB53), §11.28 (D-IB54…D-IB57), §11.31 (D-IB58…D-IB60), §11.35 (D-IB61);
 `Infra-IA/database/PADROES_BANCO.md` §5 ("carga de catálogo externo = ato com plano"); código: `setes-api/scripts/load-ibscbs-catalog.ts`
 + peça `setes-api/src/shared/ibscbs-catalog/`
 **Tempo**: ~10 min (o ensaio leva ~1–2 min: a conferência consulta a Calculadora por par NFS-e × cClassTrib)
@@ -98,6 +98,12 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
      vigentes não engana mais o selo (o cadastro olha a vigente mais nova, a mesma do faturamento).
    - ⚠️ Limite conhecido (D-IB60): a linha que o cadastro escolhe na janela não precisa valer na obrigação — uma futura aceita que acaba
      antes de 01/01/2027 salva hoje e vira "não aceita" no meio do caminho; o `impactAhead` (D-IB45/D-IB50) lista a perda com data.
+   - ⚠️ Limite conhecido (D-IB61 — o inverso da D-IB60): numa SOBREPOSIÇÃO em que a vigente mais nova não é aceita e ACABA antes da
+     obrigação por cima de uma antiga aceita em aberto, o cadastro recusa HOJE (422, selo "não aceita", fora da lista) um código que a
+     data do fato volta a aceitar no dia seguinte ao fim da mais nova e na obrigação; o impacto marca `registrationStillAccepts: false`
+     sem dizer que ele volta, e o aviso prospectivo não parte desse código. Falha para o lado seguro. Se o ensaio mostrar um caso
+     assim (catálogo com sobreposição de vigentes — em 2026-10-11 havia zero), avisar o Valdo: reabre a decisão para a "linha do
+     tempo" (a volta da antiga conta como linha futura aceita).
    - D-IB46: `validityVigentOnDate` (e `vigentOnDate` na linha do encolhimento) = vigentes na data ao lado da base — se cair abaixo
      de 80 % das presentes, a base do limite está diluída: avisar o Valdo (reabre a D-IB46).
    - ⚠️ Limite conhecido (D-IB43): nada recusa um IT MAIS ANTIGO que o gravado pelo número da versão (`--it-version` é texto livre).

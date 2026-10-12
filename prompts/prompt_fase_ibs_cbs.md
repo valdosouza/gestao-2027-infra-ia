@@ -1221,3 +1221,16 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
   volta (mesmo mecanismo do `lossesAhead`); (c) só informar no impacto da carga quando o código volta (`acceptedAgainFrom`).
   *(Rec.: (a) — o estado depende de sobreposição que hoje não existe, a regra mudou duas vezes em duas rodadas, a falha é segura; reabrir
   para (b) se uma carga real trouxer sobreposição.)*
+
+### 11.35 Rodada 12 DECIDIDA (Valdo 2026-10-11: "siga as recomendações na Rodada 12") — D-IB61
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB61** | (a) A linha antiga que VOLTA a valer dentro da janela (sobreposição: a vigente mais nova sem aceite acaba antes da obrigação por cima de uma antiga aceita em aberto) é LIMITE CONHECIDO: o cadastro recusa hoje um código que a data do fato volta a aceitar antes da obrigação; o impacto não diz que volta e o aviso não parte dele. Falha para o lado seguro (422); zero sobreposições no catálogo real; reabrir para a "linha do tempo" (opção (b)) se uma carga real trouxer sobreposição de vigentes |
+
+**Execução** (2026-10-11): nenhuma mudança de código de produção — um teste que FIXA a semântica (`src/__tests__/ibscbs-classification.test.ts`
+"D-IB61 — limite conhecido": cadastro recusa em 10/10, data do fato aceita em 01/12 e na obrigação; padrão do conhecimento negativo da
+D-A28 — para ninguém "consertar" sem nova decisão) + o limite escrito na skill `setes-api/skills/carregar-catalogo-ibscbs.md` com o gatilho
+de reabertura. Gates socrático/adversarial NÃO rodados nesta rodada: o delta não toca código de produção (só um teste que fixa o
+comportamento já provado pelos gates da Rodada 11 e documentação). Nenhuma questão aberta na fase depois desta rodada — próximo passo
+da fase: a IB-2 (roteiro de leitura no §4).
