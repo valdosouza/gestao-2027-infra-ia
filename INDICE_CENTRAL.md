@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.39 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.40 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-11  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-11 | **APIs fiscais — Rodada 22 EXECUTADA e PUBLICADA (D-F105…D-F106)** (`prompts/prompt_apis_fiscais_isoladas.md` §21.16 FECHAMENTO): gate r22 convertido (`[CORRIGIDO na sessão]`; a camada de chamada é a `writerCallFlags` da peça — a réplica local saiu; nada escapa), S1 (testemunhas presas à chamada do escritor real no r21), S6 (`setes-api/src/__tests__/service-voice-write-kind.test.ts`). Provas: núcleo 208 · nfse-api 561 unit + 150/150 ao vivo · setes-api 2229/2248 (19 = boleto do Inter, data fixa — outra sessão). **Rodada 23 ABERTA (§8.R23): Q-F113 domínio do CHECK da F2a · Q-F114 a lista da família quando o escritor for para o núcleo — decidir antes da NE-1a.** Lição: Jest do setes-api em paralelo cai no `kill EPERM` do Windows — rodar com `--runInBand`. Publicado: núcleo f6aeb03 · nfse a23fea6 · api 6bd6f83 · nfe-api 35ce356; `wip/rodada-22` apagados. | 9.40 |
 | 2026-10-11 | **APIs fiscais — Rodada 22 DECIDIDA (D-F105…D-F106), execução EM ANDAMENTO** (`prompts/prompt_apis_fiscais_isoladas.md` §21.16 = handoff): a D-F102 vale só para a NFS-e; o escritor da voz da NFS-e aceita só a lista positiva da família (constante + tipo derivado + funil em execução + mapa congelado). Gates 0,76/0,80 ✅; correções de sessão no working tree e em backup nos branches `wip/rodada-22` (fiscal-api, nfse-api, setes-api); pendem a conversão dos testes do gate r22, S1/S6, suítes, docs e a publicação. Rodada 23 a abrir: Q-F113/Q-F114. | 9.39 |
 | 2026-10-11 | **Fase IBS/CBS — IB-2 ABERTA (Rodada 0)** (`prompts/prompt_fase_ibs_cbs.md` §12 ⭐ ponto de retomada; Valdo: "vamos abrir a IB-2"): escopo = congelamento ÚNICO da classificação no ramo `tb_invoice_service` (billing e OS), barreira por calendário (antes da obrigação sem o grupo, depois 422 — veredito da peça na data do fato), obrigação pelo enquadramento datado (`tb_establishment_tax_regime` — troca leitores da frente das APIs fiscais: combinar) e pré-voo do faturamento; inventário do código e parecer do guardião lançados e interrompidos (nova sessão) — relançar no início da próxima sessão; nada de código antes da Rodada 1 (Q-IB62+). | 9.38 |
 | 2026-10-11 | **Fase IBS/CBS — Rodada 12 DECIDIDA** (`prompts/prompt_fase_ibs_cbs.md` §11.35; Valdo: "siga as recomendações na Rodada 12"): D-IB61 a linha antiga que volta a valer dentro da janela (sobreposição de vigentes) é limite conhecido — falha para o lado seguro, zero sobreposições no catálogo real; teste que fixa a semântica + limite e gatilho de reabertura na skill `setes-api/skills/carregar-catalogo-ibscbs.md`; sem código de produção. **Nenhuma questão aberta na fase** — próximo passo: a IB-2 (roteiro do §4). | 9.37 |

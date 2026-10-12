@@ -7,9 +7,9 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.16 — ⚠️ Rodada 22 (D-F105…D-F106) EM ANDAMENTO: código no working tree + backup nos branches
-> `wip/rodada-22`; falta converter os testes do gate r22, S1/S6, suítes e docs — lista exata no §21.16 (D-F67…D-F104 publicadas:
-> prova da reconferência, alarme com causa fechada, voz S e `kind` como conhecimento negativo com cerca por AST). Antes: §21.7–§21.15,
+> **⏯ RETOMAR POR AQUI — §21.16 — Rodada 22 (D-F105…D-F106) EXECUTADA e PUBLICADA (2026-10-11); ⚠️ Rodada 23 aberta (Q-F113…Q-F114
+> — decidir ANTES da NE-1a) (D-F67…D-F106 publicadas: prova da reconferência, alarme com causa fechada, voz S e `kind` como conhecimento
+> negativo com cerca por AST, escritor da NFS-e pela lista positiva da família + funil em execução). Antes: §21.7–§21.15,
 > §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
 > máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F106** (§7). Escolhas do Valdo na reconciliação (§20.3):
@@ -714,9 +714,13 @@ branch `sessao-2026-10-10`):**
   chave/recibo — D-NE33). A cerca (`nfse-api/src/__tests__/voice-kind-fence.ts`) mira a família: SQL só na tabela da NFS-e; no NÚCLEO (onde
   a NE-1a põe a máquina comum) só o SQL — nunca o literal `kind: 'S'`, que lá é da NF-e.
 - **D-F106 (= Q-F112 (b) — idem) — o escritor da voz da NFS-e é tipado pelo vocabulário DA FAMÍLIA, em lista POSITIVA**:
-  `ServiceVoiceWriteKind = Extract<TransmissionEventKind, 'A'|'R'|'C'|'K'|'F'|'N'>` em `TransmissionEventInput.kind` (nfse-api e setes-api)
-  e no `OUTCOME_KIND` — sem S já agora e sem os kinds que a NE-1a trouxer para o tipo comum (P/D da NF-e). O TIPO é a cerca real: pega o
-  produtor SEMÂNTICO (constante, shorthand, mapa, parâmetro) que nenhuma cerca textual pega. O CHECK do banco continua na F2a (item (7)). Funil em EXECUÇÃO e mapa congelado = correções do gate R22 (§21.16).
+  `SERVICE_VOICE_WRITE_KINDS = ['A','R','C','K','F','N'] as const satisfies readonly TransmissionEventKind[]` e o tipo
+  `ServiceVoiceWriteKind` DERIVADO dela (a 1ª forma, `Extract<…>`, evaporava calada se o tipo comum virasse `any` — ressalva do
+  adversarial R22) em `TransmissionEventInput.kind` (nfse-api e setes-api) e no `OUTCOME_KIND` — sem S já agora e sem os kinds que a NE-1a
+  trouxer para o tipo comum (P/D da NF-e). O TIPO pega o produtor SEMÂNTICO (constante, shorthand, mapa, parâmetro) que nenhuma cerca
+  textual pega. O CHECK do banco continua na F2a (item (7)). Correções do gate R22 (§21.16), executadas na sessão e reversíveis pelo
+  Valdo: FUNIL em execução no escritor (recusa kind fora da lista, sensível a caixa, antes de qualquer query), `OUTCOME_KIND` congelado,
+  cerca de CHAMADA + ESCRITOR ÚNICO na peça `voice-kind-fence.ts` (`writerCallFlags`/`voiceWriterViolations`/`VOICE_SQL_WRITERS`).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -1006,11 +1010,18 @@ Texto completo e recomendações no §21.14: **Q-F108** a voz S não tem saída 
 ela a saída da D-F51) · **Q-F109** `kind` sem CHECK de domínio (Rec.: conhecimento negativo até a F2a; CHECK binário na migration dela) ·
 **Q-F110** (opcional) o contrato da prova para a F2a (Rec.: manter o booleano; o veredito com motivo se decide na F2a).
 
-### 8.R22 Rodada 22 — aberta pelos gates da Rodada 21 (2026-10-11, §21.15) — DECIDIDA ("siga as recomendações" → D-F105…D-F106) — execução EM ANDAMENTO (§21.16)
+### 8.R22 Rodada 22 — aberta pelos gates da Rodada 21 (2026-10-11, §21.15) — DECIDIDA ("siga as recomendações" → D-F105…D-F106) e EXECUTADA (§21.16)
 
 Texto completo e recomendações no §21.15: **Q-F111** a D-F102 vale para qual família (Rec.: só a NFS-e — a NF-e define a saída do S dela
 na própria rodada; decidir antes da NE-1a) · **Q-F112** proteção do domínio do escritor da NFS-e (Rec.: tipo da família — sem S já agora,
 sem P/D na NE-1a; CHECK na F2a).
+
+### 8.R23 Rodada 23 — aberta pelos gates da Rodada 22 (2026-10-11, §21.16) — ⚠️ AGUARDA O VALDO (decidir ANTES da NE-1a)
+
+Texto completo e recomendações no §21.16: **Q-F113** qual domínio o CHECK da F2a (item (7)) protege na tabela da NFS-e (Rec.: (a) a lista
+da FAMÍLIA — a mesma constante do tipo; sonda do boot e teste comparam constante × DDL) · **Q-F114** onde mora a lista de escrita da
+família quando o escritor for para o núcleo na NE-1a (Rec.: (a) o descritor da família no núcleo carrega a lista — `VoiceFamily<K>` —,
+o escritor comum é genérico nela e a confere em execução; a cerca do núcleo vira "escritor único").
 
 ## 9. Fora de escopo desta fase
 
@@ -2539,12 +2550,12 @@ rebaixa a violação do CHECK a AVISO (a linha some e o passo 6 falha com a mens
 (Valdo), o ALARME da F3, a tarefa da bomba-relógio de data dos testes do boleto (fora desta frente — outra sessão, decisão do Valdo), e os
 próximos passos: Rodada 22 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 
-### 21.16 Rodada 22 — D-F105…D-F106 (Valdo 2026-10-11: "siga as recomendações") — ⏯ EM ANDAMENTO — RETOMAR POR AQUI
+### 21.16 Rodada 22 — D-F105…D-F106 (Valdo 2026-10-11: "siga as recomendações") — EXECUTADA e PUBLICADA — ⏯ RETOMAR POR AQUI (Rodada 23)
 
-> **Sessão encerrada a pedido do Valdo no meio das correções dos gates (2026-10-11).** O código está no WORKING TREE dos três repos
-> (sem commit no `main`) e em BACKUP nos branches remotos **`wip/rodada-22`** — fiscal-api `6d7d72d` · nfse-api `49383ba` · setes-api
-> `dcb7a43` (commits montados por índice temporário: o HEAD/checkout compartilhado não mudou). ⚠️ **O setes-api JÁ RODA o funil e o mapa
-> congelado** (`tsx watch` = deploy ao salvar; mudança sem efeito para os 6 kinds da família — conferido: `tsc` limpo, `/health` 200).
+> **Histórico**: a 1ª sessão foi encerrada a pedido do Valdo no meio das correções dos gates; o código ficou no working tree e em backup
+> nos branches `wip/rodada-22` (fiscal-api `6d7d72d` · nfse-api `49383ba` · setes-api `dcb7a43`). Uma 2ª sessão no mesmo dia (Valdo:
+> "termine a execução da Rodada 22") conferiu o working tree = backup (blob a blob), fechou a lista PENDENTE abaixo, publicou no `main` e
+> apagou os `wip/rodada-22`. O setes-api do dev já rodava o funil e o mapa congelado desde a 1ª sessão (`tsx watch`).
 
 | Decisão | O quê | Onde |
 |---|---|---|
@@ -2570,21 +2581,33 @@ além do tipo até a F2a" — foi executada aqui porque o adversarial a classifi
   `VOICE_SQL_WRITERS` (ESCRITOR ÚNICO: os dois repositórios + a cópia do `migrate:setes`). `voice-kind-fence.test.ts` 10/10; o código REAL
   não tem violação (nem produtor de S, nem chamada/escritor fora da regra).
 
-**PENDENTE — retomar nesta ordem**:
-1. **Converter os testes do `adversarial-r22-gate.test.ts`** (nfse-api: **17 falhas** = os `it.failing` R22-01/02/04/05/06/07/03 que agora
-   PASSAM + os "contexto" que fixavam o comportamento antigo — matriz do ATAQUE 1, contextos do 1b (spread grava S → agora REJEITA;
-   `Object.assign` no mapa → agora LANÇA TypeError; "escritor não confere nada" → agora recusa); trocar a réplica local `callFenceFlags`
-   pela `writerCallFlags` da peça; núcleo: **2 falhas** no r22 dele a converter). Regra: `it.failing` → `it('[CORRIGIDO na sessão] …')`.
-2. **S1** testemunhas presas ao escritor REAL (no r21, teste "DECIDIDO — D-F106": `repo.insertTransmissionEvent(…, { kind: 'S' … })`
-   dentro de função NÃO executada com `@ts-expect-error`).
-3. **S6** setes-api sem testemunha: teste novo (ex.: `src/__tests__/service-voice-write-kind.test.ts`) com `@ts-expect-error` no escritor
-   real + funil em execução (conn falsa: recusa S/P/D/'s' sem nenhuma query) + `Object.isFrozen(OUTCOME_KIND)`.
-4. Suítes: núcleo · nfse-api unit + **150 ao vivo** · setes-api (`--forceExit`; as 19 do boleto são de outra sessão).
-5. Docs: §8.R22 → DECIDIDA e EXECUTADA; §8.R23 com Q-F113/Q-F114; a **nota de implantação da NE-1a** (abaixo); CLAUDE.md da fiscal-api,
-   nfse-api e nfe-api (D-F1…D-F106); INDEX; memória. Commit SÓ dos caminhos desta frente; push no `main`; **apagar os `wip/rodada-22`**
-   depois de publicado.
+**FECHAMENTO (2ª sessão de 2026-10-11 — sem decisão nova, só conversão de teste e testemunhas)**:
+1. **Gate r22 convertido** — `it.failing` → `it('[CORRIGIDO na sessão] …')` e os "contexto" que fixavam o comportamento ANTIGO passaram a
+   fixar o NOVO. nfse-api (`adversarial-r22-gate.test.ts`, 45/45): a réplica local `callFenceFlags` SAIU — a camada (W) é a `writerCallFlags`
+   da peça (o teste 0 confere que tudo o que o predicado do r21 recusa, a peça recusa); a matriz do ATAQUE 1 com a coluna (W) medida pela
+   peça (nada escapa: `ESCAPES = []`; o que escapava antes ficou como histórico em `ESCAPED_BEFORE`); 1b: o spread posterior e o "s"/S/P/D
+   são RECUSADOS pelo funil sem nenhuma query, `Object.assign` no mapa LANÇA `TypeError`, `Reflect.set` devolve `false`; ATAQUE 3: com o
+   comum `string` ou `any` a lista da família CONTINUA A/R/C/K/F/N (a ressalva do `Extract` fechada — com `any` só o "comum" compila, e o
+   funil o pega); o erro do tsc agora mostra o tipo derivado EXPANDIDO (`"A" | "R" | …`), não o nome; ATAQUE 4: os escritores SQL reais =
+   `VOICE_SQL_WRITERS`. Núcleo (`adversarial-r22-gate.test.ts`, 8/8): as 2 falhas eram testes que fixavam a 1ª forma (`Extract`) e a regex
+   antiga da cerca — agora fixam a constante + tipo derivado + funil (texto da família) e o `VOICE_TABLE`/`S_LIT` da cerca.
+   **Q-F113 do texto dos testes = Q-F114 desta seção** (R22-08 — os testes foram escritos antes da numeração do socrático; renomeado).
+2. **S1** — no r21 (teste "DECIDIDO — D-F106"), testemunhas `@ts-expect-error` presas à CHAMADA `repo.insertTransmissionEvent(…)` com S, P,
+   D e o vocabulário comum, dentro de função que não roda (F segue aceito); o comentário "em execução o JS não confere" corrigido (o funil confere).
+3. **S6** — `setes-api/src/__tests__/service-voice-write-kind.test.ts` (5): lista = A/R/C/K/F/N; `@ts-expect-error` no escritor REAL (S/P/D/
+   comum) e no `OUTCOME_KIND.local = …` (Readonly); funil recusa S/P/D/"s"/"a"/vazio/ausente e o spread posterior SEM nenhuma query; os seis
+   gravam; `Object.isFrozen` + `Object.assign` lança + `Reflect.set` = false.
+4. **Provas**: núcleo **208/208** (`tsc` limpo, `build` refeito) · nfse-api **561 unit** (150 ao vivo pulados) + **150/150 ao vivo**
+   (`NFSE_ADV_LIVE=1`, cópias descartáveis — a 1ª rodada ao vivo saiu com código 255 sem resumo legível; a 2ª, 150/150) · setes-api: `tsc`
+   limpo; `--runInBand` **2229/2248** — as **19 falhas conhecidas** do boleto do Inter (`bank-slip-registration`, `onda2-adversarial`,
+   `onda2-gate-rework` — todas `BANK_SLIP_EXPIRATION_PAST`, data fixa dos fixtures; outra sessão). Em paralelo o Jest do setes-api caiu no
+   encerramento (`kill EPERM` dos workers no Windows) e um arquivo não reportou: rodar com `--runInBand`.
+5. **Docs**: §7 (D-F106 na forma final), §8.R22 EXECUTADA, §8.R23 aberta, CLAUDE.md dos três projetos fiscais + raiz, INDEX, INDICE_CENTRAL,
+   memória. Commit SÓ dos caminhos desta frente; push no `main`; `wip/rodada-22` apagados depois de publicado (conferido antes: o
+   `main` contém todo o código de produção dos backups — a diferença era só testes e CLAUDE.md desta sessão).
+   **PUBLICADO 2026-10-11**: núcleo f6aeb03 · nfse a23fea6 · api 6bd6f83 · nfe-api 35ce356 · infra (o commit desta seção).
 
-**Rodada 23 (a abrir quando a Rodada 22 fechar — recomendações dos gates)**:
+**Rodada 23 (aberta pelos gates da Rodada 22 — ⚠️ AGUARDA O VALDO; decidir antes da NE-1a)**:
 - **Q-F113 (socrático S4)** — qual domínio o CHECK do item (7) da F2a protege na tabela da NFS-e? (a) **a lista da FAMÍLIA** (A/R/C/K/F/N
   — a mesma constante do tipo; a sonda do boot e um teste comparam a constante com o DDL; a conferência antes do ALTER conta também S nas
   duas pontas) · (b) o vocabulário comum · (c) decidir na F2a. *(Rec.: (a).)*
