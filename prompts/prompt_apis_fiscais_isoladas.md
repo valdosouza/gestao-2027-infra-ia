@@ -7,9 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.16 — Rodada 22 (D-F105…D-F106) EXECUTADA e PUBLICADA (2026-10-11); ⚠️ Rodada 23 aberta (Q-F113…Q-F114
-> — decidir ANTES da NE-1a) (D-F67…D-F106 publicadas: prova da reconferência, alarme com causa fechada, voz S e `kind` como conhecimento
-> negativo com cerca por AST, escritor da NFS-e pela lista positiva da família + funil em execução). Antes: §21.7–§21.15,
+> **⏯ RETOMAR POR AQUI — §21.17 — Rodada 23 DECIDIDA (D-F107…D-F108, 2026-10-11): o CHECK da F2a protege a lista da família e, na NE-1a,
+> o descritor da família carrega a lista de escrita — as duas se EXECUTAM na F2a e na NE-1a (nota da NE-1a no `prompt_onda_nfe_sefaz.md`
+> §12.8); nenhuma questão aberta nesta frente; próximo: NE-0 → NE-1a → F2a (corte 30/11). (D-F67…D-F106 publicadas: prova da
+> reconferência, alarme com causa fechada, voz S e `kind` como conhecimento negativo com cerca por AST, escritor da NFS-e pela lista
+> positiva da família + funil em execução — Rodada 22 no §21.16). Antes: §21.7–§21.15,
 > §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
 > máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F106** (§7). Escolhas do Valdo na reconciliação (§20.3):
@@ -721,6 +723,18 @@ branch `sessao-2026-10-10`):**
   textual pega. O CHECK do banco continua na F2a (item (7)). Correções do gate R22 (§21.16), executadas na sessão e reversíveis pelo
   Valdo: FUNIL em execução no escritor (recusa kind fora da lista, sensível a caixa, antes de qualquer query), `OUTCOME_KIND` congelado,
   cerca de CHAMADA + ESCRITOR ÚNICO na peça `voice-kind-fence.ts` (`writerCallFlags`/`voiceWriterViolations`/`VOICE_SQL_WRITERS`).
+- **D-F107 (= Q-F113 (a) — Valdo 2026-10-11: "siga as recomendações da Rodada 23") — o CHECK da F2a (item (7) da nota, D-F103) protege a
+  lista da FAMÍLIA na tabela da voz da NFS-e**: domínio = A/R/C/K/F/N em colação BINÁRIA — a MESMA constante `SERVICE_VOICE_WRITE_KINDS`
+  do tipo (UMA fonte); a sonda do boot (molde da D-F45) e um teste comparam a constante com o DDL; a conferência antes do ALTER conta, no
+  `fiscal_api` E na origem do setes-api, `kind` fora da lista ou da caixa — inclusive S. S segue no vocabulário COMUM (D-F102 — tabela
+  sem consumidor não é morta), mas a tabela da NFS-e não o aceita; a NF-e decide o domínio da tabela DELA na NE-2 (D-F105).
+- **D-F108 (= Q-F114 (a) — idem) — quando a máquina da voz for para o núcleo (NE-1a, D-NE13), o DESCRITOR da família carrega a lista de
+  escrita**: `VoiceFamily<K>` com a tabela da voz e `writeKinds: readonly K[]`; o escritor comum é genérico em K (a porta do núcleo é
+  PROPRIEDADE-FUNÇÃO, nunca método — método é bivariante e deixaria gravar S) e confere a lista em EXECUÇÃO (o funil da D-F106 vai junto
+  com a máquina); a cerca do núcleo vira ESCRITOR ÚNICO (SQL de escrita em `*_transmission_event` só no escritor do descritor). A nfse-api
+  declara a família de serviço com `SERVICE_VOICE_WRITE_KINDS`; a NF-e declara a dela (pode ter S/P/D com saída — D-F105). Rejeitadas:
+  (b) invólucro tipado na nfse-api + cerca de import (o genérico seguiria aberto a S); (c) só o CHECK da F2a (o domínio comum tem S).
+  Nota de implantação em `prompt_onda_nfe_sefaz.md` §12.8.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -1016,7 +1030,7 @@ Texto completo e recomendações no §21.15: **Q-F111** a D-F102 vale para qual 
 na própria rodada; decidir antes da NE-1a) · **Q-F112** proteção do domínio do escritor da NFS-e (Rec.: tipo da família — sem S já agora,
 sem P/D na NE-1a; CHECK na F2a).
 
-### 8.R23 Rodada 23 — aberta pelos gates da Rodada 22 (2026-10-11, §21.16) — ⚠️ AGUARDA O VALDO (decidir ANTES da NE-1a)
+### 8.R23 Rodada 23 — aberta pelos gates da Rodada 22 (2026-10-11, §21.16) — DECIDIDA ("siga as recomendações da Rodada 23" → D-F107…D-F108; execução na F2a e na NE-1a — §21.17)
 
 Texto completo e recomendações no §21.16: **Q-F113** qual domínio o CHECK da F2a (item (7)) protege na tabela da NFS-e (Rec.: (a) a lista
 da FAMÍLIA — a mesma constante do tipo; sonda do boot e teste comparam constante × DDL) · **Q-F114** onde mora a lista de escrita da
@@ -2550,7 +2564,7 @@ rebaixa a violação do CHECK a AVISO (a linha some e o passo 6 falha com a mens
 (Valdo), o ALARME da F3, a tarefa da bomba-relógio de data dos testes do boleto (fora desta frente — outra sessão, decisão do Valdo), e os
 próximos passos: Rodada 22 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
 
-### 21.16 Rodada 22 — D-F105…D-F106 (Valdo 2026-10-11: "siga as recomendações") — EXECUTADA e PUBLICADA — ⏯ RETOMAR POR AQUI (Rodada 23)
+### 21.16 Rodada 22 — D-F105…D-F106 (Valdo 2026-10-11: "siga as recomendações") — EXECUTADA e PUBLICADA (Rodada 23 decidida no §21.17)
 
 > **Histórico**: a 1ª sessão foi encerrada a pedido do Valdo no meio das correções dos gates; o código ficou no working tree e em backup
 > nos branches `wip/rodada-22` (fiscal-api `6d7d72d` · nfse-api `49383ba` · setes-api `dcb7a43`). Uma 2ª sessão no mesmo dia (Valdo:
@@ -2607,7 +2621,7 @@ além do tipo até a F2a" — foi executada aqui porque o adversarial a classifi
    `main` contém todo o código de produção dos backups — a diferença era só testes e CLAUDE.md desta sessão).
    **PUBLICADO 2026-10-11**: núcleo f6aeb03 · nfse a23fea6 · api 6bd6f83 · nfe-api 35ce356 · infra (o commit desta seção).
 
-**Rodada 23 (aberta pelos gates da Rodada 22 — ⚠️ AGUARDA O VALDO; decidir antes da NE-1a)**:
+**Rodada 23 (aberta pelos gates da Rodada 22 — DECIDIDA: D-F107/D-F108, §21.17)**:
 - **Q-F113 (socrático S4)** — qual domínio o CHECK do item (7) da F2a protege na tabela da NFS-e? (a) **a lista da FAMÍLIA** (A/R/C/K/F/N
   — a mesma constante do tipo; a sonda do boot e um teste comparam a constante com o DDL; a conferência antes do ALTER conta também S nas
   duas pontas) · (b) o vocabulário comum · (c) decidir na F2a. *(Rec.: (a).)*
@@ -2616,7 +2630,7 @@ além do tipo até a F2a" — foi executada aqui porque o adversarial a classifi
   em execução; a cerca do núcleo vira "escritor único"** · (b) a nfse-api mantém um invólucro tipado como ÚNICO caminho e uma cerca proíbe
   importar o escritor genérico · (c) deixar para o CHECK da F2a (não resolve — o domínio comum tem S). *(Rec.: (a), antes da NE-1a.)*
 
-**Nota de implantação da NE-1a (proposta dos gates — entra no prompt da NF-e quando a Rodada 23 decidir)**: (1) a escrita da voz segue POR
+**Nota de implantação da NE-1a (proposta dos gates — MOVIDA para o `prompt_onda_nfe_sefaz.md` §12.8 com a D-F108; texto original abaixo)**: (1) a escrita da voz segue POR
 FAMÍLIA — a porta do núcleo é PROPRIEDADE-FUNÇÃO, nunca método (método é bivariante: aceitaria o escritor estreito e deixaria gravar S —
 provado com `tsc --strict`), ou o escritor é genérico com `kind: WriteKindOf<F>`; (2) testemunhas `@ts-expect-error` de S/P/D presas ao
 escritor que a máquina REALMENTE chama; (3) nenhum "S antes do POST" comum às famílias — quem produzir S na NF-e entrega a saída junto;
@@ -2632,3 +2646,26 @@ combinar antes; nada será feito sem decisão do Valdo.
 **Seguem (inalterados)**: LOW registrados (log do transporte com a NOSSA chave/Id na URL; a cerca de LOGS do r20 com a regex antiga; os da
 §21.8), prova ao vivo M4 (Valdo), o ALARME da F3, a bomba-relógio de data do boleto (outra sessão), e: Rodada 22 (fechar) → Rodada 23 →
 NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.17 Rodada 23 — D-F107…D-F108 (Valdo 2026-10-11: "siga as recomendações da Rodada 23") — ⏯ RETOMAR POR AQUI
+
+| Decisão | O quê | Executa em |
+|---|---|---|
+| **D-F107** (= Q-F113 (a)) | o CHECK do item (7) protege a lista da FAMÍLIA (A/R/C/K/F/N), binário, UMA fonte com o tipo | migration da nfse-api na **F2a** |
+| **D-F108** (= Q-F114 (a)) | na extração da máquina para o núcleo, o DESCRITOR da família carrega a lista de escrita; escritor comum genérico nela, com o funil em execução; cerca do núcleo = escritor único | **NE-1a** (nota no `prompt_onda_nfe_sefaz.md` §12.8) |
+
+**Sem código de comportamento nesta rodada** — as duas decisões têm lugar de execução marcado e nada a fazer antes dele. Feito agora:
+comentários no ponto de uso (`fiscal-api/src/voice/kinds.ts`, `nfse-api/src/nfse/repository.ts`) e os títulos dos testes de contexto que
+fixavam a alternativa (a) (`adversarial-r22-gate` do núcleo e da nfse-api) passaram a citar a D-F108. Sem gate: nenhuma mudança de
+comportamento (os mesmos testes, mesmos resultados).
+
+**Nota de implantação da F2a — item (7) REVISTO (D-F103 + D-F107; substitui o texto do §21.15)**: a migration da **nfse-api** (banco
+`fiscal_api`) que a F2a trouxer ganha o CHECK de `kind` na tabela da voz da NFS-e com o domínio **A/R/C/K/F/N em colação BINÁRIA** (forma
+exata pelo `revisar-ddl`), tirado da constante `SERVICE_VOICE_WRITE_KINDS` — um teste compara a constante com o DDL e a sonda do boot
+(molde da D-F45) tenta gravar `'S'` E `'f'` e exige a recusa das duas (nunca `'ZZ'` — um CHECK `_ci` ou sobre o vocabulário comum
+passaria). Antes do ALTER: contar `kind` fora da lista ou da caixa (inclusive S) no `fiscal_api` E na origem do setes-api; conferir no
+MariaDB 10.4 se o `INSERT IGNORE` da cópia do `migrate:setes` rebaixa a violação do CHECK a AVISO (a linha some e o passo 6 falha com a
+mensagem "dual-write", que engana) — se rebaixar, a cópia confere a lista antes de inserir.
+
+**Próximo**: nenhuma questão aberta nesta frente. Ordem: NE-0 (levantamento oficial da NF-e + OpenAPI + parecer do guardião) → NE-1a
+(núcleo generalizado, com a D-F108) → **F2a** (setes-api passivo, com a D-F107) → virada → F2b. Corte da F2a: 30/11 (D-IB15).

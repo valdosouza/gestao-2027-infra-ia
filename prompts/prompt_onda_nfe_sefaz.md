@@ -5,7 +5,7 @@
 **Molde**: `prompt_onda3_nfse_adn.md` §3–§7 (mesma tabela de conceitos, mesmos nomes de peça) e `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates: ambíguo nunca fecha, reconciliar antes de reapresentar, transitório ≠ recusa).
 **Legado** (vault `D:\Gestao2016\Infra-IA\Gestao`, Decisão 65): `proc-faturamento-venda` E07, `proc-cancelamento-nfe` C00–C05, Lote 6 §2–§5, Lote 8 §2, NUM-01/02/03, AUT-01/02/03/04, CAN-01, CAN-V5/V6/V7, NF-01, `geracao-nfe-hierarquia` §3–§4 (diagnóstico: variação por MODELO duplicada = maior fonte de retrabalho; variação por PROCESSO pequena e sadia; operações do ciclo — inutilizar/consultar — são comandos, não "geradores").
 **Aberto em**: 2026-09-21 (Rodada 0 = parecer do guardião conceitual, agente `setes-conceito`, a pedido do Valdo: "desenhar o processo da NF-e mantendo a simetria de controles com a NFS-e, para que o desenho fique, se não o mesmo, seguindo o mesmo fluxo"). Fatos do parecer conferidos no disco pelo condutor (billing.service.ts:672–677, baseline 001, produtores em api/sync).
-**Estado**: **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
+**Estado**: **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
 
 ---
 
@@ -617,7 +617,7 @@ não fazem parte desse contrato → saem do caminho crítico (NE-1b).
 | Onda | Entrega (acréscimos da leitura em **negrito**) | Sessões | Depende de |
 |---|---|---|---|
 | **NE-0** | levantamento oficial (D-NE19) + OpenAPI design-first + parecer do guardião sobre o DDL; **conferir: a tabela de autorizadores contra a "Relação de Web Services" (o INI do ACBr dá a forma — 127 seções, redirecionamentos; 01 item 1); a coluna (d) dos §8 dos relatórios 01/02/05; se existe consulta de inutilização (Q-NE40); a NT do CNPJ alfanumérico na NF-e (insumo da Q-NE29)** | 3–4 | Valdo; depois do prompt IBS/CBS |
-| **NE-1a** (antes da F2a) | EXATAMENTE o escopo do §11.4: cerca por família (D-NE10), emitter no núcleo (D-NE9), `terminal` (D-NE12), vocabulário P/D + leitura (D-NE14), máquina comum extraída (D-NE13), `ca` + falha de cadeia do servidor ≠ credencial (D-NE17); **assinatura SEM mudança; dívida N17 da nfse-api (regex → parser XML) paga na extração da máquina** | 4–6 | gate do delta fiscal (§11.7 passo 1) |
+| **NE-1a** (antes da F2a) | EXATAMENTE o escopo do §11.4: cerca por família (D-NE10), emitter no núcleo (D-NE9), `terminal` (D-NE12), vocabulário P/D + leitura (D-NE14), máquina comum extraída (D-NE13), `ca` + falha de cadeia do servidor ≠ credencial (D-NE17); **assinatura SEM mudança; dívida N17 da nfse-api (regex → parser XML) paga na extração da máquina; escrita da voz pelo DESCRITOR da família (D-F108 — nota no §12.8)** | 4–6 | gate do delta fiscal (§11.7 passo 1) |
 | **NE-1b** (depois da F2a) | **base de PDF (D-NE20) com código de barras (Q-NE32), "Folha n/N", marca d'água por página; documento alfanumérico no núcleo conforme a frente de produto (Q-NE29)** | 1–2 | F2a; Q-NE29/Q-NE32 |
 | **NE-2** | esqueleto + DDL da família (transmissão, voz, inutilização) + views — **+ voz do EVENTO com identidade `(tpEvento, chave, nSeq)` (Q-NE39); autorizador e `tpEmis` na tentativa (Q-NE37); cNF/cDV/chave persistidos write-once na tentativa (02 item 6); UNIQUE da chave natural da inutilização (cUF, ano, CNPJ, mod, série, faixa — 05 item 5); nomes de arquivo (Q-NE50)** | 2–4 | NE-0, NE-1a |
 | **NE-3** | adaptador SEFAZ: **envelope SOAP 1.2 mínimo sem Header (01 item 2); 1 NF-e por lote síncrono (Q-NE33); 1 evento por envio (Q-NE39); parser XML de verdade + resposta conferida contra a pergunta (Q-NE42); timeouts por serviço (Q-NE38); Fault/HTTP 500 classificados (Q-NE34)**; `authorizers.ts` com dimensão serviço/evento; XSD de toda mensagem (inclusive `inutNFe`/`consSitNFe`); smoke H parcial: status, consulta cadastro, **inutilização** | 5–7 | NE-2; A1 vigente |
@@ -793,3 +793,28 @@ eventos RTC, `tpRetPisCofins` da NT 007, hipótese do §12.1 item 7) e a D-NE31.
 **Próximos passos (ordem do §12.4, inalterada)**: (1) gate adversarial do delta fiscal (APIs isoladas §17.8) · (2) prompt da fase
 IBS/CBS (Rodada 0 — começar pelas NT 007/008/009 + XSD 1.01 do acervo) · (3) NE-0 · (4) NE-1a · (5) F2a/F2b · (6) NE-1b/NE-2/NE-3.
 A frente do CNPJ alfanumérico (D-NE29) corre à parte, no grupo de cada sistema.
+
+### 12.8 Nota de implantação da NE-1a — escrita da voz POR FAMÍLIA (D-F105/D-F106/D-F108 das APIs fiscais, 2026-10-11)
+
+Origem: gates da Rodada 22 das APIs fiscais (`prompt_apis_fiscais_isoladas.md` §21.16) e a **D-F108** (= Q-F114 (a), Rodada 23 — §21.17
+de lá). Hoje o escritor da voz da NFS-e mora na nfse-api (`src/nfse/repository.ts` — `insertTransmissionEvent`, lista
+`SERVICE_VOICE_WRITE_KINDS` A/R/C/K/F/N, funil em execução) e o núcleo não tem escritor nenhum. A NE-1a (D-NE13) leva a máquina
+tentativa × voz para o núcleo — e com ela as defesas da NFS-e, que ficariam para trás se a extração fosse literal (o escritor comum tipado
+pelo vocabulário COMUM aceita S, P e D para qualquer família — provado no `adversarial-r22-gate` do núcleo e da nfse-api).
+
+1. **Descritor da família** (D-F108): `VoiceFamily<K>` no núcleo com a tabela da voz e `writeKinds: readonly K[]`; o escritor comum é
+   genérico em K e CONFERE a lista em execução (o funil da D-F106 vai junto); a família de serviço declara `SERVICE_VOICE_WRITE_KINDS`; a
+   NF-e declara a dela (pode ter S/P/D — D-F105 — desde que dê a saída de cada uma na mesma entrega).
+2. A porta do núcleo é **PROPRIEDADE-FUNÇÃO, nunca método** — método é bivariante: aceitaria o escritor estreito e deixaria gravar S
+   (provado com `tsc --strict`); ou o escritor é genérico com `kind: WriteKindOf<F>`.
+3. Testemunhas `@ts-expect-error` de S/P/D presas ao escritor que a máquina REALMENTE chama (molde do S1 no `adversarial-r21-gate` da
+   nfse-api e do `service-voice-write-kind.test.ts` do setes-api).
+4. Nenhum "S antes do POST" comum às famílias — quem produzir S na NF-e entrega a saída junto (consulta pela NOSSA chave — §3.2/D-NE7; o P
+   sai pela consulta do recibo — D-NE33).
+5. P entra no tipo comum como VIVA e **D em `FINAL_TRANSMISSION_KINDS`**; os `default` dos dois `fiscalStateOf` viram `switch` exaustivo
+   (`never`) — kind novo quebra a compilação em vez de virar `in_flight`.
+6. A cerca do núcleo vira **ESCRITOR ÚNICO**: SQL de escrita em `*_transmission_event` só no escritor do descritor (lista branca); a cerca
+   da voz S segue `sqlOnly` no núcleo (D-F105 — `${table}` é invisível a ela).
+7. A lista da família tem UMA fonte, reusada pelo CHECK da F2a (D-F107 — domínio A/R/C/K/F/N em colação binária na tabela da NFS-e).
+8. Depois da extração: `voiceSProducers()`, `voiceWriterViolations()` (a peça `nfse-api/src/__tests__/voice-kind-fence.ts` — ajustar o
+   escopo e os `VOICE_SQL_WRITERS` ao escritor do núcleo), as testemunhas e a suíte inteira da nfse-api (unit + 150 ao vivo).
