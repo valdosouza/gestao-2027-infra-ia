@@ -3022,7 +3022,7 @@ D-F120, D-F122) e `f2a-a1-nfse` reescrito.
 **Provas**: núcleo **463/463** (`tsc` limpo, `dist/` refeito) · nfse-api **691 unit** + ao vivo **183/183** (as 150 + o gate da A1 com a parte viva em `fiscal_api_adv_gatea1*`, criados do zero e apagados) · nada aplicado no `fiscal_api` do dev (as 005 entram no próximo boot/`db:migrate` da nfse-api, depois de publicadas).
 
 
-**PUBLICADA a A1 (Valdo: "salva tudo e vamos abrir uma nova seção", 2026-10-12)** — núcleo 1cc8e99 · nfse a930827 · infra INFRA_HASH.
+**PUBLICADA a A1 (Valdo: "salva tudo e vamos abrir uma nova seção", 2026-10-12)** — núcleo 1cc8e99 · nfse a930827 · infra 9cb8612.
 
 #### 22.8 ⏯ PROMPT DE RETOMADA — etapa A2 da F2a (colar numa sessão nova)
 
