@@ -9,7 +9,7 @@
 
 > **⏯ RETOMAR POR AQUI — §22.10 (prompt de retomada da A3) — etapa A2 da F2a EXECUTADA, com gates 0,73/0,70, e PUBLICADA na árvore viva
 > (2026-10-12, `main` f5eee3b — §22.9/§22.9.4): dependência, 068 + leitores pelas views, D-F37, RS256 com kid (o segredo HS256 vazado em
-> repositório público deixou de valer — D-F124); D-F124…D-F127 decididas; push dos repos pendente do "vai".**
+> repositório público deixou de valer — D-F124); D-F124…D-F127 decididas; PUBLICADA no GitHub (api f5eee3b · sql 5f7d694 · infra a91abd9).**
 > *Antes:* **§22 — F2a ABERTA (Rodada 0, 2026-10-12): inventário do setes-api + parecer do guardião + ordem proposta
 > (A1 núcleo/nfse-api → A2 setes-api sem depender de onde a voz mora → A3 lote da janela em WORKTREE → janela única com a virada e a F2b,
 > antes de 30/11); Rodada 1 DECIDIDA (D-F109…D-F117, §22.6); etapa A1 EXECUTADA com gates 0,74/0,72 → Rodada 2 DECIDIDA (D-F118…D-F123, §22.7) e PUBLICADA (núcleo 1cc8e99 · nfse a930827); próximo:
@@ -3184,7 +3184,9 @@ link `fiscal-api` entrou; versões de topo iguais; o servidor não reiniciou). *
 leitura fiscal da OS 7374 (licença `service-orders`) → 200; `scripts/prove-policy-views.ts` na árvore viva → zero divergência. Espelho da
 068 no `sql/03`. A trilha (`trilha-primeiro-cliente.ts`) NÃO foi rodada (escreve dados de teste na produção — rodar com o Valdo).
 **Relogin**: todo token HS256 em uso virou 401 — no app, "Sair e entrar" (sem tratamento global de 401 até a F2b).
-**Pendente**: push (setes-api público, sql, Infra-IA) — com o "vai"; a worktree `setes-api-f2a` continua para a A3 (branch `f2a` = `main` agora).
+**PUBLICADA no GitHub (Valdo: "vai", 2026-10-12)**: setes-api f5eee3b · sql 5f7d694 · infra a91abd9 (scan antes do push: nenhum arquivo
+sensível, nenhuma chave privada, o segredo antigo fora do diff). Serviços reiniciados para o teste do Valdo (setes-api :3000 em RS256 ·
+setes-app web :5051). A worktree `setes-api-f2a` continua para a A3 (branch `f2a` = `main` agora).
 
 #### 22.10 ⏯ PROMPT DE RETOMADA — etapa A3 da F2a (colar numa sessão nova)
 
