@@ -240,7 +240,8 @@ usa `classificationAcceptedForRegistration`; "aceito" = `verdictOf`, UMA defini�
 limite TOCTOU do §11.8 (PUT que leu o catálogo antes de uma carga pode gravar código que acabou de perder a presença — a IB-2 barra) ·
 limite do §11.11 (excluir o serviço não mata a peça 1:1 `tb_service_ibscbs` — todo leitor exige o produto vivo) · **D-IB52 (PRÉ-VOO do
 faturamento antes de 01/01/2027: listar, por schema, os serviços cuja classificação gravada a data do fato JÁ recusa — o "estoque" que o
-impacto da carga não mostra, inclusive a sobreposição em que o selo diz "aceita"; uma consulta por schema pela pergunta da peça —
+impacto da carga não mostra — desde a D-IB59, o caso em que o selo diz "aceita" e o faturamento recusa é só o do serviço aceito por
+uma linha FUTURA (D-IB58); uma consulta por schema pela pergunta da peça —
 `classificationVerdictsAt` — antes de ligar a barreira; D-IB55: pergunta NA DATA DA OBRIGAÇÃO — depois dela, na competência a
 faturar — e mostra ao lado o veredito de HOJE e o selo do cadastro: "recusa hoje → a nota sai sem o grupo" × "recusa na obrigação → vai
 dar 422")** · D-IB42 (calendário
@@ -1191,3 +1192,32 @@ Cada D-IB*n* = a recomendação da Q-IB*n* (§11.9). Numeração permanente.
   (`edb2c381d29e316e`); catálogo conferido depois (os 7 `CHECKSUM TABLE` iguais), produtos 65–68 excluídos.
 - **D-IB58** no roteiro da IB-2 (§4); **D-IB60** limite conhecido na skill — nenhum código.
 - **Gates do delta R11**: socrático e adversarial EM EXECUÇÃO no momento do commit — o Valdo pediu "save tudo" (commit e push antes do resultado; as 19 falhas da bomba-relógio do Banco Inter ficam para outra sessão). O resultado dos dois gates entra na próxima rodada (§11.33) e, se trouxer achado objetivo, vira correção com teste num commit próprio.
+
+### 11.33 Gates do delta da Rodada 11 (rodaram depois do commit 6201fbf — "save tudo" do Valdo) + correções
+
+- **Socrático: 0.77 ✅** — os testes ajustados à D-IB59 são consequência legítima (nenhum afrouxado); "qual linha" e "aceito" são a mesma
+  regra nas duas pontas para as vigentes. **Adversarial: 0.84 ✅** (sem HIGH/CRITICAL/MEDIUM) — enumeração exaustiva sem banco (221.566
+  conjuntos de linhas × 4 datas): zero violação de "fato aceita ⇒ cadastro aceita", "cadastro aceita ⇒ fato aceita ou há futura aceita na
+  janela", "vigente escolhida = linha da data do fato", "superada nunca é escolhida"; catálogo real 173 × 173 sem diferença; 130 execuções
+  do harness triplo da carga sem erro (as 15 diferenças contra 05ccfd2 todas explicadas pela D-IB59); subconsulta da lista no MariaDB =
+  semi-join pela PRIMARY, 1–8 ms; entradas `%`, `_`, `'; DROP --` voltam vazias.
+- **Correções sem decisão** (commit próprio): (S11-2 = LOW 1 do adversarial) o LIMIT da lista é por LINHA e podia cortar o último código no
+  meio — só as linhas antigas chegavam à escolha e a lista oferecia o que o salvar recusa; batendo no limite, o último código é descartado
+  (teste com 399 + 1 códigos); (LOW 3 do adversarial / S11-5) o filtro por código/nome só casa com linha DA JANELA — o nome de uma linha
+  vencida ou fora da janela não puxa mais o código; o comentário saiu de dentro da string do SQL (o mysql2 troca todo `?`); (S11-3) testes:
+  caso positivo do filtro (antiga sem presença × nova aceita, filtrando pela antiga → oferece pela nova e o salvar aceita) e PROPRIEDADE
+  "depois da obrigação o cadastro escolhe a mesma linha da data do fato" (27 formas × 3 datas); (S11-4) textos: `lostAfterLoad` (pela
+  D-IB59 só linha FUTURA dá `registrationOnly`), comentário do teste da sobreposição, roteiro da D-IB52 no §4, cabeçalho da peça. IBS/CBS +
+  serviços 153/153; lista no catálogo real igual (68 códigos sem filtro, hoje e depois da obrigação; filtros certos; 1–99 ms).
+
+### 11.34 ⚠️ Rodada 12 — questões para o Valdo (dos gates do delta da Rodada 11; recomendação entre parênteses)
+
+- **Q-IB61** — Linha antiga que VOLTA a valer dentro da janela (os dois gates acharam, provado): a vigente mais nova sem aceite acaba
+  ANTES da obrigação por cima de uma antiga aceita em aberto — hoje cadastro, salvar, selo e lista recusam, mas a data do fato volta a
+  aceitar no dia seguinte ao fim dela e na própria obrigação; a futura aceita salva (D-IB57), a volta da antiga não; o impacto marca
+  `registrationStillAccepts: false` sem dizer que volta e o aviso fica vazio (pela regra antiga o aviso dizia "volta em X"). (a) limite
+  conhecido — falha para o lado seguro (422), zero sobreposições no catálogo real —, escrito na skill, inclusive que o aviso não parte
+  desse código; (b) a janela pergunta pela LINHA DO TEMPO: a volta da linha antiga dentro da janela conta como "futura aceita" na data da
+  volta (mesmo mecanismo do `lossesAhead`); (c) só informar no impacto da carga quando o código volta (`acceptedAgainFrom`).
+  *(Rec.: (a) — o estado depende de sobreposição que hoje não existe, a regra mudou duas vezes em duas rodadas, a falha é segura; reabrir
+  para (b) se uma carga real trouxer sobreposição.)*
