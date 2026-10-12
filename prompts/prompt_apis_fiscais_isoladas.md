@@ -7,7 +7,10 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22 — F2a ABERTA (Rodada 0, 2026-10-12): inventário do setes-api + parecer do guardião + ordem proposta
+> **⏯ RETOMAR POR AQUI — §22.10 (prompt de retomada da A3) — etapa A2 da F2a EXECUTADA, com gates 0,73/0,70, e PUBLICADA na árvore viva
+> (2026-10-12, `main` f5eee3b — §22.9/§22.9.4): dependência, 068 + leitores pelas views, D-F37, RS256 com kid (o segredo HS256 vazado em
+> repositório público deixou de valer — D-F124); D-F124…D-F127 decididas; push dos repos pendente do "vai".**
+> *Antes:* **§22 — F2a ABERTA (Rodada 0, 2026-10-12): inventário do setes-api + parecer do guardião + ordem proposta
 > (A1 núcleo/nfse-api → A2 setes-api sem depender de onde a voz mora → A3 lote da janela em WORKTREE → janela única com a virada e a F2b,
 > antes de 30/11); Rodada 1 DECIDIDA (D-F109…D-F117, §22.6); etapa A1 EXECUTADA com gates 0,74/0,72 → Rodada 2 DECIDIDA (D-F118…D-F123, §22.7) e PUBLICADA (núcleo 1cc8e99 · nfse a930827); próximo:
 > etapa A2 — ⏯ PROMPT DE RETOMADA no §22.8 (setes-api em WORKTREE; inclui a `vw_order_interface` com COLLATE binário). A NE-1a está COMPLETA (parte 2b publicada — `prompt_onda_nfe_sefaz.md` §12.9.7.4).**
@@ -402,7 +405,7 @@ Entrou nas tabelas fixas da raiz (CLAUDE.md, `ORGANIZACAO_PASTAS.md`) e no `INDI
 - **D-F10 (Valdo, 2026-10-03, Rodada 2 — resposta à Q-F15 + Q-F29 (a)) — a API fiscal LÊ o banco do produto para montar o XML e controla o ciclo de comunicação inteiro.** Texto fiel: *"considere que o setes-app envia a informação de um order para autorização, a nfe-api/nfse-api deve coletar tudo o que precisa do banco para gerar o xml e controlar o ciclo de comunicação incluindo envio, autorização ou cancelamento"*. O app manda só a REFERÊNCIA (nota/pedido); a API lê `setes_central` + `setes_<cliente>` na mesma instância MySQL (molde do setes-sync: serviço Node separado operando sobre os bancos do produto). **Porta isolada (Q-F29 (a))**: toda leitura do ERP vive em UM módulo — a *fonte de fatos Gestão 2027* — atrás de uma interface que entrega os fatos do documento (o `DpsBase` de hoje); o NÚCLEO (assinatura, transporte, tentativa, voz, arquivo, PDF) não conhece `tb_*` do ERP — a cerca do §10.1 passa a ser "nenhum `tb_invoice`/`tb_order`/`tb_entity*` FORA da fonte de fatos". Fecha a **Q-F2 em (a)** (tentativa, voz, nDPS, XML, DANFSe na API) e ABSORVE a **Q-F15** (nada de fatos no contrato: emitente, tomador, serviço, regime e pTotTribSN são lidos de `tb_entity*`/`tb_entity_tax`/ramo congelado no momento da transmissão; o `fiscal_api` guarda só habilitação + A1 + documento/tentativa/voz). **Revisa o parecer §3**: "API cega ao ERP" vale para o NÚCLEO, não para o serviço — a API é serviço do PRODUTO Gestão 2027; o teste do terceiro cego passa a valer para o núcleo (outra fonte de fatos — ex.: payload de um ERP de terceiro — é um adaptador novo, nunca reescrita). *Por quê*: palavras do Valdo; extração muito mais barata (o código de hoje já lê o ERP); o setes-sync é precedente de serviço separado sobre os mesmos bancos.
 - **D-F11 (Valdo, 2026-10-03, Rodada 2 — Q-F30 (a)) — o EFEITO no ERP é do setes-api, lendo a VOZ direto no banco `fiscal_api`.** O app pede "Cancelar nota" ao setes-api; ele confere a voz C no `fiscal_api` (mesma instância) antes de cancelar local — sem recibo assinado, sem webhook, sem federação. Voz C sem C local = pendência visível e reaplicável (padrão `FISCAL_EFFECT_PENDING`/`countPendingEffects` de hoje). O setes-api continua sem chamar a API fiscal por HTTP (essência da D-F4 mantida); a API fiscal NUNCA escreve no ERP (só lê — candidata a ser garantida por GRANT, Q-F34). ABSORVE a **Q-F4** (a voz chega ao ERP pelo banco), a **Q-F16 em (a)** (nenhuma coluna de estado no ERP; selo e plano de cancelamento leem o estado DERIVADO no `fiscal_api`) e a **Q-F19** (C local SÓ com voz C lida do banco fiscal; efeito idempotente na transação do ERP; recusa = pendência). **SUPERA os mecanismos da D-F4** (`fiscal-facts`, recibo assinado JWS, webhook de entrada, token federado): a condição que eles protegiam — "o ERP nunca acredita no app" — é satisfeita pelo banco compartilhado (o app nunca porta estado; o ERP lê a verdade). Critério §10.12 reescrito em §10. *Por quê*: decisão do Valdo; mesma instância MySQL (D-F9) torna a leitura direta possível e transacional.
 - **D-F12 (Valdo, 2026-10-03, Rodada 2 — Q-F31 (b)) — DOIS projetos, `nfse-api` e `nfe-api`, com NÚCLEO COMUM; o mesmo banco `fiscal_api` e o mesmo cofre.** REVISA a **D-F1** (que fixava UM projeto `fiscal-api`): "fiscal" continua sendo o nome do CONCEITO, do banco (`fiscal_api`, D-F7) e do núcleo; os deployáveis são dois, um por família, com escala independente (D-F9). O núcleo comum (assinatura XMLDSig, transporte mTLS, cofre, storage, máquina de tentativa × voz, habilitação, PDF, porta da fonte de fatos) é UM só — o mesmo A1 serve as duas famílias (D-N31) e há UMA habilitação por modelo por emitente (D-E1); duplicar o núcleo seria a maquete do §3.E. Onde o núcleo vive e como é consumido: Q-F33. A pasta `D:\Gestao2027\fiscal-api\` criada na D-F1 (sem código, git local sem remoto) é reorganizada conforme a Q-F33.
-- **D-F13 (Valdo, 2026-10-03, Rodada 2 — Q-F32 (a)) — mesmo login do produto, assinatura ASSIMÉTRICA.** O setes-api passa a assinar o JWT com par de chaves (hoje HS256 com `JWT_SECRET`, `auth.service.ts:63`); as APIs fiscais validam só com a chave PÚBLICA (nunca conseguem forjar token) e conferem TRANSMITIR/CANCELAR no schema do cliente pelo mesmo resolver do setes-api. ABSORVE a **Q-F3** (credencial de aplicativo sem humano — server-to-server, app de terceiro — é da frente S1, no setes-api, que emite o token), a **Q-F11** (a REGRA de privilégio continua do ERP; a porta fiscal a aplica lendo o ERP) e a **Q-F22** (o app usa o mesmo JWT curto; nenhum secret no dispositivo). A D-F2 segue valendo no "todo cliente, múltiplos apps" — mas a credencial por aplicativo (`tb_licensee_app`) sai da API fiscal e vai para a S1. O setes-sync (X-Api-Key) não muda.
+- **D-F13 (Valdo, 2026-10-03, Rodada 2 — Q-F32 (a)) — mesmo login do produto, assinatura ASSIMÉTRICA.** *(EXECUTADA no setes-api na A2 da F2a, 2026-10-12, worktree `f2a` — `@shared/auth/product-token`, §22.9)* O setes-api passa a assinar o JWT com par de chaves (hoje HS256 com `JWT_SECRET`, `auth.service.ts:63`); as APIs fiscais validam só com a chave PÚBLICA (nunca conseguem forjar token) e conferem TRANSMITIR/CANCELAR no schema do cliente pelo mesmo resolver do setes-api. ABSORVE a **Q-F3** (credencial de aplicativo sem humano — server-to-server, app de terceiro — é da frente S1, no setes-api, que emite o token), a **Q-F11** (a REGRA de privilégio continua do ERP; a porta fiscal a aplica lendo o ERP) e a **Q-F22** (o app usa o mesmo JWT curto; nenhum secret no dispositivo). A D-F2 segue valendo no "todo cliente, múltiplos apps" — mas a credencial por aplicativo (`tb_licensee_app`) sai da API fiscal e vai para a S1. O setes-sync (X-Api-Key) não muda.
 - **D-F14 (Valdo, 2026-10-03, Rodada 2 — Q-F20 revista (a)) — NÃO existe `tb_licensee`: licenciado = institution do produto.** O JWT já traz `institutionId`; a licença fiscal = contrato de interface do produto (`tb_institution_has_interface` das telas fiscais), lido no schema do cliente pela porta fiscal. O emitente no `fiscal_api` é chaveado pela institution (+ CNPJ como atributo verificado contra o A1 — D-N29b), com habilitação por MODELO (D-E1); limites por config. REVISA a D-F2 (o "licenciado = cliente" fica, sem tabela própria) e os nomes do §3.F (`tb_licensee`/`tb_licensee_app` morrem nesta fase). *Por quê*: um fato a menos em dois lugares; coerente com D-F10/D-F13 (serviço do produto, mesmo login).
 - **D-F15 (Valdo, 2026-10-03, Rodada 2 — Q-F34 (a)) — contrato de leitura por VIEWS publicadas + GRANT mínimo.** A API fiscal tem usuário MySQL com **só SELECT** em `setes_central`/`setes_*` (a D-F11 "a API fiscal nunca escreve no ERP" vira garantia de BANCO, não de disciplina) e controle total só no `fiscal_api`; o setes-api tem usuário com SELECT **só nas VIEWs publicadas** do `fiscal_api` (estado derivado por nota/vida/modelo, pendência de efeito). Tabela interna de um lado muda sem quebrar o outro; a view é o contrato e entra no versionamento como o OpenAPI. A **serialização transmitir × cancelar local** (hoje o mesmo `FOR UPDATE` na nota) é desenho da F0 — candidata: trava nomeada da instância (`GET_LOCK('fiscal:<schema>:<nota>', n)`), que não exige privilégio de escrita na tabela do outro lado. *Por quê*: decisão do Valdo; fronteira testável por GRANT.
 - **D-F16 (Valdo, 2026-10-03, Rodada 2 — Q-F25 revista (a)) — A1 CRIPTOGRAFADO no banco `fiscal_api` desde a F1; XML atrás da interface de storage.** O cofre do A1 deixa de ser arquivo (`SECRETS_PATH`) e vira linha cifrada no `fiscal_api` (chave-mestra em variável de ambiente; KMS depois, atrás da mesma interface) — as duas instâncias fiscais (D-F9) leem o MESMO A1 sem disco compartilhado (D-N31 por construção). XML/DANFSe atrás de `storage`: filesystem no dev; backend de produção (objeto S3-compatível ou volume compartilhado) decidido na F3 com o que a SaveInCloud oferecer. Senha do PKCS#12 continua sem persistir (D-N5). *Por quê*: instâncias separadas não compartilham filesystem; o A1 é pequeno e precisa estar nas duas famílias; o XML é volumoso (§5.9).
@@ -746,7 +749,7 @@ branch `sessao-2026-10-10`):**
   `nao-exigida`), usado pelo plano do setes-api e pelo `/reconfirm` da nfse-api — a ordem "irmã viva primeiro" (nota (1) da F2a) fica num
   lugar só; `reconfirmationProven` passa a ser `verdict === 'provada'`. REVÊ a D-F104 (booleano até a F2a). A política do ERP (Q-CA5b, destino
   da nota) segue no plano do ERP.
-- **D-F110 (= Q-F116 (a) — idem) — `068_f2a_fiscal_passivo` CONGELA a escrita fiscal do ERP por construção**: triggers BEFORE INSERT/UPDATE com
+- **D-F110 (= Q-F116 (a) — idem) — `068_f2a_fiscal_passivo` CONGELA a escrita fiscal do ERP por construção** *(errata 2026-10-12, gates da A2: o NOME é o fato — a nfse-api confere `_migrations.name`; o NÚMERO é o próximo livre na janela, porque a 068 foi usada pela A2 — `068_order_interface_view_bin`; o runner agora falha alto com número repetido)*: triggers BEFORE INSERT/UPDATE com
   SIGNAL nas tabelas de tentativa e voz do ERP e na linha SE de `tb_establishment_issuer` (sem revive S→N, sem mudar `environment`/
   `dps_last_number`, sem INSERT de SE; N→S permitido — o ato da D-F44) + COMMENTs de aposentadoria sem DROP (`environment`, `dps_last_number`,
   `tb_invoice_service.dps_number`, as duas tabelas = "origem congelada"). O nome passa a significar "o ERP deixou de escrever a voz fiscal".
@@ -786,6 +789,17 @@ branch `sessao-2026-10-10`):**
   sem privilégio extra): PADROES_BANCO §11 regra 11 + cerca por AST no núcleo (núcleo, nfse-api, setes-api, nfe-api).
 - **D-F123 (= Q-F133 (a) — idem) — as migrations 005 são RE-EXECUTÁVEIS** (`DROP/ADD CONSTRAINT IF [NOT] EXISTS`): processo morto entre o
   ALTER e o registro em `_migrations` não trava o próximo boot. Só MariaDB (como as 002/003) — a ida para MySQL 8 na F3 revê a cadeia.
+- **D-F124 (= Q-F134 (a) — Valdo 2026-10-12, gates da A2 da F2a, §22.9.3) — a A2 foi PUBLICADA na hora** para conter o segredo HS256 de
+  produção que estava num script de repositório PÚBLICO: `.env` vivo com a chave RS256 ANTES do merge, fast-forward do `main` até f5eee3b,
+  `JWT_SECRET` retirada depois do boot novo; provado em produção que o token HS256 com o segredo vazado dá 401 (§22.9.4).
+- **D-F125 (= Q-F135 (a) — idem) — a D-F37 vale em TODA guarda de ação** (FATURAR, ALTERAR, TRANSMITIR, CANCELAR e as leituras fiscais):
+  licença é o que se vendeu (D-F14); super/admin passam só o privilégio. Um cliente que contrate `orders` sem `order-returns` não fatura
+  devolução, nem o admin.
+- **D-F126 (= Q-F136 (a) — idem) — leitura da VIDA por view travante exige UMA linha**: o `lockInvoice` do setes-api recusa mais de uma linha
+  da `vw_invoice_life` (409 RESOURCE_BUSY, retryable) — conhecimento negativo do motor (PADROES §11 regra 13); a A3 leva a MESMA recusa ao
+  `erp.lockInvoice` do núcleo e a todo leitor escopado pela vida (D-F119). Rejeitado: voltar ao leitor direto em `tb_invoice_event` (2ª cópia).
+- **D-F127 (= Q-F137 (a) — idem) — a conferência do boot das views das famílias (`assertFamilyViewsReadable`, D-F113) entra na A3**, junto da
+  porta `fiscal-voice` — antes da janela nada no setes-api lê o `fiscal_api`.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -3066,5 +3080,144 @@ ITENS DA A2 (§22.3 + §22.5 + o achado da A1):
    lá é RÉPLICA; dados conferidos dentro dos domínios) e rodar `npm run migrate:setes -- --dry-run` para ver a re-sincronia
    com a conferência nova da origem.
 Para cada item: testes, gates do delta (socrático ≥ 0,70 + adversarial sem HIGH), docs (§22.9+), e só então o merge.
+Corte da F2a: 30/11 (D-IB15).
+```
+
+### 22.9 Etapa A2 — executada na WORKTREE (2026-10-12) — itens 1–5 prontos; item 6 aguarda o Valdo; NADA na árvore viva
+
+**Onde**: worktree `D:\Gestao2027\setes-api-f2a`, branch `f2a` (criada do `main` 6bd6f83 — D-F117), com `.env` (PORT 3010, sem `JWT_SECRET`,
+com `JWT_PRIVATE_KEY_PATH`/`JWT_KID`), `secrets/` e `node_modules` copiados da árvore viva (fora do git). ⚠️ **Nunca `npm run dev` na
+worktree**: o `.env` aponta para o MESMO MySQL da produção e o boot aplica as migrations do disco da worktree em todo schema ativo.
+Testes ali (mocks) e provas só de leitura no banco real; DDL só em banco descartável.
+
+**Item 7 (antes de tudo)**: `npm run db:migrate` na nfse-api aplicou no `fiscal_api` do dev as 005 da A1 (`fiscal-api/005_issuer_domains_binary`,
+`nfse-api/005_service_transmission_domains`); `npm run migrate:setes -- --dry-run` limpo (setes_setes: 1 habilitação, mesmo A1, 20 tentativas
+re-sincronizáveis, 0 vozes novas, 0 falhas).
+
+| Commit (`f2a`) | Item | O quê | Prova |
+|---|---|---|---|
+| `a41406e` | 1 | dependência `fiscal-api: file:../fiscal-api` (só o subpath `fiscal-api/reading` — cerca D-NE77 do núcleo); nenhum import ainda; pino na F3 (a `package-lock` segue no `.gitignore` — R13) | `node_modules` da worktree = o da viva + `fiscal-api` (diff de versões de topo) |
+| `889bad5` | 2–3 | migration **068** `order_interface_view_bin` (`interface_key` `COLLATE utf8mb4_bin`); `resolveOrderInterface` lê `vw_order_interface`; `lockInvoice` = `FOR UPDATE` na nota (1º comando) + vida/último evento da `vw_invoice_life` em `LOCK IN SHARE MODE` (molde do `erp.lockInvoice` do núcleo; `lifeEvent` no retorno — a A3 escopa a leitura da voz pela vida, D-F119); `LAST_INVOICE_EVENT_KIND_SQL` e `CURRENT_RETURN_SQL` leem a `vw_invoice_life` — uma definição de "último evento" só (D-F32) | 1267 reproduzido na view VIVA numa conexão `general_ci`; a 068 em banco descartável (`f2a_probe_068`, apagado): 0 erro nas 3 colações, contagens iguais (344/51/7.552), view fundida; `scripts/prove-policy-views.ts` (SÓ LEITURA, no banco real): regra antiga × leitores novos em **7.947 pedidos, 7.432 notas e 7 vínculos de devolução — zero divergência**, 0 ramo/evento órfão, EXPLAIN por chave |
+| `318f994` | 4 | D-F37 nas 3 guardas (`requirePrivilege`, `requirePrivilegeFor`, `requireInterfaceFor`): licença (interface contratada) para TODOS antes do privilégio; admin/super passam só o privilégio; lista = só as contratadas | dado conferido ANTES: a única institution ativa contrata `orders`/`service-orders`/`order-returns`/`settlements` e não há privilégio ativo de usuário comum — ninguém perde acesso |
+| `aa13633` | 5 | D-F13: `@shared/auth/product-token` — RS256 com `kid` (`JWT_PRIVATE_KEY_PATH`, `JWT_KID` padrão `default`, `JWT_PUBLIC_KEYS` = chaves anteriores na rotação); token FINAL recusa `scope` e exige a forma (schema pelo padrão); token de SELEÇÃO exige `scope` e recusa `institutionId`; boot não sobe sem a chave (`assertJwtKeys`); `JWT_SECRET` só gera aviso; scripts e testes assinam pela chave (setup do jest gera o par de TESTE uma vez) | o token emitido passa no verificador REAL do núcleo com a pública da nfse-api; o de seleção é recusado lá; o par de dev existente (2048 bits) confere com a pública que a nfse-api usa |
+
+**Achado de SEGURANÇA (fechado pelo item 5 quando publicado)**: o `JWT_SECRET` HS256 de PRODUÇÃO era idêntico ao valor fixo em
+`setes-api/scripts/generate-token.ts`, versionado desde 2026-07-04 num repositório **PÚBLICO** (`valdosouza/gestao-2027-setes-api`) — qualquer
+pessoa podia assinar um token de `super`. Com o RS256 o segredo deixa de valer (HS256 recusado por construção); o script passou a assinar pela
+chave do `.env`. O histórico do git continua com o valor (inofensivo depois do item 5).
+
+**Provas da A2**: setes-api — `tsc` limpo; suíte **2.252 ok + 20 falhas PRÉ-EXISTENTES idênticas às do `main`** (nome a nome: 19 da bomba-relógio
+do boleto + 1 da cerca de fuso — falso positivo num COMENTÁRIO em `cashier.repository.ts:95`, desde a IB-1); núcleo **463/463** e nfse-api **691**
+com `SETES_API_DIR=D:/Gestao2027/setes-api-f2a` (cercas da D-F117 lendo a worktree).
+
+**Observação de UX (fora da F2a)**: o setes-app não tem tratamento global de 401 (`api_client.dart` lança `UnauthorizedFailure`, ninguém o
+captura para voltar ao login) — o deploy do RS256 se comporta como a expiração diária de 24 h: o usuário vê "Token inválido ou expirado" e entra
+de novo.
+
+#### 22.9.1 Gates do delta da A2 — socrático **0,73 ✅** · adversarial **0,70 ✅** (nenhum CRITICAL/HIGH no delta; 4 MEDIUM)
+
+Agentes independentes; achado confirmado vira teste em `setes-api/src/__tests__/adversarial-f2a-a2-gate.test.ts` (parte viva opt-in
+`F2A_ADV_LIVE=1`, banco descartável `f2a_adv_a2_*` criado e apagado). **Corrigidos na sessão** (commit `e0331dc`):
+
+| Achado | O quê | Correção |
+|---|---|---|
+| **F2A2-ADV-02** MEDIUM (os DOIS gates; provado ao vivo) | `vw_invoice_life … LOCK IN SHARE MODE` só é fresca nas tabelas do JOIN — os `NOT EXISTS` da view (o "último evento") leem o RETRATO do REPEATABLE READ; retrato aberto ANTES da trava da nota + re-faturamento no intervalo (E1, C2 → E3) = 4 linhas, a 1ª velha. O leitor antigo (`FOR UPDATE … LIMIT 1`) era fresco | `lockInvoice` RECUSA mais de uma linha → 409 `RESOURCE_BUSY` (refazer abre retrato novo depois da trava); nunca "pega a primeira". Conhecimento negativo no PADROES §11 regra 13 |
+| **F2A2-ADV-04** MEDIUM | o runner decide pelo NÚMERO — outra frente com a mesma versão (a IB-2) faria uma migration ser pulada calada | o boot FALHA ALTO com versão repetida nos arquivos ou versão aplicada com outro nome (conferido antes: os 67 nomes aplicados batem com os arquivos); D-F110 com errata (o número do `f2a_fiscal_passivo` é o próximo livre na janela) |
+| **F2A2-ADV-01/01b** MEDIUM | o lote de transmissão passava com QUALQUER ramo contratado e o item pulava a licença | licença do ramo por item, para todos (D-F37) |
+| **F2A2-ADV-07** LOW | token sem `exp` valia para sempre | `exp` obrigatório |
+| socrático 8/10, adversarial 08 | 401 sem `code`; códigos fora do catálogo; cerca do subpath só no núcleo; EXPLAIN da prova com id inexistente ("Impossible WHERE") | `code` no 401; `INTERFACE_NOT_ALLOWED`/`UNAUTHORIZED` no catálogo; `f2a-fiscal-api-fence.test.ts` na suíte do setes-api; prova com ids reais (falha se a tabela vier nula) |
+
+**Limites conhecidos (código que MORRE na A3; hoje os 4 ramos estão contratados)**: `POST /fiscal/refresh` sem escopo de ramo (ADV-01c); `GET
+/fiscal/pending` sem licença (ADV-06); o "plano do cancelamento fiscal" abre o retrato antes da trava da nota (ADV-02b — com a correção do
+ADV-02 o efeito é 409 retryable, nunca vida velha); cópias de "último evento" em `lastInvoiceEventAny`/rodízio/`LIFE_WHERE` (ADV-09).
+**Para a A3**: todo leitor escopado pela vida (D-F119) exige 1 linha da view ou trava a nota antes de qualquer leitura; o `erp.lockInvoice` do
+núcleo tem o MESMO molde (seguro hoje só porque `withInvoiceTx` põe a trava como 1º comando) — levar a mesma recusa; o comentário de
+`fiscal-api/src/erp/facts.ts:282` cita a 068 (corrigir junto).
+
+**Pendências de deploy (não são do código)**: (1) o `.env` da árvore viva NÃO tem `JWT_PRIVATE_KEY_PATH`/`JWT_KID` — publicar o item 5 sem
+isso derruba a produção no boot (falha segura: nunca volta ao HS256); o par existe em `setes-api/secrets/jwt/` e confere com a pública da
+nfse-api; (2) relogin de todos — o app não trata 401 globalmente; (3) espelho da 068 no `sql/03` (com `SET NAMES utf8mb4` antes — latin1 dá 1253).
+
+**Provas depois das correções**: setes-api 2.278 ok + as MESMAS 20 falhas do `main` (nome a nome); `tsc` limpo; prova de equivalência
+refeita (zero divergência, EXPLAIN por chave em ids reais); parte viva do gate (1267 × 068 e o fato do motor) em banco descartável, apagado.
+
+#### 22.9.2 Roteiro de PUBLICAÇÃO da A2 (= deploy; só com o "pode publicar" do Valdo)
+
+Os commits do `f2a` são lineares sobre o `main` 6bd6f83 — publicar = `git -C D:/Gestao2027/setes-api merge --ff-only <commit>` (mesmos
+hashes; se o `main` andou — a IB-2 —, rebase do `f2a` antes e suíte de novo). Em ordem:
+1. **`.env` da árvore viva ANTES de tudo**: `JWT_PRIVATE_KEY_PATH=./secrets/jwt/setes-api.private.pem` + `JWT_KID=default`; tirar `JWT_SECRET`
+   (o `tsx watch` não relê o `.env` sozinho — nada muda até o próximo restart).
+2. `npm install` na árvore viva (cria o link `node_modules/fiscal-api`; conferir que as versões de topo não mudaram — na worktree só entrou o
+   `fiscal-api`).
+3. `merge --ff-only f5eee3b` (tudo da A2 — ponta do `f2a`) → o `tsx watch` reinicia → boot: "JWT do produto: RS256, kid 'default'" + "Migration aplicada: 068 -
+   order_interface_view_bin" no `setes_setes`. Conferir no log; `scripts/prove-policy-views.ts` de novo na árvore viva (só leitura).
+4. Relogin (Sair e entrar no app); trilha (`scripts/trilha-primeiro-cliente.ts`, assina pela chave nova).
+5. Espelho da 068 no `sql/03`; push dos repos (setes-api público — o segredo antigo segue no histórico, inofensivo depois do RS256).
+Publicação por item (cherry-pick) continua possível se o Valdo quiser só parte — o item 5 sozinho exige o passo 1.
+
+#### 22.9.3 Rodada 3 da F2a — questões abertas pelos gates da A2 — DECIDIDAS (Valdo 2026-10-12: as quatro recomendações → D-F124…D-F127)
+
+- ⚠️ **Q-F134 (URGENTE) — contenção do segredo HS256 vazado (repositório público desde 2026-07-04)**: (a) **publicar a A2 agora** pelo
+  roteiro do §22.9.2 (o RS256 aposenta o segredo; relogin de todos) · (b) só girar o `JWT_SECRET` no `.env` vivo agora (novo valor
+  aleatório + restart; relogin) e publicar a A2 depois · (c) esperar o fluxo normal. *(Rec.: (a) se a publicação for hoje; senão (b)
+  imediatamente — enquanto o segredo velho vale, qualquer um assina token de super. O log "Auth OK" não distingue token forjado: não há
+  como auditar o passado.)*
+- **Q-F135 — escopo da D-F37 nas ações NÃO fiscais** (FATURAR em billing/OS/devolução, ALTERAR em settlements): (a) **licença para todos em
+  toda guarda de ação** (EXECUTADO assim — coerente com a D-F14; impacto zero no dado de hoje) · (b) restringir às ações fiscais
+  (TRANSMITIR/CANCELAR e leituras Q-N32). *(Rec.: (a); consequência: um cliente que contrate `orders` sem `order-returns` não fatura
+  devolução, nem o admin.)*
+- **Q-F136 — leitor da vida pela view travante** (F2A2-ADV-02, EXECUTADO como assunção): (a) **`lockInvoice` exige 1 linha da view; mais =
+  409 retryable; levar a mesma recusa ao `erp.lockInvoice` do núcleo na A3** · (b) voltar ao leitor travante direto em `tb_invoice_event`
+  (fresco por construção, mas 2ª cópia da regra — contraria a D-F32) · (c) só conhecimento negativo. *(Rec.: (a).)*
+- **Q-F137 — item 6 da A2 (`assertFamilyViewsReadable` no boot do setes-api, D-F113)**: (a) **vai para a A3**, junto da porta
+  `fiscal-voice` — antes da janela nada no setes-api lê o `fiscal_api`, a conferência não protegeria nada e o boot passaria a depender do
+  `fiscal_api` no ar e do GRANT · (b) entra já na A2. *(Rec.: (a).)*
+- (procedimento, sem questão) transição do RS256 no app: avisar "Sair e entrar" no deploy; o tratamento global de 401 (→ login) entra na F2b.
+
+#### 22.9.4 A2 PUBLICADA na árvore viva (2026-10-12, D-F124) — produção da Setes em RS256
+
+Pelo roteiro do §22.9.2: `.env` vivo ganhou `JWT_PRIVATE_KEY_PATH`/`JWT_KID` (cópia do anterior no scratchpad da sessão) → `git merge --ff-only
+f5eee3b` no `main` da árvore viva → o `tsx watch` reiniciou (PID 22984 → 26648), `/health` ok, **068 aplicada no `setes_setes` às 21:38 UTC**
+(`interface_key` = `utf8mb4_bin`; a view responde em `general_ci` e `unicode_ci`) → `JWT_SECRET` retirada do `.env` → `npm install` (só o
+link `fiscal-api` entrou; versões de topo iguais; o servidor não reiniciou). **Provas em produção (só leitura)**: token RS256 → 200 em
+`/api/core/me`; **token HS256 com o segredo vazado → 401** `{"error":"Token inválido","code":"UNAUTHORIZED"}`; token de seleção em /api → 401;
+leitura fiscal da OS 7374 (licença `service-orders`) → 200; `scripts/prove-policy-views.ts` na árvore viva → zero divergência. Espelho da
+068 no `sql/03`. A trilha (`trilha-primeiro-cliente.ts`) NÃO foi rodada (escreve dados de teste na produção — rodar com o Valdo).
+**Relogin**: todo token HS256 em uso virou 401 — no app, "Sair e entrar" (sem tratamento global de 401 até a F2b).
+**Pendente**: push (setes-api público, sql, Infra-IA) — com o "vai"; a worktree `setes-api-f2a` continua para a A3 (branch `f2a` = `main` agora).
+
+#### 22.10 ⏯ PROMPT DE RETOMADA — etapa A3 da F2a (colar numa sessão nova)
+
+```
+Retome a F2a (setes-api PASSIVO) do Gestão 2027 pela etapa A3. Leia primeiro D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22 inteiro (Rodada 0 → §22.1–§22.5; Rodada 1 → §22.6; A1 → §22.7;
+A2 → §22.9, gates §22.9.1, publicação §22.9.4) e as decisões D-F109…D-F127 no §7. A2 PUBLICADA (setes-api main f5eee3b:
+068, leitores pelas views da 065, D-F37 em toda guarda, JWT RS256 com kid). PADROES_BANCO §11 regras 11–14.
+
+REGRAS DURAS (não negociar):
+- A árvore D:\Gestao2027\setes-api roda em `tsx watch` e É a produção da Setes: salvar = deploy; o boot aplica as migrations.
+  O lote da A3 NÃO entra nela antes da JANELA única (D-F111) — fica na worktree D:\Gestao2027\setes-api-f2a (branch `f2a`,
+  hoje = main; `.env` com PORT 3010 e RS256; NUNCA `npm run dev` nela: o .env aponta para o MySQL de produção).
+- Rodar a suíte do setes-api SEM editar nada durante a execução (baseline contaminada); a base tem 20 falhas pré-existentes
+  (19 bomba-relógio do boleto + 1 falso positivo da cerca de fuso num comentário de cashier.repository.ts:95).
+- Testes ao vivo só em banco descartável; nunca `migrate:setes --cutover … --vai` fora da janela; decisões são do Valdo.
+- Commit só dos caminhos da frente, mensagem em arquivo UTF-8 sem BOM; push só com o "vai".
+
+ITENS DA A3 (§22.3 + D-F110…D-F127):
+1. Porta `src/shared/fiscal-voice/` (único lugar que lê o `fiscal_api`; só `fiscal-api/reading` — D-NE77; cerca já na suíte:
+   `f2a-fiscal-api-fence.test.ts`) + conferência do boot `assertFamilyViewsReadable` (D-F113/D-F127; GRANT do `setes_api` só na
+   view de tentativas — nfse-api/ops/grants.sql; ordem de deploy: nfse-api antes).
+2. Plano do cancelamento, dispensa ("manter a nota"), selo da lista de OS e `fiscalEffectOf` (D-F114) pela porta, com os
+   predicados do núcleo (nada por coluna crua — `accessKey`/`environment`/`last_queried_at` não decidem fora do núcleo); leitura
+   da voz DEPOIS do FOR UPDATE da nota (D-F121) e escopada pela VIDA do `lockInvoice` (D-F119) — exigir 1 linha (D-F126; levar a
+   mesma recusa ao `erp.lockInvoice` do núcleo e corrigir o comentário da 068 em fiscal-api/src/erp/facts.ts:282).
+3. Rotas `GET /api/billing/:orderId/cancel-plan` e `GET /api/billing/:orderId/fiscal-effect` (D-F115); `@shared/invoice-series`
+   (D-F112); remoção das 14 rotas + peças fiscais + espelhos + `setTransmissionEventEffect` (os limites ADV-01c/ADV-06/ADV-02b do
+   gate da A2 morrem aqui); as cercas dos irmãos que vigiam esses arquivos (SETES_API_DIR — D-F117) revistas na MESMA entrega.
+4. Migration `NNN_f2a_fiscal_passivo` (D-F110 — o NÚMERO é o próximo livre na janela; o runner falha alto com número repetido):
+   triggers de trava (1º trigger de TRAVA da casa → regra nova no PADROES + revisar-ddl) + COMMENTs, sem DROP.
+5. Prova de aceite: leitor novo na réplica recém-sincronizada × leitor velho na origem = 0 divergência (selo, bloco fiscal do
+   plano, pendência, prova).
+Gates socrático + adversarial ANTES da janela; a F2b (app) tem Rodada 0 própria (inclui o tratamento global de 401 → login).
 Corte da F2a: 30/11 (D-IB15).
 ```

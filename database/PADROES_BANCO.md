@@ -150,6 +150,11 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
 
 - `institutionId` int (nunca `tenantId` string — nomenclatura antiga eliminada)
 - TTL 24h, sem refresh token (relogin diário; refresh fica para o setes-app)
+- **RS256 com `kid`** (D-F13 — executada na F2a, etapa A2, 2026-10-12): o setes-api ASSINA com a chave PRIVADA (`JWT_PRIVATE_KEY_PATH`,
+  `JWT_KID`; `JWT_PUBLIC_KEYS` = chaves anteriores durante a rotação) pela peça única `@shared/auth/product-token`; as APIs do produto só
+  têm a PÚBLICA. HS256/`JWT_SECRET` aposentados (o segredo antigo estava num script versionado de repositório público). Token FINAL recusa
+  `scope` e exige a forma acima; token de SELEÇÃO (`{ userId, scope: 'select-institution' }`, 5 min) exige `scope` e recusa `institutionId`;
+  `exp` obrigatório; sem a chave o boot não sobe. NUNCA segredo de assinatura em arquivo versionado.
 - Fluxo multi-institution: ver `setes-api/04-AUTH-MULTI-INSTITUTION.md`
 
 ## 8. Validação antes de executar
@@ -270,7 +275,8 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
    acesso por chave) antes de publicar. Tipos e regras de leitura da view saem de UMA biblioteca (D-F33), nunca duas cópias.
    **Coluna da view DERIVADA DE LITERAL leva `COLLATE` explícito** (NE-1a, 2026-10-11 — `authority_recorded` da 004 da nfse-api):
    sem ele a coluna sai COERCÍVEL na colação do banco e `coluna = 'S'` numa conexão de outra colação (o padrão do mysql2 é
-   `utf8mb4_general_ci`; nem o setes-api nem o núcleo fixam colação) dá **erro 1267** só no leitor do outro serviço. Flag/domínio fechado
+   `utf8mb4_general_ci` — medido na F2a: o mysql2 3.x conecta em `utf8mb4_unicode_ci`, e a view guarda a colação da conexão que a CRIOU;
+   nem o setes-api nem o núcleo fixam colação) dá **erro 1267** só no leitor do outro serviço. Flag/domínio fechado
    → `COLLATE utf8mb4_bin` (coercibilidade 0, sensível a caixa). Conferir com `SET NAMES utf8mb4 COLLATE <x>` em ≥ 2 colações antes de publicar.
 4. **Serialização entre serviços = a MESMA linha travada** (D-F27): o `FOR UPDATE` na linha da nota (`tb_invoice` do
    cliente) é o ponto comum; quem trava primeiro a nota e só depois as suas tabelas (ordem nota → linhas do serviço).
@@ -327,3 +333,14 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     (provado ao vivo nos gates da A1 da F2a); o `FOR UPDATE` da linha que serializa (a nota no ERP) é o 1º comando da transação que
     decide (regra 2 do §9 aplicada à leitura entre serviços). E o leitor entre serviços é ESCOPADO pelo fato que decide (a VIDA da
     nota — D-F119): devolver "tudo da nota" deixava misturar uma vida antiga registrada com a nova e liberar o cancelamento local.
+13. **Leitura TRAVANTE de view só é fresca nas tabelas do JOIN** (gates da A2 da F2a, 2026-10-12 — provado no MariaDB 10.4.20): em
+    `SELECT … FROM vw_x … LOCK IN SHARE MODE`/`FOR UPDATE`, as subconsultas de dentro da view (o `NOT EXISTS` do "último evento")
+    leem o RETRATO do REPEATABLE READ, não a versão corrente. Com o retrato aberto ANTES da trava (uma leitura não travante, ou um FOR
+    UPDATE com subconsulta) e escrita no intervalo, a view devolve VÁRIAS linhas (novas × velhas). Regras: a trava da linha que serializa
+    é o 1º comando (regra 12); quem lê "a vida/o último" por view travante EXIGE exatamente 1 linha e recusa (409 retryable) se vier
+    mais — nunca "pega a primeira" (`lockInvoice` do setes-api; o `erp.lockInvoice` do núcleo segue o mesmo molde na A3). E a trava S que
+    essa leitura põe nas linhas faz um escritor que PULE a trava da linha-mãe cair em deadlock S→X: quem grava evento trava a nota antes.
+14. **Migration decidida pelo NÚMERO falha ALTO com número repetido** (gates da A2 da F2a, 2026-10-12): duas frentes que escolham a
+    mesma versão fariam uma ser pulada calada (ou o 2º registro em `_migrations` derrubaria o boot depois do DDL). O runner do
+    setes-api recusa versão repetida nos arquivos e versão aplicada com OUTRO nome que o do arquivo. Numerar = conferir o `main` e as
+    frentes abertas; o que importa a outro serviço é o NOME (a nfse-api confere `f2a_fiscal_passivo` por nome).
