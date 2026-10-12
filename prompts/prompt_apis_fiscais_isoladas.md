@@ -9,7 +9,8 @@
 
 > **⏯ RETOMAR POR AQUI — §21.17 — Rodada 23 DECIDIDA (D-F107…D-F108, 2026-10-11): o CHECK da F2a protege a lista da família e, na NE-1a,
 > o descritor da família carrega a lista de escrita — as duas se EXECUTAM na F2a e na NE-1a (nota da NE-1a no `prompt_onda_nfe_sefaz.md`
-> §12.8); nenhuma questão aberta nesta frente; próximo: NE-0 → NE-1a → F2a (corte 30/11). (D-F67…D-F106 publicadas: prova da
+> §12.8); nenhuma questão aberta nesta frente; próximo: NE-1a (Rodada 0 aberta — `prompt_onda_nfe_sefaz.md` §12.9) → F2a (corte 30/11)
+> → NE-0 (D-NE55: o levantamento da SEFAZ saiu do caminho crítico). (D-F67…D-F106 publicadas: prova da
 > reconferência, alarme com causa fechada, voz S e `kind` como conhecimento negativo com cerca por AST, escritor da NFS-e pela lista
 > positiva da família + funil em execução — Rodada 22 no §21.16). Antes: §21.7–§21.15,
 > §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
@@ -2667,5 +2668,6 @@ passaria). Antes do ALTER: contar `kind` fora da lista ou da caixa (inclusive S)
 MariaDB 10.4 se o `INSERT IGNORE` da cópia do `migrate:setes` rebaixa a violação do CHECK a AVISO (a linha some e o passo 6 falha com a
 mensagem "dual-write", que engana) — se rebaixar, a cópia confere a lista antes de inserir.
 
-**Próximo**: nenhuma questão aberta nesta frente. Ordem: NE-0 (levantamento oficial da NF-e + OpenAPI + parecer do guardião) → NE-1a
-(núcleo generalizado, com a D-F108) → **F2a** (setes-api passivo, com a D-F107) → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+**Próximo**: nenhuma questão aberta nesta frente. Ordem (D-NE55, Valdo 2026-10-11 — `prompt_onda_nfe_sefaz.md` §12.9: a NE-0 saiu do
+caminho crítico): NE-1a (núcleo generalizado, com a D-F108 — Rodada 0 aberta no §12.9 de lá) → **F2a** (setes-api passivo, com a D-F107)
+→ virada → F2b → NE-0. Corte da F2a: 30/11 (D-IB15).

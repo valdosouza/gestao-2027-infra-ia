@@ -5,7 +5,7 @@
 **Molde**: `prompt_onda3_nfse_adn.md` §3–§7 (mesma tabela de conceitos, mesmos nomes de peça) e `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates: ambíguo nunca fecha, reconciliar antes de reapresentar, transitório ≠ recusa).
 **Legado** (vault `D:\Gestao2016\Infra-IA\Gestao`, Decisão 65): `proc-faturamento-venda` E07, `proc-cancelamento-nfe` C00–C05, Lote 6 §2–§5, Lote 8 §2, NUM-01/02/03, AUT-01/02/03/04, CAN-01, CAN-V5/V6/V7, NF-01, `geracao-nfe-hierarquia` §3–§4 (diagnóstico: variação por MODELO duplicada = maior fonte de retrabalho; variação por PROCESSO pequena e sadia; operações do ciclo — inutilizar/consultar — são comandos, não "geradores").
 **Aberto em**: 2026-09-21 (Rodada 0 = parecer do guardião conceitual, agente `setes-conceito`, a pedido do Valdo: "desenhar o processo da NF-e mantendo a simetria de controles com a NFS-e, para que o desenho fique, se não o mesmo, seguindo o mesmo fluxo"). Fatos do parecer conferidos no disco pelo condutor (billing.service.ts:672–677, baseline 001, produtores em api/sync).
-**Estado**: **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
+**Estado**: **2026-10-11 — §12.9 ⏯ RETOMAR POR AQUI: D-NE55 (a NE-0 vai para depois da F2a; ordem NE-1a → F2a/F2b → NE-0) e NE-1a com Rodada 0 FEITA (inventário + guardião, §12.9.1–§12.9.2) — ⚠️ Rodada 1 Q-NE56…Q-NE60 aguarda o Valdo (§12.9.3)** · **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
 
 ---
 
@@ -818,3 +818,106 @@ pelo vocabulário COMUM aceita S, P e D para qualquer família — provado no `a
 7. A lista da família tem UMA fonte, reusada pelo CHECK da F2a (D-F107 — domínio A/R/C/K/F/N em colação binária na tabela da NFS-e).
 8. Depois da extração: `voiceSProducers()`, `voiceWriterViolations()` (a peça `nfse-api/src/__tests__/voice-kind-fence.ts` — ajustar o
    escopo e os `VOICE_SQL_WRITERS` ao escritor do núcleo), as testemunhas e a suíte inteira da nfse-api (unit + 150 ao vivo).
+
+### 12.9 D-NE55 — a NE-0 vai para DEPOIS da F2a (Valdo 2026-10-11) + NE-1a ABERTA (Rodada 0) — ⏯ RETOMAR POR AQUI
+
+**Q-NE55** (levantada pelo condutor ao retomar a NE-0/NE-1a): o §12.4 punha "NE-0 → NE-1a → F2a", mas pelo próprio plano a NE-0 não é
+pré-requisito da F2a nem da NE-1a — o §12.2 diz "nada da nfe-api entra antes da F2a se não for pré-requisito dela"; no §12.3 a NE-1a
+depende só do gate do delta fiscal (feito — APIs fiscais §19.4) e quem depende da NE-0 é a NE-2; a semântica de P/D e a separação
+credencial × cadeia do servidor já vieram da leitura do ACBr. Opções: (a) NE-1a já, NE-0 depois da F2a · (b) manter NE-0 → NE-1a ·
+(c) as duas em paralelo (agentes na NE-0).
+
+| Decisão | O quê |
+|---|---|
+| **D-NE55** (= Q-NE55 (a), Valdo 2026-10-11) | **a NE-0 sai do caminho crítico de 01/01/2027**: ordem = **NE-1a → F2a/F2b + fase IBS/CBS da NFS-e → NE-0 → NE-1b/NE-2/NE-3** (substitui o §12.4 e o §12.7 "Próximos passos"). A NE-1a não pode depender de dado oficial NOVO da SEFAZ; se a NE-0 revelar algo que mude o vocabulário do núcleo, o ajuste entra na NE-1b/NE-2. Economia: 3–4 sessões antes da F2a. |
+
+**NE-1a — Rodada 0 (2026-10-11)**: inventário do código (agente Explore) e parecer do guardião (agente `setes-conceito`), ambos só de
+leitura; as afirmações que sustentam as questões foram conferidas no disco pelo condutor.
+
+#### 12.9.1 Fatos do inventário (caminho:linha)
+
+- **A máquina tentativa × voz está quase toda na nfse-api**: no núcleo só o vocabulário (`fiscal-api/src/voice/kinds.ts`) e o contrato de
+  leitura (`voice/reading.ts`); nenhum escritor da voz e nenhum `VoiceFamily`. O `fiscal-api/CLAUDE.md` diz o contrário — corrigir.
+  Esqueleto genérico ≈ 245 de 1.122 linhas de `nfse-api/src/nfse/transmission.ts` (`withInvoiceTx`, `isInterruptedInFlight`,
+  `recordInterruptedFailure`, `classifyAuthorityError`/`OUTCOME_KIND`, reserva K/N, esqueleto do rodízio sem o PAM) + ≈ 360 de 431 linhas
+  de `repository.ts` com forma genérica mas tabelas fixas `tb_invoice_service_*`. Fica na família: `dps-builder` (306), `adn` (388),
+  `danfse` (167), `service-facts` (358) e ≈ 450 linhas de DPS/E2404/PAM/e101101 em `transmission.ts`. Muda de lugar: ≈ 600–650 linhas.
+- **Registro fiscal pela PRESENÇA DA CHAVE** (conferido): `currentOf` = "quem detém a chave" (`fiscal-api/src/voice/reading.ts:98-103`);
+  o setes-api decide o registro com `!!tx?.accessKey && tx.environment === 'P'` (`setes-api/src/shared/invoice/invoice-cancel.ts:350`). Na
+  NF-e a chave é NOSSA e existe desde o INSERT da tentativa (§3.2/D-NE7) → uma NF-e rejeitada viraria "registro fiscal".
+- **Vocabulário**: `fiscalStateOf` com `default: 'in_flight'` (`reading.ts:121`) — um D cairia como "em voo"; `FINAL`/`AUTHORIZED` em `Set`
+  soltos (`kinds.ts:32,34`); SQL com lista literal (`nfse-api/src/nfse/repository.ts:377,391-404`); barreira de nova tentativa
+  `isLive || isAuthorized` (`transmission.ts:337`) — com D deixaria retransmitir NF-e denegada.
+- **Cerca da virada por INSTITUTION**: `emissionStillInErp` e `assertEmitterWritable` olham qualquer réplica (`fiscal-api/src/establishment/
+  establishment.ts:180-186`, `establishment.repository.ts:149-156`), apoiados na premissa escrita de que 55/65 nascem virados; `'SE'`
+  espalhado (`authorityOf` `establishment.ts:25-27`, `SERVICE_ISSUER_MODEL`, `nextDpsNumber` `establishment.repository.ts:195-213`).
+- **Transmissões vivas só da NFS-e** (conferido): `countLiveTransmissions` lê só `tb_invoice_service_transmission(_event)`
+  (`nfse-api/src/nfse/repository.ts:416-431`) e guarda o DELETE do A1, que é UM por estabelecimento para as duas famílias.
+- **`terminal = 0` literal** no núcleo (`fiscal-api/src/erp/facts.ts:70,102,110,311,316`) e em ≈ 18 SQLs da nfse-api; nenhuma assinatura
+  recebe terminal; as colunas já existem em todas as PKs e views.
+- **TLS** (conferido): falha da cadeia do SERVIDOR (`SELF_SIGNED_CERT_IN_CHAIN`, `UNABLE_TO_GET_ISSUER_CERT_LOCALLY`, `CERT_HAS_EXPIRED`…)
+  vira 409 `FISCAL_AUTHORITY_AUTH_FAILED` "confira o A1" e voz F (`fiscal-api/src/transport/https-json.ts:107-131,187-190`); sem `ca`
+  em lugar nenhum; erro de código desconhecido vira AMBÍGUO (`nfse-api/src/nfse/transmission.ts:206-212`).
+- **XML por regex (N17)**: `nfse-api/src/authority/dps-builder.ts:254-306` (a referência antiga "228-231" envelheceu), `danfse.ts:28-91`,
+  `adn.ts:118-120,331`, `fiscal-api/src/transport/xmldsig.ts:75`; nenhum parser XML declarado (`@xmldom/xmldom` só transitivo do
+  `xml-crypto`); 25 asserções em 6 suítes fixam o comportamento atual.
+- **Views**: `vw_invoice_service_transmission` (migration 003 da nfse-api) e `_event` (001); **`vw_invoice_service_dps` não existe** (só no
+  plano §14); o setes-api ainda não lê nenhuma (GRANTs comentados em `nfse-api/ops/grants.sql:32-33`).
+- **Cercas que travam a divisão atual e terão de mudar na NE-1a**: `fiscal-api/src/__tests__/fence.ts` (escritor com `${tabela}` é acusado),
+  `contrato.test.ts:157-165` (nenhum `tb_invoice*` fora de `src/erp/` no núcleo), `:180-186` (`new Map<`), r21/r22 do núcleo (o núcleo não
+  pode ter escritor da voz), `voice-kind-fence.ts` (`VOICE_SQL_WRITERS`), r18/r19/r22 da nfse-api (leem caminho/texto de arquivos); 20
+  suítes fazem `jest.mock('../nfse/repository')`; o `live-harness.ts` copia 5 tabelas fixas.
+- Correções de documentação (sem decisão): `closeInterruptedSend` não existe — os nomes reais são `reconcileInterrupted` +
+  `recordInterruptedFailure`; o `fiscal-api/CLAUDE.md` anuncia a máquina no núcleo.
+
+#### 12.9.2 Modelo do guardião (peças)
+
+Conceito mantido ("um emitente habilitado declara um documento fiscal ao fisco e recebe a voz dele"); **sem DDL de tabela** (no máximo a
+troca de uma VIEW — Q-NE56). Peças no núcleo: vocabulário com **classificação total** (`KIND_CLASS satisfies Record<kind,{final,authorized}>`,
+P viva, D final não autorizada; `fiscalStateOf` exaustivo com `'processing'`/`'denied'`); **projeção comum** `TransmissionView` ×
+`ServiceTransmissionView` da família; **leitura publicada da família** `VoiceFamilyReading<V>` + catálogo `VOICE_READINGS` (no núcleo —
+o setes-api só importa o núcleo, D-F33); predicados comuns `currentOf` (por REGISTRO), `isFiscalRecord`, `blocksNewAttempt =
+isLive || registrado`, `localCancelPending`; regras só da NFS-e (E2404, substituição/ofício, códigos de evento) em
+`voice/families/service.ts`, re-exportadas com os mesmos nomes; **escrita** `VoiceFamily<K>`/`defineVoiceFamily`/`insertVoice`
+(propriedade-função) com `SERVICE_VOICE_FAMILY` declarado pela nfse-api (D-F108); **família = RAMO** (`InvoiceBranch = 'service' |
+'merchandise'` — 55 e 65 são a mesma família) × **cerca/emissão/aluguel = MODELO**, ligados por UM catálogo `ISSUER_MODEL_FACTS`
+(`{authority, branch, erpLegacy}`, só SE tem legado); cerca `emissionStillInErp(…, model)` + `assertIssuerWritable` (habilitação) +
+`assertCertificateWritable` (A1 — qualquer réplica ou lacuna (b) da SE, como hoje); vivas do emitente somando as leituras do catálogo
+(o DELETE do A1 soma todas as famílias); `InvoiceRef {institutionId, invoiceId, terminal}` com `WEB_TERMINAL = 0` só na borda; transporte
+com `ca` + `isServerChainError`; leitor XML em `fiscal-api/src/xml/`. **Views POR família com a projeção comum idêntica** — view comum
+(UNION) é MAQUETE (não funde — PADROES §11.3; colunas NULL por família; sem dono — D-F35). Contrato que a F2a importa = projeção comum +
+registro por fato + P/D + `InvoiceRef`; o resto (leitura de mercadoria, `model` na projeção, inutilização, voz do evento, PDF) fica para a
+NE-2/NE-1b. Critério "a NFS-e não muda": 561 unit + 150 ao vivo verdes SEM mexer em asserção (só import); equivalência da view e do
+`currentOf` contra o dado real; EXPLAIN refeito; N17 com corpus dourado dos XMLs reais (a 704, os eventos) — parser novo e regex com
+saída idêntica, divergência = parar e levar ao Valdo. MAQUETES vetadas: `tb_fiscal_document`/identidade comum da declaração, roteiro
+genérico com ganchos, `model` na tentativa, terminal na URL/config, renomear `FISCAL_DPS_REJECTED`. Conhecimento negativo: no Node, passar
+`ca` SUBSTITUI a loja padrão — nunca no ADN.
+
+#### 12.9.3 ⚠️ Rodada 1 da NE-1a — questões para o Valdo (recomendação entre parênteses)
+
+- **Q-NE56 — como o "registro fiscal" (D-NE14) chega ao leitor.** (a) coluna `authority_recorded` ('S'/'N') na projeção comum da VIEW de
+  cada família — NFS-e `access_key IS NOT NULL`, NF-e (NE-2) `protocol IS NOT NULL`; só a view muda (migration 004 da nfse-api,
+  `CREATE OR REPLACE VIEW`, fundível, equivalência provada contra o dado real) · (b) predicado na `VoiceFamilyReading` da biblioteca, sem
+  DDL · (c) manter `!!accessKey` e decidir na NE-2. *(Rec.: (a) — o fato fica no contrato (a view é a API, D-F15), a família é dona da
+  definição (D-F35) e a F2a conta pendências em SQL com um fragmento só; (c) entrega à F2a o bug da NF-e rejeitada como registro.)*
+- **Q-NE57 — falha da cadeia do SERVIDOR (D-NE17) na NFS-e.** (a) voz F inalterada (antes do aperto de mão nada chegou ao fisco — é
+  conclusivo), código NOVO `FISCAL_AUTHORITY_CHAIN_UNTRUSTED` com mensagem que não manda renovar o A1, classificação EXPLÍCITA (código
+  desconhecido vira ambíguo hoje), entra em `EMITTER_FAILURE_CODES`, `logger.error` como semente do alarme · (b) sem voz (503 — a
+  tentativa fica em voo; mente, nada foi enviado) · (c) separar só na nfe-api (bifurca o transporte). *(Rec.: (a) — é a ÚNICA mudança
+  visível da NE-1a na NFS-e: código e mensagem, não a voz; a cópia do setes-api NÃO recebe — morre na F2a e o caso nunca ocorreu em
+  produção.)*
+- **Q-NE58 — o que é "a máquina" extraída (D-NE13).** (a) a POLÍTICA em peças no núcleo (escritor único, vigente/registro, barreira de nova
+  tentativa, desfecho → voz, reserva K/liberação N, idempotência, transação sob a trava da nota, aluguel); os ROTEIROS (transmitir,
+  consultar, reconferir, cancelar, rodízio) ficam na nfse-api compondo as peças; o roteiro comum só se extrai quando a nfe-api tiver o dela
+  e os dois coincidirem · (b) roteiro genérico com ganchos por família já agora · (c) só o escritor e a leitura. *(Rec.: (a) — (b) seriam
+  palpites sobre um fluxo que a D-NE55 proíbe conhecer agora; (c) entrega menos que a D-NE13.)*
+- **Q-NE59 — ordem interna e linha de corte (corte da F2a 30/11).** (a) primeiro o que a F2a importa (projeção comum + registro, P/D com
+  classificação total, `InvoiceRef`); depois cerca por modelo, emitter, escritor/peças, `ca`/cadeia e N17 — se passar das 6 sessões, a
+  2ª metade desliza para logo depois da F2a (nada dela muda o que o setes-api lê) · (b) a NE-1a inteira antes da F2a. *(Rec.: (a).)*
+- **Q-NE60 — "casa cifrada do CSC já nasce generalizada" (D-NE2).** (a) nenhum DDL: a casa genérica já existe (AES-GCM com AAD por linha,
+  PADROES §11.6); a coluna do CSC nasce na F5 com o dado oficial · (b) tabela genérica `tb_establishment_secret` agora (puxaria o A1 para
+  dentro — reforma de `tb_establishment_certificate`) · (c) colunas na linha 65 agora. *(Rec.: (a) — sem consumidor; a semântica do CSC é
+  dado da SEFAZ, que a D-NE55 tirou do caminho.)*
+
+**Ao fechar a rodada**: glossário de palavras ocupadas ganha "registro fiscal" (`authority_recorded` × `isFiscalRecord`) e "família" (o ramo
+da nota no `fiscal_api`).
