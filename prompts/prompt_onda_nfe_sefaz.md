@@ -5,7 +5,7 @@
 **Molde**: `prompt_onda3_nfse_adn.md` §3–§7 (mesma tabela de conceitos, mesmos nomes de peça) e `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates: ambíguo nunca fecha, reconciliar antes de reapresentar, transitório ≠ recusa).
 **Legado** (vault `D:\Gestao2016\Infra-IA\Gestao`, Decisão 65): `proc-faturamento-venda` E07, `proc-cancelamento-nfe` C00–C05, Lote 6 §2–§5, Lote 8 §2, NUM-01/02/03, AUT-01/02/03/04, CAN-01, CAN-V5/V6/V7, NF-01, `geracao-nfe-hierarquia` §3–§4 (diagnóstico: variação por MODELO duplicada = maior fonte de retrabalho; variação por PROCESSO pequena e sadia; operações do ciclo — inutilizar/consultar — são comandos, não "geradores").
 **Aberto em**: 2026-09-21 (Rodada 0 = parecer do guardião conceitual, agente `setes-conceito`, a pedido do Valdo: "desenhar o processo da NF-e mantendo a simetria de controles com a NFS-e, para que o desenho fique, se não o mesmo, seguindo o mesmo fluxo"). Fatos do parecer conferidos no disco pelo condutor (billing.service.ts:672–677, baseline 001, produtores em api/sync).
-**Estado**: **2026-10-12 — §12.9 ⏯ RETOMAR POR AQUI: NE-1a PARTE 1 EXECUTADA, com GATES (0,76/0,76) e PUBLICADA — D-NE56…D-NE62 e D-NE66/68/69/70/71 (D-NE61: a denegada barra pelo FATO da view — Q-NE67 rejeitada); nenhuma questão aberta; PROMPT DE RETOMADA da parte 2 no §12.9.6; próximo: parte 2 da NE-1a (cerca por modelo, emitter, escritor/peças, `ca`/cadeia D-NE57, parser XML N17, D-NE69) → F2a** · 2026-10-11 — D-NE55 (a NE-0 vai para depois da F2a) · **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
+**Estado**: **2026-10-12 (tarde) — §12.9.7: Rodada 0 da PARTE 2 da NE-1a feita (inventário + parecer do guardião + ordem interna, sem DDL) + leitura DETERMINÍSTICA do ACBr (`../nfe-api/referencia-acbr/06`) → D-NE72…D-NE74 DECIDIDAS e ordem aceita ("siga as recomendações e a ordem proposta"); EM EXECUÇÃO — passos 1–6 FEITOS (§12.9.7.1: cerca por modelo, emitter no núcleo, terminal por parâmetro + listas derivadas, escritor genérico sob `InvoiceTx`, política em peças, `ca`/cadeia do servidor — D-NE57; núcleo 327 · nfse-api 591 + 150/150 ao vivo; nada commitado); em curso: gates (socrático + adversarial) dos passos 1–6 → publicar "parte 2a"** · **2026-10-12 — §12.9 ⏯ RETOMAR POR AQUI: NE-1a PARTE 1 EXECUTADA, com GATES (0,76/0,76) e PUBLICADA — D-NE56…D-NE62 e D-NE66/68/69/70/71 (D-NE61: a denegada barra pelo FATO da view — Q-NE67 rejeitada); nenhuma questão aberta; PROMPT DE RETOMADA da parte 2 no §12.9.6; próximo: parte 2 da NE-1a (cerca por modelo, emitter, escritor/peças, `ca`/cadeia D-NE57, parser XML N17, D-NE69) → F2a** · 2026-10-11 — D-NE55 (a NE-0 vai para depois da F2a) · **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
 
 ---
 
@@ -1058,3 +1058,241 @@ commit com mensagem em ARQUIVO UTF-8 sem BOM (`git commit -F arquivo` — o `-F 
 ferramenta de edição ou script Node em UTF-8 (nunca Set-Content); commit SÓ dos caminhos da frente; ao terminar, atualizar §12.9,
 INDEX (fiscal-api/nfse-api/nfe-api), INDICE_CENTRAL, CLAUDE.md da raiz e a memória (skill atualizar-infra-ia).
 ```
+
+#### 12.9.7 Parte 2 da NE-1a — Rodada 0 (2026-10-12): inventário + parecer do guardião + ORDEM INTERNA proposta — ⚠️ aguarda o Valdo (Q-NE72…Q-NE74)
+
+Inventário (agente Explore) e parecer (agente `setes-conceito`), ambos só de leitura; o condutor conferiu no disco os pontos que geram
+questão ou conflito com o critério (`kinds.ts`, `ne1a-gate:170-239`, `authority.test.ts:282-293`, `service-facts.ts:311-340`,
+`repository.ts:380-452`, `r17:270-294`, `r13:523-535`, `004_issuer_model_domain.sql`, `establishment.ts:140-179`).
+**Linha de base**: núcleo **256/256** · nfse-api **584 unit** (150 ao vivo pulados) · `tsc` limpo nos dois · árvores limpas.
+
+**Fatos do inventário (o que mudou em relação ao §12.9.1)**:
+- Tamanhos: `transmission.ts` 1.128 · `repository.ts` 452 linhas. O que MUDA DE LUGAR é ≈ 230–395 linhas (não 600–650 — o §12.9.1 contava
+  roteiros e leitores que a D-NE58 deixa na família). `terminal = 0` literal: **18** em `repository.ts` (15 + 3 `VALUES (?, ?, 0`), **3** em
+  `service-facts.ts`, 2 no `smoke-adn-homologacao.ts` (não 31/9). `jest.mock('../nfse/repository')` em **21** suítes. Linhas do §12.9.1 que
+  envelheceram (parte 1 já mexeu): `currentOf` `reading.ts:202-208`, `fiscalStateOf` exaustivo `:248-269`, conjuntos derivados `kinds.ts:51-69`,
+  `countLiveTransmissions` `repository.ts:437-452` (já deriva os finais), barreira `transmission.ts:343`, `classifyAuthorityError` `:212-218`.
+- Cerca: `assertEmitterWritable` guarda A1 (`storeCertificate`/`clearCertificate`) E habilitação (`upsertIssuer`/`softDeleteIssuer`,
+  `emitter.service.ts:59,77`); `emissionStillInErp` em `guards.ts:30`, `transmission.ts:774,974`, `openIssuer` e na pós-condição do ato
+  (`migrate-from-setes-api.ts:442`). Achado menor: `scripts/smoke-adn-homologacao.ts:133` chama `openIssuer` SEM `schemaName` (único que cai no
+  ramo `issuerRowsState`).
+- Emitter: a guarda do DELETE do A1 é CALLBACK da família (`clearCertificate({ guard })`, `establishment.ts:161-171`) contando só
+  `tb_invoice_service_*` (`repository.ts:437-452`) — com a NF-e, a nfse-api apagaria o A1 com NF-e viva.
+- Transporte: ninguém passa `ca`; `TLS_CREDENTIAL_CODES` (`https-json.ts:107-112`) mistura cadeia do SERVIDOR com credencial; a regex
+  `/certificate/` (`:130`) casa os dois lados ("unable to get local issuer certificate" é do servidor; "sslv3 alert bad certificate" é nosso).
+- XML: nenhum parser declarado (`@xmldom/xmldom` 0.8.15 só transitivo do `xml-crypto` 6.3.2). Corpus real do dev: `setes-api/storage`
+  = 3 DPS + 3 NFS-e + 2 `-evt101101` (PRODUÇÃO); `nfse-api/storage-smoke` = 4 DPS + 1 NFS-e + 1 evento (H). `adn.ts:331` varre o texto
+  JSON do `GET /dps` — NÃO é XML (fora do N17). `CANCEL_EVENT_CODES` em DUAS fontes (`dps-builder.ts:23` mutável × `families/service.ts:20`).
+- D-NE69 — listas literais: rodízio `('S','K')` (`repository.ts:398,414`), `('A','N')` (`:416`), ordenação `('A','N','F')` (`:428`), pendentes
+  `IN ('A','N','S','K','C','-')` (`service-facts.ts:333`); letras de UM fato: `'C'` do ERP (`l.last_kind`), `'F'` da revisita (`:419`), `'-'`.
+- Consumidores: o setes-api NÃO importa o núcleo (só comentários); a `nfe-api` não tem `src/`. Mexer em export do núcleo não quebra outro projeto.
+
+**Modelo do guardião (corrige o §12.9.2 em dois pontos)**:
+1. **Três grãos**, não dois: **RAMO** (tabelas, views, leitura, lista de escrita) × **MODELO** (a linha da habilitação: ambiente, série,
+   `cutover_at`, aluguel, nDPS, autoridade derivada) × **ESTABELECIMENTO** (o A1 — D-N31 —, a trava de TODAS as linhas, o ato da virada, as vivas
+   de TODAS as famílias quando o assunto é o A1).
+2. O escritor se chama **`insertTransmissionEvent`** (não `insertVoice`): a tabela é `*_transmission_event`, K/N são fatos NOSSOS gravados nela
+   (PADROES §11 regra 9) e a `writerCallFlags` reconhece o escritor por esse nome.
+
+Peças (sem DDL — nenhuma tabela nem view muda):
+- **Dois descritores COMPOSTOS**: `VoiceFamilyReading<V>` (contrato PUBLICADO — o setes-api importa, D-F33) + `VoiceFamily<K>` (lado interno).
+  Tipo e `defineVoiceFamily({ reading, eventTable, writeKinds })` no núcleo; o VALOR `SERVICE_VOICE_FAMILY` e a constante
+  `SERVICE_VOICE_WRITE_KINDS` ficam na nfse-api (`src/nfse/voice-family.ts`) — mesmo repo do CHECK da F2a (D-F107). `eventTable` validada em
+  execução (`^tb_[a-z0-9_]+_transmission_event$` — sem ponto, crase, schema); o literal da tabela NUNCA entra no núcleo (a cerca do núcleo cego
+  fica sem exceção). Teste da família: a `eventTable` é o `FROM` da view da migration.
+- **Escritor** em `fiscal-api/src/voice/event-table.ts` — o ÚNICO SQL do núcleo na voz (escritor + `hasTransmissionEvent` +
+  `findTransmissionEventByKind`; funil + MAX+1 sob trava + colunas comuns); exceção NOMEADA na cerca D-F31 (`fence.ts` — o arquivo e
+  `${family.eventTable}`); na nfse-api nenhum SQL de escrita na voz sobra (`VOICE_SQL_WRITERS` = escritor do núcleo + a cópia do
+  `migrate:setes`, R21-05). A nfse-api re-exporta `insertTransmissionEvent` em `repository.ts` como `const` arrow tipada pela lista da família —
+  os 21 `jest.mock` seguem interceptando e as testemunhas `@ts-expect-error` S/P/D ficam presas a ela (o que a máquina chama).
+- **Emitter** = composição em `fiscal-api/src/emitter/`: `countLiveTransmissions(q, inst, { branches: 'all' | InvoiceBranch[], environment? })`
+  lendo as VIEWS do catálogo `VOICE_READINGS` (DELETE do A1 = todas as famílias; PUT/DELETE da habilitação de M = só a família de M); o callback
+  `guard` morre; rotas `/v1/emitter` seguem em cada serviço, montadas por `modelsOf(branch)` (somem os `'SE'` de `emitter.service.ts:32,113`).
+  Equivalência tabela × view no dev (a FK `fk_invoice_service_transmission_dps` garante o JOIN da view) + EXPLAIN. Erro 1146 NUNCA vira 0;
+  família entra no catálogo junto com a conferência de boot da view dela (molde do item (9) da F2a).
+- **Cerca por modelo**: `ISSUER_MODEL_FACTS` em CÓDIGO, congelado, `satisfies Record<IssuerModel, …>` (tabela-catálogo já vetada na 004 —
+  lê-la antes do `FOR UPDATE` recria o snapshot); `ISSUER_MODELS`/`authorityOf` DERIVAM dele; teste catálogo × CHECK da 004. A TRAVA segue de
+  TODAS as linhas (`lockIssuerRows`, PADROES §9 regra 8) — só a DECISÃO é por modelo. `emissionStillInErp(q, s, inst, model)` com `model`
+  OBRIGATÓRIO + `anyEmissionStillInErp(q, s, inst)` (rotas do A1 e pós-condição do ato, que é por institution); `assertIssuerWritable(…, model)` ×
+  `assertCertificateWritable(…)` (o predicado de hoje, renomeado). `nextDpsNumber` fica SEM modelo (fato da linha SE — D-N18). `InvoiceBranch`
+  vai para `ref/` (re-exportado com o mesmo nome; `establishment/` não importa `voice/`).
+- **Peças da máquina que SOBEM**: `withInvoiceTx` (ao lado de `lockInvoice`, recebe `InvoiceRef`), escritor + idempotência (kind, dh) + C por
+  kind, `reserveCancelRequest`/`releaseCancelRequest` (K/N exigidos no TIPO da família — QUANDO reservar e o K→N por carência de 10 min ficam na
+  família), `classifyAuthorityError`/`AuthorityOutcome`/`OUTCOME_KIND`/`EMITTER_FAILURE_CODES` (roteiros com `switch` exaustivo — a classe da
+  D-NE57 quebra a compilação do cancelamento em vez de cair no ambíguo e prender o K). **FICAM**: `isInterruptedInFlight`/`reconcileInterrupted`/
+  `recordInterruptedFailure` (`IN_FLIGHT_MINUTES`, GET /dps, E2404 — NFS-e; D-F102 vale só para ela), `firstAuthorityCode` (`E\d{4}` = dialeto do
+  ADN), aluguel/rodízio (o mecanismo já está no núcleo), `insertTransmission`/`fillAuthorityData`/`touchQueriedAt`/`recordNfseNotGenerated`
+  (colunas da tentativa são da família), `liveTransmissionError`.
+- **D-NE69**: deriva da `KIND_CLASS` SÓ as CLASSES (vivas com voz = não finais S/K/P; autorizadas A/N; finais); letras que nomeiam UM fato
+  ficam literais (C fora do rodízio — D-F28; F da revisita — D-F52; sentinela `'-'`). P entra no TEXTO do SQL, não no comportamento (nenhum P na
+  tabela da NFS-e); EXPLAIN refeito.
+- **Leitor XML** `fiscal-api/src/xml/`: leitura ESTRITA (mal-formado ou DOCTYPE = erro — fecha XXE/expansão), `readXml`/`firstElement`/
+  `firstText` (mantém o nome da D-F96)/`attrOf` por NOME QUALIFICADO sem prefixo (como a regex); `@xmldom/xmldom` dependência DIRETA na linha
+  0.8.x do `xml-crypto` (uma cópia do DOM); a extração da `Signature` do `verifyXml` sobe. Leitores da família reescritos sobre a peça em
+  `authority/nfse-reader.ts` (ler × montar); o montador fica (escape sobe na NE-4). Reproduzir o ESCOPO de cada leitura (ex.: `cancelBlock` lê
+  `dhEvento` do documento inteiro; `parseNfseXml` lê o cabeçalho antes do `<emit>`); `CANCEL_EVENT_CODES` da família passa a ser a do núcleo.
+- **`ca`**: campo `ca` no `HttpsCall` + `isServerChainError`/`SERVER_CHAIN_CODES` decididos pelo CÓDIGO antes de `isTlsCredentialError`
+  (EPROTO, alertas TLS e `ERR_OSSL_*` seguem credencial); o `ca` é dado do ADAPTADOR da autoridade (D-NE17/D-NE54) — nunca de
+  `tb_establishment_*`, do núcleo nem de `NODE_EXTRA_CA_CERTS` (processo inteiro: ADN e Inter). Conhecimento negativo no comentário do campo +
+  teste da nfse-api que exige `ca === undefined` no ADN + cerca de zero `rejectUnauthorized`.
+- **Maquetes vetadas**: descritor único leitura+escrita; registro de tabelas internas no núcleo; `writeKinds` no `VoiceFamilyReading`; catálogo
+  de escrita paralelo; tabela por convenção `tb_invoice_${branch}_…`; ganchos/"colunas extras" no escritor; escritor comum gravando a
+  tentativa; porta como método; guarda do A1 injetada pela família; vivas da habilitação somando TODAS as famílias; tabela-catálogo de modelos;
+  `nextDpsNumber(model)`; trava só na linha do modelo; `IN_FLIGHT_MINUTES` no núcleo; "S antes do POST" comum; D-NE69 derivando da lista de
+  ESCRITA; modelo de objeto do DPS/NF-e no núcleo; leitor tolerante que imita a regex; regex como plano B (dois leitores — fere a D-F96); XSD
+  no núcleo agora (NE-3); `ca` na configuração do estabelecimento; flag `trustServerChain`.
+- **Glossário (ao fechar)**: "emitter" (dois sentidos na nfse-api: o emissor do `fiscal_api` — `/v1/emitter` — × o emitente lido do ERP —
+  `EmitterIdentity`; no núcleo nunca para fato do ERP), "reserva" (da TENTATIVA × do PEDIDO de cancelamento K), "descritor de leitura × descritor
+  da família".
+
+**Como o critério "a NFS-e não muda" será lido (o mesmo da parte 1)**: asserção de COMPORTAMENTO intocada; mudam só import, forma da chamada
+(inclusive a posição do parâmetro do terminal — `r21:451`, `r22:103`), fixture e o ponto de simulação dos mocks; testes de CONTEXTO/CERCA que
+fixavam a estrutura que as decisões mandam mudar são CONVERTIDOS como na parte 1 e na R22 (`ne1a-gate:185-194/227-239`, r21/r22 do núcleo — "o
+núcleo não tem escritor" —, r22 da nfse-api — INSERT literal e `VOICE_SQL_WRITERS` —, oráculo do `f1r9` com `t.terminal = 0`, `f1r10:184-186`,
+`r20:265`, leituras de texto de arquivo dos r18/r19/r21 nos caminhos novos), cada um listado na entrega. **Uma** asserção de comportamento muda
+POR DECISÃO: D-NE57 × `authority.test.ts:285-286` (`CERT_HAS_EXPIRED` é a cadeia do SERVIDOR → `FISCAL_AUTHORITY_CHAIN_UNTRUSTED`, voz F
+inalterada); a mensagem sem código (`:287-288`) segue credencial (o código decide antes da mensagem).
+
+**Ordem interna PROPOSTA** (todo passo: `tsc` nos dois + `npm run build` do núcleo + 256/584; "ao vivo" = 150 em cópias descartáveis):
+
+| # | Passo | Frente | Risco para a NFS-e | Prova extra |
+|---|---|---|---|---|
+| 1 | cerca por modelo (`ISSUER_MODEL_FACTS`, `emissionStillInErp(…, model)`, `anyEmissionStillInErp`, `assertIssuerWritable` × `assertCertificateWritable`; o smoke passa o schema) | (1) | baixo — réplica só existe na SE (D-F42) | matriz `r8`/`f1r11.live` |
+| 2 | emitter no núcleo (vivas pelo catálogo; o callback morre) | (2) | médio — a guarda passa a ler a VIEW | equivalência tabela × view no dev + EXPLAIN + **ao vivo** |
+| 3 | uma passada pelo SQL da família: terminal por parâmetro, `InvoiceRef` até a rota (`WEB_TERMINAL` só em `*.routes.ts`, com cerca) + listas derivadas da `KIND_CLASS` | (7)+(6) | baixo — texto muda, dado não | EXPLAIN (`explain:leituras`) |
+| 4 | estrutura do escritor: `withInvoiceTx`/`InvoiceTx`, descritores, escritor no núcleo, ligação na família, cercas (escritor único, exceção nomeada da D-F31, r21/r22, `voice-kind-fence`) | (3a) | o MAIOR estrutural | **ao vivo** |
+| 5 | política sobre o escritor: K/N, idempotência, desfecho → voz com `switch` exaustivo | (3b) | médio | — |
+| 6 | `ca` + cadeia do servidor (D-NE57) — depois do 5 para mexer na classificação UMA vez, já no lugar final | (4) | a ÚNICA mudança visível (código/mensagem) | **ao vivo** |
+| — | **gates** (socrático + adversarial, agentes que não fizeram a entrega) dos passos 1–6 → publicar ("parte 2a") | | | |
+| 7 | N17 — parser XML; corpus dourado (8 XMLs de produção + 6 de H + fixtures) | (5) | isolado; único que pode PARAR por divergência | **ao vivo** + gate do delta ("parte 2b") |
+
+Estimativa: 1–6 + gates ≈ 4–5 sessões; o N17 ≈ 1–2. O N17 por último porque é puro e isolado, não pode segurar os outros, e é o candidato
+natural a deslizar para depois da F2a se a parte 2 passar de 6 sessões (D-NE59) — nada da F2a lê XML.
+
+**Questões para o Valdo (recomendação entre parênteses)**:
+- **Q-NE72 — até onde vale "saída IDÊNTICA" no N17.** Fora do XML bem-formado a regex e o parser divergem por natureza (mal-formado, DOCTYPE,
+  auto-fechado, CDATA, comentário, prefixo — casos que o corpus real não exercita). (a) idêntico no que o corpus real e as fixtures BEM-FORMADAS
+  exercitam; nos casos estranhos o leitor RECUSA (valor só de elemento com TEXTO SIMPLES — CDATA, comentário ou filho = recusa) e a recusa vira
+  ambíguo pela causa que já existe (`nfse-ilegivel`/`evento-ilegivel`) — falha fechado; os testes adversariais de CDATA/marcação
+  (`r17:282-293`, `r13:523-535`) devem seguir com o MESMO desfecho (ambíguo / chave nula), e onde só o caminho mudar (XML mal-formado que a regex
+  "lia") a divergência é intencional, fixada em teste de contexto · (b) equivalência também nos casos estranhos (reimplementar a regex dentro do
+  parser — maquete) · (c) regex como plano B quando o parser falhar (dois leitores — fere a D-F96). *(Rec.: (a) — sem ela o "divergência = parar"
+  trava o N17 em casos que nenhum XML real produz; qualquer divergência no corpus REAL continua sendo parar e trazer ao Valdo.)*
+  **Atualização pela leitura DETERMINÍSTICA do ACBr (2026-10-12, pedido do Valdo antes de decidir — `../nfe-api/referencia-acbr/06-leitura-deterministica.md`;
+  8 pontos da leitura por agentes conferidos, 0 desmentidos)**: as regras "casar pelo NOME QUALIFICADO" e "CDATA = recusa" de (a) passam a ser
+  PARÂMETRO da leitura do núcleo, escolhido pela FAMÍLIA — a NFS-e usa qualificado + texto simples (saída idêntica à regex); a NF-e (NE-2) vai precisar
+  de nome LOCAL em qualquer namespace (prefixos das SEFAZ CE/MG — `pcnLeitor.pas:168,178,188`; o parser do ACBr usa `FindAnyNs`) e de ler CDATA (qrCode
+  da NFC-e — `ACBrNFe.XmlWriter.pas:388`). Corrige o parecer do guardião (letra F: "não casar por `localName`" vale para a NFS-e, não para o núcleo).
+  Q-NE73 e Q-NE74 independem do ACBr.
+- **Q-NE73 — nome do campo `erpLegacy` do catálogo da D-NE10.** "Legado" no acervo é o Gestao2016; aqui o fato é "o ERP (setes-api) já transmitiu
+  este modelo antes da extração e a lacuna (b) consulta a habilitação dele". (a) `erpTransmitted` · (b) manter `erpLegacy` e registrar a colisão no
+  glossário. *(Rec.: (a) — só o nome muda; o conceito da D-NE10 fica.)*
+- **Q-NE74 — o escritor da voz exige a TRAVA pelo tipo?** (a) o escritor recebe um `InvoiceTx` (conexão + `InvoiceRef` + vida travada) que SÓ o
+  `withInvoiceTx` produz — a regra "escrita na voz sempre sob a trava da nota" (hoje comentário, `repository.ts:221-222`) vale por construção e a
+  nota escrita é obrigatoriamente a travada (hoje `insertTransmissionEvent(conn, institutionId, invoiceId, …)` aceita outra nota); todas as
+  escritas atuais já estão dentro do `withInvoiceTx` (conferido pelo guardião) — muda a FORMA de ≈ 30 asserções de chamada, não o comportamento ·
+  (b) manter `(conn, institutionId, invoiceId)` e a regra em comentário. *(Rec.: (a) — é a mesma defesa da D-F106 levada da letra para a nota;
+  barato agora, caro depois que a NF-e escrever.)*
+**DECIDIDO (Valdo 2026-10-12: "siga as recomendações e a ordem proposta" — depois da leitura determinística do ACBr)**:
+
+| Decisão | O quê |
+|---|---|
+| **D-NE72** (= Q-NE72 (a)) | N17: saída IDÊNTICA no corpus real e nas fixtures bem-formadas; nos casos estranhos o leitor RECUSA → ambíguo pela causa existente; casamento por nome (qualificado × local) e CDATA são PARÂMETRO da leitura do núcleo, escolhidos pela família (NFS-e = qualificado + texto simples) |
+| **D-NE73** (= Q-NE73 (a)) | o campo do catálogo `ISSUER_MODEL_FACTS` é `erpTransmitted` (não `erpLegacy`) |
+| **D-NE74** (= Q-NE74 (a)) | o escritor da voz recebe `InvoiceTx` (conexão + `InvoiceRef` + vida travada), produzido SÓ pelo `withInvoiceTx` |
+| ordem | a ORDEM INTERNA proposta acima (passos 1–6 → gates → publicar "parte 2a"; passo 7 = N17 → gate do delta → "parte 2b") |
+
+- Achado sem decisão (entra no passo 1): `smoke-adn-homologacao.ts:133` passa a informar o schema (o `openIssuer` sem schema dava o predicado
+  INCOMPLETO da cerca); `fiscal-api/package.json:5` ainda anuncia "tentativa × voz" — corrigir com a entrega.
+
+##### 12.9.7.1 Execução — passos 1 a 6 (2026-10-12) — nada commitado ainda; próximo: gates (socrático + adversarial) dos passos 1–6
+
+| Passo | O que mudou | Provas |
+|---|---|---|
+| **1 — cerca por modelo** (D-NE10/D-NE73) | núcleo: `establishment/issuer-models.ts` (catálogo `ISSUER_MODEL_FACTS {authority, branch, erpTransmitted}` congelado, domínio = CHECK da 004; `authorityOf`/`branchOf`/`modelsOf`/`erpTransmitted`); `emissionStillInErp(…, model)` OBRIGATÓRIO + `anyEmissionStillInErp` (grão do estabelecimento = o predicado de antes = a disjunção do catálogo); `assertEmitterWritable` → `assertIssuerWritable(…, model)` (trava TODAS as linhas, decide pelas do modelo) × `assertCertificateWritable` (o de antes); `InvoiceBranch` foi para `ref/`. nfse-api: `requireCutover(ctx, inst, grain)` — SE nas rotas da NFS-e e da habilitação, `'establishment'` nas do A1; ato da virada com `anyEmissionStillInErp`; smoke com o schema | núcleo +29 (`ne1a-cerca-modelo.test.ts`: catálogo × CHECK, matriz por modelo em 11 estados × ERP com/sem SE, disjunção); matriz por modelo também no MOTOR real (`f1r11.live`) |
+| **2 — emitter no núcleo** (D-NE9) | núcleo `emitter/emitter.ts`: `countLiveTransmissions(q, inst, { branches, environment })` pelas VIEWS publicadas de `VOICE_READINGS` (1146 nunca vira 0); `emitterView`/`writeIssuer`/`deleteIssuer`/`uploadCertificate`/`clearCertificate`/`deleteCertificate` — o DELETE do A1 soma TODAS as famílias, a habilitação de M só a família de M; o callback `guard` da família MORREU (o `clearCertificate` saiu de `establishment/`). nfse-api: `emitter.service.ts` vira borda fina (DTO + recusa do modelo); `countLiveTransmissions` saiu do `repository.ts`. **Achado e corrigido**: o upload no núcleo lia o CNPJ do ERP por dentro e furava a costura dos mocks da família (o 503 do teste de contrato virou 422) → a BORDA lê o fato do ERP e entrega (`expectedCnpj`); o núcleo segue recusando ausente/divergente | núcleo +10 (`ne1a-emitter.test.ts` — inclusive a SOMA com uma 2ª família injetada: NF-e viva barra o A1, não barra a SE); dev: tabela × view **0 divergências**; EXPLAIN da contagem nova: view fundida, por chave, ~1 ms (entrou no `explain:leituras`) |
+| **3 — terminal por parâmetro + listas derivadas** (D-NE12/D-NE59/D-NE69) | núcleo: `LIVE_VOICE_KINDS` + `sqlKindList` (só kinds do vocabulário) e `InvoiceScope`; nfse-api: o SQL da família recebe a nota INTEIRA (`InvoiceRef`) ou o ESCOPO (estabelecimento + terminal) — zero `terminal = 0` fora das 3 peças da VOZ (passo 4); a composição recebe `ref` (conferido por `refOf` — outra institution falha alto); `webInvoice` saiu; a ROTA monta a referência (`WEB_TERMINAL` só em `*.routes.ts` e scripts); rodízio e pendentes com o terminal da borda; listas do rodízio/pendentes DERIVADAS (vivas S/K/P · autorizadas A/N · ordem pelos finais; C e '-' pelo nome) | núcleo +3 (`ne1a-listas-sql.test.ts`); codemod por AST nos testes (354 edições de FORMA — composição, repositório, escopo, mocks, índices de `mock.calls`); EXPLAIN do rodízio e dos pendentes OK |
+
+| **4 — estrutura do escritor** (D-F108/D-NE74) | núcleo: `erp/invoice-tx.ts` — `withInvoiceTx(pool, schema, ref, {label, requireAlive, lock}, fn)` produz o `InvoiceTx` (marca por `unique symbol` que não sai do módulo), CONGELADO, com CÓPIAS congeladas da referência e da vida (quem segura o `InvoiceTx` não troca a nota escrita depois da trava) e `open` (getter que cai no fim do callback — `InvoiceTx` vazado para depois da transação é recusado); `assertInvoiceTx` confere em execução. `voice/event-table.ts` — `defineVoiceFamily({reading, eventTable, writeKinds})`: tabela da voz só por NOME SIMPLES `tb_<…>_transmission_event`, lista no vocabulário (cópia congelada), escritor GENÉRICO (propriedade-função; FUNIL da lista da família antes de qualquer query → `assertInvoiceTx` → MAX+1 e INSERT pela tabela do descritor, terminal da referência) + os dois leitores de idempotência. nfse-api: `nfse/voice-family.ts` = o DESCRITOR (dona de `SERVICE_VOICE_WRITE_KINDS`); o `repository.ts` só LIGA (`export const insertTransmissionEvent = SERVICE_VOICE_FAMILY.insertTransmissionEvent`) e re-exporta; `transmission.ts` usa o `withInvoiceTx` do núcleo (leitor travante `erp.lockInvoice` como costura dos mocks) e escreve com o `InvoiceTx`. Cercas: exceção NOMEADA da D-F31 (`NAMED_WRITE_EXCEPTIONS` — só `voice/event-table.ts` com alvo `${table}`, alvo exato); `voice-kind-fence`: `VOICE_SQL_WRITERS` sem o repositório da nfse-api, escrita na voz = a voz como ALVO (o subselect do `recordNfseNotGenerated` não é escrita), um descritor só (`VOICE_FAMILY_DESCRIPTORS`, `defineVoiceFamily` por qualquer grafia fora dele = violação); cast para `InvoiceTx` só na própria peça (AST) | núcleo +15 (`ne1a-escritor.test.ts`: descritor, funil, terminal, idempotência, trava/404, cópias congeladas, `InvoiceTx` vazado/forjado, deadlock com `InvoiceTx` próprio, testemunhas de compilação — `VoiceFamily<estreita>` não alarga; o MÉTODO alargaria —, cerca do cast); nfse-api +2 (cerca: alvo da escrita, 2º descritor); codemod por AST (48 edições de FORMA nas chamadas do escritor/leitores); EXPLAIN OK; ao vivo 150/150 |
+
+| **5 — política sobre o escritor** (D-NE13/D-NE58) | núcleo `voice/outcome.ts`: `AuthorityOutcome`, `classifyAuthorityError` (`switch` pelo código), `OUTCOME_KIND` (Record sobre os desfechos que gravam — exaustivo pelo tipo — e congelado, valores literais R/F), `EMITTER_FAILURE_CODES` (agora `readonlySet` — imutável em execução), `unhandledOutcome(never)` (fecho de `switch` exaustivo nos roteiros); `voice/policy.ts`: `recordVoiceOnce` (idempotência (kind, dh) da voz do fisco), `recordKindOnce` (um C por tentativa, qualquer dh — HIGH-3a), `reserveCancelRequest` (K, dh NULL) e `releaseCancelRequest` (N só se a última voz ainda é o K, lida pela família sob a mesma trava). As peças recebem a PORTA da família (`VoiceWriter<'K'>`…): o escritor de uma família sem K/N não cabe (contravariância — `strictFunctionTypes`) e a costura dos mocks da família fica intacta. nfse-api: `transmission.ts` re-exporta os nomes (os testes seguem importando de lá); o roteiro do cancelamento virou `switch` EXAUSTIVO; o A idempotente (POST e consulta), o C por kind, o K e o N passam pelas políticas. Cerca nova (`voice-kind-fence`): o ESCRITOR como VALOR só vai às políticas (1º argumento de reserva/liberação; propriedade das portas de `recordVoiceOnce`/`recordKindOnce`) | núcleo +9 (`ne1a-politica.test.ts`, inclusive testemunhas: família sem K/N não reserva; roteiro que esquece um desfecho não compila); nfse-api +1 (cerca do escritor como valor) |
+| **6 — `ca` + cadeia do servidor** (D-NE57) | núcleo: `HttpsCall.ca` (só passa ao Node quando DITO — ausente = loja padrão; conhecimento negativo no tipo: `ca` SUBSTITUI a loja, nunca no ADN); `isServerChainError` pelo CÓDIGO (lista de verificação X.509 da doc do `tls` + `ERR_TLS_CERT_ALTNAME_INVALID`; a mensagem nunca decide) → antes do aperto de mão **409 `FISCAL_AUTHORITY_CHAIN_UNTRUSTED`** ("Certificado do servidor do fisco não reconhecido … não é o seu A1; nada foi enviado …") + `logger.error`; depois do aperto de mão segue ambíguo (Q-ADV1a); desfecho `chain_untrusted` EXPLÍCITO → voz **F** (inalterada), em `EMITTER_FAILURE_CODES` (pára a passada do rodízio); catálogo de erros. A compilação QUEBROU no roteiro do cancelamento da nfse-api até ele tratar o caso (o `switch` exaustivo do passo 5 cumpriu o papel) → `chain_untrusted` libera o K com N ("pedido não enviado — certificado do servidor do fisco não confiável"). `package.json` do núcleo: descrição corrigida. A cópia do setes-api NÃO muda | núcleo +5 (`ne1a-cadeia.test.ts`: `ca` só quando dito, código × mensagem, 409/`logger.error`/voz F, depois do aperto de mão = ambíguo, cerca AST de `rejectUnauthorized`/`NODE_TLS_REJECT_UNAUTHORIZED` em produção); nfse-api +4 (cadeia no adaptador ADN — 7 códigos, mensagem sem "A1"; ADN nunca passa `ca`; transmitir → F; cancelar → K,N) |
+
+**Provas acumuladas**: núcleo **298/298** · nfse-api **584/584 unit** · `tsc` limpo nos dois · `dist/` refeito · ao vivo **150/150** depois dos passos 1–2 e de novo **150/150** depois do passo 3. **Depois do passo 4**: núcleo **313/313** · nfse-api **586/586 unit** · EXPLAIN OK · ao vivo **150/150** (271 s). **Depois dos passos 5–6**: núcleo **327/327** · nfse-api **591/591 unit** · `tsc` limpo · `dist/` refeito · ao vivo **150/150** (313 s).
+
+**Testes CONVERTIDOS (estrutura que as decisões mandaram mudar — nenhuma promessa mudou)**: r8/cofre/f1r11.live/f1r5/f1r8 (nomes da cerca; grão do
+estabelecimento); `ne1a-gate` da nfse-api (C: listas literais → `[DECIDIDO — D-NE69]` provando os MESMOS membros para os kinds da NFS-e; D: borda
+`webInvoice` → `[DECIDIDO — D-NE12/D-NE59]` — refs só da borda, zero literal fora das peças da voz); `ne1a-gate` do núcleo (o SQL das vivas mora no
+emitter); `cofre` (o callback da família morreu → a guarda do núcleo recusa e desfaz); `f1r9` (oráculo aprende `t.last_kind`/`t.terminal = ?`);
+`f1r5` (a contagem é pela view); posição de parâmetro do SQL nos bancos falsos r15/r16/r18/r20/r21 e em `passada-ramos`; textos `('S','K')` →
+`('S','K','P')` (r20, passada-ramos); `f1r10` (VALUES com o terminal por parâmetro). **Passos 4–6**: r22 da nfse-api (32 trechos com a
+forma nova da chamada `(itx, attempt, userId, …)`; kind no índice 5 do INSERT — o terminal entrou; o título do funil diz onde ele mora; lista e
+tipo derivado conferidos no DESCRITOR `voice-family.ts` + re-exportação no repositório; casts de LEITURA 4→3 — o da nfse-api saiu com o leitor;
+assinatura = ligação + `PropertySignature` no núcleo; escritores SQL sem o repositório da nfse-api + o genérico pela tabela do descritor + um
+descritor só; o mapa ganha `chain_untrusted`); `df61:352` (índice `![5]`→`![3]` fora do alcance do codemod); `ne1a-gate` da nfse-api (D: a trava
+`erp.lockInvoice` entrou no `withInvoiceTx` do núcleo — a chamada contada é a dele; "terminal = 0 só nas 3 peças da voz" → zero, e o núcleo usa
+`terminal = ?`); `contrato`/`r8` L6 do núcleo (exceção NOMEADA `${table}` em `voice/event-table.ts`); r21/r22 do núcleo ("o núcleo NÃO tem
+escritor" → "tem EXATAMENTE UM, genérico, exportado só como fábrica"); r21 e r22 da nfse-api (as escritas pelas políticas contam como chamadas
+legítimas — K/N fixos na peça, conferidos); `r20:327` (a análise estática do produtor do K olha a chamada da reserva); `r20:297` (o mapa
+desfecho → voz dá `F` também para a cadeia — a promessa "só R/F" segue, por conjunto). **Asserção de COMPORTAMENTO mudada — UMA, por decisão
+(D-NE57)**: `authority.test.ts:285-286` (`CERT_HAS_EXPIRED` com código → `FISCAL_AUTHORITY_CHAIN_UNTRUSTED`, voz F inalterada); a mensagem sem
+código (`:287-288`) segue credencial.
+
+**Consequência decidida, registrada (D-NE10 (a))**: no estado inalcançável "só 55 réplica" (versão antiga do script — o `migrate:setes` atual falha
+alto), a habilitação SE e as rotas da NFS-e deixam de ser barradas pela réplica 55; o A1 segue barrado (grão do estabelecimento).
+
+**Lições (conhecimento negativo)**: (1) NUNCA editar `src/` enquanto a suíte ao vivo roda — o Jest carrega os módulos ao longo da execução e mede
+código pela metade (a 1ª rodada do passo 1 acusou 500 no DELETE do A1 que era o passo 2 meio editado); (2) codemod que REMAPEIA índice
+(`c[3]`→`c[2]`) não é idempotente — rodar só na 1ª passada; as trocas idempotentes (guardadas pelo prefixo `refOf(`/`webRef(`) podem repetir;
+(3) inserir import por regex de linha cai dentro de import de várias linhas — posicionar pela AST (última `ImportDeclaration`); (4) composição do
+núcleo que chama outra peça do núcleo POR DENTRO fura o `jest.mock('fiscal-api')` da família — fato do ERP lido na BORDA e entregue.
+
+##### 12.9.7.2 Gates dos passos 1–6 (2026-10-12) — socrático **0,76 ✅** · adversarial **0,72 ✅** (nenhum CRITICAL/HIGH) — Valdo: "siga as recomendações dos gates"
+
+**Socrático (agente independente)**: nenhum CRITICAL/HIGH; as decisões executadas fielmente; três brechas MÉDIAS no que a entrega anuncia "por
+construção" — (i) o `lock` do `withInvoiceTx` é porta lateral (qualquer função vira "a trava" e o `assertInvoiceTx` confere só a FORMA);
+(ii) a exceção nomeada da D-F31 casava arquivo + alvo, não o VERBO (`UPDATE`/`DELETE` em `${table}` passavam — provado); (iii) a amarração
+da referência ao estabelecimento de quem pede só existia na nfse-api (`refOf`), não no núcleo. **Correções de sessão** (sem decisão nova):
+cerca do `lock` + identidade do `InvoiceTx`; exceção com VERBO; o `withInvoiceTx` recebe quem pede e recusa outra institution; a liberação
+confere a TENTATIVA do `current`; o alarme da cadeia leva host (nunca a URL com chave/Id); rótulo da família no DESCRITOR (núcleo sem
+literal); a decisão do cancelamento pelas CLASSES (`isLiveTransmission`/`isAuthorized` — P/D do vocabulário comum); teste que amarra a
+`eventTable` do descritor à view da migration.
+
+**Decisões (Valdo: "siga as recomendações dos gates")**:
+
+| Decisão | O quê |
+|---|---|
+| **D-NE75** (= Q-NE75 (a)) | a D-NE74 alcança os escritores da TENTATIVA que a F2a lê: `fillAuthorityData` (grava `access_key` = o REGISTRO fiscal da D-NE56), `insertTransmission` e `insertLifeDps` recebem o `InvoiceTx` (escrita na nota TRAVADA por construção); ficam de fora, por desenho, os comandos únicos guardados FORA da trava — `touchQueriedAt` (throttle) e `recordNfseNotGenerated` (prova D-F90, UPDATE condicional) |
+| **D-NE76** (= Q-NE76 (a)) | família do catálogo `VOICE_READINGS` × `fiscal_api` compartilhado: decisão POR CHAMADA no `countLiveTransmissions` — view existe → conta; nem a view nem a tabela base da família existem → família NÃO INSTALADA → 0 legítimo; tabela sem view (ou 1146 da view com a tabela presente) → falha fechado; nenhum serviço condiciona o boot às migrations de outra família |
+| **D-NE77** (= Q-NE77 (a)) | superfície da biblioteca para a F2a: subpath de LEITURA `fiscal-api/reading` (`exports` do package.json — projeção comum, `VOICE_READINGS`, predicados, `InvoiceRef`; o leitor que já mapeia da D-NE66 (b) entra nele na F2a) + cerca de que o setes-api só importa esse subpath; o barrel completo é das famílias |
+
+| **D-NE80** (= Q-NE80 (a)) | a TRAVA do `withInvoiceTx` numa família é só `erp.lockInvoice` — cerca por AST (`lockFlags` na `voice-kind-fence` da nfse-api; o gate do núcleo enumera todo `lock:` do workspace) |
+| **D-NE81** (= Q-NE81 (b) — **Valdo DIVERGIU** da recomendação do adversarial (a), escolhendo a do socrático) | o `assertInvoiceTx` confere IDENTIDADE: o núcleo guarda os `InvoiceTx` EMITIDOS e abertos num `WeakSet` privado de `erp/invoice-tx.ts` — forja impossível, mesmo copiando os campos de um verdadeiro; exceção NOMEADA na regra 3 do núcleo (lista branca da cerca de Map/Set, que passou a enxergar `WeakMap`/`WeakSet`): identidade, não trava — a trava segue no BANCO |
+| **D-NE82** (= Q-NE82 (a)) | "um descritor só" endurecido na cerca da família: o NOME `defineVoiceFamily` fora do descritor autorizado, em qualquer forma (identificador ou texto), e o escritor/descritor como valor por texto, elemento, reflexão ou espalhamento são violação. **(c) — registro de descritores em EXECUÇÃO no núcleo — segue EM PAUTA** (não decidido; o contexto que o fundamenta fica fixado nos gates) |
+| **D-NE83** (= Q-NE83 (a)) | `releaseCancelRequest` exige `current: { attempt, lastKind }` e confere `current.attempt === attempt` (a de outra tentativa falha ALTO) |
+| **D-NE84** (= Q-NE84 (a)) | a trava e a leitura da habilitação decidem na MESMA semântica já (o modelo volta CANÔNICO de `lockIssuerRowList` — a colação _ci do SQL); o CHECK binário do `model` entra na migration da F2a (nota de implantação, junto da D-F107) |
+
+**Adversarial (agente independente)**: 12 achados — 2 MEDIUM (NE1A2-01 `InvoiceTx` forjado passava na conferência por FORMA; NE1A2-09 o 2º
+descritor por alias/`.call`/`(0, f)`/elemento/desestruturação/`Reflect.apply` escapava da cerca — com o NE1A2-10, uma cadeia SEM cast
+gravava S e D na tabela da NFS-e), 10 LOW; todos LATENTES (nenhum caminho de produção os aciona). **Correções de sessão** (sem decisão nova):
+NE1A2-02 (2ª conferência do `InvoiceTx` logo antes do INSERT), NE1A2-03 (a entrada do escritor lida UMA vez), NE1A2-05 (as políticas conferem o
+`InvoiceTx` na entrada), NE1A2-06 (`branches` vazio/estranho falha alto), NE1A2-08 (a exceção da D-F31 com VERBO + alvo + LIGAÇÃO
+`const table = d.eventTable`), NE1A2-11 (`SERVICE_VOICE_WRITE_KINDS` congelada), NE1A2-12 (`refOf` devolve cópia congelada e cada composição
+a usa — conferida UMA vez).
+
+**Execução das correções e decisões (2026-10-12)**: núcleo — `withInvoiceTx(pool, quemPede, ref, …)` (outra institution/id/terminal fora do
+domínio falha alto antes de qualquer conexão), registro `ISSUED` (D-NE81), rótulo no DESCRITOR (`label` — o núcleo sem literal de família),
+`countLiveTransmissions` por chamada (D-NE76 — a tabela pela CONVENÇÃO `vw_<x>` ↔ `tb_<x>`, sem literal de família no núcleo: a 1ª tentativa
+com o nome da tabela no catálogo tropeçou na cerca de "tabela do ERP"), superfície `fiscal-api/reading` (D-NE77 — `exports` + `typesVersions`;
+caminho interno do pacote bloqueado em execução, `ERR_PACKAGE_PATH_NOT_EXPORTED`), alarme da cadeia só com o HOST; nfse-api — D-NE75 nos três
+escritores da tentativa, decisão do cancelamento pelas CLASSES (`isLiveTransmission`/`isAuthorized`), `underTx` (peça de teste: `InvoiceTx` de
+VERDADE — o `itxOf` forjado só serve a escritor simulado), teste `descritor-ddl` (o descritor e a convenção da D-NE76 amarrados às migrations).
+**Testes convertidos** (estrutura/decisão — nenhuma promessa de comportamento da NFS-e mudou): os `it.failing` dos dois gates → `[CORRIGIDO na
+sessão]`; os "contexto" que fixavam as fugas de HOJE (NE1A2-09/10) passam a fixar "nada escapa"; o 1146 do emitter (`ne1a-emitter`, gate E) ganha
+a distinção "família instalada"; `withInvoiceTx` com quem pede (codemod); `defineVoiceFamily` com `label`; D-NE75 (codemod — 5 edições);
+`r20:327` (a decisão do cancelamento pelas classes); `ne1a-gate` D (a cópia do `refOf`); pinos da lista congelada (r22 nos dois projetos);
+cerca de Map/Set (`WeakMap`/`WeakSet`). **Provas**: núcleo **356/356** · nfse-api **606 unit** · `tsc` limpo · `dist/` refeito · EXPLAIN OK ·
+ao vivo **150/150** (255 s).
+
+**Lição (ferramenta)**: o heredoc do Bash desta sessão corta PELA METADE as barras invertidas (`\\n` vira quebra de linha real, `/\\/g` vira `/\/g`) —
+script com barra invertida vai por arquivo escrito pela ferramenta de escrita, nunca por heredoc nem `node -e` com aspas duplas.

@@ -2678,6 +2678,14 @@ leitura em LOTE (selo da lista de OS) usa `familyViewQueryMany` do núcleo (term
 `terminal = 0`; e, pela D-NE66 (b) (gates da NE-1a), a F2a recebe do núcleo um leitor que JÁ MAPEIA (`readFamilyTransmissions`) — o par
 `familyViewQuery`/`…Many` + linha crua deixa de ser o caminho público (os predicados já falham alto com a linha crua — D-NE66 (a)).
 
+**Nota de implantação da F2a — itens (10) a (12) (NE-1a parte 2, gates dos passos 1–6, 2026-10-12 — `prompt_onda_nfe_sefaz.md` §12.9.7.2)**:
+(10) D-NE77: o setes-api importa SÓ `fiscal-api/reading` (a superfície de leitura — projeção comum, `VOICE_READINGS`, predicados,
+`InvoiceRef`; o leitor que já mapeia da D-NE66 (b) entra nela); o barrel completo é das famílias — a cerca está no núcleo
+(`ne1a-superficie.test.ts`, lê o `setes-api/src`) e quebra no 1º import fora do subpath. (11) D-NE84: a migration da F2a põe o CHECK
+BINÁRIO do `model` em `tb_establishment_issuer` (hoje a 004 do núcleo avalia `IN ('SE','55','65')` na colação _ci — 'se' passa), junto
+do CHECK da lista da família (D-F107). (12) D-NE76: a contagem de transmissões vivas (DELETE do A1 / troca de ambiente) trata família NÃO
+instalada no `fiscal_api` como 0 — nenhum serviço condiciona o boot às migrations de outra família; tabela sem view segue falhando fechado.
+
 **Próximo**: nenhuma questão aberta nesta frente. Ordem (D-NE55, Valdo 2026-10-11 — `prompt_onda_nfe_sefaz.md` §12.9: a NE-0 saiu do
 caminho crítico): NE-1a (núcleo generalizado, com a D-F108 — Rodada 0 aberta no §12.9 de lá) → **F2a** (setes-api passivo, com a D-F107)
 → virada → F2b → NE-0. Corte da F2a: 30/11 (D-IB15).

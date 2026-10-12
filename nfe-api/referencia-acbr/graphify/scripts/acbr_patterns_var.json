@@ -1,0 +1,8 @@
+{
+  "_keep_comments": ["regional_fix", "apostrofo_comment"],
+  "regional_fix": "(Cear|\\bCE\\b|\\bMG\\b|Paran|\\bPR\\b|\\bBA\\b|\\bGO\\b|\\bMT\\b|\\bMS\\b|\\bRS\\b|\\bSP\\b|\\bAM\\b|\\bPE\\b).{0,40}(corre|webservice|WebService|retorn|tag|aspas|prefix)|(corre|webservice|WebService|retorn|aspas|prefix).{0,40}(Cear|\\bCE\\b|\\bMG\\b|Paran|\\bPR\\b)",
+  "apostrofo_comment": "aspas simples|ap[oó]strofo|''''|#39",
+  "tls_verify": "VerifyCert|SSL_VERIFY|VerifyPeer|SslVerify|IgnoreCert|SECURITY_FLAG_IGNORE|INTERNET_FLAG_IGNORE|VerifyMode|VerifyDepth|OnVerifyPeer|SSLVerify|ssl_ctx_set_verify|CertCA|CA_Cert|CertCAFile|RootCert",
+  "prefix_tag": "FindAnyNs|LocalName|PermitePrefixo|Prefixo \\+ ':'",
+  "cdata": "CDATA"
+}

@@ -36,6 +36,11 @@ conferência"). Toda regra daqui só vira regra de produção depois de conferid
 | 03 | [03-ibs-cbs-rtc.md](03-ibs-cbs-rtc.md) | IBS/CBS/IS na NF-e **e** no DPS da NFS-e Padrão Nacional | 42 unidades RTC na NF-e; 10 no IBSCBS do DPS; 15 eventos RTC (todos à SVRS); 22 pendências (2 🔴) |
 | 04 | [04-regras-validacao-local.md](04-regras-validacao-local.md) + [.json](04-regras-validacao-local.json) | Regras de validação pré-SEFAZ como Rule Cards (Given/When/Then) | **198 regras** (151 Alta / 43 Média / 4 Baixa), 158 cStat citados; .md e .json 1:1 conferidos por programa |
 | 05 | [05-eventos-inutilizacao-danfe.md](05-eventos-inutilizacao-danfe.md) | Eventos (110111/110110/…), inutilização, consulta de situação, DANFE A4, e-mail | 11 mensagens; 18 blocos do DANFE; 30 pendências (0 🔴) |
+| 06 | [06-leitura-deterministica.md](06-leitura-deterministica.md) | **Leitura DETERMINÍSTICA (2026-10-12)** — grafo graphify (sem LLM) + varredura por script, mesmo recorte; confronto com 01–05 | 130 arquivos · 4.944 nós · 7.876 arestas; **8 pontos conferidos, 0 desmentidos**; consequência: casamento por nome e CDATA = parâmetro do leitor do núcleo (Q-NE72) |
+
+> **Sobre a confiabilidade de 01–05**: a leitura de 10/10 foi feita por AGENTES (afirmação com `arquivo:linha`, cobertura não garantida). Em
+> 2026-10-12 os pontos que pesam nas decisões foram reconferidos de forma determinística no **06** (grafo em `graphify/`, scripts em
+> `graphify/scripts/`) — todos se sustentaram. Contagens de 02/04/05 (750 campos, 198 regras, cStat) NÃO foram re-verificadas.
 
 ## Conhecimento NEGATIVO — o que o ACBr faz e a nfe-api NÃO deve copiar
 

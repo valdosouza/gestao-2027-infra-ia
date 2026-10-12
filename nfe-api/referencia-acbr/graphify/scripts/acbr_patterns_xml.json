@@ -1,0 +1,13 @@
+{
+  "_keep_comments": ["define_xmldocument"],
+  "define_xmldocument": "USE_ACBr_XMLDOCUMENT",
+  "xmldocument_use": "TACBrXmlDocument\\b",
+  "xmlreader_class": "TACBrXmlReader\\b|TNFeXmlReader\\b|TDFeRTCXmlReader\\b",
+  "pcn_leitor": "\\bTLeitor\\b",
+  "separa_dados": "\\bSeparaDados(Array)?\\s*\\(",
+  "retornar_conteudo_entre": "\\bRetornarConteudoEntre\\s*\\(",
+  "parse_xml_string": "\\.LoadFromXml\\s*\\(|\\.LoadFromString\\s*\\(|xmlReadMemory|xmlParseMemory|xmlReadDoc",
+  "ret_xml_assign": "\\b(RetWS|FPRetWS|FPRetornoWS|RetornoWS)\\s*:=",
+  "attr_quote": "ObterAtributo|AttributeValue|Attributes\\.Items|\\.Attributes\\[|GetAttribute|Atributo",
+  "xml_decode": "ParseText|DecodeToString|RemoverDeclaracaoXML|UTF8ToNativeString|ConverterUnicode|XmlToStr|StrToXml"
+}

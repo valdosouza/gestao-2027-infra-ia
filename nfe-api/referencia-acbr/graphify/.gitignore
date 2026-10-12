@@ -1,0 +1,4 @@
+# regeneráveis pelos scripts/ (leitura determinística do ACBr — 06-leitura-deterministica.md)
+graphify-out/cache/
+graphify-out/graph.html
+graphify-out/.graphify_*
