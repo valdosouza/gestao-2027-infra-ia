@@ -1382,4 +1382,4 @@ transmissão/consulta); (b) manter como limite conhecido. *Rec. (a) na F2a/NE-2*
 liga a assinatura ao nó lido? (o xml-crypto reparsa com o @xmldom leniente; quem validar XML do fisco tem de ler do nó ASSINADO — risco de
 assinatura embrulhada/XSW); leitura por nó-escopo (D-NE86). Segue EM PAUTA a D-NE82 (c).
 
-**Provas**: núcleo **405/405** · nfse-api **665 unit** (44 suítes) · `tsc` limpo nos dois · `dist/` refeito · ao vivo **150/150**. **PUBLICADA a "parte 2b" (Valdo: "pode publicar a parte 2b", 2026-10-12)** — núcleo 604117a · nfse ebbaf44. Próximo: F2a.
+**Provas**: núcleo **405/405** · nfse-api **665 unit** (44 suítes) · `tsc` limpo nos dois · `dist/` refeito · ao vivo **150/150**. **PUBLICADA a "parte 2b" (Valdo: "pode publicar a parte 2b", 2026-10-12)** — núcleo 604117a · nfse ebbaf44 · infra afcbebb. Próximo: F2a.
