@@ -2668,6 +2668,16 @@ passaria). Antes do ALTER: contar `kind` fora da lista ou da caixa (inclusive S)
 MariaDB 10.4 se o `INSERT IGNORE` da cópia do `migrate:setes` rebaixa a violação do CHECK a AVISO (a linha some e o passo 6 falha com a
 mensagem "dual-write", que engana) — se rebaixar, a cópia confere a lista antes de inserir.
 
+**Nota de implantação da F2a — itens (8) e (9) (NE-1a parte 1, gate socrático M5, 2026-10-11 — `prompt_onda_nfe_sefaz.md` §12.9.4)**:
+(8) a F2a decide REGISTRO FISCAL só por `isFiscalRecord(currentOf(…))` do núcleo (fato `authority_recorded` da view — D-NE56); a linha
+`fiscalRecord = !!tx?.accessKey && tx.environment === 'P'` de `setes-api/src/shared/invoice/invoice-cancel.ts:350` NÃO é portada (na NF-e a
+chave é nossa desde a reserva — portá-la é o bug da NF-e rejeitada tratada como registro); cerca no setes-api contra `accessKey` decidindo
+registro. (9) a nfse-api sobe com as migrations 003 **e 004** ANTES do setes-api novo, e o setes-api confere no boot que a view publica
+`authority_recorded` (molde D-F45/D-IB26) — sem isso o `mapCommonView` estrito do núcleo derruba com 500 a lista de OS na 1ª leitura. A
+leitura em LOTE (selo da lista de OS) usa `familyViewQueryMany` do núcleo (terminal por parâmetro), nunca um WHERE próprio com
+`terminal = 0`; e, pela D-NE66 (b) (gates da NE-1a), a F2a recebe do núcleo um leitor que JÁ MAPEIA (`readFamilyTransmissions`) — o par
+`familyViewQuery`/`…Many` + linha crua deixa de ser o caminho público (os predicados já falham alto com a linha crua — D-NE66 (a)).
+
 **Próximo**: nenhuma questão aberta nesta frente. Ordem (D-NE55, Valdo 2026-10-11 — `prompt_onda_nfe_sefaz.md` §12.9: a NE-0 saiu do
 caminho crítico): NE-1a (núcleo generalizado, com a D-F108 — Rodada 0 aberta no §12.9 de lá) → **F2a** (setes-api passivo, com a D-F107)
 → virada → F2b → NE-0. Corte da F2a: 30/11 (D-IB15).

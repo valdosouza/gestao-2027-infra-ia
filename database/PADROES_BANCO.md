@@ -268,6 +268,10 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
    o MariaDB/MySQL não a FUNDE e a materializa inteira a cada leitura (com 1000 clientes, varredura). "Último evento" vai
    no ON (`NOT EXISTS (… x.event > e.event)` ou `e.event = (SELECT MAX …)`); conferir `EXPLAIN` (select_type PRIMARY,
    acesso por chave) antes de publicar. Tipos e regras de leitura da view saem de UMA biblioteca (D-F33), nunca duas cópias.
+   **Coluna da view DERIVADA DE LITERAL leva `COLLATE` explícito** (NE-1a, 2026-10-11 — `authority_recorded` da 004 da nfse-api):
+   sem ele a coluna sai COERCÍVEL na colação do banco e `coluna = 'S'` numa conexão de outra colação (o padrão do mysql2 é
+   `utf8mb4_general_ci`; nem o setes-api nem o núcleo fixam colação) dá **erro 1267** só no leitor do outro serviço. Flag/domínio fechado
+   → `COLLATE utf8mb4_bin` (coercibilidade 0, sensível a caixa). Conferir com `SET NAMES utf8mb4 COLLATE <x>` em ≥ 2 colações antes de publicar.
 4. **Serialização entre serviços = a MESMA linha travada** (D-F27): o `FOR UPDATE` na linha da nota (`tb_invoice` do
    cliente) é o ponto comum; quem trava primeiro a nota e só depois as suas tabelas (ordem nota → linhas do serviço).
    Leitura que decide sobre o banco do OUTRO serviço é travante (`LOCK IN SHARE MODE`) ou feita depois da trava da nota
