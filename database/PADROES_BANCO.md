@@ -344,3 +344,15 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     mesma versão fariam uma ser pulada calada (ou o 2º registro em `_migrations` derrubaria o boot depois do DDL). O runner do
     setes-api recusa versão repetida nos arquivos e versão aplicada com OUTRO nome que o do arquivo. Numerar = conferir o `main` e as
     frentes abertas; o que importa a outro serviço é o NOME (a nfse-api confere `f2a_fiscal_passivo` por nome).
+15. **Gatilho de TRAVA congela o que mudou de dono** (F2a, etapa A3 — D-F110, 2026-10-12; o 1º da casa: `069_f2a_fiscal_passivo`):
+    quando um fato passa a ser escrito por OUTRO serviço, a tabela antiga vira ORIGEM CONGELADA por construção — gatilhos BEFORE
+    INSERT/UPDATE/DELETE com `SIGNAL SQLSTATE '45000'` e mensagem ASCII ≤ 128 que cita a decisão (o motor devolve errno 1644), nunca
+    "o código não escreve mais" (rollback de código pós-virada escreveria). A trava é do FATO, não da tabela inteira quando a linha
+    carrega outro conceito: na habilitação SE só o ATO previsto passa (N→S — D-F44) e as linhas 55/65 (série da nota) seguem livres.
+    Comparar o domínio na colação da COLUNA (`_ci` pega 'se') — congelamento quer a regra mais larga. Forma para o runner do setes-api:
+    `DROP TRIGGER IF EXISTS` + `CREATE TRIGGER` (re-executável; `CREATE OR REPLACE TRIGGER` é só MariaDB), corpo com `BEGIN`/`END;`
+    em linhas próprias (o runner corta por `;` fora do bloco), sem DELIMITER. Aposentar coluna = COMMENT (`MODIFY` repetindo tipo,
+    nulo, padrão e colação do schema APLICADO — conferir antes e depois), nunca DROP sem decisão. Prova obrigatória em banco descartável
+    (`setes-api/scripts/prove-f2a-passivo.ts`): cada escrita barrada pelo errno 1644, o ato permitido passa, o que é livre segue livre.
+    ⚠️ Com `log_bin` ligado e sem SUPER, `CREATE TRIGGER` exige `log_bin_trust_function_creators=1` (no dev: `log_bin`=0) — conferir no
+    MySQL da F3 antes da janela.

@@ -48,6 +48,13 @@
       DROP da versão legada + CREATE canônico, padrão fix-forward da 005;
       conferir antes se nada tem FK para ela e se está vazia nos schemas vivos)
 
+### Gatilhos (F2a — D-F110, 2026-10-12; PADROES_BANCO §11 regra 15)
+- [ ] **Gatilho de TRAVA**: `SIGNAL SQLSTATE '45000'` com mensagem ASCII ≤ 128 citando a decisão; cobre INSERT/UPDATE/DELETE do FATO congelado?
+- [ ] O que deve continuar livre continua (o ATO previsto, as linhas de outro conceito)? Prova em banco descartável com cada caminho
+- [ ] Re-executável: `DROP TRIGGER IF EXISTS` + `CREATE TRIGGER`; `BEGIN`/`END;` em linhas próprias (runner do setes-api); sem DELIMITER
+- [ ] Domínio comparado na colação da coluna (`_ci`) — congelamento quer a regra mais larga
+- [ ] `MODIFY` só para COMMENT repete tipo/nulo/padrão/colação do schema APLICADO (conferido antes e depois)
+
 ### Seeds e execução
 - [ ] **Seed compatível com o DDL final?** Colunas do INSERT existem? (caso real: seed com `salt` e `kind` após remoção das colunas)
 - [ ] **Seed de interface/catálogo com id FIXO?** NUNCA — id sempre
