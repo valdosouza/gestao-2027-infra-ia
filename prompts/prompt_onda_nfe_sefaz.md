@@ -1296,3 +1296,90 @@ ao vivo **150/150** (255 s). **PUBLICADA a "parte 2a" (Valdo: "pode publicar a p
 
 **Lição (ferramenta)**: o heredoc do Bash desta sessão corta PELA METADE as barras invertidas (`\\n` vira quebra de linha real, `/\\/g` vira `/\/g`) —
 script com barra invertida vai por arquivo escrito pela ferramenta de escrita, nunca por heredoc nem `node -e` com aspas duplas.
+
+##### 12.9.7.3 Passo 7 — N17: leitura de XML por PARSER (2026-10-12; Valdo: "pode seguir para o passo 7") — gates do delta e o que mudou depois deles no §12.9.7.4
+
+> ⚠️ **Errata do gate socrático do delta (item 11)**: a 1ª versão desta tabela prometia mais do que a peça fazia — a estriteza vinha de uma LISTA
+> de leniências medidas, e lixo depois de comentário/declaração, CDATA mal-formado, PI sem fim e caractere de controle cru ainda passavam. A
+> peça foi REESCRITA nos gates (varredura ÚNICA da gramática — §12.9.7.4); a linha "Peça do núcleo" abaixo descreve a 1ª versão e fica como
+> história. Também as linhas "NFS-e" (`cdata: 'refuse'` saiu da família — D-NE87) e "Divergências" (auto-fechado e aspas simples NÃO eram da
+> D-NE72 — viraram D-NE85) foram superadas pelo §12.9.7.4.
+
+| O quê | Como |
+|---|---|
+| **Peça do núcleo** `xml/reader.ts` (D-NE72) | `parseXml` ESTRITO por cima do `@xmldom/xmldom` 0.8.15 (declarado no núcleo, exato, `npm install --offline` — já vinha transitivo do `xml-crypto`; nenhum download). Medido no passo: o @xmldom 0.8 é LENIENTE — aceita `&` solto, lixo depois da raiz, referência de caractere fora do Unicode (vira lixo) e descarta calado o lixo antes da raiz; a peça RECUSA tudo isso + DOCTYPE, entidade não predefinida, aviso/erro do parser, documento sem raiz ou com 2 raízes (`XmlUnreadableError` com o motivo). Leitura: ordem de DOCUMENTO, 1º elemento pelo nome; `textOf` = TEXTO SIMPLES aparado (filho/comentário/PI = recusa; CDATA = recusa ou texto); casamento QUALIFICADO × LOCAL e CDATA = PARÂMETRO da família (`XmlReadOptions`). **Conhecimento negativo**: o @xmldom traz `/// <reference lib="dom" />` — importado com tipos, poria os tipos do DOM na compilação INTEIRA do núcleo e da nfse-api; entra por `require` com tipos estruturais mínimos |
+| **NFS-e** (`dps-builder.ts`, `danfse.ts`, `adn.ts`) | `NFSE_XML = { match: 'qualified', cdata: 'refuse' }`; `firstText`/`parseNfseXml`/`parseEventXml`/DANFSe/`sentDpsIdOf` pelo leitor, com a MESMA busca do recorte (cabeçalho = elementos depois de `<infNFSe>` e antes do 1º `<emit>` sem atributo; `<eNNNNNN>` e `<e101101>` sem atributo; atributo do 1º elemento que o TEM). A recusa cai nos `try` que já existiam no adaptador → ambíguo pela causa existente (`nfse-ilegivel`/`evento-ilegivel`). `unescapeXml` fica como utilitário (os testes o usam para conferir o XML que NÓS montamos) |
+| **Núcleo** `transport/xmldsig.ts` | `verifyXml` acha a `<Signature>` pelo leitor (a 1ª do namespace XMLDSig que o declara nela mesma — a forma do recorte) e passa o NÓ ao `xml-crypto`; documento ilegível = false |
+| **Paridade** | ORÁCULO = o leitor por regex extraído LITERALMENTE do git (nfse-api 38980bb → `__tests__/legacy-xml-oracle.ts`; núcleo 27d2aa6 → dentro de `n17-xmldsig.test.ts`) — nunca editado à mão. **Corpus real do dev (14: 8 de produção + 6 de H)**: saída IDÊNTICA em TUDO o que a família lê (parse da NFS-e e do evento, assinatura do evento D-F93, DANFSe, Id do DPS, `firstText` de toda folha com conteúdo) e as 14 assinaturas reais VERIFICAM (true) nos dois; **fixtures**: medição com instrumentação TEMPORÁRIA (revertida) na suíte inteira — 1014 leituras, **0 divergência** fora dos casos estranhos; 11 fixtures sintéticas bem-formadas idênticas (`n17-paridade.test.ts`) |
+| **Divergências INTENCIONAIS** (D-NE72 — fixadas `[DECIDIDO — D-NE72]`) | CDATA, elemento ou comentário no valor lido, referência inválida, entidade não predefinida, `&` solto, DOCTYPE, texto UTF-16 lido como UTF-8, lixo fora da raiz → o leitor RECUSA (o recorte devolvia marcação crua, literal ou "nada"; a referência fora do Unicode já lançava) — mesmo DESFECHO nos testes adversariais (r17/r18/r13: ambíguo); a CAUSA do CDATA nos 4 campos da assinatura muda de `evento-contraditorio` para `evento-ilegivel` (as duas são ambíguo). **Auto-fechado** (`<x/>`): o recorte o PULAVA e lia o próximo `<x>…</x>`; o parser lê o 1º (vazio) — no corpus só os algoritmos da assinatura são auto-fechados (nunca lidos). **Atributo com aspas simples**: o recorte não via (nulo); o parser lê |
+| **Cerca** | `n17-xml-reader.test.ts`: nenhuma regex com cara de TAG em produção (núcleo, nfse-api src/scripts, nfe-api) — exceção NOMEADA: o saneamento do HTML de gateway nas mensagens de erro (`https-json.ts` — texto para pessoa, nunca valor fiscal) |
+
+**Provas**: núcleo **367/367** · nfse-api **630 unit** · `tsc` limpo · `dist/` refeito · ao vivo **150/150** (253 s).
+
+
+##### 12.9.7.4 Gates do delta do passo 7 (2026-10-12) — socrático **0,74 ✅** · adversarial **0,72 ✅** (nenhum CRITICAL/HIGH; 2 MEDIUM) — Valdo respondeu as 6 questões pelas recomendações → D-NE85…D-NE90
+
+**Socrático (agente independente)**: aprovado, mas com o ponto 1 a corrigir ANTES de publicar porque gravava C irreversível — o AUTO-FECHADO
+decidia voz (`<e101101/>` numa NFS-e virava `cancelled`; num evento, `eventCode` 101101 e o registrar aceitava; `<dhProc/>` devolvia `''` e o
+`??` não caía). Demais: a estriteza vinha de LISTA de leniências medidas (passavam CDATA sem fim/minúsculo — a marcação crua lida como valor —,
+lixo depois de comentário/declaração, `&#0;` escondido por comentário com marcador de CDATA, PI sem fim, `<` em atributo, controle cru);
+custo/DoS (sem teto de tamanho, DOM ≈ 90× o texto, assinatura D-F93 reparsando o evento 4–5×, pré-checagem quadrática, `elementsOf`
+recursivo estourando a pilha ~10 mil níveis); recusa fora do ambíguo (DANFSe → 500 para sempre; `sentDpsIdOf` depois do 2xx, fora de `try`);
+trecho do documento na mensagem da recusa (contra a D-F100); grão do `match: 'local'`/CDATA para a NF-e; cerca com rotas de evasão; oráculo
+sem integridade; `package-lock` da nfse-api velho; e o §12.9.7.3 prometendo mais que a peça (errata acima).
+
+**Adversarial (agente independente — gates criados: `fiscal-api/src/__tests__/adversarial-n17-gate.test.ts` 35 testes,
+`nfse-api/src/__tests__/adversarial-n17-gate.test.ts` 33)**: **N17-01 MEDIUM** — o pré-filtro em duas passadas (CDATA, depois comentário)
+deixava `<![CDATA[` num comentário e `]]>` noutro esconderem referência inválida/`&` solto; o @xmldom convertia calado → na consulta o evento
+virava CANCELADA com motivo-lixo e no transmitir AUTORIZADA com nNFSe-lixo (o publicado dava `evento-ilegivel`/`nfse-ilegivel`); **N17-02
+MEDIUM** — o DANFSe lê campos que mais ninguém lê (nomes, `xDescServ`, `xLgr`): NFS-e AUTORIZADA com marcação neles → 500 "Erro interno"; LOW
+N17-03 (exceção crua: CDATA depois da raiz sem `try` no DOMParser; `elementsOf` recursivo), N17-04 (10 classes BEM-FORMADAS divergindo do
+oráculo — o parser lê certo; duas mudam voz), N17-05 (o vazio `''` não dispara `??`; grupo vazio vale cancelamento), N17-06 (12 formas
+mal-formadas aceitas), N17-07 (2 bem-formadas recusadas — PI com `&`, `<!DOCTYPE` em comentário), N17-08 (1 + 5N parses por consulta; pré-filtro
+quadrático; sem teto), N17-09 (cerca sem `<\s*`, `[<]`, `\x3c`, `RegExp(` sem `new`, concatenação, `split`/`indexOf`). **Resistiu**:
+truncamento; XXE/DOCTYPE; atributo duplicado/sem aspas; lixo depois da raiz; resposta TROCADA com aspas simples; Id falso em COMENTÁRIO (o
+recorte o lia e **autorizava a NFS-e alheia** — o parser lê o real); eco do nosso pedido com `<dhProc/>`; `verifyXml` nunca lança.
+
+**Decisões (Valdo, 2026-10-12 — as 6 pelas recomendações)**:
+
+| Decisão | O quê |
+|---|---|
+| **D-NE85** (= Q-NE85 (b) + Q-NE92 (a)) | **VALOR vazio = AUSENTE**: o leitor PULA o elemento vazio e lê o próximo com o nome (paridade com o recorte em `<x/>`; o vazio EXPLÍCITO `<x></x>` passa de `''` para `null` — divergência intencional); os `??` do adaptador voltam a cair. **GRUPO que decide voz vazio** (`<e101101/>`, `<e101101></e101101>`, `<eNNNNNN/>` — no evento e EMBUTIDO na NFS-e) = RECUSA `grupo-vazio` → ambíguo pela causa existente (`evento-ilegivel`/`nfse-ilegivel`), **nunca C** — a forma explícita, que o recorte dava por cancelamento, também muda. Ratifica as **aspas simples** (o parser lê; a identidade segue conferida pela chave/Id) — o §12.9.7.3 as tinha posto na conta da D-NE72 sem ela as decidir |
+| **D-NE86** (= Q-NE86 (b)) | `match: 'local'` (NF-e) casa o nome local SÓ dentro da lista de namespaces da FAMÍLIA (`{ match: 'local', namespaces: [...] }` — cobre o prefixo de CE/MG; SOAP e XMLDSig ficam fora). A leitura por nó-escopo (caminho) fica para a NE-2 decidir com o leiaute |
+| **D-NE87** (= Q-NE87 (b)) | CDATA é escolha do **CAMPO** (`XmlFieldRead { cdata: 'refuse' \| 'read' }`), recusa por padrão: só o campo que o leiaute põe em CDATA (qrCode/urlChave da NFC-e) pede `'read'`; campo que decide voz (cStat, chNFe, nProt…) nunca. Saiu do `XmlReadOptions` da família (`NFSE_XML = { match: 'qualified' }`) |
+| **D-NE88** (= Q-NE88 recomendada) | tetos ANTES do parse, no NÚCLEO: **1 MB** de texto (`MAX_XML_BYTES` — também o `maxOutputLength` do gunzip da nfse-api) e **64 níveis** (`MAX_XML_DEPTH`); `grande-demais`/`profundo-demais` entram no `XmlRefusal` e a família os mapeia para a causa que JÁ existe — nenhuma `AmbiguousCause` nova (D-F98). NFS-e real ≈ 10 KB e 12 níveis |
+| **D-NE89** (= Q-NE89 (a) + Q-NE91 (a)) | DANFSe de nota cujo XML guardado tem campo que o leitor recusa: erro com **código próprio** do catálogo `FISCAL_DANFSE_XML_UNREADABLE` (422 — "o XML segue disponível para download"), **nunca 500**; o XML continua pela rota dele |
+| **D-NE90** (= Q-NE90 (a)) | as 10 classes BEM-FORMADAS em que o recorte lia ERRADO (`<e101101 >`, `</nNFSe >`, marcação dentro de comentário — `<emit>`, `<cStat>`, `<e101101>` —, referência de espaço na ponta do valor, CR LF, referência/espaço em volta do `=`/`>` literal em atributo) são **divergência INTENCIONAL**: o parser lê certo; imitar o recorte reintroduziria o cancelamento lido de dentro de comentário e o Id falso em comentário. As duas que mudam voz (contradição → repetição; `<e101101 >` → cancelada) ficam fixadas como contexto `[DECIDIDO — D-NE90]` |
+
+**Correções de sessão (sem decisão nova)** — o núcleo `xml/reader.ts` foi REESCRITO na linha da "dica arquitetural" do socrático (estrito por
+GRAMÁTICA num ponto só, não por lista de leniências): **varredura ÚNICA em ordem de documento** antes do @xmldom — comentário (sem `--` dentro),
+CDATA só DENTRO da raiz e fechado, PI fechada, `<?xml` só no início, qualquer outro `<!` = `doctype`, tag com aspas respeitadas e `<` em
+atributo recusado, referências validadas em texto E atributo (`referencia-invalida`), `]]>` em texto recusado, fora da raiz só espaço do XML
+(`fora-da-raiz`), profundidade contada na própria varredura (`profundo-demais`), caractere fora da produção Char do XML 1.0
+(`caractere-invalido`) — fecha N17-01, N17-06, N17-07 e o item 1 do socrático; `try` em volta do DOMParser (erro dele = `mal-formado`) e
+`elementsOf` ITERATIVO (N17-03); a mensagem da recusa leva só o MOTIVO e a POSIÇÃO, nunca trecho do documento (D-F100); `firstText` pula o
+vazio (D-NE85). nfse-api: `parseEventDoc` + `eventSignature(e, doc)` + `firstText(xml | doc)` — **um parse por documento** (consulta com N
+eventos = 1 + N; era 1 + 5N — N17-08); o Id do NOSSO DPS lido ANTES do POST (se o leitor o recusar, nada foi enviado — socrático 4);
+`assertGroupFilled` (D-NE85); DANFSe pela D-NE89. Cerca `tagReads` (`n17-xml-reader.test.ts`) passou a pegar `RegExp(` sem `new`, concatenação
+com `'<'`, `\x3c`, `[<]`, `<\s*` e `indexOf`/`split`/`includes`/`match` com literal de tag (N17-09 · socrático 7); oráculo com **sha256
+fixado** em teste (texto com fins de linha normalizados — socrático 8); `package-lock` da nfse-api com o `@xmldom/xmldom` do núcleo
+(`--package-lock-only --offline` — socrático 9).
+
+**Testes convertidos**: gate do núcleo — os 17 `it.failing` → `[CORRIGIDO na sessão]` (N17-01 ×3, N17-03 ×2, N17-06 ×12); os contextos que
+fixavam o lixo/os desfechos duplos passam a fixar a recusa; "1 000 níveis" → recusado pelo teto (D-NE88). Gate da nfse-api — N17-01 ×2,
+N17-02 ×4, N17-05 ×2 → `[CORRIGIDO na sessão]`; N17-04 ×10 → `[DECIDIDO — D-NE90]` (afirma divergência SEM recusa); Q-NE92 → `[DECIDIDO —
+D-NE85]` (grupo vazio = ambíguo nos dois caminhos e embutido na NFS-e); N17-08 → 2 e 4 parses. `n17-paridade`: o vazio explícito saiu das
+fixtures idênticas para `[DECIDIDO — D-NE85]` (`[null, '']`); o auto-fechado agora é PARIDADE (`['12', '12']`); teste novo do grupo vazio.
+
+**O que muda na NFS-e** (critério "a NFS-e não muda de comportamento" — só o DECIDIDO): casos estranhos → ambíguo (D-NE72); grupo de voz
+vazio → ambíguo, inclusive a forma explícita (D-NE85); valor vazio explícito `''` → ausente (D-NE85); as 10 classes bem-formadas (D-NE90);
+DANFSe com campo recusado → 422 com código (era PDF com a marcação crua no publicado — D-NE89). **Corpus real do dev (14 XMLs): saída
+IDÊNTICA** e as 14 assinaturas verificam.
+
+**Fica registrado (não decidido)**: **Q-NE93** — o corpo HTTP da resposta do fisco (`https-json` do núcleo) segue SEM teto; o XML descomprimido
+tem o da D-NE88 e o canal é mTLS com o fisco. Opções: (a) teto no transporte do núcleo (ex.: alguns MB, recusa = ambíguo pela causa da
+transmissão/consulta); (b) manter como limite conhecido. *Rec. (a) na F2a/NE-2* (vem junto do SOAP da SEFAZ). Para a **NE-2**: o `verifyXml`
+liga a assinatura ao nó lido? (o xml-crypto reparsa com o @xmldom leniente; quem validar XML do fisco tem de ler do nó ASSINADO — risco de
+assinatura embrulhada/XSW); leitura por nó-escopo (D-NE86). Segue EM PAUTA a D-NE82 (c).
+
+**Provas**: núcleo **405/405** · nfse-api **665 unit** (44 suítes) · `tsc` limpo nos dois · `dist/` refeito · ao vivo **150/150**. **PUBLICADA a "parte 2b" (Valdo: "pode publicar a parte 2b", 2026-10-12)** — núcleo 604117a · nfse ebbaf44. Próximo: F2a.
