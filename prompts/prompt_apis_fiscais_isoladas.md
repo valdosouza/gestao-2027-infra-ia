@@ -7,12 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §21.15 (D-F67…D-F104 executadas e publicadas: substituição e105102 com fim humano, prova da
-> reconferência = E2404 explícito posterior à ÚLTIMA apresentação do Id e sem tentativa VIVA da mesma identidade — D-F90/D-F97/D-F99/D-F101 —,
-> alarme do ambíguo com CAUSA de lista fechada, nunca documento nem resposta de terceiro — D-F98/D-F100; voz S sem saída e `kind`
-> sem CHECK como conhecimento negativo, com cerca por AST — D-F102/D-F103; aberta a Rodada 22: Q-F111…Q-F112). Antes: §21.7–§21.14, §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
+> **⏯ RETOMAR POR AQUI — §21.16 — ⚠️ Rodada 22 (D-F105…D-F106) EM ANDAMENTO: código no working tree + backup nos branches
+> `wip/rodada-22`; falta converter os testes do gate r22, S1/S6, suítes e docs — lista exata no §21.16 (D-F67…D-F104 publicadas:
+> prova da reconferência, alarme com causa fechada, voz S e `kind` como conhecimento negativo com cerca por AST). Antes: §21.7–§21.15,
+> §21 e §20**: este documento juntou DOIS históricos que divergiram — a 3ª
 > sessão de 2026-10-04 (feita em outro clone, publicada no `main`: D-F46…D-F53, §17.5/§18) e a sessão de 2026-10-10 desta
-> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F104** (§7). Escolhas do Valdo na reconciliação (§20.3):
+> máquina (§19, renumerada: D-F54…D-F59). Decisões vigentes **D-F1…D-F106** (§7). Escolhas do Valdo na reconciliação (§20.3):
 > **Q-F52 = (b) bloqueio total** (a D-F46 vale; a D-F55 — "licença só na transmissão nova" — foi REVOGADA e o código dela saiu)
 > e **os dois fechamentos do revive da SE** (D-F50 — o ato exige a F2a — + D-F56/D-F58 — guarda no setes-api). Provas da
 > reconciliação: `fiscal-api` 78 · `nfse-api` 240 unit + **150/150 ao vivo** (1ª rodada ao vivo do código da 3ª sessão) ·
@@ -709,6 +709,14 @@ branch `sessao-2026-10-10`):**
 - **D-F104 (= Q-F110 (a) — idem) — a prova da reconferência fica BOOLEANA até a F2a**: o veredito com MOTIVO (barreira e prova numa
   chamada só — molde `verdictOf`, D-IB47) se decide na rodada da F2a, com o caso real; até lá valem os itens (5)/(6) da nota de
   implantação (§21.14).
+- **D-F105 (= Q-F111 (a) — Valdo 2026-10-11: "siga as recomendações") — a D-F102 vale SÓ para a família NFS-e**
+  (`tb_invoice_service_transmission_event`): a NF-e produz S LEGÍTIMO (NE-3) e define a saída dele na própria rodada (consulta pela
+  chave/recibo — D-NE33). A cerca (`nfse-api/src/__tests__/voice-kind-fence.ts`) mira a família: SQL só na tabela da NFS-e; no NÚCLEO (onde
+  a NE-1a põe a máquina comum) só o SQL — nunca o literal `kind: 'S'`, que lá é da NF-e.
+- **D-F106 (= Q-F112 (b) — idem) — o escritor da voz da NFS-e é tipado pelo vocabulário DA FAMÍLIA, em lista POSITIVA**:
+  `ServiceVoiceWriteKind = Extract<TransmissionEventKind, 'A'|'R'|'C'|'K'|'F'|'N'>` em `TransmissionEventInput.kind` (nfse-api e setes-api)
+  e no `OUTCOME_KIND` — sem S já agora e sem os kinds que a NE-1a trouxer para o tipo comum (P/D da NF-e). O TIPO é a cerca real: pega o
+  produtor SEMÂNTICO (constante, shorthand, mapa, parâmetro) que nenhuma cerca textual pega. O CHECK do banco continua na F2a (item (7)). Funil em EXECUÇÃO e mapa congelado = correções do gate R22 (§21.16).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -998,7 +1006,7 @@ Texto completo e recomendações no §21.14: **Q-F108** a voz S não tem saída 
 ela a saída da D-F51) · **Q-F109** `kind` sem CHECK de domínio (Rec.: conhecimento negativo até a F2a; CHECK binário na migration dela) ·
 **Q-F110** (opcional) o contrato da prova para a F2a (Rec.: manter o booleano; o veredito com motivo se decide na F2a).
 
-### 8.R22 Rodada 22 — aberta pelos gates da Rodada 21 (2026-10-11, §21.15) — ⚠️ AGUARDA O VALDO
+### 8.R22 Rodada 22 — aberta pelos gates da Rodada 21 (2026-10-11, §21.15) — DECIDIDA ("siga as recomendações" → D-F105…D-F106) — execução EM ANDAMENTO (§21.16)
 
 Texto completo e recomendações no §21.15: **Q-F111** a D-F102 vale para qual família (Rec.: só a NFS-e — a NF-e define a saída do S dela
 na própria rodada; decidir antes da NE-1a) · **Q-F112** proteção do domínio do escritor da NFS-e (Rec.: tipo da família — sem S já agora,
@@ -2474,7 +2482,7 @@ ver Q-F110.
 tarefa da bomba-relógio de data dos testes do boleto (fora desta frente), e os próximos passos: Rodada 21 → NE-0/NE-1 → **F2a** → virada →
 F2b. Corte da F2a: 30/11 (D-IB15).
 
-### 21.15 Rodada 21 — D-F102…D-F104 (Valdo 2026-10-11: "siga as recomendações") — ⏯ RETOMAR POR AQUI
+### 21.15 Rodada 21 — D-F102…D-F104 (Valdo 2026-10-11: "siga as recomendações") — Rodada 22 DECIDIDA no §21.16
 
 | Decisão | O quê | Onde |
 |---|---|---|
@@ -2530,3 +2538,74 @@ rebaixa a violação do CHECK a AVISO (a linha some e o passo 6 falha com a mens
 **Seguem**: LOW registrados (log do transporte com a NOSSA chave/Id na URL; a cerca de logs com a regex antiga; os da §21.8), prova ao vivo M4
 (Valdo), o ALARME da F3, a tarefa da bomba-relógio de data dos testes do boleto (fora desta frente — outra sessão, decisão do Valdo), e os
 próximos passos: Rodada 22 → NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
+
+### 21.16 Rodada 22 — D-F105…D-F106 (Valdo 2026-10-11: "siga as recomendações") — ⏯ EM ANDAMENTO — RETOMAR POR AQUI
+
+> **Sessão encerrada a pedido do Valdo no meio das correções dos gates (2026-10-11).** O código está no WORKING TREE dos três repos
+> (sem commit no `main`) e em BACKUP nos branches remotos **`wip/rodada-22`** — fiscal-api `6d7d72d` · nfse-api `49383ba` · setes-api
+> `dcb7a43` (commits montados por índice temporário: o HEAD/checkout compartilhado não mudou). ⚠️ **O setes-api JÁ RODA o funil e o mapa
+> congelado** (`tsx watch` = deploy ao salvar; mudança sem efeito para os 6 kinds da família — conferido: `tsc` limpo, `/health` 200).
+
+| Decisão | O quê | Onde |
+|---|---|---|
+| **D-F105** (= Q-F111 (a)) | a D-F102 vale SÓ para a família NFS-e; a cerca mira a família: SQL só na tabela da NFS-e; no núcleo só SQL (`sqlOnly`) | `nfse-api/src/__tests__/voice-kind-fence.ts` + `voice-kind-fence.test.ts` (novo) |
+| **D-F106** (= Q-F112 (b)) | o escritor da voz da NFS-e aceita só a lista POSITIVA da família — `SERVICE_VOICE_WRITE_KINDS = ['A','R','C','K','F','N'] as const satisfies readonly TransmissionEventKind[]` e o tipo `ServiceVoiceWriteKind` DERIVA dela | `repository.ts` da nfse-api e `transmission.repository.ts` do setes-api; `OUTCOME_KIND` nos dois |
+
+**Gates do delta**: socrático **0,76 ✅** · adversarial **0,80 ✅** (nenhum HIGH+; hoje nenhum caminho grava S; toda forma SEM cast que põe kind fora
+da família direto no objeto do escritor NÃO compila — literal, constante, shorthand, mapa, parâmetro, ternário, não-nulo, genérico, spread
+antes — medido com o tsconfig real, nos dois projetos).
+
+**JÁ FEITO na sessão (working tree + `wip/rodada-22`)** — sem decisão nova; os dois gates convergiram (a Q-F114 (b) do socrático — "rede
+além do tipo até a F2a" — foi executada aqui porque o adversarial a classificou como correção de sessão: **o Valdo pode reverter**):
+- **R22-03** funil em EXECUÇÃO: os dois `insertTransmissionEvent` recusam kind fora da lista (sensível a caixa — o `'s'` também) ANTES de
+  qualquer query (`throw Error('D-F106: …')`) — fecha cast, spread, JSON e `as any` (o tipo some no JS).
+- **R22-02** `OUTCOME_KIND` = `Object.freeze(...)` nos dois lados (`Object.assign`/`Reflect.set` compilavam sem cast).
+- Ressalva do adversarial (`any` no tipo comum apagava a D-F106 calado) fechada: o tipo da família DERIVA da constante.
+- **S2** comentário: P = viva (em processamento), **D = FINAL (denegada)** — o texto antigo "P/D vivos" levaria NF-e denegada a ficar em voo.
+- **S3** comentário: a D-NE33 é o **P** (consulta do recibo); o S da NF-e, se existir, sai pela consulta da NOSSA chave (§3.2/D-NE7).
+- Peça da cerca (`voice-kind-fence.ts`): **R22-07** SQL em mais grafias (aspas duplas, INSERT/REPLACE sem INTO e com modificadores,
+  `` `kind` `` com crase, CASE/IF no SET); **R22-06** tabela por CONSTANTE resolvida no template; **R22-01/R22-04/R22-05** nova
+  `writerCallFlags` (chamada ao escritor nu/namespace/alias/cast da função; objeto da voz literal SEM spread/cast; kind literal da família
+  ou `OUTCOME_KIND[…]`; mutação do `OUTCOME_KIND`; SQL de escrita na voz fora dos escritores autorizados) + `voiceWriterViolations()` +
+  `VOICE_SQL_WRITERS` (ESCRITOR ÚNICO: os dois repositórios + a cópia do `migrate:setes`). `voice-kind-fence.test.ts` 10/10; o código REAL
+  não tem violação (nem produtor de S, nem chamada/escritor fora da regra).
+
+**PENDENTE — retomar nesta ordem**:
+1. **Converter os testes do `adversarial-r22-gate.test.ts`** (nfse-api: **17 falhas** = os `it.failing` R22-01/02/04/05/06/07/03 que agora
+   PASSAM + os "contexto" que fixavam o comportamento antigo — matriz do ATAQUE 1, contextos do 1b (spread grava S → agora REJEITA;
+   `Object.assign` no mapa → agora LANÇA TypeError; "escritor não confere nada" → agora recusa); trocar a réplica local `callFenceFlags`
+   pela `writerCallFlags` da peça; núcleo: **2 falhas** no r22 dele a converter). Regra: `it.failing` → `it('[CORRIGIDO na sessão] …')`.
+2. **S1** testemunhas presas ao escritor REAL (no r21, teste "DECIDIDO — D-F106": `repo.insertTransmissionEvent(…, { kind: 'S' … })`
+   dentro de função NÃO executada com `@ts-expect-error`).
+3. **S6** setes-api sem testemunha: teste novo (ex.: `src/__tests__/service-voice-write-kind.test.ts`) com `@ts-expect-error` no escritor
+   real + funil em execução (conn falsa: recusa S/P/D/'s' sem nenhuma query) + `Object.isFrozen(OUTCOME_KIND)`.
+4. Suítes: núcleo · nfse-api unit + **150 ao vivo** · setes-api (`--forceExit`; as 19 do boleto são de outra sessão).
+5. Docs: §8.R22 → DECIDIDA e EXECUTADA; §8.R23 com Q-F113/Q-F114; a **nota de implantação da NE-1a** (abaixo); CLAUDE.md da fiscal-api,
+   nfse-api e nfe-api (D-F1…D-F106); INDEX; memória. Commit SÓ dos caminhos desta frente; push no `main`; **apagar os `wip/rodada-22`**
+   depois de publicado.
+
+**Rodada 23 (a abrir quando a Rodada 22 fechar — recomendações dos gates)**:
+- **Q-F113 (socrático S4)** — qual domínio o CHECK do item (7) da F2a protege na tabela da NFS-e? (a) **a lista da FAMÍLIA** (A/R/C/K/F/N
+  — a mesma constante do tipo; a sonda do boot e um teste comparam a constante com o DDL; a conferência antes do ALTER conta também S nas
+  duas pontas) · (b) o vocabulário comum · (c) decidir na F2a. *(Rec.: (a).)*
+- **Q-F114 (adversarial R22-08, MEDIUM latente/planejado)** — onde mora a lista de escrita da família quando o escritor for para o núcleo
+  na NE-1a (D-NE13)? (a) **o descritor da família no núcleo carrega a lista (`VoiceFamily<K>`); o escritor comum é genérico nela e a confere
+  em execução; a cerca do núcleo vira "escritor único"** · (b) a nfse-api mantém um invólucro tipado como ÚNICO caminho e uma cerca proíbe
+  importar o escritor genérico · (c) deixar para o CHECK da F2a (não resolve — o domínio comum tem S). *(Rec.: (a), antes da NE-1a.)*
+
+**Nota de implantação da NE-1a (proposta dos gates — entra no prompt da NF-e quando a Rodada 23 decidir)**: (1) a escrita da voz segue POR
+FAMÍLIA — a porta do núcleo é PROPRIEDADE-FUNÇÃO, nunca método (método é bivariante: aceitaria o escritor estreito e deixaria gravar S —
+provado com `tsc --strict`), ou o escritor é genérico com `kind: WriteKindOf<F>`; (2) testemunhas `@ts-expect-error` de S/P/D presas ao
+escritor que a máquina REALMENTE chama; (3) nenhum "S antes do POST" comum às famílias — quem produzir S na NF-e entrega a saída junto;
+(4) P entra no tipo comum como VIVA e **D em `FINAL_TRANSMISSION_KINDS`**; os `default` dos dois `fiscalStateOf` viram `switch` exaustivo
+(`never`) — kind novo quebra a compilação em vez de virar `in_flight`; (5) o escritor genérico do núcleo entra na lista branca da cerca
+(no núcleo ela segue `sqlOnly` — D-F105; `${table}` é invisível a ela); (6) a lista da família tem UMA fonte, reusada pelo CHECK da F2a
+(Q-F113); (7) depois da extração: `voiceSProducers()`, `voiceWriterViolations()`, as testemunhas e a suíte inteira da nfse-api (unit + 150).
+
+**Aviso da sessão IBS/CBS (2026-10-11)**: a IB-2 prevê o enquadramento DATADO do emitente (`tb_establishment_tax_regime`, D-IB7/D-IB35), que
+troca os leitores de `tb_entity_tax` em `fiscal-api/src/erp/facts.ts`, `nfse-api/src/facts/service-facts.ts` e no dual-run do setes-api —
+combinar antes; nada será feito sem decisão do Valdo.
+
+**Seguem (inalterados)**: LOW registrados (log do transporte com a NOSSA chave/Id na URL; a cerca de LOGS do r20 com a regex antiga; os da
+§21.8), prova ao vivo M4 (Valdo), o ALARME da F3, a bomba-relógio de data do boleto (outra sessão), e: Rodada 22 (fechar) → Rodada 23 →
+NE-0/NE-1 → **F2a** → virada → F2b. Corte da F2a: 30/11 (D-IB15).
