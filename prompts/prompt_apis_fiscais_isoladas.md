@@ -7,7 +7,10 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.43 (PROMPT DE RETOMADA) — gates da Rodada 13 FEITOS (socrático 0,79 · adversarial 0,80, sem HIGH) e a Rodada 14
+> **⏯ RETOMAR POR AQUI — §22.45 (PROMPT DE RETOMADA CURTO) — Rodada 15 da F2a/F2b EXECUTADA (2026-10-13, §22.44: gates da Rodada 14
+> 0,80/0,84 e D-F195…D-F198 pela autorização em pé); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 95d829d).
+> Próximo: os gates do delta da Rodada 15 (pequeno — só o app) → passeio logado → a JANELA.**
+> *Antes:* **§22.43 — gates da Rodada 13 FEITOS (socrático 0,79 · adversarial 0,80, sem HIGH) e a Rodada 14
 > DECIDIDA e EXECUTADA (2026-10-13, §22.42: D-F192…D-F194 — o roteiro protege a guarda do aborto (ensaio do aborto no passo 3; nenhuma SE
 > nativa no fiscal_api de produção até a 1ª janela), a releitura da OS ABERTA morre com o lote por cima, o plano abre com a MESMA OS a
 > caminho); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 822fdf9); gates do delta da Rodada 14 em §22.42.3.
@@ -1084,6 +1087,18 @@ branch `sessao-2026-10-10`):**
   (D-F174) — a releitura dela segue como pedido de detalhe "a caminho" (D-F191 (a)).
 - **D-F194 (= Q-F196-SOC-03 (a), Valdo 2026-10-13 — R13-SOC-04) — o plano do cancelamento abre também com a MESMA OS a caminho**
   (`_showsOrder`), coerente com a D-F191 (a).
+- **D-F195 (= Q-F197-SOC-01 (a), Valdo 2026-10-13 — autorização em pé; R14-SOC-01) — a recusa do ENSAIO do aborto no passo 3 PARA a
+  janela antes do passo 4**, com o procedimento no roteiro (§22.13): identificar a linha (`SELECT tb_institution_id, model, created_at,
+  tb_user_id, deleted FROM fiscal_api.tb_establishment_issuer WHERE cutover_at IS NOT NULL`), provar que ela nunca transmitiu (0
+  tentativas), APAGAR FISICAMENTE só com o "vai" do Valdo na hora (a exclusão lógica continua contando) e ensaiar de novo. A pré-condição
+  vira: NENHUMA linha com `cutover_at` no `fiscal_api` de produção — qualquer modelo, qualquer institution, viva ou excluída.
+- **D-F196 (= Q-F197-SOC-02 (a), Valdo 2026-10-13 — R14-SOC-04) — o plano que chega com a tela em OUTRA OS ou na lista some sem aviso**
+  = conhecimento negativo (comentário na guarda; o GET não tem efeito; uma frase convidaria a decidir sem ver a OS — R10-SOC-03).
+- **D-F197 (= Q-F197-ADV-01 (a), Valdo 2026-10-13 — R14-ADV-01) — o ato nascido com a OS A CAMINHO (o plano aberto sobre a lista — D-F194)
+  não marca `saving`** = limite conhecido, a família da D-F191 (b) (comentário no `_beginDetailAct`; o ACHADO do gate fica pulado com o
+  motivo; a trava por nota barra o 2º envio).
+- **D-F198 (= Q-F197-ADV-02 (a), Valdo 2026-10-13 — R14-ADV-02) — one-shots IGUAIS seguidos viram UM** (`Equatable` + o bloc descarta estado
+  igual) = conhecimento negativo (comentário no estado): nenhuma regra pode contar avisos iguais seguidos.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -3639,7 +3654,13 @@ achado do guardião da F2b); `ARQUITETURA_MODULOS.md` do app — a exceção nom
    da worktree `f2a`) tem de responder SEM recusa — a guarda da D-F190 conta QUALQUER `cutover_at` do `fiscal_api`, e habilitação criada
    pela nfse-api já nasce virada (D-F39): pré-condição da janela = NENHUMA habilitação SE criada pela nfse-api no `fiscal_api` de produção
    até a 1ª janela. **R13-SOC-06**: numa instalação com várias institutions com SE no ERP, o 1º `--vai` fecha o aborto de TODAS (o merge
-   congela todos os schemas no boot) — todos os ensaios e abortos vêm ANTES do 1º `--vai`.
+   congela todos os schemas no boot) — todos os ensaios e abortos vêm ANTES do 1º `--vai`. **R14-SOC-02**: o ensaio do aborto ANTES do
+   merge responde `{ dryRun: true, triggers: [], migrationRow: false, tombstone: false }` (uma `tombstone: true` de tentativa anterior
+   passa "sem recusa" mas derruba o boot no passo 4 — tratar ANTES); o D-F50 "esperado" do ensaio do ATO é o da frase "sem F2a"; conferir que
+   `FISCAL_DB_NAME` NÃO está exportado no shell (o `.env` da worktree não o define — o padrão é `fiscal_api`). **D-F195**: se o ensaio do
+   aborto RECUSAR, a janela PARA aqui — identificar a linha com `cutover_at` (`SELECT tb_institution_id, model, created_at, tb_user_id,
+   deleted FROM fiscal_api.tb_establishment_issuer WHERE cutover_at IS NOT NULL`), provar 0 tentativas dela, apagar FISCAMENTE só com o "vai"
+   do Valdo na hora e ensaiar de novo; a pré-condição vale para QUALQUER modelo/institution, viva ou excluída.
 4. Conferir o número da `NNN_f2a_fiscal_passivo` contra o `main` (a IB-2); **PARAR o processo do setes-api** → `git -C setes-api merge
    --ff-only f2a` (rebase antes se o `main` andou) → SUBIR → ler o log: "Voz do fisco (views): fiscal_api — família(s) service" +
    "Migration aplicada: 069 - f2a_fiscal_passivo" (SOC-11).
@@ -5096,9 +5117,16 @@ nenhum banco descartável sobrou.
 
 #### 22.42.3 Gates do delta (Rodada 14: `9a5d2a8..822fdf9` · `0db9310..8556491`)
 
-(em execução — preencher com os resultados)
+**Socrático 0,80 ✅** (4 LOW + 2 INFO) e **adversarial 0,84 ✅** (2 LOW). Fechados: R13-ADV-01/02 (D-F193/D-F194 — fuzz estrito sem detalhe
+ressuscitado em 300 sementes; o plano abriu as 186 vezes em que era a OS dele e nunca nas 56 em que não era), R13-SOC-03, R13-ADV-03 (a
+pré-condição vale hoje). Novos: o roteiro da D-F192 detecta mas não remedeia (R14-SOC-01 → **D-F195**); o relatório esperado do ensaio do
+aborto e o `FISCAL_DB_NAME` (R14-SOC-02 → roteiro); o fuzz só imprimia os contadores da D-F193/D-F194 (R14-SOC-03 → cerca); o plano fora
+da OS some sem aviso (R14-SOC-04 → **D-F196**); `_beginDetailAct`/`_outcomeOrder` sem conferir a OS do ato (R14-SOC-05, latente →
+endurecido); o número interno no diálogo do plano com nota sem número (R14-SOC-06, INFO, inalcançável — 253/253 notas de OS com número); o
+ato nascido com a OS a caminho sem `saving` (R14-ADV-01 → **D-F197**); one-shots iguais seguidos (R14-ADV-02 → **D-F198**). Questões
+Q-F197 — seguidas pela AUTORIZAÇÃO EM PÉ (execução no §22.44).
 
-#### 22.43 ⏯ PROMPT DE RETOMADA — gates do delta → passeio logado → JANELA (colar numa sessão nova)
+#### 22.43 ⏯ PROMPT DE RETOMADA — gates do delta → passeio logado → JANELA (SUPERADO pelo §22.45)
 
 ```
 Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
@@ -5139,4 +5167,38 @@ D-F195+ no §7, executar e rodar os gates do delta. PASSO 2 — passeio logado d
 fiscal" (D-F188); o passeio NÃO cria habilitação no fiscal_api de produção (D-F192). PASSO 3 — a JANELA pelo roteiro do §22.13 (cada passo
 irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.44+), INDICE_CENTRAL, CLAUDE.md da raiz, memória
 apis-fiscais-isoladas.
+```
+
+### 22.44 Rodada 15 da F2a/F2b — EXECUTADA (2026-10-13) — D-F195…D-F198 (autorização em pé)
+
+| Repo | Commit | O quê |
+|---|---|---|
+| app (worktree `f2b`) | `95d829d` | R14-SOC-05 (`_beginDetailAct(emit, orderId)` só marca o detalhe DA OS do ato; `_outcomeOrder` pelo `_showsOrder`); D-F196/D-F197/D-F198 (comentários de conhecimento negativo; o ACHADO R14-ADV-01 pulado com o motivo); R14-SOC-03 (o fuzz R13 confere `resurrectedOverLongOp`/`planDroppedOnTheWay` == 0); o gate R14 do adversarial (fuzz de 300 sementes com o modelo do último pedido de tela) |
+| Infra-IA (§7, §22.13) | — | D-F195…D-F198; no passo 3 da janela: o relatório esperado do ensaio do aborto, o D-F50 esperado ("sem F2a"), o `FISCAL_DB_NAME` e o procedimento da D-F195 |
+
+núcleo, nfse-api e setes-api sem mudança (945ad2d · 61d0bbe · 8556491). **Provas**: app **463** (+6 pulados: as 4 provas superadas do R9,
+o R12-ADV-03 da D-F188 e o R14-ADV-01 da D-F197) · `flutter analyze` limpo · setes-api 1.842 + as MESMAS 20 · ao vivo 139/139 ·
+`prove-f2a-abort` ok · núcleo 531 + 1 · nfse-api 765 + 169 · nfse ao vivo 195 + 4 (conferidos pelos gates da R14) · nenhum banco
+descartável sobrou.
+
+#### 22.44.1 Gates do delta (Rodada 15: `822fdf9..95d829d`)
+
+(pendentes — 1º passo da próxima sessão)
+
+#### 22.45 ⏯ PROMPT DE RETOMADA CURTO (colar numa sessão nova)
+
+```
+Retome a F2a/F2b do Gestão 2027 pelo §22.45 do Infra-IA/prompts/prompt_apis_fiscais_isoladas.md (leia D:\Gestao2027\CLAUDE.md, o §22.44 e
+o §22.13 — roteiro da JANELA; §7 = D-F1…D-F198). Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a
+(branch f2a, 8556491) · núcleo 945ad2d · nfse-api 61d0bbe · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 95d829d).
+AUTORIZAÇÃO EM PÉ: as questões dos gates seguem a RECOMENDAÇÃO sem esperar — salvo passo irreversível (janela, --cutover --vai, aborto --vai
+fora de descartável, push, apagar linha do fiscal_api), algo fora da F2a/F2b, gates divergentes sem saída ou achado HIGH/CRITICAL.
+REGRAS: D:\Gestao2027\setes-api (árvore viva) É a produção (tsx watch) — só leitura; nunca npm run dev/flutter run nas worktrees; nunca
+criar habilitação no fiscal_api de produção (D-F192/D-F195); ao vivo só em bancos descartáveis, um de cada vez; nunca mexer em código com um
+gate rodando nas mesmas árvores; edição por ferramenta/script em arquivo (UTF-8); commit só dos caminhos da frente com git commit -F.
+PASSO 1 — gates do delta da Rodada 15 (`822fdf9..95d829d` no app; socrático + adversarial em paralelo, como no §22.42.3) → corrigir/
+seguir recomendações → suítes (app 463+6; setes-api 1.842 + as mesmas 20; ao vivo 139 + prove-f2a-abort; núcleo 531; nfse 765 + ao vivo 195)
+→ commit → docs (§22.46+, INDICE, CLAUDE.md, memória). PASSO 2 — passeio logado da F2b (provocar 502/504 do proxy; decidir
+core.errors.network + Emissor fiscal — D-F188; NÃO criar habilitação). PASSO 3 — a JANELA pelo §22.13, cada passo irreversível com o "vai",
+antes de 30/11.
 ```
