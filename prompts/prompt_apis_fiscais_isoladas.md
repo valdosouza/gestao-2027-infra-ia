@@ -7,7 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.23 (PROMPT DE RETOMADA) — Rodada 7 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.22: D-F165…D-F169 —
+> **⏯ RETOMAR POR AQUI — §22.25 (PROMPT DE RETOMADA) — Rodada 8 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.24: D-F170/D-F171 —
+> kids mais frequentes no resumo do log do 401, "não tentadas" com contador próprio) + correções dos gates da Rodada 7 (socrático 0,78 ·
+> adversarial 0,74 — token não-JSON = 401, recarga superada não emite, o ato da nfse-api sempre olha a lápide); tudo em commit LOCAL (núcleo
+> 92811fc · nfse 267b4b0 · api 6dbb5af · app 13cdd92); gates do delta da Rodada 8 em §22.24.3; aguarda o Valdo a Q-F180 (§22.22.4).
+> Depois: passeio logado e a JANELA.**
+> *Antes:* **§22.23 — Rodada 7 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.22: D-F165…D-F169 —
 > kid/exp obrigatórios no núcleo, RESOURCE_BUSY antes do fisco = limite conhecido, kid distinto no log do 401, "incertas — consulte" no
 > relatório do lote, lista em loading com lote no ar) + correções dos gates da Rodada 6 (socrático 0,77 · adversarial 0,80); tudo em commit
 > LOCAL (núcleo 8704085 · nfse 7bf6ea9 · api f5d2be2 · app e89231e); gates do delta da Rodada 7 em §22.22.3. Depois: passeio logado e a JANELA.**
@@ -954,6 +959,13 @@ branch `sessao-2026-10-10`):**
 - **D-F169 (= Q-F177 (a), Valdo 2026-10-13 — R6-ADV-06/R6-SOC-08) — com um lote no ar, a lista sai em `loading`**: a página recriada no meio
   do lote (cruzar 1100 px — D-F160) pede a lista; sem isto a trava H1 dos botões reabria e a tela parecia ociosa com o lote rodando. Vale para
   os dois lotes (faturamento e fiscal); cada um baixa a própria marca ANTES da recarga final (a lista final sai livre).
+- **D-F170 (= Q-F178 (b), Valdo 2026-10-13 — R7-SOC-01/R7-ADV-02) — o resumo do log do 401 lista os kids MAIS FREQUENTES da janela**:
+  16 contadores pelo algoritmo Space-Saving (memória fixa; a contagem pode SUPERESTIMAR, nunca subestimar) — todo kid com mais de 1/17 das
+  recusas com kid fica na lista; o de uma rotação mal publicada (toda sessão, toda requisição) vence qualquer volume de kids inventados (os
+  16 forjados no começo da janela esgotavam o conjunto da D-F167). Linha própria, junto do resumo das suprimidas e só quando houve supressão.
+- **D-F171 (= Q-F179 (a), Valdo 2026-10-13 — R7-SOC-02) — "não tentadas" com contador e linha próprios no relatório do lote fiscal**
+  ("Não tentadas: N — o lote parou antes delas"; a linha "Ordem N: não tentada — o lote parou antes dela") — nunca "recusadas" nem com a
+  frase da falha que parou o lote.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -4217,9 +4229,9 @@ D-F166 = só doc (§7).
 
 #### 22.22.3 Gates do delta da Rodada 7 (`c0a8d35..8704085` · `391fef7..7bf6ea9` · `99da896..f5d2be2` · `3b5b2b6..e89231e`)
 
-(em execução — preencher com os resultados)
+Resultados no §22.22.3-bis (logo abaixo do prompt de retomada §22.23).
 
-#### 22.23 ⏯ PROMPT DE RETOMADA — gates da Rodada 7 → passeio logado → JANELA (colar numa sessão nova)
+#### 22.23 ⏯ PROMPT DE RETOMADA — gates da Rodada 7 → passeio logado → JANELA (SUPERADO pelo §22.25)
 
 ```
 Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
@@ -4245,4 +4257,86 @@ PASSO 1 — se os gates do delta da Rodada 7 (§22.22.3) deixaram questões: com
 rodar os gates do delta. PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7). PASSO 3 — a JANELA pelo roteiro do
 §22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.24+), INDICE_CENTRAL, CLAUDE.md da
 raiz, memória apis-fiscais-isoladas.
+```
+
+#### 22.22.3-bis Resultado dos gates do delta da Rodada 7
+
+**Socrático: 0,78 ✅** (5 LOW) · **Adversarial: 0,74 ✅** (1 MEDIUM + 5 LOW; achados anteriores seguem fechados — com `ADV_SHOW=1` só os novos
+falham; nfse-api ao vivo 156/156 com o CHECKSUM do `fiscal_api` e do ERP iguais; setes-api ao vivo 128/128). Resistiram: `exp` de tipo
+estranho, a ordem das checagens (sem oráculo), kid estranho (`__proto__`), 100 mil kids com memória fixa e resumo exato, a leitura original
+do ato intacta, D-F168/D-F169 em todas as combinações, a matriz de 8 casos da frase da substituição.
+
+| Achado | Sev. | O quê | Destino |
+|---|---|---|---|
+| R7-ADV-01 | MEDIUM | token com corpo que NÃO é JSON fazia o `jws` lançar no decode → 500 `INTERNAL` com stack no log, sem o limite do log do 401 (o setes-api responde 401) | **corrigido**: decode protegido → 401 `malformed` |
+| R7-SOC-01 · R7-ADV-02 | LOW | 16 kids forjados esgotam o conjunto da D-F167 e o kid real some | **D-F170** (= Q-F178 (b)) |
+| R7-SOC-02 · R7-ADV-05/06 | LOW | parada por incertas com o "tente novamente" do servidor; não tentadas como recusadas com a frase da falha; a incerta perdia código e `supportRef` | **corrigido** (frase própria da parada; linha incerta com código + ref; não tentada diz que não foi tentada) + contador → **D-F171** (= Q-F179 (a)) |
+| R7-SOC-03 | LOW | a recarga pedida no meio do lote que responde DEPOIS da recarga final sobrescrevia a lista com a foto velha | **corrigido**: contador de geração — a recarga superada não emite |
+| R7-SOC-04 | LOW | textos: cabeçalho do verificador ("token sem kid usa a padrão"), `.env.example` da nfse-api (lista vai em `JWT_PUBLIC_KEYS`), JSDoc do `mapTx` | **corrigido** |
+| R7-SOC-05 · R7-ADV-03 | LOW | o ato só olhava a lápide sem a linha da F2a: linha + lápide (SQL à mão) virava | **corrigido**: lê a lápide SEMPRE (falha fechado); linha + lápide = recusa |
+| R7-ADV-04 | LOW | aborto pela METADE (lápide + gatilhos): a frase mandava `--retirar-lapide`, que recusa esse estado | **corrigido**: "termine o aborto" |
+| F2AR4-ADV-05 | — | o `it.failing` passava VAZIO (a pré-condição foi invertida pela correção da Rodada 4) | **corrigido**: vira `[CORRIGIDO]` afirmando o 503 pela porta |
+| Q-F178-ADV-03 | — | `exp` finito gigante aceito (núcleo e setes-api iguais) | **Q-F180** |
+
+#### 22.22.4 Questões dos gates da Rodada 7
+
+- Q-F178 (= Q-F178-SOC-01/ADV-01) e Q-F179 (= Q-F178-SOC-02) — **DECIDIDAS** (Valdo 2026-10-13: "Q-F178 e Q-F179 - siga recomendações" →
+  D-F170/D-F171). Q-F178-ADV-02 (o ato com linha + lápide e aborto pela metade) ficou coberta pelas correções R7-SOC-05/R7-ADV-04 sem a
+  troca para `name IN (?, ?)` (a leitura original intacta — os 8 testes do ato não mudaram).
+- **Q-F180 — teto da validade (`exp`) do token (Q-F178-ADV-03) — AGUARDA o Valdo**: (a) **aceitar sem teto agora** (o setes-api assina com
+  24 h; só quem tem a chave privada emite) **e pôr o teto nos DOIS leitores (`exp ≤ agora + 24 h + folga`) na próxima vez que alguém mexer
+  neles** — pegaria um bug de `exp` em milissegundos · (b) teto já. *(Rec.: (a).)*
+
+### 22.24 Rodada 8 da F2a/F2b + correções dos gates da Rodada 7 — EXECUTADAS (2026-10-13) — D-F170/D-F171
+
+> Valdo (2026-10-13): "Q-F178 e Q-F179 - siga recomendações". Tudo em commit LOCAL; a árvore viva do setes-api não foi tocada.
+
+#### 22.24.1 O que foi executado
+
+| Repo | Commit | O quê |
+|---|---|---|
+| núcleo | `92811fc` | D-F170 (Space-Saving no `authRejectLog`), R7-ADV-01 (decode protegido), R7-SOC-04 (cabeçalho); testes `rodada8-auth-topkids`, gate adversarial R7 (o FATO do 500 superado), posições do log ajustadas; `dist` reconstruído |
+| nfse-api | `267b4b0` | R7-SOC-05/R7-ADV-03/04 (o ato: lápide sempre, linha + lápide, aborto pela metade), R7-SOC-04 (`.env.example`, JSDoc); testes do gate R7 (FATOS superados) e do ato |
+| setes-api (worktree `f2a`) | `6dbb5af` | testes: gate adversarial R7; F2AR4-ADV-05 vira `[CORRIGIDO]` |
+| app (worktree `f2b`) | `13cdd92` | D-F171 (`notTried`/`notTriedRows`, partes do resumo pt/en), R7-SOC-02 (frase da parada por incertas; incerta com código + `supportRef`; linha da não tentada), R7-SOC-03 (geração no `_reloadList`); testes (nenhum pulado) |
+
+#### 22.24.2 Provas (2026-10-13)
+
+- setes-api `f2a`: suíte **1.831 + as MESMAS 20** (19 boleto + 1 fuso); gates ao vivo (A2…R7) **129/129**; `prove-f2a-abort.ts` ok; nenhum
+  banco `f2a_*`/`fiscal_api_adv*` sobrou.
+- núcleo **516** (+1 pulado — o FATO do 500, superado) nas duas árvores · nfse-api **735** + 167 pulados (165 ao vivo + 2 FATOS superados)
+  nas duas árvores · nfse-api AO VIVO **166** (+2 pulados).
+- app **354/354** (nenhum pulado) · core do app **54/54** · `flutter analyze` limpo.
+
+#### 22.24.3 Gates do delta da Rodada 8 (`8704085..92811fc` · `7bf6ea9..267b4b0` · `f5d2be2..6dbb5af` · `e89231e..13cdd92`)
+
+(em execução — preencher com os resultados)
+
+#### 22.25 ⏯ PROMPT DE RETOMADA — Q-F180 + gates da Rodada 8 → passeio logado → JANELA (colar numa sessão nova)
+
+```
+Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22.24 (Rodada 8 EXECUTADA — D-F170/D-F171; gates do delta no §22.24.3), o §22.22
+(Rodada 7 + gates — Q-F180 no §22.22.4), o §22.20 (Rodada 6) e o roteiro da JANELA no §22.13 (aborto com a LÁPIDE SENTINELA —
+D-F153/D-F162; reaplicar a trava só do que falta — D-F152; rotação do JWT_KID em PADROES §7); §7 quando precisar.
+Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, ponta 6dbb5af+) · núcleo 92811fc+ ·
+nfse-api 267b4b0+ · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 13cdd92+) · Infra-IA (main).
+
+REGRAS DURAS
+- D:\Gestao2027\setes-api roda em tsx watch e É a produção da Setes (salvar = deploy; o boot aplica migrations). A F2a SÓ entra na JANELA,
+  junto da F2b. Nunca npm run dev / flutter run nas worktrees (o .env aponta para o MySQL de produção). Nunca migrate:setes --cutover … --vai
+  fora da janela; os --vai dos scripts de aborto/reaplicar só em banco descartável fora da janela. Testes ao vivo só em bancos descartáveis
+  (f2a_*, fiscal_api_adv_*), apagados no fim — e um de cada vez.
+- Suíte do setes-api SEM editar arquivos durante a execução; base = 20 falhas pré-existentes (19 boleto + 1 cerca de fuso). Cercas do
+  núcleo/nfse-api com SETES_API_DIR nas DUAS árvores. Núcleo: `npm run build` depois de mexer (a nfse-api consome o dist) — nunca com uma
+  suíte ao vivo da nfse-api rodando. Jest no Windows: `--json --outputFile` ou `--runInBand --forceExit`.
+- Edição em UTF-8 pela ferramenta de edição (heredoc/`node -e` com barras invertidas e crases FALHAM — script em arquivo); .ps1 com BOM
+  (PS 5.1); commit só dos caminhos da frente, mensagem em arquivo (git commit -F); push só com o "vai". Decisões de arquitetura são do Valdo.
+  Nunca mexer em código enquanto um agente de gate roda testes nas mesmas árvores. Teste que simula o banco pela FORMA da consulta acusa
+  qualquer SQL novo — leitura nova entra SEPARADA.
+
+PASSO 1 — com as respostas do Valdo à Q-F180 e às questões dos gates da Rodada 8 (§22.24.3): registrar D-F172+ no §7, executar e rodar os
+gates do delta. PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7). PASSO 3 — a JANELA pelo roteiro do §22.13
+(cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.26+), INDICE_CENTRAL, CLAUDE.md da raiz,
+memória apis-fiscais-isoladas.
 ```
