@@ -7,9 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.45 (PROMPT DE RETOMADA CURTO) — Rodada 15 da F2a/F2b EXECUTADA (2026-10-13, §22.44: gates da Rodada 14
-> 0,80/0,84 e D-F195…D-F198 pela autorização em pé); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 95d829d).
-> Próximo: os gates do delta da Rodada 15 (pequeno — só o app) → passeio logado → a JANELA.**
+> **⏯ RETOMAR POR AQUI — §22.47 (PROMPT DE RETOMADA CURTO) — 4ª sessão de 2026-10-13 (§22.46): gates da Rodada 15 (0,80/0,86) → Rodada 16
+> (D-F199…D-F203) → gates do delta da R16 (0,80/0,88, nada no produto) e as correções; ENSAIO DA JANELA na instância descartável (passos 3–5,
+> inclusive o `--vai` — PASSOU, produção intacta); passeio logado MONTADO (kit em `fiscal-api/scripts/ensaio-janela/`) e parado no login do
+> Valdo. Commits LOCAIS: núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 570324c. Próximo: o passeio (D-F188) → a JANELA.**
+> *Antes:* **§22.45 — Rodada 15 da F2a/F2b EXECUTADA (2026-10-13, §22.44: gates da Rodada 14
+> 0,80/0,84 e D-F195…D-F198 pela autorização em pé); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 95d829d).**
 > *Antes:* **§22.43 — gates da Rodada 13 FEITOS (socrático 0,79 · adversarial 0,80, sem HIGH) e a Rodada 14
 > DECIDIDA e EXECUTADA (2026-10-13, §22.42: D-F192…D-F194 — o roteiro protege a guarda do aborto (ensaio do aborto no passo 3; nenhuma SE
 > nativa no fiscal_api de produção até a 1ª janela), a releitura da OS ABERTA morre com o lote por cima, o plano abre com a MESMA OS a
@@ -1048,7 +1051,7 @@ branch `sessao-2026-10-10`):**
 - **D-F182 (= Q-F190 (a), Valdo 2026-10-13 — R11-SOC-01/02 = R11-ADV-02) — o desfecho de um ato cuja tela SAIU no meio** (página recriada):
   a MESMA OS reaberta é RELIDA no fim do ato (pela tela de AGORA, conferida de novo na chegada); outra OS ou a lista: o desfecho leva o
   NÚMERO da OS ("OS 7374: NFS-e autorizada — …" — `orderId` nos one-shots, prefixo pela ponte). A lista desatualizada depois de faturar NÃO
-  é relida (se corrige ao abrir a OS).
+  é relida (se corrige ao abrir a OS) — D-F202: idem depois de cancelar a OS.
 - **D-F183 (= Q-F191 (a), Valdo 2026-10-13 — R11-SOC-02 = R11-ADV-03) — a trava de duplo clique é POR NOTA** (`Set<int>` das OS em voo no
   Transmitir e no cancelar/"manter a nota"): o clique na OUTRA OS vai; quem protege a nota é a trava DELA na nfse-api/ERP.
 - **D-F184 (= Q-F192 (a), Valdo 2026-10-13 — R11-SOC-03) — a decisão confirmada num diálogo vai ao bloc se ELE está vivo** (`_dispatch`
@@ -1099,6 +1102,28 @@ branch `sessao-2026-10-10`):**
   motivo; a trava por nota barra o 2º envio).
 - **D-F198 (= Q-F197-ADV-02 (a), Valdo 2026-10-13 — R14-ADV-02) — one-shots IGUAIS seguidos viram UM** (`Equatable` + o bloc descarta estado
   igual) = conhecimento negativo (comentário no estado): nenhuma regra pode contar avisos iguais seguidos.
+- **D-F199 (= Q-F198-SOC-01 (a) = Q-F198-ADV-01 (a), Valdo 2026-10-13 — autorização em pé; R15-SOC-01 = R15-ADV-01, os dois gates
+  concordaram) — UM predicado "a tela capturada ainda é o detalhe DESTA OS"** (`_stillOnActDetail(screen, orderId)`) em todo ponto que
+  re-emite o detalhe capturado ou tira o operador dele (o fim sem recarga, a troca de aba do Faturar); as decisões "a tela é a OS do ato"
+  (prefixo, releitura, plano, lista depois de cancelar a OS) são do `_showsOrder`. Nada alcançável pela página muda — a garantia sai da
+  página e vai para o bloc (o plano da A nunca abre sobre a B; o fim de um ato da A não tira o operador da B nem desmarca o `saving` dela).
+- **D-F200 (= Q-F198-SOC-02 (a), Valdo 2026-10-13 — R15-SOC-03; premissa CORRIGIDA pelo gate da Rodada 16, R16-SOC-01 = Q-F199-SOC-01
+  (a)) — a RECONFERÊNCIA nascida com a OS a caminho (a porta da D-F194) não tem trava por nota no app** = conhecimento negativo: o 2º clique
+  manda outra reconferência. Ela é aceita porque a DUPLICATA É INOFENSIVA — não porque o servidor serializa: a reconferência é um `GET /dps`
+  no fisco (sem efeito) e a prova do E2404 pousa por UPDATE condicional à última voz vista (D-F90, sem trava longa); duas reconferências
+  juntas viram dois GET e dois carimbos (o 2º mais novo, ainda posterior ao F — a prova da D-F94 continua válida) e as duas dizem
+  "provada"; só o caminho em que o fisco ACHA a nota passa pela trava da nota (`withInvoiceTx` — reconciliação).
+- **D-F201 (= Q-F198-ADV-02 (a), Valdo 2026-10-13 — R15-ADV-02) — a cascata do `saving` na MESMA OS** (a releitura do 1º ato reabriu os
+  botões; o operador disparou o 3º; o fim do 2º — que nasceu depois de a releitura do 1º ser PEDIDA, no mesmo contador — o desmarca) =
+  conhecimento negativo, a família da D-F191 (b): não há contador de atos por OS (o R14-ADV-01 recusado na D-F197); as travas por nota e o
+  servidor protegem.
+- **D-F202 (= Q-F199-SOC-02 (a), Valdo 2026-10-13 — autorização em pé; R16-SOC-04) — a cláusula da D-F182 vale também para "Cancelar
+  OS"**: a lista desatualizada depois de faturar OU de cancelar a OS NÃO é relida (página recriada no meio do ato, a lista carregada antes
+  do commit — clicar na OS excluída dá 404, que vira falha e recarga). Sem código.
+- **D-F203 (= Q-F199-ADV-01 (a), Valdo 2026-10-13 — autorização em pé; R16-ADV-01) — o Faturar na OS aberta com OUTRO ato dela relido no
+  meio RELÊ a OS em vez de trocar para a aba Faturadas** (a releitura do outro ato subiu o contador — a raiz da D-F201): a nota aparece no
+  detalhe; a aba fica para o operador. Conhecimento negativo (comentário no `_endDetailAct`); a alternativa (decidir pela tela de agora)
+  reintroduziria o "a tela não mudou" que a D-F199 aposentou.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -3667,7 +3692,10 @@ achado do guardião da F2b); `ARQUITETURA_MODULOS.md` do app — a exceção nom
 5. `npm run migrate:setes` (re-sincronia sobre a origem AGORA congelada) + conferir as contagens de tentativas/vozes origem × réplica;
    ensaio `--cutover 1 --confirmo-setes-api-parado` de novo — **sem bloqueio** (D-F50 e os 9 gatilhos, F2A3-ADV-04) → com o "vai":
    `… --vai` (D-F44). **Ponto sem volta.** Até aqui o uso continua PARADO (SOC-01).
-6. Publicar o build da F2b com `no-cache` em `index.html`/`flutter_bootstrap.js`/`main.dart.js` (Q-F155); relogin.
+6. Publicar o build da F2b com `no-cache` em `index.html`/`flutter_bootstrap.js`/`main.dart.js` (Q-F155); relogin. **R16-SOC-07**: o
+   build (`apps/web/build-web.ps1`) é ENSAIADO antes do dia da janela — no passeio de 2026-10-13 o `flutter build web` QUEBROU na migração
+   interna do flutter_tools que lê o `apps/web/.gitignore` como UTF-8 (estava em cp1252; corrigido no app `41f8867`); o `flutter run` não
+   passa por ela, por isso nunca tinha aparecido.
 7. Trilha (`scripts/trilha-primeiro-cliente.ts` — P8b pela nfse-api) → reabrir.
 8. Depois: apagar o A1 do cofre do setes-api (D-F116, "vai"); push dos repos; F3 (Onda 4). ⚠️ Checklist da F3 (D-F132 × D-F135 —
    F2AR4-SOC-08): o usuário PRÓPRIO do setes-api não terá o privilégio TRIGGER (senão ele mesmo apagaria a trava) e o `information_schema`
@@ -5183,7 +5211,7 @@ descartável sobrou.
 
 #### 22.44.1 Gates do delta (Rodada 15: `822fdf9..95d829d`)
 
-(pendentes — 1º passo da próxima sessão)
+FEITOS em 2026-10-13 (4ª sessão) — resultado e execução no §22.46.
 
 #### 22.45 ⏯ PROMPT DE RETOMADA CURTO (colar numa sessão nova)
 
@@ -5201,4 +5229,111 @@ seguir recomendações → suítes (app 463+6; setes-api 1.842 + as mesmas 20; a
 → commit → docs (§22.46+, INDICE, CLAUDE.md, memória). PASSO 2 — passeio logado da F2b (provocar 502/504 do proxy; decidir
 core.errors.network + Emissor fiscal — D-F188; NÃO criar habilitação). PASSO 3 — a JANELA pelo §22.13, cada passo irreversível com o "vai",
 antes de 30/11.
+```
+
+### 22.46 Gates da Rodada 15 + Rodada 16 (D-F199…D-F202) + ENSAIO da janela e PASSEIO em instância descartável (2026-10-13, 4ª sessão)
+
+> Valdo (2026-10-13, prompt do §22.45): PASSO 1 gates do delta → PASSO 2 passeio logado → PASSO 3 janela. Autorização em pé vigente.
+> Pergunta da sessão (AskUserQuestion) — onde fazer o passeio: **"Instância descartável"** (a recomendação; alternativas: na janela,
+> passo 7, ou pular).
+
+#### 22.46.1 Gates do delta da Rodada 15 (`822fdf9..95d829d`, só o app)
+
+**Socrático 0,80 ✅** (3 LOW + 3 INFO) e **adversarial 0,86 ✅** (1 LOW + 1 INFO; matriz dirigida 13 atos × 7 telas × 3 desfechos = 273
+células sem erro; fuzz de página 300 sementes com `beginOnOtherDetail` = `oldRuleMayDiffer` = 0 — nada alcançável mudou; fuzz de eventos
+DIRETOS 200 sementes, 3.783 atos). Os dois acharam a MESMA coisa: o endurecimento do R14-SOC-05 cobriu 2 dos 6 pontos que decidem por "a
+tela não mudou" (R15-SOC-01 = R15-ADV-01) → **D-F199**. Demais: reconferência a caminho sem trava (R15-SOC-03 → **D-F200**), cascata do
+`saving` (R15-ADV-02 → **D-F201**), o R14-SOC-05 sem teste (R15-SOC-02 → coberto pelo gate R15), oráculos frouxos (R15-SOC-04), parâmetro
+morto (R15-SOC-05), comentário da D-F198 no lugar e no tempo errados (R15-SOC-06). Todas as recomendações (a) — autorização em pé.
+
+#### 22.46.2 Rodada 16 — EXECUTADA (app `7bbbd04` + `41f8867`)
+
+| Repo | Commit | O quê |
+|---|---|---|
+| app (worktree `f2b`) | `7bbbd04` | D-F199 (`_stillOnActDetail` no `_endDetailAct`/Faturar; plano e lista do "Cancelar OS" pelo `_showsOrder`); D-F200/D-F201 (comentários + teste `[DECIDIDO]`); `_outcomeOrder(orderId)`/`_unknownOutcome` sem a tela; D-F198 na `sealed class`; oráculos: R14 (2) exige a lista como 1ª emissão do passo, `verify` do plano no `[RESISTIU]` da D-F194, R13 `longOpOverDetail` com mínimo; gate R15 (`adversarial_r15_gate_test.dart`) ACHADOs → `[CORRIGIDO D-F199]`, cerca = 0 no fuzz direto |
+| app (worktree `f2b`) | `41f8867` | `apps/web/.gitignore` cp1252 → UTF-8: o `flutter build web` QUEBRAVA (migração `ScrubGeneratedPluginRegistrant` do flutter_tools) — achado ao montar o passeio; o passo 6 da janela esbarraria nele (nota no §22.13) |
+
+núcleo, nfse-api e setes-api sem mudança (945ad2d · 61d0bbe · 8556491). **Provas**: app **476 + 6 pulados** (o gate R15 com 13, nenhum
+pulado) · core 54 · `flutter analyze` limpo. Gates do delta da Rodada 16 (`95d829d..41f8867`): socrático **0,80 ✅** (R16-SOC-01: a
+premissa da D-F200 estava errada — corrigida no §7 antes de entrar; R16-SOC-04 → **D-F202**); adversarial — §22.46.5.
+
+#### 22.46.3 ENSAIO da JANELA na instância descartável (passos 3–5 do §22.13 — PASSOU)
+
+**Kit durável** (os scripts, sem senhas, + a receita): `Infra-IA/fiscal-api/scripts/ensaio-janela/README.md`.
+Ambiente (tudo no scratchpad da sessão, fora dos repositórios): 2ª instância do MariaDB 10.4.20 do XAMPP na porta **3307** (datadir
+próprio, `bind-address=127.0.0.1`, mesmos `sql_mode`/charset/lock wait da produção), restaurada de um `mysqldump --single-transaction`
+SÓ-LEITURA de `setes_central` + `setes_setes` + `fiscal_api` (~10 MB); usuários `setes`/`fiscal_api` com SENHAS NOVAS (a da produção nunca
+entra); na cópia, a habilitação SE em **H** (IM de H = fato do emitente — D-F60) e `dps_last_number` 900 (longe do histórico de H). Os
+processos sobem com as variáveis do passeio por cima do `.env` (o `dotenv` não sobrescreve) — **sonda antes de cada passo** (`SELECT
+@@port, @@datadir`) — e com um preload do Node (`--require block-hosts.js` via `NODE_OPTIONS`) que RECUSA DNS/TCP/TLS para
+`sefin.nfse.gov.br`, `adn.nfse.gov.br` e o Inter de produção: a cópia tem notas AUTORIZADAS em P e o A1 real (um "Cancelar nota" numa delas
+iria ao fisco de produção). JWT do passeio com par RS256 e `kid` próprios (o token não vale na produção); armazenamento, cofre e SMTP do
+setes-api apontam para o scratchpad.
+
+| Passo | Resultado |
+|---|---|
+| nfse-api `db:migrate` | `006 - cancel_event_code_exact` aplicada na cópia |
+| 3 — re-sincronia | `issuers 1 · transmissions 20 · events 0 · failures []` (os 3 XMLs de P "faltando" = armazenamento vazio de propósito) |
+| 3 — ensaio do ATO (`--cutover 1 --confirmo-setes-api-parado`, dono do ERP) | **exit 0**, `cutover {linhasViradas 1, habilitacaoErpAposentada 1}`, `bloqueios` = só o D-F50 "sem F2a" — o critério do R12-SOC-07 |
+| 3 — ensaio do ABORTO (worktree `f2a`) | `{ dryRun: true, triggers: [], migrationRow: false, tombstone: false }` — sem recusa (D-F192/R14-SOC-02) |
+| 4 — boot da F2a (worktree, sem watch, :3010) | "Voz do fisco (views): fiscal_api — família(s) service" · "Migration aplicada: 069 - f2a_fiscal_passivo" · "Gatilhos de TRAVA da F2a: 9 gatilho(s) em 1 schema(s)" |
+| 5 — re-sincronia + contagens | origem × réplica = **20 tentativas · 23 vozes** nos dois lados |
+| 5 — ensaio sem bloqueio | exit 0, `cutover`, **sem `bloqueios`** |
+| 5 — `--vai` (com o setes-api PARADO) | `committed: true`; `fiscal_api`: H, `cutover_at` gravado; ERP: SE `deleted='S'` |
+
+Produção conferida DEPOIS (só leitura, 3306): `fiscal_api` P/`cutover_at` NULL, ERP P/`deleted='N'`, nenhuma `f2a_fiscal_passivo` no
+`_migrations`. Lição: o ensaio na cópia exercita o roteiro inteiro (inclusive o `--vai` e a ordem parar → ato → subir) sem tocar a
+produção — repetir no dia da janela, ANTES do passo 2 real, se houver mudança nos repositórios desde este ensaio.
+
+#### 22.46.4 Passeio logado da F2b (em andamento)
+
+Topologia: setes-api da worktree `f2a` em :3010 e nfse-api em :3012 contra a 3307; proxy de FALHAS na frente de cada uma (:3011 → :3010,
+:3013 → :3012) que, por um arquivo de controle (`proxy-mode.json` — modo `502|503|504|hang|reset`, regex do caminho, N vezes), devolve a
+página de erro do nginx SEM cabeçalho CORS (a D-F181); build web da f2b (`flutter build web --dart-define-from-file` com as URLs dos
+proxies) servido em :5052 com `no-cache`; navegador do app (o Valdo digita a senha — o agente nunca). Roteiro: selo fiscal da lista pela
+nfse-api; OS de teste de cliente interno faturada → Transmitir em H → "Cancelar nota" pela saga; lote "Transmitir notas sem NFS-e"; 502/504
+na linha do lote, no ato avulso e numa leitura do setes-api → decidir o `core.errors.network` + a aba "Emissor fiscal" (D-F188). As notas de
+P da cópia NÃO são tocadas.
+
+#### 22.46.5 Gates do delta da Rodada 16 (`95d829d..41f8867`) e as correções (app `570324c`)
+
+**Socrático 0,80 ✅** (3 LOW + 4 INFO) e **adversarial 0,88 ✅** (3 LOW, NADA no produto — matriz de eventos diretos de 1.248 células sem
+erro; 400 sequências NOVAS pela página + 300 diretas + as 500 do R15 sob oráculos mais fortes; `.gitignore`/`pubspec`/`.metadata`/`web/*`
+em UTF-8 — cerca nova no gate R16). Correções (autorização em pé):
+
+| Achado | O quê | Destino |
+|---|---|---|
+| R16-SOC-01 | a premissa da D-F200 ("o servidor serializa pela trava da nota") era FALSA — a reconferência não trava a nota; a duplicata é inofensiva (GET + carimbo condicional da D-F90) | **corrigida** no §7, no comentário e no nome do teste (Q-F199-SOC-01 (a)) |
+| R16-SOC-02 = R16-ADV-02 | a tolerância do "desfecho engolido" (oráculo (2)) não conferia a CAUSA — no R15 nem a 1ª emissão | **corrigido** nos fuzz R14 e R15: só no passo de um `get`/`post` que FALHOU, com a lista como 1ª emissão |
+| R16-SOC-03 | "hoje todo ato nasce no detalhe dele" é falso (D-F197/D-F184) | **corrigido**: o comentário da D-F199 cita os invariantes I1–I3 e a cerca (diferencial do fuzz de página) |
+| R16-SOC-04 | a lista desatualizada depois de "Cancelar OS" (página recriada) — a D-F182 só falava em faturar | **D-F202** (texto) |
+| R16-SOC-06 | o exemplo da D-F201 sem o detalhe do contador | **corrigido** (meia frase) |
+| R16-SOC-07 | o build web pode voltar a quebrar sem ninguém ver | nota no passo 6 da janela (ensaiar o build antes) + cerca de decodificação no gate R16 |
+| R16-ADV-01 | Faturar com outro ato da OS relido no meio relê em vez de trocar de aba | **D-F203** |
+| R16-ADV-03 | o oráculo (7) do R15 reprovava por engano a D-F201 (só a chamada decisiva contava como irmão) | **corrigido**: qualquer parte da cadeia |
+| R16-SOC-05 | contadores de pré-condição no fuzz (opcional) | não feito — os dirigidos cobrem |
+
+**Provas**: app **488 + 6 pulados** · `flutter analyze` limpo. Commits LOCAIS do app nesta sessão: `7bbbd04` · `41f8867` · `570324c`.
+
+#### 22.47 ⏯ PROMPT DE RETOMADA CURTO (colar numa sessão nova)
+
+```
+Retome a F2a/F2b do Gestão 2027 pelo §22.47 do Infra-IA/prompts/prompt_apis_fiscais_isoladas.md (leia D:\Gestao2027\CLAUDE.md, o §22.46 e
+o §22.13 — roteiro da JANELA; §7 = D-F1…D-F203). Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a
+(branch f2a, 8556491) · núcleo 945ad2d · nfse-api 61d0bbe · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 570324c).
+AUTORIZAÇÃO EM PÉ: as questões dos gates seguem a RECOMENDAÇÃO sem esperar — salvo passo irreversível (janela, --cutover --vai fora de
+cópia descartável, aborto --vai fora de descartável, push, apagar linha do fiscal_api), algo fora da F2a/F2b, gates divergentes sem saída ou
+achado HIGH/CRITICAL.
+REGRAS: D:\Gestao2027\setes-api (árvore viva) É a produção (tsx watch) — só leitura; nunca npm run dev/flutter run nas worktrees com o .env
+delas; nunca criar habilitação no fiscal_api de produção (D-F192/D-F195); ao vivo só em bancos/instâncias descartáveis, um de cada vez;
+nunca mexer em código com um gate rodando nas mesmas árvores; edição por ferramenta/script em arquivo (UTF-8); commit só dos caminhos da
+frente com git commit -F.
+PASSO 1 — o delta 41f8867..570324c do app é só comentário e oráculo de teste: rodar os gates dele JUNTO com a próxima mudança de código.
+PASSO 2 — o passeio logado da F2b na instância descartável (§22.46.4; se o scratchpad da sessão anterior sumiu, remontar pelo kit
+Infra-IA/fiscal-api/scripts/ensaio-janela/README.md — o ensaio dos passos 3–5 refaz junto): selo fiscal da lista; OS de teste de cliente
+interno faturada → Transmitir em H → "Cancelar nota" pela saga; lote "Transmitir notas sem NFS-e"; 502/504 do proxy na linha do lote, no
+ato avulso e numa leitura do setes-api → decidir o core.errors.network + a aba "Emissor fiscal" (D-F188); as notas de P da cópia NÃO são
+tocadas; no fim, parar os processos (pela porta + caminho da worktree) e apagar a instância. PASSO 3 — a JANELA pelo §22.13 (cada passo
+irreversível com o "vai"; ensaiar o build web antes — R16-SOC-07), antes de 30/11. Ao fim de cada passo: docs (§22.48+), INDICE_CENTRAL,
+CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```
