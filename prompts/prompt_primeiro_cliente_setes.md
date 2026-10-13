@@ -933,7 +933,9 @@ trilha **17 OK · 7 PENDENTE · 0 FALHA** (rodada 3× no dia, inclusive com a re
 - **Q-R5.2** (D27/app) — operador sai da tela (ou fecha a aba do navegador) no meio dos blocos: PARAR
   de enviar os blocos seguintes (hoje: para se o bloc fechar; o que já rodou fica na aba Faturadas)
   ou SEGUIR até o fim sem relatório? Barreira modal com progresso "bloco i de n" evita a pergunta na
-  maioria dos casos. **Rec.: parar + barreira modal.**
+  maioria dos casos. **Rec.: parar + barreira modal.** → **DECIDIDA 2026-10-13 junto da D-F156** (`prompt_apis_fiscais_isoladas.md`
+  §7/§22.18.3 — Valdo: "siga as recomendações" na Q-F164): sair da tela PARA os blocos seguintes (o em voo termina; o já faturado fica na
+  aba Faturadas; sem relatório) — `stopBatches()` + `onDispose` do módulo; a barreira modal fica como melhoria de UX (não feita).
 - **Q-R5.3** (D23, visibilidade) — na recusa por fatos divergentes, mostrar QUAL competência/contrato
   divergiu (a OS mistura fatos de N contratos; contrato excluído nem aparece na lista)? **Rec.: sim**,
   em `fields[]` do relatório (uma linha por competência: mês, contrato, dia, forma) — zero DDL.

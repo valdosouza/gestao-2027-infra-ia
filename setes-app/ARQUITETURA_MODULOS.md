@@ -78,8 +78,12 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
   por módulo**; nunca cruza datasources (o datasource da nfse-api não chama o setes-api e vice-versa).
   O setes-api é PASSIVO diante das APIs fiscais; o mesmo JWT do login vale nas duas (RS256 — D-F13).
   Sagas que atravessam as duas (ex.: cancelar a nota com NFS-e autorizada = nfse-api `cancel` → setes-api
-  `/api/billing/cancel`) são orquestradas pelo app, idempotentes e resumíveis. Implementação na F2b
-  (os 17 arquivos Dart do fiscal de `service_orders`/`establishment` ainda falam com `/api/billing/fiscal*`).
+  `/api/billing/cancel`) são orquestradas pelo app, idempotentes e resumíveis. **Implementação da F2b (worktree
+  `setes-app-f2b`, 2026-10-13 — §22.16 do prompt)**: `ProductToken` (um token, N clientes) + `ProductApiClient` → `ApiClient` (setes-api,
+  EMISSOR do token) × `NfseApiClient` (nfse-api, envelope estrito) IRMÃOS (nunca subtipo — a injeção não cruza); o 401 de quem não
+  emitiu o token só expira depois de o emissor confirmar (D-F148). Em `service_orders`: `service_order_nfse_datasource` (só a nfse-api) ×
+  `service_order_invoice_datasource` (só `/api/billing/*`: plano, efeito, cancelar, manter); a saga é usecase de COMPOSIÇÃO sobre os dois
+  repositórios (D-F139/D-F149). Em `establishment`: o emissor pela nfse-api (`/v1/emitter`). Chega à árvore viva na JANELA da F2a.
 - **repository** (abstract no domain + impl no data): converte exceção em
   `Either<Failure, T>` (dartz — decisão 12).
 - **usecases**: 1 arquivo por operação — `<X>Getlist`, `<X>Post`, `<X>Put`, `<X>Delete`.
