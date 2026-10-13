@@ -3659,7 +3659,7 @@ achado do guardião da F2b); `ARQUITETURA_MODULOS.md` do app — a exceção nom
    passa "sem recusa" mas derruba o boot no passo 4 — tratar ANTES); o D-F50 "esperado" do ensaio do ATO é o da frase "sem F2a"; conferir que
    `FISCAL_DB_NAME` NÃO está exportado no shell (o `.env` da worktree não o define — o padrão é `fiscal_api`). **D-F195**: se o ensaio do
    aborto RECUSAR, a janela PARA aqui — identificar a linha com `cutover_at` (`SELECT tb_institution_id, model, created_at, tb_user_id,
-   deleted FROM fiscal_api.tb_establishment_issuer WHERE cutover_at IS NOT NULL`), provar 0 tentativas dela, apagar FISCAMENTE só com o "vai"
+   deleted FROM fiscal_api.tb_establishment_issuer WHERE cutover_at IS NOT NULL`), provar 0 tentativas dela, apagar FISICAMENTE só com o "vai"
    do Valdo na hora e ensaiar de novo; a pré-condição vale para QUALQUER modelo/institution, viva ou excluída.
 4. Conferir o número da `NNN_f2a_fiscal_passivo` contra o `main` (a IB-2); **PARAR o processo do setes-api** → `git -C setes-api merge
    --ff-only f2a` (rebase antes se o `main` andou) → SUBIR → ler o log: "Voz do fisco (views): fiscal_api — família(s) service" +
