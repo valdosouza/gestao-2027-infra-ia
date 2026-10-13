@@ -7,7 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.29 (PROMPT DE RETOMADA) — gates da Rodada 9 (socrático 0,76 · adversarial 0,78) com as correções EXECUTADAS
+> **⏯ RETOMAR POR AQUI — §22.31 (PROMPT DE RETOMADA) — Rodada 10 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.30: D-F175…D-F178 —
+> o mínimo garantido na linha dos kids, status HTTP/"sem conexão" na linha incerta, as saídas longas respeitam a OS aberta e o botão da rotina
+> mensal travado, o detalhe preservado não é relido = conhecimento negativo); tudo em commit LOCAL (núcleo 4c225f7 · nfse 1779a7a · api
+> f67f459 · app 3174d54); gates do delta COMBINADO (correções da R9 + R10) em §22.30.3. Depois: passeio logado e a JANELA.**
+> *Antes:* **§22.29 — gates da Rodada 9 (socrático 0,76 · adversarial 0,78) com as correções EXECUTADAS
 > (2026-10-13, §22.28: UM contador da tela no bloc — vale o último pedido —, a voz gravada junto do detalhe, a falha do 1º bloco respeita a
 > OS aberta, uma frase por estado da lápide no ato e no ensaio); tudo em commit LOCAL (núcleo 44e3a5a · nfse 1779a7a · api f67f459 · app
 > 09777d3); AGUARDAM o Valdo Q-F183…Q-F186 (§22.26.4); os gates do delta destas correções rodam JUNTO com a próxima rodada. Depois: passeio
@@ -986,7 +990,20 @@ branch `sessao-2026-10-10`):**
 - **D-F174 (= Q-F182 (b), Valdo 2026-10-13 — R8-SOC-04) — o detalhe aberto não é derrubado**: entrar no detalhe (ver OS / abrir OS) INVALIDA
   a recarga da lista em voo (contador de geração do `_reloadList` — R7-SOC-03), e o fim de um lote (faturamento ou fiscal) com uma OS aberta
   mostra o RELATÓRIO e não recarrega a lista (voltar à lista recarrega). Um lote de até 500 notas leva dezenas de minutos; abrir uma OS no meio
-  é uso legítimo.
+  é uso legítimo. *(Implementação revista pelas correções dos gates da Rodada 9 — §22.28: UM contador da tela, vale o último pedido; o pedido
+  de detalhe a caminho também conta como "no detalhe"; as operações longas não cancelam o detalhe pedido.)*
+- **D-F175 (= Q-F183 (b), Valdo 2026-10-13 — R8-ADV-01) — a linha dos kids imprime o MÍNIMO GARANTIDO**: o Space-Saving guarda o ERRO de
+  cada contador (o mínimo herdado ao entrar no lugar de outro) e a linha imprime `count − erro` (nunca superestima): o kid inventado visto
+  uma vez aparece com ~1, o real com a sua contagem; ordenada por ele. Limite conhecido (D-F173): o real despejado e readmitido só garante o
+  que viu desde a última entrada.
+- **D-F176 (= Q-F184 (b), Valdo 2026-10-13 — R8-ADV-03) — a linha incerta sem código mostra o STATUS HTTP** ("HTTP 503" — o suporte sabe
+  que foi o proxy) e, com a rede caída, "sem conexão" (o texto da exceção — o `supportRef` da rede — não vai à tela).
+- **D-F177 (= Q-F185 (a), Valdo 2026-10-13 — R9-SOC-03) — a regra da D-F174 em TODA saída longa** (rotina mensal, pendentes do lote fiscal):
+  com a OS aberta (ou a caminho) o desfecho aparece e a lista não é recarregada; o botão da rotina mensal fica TRAVADO pelo loading, como os
+  botões de lote (H1).
+- **D-F178 (= Q-F186 (a), Valdo 2026-10-13) — o detalhe preservado NÃO é relido no fim do lote** (conhecimento negativo, comentário no bloc +
+  teste que fixa a semântica): a UI não chega a uma OS do lote aberta durante ele (a lista é spinner; o FAB cria OS NOVA) e o servidor protege
+  (409/trava da nota); reler no meio de uma ação reabriria os botões em voo.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -4462,7 +4479,7 @@ relatório só, nenhuma recarga), as corridas no fim do lote, as saídas pelo de
 | R9-SOC-03 · Q-F185-ADV-01 | LOW | as outras saídas longas (rotina mensal, pendentes do lote fiscal) ainda recarregam por cima da OS aberta; o botão da rotina mensal sem a trava do loading | **Q-F185** |
 | (fato) | — | uma OS do lote aberta no detalhe fica com o status de antes no fim do lote (a UI não chega lá hoje; o servidor protege — 409) | **Q-F186** |
 
-#### 22.26.4 Questões abertas (AGUARDAM o Valdo)
+#### 22.26.4 Questões dos gates da Rodada 9 — DECIDIDAS (Valdo 2026-10-13: "Q-F183 a Q-F186 - siga recomendações" → D-F175…D-F178, §7; execução no §22.30)
 
 - **Q-F183** e **Q-F184** — §22.24.4 (o mínimo garantido na linha dos kids; o status HTTP na linha incerta).
 - **Q-F185 — as outras saídas longas com uma OS aberta no meio (R9-SOC-03/Q-F185-ADV-01)**: (a) **a regra da D-F174 em TODA saída longa
@@ -4491,7 +4508,7 @@ superadas puladas) · core **54** · `flutter analyze` limpo · nenhum banco des
 (`fe71164..44e3a5a` · `0e1ae9d..1779a7a` · `cf4b22e..f67f459` · `3766f39..09777d3`) rodam JUNTO com os da próxima rodada (as Q-F183…Q-F186
 mexem nos mesmos arquivos).
 
-#### 22.29 ⏯ PROMPT DE RETOMADA — Q-F183…Q-F186 → gates do delta → passeio logado → JANELA (colar numa sessão nova)
+#### 22.29 ⏯ PROMPT DE RETOMADA — Q-F183…Q-F186 → gates do delta → passeio logado → JANELA (SUPERADO pelo §22.31)
 
 ```
 Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
@@ -4519,4 +4536,57 @@ PASSO 1 — com as respostas do Valdo às Q-F183…Q-F186 (§22.26.4): registrar
 também as correções do §22.28). PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7). PASSO 3 — a JANELA pelo
 roteiro do §22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.30+), INDICE_CENTRAL,
 CLAUDE.md da raiz, memória apis-fiscais-isoladas.
+```
+
+### 22.30 Rodada 10 da F2a/F2b — DECIDIDA e EXECUTADA (2026-10-13) — D-F175…D-F178
+
+> Valdo (2026-10-13): "Q-F183 a Q-F186 - siga recomendações". Tudo em commit LOCAL; a árvore viva do setes-api não foi tocada.
+
+#### 22.30.1 O que foi executado
+
+| Repo | Commit | O quê |
+|---|---|---|
+| núcleo | `4c225f7` | D-F175 (`topErrors` no Space-Saving; a linha com `count − erro`, ordenada por ele); teste `rodada10-auth-guaranteed` (propriedade em 500 janelas: o mínimo nunca passa da contagem real); os testes dos gates R8/R9 que fixavam "nunca subestima" mudam para "nunca superestima"; `dist` reconstruído |
+| app (worktree `f2b`) | `3174d54` | D-F176 (`httpStatus`/`network` na linha do lote; "sem conexão" pt/en), D-F177 (`_onDetail` no fim da rotina mensal e das pendentes; o botão da rotina mensal com `state.loading ? null`), D-F178 (comentário + teste: uma carga só do detalhe); os testes dos gates R8/R9 ajustados ao formato decidido |
+
+nfse-api e setes-api sem mudança nesta rodada (pontas 1779a7a e f67f459 — §22.28).
+
+#### 22.30.2 Provas (2026-10-13)
+
+- núcleo **528** (+1 pulado) nas duas árvores · nfse-api **749** + 169 pulados nas duas árvores · nfse-api AO VIVO **179** (+4 FATOS superados; nenhum banco descartável sobrou) · app
+  **393** (+4 provas superadas puladas) · core do app **54** · `flutter analyze` limpo. setes-api sem delta nesta rodada (a última suíte:
+  1.833 + as MESMAS 20; ao vivo 132/132 — §22.28).
+
+#### 22.30.3 Gates do delta COMBINADO (correções da Rodada 9 + Rodada 10: `fe71164..4c225f7` · `0e1ae9d..1779a7a` · `cf4b22e..f67f459` · `3766f39..3174d54`)
+
+(em execução — preencher com os resultados)
+
+#### 22.31 ⏯ PROMPT DE RETOMADA — gates do delta combinado → passeio logado → JANELA (colar numa sessão nova)
+
+```
+Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22.30 (Rodada 10 EXECUTADA — D-F175…D-F178; gates do delta combinado no §22.30.3),
+o §22.28 (correções dos gates da Rodada 9), o §22.26 (Rodada 9) e o roteiro da JANELA no §22.13 (aborto com a LÁPIDE SENTINELA —
+D-F153/D-F162; reaplicar a trava só do que falta — D-F152; rotação do JWT_KID em PADROES §7); §7 quando precisar.
+Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, ponta f67f459+) · núcleo 4c225f7+ ·
+nfse-api 1779a7a+ · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 3174d54+) · Infra-IA (main).
+
+REGRAS DURAS
+- D:\Gestao2027\setes-api roda em tsx watch e É a produção da Setes (salvar = deploy; o boot aplica migrations). A F2a SÓ entra na JANELA,
+  junto da F2b. Nunca npm run dev / flutter run nas worktrees (o .env aponta para o MySQL de produção). Nunca migrate:setes --cutover … --vai
+  fora da janela; os --vai dos scripts de aborto/reaplicar só em banco descartável fora da janela. Testes ao vivo só em bancos descartáveis
+  (f2a_*, fiscal_api_adv_*), apagados no fim — e um de cada vez.
+- Suíte do setes-api SEM editar arquivos durante a execução; base = 20 falhas pré-existentes (19 boleto + 1 cerca de fuso). Cercas do
+  núcleo/nfse-api com SETES_API_DIR nas DUAS árvores. Núcleo: `npm run build` depois de mexer (a nfse-api consome o dist) — nunca com uma
+  suíte ao vivo da nfse-api rodando. Jest no Windows: `--json --outputFile` ou `--runInBand --forceExit`.
+- Edição em UTF-8 pela ferramenta de edição (heredoc/`node -e` com barras invertidas e crases FALHAM — script em arquivo; em string CRUA do
+  Dart `\n` é literal); .ps1 com BOM (PS 5.1); commit só dos caminhos da frente, mensagem em arquivo (git commit -F); push só com o "vai".
+  Decisões de arquitetura são do Valdo. Nunca mexer em código enquanto um agente de gate roda testes nas mesmas árvores. No bloc do app: UM
+  contador da tela (vale o último pedido); operações longas não cancelam o detalhe pedido; o `_detail` e a voz nascem juntos onde o detalhe
+  é emitido; toda saída longa respeita `_onDetail`.
+
+PASSO 1 — se os gates do delta combinado (§22.30.3) deixaram questões: com as respostas do Valdo, registrar D-F179+ no §7, executar e
+rodar os gates do delta. PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7). PASSO 3 — a JANELA pelo roteiro do
+§22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.32+), INDICE_CENTRAL, CLAUDE.md da
+raiz, memória apis-fiscais-isoladas.
 ```
