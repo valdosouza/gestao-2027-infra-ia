@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.2 (2026-10-13 — §11 regra 15 ampliada e regra 16, gates da A3 da F2a; 1.1 em 2026-10-12 — regras 11 e 12)
+**Versão**: 1.3 (2026-10-13 — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -295,7 +295,11 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
    **O comando do aluguel tem ESPERA CURTA** (D-F41, 2026-10-04): se outra transação segura a LINHA (escrevendo a
    habilitação), o UPDATE não espera o lock wait padrão (50 s) — `innodb_lock_wait_timeout` curto só na sessão daquele
    comando (UPDATE não aceita `WAIT n`) e 1205 → 409 RESOURCE_BUSY; deadlock reexecuta 1× com aviso (seguro só porque o
-   comando roda em AUTOCOMMIT — o 1213 já o desfez). Peça: `runShortCommand` do núcleo `fiscal-api`.
+   comando roda em AUTOCOMMIT — o 1213 já o desfez). Peça: `runShortCommand` do núcleo `fiscal-api`. **Espera curta = DUAS variáveis**
+   (gate do delta da Rodada 4 da F2a, F2AR4-ADV-03 — provado ao vivo): a trava de METADADOS (LOCK TABLES, ALTER, dump com
+   `--lock-tables`) NÃO obedece o `innodb_lock_wait_timeout` — espera o `lock_wait_timeout` (86400 s por padrão) e sai com o MESMO 1205.
+   Quem encurta encurta as duas na sessão, guarda as duas antes e devolve as duas (o plano consultivo do setes-api — D-F131); devolução
+   que falha = conexão DESCARTADA, nunca de volta ao pool encurtada.
 8. **Candidata de rodízio/lote é filtrada INTEIRA no SQL, antes do LIMIT** — filtrar em memória depois do LIMIT deixa as
    linhas descartadas presas no topo e o rodízio para em silêncio (gate socrático HIGH da F1 fiscal).
 9. **Fato NOSSO não carrega o instante da voz do outro sistema**: a UNIQUE `(…, kind, dh)` é a idempotência da VOZ
@@ -364,6 +368,14 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     evento e corpo com `SIGNAL 45000`) e a perda por TRUNCATE é acusada pela re-sincronia ("fato que a origem não tem"). O
     `information_schema` só lista gatilho de tabela em que o usuário tem o privilégio TRIGGER — a conferência com usuário sem ele vê
     lista VAZIA e tem de RECUSAR (falha fechada), nunca "conferido".
+    **Gates do delta da Rodada 4 da F2a (2026-10-13 — provado ao vivo)**: (a) a conferência compara o CORPO com o da migration, NORMALIZADO
+    (comentários fora de literais saem, espaços colapsados, literais intactos — `normalizeTriggerBody`, a MESMA regra no setes-api e na
+    nfse-api), nunca "o corpo tem um SIGNAL": SIGNAL sob um IF que nunca vale, SIGNAL em comentário ou o corpo de uma versão ANTERIOR
+    passavam (F2AR4-ADV-02); o `ACTION_STATEMENT` que o MariaDB guarda normaliza igual ao corpo do arquivo. (b) Filtro do
+    `information_schema.TRIGGERS` por `EVENT_OBJECT_SCHEMA = ?` — no MariaDB 10.4 o `TRIGGER_SCHEMA = ?` varre TODOS os bancos
+    ("Scanned all databases" no EXPLAIN); o gatilho mora no schema da tabela, a semântica é a mesma (F2AR4-SOC-04). (c) Desfazer a trava
+    (aborto ANTES do ato — D-F134) é por SCHEMA: confere a virada em TODAS as institutions donas dele, recusa o estado incoerente (linha no
+    `_migrations` sem gatilho visível) e confere a pós-condição; o processo que reaplicaria a migration fica PARADO (`--confirmo-…-parado`).
 16. **CHECK de domínio por igualdade de texto não é exato em colação PAD SPACE** (gates da A3 da F2a, F2A3-ADV-02 — provado ao vivo no
     MariaDB 10.4.20): `'105102 ' IN ('105102')` é VERDADE em `utf8mb4_unicode_ci` e também em `utf8mb4_bin` (no MariaDB 10.4 o `_bin`
     é PAD SPACE) — o CHECK aceita o valor com espaço no fim e o código (que compara exato) o lê como outro. Domínio de CÓDIGO em
