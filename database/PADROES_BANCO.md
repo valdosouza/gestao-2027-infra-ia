@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.3 (2026-10-13 — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
+**Versão**: 1.4 (2026-10-13 — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -348,11 +348,19 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     mesma versão fariam uma ser pulada calada (ou o 2º registro em `_migrations` derrubaria o boot depois do DDL). O runner do
     setes-api recusa versão repetida nos arquivos e versão aplicada com OUTRO nome que o do arquivo. Numerar = conferir o `main` e as
     frentes abertas; o que importa a outro serviço é o NOME (a nfse-api confere `f2a_fiscal_passivo` por nome).
+    **LÁPIDE** (D-F153, Rodada 5 da F2a): migration ABORTADA num schema não some do `_migrations` — a linha vira `<nome>_abortada` na
+    MESMA versão. O runner do código que traz o arquivo recusa subir sobre ela **pelo NOME** (o número muda num rebase — R5-SOC-03) e
+    o número dela fica **RESERVADO** naquele schema (outra migration com ele nunca rodaria: o runner acusa "RESERVADA"); o código antigo
+    (sem o arquivo) não a vê. Voltar é um ato deliberado que tira a lápide.
 15. **Gatilho de TRAVA congela o que mudou de dono** (F2a, etapa A3 — D-F110, 2026-10-12; o 1º da casa: `069_f2a_fiscal_passivo`):
     quando um fato passa a ser escrito por OUTRO serviço, a tabela antiga vira ORIGEM CONGELADA por construção — gatilhos BEFORE
     INSERT/UPDATE/DELETE com `SIGNAL SQLSTATE '45000'` e mensagem ASCII ≤ 128 que cita a decisão (o motor devolve errno 1644), nunca
     "o código não escreve mais" (rollback de código pós-virada escreveria). A trava é do FATO, não da tabela inteira quando a linha
     carrega outro conceito: na habilitação SE só o ATO previsto passa (N→S — D-F44) e as linhas 55/65 (série da nota) seguem livres.
+    **Aborto da trava antes do ato** (D-F134/D-F153, gate socrático da Rodada 5 — R5-SOC-05): grava a LÁPIDE (regra 14) ANTES de
+    derrubar os gatilhos (queda no meio = "lápide + alguns", que o próprio aborto termina na 2ª execução) e, com a migration registrada,
+    exige VER todos os gatilhos (o `information_schema` só mostra gatilho de tabela em que o usuário tem TRIGGER — a pós-condição só
+    enxerga o visível). Reaplicar a trava é com UMA conexão (o `USE` vale só nela), nunca um pool.
     Comparar o domínio na colação da COLUNA (`_ci` pega 'se') — congelamento quer a regra mais larga. Forma para o runner do setes-api:
     `DROP TRIGGER IF EXISTS` + `CREATE TRIGGER` (re-executável; `CREATE OR REPLACE TRIGGER` é só MariaDB), corpo com `BEGIN`/`END;`
     em linhas próprias (o runner corta por `;` fora do bloco), sem DELIMITER. Aposentar coluna = COMMENT (`MODIFY` repetindo tipo,

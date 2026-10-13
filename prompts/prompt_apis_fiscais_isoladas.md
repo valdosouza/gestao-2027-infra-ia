@@ -10,7 +10,8 @@
 > **⏯ RETOMAR POR AQUI — §22.19 (PROMPT DE RETOMADA) — Rodada 5 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.18: D-F148…D-F156 —
 > sessão confirmada pelo emissor, releitura do plano, voz fonte × contrato com o autor, reaplicar a trava, LÁPIDE do aborto, C/K ⇒ registro, 500
 > num ato = desconhecido, bloc fechado ao sair da tela); re-gates da F2b 0,78/0,75 com correções; gates do delta da Rodada 5 em §22.18.4; tudo
-> em commit LOCAL. AGUARDAM o Valdo: Q-F165…Q-F167 (§22.18.5) + as dos gates da Rodada 5; depois: passeio logado e a JANELA.**
+> em commit LOCAL; gates do delta da Rodada 5 socrático 0,76 · adversarial 0,72 (sem HIGH) com correções (api b271e03 · núcleo 01bba49 ·
+> nfse 5e61686 · app 6d94a6d). AGUARDAM o Valdo: Q-F165…Q-F172 (§22.18.5); depois: passeio logado e a JANELA.**
 > *Antes:* **§22.17 — Rodada 4 da F2a + Rodada 1 da F2b DECIDIDAS ("siga as recomendações" → D-F130…D-F147)
 > e EXECUTADAS (2026-10-13, §22.16): backend na worktree `f2a` + núcleo + nfse-api, gates do DELTA 0,74/0,72 (sem HIGH) com as correções;
 > F2b no app em WORKTREE `setes-app-f2b` (branch `f2b`); tudo em commit LOCAL (push só com o "vai"). AGUARDAM o Valdo: Q-F156…Q-F159 (§22.16.6)
@@ -830,7 +831,8 @@ branch `sessao-2026-10-10`):**
   recompilar o núcleo na máquina de produção até a F3; na F3, tag/tarball versionado como dependência (R13).
 - **D-F134 (= Q-F142 (a)) — aborto antes do `--vai` por script ensaiado**: válido SÓ até o passo 5 da janela (DROP dos 9 gatilhos, remover a
   linha `f2a_fiscal_passivo` do `_migrations`, reverter o código, re-sincronizar), provado em banco descartável antes da janela; depois do
-  `--vai` o rollback segue proibido (D-F50).
+  `--vai` o rollback segue proibido (D-F50). *(EMENDADA pela D-F153: a linha não é removida — vira a LÁPIDE `f2a_fiscal_passivo_abortada`,
+  gravada ANTES de derrubar os gatilhos.)*
 - **D-F135 (= Q-F143 (a)) — o boot do setes-api confere os 9 gatilhos de TRAVA pelo nome** (depois do runner, molde das sondas de CHECK —
   D-F45/D-IB26): faltando ou diferente = o setes-api não sobe. Uma lista só com o ato da nfse-api (cerca).
 - **D-F136 (= Q-F144 (a)) — voz A/N ⇒ registro, no mapa da família do núcleo**: `mapTransmissionView` recusa (falha alta) a tentativa cuja
@@ -872,7 +874,8 @@ branch `sessao-2026-10-10`):**
   instantes") de contrato (o mapa da família recusou a linha, argumento inválido — "INCOERENTE, tentar de novo não resolve: informe o
   código"); o alarme leva a causa na origem e o AUTOR da requisição (peça `@shared/request-actor`, fixada pelo `authMiddleware`).
 - **D-F152 (= Q-F157 (b), Valdo 2026-10-13) — a conferência dos 9 gatilhos no boot segue GLOBAL + ferramenta "reaplicar a trava do schema
-  X"** (`setes-api/scripts/f2a-reapply-freeze.ts` — só as instruções de gatilho da migration, `USE` + como o runner; a conferência do boot
+  X"** (`setes-api/scripts/f2a-reapply-freeze.ts` — só as instruções de gatilho da migration, e só as dos que faltam/diferem (gate
+  adversarial da Rodada 5, R5-ADV-04), `USE` + como o runner; a conferência do boot
   é a pós-condição; recusa com a lápide ou sem a migration registrada); a quarentena POR INSTITUTION fica para a F3.
 - **D-F153 (= Q-F158 (c), Valdo 2026-10-13) — o aborto deixa a LÁPIDE** no `_migrations` (a versão da migration com o nome
   `f2a_fiscal_passivo_abortada`): o código ANTIGO sobe normalmente (sem o arquivo, o runner não a vê); o código NOVO RECUSA subir sobre ela
@@ -885,8 +888,10 @@ branch `sessao-2026-10-10`):**
 - **D-F156 (= Q-F164 (a), Valdo 2026-10-13 — F2B-ADV-03; decide a Q-R5.2 do `prompt_primeiro_cliente_setes.md`) — sair da tela PARA os
   lotes**: o Modular fecha o `ServiceOrderBloc` no `onDispose`, e `stopBatches()` (chamado pelo `dispose` da página e pelo `onDispose`)
   para o lote fiscal depois da nota em voo e o de FATURAMENTO depois do bloco em voo; o que já foi feito fica na lista; tela fechada = sem
-  relatório. Conhecimento negativo: o `close()` do bloc 8 NÃO interrompe handler em andamento (o `isClosed` só vira true quando ele termina)
-  — por isso a parada é um sinal próprio, nunca o `isClosed`.
+  relatório. Conhecimento negativo (CORRIGIDO pelo gate socrático da Rodada 5 — R5-SOC-02, sonda no bloc 8.1.4): o `close()` do bloc 8
+  termina logo (cancela os emitters) e o `isClosed` vira true; o handler em andamento NÃO é interrompido — continua até o fim, com as
+  emissões viradas no-op. Por isso o laço do lote consulta um sinal a CADA unidade (`isClosed` ou a parada). A causa real do F2B-ADV-03 era
+  o Modular nunca fechar o bloc (o bind sem `onDispose`).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -3456,8 +3461,16 @@ LÁPIDE da D-F153 e a pós-condição é conferida); (4) reverter o código da �
 (5) subir o setes-api (código antigo — a lápide não o afeta) e rodar o ENSAIO de novo — `triggers: []`, `migrationRow: false`,
 `tombstone: true`; (6) `npm run migrate:setes` na nfse-api (re-sincronia); (7) o app fica no build anterior. Se o código da F2a subir por
 engano sobre o schema abortado, o boot RECUSA (lápide). Voltar à F2a depois = `… setes_setes 1 --retirar-lapide --vai` e o merge de novo.
-**Trava faltando no boot** (D-F152): `npx tsx --require tsconfig-paths/register scripts/f2a-reapply-freeze.ts setes_setes [--vai]`. O script RECUSA se QUALQUER dona do schema já virou (SE aposentada ou `cutover_at`), se o id não é dono do schema
-ou não tem a linha SE, e no estado incoerente (linha no `_migrations` sem gatilho visível). Depois do `--vai` do ato: rollback PROIBIDO (D-F50).
+O script do aborto RECUSA se QUALQUER dona do schema já virou (SE aposentada ou `cutover_at`), se o id não é dono do schema ou não tem a
+linha SE, e quando a linha da migration está no `_migrations` mas não se VEEM os 9 gatilhos (privilégio TRIGGER do usuário — ou gatilho
+apagado à mão: reaplicar a trava antes e abortar de novo). Ele grava a LÁPIDE ANTES de derrubar os gatilhos (R5-SOC-05): se cair no meio,
+rodar de novo termina o serviço. O aborto age POR SCHEMA e o boot do código da F2a confere a trava em TODO schema ativo — numa
+instalação com mais de um schema, o passo (3) é para CADA schema ativo (hoje, 2026-10-13: só a institution 1 / `setes_setes`). Depois do
+`--vai` do ato: rollback PROIBIDO (D-F50).
+**Trava faltando no boot** (D-F152): `npx tsx --require tsconfig-paths/register scripts/f2a-reapply-freeze.ts setes_setes [--vai]` — roda
+SÓ o DROP+CREATE dos gatilhos que FALTAM ou DIFEREM (os certos ficam de pé — R5-ADV-04), com UMA conexão (o `USE` vale só nela; recusa
+pool — R5-SOC-07), e confere pela conferência do boot. RECUSA com a LÁPIDE (a F2a foi abortada ali — voltar é o `--retirar-lapide`) e sem a migration registrada (o boot a aplica
+inteira). Sem `--vai` é ensaio.
 
 #### 22.13.1 Provas (2026-10-13)
 
@@ -3917,7 +3930,47 @@ sem relatório). A "barreira modal com progresso" da recomendação original fic
 
 #### 22.18.4 Gates do delta da Rodada 5 (`1a5af8e..22388d9` · `4cb74d9..de5924c` · `5107863..4a1a9a4` · `bbeb1d6..5c80e20`)
 
-(em execução — preencher com os resultados)
+**Socrático: 0,76 ✅** (sem CRITICAL/HIGH; 1 MEDIUM + 7 LOW; sondas reais: flutter_modular 5.0.3, bloc 8.1.4, mysql2 3.22.4 — só SELECT
+no dev; suítes conferidas pelo agente: setes-api 1.805 + as MESMAS 20 · núcleo 476 · nfse-api 713 · app 305+1 · core 46).
+
+| Achado | Sev. | O quê | Destino |
+|---|---|---|---|
+| R5-SOC-01 | MEDIUM | o `stopBatches()` no `dispose` da PÁGINA dispara também quando a janela cruza 1100 px (o `Responsive` troca o layout desktop × mobile e cada um tem o seu `RouterOutlet` — a página é recriada, o MÓDULO não): o lote para calado sem o operador sair | **Q-F168** |
+| R5-SOC-02 | LOW | o conhecimento negativo da D-F156 estava ERRADO: o `close()` do bloc 8 termina logo e o `isClosed` vira true — o handler em andamento é que segue até o fim | **corrigido** (texto da D-F156 + comentários do bloc) |
+| R5-SOC-03 | LOW | a lápide presa ao NÚMERO: a F2a renumerada num rebase (069 → 071) voltava calada; outra migration no número da lápide caía na mensagem genérica | **corrigido** (pelo NOME; número RESERVADO — PADROES §11 regra 14) |
+| R5-SOC-04 | LOW | os 3 erros do POOL do mysql2 (`Pool is closed.`, `No connections available.`, `Queue limit reached.`) não têm `code`/`errno` → saíam "contrato"; `POOL_CLOSED`/`POOL_ENQUEUELIMIT` são do pacote `mysql` (mortos) | **corrigido** |
+| R5-SOC-05 | LOW | o aborto derrubava os gatilhos ANTES da lápide (queda no meio = estado que o próprio aborto recusa) e "concluía" com gatilho escondido por privilégio | **corrigido**: lápide primeiro; linha registrada exige ver os 9 |
+| R5-SOC-06 | LOW | roteiro com as recusas do ABORTO depois do comando de reaplicar; D-F134 sem a marca da emenda; "para cada schema ativo" | **corrigido** (texto) |
+| R5-SOC-07 | LOW | `reapplyF2aFreeze` aceitava um pool (o `USE` numa conexão, os CREATE em outra) | **corrigido**: tipo + recusa em execução |
+| R5-SOC-08 | LOW | a mesma C/K sem registro dá 3 frases (ERP "INCOERENTE" · ato da nfse-api "resultado incerto" · consulta "indisponível") — sempre para o lado conservador | **Q-F169** |
+
+Pontos abertos sem achado (registrados): o pool CHEIO não tem prazo de espera (a leitura da voz espera sem 503 nem alarme — o mysql2 não
+tem `acquireTimeout`); uma linha incoerente PERSISTENTE grava um alarme por carga da lista (D-F130; 0 linhas hoje).
+
+**Adversarial: 0,72 ✅** (sem CRITICAL/HIGH; 1 MEDIUM + 8 LOW; achados anteriores seguem FECHADOS — com `--run-skipped` só o teste de
+decisão Q-F167 falha; ataques AO VIVO só em bancos descartáveis `f2a_advr5_*`, apagados). Resistiram: fonte × contrato contra erros REAIS
+(ECONNREFUSED, 1146, 1054, conexão morta por KILL; 1205 de metadados sobe cru para o 409), o autor do alarme com 2 requisições simultâneas
+resolvidas na ordem inversa, nenhuma rota sem `authMiddleware` alcança a porta, C/K ⇒ registro nos fluxos legítimos (núcleo e nfse-api),
+D-F155 (ato × leitura × 3 seguidos), D-F156 pelo `onDispose`, prazo de 15 s × relogin, lista de `/auth`. FATO registrado: voltar à tela
+cria um bloc NOVO que manda a mesma nota em paralelo com o antigo — quem serializa é a trava da nfse-api.
+
+| Achado | Sev. | O quê | Destino |
+|---|---|---|---|
+| R5-ADV-01 | MEDIUM | = R5-SOC-03: a lápide só valia para a MESMA versão — a F2a renumerada (069 → 071, o roteiro manda renumerar contra o `main`) re-congelava o ERP CALADO (provado com o runner real) | **corrigido** (pelo NOME) |
+| R5-ADV-02 | LOW | a lápide OCUPA a versão 069 em produção: a próxima migration do `main` com o 069 derruba o boot do código ANTIGO com a frase genérica | **corrigido em parte** (o runner da F2a diz "RESERVADA"); o do `main` → **Q-F170** |
+| R5-ADV-03 | LOW | = R5-SOC-04 (`Pool is closed.` saía "contrato") | **corrigido** |
+| R5-ADV-04 | LOW | reaplicar derrubava e recriava os 9 um a um: entre o DROP e o CREATE de cada um a escrita congelada PASSOU (provado ao vivo — `slipped = 1` no contador da SE, gatilho que NÃO faltava) | **corrigido**: só o DROP+CREATE do que falta/difere |
+| R5-ADV-05 | LOW | uma tentativa K/C sem registro faz `listRefreshCandidates` (nfse-api) lançar para a lista INTEIRA — a consulta ativa do estabelecimento para | **Q-F172** |
+| R5-ADV-06 | LOW | `AUTHORIZATION_PRESUPPOSED_KINDS` era lista à mão no arquivo cujo contrato diz "deriva da `KIND_CLASS`" (o evento da NF-e entraria fora da regra) | **corrigido**: atributo `presupposesAuthorization` na classe |
+| R5-ADV-07 | LOW | = R5-SOC-02 + 3 caminhos `await <diálogo>` → `_bloc.add` sem `mounted` (bloc agora fecha no `onDispose` → StateError) | **corrigido** |
+| R5-ADV-08 | LOW | `build-web.ps1` × `urlProblems` × navegador: host que termina em número sem ser IPv4 válido aceito nos dois; ponto final / `localhost.` / sublinhado aceitos só no script; `0.0.0.0`/`[::]` passavam | **corrigido**: a MESMA regra nos dois |
+| R5-ADV-09 | LOW | (anterior ao delta, mesma linha) `body['error'] as String?` lançava TypeError com o JSON de erro de um gateway | **corrigido** |
+| Q-F168-ADV-02 | — | 409 `RESOURCE_BUSY` num ATO (a gravação da voz DEPOIS do fisco esbarrou numa trava) aparece como "tente de novo" | **Q-F171** |
+
+**Correções da sessão** (commits LOCAIS): setes-api `b271e03` · núcleo `01bba49` · nfse-api `5e61686` (testes do gate) · app `6d94a6d`.
+Provas depois delas: setes-api **1.821 + as MESMAS 20** (19 boleto + 1 fuso) · gates ao vivo (A2+A3+R4+R5, bancos descartáveis) **119/119** ·
+`prove-f2a-abort.ts` **18/18** (nenhum banco sobrou) · núcleo **481/481** nas duas árvores (`dist` reconstruído) · nfse-api **718** + 165
+pulados nas duas árvores · core do app **54/54** · app **320 + 2 pulados** (decisões Q-F167 e Q-F171) · `flutter analyze` limpo nos dois.
 
 #### 22.18.5 Questões abertas (AGUARDAM o Valdo)
 
@@ -3934,9 +3987,26 @@ sem relatório). A "barreira modal com progresso" da recomendação original fic
   aparece sem a frase que explica a substituição (ela vinha da voz). (a) esconder o botão até a voz voltar · (b) **uma linha a partir do
   efeito do ERP ("NFS-e substituída no fisco — decida") — cada fonte mostra as próprias ações (F2B-SOC-11); o ERP reconfere no POST**.
   *(Rec.: (b).)*
-- (as questões dos gates da Rodada 5 entram a partir de Q-F168 — §22.18.4)
+- **Q-F168 — onde o app decide que "a tela saiu" (R5-SOC-01)**: (a) **só no `onDispose` do MÓDULO** — tirar o `stopBatches()` do
+  `dispose` da página (o módulo só é descartado ao navegar para outra tela; provado na sonda) · (b) manter os dois e preservar o
+  `RouterOutlet` na troca de layout (árvore única no shell — resolve também a perda de estado de QUALQUER tela ao redimensionar, que já
+  existe hoje) · (c) aceitar e documentar. *(Rec.: (a) agora — local e fiel à intenção da D-F156; a (b) vira item próprio de UX do shell.)*
+- **Q-F169 — a frase da incoerência C/K sem registro (R5-SOC-08)**: (a) **aceitar e documentar** (0 linhas hoje; a D-F154 é alarme) ·
+  (b) a nfse-api ganha um código próprio para a incoerência ANTES do ato ("nada foi feito — suporte") e o app a trata como falha comum.
+  *(Rec.: (a).)*
+- **Q-F170 — a forma da LÁPIDE (R5-ADV-01/02)**: hoje a lápide ocupa a versão da migration (069) no `_migrations`; o runner da F2a já
+  recusa pelo NOME e chama o número de RESERVADO, mas o código ANTIGO (o `main`, que é o que roda depois de um aborto) cai na frase genérica
+  "duas migrations com o mesmo número" se o `main` ganhar uma 069 — com o `tsx watch`, salvar o arquivo derruba a produção. (a) **lápide
+  com versão SENTINELA (`F2A-ABORT` — cabe no `VARCHAR(10)`; o runner do `main` ignora versão sem arquivo e não ordena por número —
+  conferido) e recusa pelo nome**: fecha os dois · (b) manter a versão e registrar a reserva (PADROES §11 regra 14 — feito). *(Rec.: (a).)*
+- **Q-F171 — 409 `RESOURCE_BUSY` num ATO (Q-F168-ADV-02)**: a nfse-api devolve-o quando a gravação da voz, DEPOIS de falar com o fisco,
+  esbarra numa trava (lock wait); hoje o app mostra "tente de novo". (a) **tratar como desfecho DESCONHECIDO ("resultado incerto —
+  consulte") nos atos, pela mesma razão da D-F155** · (b) manter. *(Rec.: (a); leituras seguem falha comum.)*
+- **Q-F172 — uma linha incoerente no rodízio (R5-ADV-05)**: uma tentativa K/C sem registro faz a lista de candidatas da consulta ativa
+  lançar INTEIRA (para o estabelecimento todo). (a) **pular a linha COM alarme dentro da lista do rodízio; o leitor da NOTA continua
+  falhando alto** · (b) manter (a D-F154 é alarme; 0 linhas hoje). *(Rec.: (a).)*
 
-**Pendências antes da janela**: decidir Q-F165…Q-F167 (+ as dos gates da Rodada 5); o PASSEIO LOGADO da F2b (ambiente: a decidir — as
+**Pendências antes da janela**: decidir Q-F165…Q-F172; o PASSEIO LOGADO da F2b (ambiente: a decidir — as
 worktrees apontam para o MySQL de produção; alternativa: na janela, depois do passo 5, como parte da trilha do passo 7); conferir na janela
 quantas notas sem NFS-e não são de OS (D-F145); push dos repos só com o "vai".
 
@@ -3946,8 +4016,8 @@ quantas notas sem NFS-e não são de OS (D-F145); push dos repos só com o "vai"
 Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
 Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22.18 (Rodada 5 EXECUTADA — D-F151…D-F156; gates do delta; Q-F165+), o §22.16
 (Rodada 4 + F2b + re-gates) e o roteiro da JANELA no §22.13 (aborto com a LÁPIDE da D-F153; reaplicar a trava — D-F152); §7 quando precisar.
-Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, ponta 22388d9+) · núcleo de5924c+ ·
-nfse-api 4a1a9a4+ · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 5c80e20+) · Infra-IA (main).
+Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, ponta b271e03+) · núcleo 01bba49+ ·
+nfse-api 5e61686+ · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 6d94a6d+) · Infra-IA (main).
 
 REGRAS DURAS
 - D:\Gestao2027\setes-api roda em tsx watch e É a produção da Setes (salvar = deploy; o boot aplica migrations). A F2a SÓ entra na JANELA,
@@ -3959,7 +4029,7 @@ REGRAS DURAS
 - Edição em UTF-8 pela ferramenta de edição (heredoc/`node -e` com barras invertidas FALHAM — script em arquivo); .ps1 com BOM (PS 5.1);
   commit só dos caminhos da frente, mensagem em arquivo (git commit -F); push só com o "vai". Decisões de arquitetura são do Valdo.
 
-PASSO 1 — com as respostas do Valdo às Q-F165+ : registrar D-F157+ no §7, executar e rodar os gates do delta.
+PASSO 1 — com as respostas do Valdo às Q-F165…Q-F172 (§22.18.5): registrar D-F157+ no §7, executar e rodar os gates do delta.
 PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7). PASSO 3 — a JANELA pelo roteiro do §22.13 (cada passo
 irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.20+), INDICE_CENTRAL, CLAUDE.md da raiz, memória
 apis-fiscais-isoladas.
