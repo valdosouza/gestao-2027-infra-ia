@@ -155,10 +155,13 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
   têm a PÚBLICA. HS256/`JWT_SECRET` aposentados (o segredo antigo estava num script versionado de repositório público). Token FINAL recusa
   `scope` e exige a forma acima; token de SELEÇÃO (`{ userId, scope: 'select-institution' }`, 5 min) exige `scope` e recusa `institutionId`;
   `exp` obrigatório; sem a chave o boot não sobe. NUNCA segredo de assinatura em arquivo versionado.
-  **Rotação do `JWT_KID`** (D-F157 — Rodada 6 da F2a): (1) gerar o par novo; (2) publicar a NOVA chave pública em `JWT_PUBLIC_KEYS` de
-  TODA API do produto (nfse-api, nfe-api) e reiniciá-las; (3) só então virar o `JWT_KID` do setes-api (a chave anterior fica na lista
-  dele e nas das APIs até o último token dela expirar — 24 h); (4) tirar a anterior. Virar antes do (2) = todo ato fiscal recusado com 401
-  `unknown_kid` (o núcleo LOGA a classe de cada 401, com o kid — nunca o token).
+  **Rotação do `JWT_KID`** (D-F157 — Rodada 6 da F2a; detalhes do gate socrático R6-SOC-09): (1) gerar o par novo; (2) publicar a NOVA
+  chave pública em `JWT_PUBLIC_KEYS` de TODA API do produto (nfse-api, nfe-api) — com o MESMO kid que o setes-api vai usar; quem está na
+  forma `JWT_PUBLIC_KEY_PATH` (kid `default`) passa para a lista `default=<anterior>,<novo>=<nova>` — e reiniciar TODAS as instâncias (D-F9);
+  (2b) PROVAR: um token assinado com o kid novo aceito pela nfse-api (GET autenticado qualquer) — o log da D-F157 só mostra o erro depois da
+  virada; (3) só então virar o `JWT_KID` do setes-api (a chave anterior fica na lista dele e nas das APIs até o último token dela expirar —
+  24 h); (4) tirar a anterior. Virar antes do (2) = todo ato fiscal recusado com 401 `unknown_kid` (o núcleo LOGA a classe de cada 401, com o
+  kid — nunca o token). Desde a D-F165 o núcleo, como o setes-api, exige `kid` e `exp` no token.
 - Fluxo multi-institution: ver `setes-api/04-AUTH-MULTI-INSTITUTION.md`
 
 ## 8. Validação antes de executar
