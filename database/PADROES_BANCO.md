@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.4 (2026-10-13 — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
+**Versão**: 1.5 (2026-10-13 — §7 ordem da rotação do `JWT_KID` (D-F157) e §11 regra 14 LÁPIDE com versão SENTINELA (D-F162), Rodada 6 da F2a; 1.4 no mesmo dia — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -155,6 +155,10 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
   têm a PÚBLICA. HS256/`JWT_SECRET` aposentados (o segredo antigo estava num script versionado de repositório público). Token FINAL recusa
   `scope` e exige a forma acima; token de SELEÇÃO (`{ userId, scope: 'select-institution' }`, 5 min) exige `scope` e recusa `institutionId`;
   `exp` obrigatório; sem a chave o boot não sobe. NUNCA segredo de assinatura em arquivo versionado.
+  **Rotação do `JWT_KID`** (D-F157 — Rodada 6 da F2a): (1) gerar o par novo; (2) publicar a NOVA chave pública em `JWT_PUBLIC_KEYS` de
+  TODA API do produto (nfse-api, nfe-api) e reiniciá-las; (3) só então virar o `JWT_KID` do setes-api (a chave anterior fica na lista
+  dele e nas das APIs até o último token dela expirar — 24 h); (4) tirar a anterior. Virar antes do (2) = todo ato fiscal recusado com 401
+  `unknown_kid` (o núcleo LOGA a classe de cada 401, com o kid — nunca o token).
 - Fluxo multi-institution: ver `setes-api/04-AUTH-MULTI-INSTITUTION.md`
 
 ## 8. Validação antes de executar
@@ -348,10 +352,11 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     mesma versão fariam uma ser pulada calada (ou o 2º registro em `_migrations` derrubaria o boot depois do DDL). O runner do
     setes-api recusa versão repetida nos arquivos e versão aplicada com OUTRO nome que o do arquivo. Numerar = conferir o `main` e as
     frentes abertas; o que importa a outro serviço é o NOME (a nfse-api confere `f2a_fiscal_passivo` por nome).
-    **LÁPIDE** (D-F153, Rodada 5 da F2a): migration ABORTADA num schema não some do `_migrations` — a linha vira `<nome>_abortada` na
-    MESMA versão. O runner do código que traz o arquivo recusa subir sobre ela **pelo NOME** (o número muda num rebase — R5-SOC-03) e
-    o número dela fica **RESERVADO** naquele schema (outra migration com ele nunca rodaria: o runner acusa "RESERVADA"); o código antigo
-    (sem o arquivo) não a vê. Voltar é um ato deliberado que tira a lápide.
+    **LÁPIDE** (D-F153/D-F162, Rodadas 5–6 da F2a): migration ABORTADA num schema não some do `_migrations` — a linha vira
+    `<nome>_abortada` com uma versão **SENTINELA** (`F2A-ABORT` — nunca o número da migration: com o número, a lápide o OCUPAVA e a
+    próxima migration do `main` com ele derrubava o boot do código ANTIGO). O runner do código que traz o arquivo recusa subir sobre ela
+    **pelo NOME** (o número muda num rebase — R5-SOC-03); o código antigo (sem o arquivo) não a vê. Lápide NUMÉRICA (forma anterior) ainda
+    é recusada pelo nome e reserva o número ("RESERVADA"). Voltar é um ato deliberado que tira a lápide.
 15. **Gatilho de TRAVA congela o que mudou de dono** (F2a, etapa A3 — D-F110, 2026-10-12; o 1º da casa: `069_f2a_fiscal_passivo`):
     quando um fato passa a ser escrito por OUTRO serviço, a tabela antiga vira ORIGEM CONGELADA por construção — gatilhos BEFORE
     INSERT/UPDATE/DELETE com `SIGNAL SQLSTATE '45000'` e mensagem ASCII ≤ 128 que cita a decisão (o motor devolve errno 1644), nunca
