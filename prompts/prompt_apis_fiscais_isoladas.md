@@ -7,7 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.35 (PROMPT DE RETOMADA) — Rodada 11 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.34: D-F179…D-F181 —
+> **⏯ RETOMAR POR AQUI — §22.37 (PROMPT DE RETOMADA) — gates do delta da Rodada 11 FEITOS (2026-10-13, §22.34.3: socrático 0,76 ·
+> adversarial 0,82, sem HIGH/MEDIUM) e as correções sem decisão EXECUTADAS (§22.36: o ensaio do `--cutover` interrompido imprime os
+> bloqueios; a falha montada pelo app pela LISTA `ClientFailureCodes.all`); tudo em commit LOCAL (núcleo 945ad2d · nfse 74aa6d5 · api
+> f67f459 · app da2b749); AGUARDAM o Valdo Q-F190…Q-F194 (§22.36.3). Depois: passeio logado e a JANELA.**
+> *Antes:* **§22.35 — Rodada 11 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.34: D-F179…D-F181 —
 > a trava H1 completa da rotina mensal e do "Transmitir pendentes", o "ref" da linha do lote só do servidor, a frase neutra da rede); tudo
 > em commit LOCAL (núcleo 945ad2d · nfse 56b684d · api f67f459 · app 5983b29); gates do delta (correções do §22.32 + Rodada 11) em §22.34.3.
 > Depois: passeio logado e a JANELA.**
@@ -4720,9 +4724,34 @@ rodada (§22.32.2: núcleo 531 · nfse-api 752 + 169 · nfse-api ao vivo 182 + 4
 
 #### 22.34.3 Gates do delta (correções do §22.32 + Rodada 11: `3174d54..5983b29` · `1779a7a..56b684d` · `4c225f7..945ad2d`)
 
-(em execução — preencher com os resultados)
+**Socrático 0,76 ✅** (nenhum CRITICAL/HIGH/MEDIUM — 6 LOW, dois anteriores ao delta) e **adversarial 0,82 ✅** (sem HIGH/CRITICAL/MEDIUM —
+5 LOW, 4 provados + 1 analisado; fuzz de 400 sequências aleatórias do bloc sem spinner/`saving` preso, sem detalhe com a voz de outra OS e
+com as travas sempre soltas). As correções do §22.32 e a Rodada 11 fazem o que prometem (toda emissão do detalhe conferida; a marca "a
+caminho" só morre com o `_detail`; as travas da D-F179 baixadas no `finally`; a frase do ato e do ensaio igual nos 5 ramos). O que sobra
+está na BORDA do "vale o último pedido" — só alcançável com a página RECRIADA no meio de um ato (cruzar 1100 px, girar o tablet; fora isso o
+`busy` desabilita o voltar e os botões):
 
-#### 22.35 ⏯ PROMPT DE RETOMADA — gates do delta → passeio logado → JANELA (colar numa sessão nova)
+| Achado | O quê | Destino |
+|---|---|---|
+| R11-SOC-01 = R11-ADV-02 | a MESMA OS reaberta não é relida no fim do ato: "Transmitir" em X, página recriada, X reaberta, o fisco autoriza → o aviso diz "autorizada" e o detalhe segue com a voz de antes (recusada/não transmitida, botão Transmitir ativo); antes do §22.32 esse caso relia (perdeu junto com a correção do "outra OS"). Variante: depois de faturar, a lista recriada continua mostrando a OS em Abertas. O servidor protege (409 + releitura, plano relido) | **Q-F190** |
+| R11-SOC-02 = R11-ADV-03 | as travas de duplo clique `_transmitting`/`_invoiceCancelling` são do BLOC inteiro: com o ato da OS A no ar (página recriada), "Transmitir"/"Manter a nota" na OS B somem em silêncio — e o desfecho de A ("NFS-e autorizada — chave KA") aparece sobre B, que nunca foi transmitida | **Q-F190** (o número da OS no desfecho) + **Q-F191** (trava por nota) |
+| R11-SOC-03 (anterior ao delta; lido no código) | os diálogos abrem no Navigator raiz e sobrevivem à recriação da página; ao confirmar, o `if (!mounted) return` descarta a decisão sem aviso (motivo do cancelamento, lote, rotina mensal, OS nova) — o bloc está vivo (singleton do módulo, D-F160) | **Q-F192** |
+| R11-SOC-04 | a D-F180 reconhecia a falha do app pelo PREFIXO `CLIENT_` (convenção) — `SESSION_NOT_ACCEPTED` é do app sem o prefixo (hoje inócuo: é sistêmica, linha recusada) | corrigido (§22.36) |
+| R11-SOC-05 = R11-ADV-04 | a frase neutra só na linha do lote: o ato avulso e a seção "No fisco" dizem "Falha de conexão com o servidor" (`core.errors.network`) com o texto do Dart como ref | **Q-F193** |
+| R11-SOC-06 = R11-ADV-01 | o ENSAIO do `--cutover` que falhava DENTRO da transação (transmissão viva, ERP sem SE, já virada, série, pós-condição) engolia os bloqueios D-F50/D-F110 já conferidos — o ato real responderia primeiro por eles (provado: F2a ausente + transmissão viva = o ato diz "F2a", o ensaio só "reconcilie") | corrigido (§22.36) — o socrático: sem decisão; o adversarial: a opção (a) da Q-F190-ADV-01, a recomendada |
+| R11-ADV-05 (analisado) | as frases do ato mandam rodar os scripts do setes-api "a partir da WORKTREE da F2a" — depois do merge na janela, as viradas das PRÓXIMAS institutions (alvo 1000) apontariam para uma cópia possivelmente velha | **Q-F194** |
+
+**Resistiram**: D-F179 (a falha, a página recriada e o módulo fechado deixam a lista LIVRE no fim; "voltar" com a rotina no ar devolve a lista
+ainda em loading; com o lote fiscal no ar o bloc recusa a fotografia; a falta de trava CRUZADA não é risco real — os quatro pontos de
+entrada das operações longas ficam atrás de `state.loading ? null` ou de diálogo modal); D-F180 com toda falha que o app monta
+(`invalidResponseFailure`, envelopes estritos, configuração; o ref do SERVIDOR segue — INTERNAL, RESOURCE_BUSY, FISCAL_AUTHORITY_UNAVAILABLE;
+nenhum servidor emite `CLIENT_*`); D-F181 nas duas línguas (a chave antiga sumiu); a falha de um ato com a MESMA OS reaberta no meio não
+volta por cima nem prende o `saving`; as frases do ato e do ensaio nos ramos testados (1146, permissão, a precedência lápide > "sem F2a" >
+D-F110, sem marca de molde vazada). Suítes dos gates = a base (setes-api 1.833 + as MESMAS 20; ao vivo 132/132) + os testes novos
+(`nfse-api/src/__tests__/adversarial-f2a-r11-gate.test.ts` — o nome `adversarial-r11-gate` já é da Rodada 11 da D-F61 —,
+`setes-app-f2b/apps/web/test/adversarial_r11_gate_test.dart`, com o fuzz).
+
+#### 22.35 ⏯ PROMPT DE RETOMADA — gates do delta → passeio logado → JANELA (SUPERADO pelo §22.37)
 
 ```
 Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
@@ -4752,4 +4781,80 @@ PASSO 1 — se os gates do delta (§22.34.3) deixaram questões: com as resposta
 do delta. PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7) — provocar um 502/504 do proxy (D-F181). PASSO 3 — a
 JANELA pelo roteiro do §22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.36+),
 INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
+```
+
+### 22.36 Correções dos gates do delta da Rodada 11 — EXECUTADAS (2026-10-13)
+
+> Sem decisão nova. Tudo em commit LOCAL; a árvore viva do setes-api não foi tocada.
+
+#### 22.36.1 O que foi executado
+
+| Repo | Commit | O quê |
+|---|---|---|
+| nfse-api | `74aa6d5` | R11-SOC-06 = R11-ADV-01: o ENSAIO do `--cutover` interrompido por um erro duro DENTRO da transação imprime o relatório com os bloqueios D-F50/D-F110 já conferidos (`{ dryRun, committed: false, bloqueios, interrompidoPor }`) e segue saindo com 1; o teste do gate R11 (`adversarial-f2a-r11-gate`) com o FATO e o ACHADO viraram `[CORRIGIDO]` (comparação pelo relatório JSON — o que o roteiro da janela lê) |
+| app (worktree `f2b`) | `da2b749` | R11-SOC-04: `ClientFailureCodes.all` no pacote core (a falha MONTADA pelo app — resposta ilegível, configuração, sessão não aceita) e a linha do lote (D-F180) pela lista, não pelo prefixo; cerca no teste (todo código declarado na classe entra na lista); o gate R11 do adversarial (fuzz de 400 sequências; R11-ADV-02/03 pulados até a Q-F190/Q-F191); comentários do gate R8 com a frase da D-F181 |
+
+núcleo e setes-api sem mudança (pontas 945ad2d · f67f459).
+
+#### 22.36.2 Provas (2026-10-13)
+
+app **424** (+6 pulados: as 4 provas superadas do R9 e os 2 ACHADOS do R11 que aguardam a Q-F190/Q-F191) · core do app **54** · `flutter
+analyze` limpo no app e no core · nfse-api **758** + 169 pulados nas duas árvores · nfse-api AO VIVO **188 (+4 FATOS superados; `live` + os gates r6–r10 e f2a-r11)** · núcleo sem delta (531) ·
+setes-api sem delta (1.833 + as MESMAS 20; ao vivo 132/132 — conferidos pelos gates) · nenhum banco descartável sobrou.
+
+#### 22.36.3 Questões dos gates do delta da Rodada 11 — AGUARDAM o Valdo
+
+> Todas na BORDA do "vale o último pedido": só com a página RECRIADA no meio de um ato (ou um diálogo aberto). O servidor protege em todas
+> (nada irreversível acontece) — o risco é o operador LER errado.
+
+- **Q-F190 — o desfecho de um ato cuja tela saiu no meio (R11-SOC-01/02 = R11-ADV-02)**: (a) **a MESMA OS reaberta: o fim do ato relê o
+  detalhe com a tela de AGORA (conferida de novo na chegada); outra OS ou a lista: o desfecho leva o NÚMERO da OS ("OS 7374: NFS-e
+  autorizada — chave …")** · (b) só o número da OS no desfecho · (c) aceitar como limite conhecido. *(Rec.: (a) — o operador não pode ler o
+  desfecho de X como se fosse de Y, nem ver "autorizada" sobre a voz "recusada" da mesma nota; a lista desatualizada depois de faturar se
+  corrige ao abrir a OS e fica de fora.)*
+- **Q-F191 — as travas de duplo clique são do bloc inteiro (R11-SOC-02 = R11-ADV-03)**: com o ato da OS A no ar, o clique em
+  "Transmitir"/"Manter a nota" na OS B some em silêncio. (a) **trava POR NOTA (`Set<int>` de OS em voo) — o clique da outra OS vai; quem
+  protege a nota é a trava DELA na nfse-api/ERP** · (b) aviso "a OS N ainda está no fisco" · (c) aceitar. *(Rec.: (a) — a trava do bloc é só
+  contra o duplo clique na MESMA nota.)*
+- **Q-F192 — a decisão confirmada num diálogo que sobreviveu à recriação da página (R11-SOC-03, anterior ao delta)**: hoje o `if (!mounted)
+  return` da página recriada descarta a decisão sem aviso (motivo do cancelamento, lote, rotina mensal, OS nova). (a) **despachar ao bloc
+  se ELE está vivo (`isClosed`), não pelo `mounted` da página** · (b) avisar e pedir a confirmação de novo · (c) aceitar. *(Rec.: (a) — o
+  bloc é o singleton do módulo (D-F160) e o servidor relê o plano (D-F149): despachar é seguro.)*
+- **Q-F193 — a frase neutra também nos atos fiscais e na seção "No fisco" (R11-SOC-05 = R11-ADV-04)**: (a) **só nas chamadas à nfse-api — o
+  aviso dos atos fiscais e a falha da voz na seção** · (b) mudar `core.errors.network` no app inteiro · (c) aceitar. *(Rec.: (a), e decidir
+  a (b) depois de provocar o 502/504 do proxy no passeio logado (D-F181) — também no ato avulso.)*
+- **Q-F194 — "a partir da WORKTREE da F2a" nas frases do ato (R11-ADV-05, analisado)**: (a) **texto neutro: "a partir da árvore do
+  setes-api com a F2a (a worktree até a janela; a árvore principal depois)" — nas frases da lápide e do D-F110** · (b) manter e reescrever
+  na 2ª virada. *(Rec.: (a) — barato, e a frase vale para as ~1000 viradas seguintes.)*
+
+#### 22.37 ⏯ PROMPT DE RETOMADA — Q-F190…Q-F194 → gates do delta → passeio logado → JANELA (colar numa sessão nova)
+
+```
+Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22.36 (correções dos gates do delta da Rodada 11 — Q-F190…Q-F194 no §22.36.3), o
+§22.34 (Rodada 11 — D-F179…D-F181; gates no §22.34.3), o §22.32 (correções do delta combinado) e o roteiro da JANELA no §22.13 (aborto com
+a LÁPIDE SENTINELA — D-F153/D-F162; reaplicar a trava só do que falta — D-F152; rotação do JWT_KID em PADROES §7); §7 quando precisar.
+Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, ponta f67f459+) · núcleo 945ad2d+ ·
+nfse-api 74aa6d5+ · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, da2b749+) · Infra-IA (main).
+
+REGRAS DURAS
+- D:\Gestao2027\setes-api roda em tsx watch e É a produção da Setes (salvar = deploy; o boot aplica migrations). A F2a SÓ entra na JANELA,
+  junto da F2b. Nunca npm run dev / flutter run nas worktrees (o .env aponta para o MySQL de produção). Nunca migrate:setes --cutover … --vai
+  fora da janela; os --vai dos scripts de aborto/reaplicar só em banco descartável fora da janela. Testes ao vivo só em bancos descartáveis
+  (f2a_*, fiscal_api_adv_*), apagados no fim — e um de cada vez. A contagem ao vivo da nfse-api é a de
+  `NFSE_ADV_LIVE=1 npx jest live adversarial-r6-gate … adversarial-r10-gate adversarial-f2a-r11-gate --runInBand --forceExit`.
+- Suíte do setes-api SEM editar arquivos durante a execução; base = 20 falhas pré-existentes (19 boleto + 1 cerca de fuso). Cercas do
+  núcleo/nfse-api com SETES_API_DIR nas DUAS árvores. Núcleo: `npm run build` depois de mexer (a nfse-api consome o dist) — nunca com uma
+  suíte ao vivo da nfse-api rodando. Jest no Windows: `--json --outputFile` ou `--runInBand --forceExit`.
+- Edição em UTF-8 pela ferramenta de edição (heredoc/`node -e` com barras invertidas e crases FALHAM — script em arquivo; em string CRUA do
+  Dart `\n` é literal); .ps1 com BOM (PS 5.1); commit só dos caminhos da frente, mensagem em arquivo (git commit -F); push só com o "vai".
+  Decisões de arquitetura são do Valdo. Nunca mexer em código enquanto um agente de gate roda testes nas mesmas árvores. No bloc do app: UM
+  contador da tela (vale o último pedido); operações longas não cancelam o detalhe pedido; o `_detail` e a voz nascem juntos onde o detalhe
+  é emitido — e a marca "a caminho" morre ALI; toda saída longa respeita `_onDetail` e fica no `_batchInFlight` com trava própria; todo
+  ato no detalhe confere a tela que capturou ao começar (`_stillOnDetail`). A falha montada pelo app = `ClientFailureCodes.all`.
+
+PASSO 1 — com as respostas do Valdo às Q-F190…Q-F194 (§22.36.3): registrar D-F182+ no §7, executar e rodar os gates do delta (cobrindo
+também as correções do §22.36). PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7) — provocar um 502/504 do proxy
+na linha do lote E no ato avulso (D-F181). PASSO 3 — a JANELA pelo roteiro do §22.13 (cada passo irreversível com o "vai"), antes de 30/11
+(D-IB15). Ao fim de cada passo: docs (§22.38+), INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```
