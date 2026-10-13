@@ -7,7 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.39 (PROMPT DE RETOMADA) — Rodada 12 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.38: D-F182…D-F186 —
+> **⏯ RETOMAR POR AQUI — §22.41 (PROMPT DE RETOMADA) — gates da Rodada 12 FEITOS (socrático 0,72 · adversarial 0,72 — 1 MEDIUM cada, o MESMO:
+> o desfecho citava o id interno, não o número da OS) e a Rodada 13 DECIDIDA e EXECUTADA (2026-10-13, §22.40: D-F187…D-F191 — o número que a
+> tela mostra no desfecho e nos relatórios, o 2º diálogo pelo Navigator raiz, o aborto só antes da 1ª janela, a OS a caminho pedida de novo;
+> D-F188 adiada para depois do passeio); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 0db9310 · app 9a5d2a8); gates do delta
+> (Rodada 13) em §22.40.3. Depois: passeio logado e a JANELA.**
+> *Antes:* **§22.39 — Rodada 12 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.38: D-F182…D-F186 —
 > a mesma OS reaberta é relida e o desfecho fora da OS leva o número dela, trava de duplo clique por nota, a decisão do diálogo vai ao bloc
 > vivo, a frase neutra nos atos fiscais, "de onde rodar" neutro no tempo); tudo em commit LOCAL (núcleo 945ad2d · nfse c967dcf · api f67f459 ·
 > app 495267b); gates do delta (correções do §22.36 + Rodada 12) em §22.38.3. Depois: passeio logado e a JANELA.**
@@ -1046,6 +1051,24 @@ branch `sessao-2026-10-10`):**
 - **D-F186 (= Q-F194 (a), Valdo 2026-10-13 — R11-ADV-05) — DE ONDE rodar os scripts do setes-api nas frases do ato: texto neutro no tempo**
   ("a partir da árvore do setes-api com a F2a (a worktree até a janela; a árvore principal depois)" — UMA constante, nas frases da lápide e do
   D-F110): a virada é por institution, as próximas não podem apontar para uma cópia velha.
+- **D-F187 (= Q-F195-SOC-01 (a), Valdo 2026-10-13 — R12-SOC-01) — o desfecho e os relatórios de lote citam o número que a TELA mostra**:
+  o Nº da OS (`number ?? id` — o mesmo da lista e do detalhe; no dev os 344 ids diferem dos números) no prefixo "OS N:" (D-F182) e no
+  relatório do lote de faturamento; no lote FISCAL, o nº da NOTA que a pendente já traz. Nunca a chave interna.
+- **D-F188 (= Q-F195-SOC-02 (b), Valdo 2026-10-13 — R12-SOC-04)**: a frase neutra na aba "Emissor fiscal" (módulo establishment) é decidida
+  JUNTO com o `core.errors.network` do app inteiro, depois do 502/504 provocado no passeio logado (D-F185).
+- **D-F189 (= Q-F195-SOC-03 (a), Valdo 2026-10-13 — R12-SOC-06) — fechar os descartes silenciosos que sobraram**: o 2º diálogo encadeado
+  (motivo do cancelamento no fisco) abre pelo Navigator RAIZ (o "sim" do 1º não se perde com a página recriada); o plano do cancelamento da
+  MESMA OS reaberta abre; a pesquisa avançada vai por `_dispatch` (aplica no BLOC); o aviso de documento indisponível (XML/DANFSe) leva o
+  prefixo "OS N:".
+- **D-F190 (= Q-F195-SOC-04 (a), Valdo 2026-10-13 — R12-SOC-08) — o aborto da F2a só ANTES da 1ª janela**: o script recusa quando
+  QUALQUER institution da instalação já virou (`cutover_at` no `fiscal_api`) — depois do merge da F2a na árvore principal, a lápide num
+  schema faria o boot recusar para TODOS; e as frases da lápide voltam a citar a WORKTREE da F2a (o D-F110 segue com o texto neutro da
+  D-F186).
+- **D-F191 (= Q-F195-SOC-05, Valdo 2026-10-13 — R12-SOC-02/03)**: (a) para o R12-SOC-02 — a marca "a caminho" carrega a OS
+  (`_pendingDetailOrder`): o ato que termina com a MESMA OS a caminho não leva prefixo e PEDE a OS de novo (o pedido em voo perde a vez — ele
+  pode ter lido antes do efeito); (b) para o R12-SOC-03 — a releitura de um ato antigo na MESMA OS reaberta com OUTRO ato em voo nela emite o
+  detalhe sem `saving` = limite conhecido (comentário + teste que fixa a semântica; as travas por nota cobrem Transmitir/Cancelar/Manter e
+  o servidor protege o resto).
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -3593,8 +3616,10 @@ achado do guardião da F2b); `ARQUITETURA_MODULOS.md` do app — a exceção nom
    ACEITA o token do kid VIGENTE do setes-api (`JWT_PUBLIC_KEYS` da nfse-api contém o `JWT_KID` do setes-api — um GET autenticado qualquer da
    nfse-api com o token de uma sessão de teste dá 200, nunca 401 "chave desconhecida") antes de reabrir o uso.
 3. **ENSAIO do ato ANTES do merge**: `npm run migrate:setes -- --cutover 1 --confirmo-setes-api-parado` (dry-run — o bloqueio D-F50 é
-   esperado aqui; o resto do ato roda e desfaz sobre o dado de hoje). Prova de aceite: lado velho (árvore viva) → `npm run migrate:setes` →
-   lado novo (worktree) = 0 divergência fora do "reconfirm" esperado.
+   esperado aqui; o resto do ato roda e desfaz sobre o dado de hoje). **Critério de sucesso (R12-SOC-07)**: exit **0** e o relatório com
+   `cutover` (+ `bloqueios` só com o D-F50 esperado). Exit **1** com `interrompidoPor` = o ensaio NÃO passou (transmissão viva, ERP sem SE,
+   já virada, série, pós-condição — §22.36) — resolver ANTES do passo 4, nunca seguir pelo `bloqueios` sozinho. Prova de aceite: lado velho
+   (árvore viva) → `npm run migrate:setes` → lado novo (worktree) = 0 divergência fora do "reconfirm" esperado.
 4. Conferir o número da `NNN_f2a_fiscal_passivo` contra o `main` (a IB-2); **PARAR o processo do setes-api** → `git -C setes-api merge
    --ff-only f2a` (rebase antes se o `main` andou) → SUBIR → ler o log: "Voz do fisco (views): fiscal_api — família(s) service" +
    "Migration aplicada: 069 - f2a_fiscal_passivo" (SOC-11).
@@ -3620,7 +3645,8 @@ linha SE, e quando a linha da migration está no `_migrations` mas não se VEEM 
 apagado à mão: reaplicar a trava antes e abortar de novo). Ele grava a LÁPIDE ANTES de derrubar os gatilhos (R5-SOC-05): se cair no meio,
 rodar de novo termina o serviço. O aborto age POR SCHEMA e o boot do código da F2a confere a trava em TODO schema ativo — numa
 instalação com mais de um schema, o passo (3) é para CADA schema ativo (hoje, 2026-10-13: só a institution 1 / `setes_setes`). Depois do
-`--vai` do ato: rollback PROIBIDO (D-F50).
+`--vai` do ato: rollback PROIBIDO (D-F50). **D-F190**: o aborto só existe ANTES da 1ª janela — o script RECUSA quando QUALQUER institution
+da INSTALAÇÃO já virou (depois do merge, a lápide num schema faria o boot recusar para TODAS); o `--retirar-lapide` segue valendo.
 **Trava faltando no boot** (D-F152): `npx tsx --require tsconfig-paths/register scripts/f2a-reapply-freeze.ts setes_setes [--vai]` — roda
 SÓ o DROP+CREATE dos gatilhos que FALTAM ou DIFEREM (os certos ficam de pé — R5-ADV-04), com UMA conexão (o `USE` vale só nela; recusa
 pool — R5-SOC-07), e confere pela conferência do boot. RECUSA com a LÁPIDE (a F2a foi abortada ali — voltar é o `--retirar-lapide`) e sem a migration registrada (o boot a aplica
@@ -4898,9 +4924,22 @@ app **428** (+4 provas superadas do R9 puladas) · `flutter analyze` limpo · nf
 
 #### 22.38.3 Gates do delta (correções do §22.36 + Rodada 12: `5983b29..495267b` · `56b684d..c967dcf`)
 
-(em execução — preencher com os resultados)
+**Socrático 0,72 ✅** (1 MEDIUM + 7 LOW) e **adversarial 0,72 ✅** (1 MEDIUM + 5 LOW, sem HIGH/CRITICAL). O MEDIUM é o MESMO nos dois
+(R12-SOC-01 = R12-ADV-06): o prefixo "OS N:" da D-F182 usava o `orderId` (o id INTERNO) e não o número que a tela mostra (`number ?? id`)
+— no dev as 344 OS têm número ≠ id (a OS "7374" da NFS-e 704 tem id 8011); quando os números alcançarem a faixa dos ids, "OS N:" seria lido
+como o desfecho de OUTRA OS. Os LOW: a OS reaberta ainda A CAMINHO ficava sem releitura e com prefixo (R12-SOC-02 = R12-ADV-02); a releitura
+de um ato antigo tirava o `saving` de outro ato na mesma OS e duas releituras chegavam fora de ordem (R12-SOC-03 = R12-ADV-01); a frase
+neutra não chegou à aba "Emissor fiscal" (R12-SOC-04 = R12-ADV-03); a cerca de `ClientFailureCodes.all` não via a classe inteira
+(R12-SOC-05 = R12-ADV-04); descartes silenciosos que sobraram — o "sim" do 1º diálogo encadeado, o plano da MESMA OS reaberta, a pesquisa
+avançada pelo `mounted`, o documento de outra OS sem identificação (R12-SOC-06 + Q-F195-ADV-01); o ensaio interrompido com a mesma cara do
+esperado no passo 3 (R12-SOC-07); o "de onde rodar" da lápide e o aborto depois da 1ª janela (R12-SOC-08 = R12-ADV-05). **Resistiram**: D-F182
+no fuzz de 300 sementes (887 desfechos na própria OS, 382 fora — zero número errado), D-F183 (dois atos em OS diferentes fora de ordem; o 2º
+clique na mesma nota ignorado), D-F184 (decisões depois da página recriada sem evento errado nem duplicado), D-F185 com os repositórios reais,
+o ensaio interrompido (um relatório só, exit 1) e a D-F186 letra a letra. Questões Q-F195 (5 do socrático + 3 do adversarial) — DECIDIDAS
+(Valdo 2026-10-13: "Q-F195 - siga recomendações" → D-F187…D-F191, §7; execução no §22.40; a Q-F195-ADV-02 ficou coberta pela D-F190 e a
+Q-F195-ADV-03 é a D-F187).
 
-#### 22.39 ⏯ PROMPT DE RETOMADA — gates do delta → passeio logado → JANELA (colar numa sessão nova)
+#### 22.39 ⏯ PROMPT DE RETOMADA — gates do delta → passeio logado → JANELA (SUPERADO pelo §22.41)
 
 ```
 Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
@@ -4933,4 +4972,65 @@ do delta. PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, 
 ato avulso (D-F181/D-F185; decide se `core.errors.network` muda no app inteiro). PASSO 3 — a JANELA pelo roteiro do §22.13 (cada passo
 irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.40+), INDICE_CENTRAL, CLAUDE.md da raiz, memória
 apis-fiscais-isoladas.
+```
+
+### 22.40 Rodada 13 da F2a/F2b — DECIDIDA e EXECUTADA (2026-10-13) — D-F187…D-F191
+
+> Valdo (2026-10-13): "Q-F195 - siga recomendações". Tudo em commit LOCAL; a árvore viva do setes-api não foi tocada.
+
+#### 22.40.1 O que foi executado
+
+| Repo | Commit | O quê |
+|---|---|---|
+| app (worktree `f2b`) | `9a5d2a8` | D-F187 (`_shownNumbers` — o `number ?? id` da lista e do detalhe; `orderNumber` nos one-shots no lugar do id; `numbers` no relatório do lote de faturamento; o lote FISCAL pelo nº da NOTA da pendente — "Nota {}"), D-F189 (o motivo do cancelamento no fisco pelo Navigator RAIZ; o plano da MESMA OS reaberta abre; a pesquisa avançada por `_dispatch`; XML/DANFSe de outra OS: "OS N: documento aberto em nova aba"/indisponível), D-F191 (`_pendingDetailOrder` + `_showsOrder`; a releitura do fim do ato é um PEDIDO NOVO de detalhe da OS — o em voo perde a vez, o que fecha também as releituras fora de ordem; o `saving` de outro ato = limite conhecido, fixado em teste); testes: o gate R12 do adversarial (fuzz com o oráculo da D-F191; FATOs → `[CORRIGIDO]`/`[DECIDIDO]`; o R12-ADV-03 pulado pela D-F188), D-F187 no batch bloc, a cerca de `ClientFailureCodes.all` pela classe inteira |
+| nfse-api | `61d0bbe` | D-F190 (`F2A_WORKTREE` nas frases da LÁPIDE — o aborto só existe antes da 1ª janela; o D-F110 segue com `F2A_TREE`); o gate R12 do adversarial (FATO/ACHADO do R12-ADV-05 → `[DECIDIDO D-F190]`; o RESISTIU da D-F186 revisto) e os testes que citavam a frase |
+| setes-api (worktree `f2a`) | `0db9310` | D-F190 (o `abortF2aPassivo` RECUSA quando QUALQUER institution da instalação já virou — `cutover_at` no `fiscal_api`; o `--retirar-lapide` não tem a guarda); teste `f2a-rodada13` |
+
+Junto (doc): o critério de sucesso do ensaio no passo 3 da janela (R12-SOC-07 — exit 0 com `cutover`; exit 1 com `interrompidoPor` = não
+passou) e a nota da D-F190 no roteiro do aborto (§22.13). D-F188 (a frase neutra na aba "Emissor fiscal") fica para depois do passeio.
+
+#### 22.40.2 Provas (2026-10-13)
+
+app **442** (+5 pulados: as 4 provas superadas do R9 e o R12-ADV-03 da D-F188) · `flutter analyze` limpo · nfse-api **765** (+169) na árvore F2a · **763** (+171 — os testes do aborto pulam onde o script não existe) na árvore principal (1 falha que NÃO se repetiu ao rodar sozinha — carga em paralelo com a suíte do setes-api) · nfse-api AO VIVO **195 (+4 FATOS superados)** · setes-api **1.836 + as MESMAS 20** · setes-api AO VIVO **132/132** · `prove-f2a-abort` **ok** · nenhum banco
+descartável sobrou.
+
+#### 22.40.3 Gates do delta (Rodada 13: `495267b..9a5d2a8` · `c967dcf..61d0bbe` · `f67f459..0db9310`)
+
+(em execução — preencher com os resultados)
+
+#### 22.41 ⏯ PROMPT DE RETOMADA — gates do delta → passeio logado → JANELA (colar numa sessão nova)
+
+```
+Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22.40 (Rodada 13 EXECUTADA — D-F187…D-F191; gates do delta no §22.40.3), o §22.38
+(Rodada 12 + gates no §22.38.3) e o roteiro da JANELA no §22.13 (aborto com a LÁPIDE SENTINELA — D-F153/D-F162, só ANTES da 1ª janela —
+D-F190; reaplicar a trava só do que falta — D-F152; rotação do JWT_KID em PADROES §7; o critério do ensaio no passo 3); §7 quando precisar.
+Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, ponta 0db9310+) · núcleo 945ad2d+ ·
+nfse-api 61d0bbe+ · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 9a5d2a8+) · Infra-IA (main).
+
+REGRAS DURAS
+- D:\Gestao2027\setes-api roda em tsx watch e É a produção da Setes (salvar = deploy; o boot aplica migrations). A F2a SÓ entra na JANELA,
+  junto da F2b. Nunca npm run dev / flutter run nas worktrees (o .env aponta para o MySQL de produção). Nunca migrate:setes --cutover … --vai
+  fora da janela; os --vai dos scripts de aborto/reaplicar só em banco descartável fora da janela. Testes ao vivo só em bancos descartáveis
+  (f2a_*, fiscal_api_adv_*), apagados no fim — e um de cada vez. Contagem ao vivo da nfse-api:
+  `NFSE_ADV_LIVE=1 npx jest live adversarial-r6-gate … adversarial-r10-gate adversarial-f2a-r11-gate adversarial-f2a-r12-gate --runInBand --forceExit`;
+  do setes-api: `F2A_ADV_LIVE=1 NFSE_API_DIR=D:/Gestao2027/nfse-api npx jest adversarial-f2a --runInBand --forceExit` + `scripts/prove-f2a-abort.ts`.
+- Suíte do setes-api SEM editar arquivos durante a execução; base = 20 falhas pré-existentes (19 boleto + 1 cerca de fuso). Cercas do
+  núcleo/nfse-api com SETES_API_DIR nas DUAS árvores. Núcleo: `npm run build` depois de mexer (a nfse-api consome o dist) — nunca com uma
+  suíte ao vivo da nfse-api rodando. Jest no Windows: `--json --outputFile` ou `--runInBand --forceExit`.
+- Edição em UTF-8 pela ferramenta de edição (heredoc/`node -e` com barras invertidas e crases FALHAM — script em arquivo; em string CRUA do
+  Dart `\n` é literal); .ps1 com BOM (PS 5.1); commit só dos caminhos da frente, mensagem em arquivo (git commit -F); push só com o "vai".
+  Decisões de arquitetura são do Valdo. Nunca mexer em código enquanto um agente de gate roda testes nas mesmas árvores. No bloc do app: UM
+  contador da tela (vale o último pedido); operações longas não cancelam o detalhe pedido; o `_detail` e a voz nascem juntos onde o detalhe
+  é emitido — e a marca "a caminho" (que carrega a OS) morre ALI; toda saída longa respeita `_onDetail` e fica no `_batchInFlight` com
+  trava própria; todo ato no detalhe confere a tela que capturou (`_stillOnDetail`), relê por um PEDIDO NOVO de detalhe da OS
+  (`_rereadAfterAct` — só se a tela mostra, ou vai mostrar, a OS) e marca o desfecho fora da OS com o NÚMERO que a tela mostra
+  (`_outcomeOrder`/`_shownNumbers`); trava de duplo clique POR NOTA; a página despacha decisão de diálogo por `_dispatch` (bloc vivo) e
+  abre o 2º diálogo de uma cadeia pelo Navigator raiz. A falha montada pelo app = `ClientFailureCodes.all`.
+
+PASSO 1 — se os gates do delta (§22.40.3) deixaram questões: com as respostas do Valdo, registrar D-F192+ no §7, executar e rodar os gates
+do delta. PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7) — provocar um 502/504 do proxy na linha do lote E no
+ato avulso (D-F181/D-F185) e decidir o `core.errors.network` do app inteiro JUNTO com a aba "Emissor fiscal" (D-F188). PASSO 3 — a JANELA
+pelo roteiro do §22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.42+), INDICE_CENTRAL,
+CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```
