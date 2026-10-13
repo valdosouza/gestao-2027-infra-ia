@@ -7,7 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.27 (PROMPT DE RETOMADA) — Rodada 9 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.26: D-F172…D-F174 —
+> **⏯ RETOMAR POR AQUI — §22.29 (PROMPT DE RETOMADA) — gates da Rodada 9 (socrático 0,76 · adversarial 0,78) com as correções EXECUTADAS
+> (2026-10-13, §22.28: UM contador da tela no bloc — vale o último pedido —, a voz gravada junto do detalhe, a falha do 1º bloco respeita a
+> OS aberta, uma frase por estado da lápide no ato e no ensaio); tudo em commit LOCAL (núcleo 44e3a5a · nfse 1779a7a · api f67f459 · app
+> 09777d3); AGUARDAM o Valdo Q-F183…Q-F186 (§22.26.4); os gates do delta destas correções rodam JUNTO com a próxima rodada. Depois: passeio
+> e a JANELA.**
+> *Antes:* **§22.27 — Rodada 9 da F2a/F2b DECIDIDA e EXECUTADA (2026-10-13, §22.26: D-F172…D-F174 —
 > `exp` sem teto até mexerem nos leitores, limite do resumo dos kids aceito, o detalhe aberto não é derrubado pela lista nem pelo fim do
 > lote) + correções dos gates da Rodada 8 (socrático 0,80 · adversarial 0,84); tudo em commit LOCAL (núcleo fe71164 · nfse 0e1ae9d · api
 > cf4b22e · app 3766f39); gates do delta da Rodada 9 em §22.26.3; aguardam o Valdo Q-F183/Q-F184 (§22.24.4). Depois: passeio e a JANELA.**
@@ -4408,9 +4413,9 @@ D-F172 = só doc (§7).
 
 #### 22.26.3 Gates do delta da Rodada 9 (`92811fc..fe71164` · `267b4b0..0e1ae9d` · `6dbb5af..cf4b22e` · `13cdd92..3766f39`)
 
-(em execução — preencher com os resultados)
+Resultados no §22.26.3-bis (logo abaixo do prompt de retomada §22.27).
 
-#### 22.27 ⏯ PROMPT DE RETOMADA — Q-F183/Q-F184 + gates da Rodada 9 → passeio logado → JANELA (colar numa sessão nova)
+#### 22.27 ⏯ PROMPT DE RETOMADA — Q-F183/Q-F184 + gates da Rodada 9 → passeio logado → JANELA (SUPERADO pelo §22.29)
 
 ```
 Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
@@ -4437,4 +4442,81 @@ PASSO 1 — com as respostas do Valdo às Q-F183/Q-F184 e às questões dos gate
 rodar os gates do delta. PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7). PASSO 3 — a JANELA pelo roteiro do
 §22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.28+), INDICE_CENTRAL, CLAUDE.md da
 raiz, memória apis-fiscais-isoladas.
+```
+
+#### 22.26.3-bis Resultado dos gates do delta da Rodada 9
+
+**Socrático: 0,76 ✅** (6 LOW) · **Adversarial: 0,78 ✅** (4 LOW; achados anteriores seguem fechados — com `ADV_SHOW=1` só os 2 "[LIMITE
+CONHECIDO]" do R8; `--run-skipped` nos gates r6–r8 do app 39/39). Resistiram: a D-F174 nos dois lotes (OS aberta pelo FAB no meio, um
+relatório só, nenhuma recarga), as corridas no fim do lote, as saídas pelo detalhe, a parada do lote em todas as combinações (o oráculo de
+3.000 lotes do R8 segue verde), o ensaio do ato falhando fechado, a garantia do Space-Saving em 1.500 janelas aleatórias.
+
+| Achado | Sev. | O quê | Destino |
+|---|---|---|---|
+| R9-SOC-01 · R9-ADV-01 | LOW | a falha do 1º bloco do lote (504 do proxy num bloco de 50) recarregava a lista por cima da OS aberta pelo FAB | **corrigido** (a guarda da D-F174 também nesse fim) |
+| R9-SOC-02 | LOW | a tela PRESA no spinner: o lote emitia a lista em loading sem limpar o `_detail`; no fim, "OS aberta" impedia a recarga | **corrigido**: a tela que vira lista limpa o `_detail` (`_showListLoading`) |
+| R9-SOC-04 · R9-ADV-02 | LOW | o contador só subia no fim da carga do detalhe: (i) a lista em voo aparecia por cima do POST; (ii) o detalhe vencia SEMPRE, até uma troca de aba pedida DEPOIS (detalhe na tela com `_detail` nulo, botões sem `saving`) | **corrigido** (dica do socrático): UM contador da TELA — vale o último pedido; o pedido de detalhe a caminho conta como "no detalhe" para as recargas AUTOMÁTICAS; as operações longas não cancelam o detalhe pedido |
+| R9-ADV-03 | LOW | DETALHE VELHO: a carga abandonada de A gravava a voz no meio da carga — cabeçalho de B com a seção "No fisco" de A, o Transmitir de A mandando B | **corrigido**: a voz volta como VALOR (`_fetchFiscal`) e é gravada JUNTO do detalhe, depois da conferência do pedido |
+| R9-SOC-05 · R9-ADV-04 | LOW | o ensaio distinguia os três estados mas não com as frases do ato (sem o comando que resolve, sem o `--retirar-lapide`, sem o aviso do TRIGGER); a frase mandava rodar o ensaio "no setes-api" | **corrigido**: `tombstonePhrase` — UMA frase por estado para o ato e o ensaio (cobre a Q-F185-ADV-03 (a)); o D-F110 do ensaio avisa do TRIGGER |
+| R9-SOC-06 | LOW | a cerca cruzada do setes-api passava CALADA se a nfse-api irmã sumisse | **corrigido**: falha alto (D-F117) |
+| R9-SOC-03 · Q-F185-ADV-01 | LOW | as outras saídas longas (rotina mensal, pendentes do lote fiscal) ainda recarregam por cima da OS aberta; o botão da rotina mensal sem a trava do loading | **Q-F185** |
+| (fato) | — | uma OS do lote aberta no detalhe fica com o status de antes no fim do lote (a UI não chega lá hoje; o servidor protege — 409) | **Q-F186** |
+
+#### 22.26.4 Questões abertas (AGUARDAM o Valdo)
+
+- **Q-F183** e **Q-F184** — §22.24.4 (o mínimo garantido na linha dos kids; o status HTTP na linha incerta).
+- **Q-F185 — as outras saídas longas com uma OS aberta no meio (R9-SOC-03/Q-F185-ADV-01)**: (a) **a regra da D-F174 em TODA saída longa
+  (rotina mensal, pendentes do lote fiscal) — mostra o desfecho e não recarrega com a tela no detalhe — E o botão da rotina mensal travado pelo
+  loading, como os botões de lote (H1)** · (b) só a regra · (c) aceitar. *(Rec.: (a) — a metade do R8-SOC-04 que ficou de fora.)*
+- **Q-F186 — o detalhe preservado não é relido no fim do lote (fato do socrático da Rodada 9)**: (a) **aceitar como conhecimento negativo
+  (comentário + teste que fixa a semântica)** — hoje a UI não chega lá (durante o lote a lista é spinner e o FAB cria OS NOVA) e o servidor
+  protege · (b) reler só quando a OS aberta é do lote e não está em `saving` · (c) reler sempre. *(Rec.: (a) — reler no meio de uma ação
+  reabriria os botões em voo.)*
+- Q-F185-ADV-02 (geração única) e Q-F185-ADV-03 (uma frase para ato e ensaio) ficaram COBERTAS pelas correções R9-SOC-04 e R9-ADV-04.
+
+### 22.28 Correções dos gates da Rodada 9 — EXECUTADAS (2026-10-13)
+
+> Sem decisão nova (correções que os gates apontaram e a dica arquitetural do socrático). Tudo em commit LOCAL.
+
+| Repo | Commit | O quê |
+|---|---|---|
+| núcleo | `44e3a5a` | teste do gate R9 (a garantia por par classe:kid; 1.500 janelas) |
+| nfse-api | `1779a7a` | `tombstonePhrase` (uma frase por estado — ato e ensaio); o D-F110 do ensaio com o aviso do TRIGGER; teste do gate R9 |
+| setes-api (worktree `f2a`) | `f67f459` | a cerca cruzada do gate R8 falha alto sem a nfse-api |
+| app (worktree `f2b`) | `09777d3` | `_screenGeneration` (vale o último pedido), `_showListLoading` (limpa o `_detail`; operações longas não cancelam o detalhe pedido), `_pendingDetailScreen`/`_onDetail` (aberto OU a caminho), `_fetchFiscal` (a voz como valor, gravada com o detalhe), a guarda nos três fins de lote; testes dos gates (provas de antes superadas, cerca do fonte nova) |
+
+**Provas (2026-10-13)**: setes-api **1.833 + as MESMAS 20** · gates ao vivo **132/132** · `prove-f2a-abort` ok · núcleo **526** (+1) nas duas
+árvores · nfse-api **749** + 169 pulados nas duas árvores · nfse-api ao vivo **179** (+4 FATOS superados) · app **389** (+4 provas
+superadas puladas) · core **54** · `flutter analyze` limpo · nenhum banco descartável sobrou. Os gates do delta destas correções
+(`fe71164..44e3a5a` · `0e1ae9d..1779a7a` · `cf4b22e..f67f459` · `3766f39..09777d3`) rodam JUNTO com os da próxima rodada (as Q-F183…Q-F186
+mexem nos mesmos arquivos).
+
+#### 22.29 ⏯ PROMPT DE RETOMADA — Q-F183…Q-F186 → gates do delta → passeio logado → JANELA (colar numa sessão nova)
+
+```
+Retome a F2a/F2b (setes-api PASSIVO + setes-app cliente da nfse-api) do Gestão 2027. Leia D:\Gestao2027\CLAUDE.md e, no
+Infra-IA/prompts/prompt_apis_fiscais_isoladas.md, o §22.28 (correções dos gates da Rodada 9), o §22.26 (Rodada 9 + gates — Q-F183…Q-F186
+no §22.26.4), o §22.24 (Rodada 8) e o roteiro da JANELA no §22.13 (aborto com a LÁPIDE SENTINELA — D-F153/D-F162; reaplicar a trava só do
+que falta — D-F152; rotação do JWT_KID em PADROES §7); §7 quando precisar.
+Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, ponta f67f459+) · núcleo 44e3a5a+ ·
+nfse-api 1779a7a+ · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 09777d3+) · Infra-IA (main).
+
+REGRAS DURAS
+- D:\Gestao2027\setes-api roda em tsx watch e É a produção da Setes (salvar = deploy; o boot aplica migrations). A F2a SÓ entra na JANELA,
+  junto da F2b. Nunca npm run dev / flutter run nas worktrees (o .env aponta para o MySQL de produção). Nunca migrate:setes --cutover … --vai
+  fora da janela; os --vai dos scripts de aborto/reaplicar só em banco descartável fora da janela. Testes ao vivo só em bancos descartáveis
+  (f2a_*, fiscal_api_adv_*), apagados no fim — e um de cada vez.
+- Suíte do setes-api SEM editar arquivos durante a execução; base = 20 falhas pré-existentes (19 boleto + 1 cerca de fuso). Cercas do
+  núcleo/nfse-api com SETES_API_DIR nas DUAS árvores. Núcleo: `npm run build` depois de mexer (a nfse-api consome o dist) — nunca com uma
+  suíte ao vivo da nfse-api rodando. Jest no Windows: `--json --outputFile` ou `--runInBand --forceExit`.
+- Edição em UTF-8 pela ferramenta de edição (heredoc/`node -e` com barras invertidas e crases FALHAM — script em arquivo); .ps1 com BOM
+  (PS 5.1); commit só dos caminhos da frente, mensagem em arquivo (git commit -F); push só com o "vai". Decisões de arquitetura são do Valdo.
+  Nunca mexer em código enquanto um agente de gate roda testes nas mesmas árvores. Teste que simula o banco pela FORMA da consulta acusa
+  qualquer SQL novo — leitura nova entra SEPARADA. No bloc do app: UM contador da tela (vale o último pedido); operações longas não cancelam
+  o detalhe pedido; o `_detail` e a voz nascem juntos onde o detalhe é emitido.
+
+PASSO 1 — com as respostas do Valdo às Q-F183…Q-F186 (§22.26.4): registrar D-F175+ no §7, executar e rodar os gates do delta (cobrindo
+também as correções do §22.28). PASSO 2 — passeio logado da F2b no ambiente decidido (ou na janela, passo 7). PASSO 3 — a JANELA pelo
+roteiro do §22.13 (cada passo irreversível com o "vai"), antes de 30/11 (D-IB15). Ao fim de cada passo: docs (§22.30+), INDICE_CENTRAL,
+CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```
