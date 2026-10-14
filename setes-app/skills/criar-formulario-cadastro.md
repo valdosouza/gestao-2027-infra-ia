@@ -47,7 +47,8 @@
      2026-10-13, passeio logado da F2b): falha de CARGA (502/504 do proxy, rede) é estado PRÓPRIO do bloc (`loadFailed`) e a tela
      mostra o erro (`register.loadFailed`) com "Tentar novamente" (`register.retry`, recarrega com o filtro/página/critérios atuais) —
      nunca "Não encontramos nenhum registro". A peça `RegisterSearchPage` ainda não sabe da falha (tarefa própria — as ~28 listas da
-     fábrica); molde pronto: a lista de OS (`service_orders`, setes-app branch `f2b`).
+     fábrica); molde pronto: a lista de OS (`service_orders`, setes-app branch `f2b`). O recuo "página esvaziou" do bloc só acontece
+     quando a página pedida PASSOU do total de páginas (D-F217 — `paged.page > paged.pageCount`; senão laço com servidor incoerente).
    - Clique na linha inteira (InkWell) abre a edição — não obrigar clique num botão.
 6. **Erros/avisos** → `SnackBar` (equivalente moderno do CustomToast do app antigo).
 7. **Labels de campo por extenso** — o label repete a entidade: "Código do País" /

@@ -7,10 +7,12 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.48 (PROMPT DE RETOMADA CURTO — a JANELA) — 4ª sessão de 2026-10-13 (§22.46): gates R15/R16, Rodada 16
-> (D-F199…D-F203), ENSAIO DA JANELA na instância descartável (passos 3–5 + `--vai` — PASSOU) e o PASSEIO LOGADO FEITO (NFS-e 3 autorizada em
-> H e cancelada pela saga; 502/504 provocados → D-F204…D-F207 decididas pelo Valdo; gates do passeio 0,76/0,78 → D-F208…D-F212).
-> Commits LOCAIS: núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 5f6d3be. Próximo: gates do delta 60df1df..5f6d3be → a JANELA (passo 6b = D-F207).**
+> **⏯ RETOMAR POR AQUI — §22.49 (PROMPT DE RETOMADA CURTO — gates do último delta → a JANELA) — 4ª sessão de 2026-10-13/14 (§22.46):
+> gates R15/R16, Rodada 16 (D-F199…D-F203), ENSAIO DA JANELA na instância descartável (passos 3–5 + `--vai` — PASSOU), PASSEIO LOGADO FEITO
+> (NFS-e 3 autorizada em H e cancelada pela saga; 502/504 provocados → D-F204…D-F207) e mais três rodadas de gates do app (0,76/0,78 →
+> D-F208…D-F212; 0,74/0,76 → D-F213…D-F217; 0,80/0,80 → D-F218…D-F220). Commits LOCAIS: núcleo 945ad2d · nfse 61d0bbe · api 8556491 ·
+> app ebd040c. Próximo: gates do delta 5f6d3be..ebd040c → critério de entrada → a JANELA (passo 6b = D-F207).**
+> *Antes:* **§22.48 — gates do delta 60df1df..5f6d3be → a JANELA.**
 > *Antes:* **§22.47 — passeio montado, parado no login.**
 > *Antes:* **§22.45 — Rodada 15 da F2a/F2b EXECUTADA (2026-10-13, §22.44: gates da Rodada 14
 > 0,80/0,84 e D-F195…D-F198 pela autorização em pé); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 95d829d).**
@@ -1163,6 +1165,14 @@ branch `sessao-2026-10-10`):**
 - **D-F217 (= LD-ADV-10 (a), Valdo 2026-10-14) — o recuo "página esvaziou" só quando a página pedida passou do total de páginas**
   (na lista de OS; as outras listas entram na tarefa das 28 listas): o servidor com COUNT diferente da lista fazia o bloc pedir a mesma
   página sem parar.
+- **D-F218 (= Q-LE1 (a), Valdo 2026-10-14) — a troca de senha NÃO é idempotente** (o servidor consome o código): resposta ilegível ou
+  rede na volta com a senha já trocada = "Código inválido" na nova tentativa; a saída do operador é entrar com a senha nova ou pedir outro
+  código. Conhecimento negativo (comentário no `AuthRemoteDatasource.changePassword`).
+- **D-F219 (= LE-ADV-02 (a), Valdo 2026-10-14) — o token que o RELÓGIO do aparelho já dá por vencido não entra**: o AuthBloc confere o `exp`
+  (`jwtExpiry`) antes de `AuthAuthenticated` → erro técnico `CLIENT_CLOCK` ("a data e a hora deste computador parecem erradas…"), com a
+  hora do aparelho no código (`CLOCK · <hora>`); token sem `exp` legível = resposta ilegível. Antes a guarda recusava e o login voltava MUDO.
+- **D-F220 (= LE-ADV-07 (b), Valdo 2026-10-14) — a query de QUALQUER URL dentro da causa sai antes do console** (além do `uri=` da
+  D-F215). Conhecimento negativo: o console do próprio navegador registra a requisição que falhou — fora do alcance do app.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -5418,6 +5428,25 @@ nos dois. Os gates deste último delta (`f312f06..60df1df`) rodam junto com a pr
 **Provas**: app **538 + 20 pulados** (as 7 provas superadas do gate LD entram nos pulados) · core **56** · `flutter analyze` limpo. Os
 gates deste delta (`60df1df..5f6d3be`) = o PASSO 0 do §22.48.
 
+#### 22.46.8 Gates do delta `60df1df..5f6d3be` (2026-10-14) e as decisões D-F218…D-F220 (app `ebd040c`)
+
+**Socrático 0,80 ✅** e **adversarial 0,80 ✅** — só LOW (nenhum MEDIUM/HIGH/CRITICAL). Resistiram: o fluxo de login em 21 formas de
+resposta (nenhum spinner preso), o `envelopeOk` contra as rotas REAIS (todo 2xx de `/auth/*` e `/api/core/*` é `{ ok: true }` — worktree e
+árvore viva iguais), a D-F214 nas duas pontes (13 falhas), a D-F138/D-F148 intactas, a D-F217 em 900 sequências, o `isClosed` em 8
+combinações, a seleção × falha pela página real.
+
+| Achado | O quê | Destino |
+|---|---|---|
+| LE-SOC-01 = LE-ADV-04 · LE-SOC-03 | a D-F216 só no `invalidResponseFailure` — `envelopeData`/`envelopePage`/envelope estrito sem código nem console (o caso Plesk-HTML) | **corrigido**: as três portas pelo `invalidResponseFailure` com o serviço; `service` obrigatório (sem default) |
+| LE-ADV-01 · LE-ADV-03 | token `""` virava sessão; seleção sem estabelecimentos abria tela sem saída | **corrigidos** (a regra do LD-ADV-01) |
+| LE-ADV-05 | a D-F217 comparava a página da RESPOSTA (proxy que ignora a query voltava ao laço) | **corrigido**: pela página PEDIDA |
+| LE-SOC-05 = LE-ADV-06 | `FISCAL_DPS_REJECTED` ainda com "• dps: E0116" | **corrigido** (a regra do LD-SOC-01) |
+| LE-SOC-02 · LE-SOC-07 · LE-SOC-08 | comentários falsos; `$error` cru no console; D-F211 × resposta ilegível | **corrigidos** / conhecimento negativo |
+| LE-SOC-04 | D-F217 fora das skills e de ~32 blocs | **skills atualizadas** + o chip das listas cobre a D-F217 |
+| Q-LE1 · LE-ADV-02 · LE-ADV-07 | troca de senha não idempotente; relógio adiantado = login mudo; query no meio da causa | **D-F218 · D-F219 · D-F220** |
+
+**Provas**: app **562 + 27 pulados** · core **56** · `flutter analyze` limpo. Os gates do delta `5f6d3be..ebd040c` = o PASSO 0 do §22.49.
+
 #### 22.47 ⏯ PROMPT DE RETOMADA CURTO (SUPERADO pelo §22.48)
 
 ```
@@ -5441,7 +5470,7 @@ irreversível com o "vai"; ensaiar o build web antes — R16-SOC-07), antes de 3
 CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```
 
-#### 22.48 ⏯ PROMPT DE RETOMADA CURTO — a JANELA (colar numa sessão nova)
+#### 22.48 ⏯ PROMPT DE RETOMADA CURTO — a JANELA (SUPERADO pelo §22.49)
 
 ```
 Retome a F2a/F2b do Gestão 2027 pelo §22.48 do Infra-IA/prompts/prompt_apis_fiscais_isoladas.md (leia D:\Gestao2027\CLAUDE.md, o §22.46 —
@@ -5460,4 +5489,35 @@ PASSO 1 — critério de entrada do §22.13 (suítes; gate adversarial da A3 ao 
 repositórios mudaram desde 2026-10-13, refazer o ENSAIO da janela na cópia pelo kit Infra-IA/fiscal-api/scripts/ensaio-janela/README.md.
 PASSO 2 — a JANELA pelo §22.13 com o Valdo, cada passo irreversível com o "vai" na hora (2 → 3 → 4 → 5 → 6 → 6b → 7 → 8), antes de 30/11.
 Ao fim: docs (§22.49+), INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
+```
+
+#### 22.49 ⏯ PROMPT DE RETOMADA CURTO — gates do último delta → a JANELA (colar numa sessão nova)
+
+```
+Retome a F2a/F2b do Gestão 2027 pelo §22.49 do Infra-IA/prompts/prompt_apis_fiscais_isoladas.md. Leia D:\Gestao2027\CLAUDE.md, o §22.46
+(4ª sessão de 2026-10-13/14: ensaio da janela na cópia PASSOU, passeio logado FEITO, gates §22.46.1–§22.46.8) e o §22.13 (roteiro da
+JANELA, com o passo 6b da D-F207); §7 = D-F1…D-F220.
+Commits LOCAIS (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, 8556491) · núcleo 945ad2d · nfse-api
+61d0bbe · setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, ebd040c) · Infra-IA (main).
+AUTORIZAÇÃO EM PÉ: questões dos gates DESTA frente seguem a RECOMENDAÇÃO — salvo passo irreversível (cada passo da janela, --cutover --vai,
+push, apagar linha do fiscal_api, escrita em dado de produção), algo FORA da F2a/F2b (login/core/pontes do app inteiro = perguntar),
+gates divergentes sem saída ou HIGH/CRITICAL.
+REGRAS: D:\Gestao2027\setes-api (árvore viva) É a produção (tsx watch) — só leitura até o passo 4 da janela; nunca npm run dev/flutter run
+nas worktrees com o .env delas; nunca criar habilitação no fiscal_api de produção antes do ato (D-F192/D-F195); ao vivo só em bancos/
+instâncias descartáveis; nunca mexer em código com um gate rodando na mesma árvore; edição pela ferramenta (UTF-8 — heredoc com barra
+invertida ou \n FALHA); commit só dos caminhos da frente com git commit -F; fixture de teste na forma REAL do produtor (ler o produtor antes
+de aceitar um achado).
+PASSO 0 — gates do delta 5f6d3be..ebd040c do app (socrático + adversarial em paralelo, como no §22.46.8): D-F216 nas três portas do
+envelope, token vazio/seleção vazia, recuo pela página pedida, FISCAL_DPS_REJECTED sem o nome técnico, D-F219 (CLIENT_CLOCK no AuthBloc —
+jwtExpiry), D-F220 (query fora do console) → corrigir/seguir recomendações → suítes (app 562 + 27; core 56) → commit → docs (§22.46.9+).
+PASSO 1 — critério de entrada da janela (§22.13 passo 1): suítes do setes-api (worktree f2a: 1.842 + as MESMAS 20; ao vivo 139/139 +
+scripts/prove-f2a-abort.ts), núcleo (531), nfse-api (765 + ao vivo 195); gate adversarial da A3 com F2A_ADV_LIVE=1; ENSAIAR o build web
+pelo apps/web/build-web.ps1 (R16-SOC-07 — exige URLs https de publicação); se os repositórios do banco mudaram desde 2026-10-13, refazer o
+ENSAIO da janela (passos 3–5 + --vai) na instância descartável pelo kit Infra-IA/fiscal-api/scripts/ensaio-janela/README.md.
+PASSO 2 — a JANELA pelo §22.13 COM o Valdo, cada passo irreversível com o "vai" na hora: 2 (parar o uso, nfse-api no ar com as migrations
+001–006, GRANT, cerca do kid) → 3 (ensaio do ato + ensaio do aborto, os relatórios esperados) → 4 (merge f2a, subir, ler o log) → 5
+(re-sincronia + contagens + ensaio sem bloqueio → --vai) → 6 (publicar o build da F2b com no-cache) → 6b (D-F207: cancelar as 7 notas da
+trilha com cTribMun "0102" + desativar as regras de ISS 1/3/4) → 7 (trilha → reabrir) → 8 (A1 do cofre, push, F3). Antes de 30/11.
+PENDÊNCIAS FORA DO CAMINHO CRÍTICO (chips abertos): "Levar D-F206/D-F217 às listas do app" e "Levar D-F209/D-F210 aos módulos do app".
+Ao fim de cada passo: docs (§22.50+), INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```

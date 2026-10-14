@@ -71,6 +71,9 @@ Onda 4 do Módulo Software House, 2026-07-19).
 8. **Falha de CARGA da lista é estado próprio** (D-F206, Valdo 2026-10-13 — passeio logado da F2b): o estado de lista do bloc leva
    `loadFailed` (true só no ramo de falha da carga, com a MESMA página/tamanho do estado que substituiu) e a página mostra o erro
    (`register.loadFailed`) com "Tentar novamente" — nunca o "Não encontramos nenhum registro" da lista vazia. Molde: `service_orders`.
+8b. **Recuo "página esvaziou"** (D-F217, Valdo 2026-10-14): o bloc só volta uma página quando a pedida PASSOU do total de páginas
+   (`paged.page > paged.pageCount`) — um servidor com COUNT diferente da lista (data:[] com total>0) fazia o bloc pedir a MESMA página
+   sem parar. Molde: `service_orders` (branch `f2b`); os outros ~32 blocs com o recuo antigo entram na tarefa das listas.
 9. **Falha de rede no app web** (D-F204/D-F205): o 502/504 do proxy sem CORS chega como `NetworkFailure`, igual à rede caída — a frase
    é a neutra do `core.errors.network` e o "código" é o do serviço (`NETWORK · setes-api|nfse-api`); nunca prometer "conexão" nem
    mostrar a exceção do Dart.
