@@ -68,6 +68,12 @@ Onda 4 do Módulo Software House, 2026-07-19).
 6. Projeções locais para lookups de outros domínios (módulo NUNCA importa
    módulo): clientes, produtos, formas de pagamento (filtrar `enable='S'`).
 7. Grupo de menu novo exige a chave `menu.groups.<Grupo>` no i18n pt/en.
+8. **Falha de CARGA da lista é estado próprio** (D-F206, Valdo 2026-10-13 — passeio logado da F2b): o estado de lista do bloc leva
+   `loadFailed` (true só no ramo de falha da carga, com a MESMA página/tamanho do estado que substituiu) e a página mostra o erro
+   (`register.loadFailed`) com "Tentar novamente" — nunca o "Não encontramos nenhum registro" da lista vazia. Molde: `service_orders`.
+9. **Falha de rede no app web** (D-F204/D-F205): o 502/504 do proxy sem CORS chega como `NetworkFailure`, igual à rede caída — a frase
+   é a neutra do `core.errors.network` e o "código" é o do serviço (`NETWORK · setes-api|nfse-api`); nunca prometer "conexão" nem
+   mostrar a exceção do Dart.
 
 ## Pesquisa avançada em tela de processo (Onda 3 — 2026-10-04, `prompts/prompt_pesquisa_avancada.md` §13)
 

@@ -7,10 +7,11 @@
 
 > Este documento NÃO decide. Organiza o que existe, mede o esforço e transforma cada escolha arquitetural em questão numerada (§8) com recomendação. Decisões do Valdo entram na §7 com numeração permanente (D-F1…).
 
-> **⏯ RETOMAR POR AQUI — §22.47 (PROMPT DE RETOMADA CURTO) — 4ª sessão de 2026-10-13 (§22.46): gates da Rodada 15 (0,80/0,86) → Rodada 16
-> (D-F199…D-F203) → gates do delta da R16 (0,80/0,88, nada no produto) e as correções; ENSAIO DA JANELA na instância descartável (passos 3–5,
-> inclusive o `--vai` — PASSOU, produção intacta); passeio logado MONTADO (kit em `fiscal-api/scripts/ensaio-janela/`) e parado no login do
-> Valdo. Commits LOCAIS: núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 570324c. Próximo: o passeio (D-F188) → a JANELA.**
+> **⏯ RETOMAR POR AQUI — §22.48 (PROMPT DE RETOMADA CURTO — a JANELA) — 4ª sessão de 2026-10-13 (§22.46): gates R15/R16, Rodada 16
+> (D-F199…D-F203), ENSAIO DA JANELA na instância descartável (passos 3–5 + `--vai` — PASSOU) e o PASSEIO LOGADO FEITO (NFS-e 3 autorizada em
+> H e cancelada pela saga; 502/504 provocados → D-F204…D-F207 decididas pelo Valdo; gates do passeio 0,76/0,78 → D-F208…D-F212).
+> Commits LOCAIS: núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 60df1df. Próximo: gates do último delta → a JANELA (passo 6b = D-F207).**
+> *Antes:* **§22.47 — passeio montado, parado no login.**
 > *Antes:* **§22.45 — Rodada 15 da F2a/F2b EXECUTADA (2026-10-13, §22.44: gates da Rodada 14
 > 0,80/0,84 e D-F195…D-F198 pela autorização em pé); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 95d829d).**
 > *Antes:* **§22.43 — gates da Rodada 13 FEITOS (socrático 0,79 · adversarial 0,80, sem HIGH) e a Rodada 14
@@ -1124,6 +1125,31 @@ branch `sessao-2026-10-10`):**
   meio RELÊ a OS em vez de trocar para a aba Faturadas** (a releitura do outro ato subiu o contador — a raiz da D-F201): a nota aparece no
   detalhe; a aba fica para o operador. Conhecimento negativo (comentário no `_endDetailAct`); a alternativa (decidir pela tela de agora)
   reintroduziria o "a tela não mudou" que a D-F199 aposentou.
+- **D-F204 (= D-F188 decidida — Valdo 2026-10-13, passeio logado: "Frase neutra no app todo") — `core.errors.network` NEUTRO no app
+  inteiro** ("Sem resposta do serviço — rede, proxy ou tempo." / "No response from the service — network, proxy or timeout."), a aba
+  "Emissor fiscal" incluída. Provado no navegador: o 502/504 do proxy SEM CORS chega ao app web como `net::ERR_FAILED`/"Failed to fetch" —
+  igual à rede caída; "Falha de conexão com o servidor" mandava o suporte atrás da internet do cliente.
+- **D-F205 (= P-01 (a), Valdo 2026-10-13) — a falha de rede leva um código CURTO do serviço** (`NETWORK · setes-api` / `NETWORK ·
+  nfse-api` — `serviceLabel` do `ProductApiClient`); a exceção crua do Dart (com a URL interna) vai só para o log. Revê o docstring antigo da
+  `NetworkFailure` ("expor a causa real"): no navegador o texto cru nunca foi pista.
+- **D-F206 (= P-03 (a), Valdo 2026-10-13) — falha de CARGA de lista = estado de erro com "Tentar novamente"**, nunca "Não encontramos
+  nenhum registro em nossa base". Feito na lista de OS (`loadFailed`); as ~28 listas da fábrica (`RegisterSearchPage`) = tarefa própria.
+- **D-F207 (= P-05 (a), Valdo 2026-10-13) — dado de produção antes de reabrir o uso na janela**: as 7 notas "sem NFS-e" da OS (ids
+  8004–8010, sobras da trilha de 28/09) têm o código municipal "0102" CONGELADO e nunca transmitem (a nfse-api e o caminho atual recusam —
+  `FISCAL_DPS_INVALID`, cTribMun = 3 dígitos) → CANCELAR as 7 pela tela; as regras de ISS 1, 3 e 4 (ativas, "0102", sem serviço ligado)
+  → DESATIVAR. Com o "vai" na hora (passo 6b do §22.13).
+- **D-F208 (= PSO-SOC-01 (b), Valdo 2026-10-13: "siga as recomendações") — o texto cru da falha de rede vai para o CONSOLE por
+  `debugPrint`** (no release do web o `developer.log` do dart2js é no-op — a D-F205 prometia um log que não existia; no Android futuro,
+  logcat): a causa técnica (certificado, DNS, conexão recusada) fica para o suporte; a URL aparece só no console do próprio navegador.
+- **D-F209 (= PSO-SOC-03 (a)) — o P-04 tem EXCEÇÃO para o 400 de DTO** (`code` de validação genérica — `error: 'Validação falhou'`): aí
+  a mensagem do CAMPO sozinha é a certa; nos demais (422 de domínio como o `FISCAL_DPS_INVALID`) vai a principal + a do campo; teste do
+  listener com os três casos. Levar a regra à PEÇA da ponte (valendo no app inteiro) = pendência registrada.
+- **D-F210 (= PSO-SOC-05 (a)) — os repositórios do core (auth, menu, preference, theme) param de rotular erro de LEITURA como rede**:
+  `catch (_) → invalidResponseFailure(err)` (a regra da F2B-ADV-12), porque a rede real já chega como `Failure` pelo `ApiClient`.
+- **D-F211 (= PSO-ADV-06 (a) = PSO-SOC-06, Valdo 2026-10-13) — falhas de rede IGUAIS seguidas viram UM diálogo** (com o código curto da
+  D-F205 elas ficaram iguais; a D-F198 as junta) = conhecimento negativo (comentário na `sealed class ServiceOrderState`).
+- **D-F212 (= PSO-ADV-07 (a)) — o código curto não vai aos AVISOS do ato fiscal** (`ServiceOrderFiscalNotice` — o desfecho desconhecido):
+  o aviso nasce de um ato de UM serviço; aceito.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -3696,6 +3722,9 @@ achado do guardião da F2b); `ARQUITETURA_MODULOS.md` do app — a exceção nom
    build (`apps/web/build-web.ps1`) é ENSAIADO antes do dia da janela — no passeio de 2026-10-13 o `flutter build web` QUEBROU na migração
    interna do flutter_tools que lê o `apps/web/.gitignore` como UTF-8 (estava em cp1252; corrigido no app `41f8867`); o `flutter run` não
    passa por ela, por isso nunca tinha aparecido.
+6b. **D-F207** (com o "vai" na hora, uso ainda PARADO): cancelar pela tela as 7 notas "sem NFS-e" da trilha (ids 8004–8010, código
+   municipal "0102" congelado — nunca transmitem) e desativar as regras de ISS 1, 3 e 4 ("0102", sem serviço). Conferir depois: o lote
+   "Transmitir notas sem NFS-e" acha 0 notas e nenhuma regra ativa tem código fora de vazio/3 dígitos.
 7. Trilha (`scripts/trilha-primeiro-cliente.ts` — P8b pela nfse-api) → reabrir.
 8. Depois: apagar o A1 do cofre do setes-api (D-F116, "vai"); push dos repos; F3 (Onda 4). ⚠️ Checklist da F3 (D-F132 × D-F135 —
    F2AR4-SOC-08): o usuário PRÓPRIO do setes-api não terá o privilégio TRIGGER (senão ele mesmo apagaria a trava) e o `information_schema`
@@ -5285,7 +5314,27 @@ Produção conferida DEPOIS (só leitura, 3306): `fiscal_api` P/`cutover_at` NUL
 `_migrations`. Lição: o ensaio na cópia exercita o roteiro inteiro (inclusive o `--vai` e a ordem parar → ato → subir) sem tocar a
 produção — repetir no dia da janela, ANTES do passo 2 real, se houver mudança nos repositórios desde este ensaio.
 
-#### 22.46.4 Passeio logado da F2b (em andamento)
+#### 22.46.4 Passeio logado da F2b — FEITO (2026-10-13, o Valdo logado no navegador do app; fisco de HOMOLOGAÇÃO com o "vai" dele)
+
+| Passo | Resultado |
+|---|---|
+| lista "Faturadas" (253) | selo por linha pelo setes-api lendo a voz nas views (D-F130): "Cancelada" na 7374 (a NFS-e 704 de P), "Sem NFS-e" nas outras |
+| detalhe da OS 7373 | "No fisco" pela nfse-api da cópia ("NFS-e ainda não transmitida") |
+| **502 no ato avulso** (Transmitir, POST barrado no proxy) | o `OPTIONS` passa (204), o POST leva o 502 SEM CORS → o navegador entrega `net::ERR_FAILED` → `NetworkFailure` → aviso "resultado incerto — use Consultar" + a frase neutra (D-F185). NADA chegou à nfse-api |
+| **504 na leitura da voz** | a seção degrada ("Situação fiscal indisponível") — mas o "código" era a exceção crua com a URL (**P-01** → D-F205) |
+| **502 numa leitura do setes-api** | "Falha de conexão com o servidor" (**P-02** → D-F204) e, atrás, "Não encontramos nenhum registro" (**P-03** → D-F206) |
+| **aba Emissor fiscal** | com 502: a mesma frase do app (D-F188 → D-F204); normal: A1 presente, válido até 05/10/2027, NFS-e "Habilitado" em **H** (a cópia virou) |
+| **lote "Transmitir notas sem NFS-e"** (POST barrado) | fotografia = 7 notas; "Transmitidas 0 · Recusadas 0 · Incertas — consulte 3 · Não tentadas 4", parou em 3 desconhecidos seguidos, linha com o nº da NOTA e a frase neutra; 0 tentativas novas na cópia |
+| **Transmitir em H** (OS 7373, nota 6789) | 1ª vez: 422 `FISCAL_DPS_INVALID` local (código municipal "0102") — a tela mostrou só "Esperado 3 dígitos" (**P-04** → corrigido: a mensagem principal vai junto) e o dado é da trilha (**P-05** → D-F207); corrigido SÓ na cópia o valor congelado da 8010 → **NFS-e 3 AUTORIZADA em homologação** (chave 4106902…1338, DPS …0901), "Voz do fisco" com a linha do tempo |
+| **"Cancelar nota" pela saga** | o plano abriu sobre a OS dela; motivo; nota de H = cancelamento LOCAL (D-F83 — em H a saída é cancelar a nota): evento C com o motivo, nota desfeita, OS de volta a aberta; no `fiscal_api` só a voz A (a NFS-e 3 de H segue lá, sem efeito) |
+| depois das decisões (build novo) | 502 do setes-api → "Sem resposta do serviço — rede, proxy ou tempo." + "NETWORK · setes-api" + "Não foi possível carregar a lista." com "Tentar novamente" (recarregou: 92 abertas); Emissor com 502 → frase neutra + "NETWORK · nfse-api" |
+
+**Não reproduzido**: na 1ª abertura de Ordens de Serviço (build de RELEASE, painel do navegador mudando de tamanho) a página ficou em branco
+com `Uncaught Error` minificado (o console mostrou o app "started" DUAS vezes — a página carregou duas vezes na abertura do painel — e um
+módulo DISPOSED antes do erro); o mesmo caminho em release e em profile, pelo menu e pela rota, nos dois layouts e trocando a largura com a
+tela aberta, NÃO repetiu. Fica de olho: se voltar, o build de release com `--source-maps` (`web-release/main.dart.js.map`) traduz a pilha.
+
+Commit do app com as decisões: `f312f06` (app 491 + 5 pulados · core 55 · analyze limpo). Gates do delta `570324c..f312f06`: §22.46.6.
 
 Topologia: setes-api da worktree `f2a` em :3010 e nfse-api em :3012 contra a 3307; proxy de FALHAS na frente de cada uma (:3011 → :3010,
 :3013 → :3012) que, por um arquivo de controle (`proxy-mode.json` — modo `502|503|504|hang|reset`, regex do caminho, N vezes), devolve a
@@ -5315,7 +5364,30 @@ em UTF-8 — cerca nova no gate R16). Correções (autorização em pé):
 
 **Provas**: app **488 + 6 pulados** · `flutter analyze` limpo. Commits LOCAIS do app nesta sessão: `7bbbd04` · `41f8867` · `570324c`.
 
-#### 22.47 ⏯ PROMPT DE RETOMADA CURTO (colar numa sessão nova)
+#### 22.46.6 Gates do delta do passeio (`570324c..f312f06` — D-F204…D-F206 + P-04) e as correções (app `60df1df`)
+
+**Socrático 0,76 ✅** (1 MEDIUM + LOW/INFO) e **adversarial 0,78 ✅** (só LOW — 600 sequências de fuzz da D-F206, matriz D-F205 de 50
+combinações sem vazar URL/host/token, ponta a ponta com a página montada). Valdo: **"siga as recomendações"**. Os gates DIVERGIRAM só no
+destino do texto cru (socrático (b) `debugPrint` × adversarial (a) aceitar) — seguido o (b), que cumpre os dois: o comentário vira verdade e
+o texto vai a um lugar que existe em produção.
+
+| Achado | O quê | Destino |
+|---|---|---|
+| PSO-SOC-01 (MEDIUM) = PSO-ADV-04 | `developer.log` é no-op no release do web (dart2js) — "vai só para o log" era falso | **D-F208** (`debugPrint`) |
+| PSO-SOC-03 + PSO-ADV-08 | o P-04 piorava o 400 de DTO ("Validação falhou" genérico) e repetia a mensagem do campo | **D-F209** (`unanchoredFieldsText` na ponte; FISCAL_CANCEL_REFUSED com ramo próprio) |
+| PSO-SOC-05 = PSO-ADV-03 | 10 fallbacks do core rotulavam erro de LEITURA como rede | **D-F210** |
+| PSO-SOC-06 = PSO-ADV-06 · PSO-ADV-07 | falhas de rede iguais colapsadas; o código fora dos avisos | **D-F211** · **D-F212** (conhecimento negativo) |
+| PSO-SOC-02 = PSO-ADV-01 · PSO-ADV-02 | o estado de falha perdia a página (o "Tentar novamente" ia à 1) e limpava a seleção das recusadas | **corrigido** (página/tamanho no estado; a seleção ignora a falha) |
+| PSO-ADV-05 | a lista de OS com 200 fora do envelope dizia "nenhum registro" | **corrigido** (`envelopePage`) |
+| PSO-SOC-04 | `core.errors.network` cru (sem `.tr()`) nas linhas do relatório do lote de faturamento | **corrigido** |
+| PSO-ADV-09 (anterior ao delta) | o `finally` da operação longa ANTIGA apagava a trava da SEGUINTE (a H1 da D-F179 reabria — dois lotes fiscais da mesma nota no ar) | **corrigido**: trava COM DONO (`_RunLock`) nas 4 operações |
+| PSO-SOC-07 | a regra da D-F206 fora das skills; as 28 listas sem pendência rastreável | **corrigido**: `criar-formulario-cadastro.md` + `tela-de-processo.md` (itens 8–9) + chip de tarefa |
+| PSO-SOC-08/09 · PSO-SOC-05 do R13 | chaves duplicadas da frase; dois diálogos numa queda total | mantidos (limite conhecido) |
+
+**Provas**: app **508 + 13 pulados** (as 8 provas SUPERADAS do gate do passeio entram nos pulados) · core **56** · `flutter analyze` limpo
+nos dois. Os gates deste último delta (`f312f06..60df1df`) rodam junto com a próxima mudança de código ou no dia da janela.
+
+#### 22.47 ⏯ PROMPT DE RETOMADA CURTO (SUPERADO pelo §22.48)
 
 ```
 Retome a F2a/F2b do Gestão 2027 pelo §22.47 do Infra-IA/prompts/prompt_apis_fiscais_isoladas.md (leia D:\Gestao2027\CLAUDE.md, o §22.46 e
@@ -5336,4 +5408,23 @@ ato avulso e numa leitura do setes-api → decidir o core.errors.network + a aba
 tocadas; no fim, parar os processos (pela porta + caminho da worktree) e apagar a instância. PASSO 3 — a JANELA pelo §22.13 (cada passo
 irreversível com o "vai"; ensaiar o build web antes — R16-SOC-07), antes de 30/11. Ao fim de cada passo: docs (§22.48+), INDICE_CENTRAL,
 CLAUDE.md da raiz, memória apis-fiscais-isoladas.
+```
+
+#### 22.48 ⏯ PROMPT DE RETOMADA CURTO — a JANELA (colar numa sessão nova)
+
+```
+Retome a F2a/F2b do Gestão 2027 pelo §22.48 do Infra-IA/prompts/prompt_apis_fiscais_isoladas.md (leia D:\Gestao2027\CLAUDE.md, o §22.46 —
+passeio FEITO e o ensaio da janela na cópia — e o §22.13, roteiro da JANELA com o passo 6b da D-F207; §7 = D-F1…D-F212). Commits LOCAIS
+(push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, 8556491) · núcleo 945ad2d · nfse-api 61d0bbe ·
+setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 60df1df) · Infra-IA (main).
+AUTORIZAÇÃO EM PÉ: questões dos gates seguem a RECOMENDAÇÃO — salvo passo irreversível (cada passo da janela, --cutover --vai, push, apagar
+linha do fiscal_api, escrita em dado de produção), algo fora da F2a/F2b, gates divergentes sem saída ou HIGH/CRITICAL.
+REGRAS: D:\Gestao2027\setes-api (árvore viva) É a produção (tsx watch) — só leitura até o passo 4; nunca npm run dev/flutter run nas worktrees
+com o .env delas; nunca criar habilitação no fiscal_api de produção antes do ato (D-F192/D-F195); edição por ferramenta/script em arquivo
+(UTF-8); commit só dos caminhos da frente com git commit -F.
+PASSO 0 — gates do delta f312f06..60df1df do app (a trava com dono _RunLock, D-F208…D-F210) — socrático + adversarial; corrigir.
+PASSO 1 — critério de entrada do §22.13 (suítes; gate adversarial da A3 ao vivo; ensaio do build web pelo build-web.ps1 — R16-SOC-07); se os
+repositórios mudaram desde 2026-10-13, refazer o ENSAIO da janela na cópia pelo kit Infra-IA/fiscal-api/scripts/ensaio-janela/README.md.
+PASSO 2 — a JANELA pelo §22.13 com o Valdo, cada passo irreversível com o "vai" na hora (2 → 3 → 4 → 5 → 6 → 6b → 7 → 8), antes de 30/11.
+Ao fim: docs (§22.49+), INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```
