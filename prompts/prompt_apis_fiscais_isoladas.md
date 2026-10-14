@@ -5464,6 +5464,7 @@ confere com `auth.repository.ts`).
 | LF-ADV-04 | o regex da D-F220 só entendia `https?://` minúsculo | **corrigido** (qualquer esquema, qualquer caixa); a URL SEM esquema segue como conhecimento negativo (teste que a fixa) |
 | LF-ADV-08 | rejeição `{field:'dps', message:''}` virava a linha "• " em branco | **corrigido** (linhas sem texto saem; todas vazias → mensagem principal da falha) |
 | LF-SOC-03 = LF-ADV-01 · LF-ADV-02 | `CLIENT_CLOCK` sempre culpa o aparelho (um token já vencido NO servidor — TTL mal configurado — dá o mesmo sintoma); o `supportRef` sem `iat`/`exp` e a hora local sem fuso | **QUESTÃO para o Valdo** (é o AuthBloc — login/core, FORA da F2a/F2b): recomendação (a) = `iat`/`exp` e a hora em UTC no `supportRef` + `|agora − iat|` pequeno com `exp ≤ agora` ⇒ `INVALID_RESPONSE` |
+| *(resposta do Valdo 2026-10-14: "Aplicar")* | LF-SOC-03 = LF-ADV-01 · LF-ADV-02 | **EXECUTADO** (app `0fdbfa3`): `jwtIssuedAt` em `jwt_utils.dart`; `|agora − iat| ≤ 5 min` com `exp ≤ agora` = `INVALID_RESPONSE · setes-api` (o servidor emitiu vencido); `iat` longe do relógio (ou sem `iat`) = `CLIENT_CLOCK` com `agora=…Z iat=…Z exp=…Z` no supportRef; app 576 + 27 · core 76. **Gates deste delta pequeno (`5f7bda4..0fdbfa3`, só `auth_bloc.dart`/`jwt_utils.dart`) rodam junto com a próxima mudança de código ou no dia da janela** |
 | LF-ADV-05 · LF-ADV-07 · LF-ADV-09 · LF-ADV-10 · LF-ADV-03/06 · LF-SOC-04/05 | regex quadrático só em causa de dezenas de KB de espaços; `page`/`pageSize` da resposta sem limite; item de lista com id ilegível = 0; `ok:true` sem `data`; seleção `[{}]`; D-F218 sem frase "entre com a senha nova"; D-F217 só na lista de OS | **limites conhecidos** (o setes-api real limita page/pageSize, nunca emite item sem id nem `ok:true` sem `data`; nenhum texto do servidor entra na causa) — teste/comentário os fixa |
 
 **Provas**: app **576 + 27 pulados** · core **76** · `flutter analyze` limpo nos dois. Critério de entrada (passo 1) — parcial desta sessão:
@@ -5479,6 +5480,49 @@ do banco (núcleo `945ad2d` · nfse-api `61d0bbe` · setes-api `f2a` `8556491`) 
 **o ensaio na instância descartável não precisa ser refeito**. Falta, para a JANELA: (1) as URLs https REAIS de publicação do setes-api e da
 nfse-api (`-ApiUrl`/`-NfseApiUrl`) e o destino do build (Plesk); (2) o Valdo presente para o "vai" de cada passo; (3) a decisão sobre o
 `CLIENT_CLOCK` (acima).
+
+#### 22.50 2º ENSAIO COMPLETO da janela na instância descartável com o código FINAL (2026-10-14, 5ª sessão — pedido do Valdo: "as URLs de verdade entram por configuração no deploy; quero testar agora")
+
+Kit do §22.46.3 remontado do zero (MariaDB :3307 de um dump só-leitura novo, `setes`/`fiscal_api` com senhas novas, habilitação SE em **H**
+e `dps_last_number` 900 nos DOIS lados, chaves RS256/`kid` `passeio`, fisco/Inter de produção BLOQUEADOS no processo, sondas `@@port` antes de
+cada passo). Código: setes-api `f2a` 8556491 · nfse-api 61d0bbe · núcleo 945ad2d · app `f2b` 0fdbfa3. Resultado, passo a passo do §22.13:
+`db:migrate` (006) → re-sincronia `issuers 1 · transmissions 20 · events 0 · failures []` → ENSAIO do ato **exit 0** só com o D-F50 "sem F2a"
+→ ENSAIO do aborto `{dryRun:true, triggers:[], migrationRow:false, tombstone:false}` → boot da F2a "Voz do fisco (views): fiscal_api —
+família(s) service" + "Migration aplicada: 069" + "Gatilhos de TRAVA da F2a: 9" → re-sincronia + contagens **origem = réplica (20 · 23)** →
+ensaio SEM bloqueio (exit 0, sem `bloqueios`) → setes-api parado (porta + caminho conferidos) → `--vai` **`committed: true`** (`fiscal_api` H
+com `cutover_at`; ERP SE `deleted='S'`) → subir. Produção conferida DEPOIS (só leitura, 3306): `fiscal_api` P/`cutover_at` NULL, ERP P/`deleted='N'`,
+nenhuma 069. Passeio: setes-api :3010, nfse-api :3012, proxies de falhas :3011/:3013, build web com `flutter build web --dart-define-from-file`
+(API_URL/NFSE_API_URL de localhost) servido em :5052. Lição: o Node no Windows exige caminho `C:/…` (não `/c/…`) em `NODE_OPTIONS --require`
+e nas chaves.
+
+**Passeio logado (2026-10-14, 5ª sessão — Claude in Chrome sobre o navegador do Valdo, sessão dele mantida; o agente nunca digitou senha)** —
+build do código final (`0fdbfa3`) em :5052 contra a cópia: lista de OS abertas (91→92) e faturadas (253→252) pelo setes-api da F2a; **selo
+fiscal por linha** pela voz do `fiscal_api` (7374 "Cancelada", 7368 "Falha · Homologação", demais "Sem NFS-e"); detalhe "No fisco" pela nfse-api
+(OS 7373); **Transmitir** → 422 local `FISCAL_DPS_INVALID` com a mensagem principal + "Esperado 3 dígitos" (dado da trilha, cTribMun "0102" =
+passo 6b da janela — nada foi ao fisco); **"Cancelar nota" pela saga** (ícone ⊗ do AppBar) com o plano lido pelo `cancel-plan`: nota 6789 → evento
+`C` com o motivo, OS 7373 de volta a Aberta; 2ª nota (6788) bloqueada de forma LEGÍVEL enquanto o cliente tinha outra OS aberta (a 8010 — trava D5),
+cancelada depois de cancelar a OS 7373; **502** no ato avulso → "O fisco não deu uma resposta conclusiva… use Consultar" + frase neutra; **lote**
+com 502 em todo POST → "Incertas — consulte 3 · Não tentadas 3 — o lote parou antes delas" (uma linha por nota, com o nº da NOTA); lote
+sem falha → 6 recusadas `FISCAL_DPS_INVALID`; **504 na lista do setes-api** → "Sem resposta do serviço — rede, proxy ou tempo." +
+"NETWORK · setes-api" + "Não foi possível carregar a lista." + "Tentar novamente" (recarregou); aba **Emissor fiscal**: A1 presente, válido até
+2027-10-05, NFS-e "Habilitado" em H. Console: só os `[ApiClient] falha de rede em <serviço> <caminho>` (sem query, sem `uri=`). **Não
+exercitado**: Transmitir AUTORIZADA em H (o dado "0102" recusa antes — provado em 13/10 com o dado corrigido na cópia) e o `CLIENT_CLOCK`
+(exige o relógio do aparelho; coberto pelos testes). **Não reproduzido (de novo)**: um `[EXCEPTION] Error` minificado no console, visto uma vez
+na 1ª sessão do navegador — nenhuma das ações isoladas (abrir, transmitir, plano, cancelar nota/OS, 502/504, recarga) o repetiu; mesma
+classe do item "Não reproduzido" do §22.46.4 (se voltar, `flutter build web --source-maps`).
+
+**Encerramento do ensaio e investigação dos achados (2026-10-14, a pedido do Valdo)** — ambiente ENCERRADO (processos parados pela porta + linha
+de comando; MariaDB :3307 desligado; datadir/dump/chaves APAGADOS; produção reconferida: `fiscal_api` P/`cutover_at` NULL, ERP P/`deleted='N'`,
+nenhuma 069, mesmos PIDs 3000/3306; nenhum banco `f2a_*` sobrou). Investigação:
+
+| Achado | Causa | Destino |
+|---|---|---|
+| **B1** o bloqueio do plano dizia "ordem de serviço **8010**" onde a lista mostra a OS **7373** | a frase citava `tb_service_order.id`; a tela mostra `number` (D-F187) | **corrigido** (setes-api `f2a` `4148f3a`): `findServiceOrderForReopen` devolve `blockingOrderNumber`; teste exige o número |
+| **B1b** mesma classe no bloco "Devolução N aponta para esta nota" (a tela de Devoluções mostra `a.number`) | `r.id` | **corrigido** (`f2a` — subconsulta NÃO travante, a ordem de locks C1 não muda; ao vivo 139/139). **Limite conhecido**: o bloco "Título `<pedido>/<parcela>`" segue pelo id do pedido (a tela de Baixas é que decide o que mostra — não verificado) |
+| **E1** `[EXCEPTION] Error` minificado + página em branco | traduzido com source maps (mesmo commit `0fdbfa3`): `ModularRouteInformationParser.selectRoute` (flutter_modular 5.0.3) lança o `RouteNotFound` — **qualquer rota desconhecida** (`#/nada-aqui/`, `#/home/nada-aqui/`) deixa a tela EM BRANCO com essa exceção; reproduzido de forma determinística; navegar de novo para `#/home/` recupera. O app não tem `WildcardRoute`. É a MESMA classe do "não reproduzido" de 13/10 (§22.46.4) — a causa lá foi uma rota que não resolveu na abertura | **QUESTÃO para o Valdo** (roteamento do app inteiro — fora da F2a/F2b): recomendação (a) = `WildcardRoute` no `AppModule` e no `HomeModule` redirecionando para `/home/` (logado) ou `/login`, + teste de widget |
+| `/login` transitório na recarga com sessão mantida | **desenho**: `Modular.setInitialRoute('/login')` e a `LoginPage` encaminha a sessão salva para `/home/` (`login_page.dart:36-39`) | nada |
+| cliques "perdidos" logo depois de fechar um diálogo | o clique cai durante a animação de fechamento da barreira modal (esperar ~1 s) — artefato da automação, não do app | nada |
+| `FISCAL_DPS_INVALID` "0102" · 7368 "Falha · Homologação" · 7372 sem cancelar com outra OS aberta do cliente | dado da trilha (passo 6b) · dado de um teste anterior em H · trava D5 (1 OS aberta por cliente — por desenho, agora com a frase certa) | nada (6b na janela) |
 
 #### 22.47 ⏯ PROMPT DE RETOMADA CURTO (SUPERADO pelo §22.48)
 
