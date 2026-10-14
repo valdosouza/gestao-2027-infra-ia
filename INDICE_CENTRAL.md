@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.74 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.75 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-14  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-14 | **F2a/F2b — PUSH dos repos feito** (`prompts/prompt_apis_fiscais_isoladas.md` §22.50): núcleo `945ad2d` e nfse-api `61d0bbe` (main) · setes-api branch `f2a` `f6db0db` · setes-app branch `f2b` `810138e` (1º push; avanço puro sobre o main) · Infra-IA; varredura de segredos antes (só fixtures falsas); `f2a`/`f2b` NÃO são o main — o merge da `f2a` é o passo 4 da JANELA | 9.75 |
 | 2026-10-14 | **F2b — rota de escape do app (E1 do passeio logado) APLICADA** (`prompts/prompt_apis_fiscais_isoladas.md` §22.50 ⭐ + `setes-app/ARQUITETURA_MODULOS.md` — seção nova): `WildcardRoute`+`RouteFallback` na raiz e o escape da casa NOS FILHOS do shell; conhecimento negativo: o escape no nível do HomeModule captura `/home/welcome/` e a casa entra em LAÇO (teste que mede); provado no build real com mock da API; app 582 + 27 (`810138e` — LOCAL) | 9.74 |
 | 2026-10-14 | **F2a/F2b — 2º ensaio COMPLETO da janela na cópia descartável + PASSEIO LOGADO + investigação dos achados** (`prompts/prompt_apis_fiscais_isoladas.md` §22.50 ⭐): roteiro do §22.13 (passos 3–5, inclusive o `--vai`) passou com o código final (exit 0; boot 069 + 9 gatilhos; origem = réplica 20·23; produção intacta); passeio no Chrome do Valdo: selo fiscal, Transmitir (422 local do dado da trilha), cancelar nota pela saga, 502 avulso/lote, 504 na lista, Emissor fiscal — tudo conforme; ambiente ENCERRADO e instância apagada; achados: **B1/B1b corrigidos** (o bloqueio do plano citava o id interno da OS/devolução, a tela mostra o número — setes-api `f2a` `f6db0db`; ao vivo 139/139), **E1** (rota desconhecida = tela em BRANCO + `RouteNotFound` do flutter_modular, traduzido com source maps; app sem `WildcardRoute`) = QUESTÃO para o Valdo (roteamento do app inteiro); CLIENT_CLOCK refinado (app `0fdbfa3`) | 9.73 |
 | 2026-10-14 | **F2a/F2b — gates do delta `5f6d3be..ebd040c` (socrático 0,82 · adversarial 0,84, só LOW) + critério de entrada da JANELA CUMPRIDO** (`prompts/prompt_apis_fiscais_isoladas.md` §22.46.9 ⭐): `service` obrigatório na falha de resposta ilegível, a query some da causa de rede para qualquer esquema/caixa (D-F220), rejeição vazia do fisco cai na mensagem principal; QUESTÃO aberta p/ o Valdo (AuthBloc fora da frente): `CLIENT_CLOCK` com `iat`/`exp` e hora UTC no supportRef; ao vivo setes-api 139/139 + prove-f2a-abort · nfse-api 195 · núcleo 531 · nfse 765 · setes-api 1.842 + as mesmas 20; build web ensaiado (exit 0; PS 5.1 sem `2>&1`); app 576 + 27 · core 76 (5f7bda4 — LOCAL); próximo: a JANELA (§22.13) com o Valdo — faltam as URLs https reais do build | 9.72 |
