@@ -5447,6 +5447,39 @@ combinações, a seleção × falha pela página real.
 
 **Provas**: app **562 + 27 pulados** · core **56** · `flutter analyze` limpo. Os gates do delta `5f6d3be..ebd040c` = o PASSO 0 do §22.49.
 
+#### 22.46.9 Gates do delta `5f6d3be..ebd040c` (2026-10-14, 5ª sessão) — socrático **0,82 ✅** · adversarial **0,84 ✅** (app `5f7bda4`)
+
+Agentes independentes em paralelo (o socrático só leu e rodou analyze/test; o adversarial criou `apps/web/test/adversarial_lf_gate_test.dart`
+— 14 provas — e `packages/core/test/adversarial_lf_core_test.dart` — 20 provas). **Nenhum MEDIUM/HIGH/CRITICAL.** Resistiram: o fluxo do
+login em 32 formas de token (invariante "`AuthAuthenticated` ⇒ a guarda aceita o MESMO token", nunca spinner preso), a fronteira do relógio
+(23h59 entra, ≥ 24 h = `CLIENT_CLOCK`), a D-F216 nas três portas × 18 corpos hostis × as duas APIs (o corpo/query/token nunca vão ao
+console), a D-F217 contra servidores hostis (40 sementes × 8 variantes × 22 ações: ≤ 2 GETs por ação, sem laço), `FISCAL_DPS_REJECTED` nas
+formas REAIS do produtor (`fiscal-api/src/transport/https-json.ts` `rejectField` · `nfse-api/src/authority/adn.ts`), D-F218 (comentário
+confere com `auth.repository.ts`).
+
+| Achado | O quê | Destino |
+|---|---|---|
+| LF-SOC-02 | `service` ainda opcional em `invalidResponseFailure`/`invalidResponseCode` — falha sem o serviço reaparece com a próxima chamada | **corrigido**: `required` (4 testes antigos ajustados) |
+| LF-SOC-01 | comentários diziam que todo `supportRef` das falhas `CLIENT_*` é código curto — `CLIENT_CONFIGURATION` leva a base URL/texto do erro | **corrigido** (comentários) |
+| LF-ADV-04 | o regex da D-F220 só entendia `https?://` minúsculo | **corrigido** (qualquer esquema, qualquer caixa); a URL SEM esquema segue como conhecimento negativo (teste que a fixa) |
+| LF-ADV-08 | rejeição `{field:'dps', message:''}` virava a linha "• " em branco | **corrigido** (linhas sem texto saem; todas vazias → mensagem principal da falha) |
+| LF-SOC-03 = LF-ADV-01 · LF-ADV-02 | `CLIENT_CLOCK` sempre culpa o aparelho (um token já vencido NO servidor — TTL mal configurado — dá o mesmo sintoma); o `supportRef` sem `iat`/`exp` e a hora local sem fuso | **QUESTÃO para o Valdo** (é o AuthBloc — login/core, FORA da F2a/F2b): recomendação (a) = `iat`/`exp` e a hora em UTC no `supportRef` + `|agora − iat|` pequeno com `exp ≤ agora` ⇒ `INVALID_RESPONSE` |
+| LF-ADV-05 · LF-ADV-07 · LF-ADV-09 · LF-ADV-10 · LF-ADV-03/06 · LF-SOC-04/05 | regex quadrático só em causa de dezenas de KB de espaços; `page`/`pageSize` da resposta sem limite; item de lista com id ilegível = 0; `ok:true` sem `data`; seleção `[{}]`; D-F218 sem frase "entre com a senha nova"; D-F217 só na lista de OS | **limites conhecidos** (o setes-api real limita page/pageSize, nunca emite item sem id nem `ok:true` sem `data`; nenhum texto do servidor entra na causa) — teste/comentário os fixa |
+
+**Provas**: app **576 + 27 pulados** · core **76** · `flutter analyze` limpo nos dois. Critério de entrada (passo 1) — parcial desta sessão:
+núcleo **531** · nfse-api **765** (com `SETES_API_DIR` na worktree) · setes-api worktree `f2a` **1.842 + as MESMAS 20 falhas** (19 da
+bomba-relógio do boleto + 1 da cerca de fuso, nome a nome).
+
+**Critério de entrada da janela (§22.13 passo 1) — CUMPRIDO (2026-10-14, 5ª sessão)**: setes-api worktree `f2a` — ao vivo **139/139**
+(`F2A_ADV_LIVE=1 … adversarial-f2a`, 8 suítes, inclusive o gate da A3) + `scripts/prove-f2a-abort.ts` ok; nfse-api ao vivo **195 + 4 pulados**
+(15 suítes); núcleo **531 + 1**; nfse-api **765** (com `SETES_API_DIR` na worktree); nenhum banco `f2a_*`/`fiscal_api_adv_*` sobrou. Build
+web ENSAIADO (R16-SOC-07): `apps/web/build-web.ps1` com URLs https de ensaio → **exit 0**, `main.dart.js` 5,1 MB (⚠️ no PS 5.1 NÃO
+redirecionar `2>&1` ao chamar o script — o stderr do `flutter` vira ErrorRecord e o `$ErrorActionPreference='Stop'` derruba). Os repositórios
+do banco (núcleo `945ad2d` · nfse-api `61d0bbe` · setes-api `f2a` `8556491`) NÃO mudaram desde o ensaio da janela de 2026-10-13 (§22.46.3) →
+**o ensaio na instância descartável não precisa ser refeito**. Falta, para a JANELA: (1) as URLs https REAIS de publicação do setes-api e da
+nfse-api (`-ApiUrl`/`-NfseApiUrl`) e o destino do build (Plesk); (2) o Valdo presente para o "vai" de cada passo; (3) a decisão sobre o
+`CLIENT_CLOCK` (acima).
+
 #### 22.47 ⏯ PROMPT DE RETOMADA CURTO (SUPERADO pelo §22.48)
 
 ```
