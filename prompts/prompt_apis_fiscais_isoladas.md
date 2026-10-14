@@ -10,7 +10,7 @@
 > **⏯ RETOMAR POR AQUI — §22.48 (PROMPT DE RETOMADA CURTO — a JANELA) — 4ª sessão de 2026-10-13 (§22.46): gates R15/R16, Rodada 16
 > (D-F199…D-F203), ENSAIO DA JANELA na instância descartável (passos 3–5 + `--vai` — PASSOU) e o PASSEIO LOGADO FEITO (NFS-e 3 autorizada em
 > H e cancelada pela saga; 502/504 provocados → D-F204…D-F207 decididas pelo Valdo; gates do passeio 0,76/0,78 → D-F208…D-F212).
-> Commits LOCAIS: núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 60df1df. Próximo: gates do último delta → a JANELA (passo 6b = D-F207).**
+> Commits LOCAIS: núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 5f6d3be. Próximo: gates do delta 60df1df..5f6d3be → a JANELA (passo 6b = D-F207).**
 > *Antes:* **§22.47 — passeio montado, parado no login.**
 > *Antes:* **§22.45 — Rodada 15 da F2a/F2b EXECUTADA (2026-10-13, §22.44: gates da Rodada 14
 > 0,80/0,84 e D-F195…D-F198 pela autorização em pé); tudo em commit LOCAL (núcleo 945ad2d · nfse 61d0bbe · api 8556491 · app 95d829d).**
@@ -1150,6 +1150,19 @@ branch `sessao-2026-10-10`):**
   D-F205 elas ficaram iguais; a D-F198 as junta) = conhecimento negativo (comentário na `sealed class ServiceOrderState`).
 - **D-F212 (= PSO-ADV-07 (a)) — o código curto não vai aos AVISOS do ato fiscal** (`ServiceOrderFiscalNotice` — o desfecho desconhecido):
   o aviso nasce de um ato de UM serviço; aceito.
+- **D-F213 (= LD-ADV-05 (a), gates do último delta, 2026-10-13) — a guarda cruzada da fotografia × lote fiscal é de UM lado só**
+  (conhecimento negativo no handler do lote): a fotografia não começa com o lote no ar; o lote (evento direto) pode começar com a fotografia
+  no ar — pela página não se chega (o lote nasce do diálogo MODAL da fotografia — a I3 da D-F199).
+- **D-F214 (= LD-ADV-09 = LD-SOC-03 (a), Valdo 2026-10-14) — a falha MONTADA pelo cliente (`ClientFailureCodes.all`) é TÉCNICA** nas
+  duas pontes (app `feedback.dart` e `isTechnicalFailure` do core), mesmo sem ref — nunca "Atenção" para resposta ilegível/configuração.
+- **D-F215 (= LD-SOC-07 (b), Valdo 2026-10-14) — o console da falha de rede leva só o CAMINHO** (sem a query — CPF/CNPJ do prefill,
+  filtro digitado) e a causa sem o `uri=`; a causa técnica fica.
+- **D-F216 (= LD-ADV-03 (a) + LD-SOC-08 (b), Valdo 2026-10-14) — os leitores do core exigem `{ ok: true }`** (`envelopeOk`; todas as rotas
+  `/auth/*` e `/api/core/*` respondem assim — conferido no setes-api, worktree e árvore viva) e o erro de leitura leva o código curto
+  `INVALID_RESPONSE · <serviço>` (`invalidResponseFailure(e, service:)`; o texto cru vai ao console — a regra da D-F208).
+- **D-F217 (= LD-ADV-10 (a), Valdo 2026-10-14) — o recuo "página esvaziou" só quando a página pedida passou do total de páginas**
+  (na lista de OS; as outras listas entram na tarefa das 28 listas): o servidor com COUNT diferente da lista fazia o bloc pedir a mesma
+  página sem parar.
 - **D-F20 — suspensa EM PARTE pela D-NE1 (Valdo 2026-10-10)**: as ondas NE-0…NE-3 da nfe-api (levantamento oficial, núcleo
   generalizado, esqueleto + DDL, adaptador SEFAZ provado em H só nos serviços que não exigem emitente com IE) podem ter código;
   builder de autorização em produção continua esperando o 1º cliente de mercadoria (`prompt_onda_nfe_sefaz.md` §11.7).
@@ -5387,6 +5400,24 @@ o texto vai a um lugar que existe em produção.
 **Provas**: app **508 + 13 pulados** (as 8 provas SUPERADAS do gate do passeio entram nos pulados) · core **56** · `flutter analyze` limpo
 nos dois. Os gates deste último delta (`f312f06..60df1df`) rodam junto com a próxima mudança de código ou no dia da janela.
 
+#### 22.46.7 Gates do último delta (`f312f06..60df1df`, 2026-10-13/14) e as decisões D-F213…D-F217 (app `d08ac1b` + `5f6d3be`)
+
+**Socrático 0,74 ✅** (1 MEDIUM) e **adversarial 0,76 ✅** (1 MEDIUM) — a trava COM DONO resistiu a 600 sequências com oráculos estritos.
+
+| Achado | O quê | Destino |
+|---|---|---|
+| LD-ADV-01 (MEDIUM) | login com 200 sem token nem seleção = "sucesso" com token nulo → o AuthBloc girava para sempre | **corrigido** (`d08ac1b` — o datasource recusa; a regra da D-F210) |
+| LD-SOC-01 (MEDIUM) × LD-ADV-07 | o código E do fisco "sumia" no FISCAL_CANCEL_REFUSED — era o FIXTURE (forma inventada); na forma REAL (`{field:'event', message:'E1235: …'}`) o código vem na principal | **corrigido**: fixture real + teste que exige o código (com a principal cortada em 255) + linha sem o nome técnico |
+| LD-ADV-08 = LD-SOC-06 | `unanchoredFieldsText` não era total; o ramo do DTO pegava o 422 VALIDATION_FAILED com mensagem específica | **corrigido** (vazio → principal; DTO só no 400) |
+| LD-ADV-04 = LD-SOC-02 | repositório da OS punha o texto do Dart como mensagem | **corrigido** na OS; os outros 36 → chip "Levar D-F209/D-F210 aos módulos do app" |
+| LD-ADV-06 · LD-ADV-11 = LD-SOC-04 · LD-ADV-12 = LD-SOC-05 | recarga com o bloc fechado; seleção armada sobre lista que falhou; fuzz ainda tolerando o PSO-ADV-09 | **corrigidos** |
+| LD-ADV-05 | guarda cruzada de um lado só | **D-F213** |
+| LD-ADV-09 = LD-SOC-03 · LD-SOC-07 · LD-ADV-03 + LD-SOC-08 · LD-ADV-10 | natureza dos códigos do cliente; CPF no console; leitores do core sem envelope + código do Dart; recuo infinito | **D-F214…D-F217** (Valdo 2026-10-14, todas pela recomendação) |
+| LD-SOC-09/10 | as 5 telas com a fórmula antiga; nomes de testes antigos | chip / nada |
+
+**Provas**: app **538 + 20 pulados** (as 7 provas superadas do gate LD entram nos pulados) · core **56** · `flutter analyze` limpo. Os
+gates deste delta (`60df1df..5f6d3be`) = o PASSO 0 do §22.48.
+
 #### 22.47 ⏯ PROMPT DE RETOMADA CURTO (SUPERADO pelo §22.48)
 
 ```
@@ -5414,15 +5445,17 @@ CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 
 ```
 Retome a F2a/F2b do Gestão 2027 pelo §22.48 do Infra-IA/prompts/prompt_apis_fiscais_isoladas.md (leia D:\Gestao2027\CLAUDE.md, o §22.46 —
-passeio FEITO e o ensaio da janela na cópia — e o §22.13, roteiro da JANELA com o passo 6b da D-F207; §7 = D-F1…D-F212). Commits LOCAIS
+passeio FEITO e o ensaio da janela na cópia — e o §22.13, roteiro da JANELA com o passo 6b da D-F207; §7 = D-F1…D-F217). Commits LOCAIS
 (push só com o "vai"): setes-api worktree D:\Gestao2027\setes-api-f2a (branch f2a, 8556491) · núcleo 945ad2d · nfse-api 61d0bbe ·
-setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 60df1df) · Infra-IA (main).
+setes-app worktree D:\Gestao2027\setes-app-f2b (branch f2b, 5f6d3be) · Infra-IA (main).
 AUTORIZAÇÃO EM PÉ: questões dos gates seguem a RECOMENDAÇÃO — salvo passo irreversível (cada passo da janela, --cutover --vai, push, apagar
 linha do fiscal_api, escrita em dado de produção), algo fora da F2a/F2b, gates divergentes sem saída ou HIGH/CRITICAL.
 REGRAS: D:\Gestao2027\setes-api (árvore viva) É a produção (tsx watch) — só leitura até o passo 4; nunca npm run dev/flutter run nas worktrees
 com o .env delas; nunca criar habilitação no fiscal_api de produção antes do ato (D-F192/D-F195); edição por ferramenta/script em arquivo
 (UTF-8); commit só dos caminhos da frente com git commit -F.
-PASSO 0 — gates do delta f312f06..60df1df do app (a trava com dono _RunLock, D-F208…D-F210) — socrático + adversarial; corrigir.
+PASSO 0 — gates do delta 60df1df..5f6d3be do app (§22.46.7: login sem token, texto sem âncora total, D-F213…D-F217 — falha do cliente
+técnica nas pontes, console sem query, leitores do core no envelope + código INVALID_RESPONSE, recuo de página) — socrático + adversarial;
+corrigir (os gates de f312f06..60df1df já rodaram — §22.46.7).
 PASSO 1 — critério de entrada do §22.13 (suítes; gate adversarial da A3 ao vivo; ensaio do build web pelo build-web.ps1 — R16-SOC-07); se os
 repositórios mudaram desde 2026-10-13, refazer o ENSAIO da janela na cópia pelo kit Infra-IA/fiscal-api/scripts/ensaio-janela/README.md.
 PASSO 2 — a JANELA pelo §22.13 com o Valdo, cada passo irreversível com o "vai" na hora (2 → 3 → 4 → 5 → 6 → 6b → 7 → 8), antes de 30/11.
