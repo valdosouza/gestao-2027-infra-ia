@@ -138,3 +138,17 @@ sem rotas próprias (InterfaceFrame com switch de i18nKey instanciava as pages).
 Problemas: módulo inchado, alto acoplamento, difícil reutilizar. A refatoração
 desmontou o super/ em countries/, states/ e cities/ com camadas completas, criou
 app/shared (register + lookup) e trocou o InterfaceFrame por RouterOutlet + rotas.
+
+## Rota de escape — endereço desconhecido (2026-10-14, passeio logado da F2b)
+
+Sem `WildcardRoute` o `selectRoute` do flutter_modular lança o `RouteNotFound` e a tela fica **em branco**. Regra:
+
+- **Raiz**: `WildcardRoute(child: RouteFallback)` no `AppModule` (`app/shared/routing/route_fallback.dart` → vai a `/home/`; sem sessão a
+  guarda de `/home` manda ao login).
+- **Casa**: o escape vive **NOS FILHOS** do `ChildRoute('/')` do `HomeModule`, por ÚLTIMO, mostrando o `WelcomeFrame`.
+- ⚠️ **CONHECIMENTO NEGATIVO**: escape no nível do `HomeModule` (ou o da raiz sozinho) captura `/home/welcome/` — o redirecionamento
+  que a `HomePage` faz de `/home/` — e a casa entra em **LAÇO** (a casa nasce a cada ~1,3 s e repete `/api/core/*`). Provado no
+  navegador e em `apps/web/test/route_fallback_loop_test.dart` (mede quantas vezes a casa nasce: tem de ser 1).
+- Módulo novo de cadastro NÃO precisa de escape próprio (o da casa cobre `/home/<qualquer-coisa>/`); só endereço desconhecido DENTRO
+  de um módulo de interface (`/home/customers/nada/`) segue sem cerca.
+- Testes de roteamento: o Modular é singleton — um cenário por arquivo (`route_fallback_*_test.dart`).
