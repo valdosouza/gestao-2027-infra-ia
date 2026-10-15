@@ -10,7 +10,7 @@ Ato Conjunto nº 4/2026) · D-NE4 ("prompt aberto JÁ") · D-NE31 (vigência de 
 XSD 1.01, NT 007/008/009, anexos I e II, FAQ) · (B) inventário do produto (setes-api, nfse-api, fiscal-api, sql) · (C) fotografia do legado
 Gestao2016 (agente legacy-analyst) · (D) legislação e documentos oficiais na web (fontes primárias, datadas) · + `Infra-IA/nfe-api/referencia-acbr/03-ibs-cbs-rtc.md`
 (ACBr, terceiro — só conferência).
-**Estado**: **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
+**Estado**: **⏯ 2026-10-15: IB-2 EXECUTADA na worktree `setes-api-ib2` (branch `ib2`) — Rodada 1 D-IB62…D-IB73 (§12.6), execução (§12.7), gates 0,74/0,80 + D-IB74/D-IB75 e retrabalho (§12.8: trava da presunção provada e corrigida — 1213; pré-voo pela união por cliente); setes-api 1899/1899; PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e; 070 aplicada em produção); Q-IB76 aberta; próximo = IB-3.** (antes: 2026-10-14 Rodada 0 da IB-2) (antes:) **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
 guardião). Antes: Rodada 1 DECIDIDA (2026-10-10, "siga as recomendações" — §8, D-IB1…D-IB21).
 ⚠️ A opção de regime da Setes (D-IB1) segue com o Valdo e o contador até **30/10/2026**; o patch do legado (D-IB3) está COMMITADO (SVN r1300) e
 compilado — falta só a versão aos clientes (conferência dispensada: nenhum cliente de serviço emitiu com a reforma).
@@ -1235,7 +1235,7 @@ de reabertura. Gates socrático/adversarial NÃO rodados nesta rodada: o delta n
 comportamento já provado pelos gates da Rodada 11 e documentação). Nenhuma questão aberta na fase depois desta rodada — próximo passo
 da fase: a IB-2 (roteiro de leitura no §4).
 
-## 12. IB-2 — Rodada 0 ABERTA (Valdo 2026-10-11: "vamos abrir a IB-2") — ⚠️ RETOMAR AQUI
+## 12. IB-2 — EXECUTADA na worktree com gates (2026-10-15 — §12.6 decisões · §12.7 execução · §12.8 gates) — PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e) — ⚠️ RETOMAR PELA IB-3 (§12.8, fim)
 
 **Escopo** (§4 + decisões já tomadas): (1) **congelamento ÚNICO** da classificação no ramo `tb_invoice_service` (`classification_code`,
 `place_indicator_code`, `nbs` — colunas JÁ criadas pela migration 066 na IB-1, sem produtor; CST e indDest derivados) por UMA função da
@@ -1245,7 +1245,8 @@ fatura pela OS) — D-IB9; (2) **barreira por calendário** — antes da obriga�
 (`classificationVerdictAt`/`classificationVerdictsAt` — D-IB47; `acceptedToday` é sinal de cadastro e nunca decide); a nota congelada nunca
 reconsulta o catálogo (D-IB41); NBS pela regra única `nbsAcceptedSql` (D-IB40/D-IB42); (3) **obrigação pelo ENQUADRAMENTO DATADO** do
 emitente (D-IB7/D-IB35 — `tb_establishment_tax_regime`, item B3 adiado da IB-1 porque troca os leitores de `tb_entity_tax` na fiscal-api
-`src/erp/facts.ts`, na nfse-api `src/facts/service-facts.ts` e na cópia do dual-run no setes-api — FRENTE DA OUTRA SESSÃO: combinar antes);
+`src/erp/facts.ts` e na nfse-api `src/facts/service-facts.ts` — **a cópia do dual-run no setes-api NÃO existe mais** (F2a A3, §12.2) —
+FRENTE DAS APIs FISCAIS: combinar antes — §12.5);
 (4) **PRÉ-VOO** do faturamento (D-IB52/D-IB55 — antes de 01/01/2027 listar, por schema, os serviços cuja classificação gravada a data da
 OBRIGAÇÃO recusa, com o veredito de hoje e o selo ao lado).
 
@@ -1264,3 +1265,289 @@ nada foi integrado nem alterado. **Primeiro passo da próxima sessão: relançá
   fiscal; o pré-voo como peça × relatório × script do Super; nomes (glossário de palavras ocupadas) e o que vira maquete.
 - Depois: consolidar aqui (fatos com caminho:linha + modelo + **Rodada 1 da IB-2 — Q-IB62 em diante**, cada uma com recomendação) e
   combinar com a sessão das APIs fiscais o que tocar nos leitores dela. Nenhum código antes das decisões do Valdo.
+
+**2026-10-14 (Valdo: "siga a ordem: retome a IB-2 pelo §12")**: os dois levantamentos foram RELANÇADOS em paralelo (Explore very thorough +
+`setes-conceito`), só leitura; o condutor conferiu no disco os fatos que sustentam as questões (UPSERT do ramo, `dCompet`, E0322 no Anexo I,
+trava D5, model 55 da conjugada, `fields[]` descartado no lote, catálogo sem vigência para cIndOp/NBS, dual-run removido, `tsx watch` na
+árvore viva). Consolidação em §12.1–§12.5. Nenhum código; nenhuma escrita fora da Infra-IA.
+
+### 12.1 Fatos (2026-10-14 — conferidos no disco; setes-api = `main` 9b85b51, a árvore de PRODUÇÃO)
+
+| # | Fato | Onde |
+|---|---|---|
+| F1 | **Ninguém lê nem grava** `classification_code`/`place_indicator_code`/`nbs` de `tb_invoice_service` em nenhum repositório — só o DDL | `setes-api/src/migrations/sql/066_ibscbs_service_classification.sql:54-72` · `sql/03_schema_cliente_ddl.sql:462-464,477-479` |
+| F2 | O ÚNICO escritor do ramo é `issueInvoice`; o `ON DUPLICATE KEY UPDATE` NÃO lista as 3 colunas → a nota **revivida herdaria a declaração da 1ª vida** se a 2ª não a regravar (inclusive NULL) | `setes-api/src/shared/invoice/invoice.ts:312-329` |
+| F3 | Dois produtores de forma diferente: `buildServiceBranch` é PURA/síncrona, sem conexão, chamada dentro de `persistInvoiceOnce` (transação `:458-606`, retry `:444-451`, chamada `:510-512`); `freezeServiceOrderIss` é async e recebe a conexão (chamada `:1147`, antes do `issueInvoice` `:1161`). O fiscal da venda e da OS é resolvido FORA da transação, pelo pool | `billing/billing.repository.ts:770-797` · `service-orders/service-orders.repository.ts:1009-1054` · `billing.service.ts:404-429` · `service-orders.repository.ts:963-1006` |
+| F4 | **`dCompet` do DPS = `tb_invoice.dt_emission`** = `todayFor` no faturamento. A competência do CONTRATO (`'YYYY-MM'`, `tb_contract_item_competence`) não chega à nota nem ao DPS — OS de competência 12/2026 faturada em janeiro sai com `dCompet` 2027-01 | `nfse-api/src/facts/service-facts.ts:284` · `invoice.ts:283` · `service-orders.repository.ts:600,731-743` |
+| F5 | **E0322 (rejeição)**: "Se o bloco IBS/CBS for informado na DPS, então é obrigatório informar um item da NBS" — o grupo sem `cNBS` é rejeitado | `Infra-IA/setes-api/integracoes/nfse-adn/anexo1-dps.xlsx`, aba RN DPS_NFS-e, linha 324 |
+| F6 | Um DPS = UM código nacional (422 `INVOICE_SERVICE_MULTI_CODE`), mas a trava D5 permite UMA OS aberta por cliente e a rotina mensal agrupa por cliente → N serviços numa declaração; o cIndOp muda pela NBS (licenciamento **100501** × desenvolvimento/manutenção/SaaS **100301** — §10.1 item 5) | `billing.repository.ts:773-777` · `setes-api/src/shared/service-order/service-order.ts:10` · §10.1 |
+| F7 | A peça responde "na data" SÓ para o cClassTrib (motivos `no-line`/`not-applicable`/`requires-regular`); **cIndOp e NBS não têm vigência no catálogo** (`findPlaceIndicator` sem data; `nbsAcceptedSql`/`nbsExists` só `deleted`); a obrigação é só a constante do Simples; `indDest` não existe em repositório algum; a presunção do serviço (`tb_service_ibscbs` + `tb_service.nbs`) só é lida no módulo `services` | `setes-api/src/shared/ibscbs-classification/index.ts:41-45,88-163,292-304,313-322` · `sql/61_ibscbs_reference_ddl.sql:81-116` · `services.repository.ts:95-170` |
+| F8 | A conjugada da venda tem `tb_invoice.model` **55**, e o ramo de serviço vai ao fisco como NFS-e (a nfse-api não filtra modelo) → o veredito do ramo pergunta pelo modelo **SE** (`MODEL_NFSE`), nunca pelo `model` da nota | `billing.service.ts:689` · `nfse-api/src/nfse/transmission.ts:117-125` |
+| F9 | O "lote mensal" das D-IB34/D-IB42 é o **`POST /batch-invoice`** (a rotina mensal só INJETA itens, não fatura): uma transação por ordem — um 422 derruba só a ordem —, mas o `catch` devolve `message`+`code` e **DESCARTA `fields[]`** | `service-orders.service.ts:147-185,261-282` · `service-orders.repository.ts:594-776` |
+| F10 | O reenvio na nfse-api **relê o ramo vivo** e remonta o DPS (só série/nDPS/Id ficam congelados no `fiscal_api`) → a declaração tem de estar NO ramo | `nfse-api/src/nfse/transmission.ts:306,315,345-357` |
+| F11 | A **cópia do dual-run do setes-api foi REMOVIDA** na F2a A3 (commit `ca81906`, 2026-10-12): o único leitor do enquadramento é `buildEmitter` → núcleo `erp.entityTax` (fora da superfície `reading`), lido AGORA e não pela competência; nenhuma view lê `tb_entity_tax`; **D-F133**: proibido recompilar o núcleo na máquina de produção até a F3 | `service-facts.ts:159-205` · `fiscal-api/src/erp/facts.ts:238-259` · `fiscal-api/src/reading.ts:19-34` |
+| F12 | DPS de hoje: só `cNBS` opcional sem produtor; grupo IBSCBS/cClassTrib/CST/cIndOp/indDest inexistentes; `DpsRegTrib` só opSimpNac 1/2/3 e não optante = 422 | `nfse-api/src/authority/types.ts:18,23-27,64` · `dps-builder.ts:168` · `service-facts.ts:192-195` |
+| F13 | O setes-api de PRODUÇÃO roda `tsx watch` na árvore viva `D:\Gestao2027\setes-api` — salvar = deploy | processo `node … tsx … watch … src/server.ts` (2026-10-14) |
+
+### 12.2 Correções de documentação (sem decisão)
+
+- §12 (escopo, item 3) e §10.3 (d) citavam "a cópia do dual-run" — não existe mais (F11); o §12 foi corrigido, o §10.3 fica como história.
+  **D-IB15 (fallback do grupo nas duas cópias) e D-IB27 ficam SEM OBJETO** — a F2a virou em 2026-10-14, antes do corte de 30/11.
+- §4 (roteiro): "os dois montadores têm o campo" → hoje só o da nfse-api.
+- Rascunho `prompt_fase_ibs_cbs-ddl-ib1-rascunho.sql`: o bloco C diz "migration 002 da nfse-api" — a 002 já é `002_cancel_event_code.sql` (a
+  nfse-api vai até a 006): renumerar na execução (PADROES §11 regra 14); o B5.2 cita o leitor do dual-run.
+- O comentário da 066 (`:9-10`) cita o dual-run — migration aplicada não se reescreve; registrado aqui.
+
+### 12.3 Modelo (parecer do guardião, 2026-10-14)
+
+**Conceito**: a **declaração IBS/CBS da nota** = o par cClassTrib + cIndOp e a NBS que a nota apresenta ao fisco, decididos UMA vez na
+competência fiscal da nota (`dCompet`) e congelados no ramo. Fato gerador: o faturamento (evento E). Distinta da **presunção** do serviço
+(`tb_service_ibscbs` + `tb_service.nbs` — o que o cadastro presume) e da **voz** do fisco (os valores). A **ausência** antes da obrigação NÃO é
+fato — é consequência de regra sobre fatos já gravados (data + regime + calendário).
+
+| Peça | Responsabilidade | Onde | Quem chama |
+|---|---|---|---|
+| **Regra** `ibscbsDeclarationAt` + `ibscbsObligationStart` | decide a declaração a partir das presunções, da data e do início da obrigação — `classificationVerdictsAt`/`verdictOf` (D-IB47), `findPlaceIndicator`, `nbsAcceptedSql` (D-IB40); reduz N itens a 1; aplica o calendário (omite antes, 422 depois); SEMPRE pelo modelo SE (F8); não conhece o ERP | `@shared/ibscbs-classification` | a composição; o pré-voo; na F4, a NF-e |
+| **Peça** `readServicePresumptions(conn, s, inst, productIds)` | lê a presunção dos serviços (NBS + 1:1), só de produto VIVO (limite do §11.11) | `@shared/service-ibscbs` (nova) | a composição |
+| **Peça** `emitterRegimeAt(conn, s, inst, date)` | enquadramento do emitente na data (forma: Q-IB66) | `@shared/entity-tax` | a composição; a janela do cadastro (D-IB29/D-IB35) |
+| **Composição** `declareServiceIbscbs(conn, s, inst, { productIds, competenceDate })` | só combina as três — sem regra própria | `@shared/service-ibscbs-declaration` | os DOIS produtores e o pré-voo |
+| `issueInvoice` | único ESCRITOR das 3 colunas — também no `ON DUPLICATE KEY UPDATE` (F2) | `@shared/invoice` | os produtores |
+
+Esboço do tipo (o texto exato é da execução): `IbscbsDeclaration { group: { classificationCode, placeIndicatorCode } | null; nbs: string |
+null; omitted: IbscbsOmission[] }` — `IbscbsOmission` = `not-classified | no-line | not-applicable | requires-regular | place-indicator |
+nbs-missing | nbs-not-accepted | divergent`; só a peça o constrói; `omitted` NÃO é persistido (Q-IB65). **Congela** as 3 colunas; CST
+(prefixo do cClassTrib) e `indDest` (0 enquanto o ERP não tiver o conceito — quando tiver, é fato da NOTA) ficam derivados no montador da IB-3.
+**Ponto da transação**: com a conexão da transação do faturamento, depois da trava do pedido e logo antes do `issueInvoice` — billing depois
+de `persistItemTaxes` (produtos de `serviceItems`, `billing.repository.ts:498-513`); OS depois de `freezeServiceOrderIss`, que relê os itens
+sob a trava e passa a devolver os `productIds`. **Sem duplicar regra**: `InvoiceServiceInput.ibscbs` OBRIGATÓRIO e do tipo da peça — produtor
+que não decide não compila. **Data**: o produtor calcula `dtEmission` UMA vez e passa a MESMA variável à composição e ao `issueInvoice`
+(que deixa de chamar `todayFor` para ela); no lote, o relógio é por ordem (Q-TZ9).
+
+**Fica de fora**: coluna/tabela de motivo da omissão (sem fato gerador nem consumidor; morreria em 01/01/2027) · chave de "envio
+voluntário" (maquete nº 2 do §3.1 — o liga/desliga do envio é o calendário de LEIAUTE da nfse-api, D-IB13) · snapshot por item na NFS-e
+(D-IB9 (b) rejeitada) · reconsultar o catálogo na transmissão (D-IB41).
+
+**Maquetes desta onda**: (1) regra copiada nos dois produtores · (2) motivo da omissão persistido · (3) chave de envio voluntário · (4) "o
+item de maior valor decide" · (5) re-derivar "aceito" (`applicable && !requiresRegular`) ou usar `acceptedToday` no faturamento (D-IB41/
+D-IB47) · (6) CST/`indDest` gravados no ramo · (7) competência do CONTRATO como data fiscal · (8) tabela datada sem a D-IB24 · (9) pré-voo
+com predicado SQL próprio · (10) — defeito, não maquete — a revivida herdando a declaração da 1ª vida (F2).
+
+**Glossário (entra na skill `guardiao-conceitual.md` com a execução)**: *competência* tem dois sentidos — o mês do CONTRATO
+(`tb_contract_item_competence.competence`) × a competência FISCAL da nota (`dCompet` = `dt_emission`); parâmetro da peça = `competenceDate`,
+nunca `competence` solto · *classificação* = a linha do cClassTrib no catálogo; o serviço tem a **presunção**, a nota leva a **declaração**
+(livre) · *regime* = `tb_entity_tax.tax_regime` (CRT, serve ao destinatário) × o enquadramento inteiro do emitente · evitar *barreira*
+(ocupada na F2a) e *obrigações do DPS* (Anexo I) — usar `ibscbsObligationStart`.
+
+### 12.4 ⚠️ Rodada 1 da IB-2 — questões para o Valdo (recomendação entre parênteses)
+
+**A. A declaração**
+
+- **Q-IB62 Unidade da declaração (fato E0322 — F5).** (a) **o grupo só vai com o TRIO aceito (cClassTrib + cIndOp + NBS); antes da obrigação,
+  falta de qualquer um = o grupo inteiro é omitido (a NBS ainda pode ir sozinha, como `cNBS`, se aceita); depois, falta de qualquer um = 422
+  — inclusive serviço sem NBS (`tb_service.nbs` NULL), caso que a D-IB42 não nomeia; CHECKs novos em `tb_invoice_service`: o par vem completo
+  ou não vem, e `classification_code` presente exige `nbs`** · (b) componentes independentes (dá E0322) · (c) NBS obrigatória já antes da
+  obrigação (contraria a D-IB42). *(Rec.: (a) — refina D-IB13/D-IB34/D-IB42 pelo fato do fisco.)*
+- **Q-IB63 N itens → UMA declaração (F6).** (a) **divergência de qualquer componente entre os serviços da nota segue o MESMO calendário: antes
+  da obrigação omite (motivo `divergent`); depois, 422 `INVOICE_SERVICE_MULTI_DECLARATION` com o campo por produto (molde do `MULTI_CODE`);
+  o pré-voo lista os clientes com divergência; o contador harmoniza a classificação do que é faturado junto; se a divergência for REAL
+  (ex.: licenciamento 100501 + manutenção 100301 na mesma OS), reabrir a trava D5 (OS por cliente × declaração) como decisão própria ANTES de
+  dezembro** · (b) o item de maior valor decide (decisão silenciosa — maquete nº 4) · (c) declaração por item (= D-IB9 (b), rejeitada).
+  *(Rec.: (a).)*
+- **Q-IB64 Data da peça (F4).** (a) **`dt_emission` — que é o `dCompet` do DPS —, calculada UMA vez pelo produtor e passada ao `issueInvoice` e à
+  peça** · (b) a competência do contrato na OS · (c) o `dhEmi` (instante da transmissão). *(Rec.: (a). **Para o contador, à parte**: faturar
+  em dezembro o serviço de janeiro (rotina antecipada) sai SEM o grupo, e a OS de dezembro faturada em janeiro sai COM ele — `dCompet` = dia
+  do faturamento está certo para a cobrança mensal da Setes?)*
+- **Q-IB65 O "nada" antes da obrigação.** (a) **as 3 colunas NULL, sem motivo persistido; o motivo volta no RESULTADO do faturamento
+  (`ibscbs: declared | omitted[]`) e vira contador no relatório do `batch-invoice` (molde da D26); como o lote descarta `fields[]` (F9), a
+  MENSAGEM do 422 depois da obrigação nomeia o(s) serviço(s)** · (b) coluna/tabela de motivo (maquete) · (c) silêncio (um envio voluntário
+  desligado em dezembro passaria sem ninguém ver). *(Rec.: (a).)*
+
+**B. Obrigação e enquadramento**
+
+- **Q-IB66 Enquadramento datado — ⚠️ DIVERGE da D-IB35.** (a) **assinatura datada JÁ (`emitterRegimeAt`, `ibscbsObligationStart(model,
+  regime)`), lendo o `tb_entity_tax` atual sob a convenção NOMEADA "sem história, o enquadramento conhecido vale para toda data"; a tabela
+  `tb_establishment_tax_regime`, a D-IB24 (CRT derivado) e o leitor por `dCompet` nascem com o 1º FATO datado — gatilhos: Q-IB1 (b)/(c) em
+  30/10 (aí a tabela entra antes de 01/12), XSD da NT 009 (IB-5) ou 1º cliente não optante; item de agenda: conferir a Q-IB1 em 30/10** ·
+  (b) D-IB35 ao pé da letra, já na IB-2, com a D-IB24 · (c) constante do Simples para todos. *(Rec.: (a) — no leiaute 1.01 nada muda no DPS
+  da Setes em 01/01/2027 (o `regApIBSCBSSN` só existe na NT 009); a tabela sem a D-IB24 espalha o CRT em duas casas (maquete nº 10 — o motor
+  de mercadoria lê `tax_regime`, `billing.service.ts:94`); o leitor está em produção na nfse-api e o núcleo não pode ser recompilado (D-F133).
+  Quando entrar: rascunho B3 + `regEspTrib` (`special_tax_regime` — vai no MESMO grupo `regTrib` do DPS), sem `valid_until` (a linha
+  seguinte fecha a anterior), CHECK pela PADROES §11 regra 11, o `establishment` grava só linha nova e altera só linha futura, backfill com
+  piso 2000-01-01 e `WHERE NOT EXISTS`, contract em migration separada.)*
+- **Q-IB67 Obrigação do NÃO optante na constante.** (a) **data única conservadora 01/10/2026 para qualquer subitem; MEI, ME/EPP e opSimpNac 4
+  "pendente" = 01/01/2027; revisar com o 1º não optante (que hoje nem transmite — F12)** · (b) tabela por subitem já · (c) tratar como Simples
+  (leniente — deixa passar desconformidade). *(Rec.: (a) — ajusta a dimensão "subitem" da D-IB13.)*
+- **Q-IB68 Alcance da trava do faturamento.** (a) **vale para toda nota SE faturada pelo ERP (o setes-api é passivo e não lê a habilitação)** ·
+  (b) só para estabelecimento com habilitação SE no `fiscal_api` (dependência nova do ERP no banco fiscal). *(Rec.: (a).)*
+- **Q-IB69 cIndOp e NBS sem vigência no catálogo (F7).** (a) **limite conhecido: para eles a peça responde o estado do catálogo no MOMENTO
+  do faturamento (o "na data" da D-IB47/D-IB55 vale inteiro só para o cClassTrib); conferir na próxima carga se a fonte oficial (Anexo VII,
+  tabela NBS) traz data de vigência — se trouxer, vigência entra como linha, no molde do cClassTrib, em rodada própria** · (b) vigência para
+  os dois já na IB-2 (DDL + carga). *(Rec.: (a) — sem fonte datada, vigência inventada seria maquete.)*
+
+**C. Execução**
+
+- **Q-IB70 Leituras dentro da transação.** (a) **presunção do serviço em leitura travante COMPARTILHADA (PADROES §9 regra 2; entra na ordem
+  canônica entre pedido e nota); catálogo central SEM trava, como exceção documentada (travá-lo acopla todo faturamento ao `FOR UPDATE` da
+  carga) — limite conhecido: a nota congela o catálogo do retrato da transação** · (b) tudo travante (o lote leva 409 durante a carga) · (c)
+  tudo fora da transação (abre a corrida com a edição do serviço). *(Rec.: (a).)*
+- **Q-IB71 Estrutura (ajusta a letra da D-IB9).** (a) **regra na peça de classificação; leitura da presunção em `@shared/service-ibscbs`;
+  composição fina chamada pelos dois produtores; `ibscbs` obrigatório no tipo do ramo; o UPSERT do `issueInvoice` grava as 3 colunas também na
+  revivida (F2); teste de cerca: só `@shared/invoice` escreve as colunas; CHECKs da Q-IB62 numa migration nova (número conferido entre as
+  frentes — PADROES §11 regra 14 — e pelo `revisar-ddl`)** · (b) tudo dentro da peça de classificação (ela passa a conhecer o ERP e a NF-e
+  não a reusa — na F4 a presunção vem da regra `tb_tax_rule_ibscbs`, não do produto). *(Rec.: (a).)*
+- **Q-IB72 Forma do pré-voo (D-IB52/D-IB55).** (a) **script do Super `scripts/preflight-ibscbs.ts` com a MESMA composição em modo "só
+  pergunta" (sem escrita), todos os schemas, mesmo operador/credencial da carga (D-IB32); universo = cada serviço ativo sozinho + os conjuntos
+  REAIS (OS abertas e contratos vigentes POR CLIENTE — o que o lote de janeiro vai faturar, e o que pega a divergência da Q-IB63); data = a da
+  obrigação (depois dela, a competência a faturar), com o veredito de hoje e o selo ao lado; rodar antes de 01/12 e de novo antes de 01/01;
+  endpoint no módulo `services` só quando o 2º cliente emitir pela nfse-api** · (b) endpoint e tela já · (c) critério da Pesquisa Avançada
+  (2ª definição de "aceito" em SQL — maquete). *(Rec.: (a).)*
+- **Q-IB73 Onde executar (F13).** (a) **worktree própria do setes-api (branch `ib2`, molde da F2a), migration provada em schema descartável,
+  merge na árvore viva só com o "vai" — com a suíte verde e os gates; nada se salva na árvore viva antes disso** · (b) direto na árvore viva
+  (cada salvar vira deploy em produção). *(Rec.: (a).)*
+
+### 12.5 Verificações e combinação com a frente das APIs fiscais
+
+- **V1 — pré-condição da D-IB33**: a 066 está no `setes_setes`, que desde a janela é PRODUÇÃO (a máquina do Valdo). Confirmar com o grupo do
+  sync que o `/service/sincronize` não faz REPLACE nem DELETE físico em `tb_service` (a FK `tb_service_ibscbs → tb_service` está viva) —
+  pergunta ao grupo do sync (regra dos dois grupos; esta frente não investiga o setes-sync).
+- **V2 — risco de CAIXA em janeiro**: com Q-IB62/Q-IB63 (a), o `batch-invoice` de 01/2027 dá 422 em toda OS sem declaração completa e ÚNICA.
+  O que evita isso é o pré-voo (Q-IB72) + a classificação e a NBS de CADA serviço da Setes definidas pelo Valdo com o contador ANTES de
+  dezembro (junto com a Q-IB1 até 30/10).
+- **Frente fiscal**: com a Q-IB66 (a), a IB-2 toca SÓ o setes-api (+ migration dos CHECKs no schema do cliente) — nada na nfse-api nem no
+  núcleo. A IB-3 acrescenta as 3 colunas ao SELECT de `readServiceInvoice` (nfse-api) e nunca reconsulta o catálogo; quando a tabela datada
+  nascer, o leitor por `dCompet` vai na fonte de fatos da própria nfse-api (`service-facts.ts`), não no núcleo, até a F3 (D-F133); o GRANT
+  `SELECT` em `setes\_%` já cobre a tabela (`nfse-api/ops/grants.sql:17`).
+- **Esforço**: IB-2 segue em 2–3 sessões (§4) com a Q-IB66 (a); com a (b), +1–2 (D-IB24 + leitor na nfse-api + janela de deploy).
+
+### 12.6 Rodada 1 da IB-2 DECIDIDA (Valdo 2026-10-15: "siga as recomendações da Rodada 1 da IB-2") — D-IB62…D-IB73
+
+Cada D-IB*n* = a recomendação (a) da Q-IB*n* (§12.4), na íntegra. Numeração permanente; código e testes citam o nº.
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB62** | unidade da declaração = o TRIO aceito (cClassTrib + cIndOp + NBS) — E0322; antes da obrigação, falta de qualquer um omite o grupo inteiro (a NBS pode ir sozinha, como `cNBS`, se aceita); depois, falta de qualquer um = 422, inclusive serviço sem NBS; CHECKs em `tb_invoice_service`: par completo ou nenhum, `classification_code` exige `nbs` — **refina D-IB13/D-IB34/D-IB42** |
+| **D-IB63** | N serviços → UMA declaração: divergência segue o calendário (antes omite com motivo `divergent`; depois 422 `INVOICE_SERVICE_MULTI_DECLARATION` com o campo por produto); o pré-voo lista os clientes com divergência; divergência REAL reabre a trava D5 como decisão própria antes de dezembro |
+| **D-IB64** | a data da peça é `dt_emission` (= `dCompet`), calculada UMA vez pelo produtor e passada ao `issueInvoice` e à composição. **Pendente com o contador** (não bloqueia): `dCompet` = dia do faturamento está certo para a cobrança mensal? |
+| **D-IB65** | antes da obrigação as 3 colunas ficam NULL, sem motivo persistido; o motivo volta no resultado do faturamento (`ibscbs`) e vira contador no relatório do `batch-invoice`; a mensagem do 422 depois da obrigação nomeia o(s) serviço(s) (o lote descarta `fields[]`) |
+| **D-IB66** | **DIVERGE da D-IB35**: assinatura datada já (`emitterRegimeAt`, `ibscbsObligationStart(model, regime)`), lendo o `tb_entity_tax` atual sob a convenção NOMEADA "sem história, o enquadramento conhecido vale para toda data"; `tb_establishment_tax_regime` + D-IB24 + leitor por `dCompet` nascem com o 1º fato datado (gatilhos: Q-IB1 (b)/(c) em 30/10 → tabela antes de 01/12; XSD da NT 009; 1º não optante). **Agenda: conferir a Q-IB1 em 30/10** |
+| **D-IB67** | obrigação do não optante = data única 01/10/2026 para qualquer subitem; MEI, ME/EPP e opSimpNac 4 = 01/01/2027; revisar com o 1º não optante — ajusta a dimensão "subitem" da D-IB13 |
+| **D-IB68** | a exigência vale para toda nota SE faturada pelo ERP (o setes-api não lê a habilitação do `fiscal_api`) |
+| **D-IB69** | cIndOp e NBS sem vigência = limite conhecido (estado do catálogo no MOMENTO do faturamento); conferir na próxima carga se a fonte oficial traz vigência — se trouxer, entra como linha em rodada própria |
+| **D-IB70** | presunção do serviço em leitura travante COMPARTILHADA dentro da transação (PADROES §9 regra 2, entre pedido e nota); catálogo central sem trava (exceção documentada); a nota congela o catálogo do retrato da transação |
+| **D-IB71** | regra na peça de classificação; presunção em `@shared/service-ibscbs`; composição fina `@shared/service-ibscbs-declaration` chamada pelos dois produtores; `ibscbs` obrigatório no tipo do ramo; o UPSERT do `issueInvoice` grava as 3 colunas também na revivida; teste de cerca (só `@shared/invoice` escreve as colunas); CHECKs numa migration nova (número conferido — PADROES §11 regra 14 — e `revisar-ddl`) — **ajusta a letra da D-IB9** |
+| **D-IB72** | pré-voo = script do Super `scripts/preflight-ibscbs.ts`, mesma composição em modo só-pergunta, todos os schemas; universo = serviços ativos sozinhos + conjuntos reais por cliente (OS abertas e contratos vigentes); data = a da obrigação (depois, a competência a faturar) com o veredito de hoje e o selo; rodar antes de 01/12 e de novo antes de 01/01 |
+| **D-IB73** | execução em worktree própria do setes-api (branch `ib2`), migration provada em schema descartável, merge na árvore viva só com o "vai" (suíte verde + gates); nada se salva na árvore viva antes disso |
+
+**Execução**: §12.7.
+
+### 12.7 IB-2 — execução (2026-10-15, worktree `D:\Gestao2027\setes-api-ib2`, branch `ib2` — D-IB73; NADA na árvore viva)
+
+**O que entrou** (setes-api; nada na nfse-api nem no núcleo — D-IB66 (a)):
+- **Regra** na peça `@shared/ibscbs-classification` (`index.ts`, bloco "IB-2"): `ibscbsObligationStart(model, regime)` (D-IB66/D-IB67 —
+  constante da obrigação legal: MEI/ME-EPP/pendente 01/01/2027, não optante 01/10/2026; **A-IB3**: opSimpNac desconhecido = data do não optante,
+  o lado conservador; NF-e falha alto — F4), `evaluateIbscbsDeclaration` (reduz N serviços a UMA declaração na competência: falta → motivo,
+  valores diferentes → `divergent`, cClassTrib pelo veredito da data — `classificationVerdictsAt`, cIndOp/NBS pelo estado do catálogo — D-IB69,
+  SEMPRE modelo SE), `assertIbscbsDeclarable` (obrigatória e incompleta = 422 `INVOICE_SERVICE_IBSCBS_REQUIRED` ou
+  `INVOICE_SERVICE_MULTI_DECLARATION`, `fields[]` por serviço e a mensagem NOMEIA os serviços — D-IB65), `IbscbsDeclaration` com MARCA de tipo
+  (só a peça constrói), `ibscbsOutcomeOf`.
+- **Peça nova** `@shared/service-ibscbs` (`readServicePresumptions` — presunção por produto, só produto vivo, `LOCK IN SHARE MODE` na
+  transação — D-IB70) · `@shared/entity-tax` ganhou `emitterRegimeAt` (assinatura datada, convenção NOMEADA "sem história"; trava
+  compartilhada na transação) · **composição nova** `@shared/service-ibscbs-declaration` (`declareServiceIbscbs` para o faturamento,
+  `evaluateServiceIbscbs` só-pergunta para o pré-voo).
+- **`issueInvoice`**: `InvoiceServiceInput.ibscbs` OBRIGATÓRIO (tipo da peça); o UPSERT do ramo grava as 3 colunas no INSERT **e** no
+  `ON DUPLICATE KEY UPDATE` (a revivida nunca herda — F2); `dtEmission` OBRIGATÓRIO no lugar do `dtRecord?` (a nota e o evento E com a
+  data que o produtor calculou — D-IB64); `InvoiceServiceDraft` = o ramo antes da declaração.
+- **Produtores**: billing — `dtEmission` = a `baseDate` já calculada (a mesma dos vencimentos), declaração depois de `persistItemTaxes` e
+  logo antes do `issueInvoice`, `invoiceDate` (cheque/automatismos) = a mesma data; OS — `dtEmission` na conexão da transação logo após as
+  travas, `freezeServiceOrderIss` devolve `{ draft, productIds }` (relidos sob o lock), declaração antes da nota, automatismos com a mesma
+  data. Resultado dos dois com `ibscbs: { declared, omitted[] }`; `batch-invoice` com `ibscbsDeclared`/`ibscbsOmitted` e `ibscbs` por linha
+  (D-IB65). Swagger dos três endpoints atualizado (201/200 + o 422 novo).
+- **Migration 070** `070_ibscbs_declaration_checks.sql`: `ck_invoice_service_ibscbs_pair` (par completo ou nenhum) +
+  `ck_invoice_service_ibscbs_requires_nbs` (grupo exige NBS — E0322); NBS sozinha permitida. **Provada em schema descartável**
+  (`scripts/prove-ibscbs-declaration-checks.ts`: aplicada 2×, 6 casos, 0 violação nas linhas do `setes_setes`, schema apagado). Espelho no
+  canônico `sql/03_schema_cliente_ddl.sql` (repo `sql`, não commitado).
+- **Pré-voo** `scripts/preflight-ibscbs.ts` (D-IB72): mesma composição, todos os schemas, universo (a) serviço ativo sozinho + (b) OS aberta
+  e contratos vigentes por cliente, data da obrigação (depois, a competência), veredito de hoje + selo ao lado.
+- **Glossário** na skill `guardiao-conceitual.md`: competência (2 sentidos), classificação × presunção × declaração, regime, barreira.
+- **Conhecimento** (comentário no billing): as leituras do catálogo central são não travantes (D-IB70) e viriam antes do recomputo do saldo
+  devolvível numa devolução — a devolução nasce só com itens P/M (pré-carga `p.kind IN ('P','M')`), sem ramo de serviço. ⚠️ Achado
+  pré-existente (não desta onda): `resolveParcels` (`getPaymentTypeKinds`) e o `todayFor` com cache frio já fazem leitura não travante antes do
+  `assertReturnableInTx` — candidato a gate do financeiro, fora da IB-2.
+
+**1º pré-voo REAL (2026-10-15, só leitura, `setes_setes`)**: opSimpNac 3 → obrigação 01/01/2027; **os 45 serviços ativos estão SEM
+classificação e SEM NBS** (hoje a nota sai sem o grupo — `[not-classified, nbs-missing]`; em 01/01/2027 = 422) e **todos os conjuntos reais**
+(OS abertas + contratos vigentes em 2027-01) recusariam — **145 recusas** na data (serviços + conjuntos; parte vem do resíduo de teste
+"TRILHA" da régua do Primeiro Cliente). É a V2 do §12.5 materializada: a classificação + NBS de cada serviço da Setes com o contador ANTES de
+dezembro é PRÉ-REQUISITO do lote de janeiro.
+
+**Suíte (2026-10-15, worktree)**: 1ª rodada completa = 2 falhas FORA da IB-2, ambas dependentes do CHECKOUT (a worktree sai com CRLF pelo
+`autocrlf` e mora fora da árvore viva) — corrigidas só no teste, sem decisão: (1) `time-zone-fence.test.ts` dividia por `'\n'` e o `.` do JS
+não casa `\r`, então `//.*$` não tirava o comentário de linha CRLF (acusava o comentário "nunca CURDATE()" do `cashier.repository.ts`, que nem
+foi tocado) → `split(/\r?\n/)`; (2) `adversarial-f2a-r6-gate.test.ts` simulava o diretório de migrations da ÁRVORE VIVA enquanto o
+runner-fixture lê o da PRÓPRIA árvore — numa worktree a 069 ficava fora da simulação → o diretório simulado é o da árvore do teste (idêntico
+na árvore viva). Depois: **1893/1893** (31 ao vivo pulados; ao fim dos gates: **1899/1899** — §12.8) · `tsc` limpo. Lição: teste que lê texto de fonte divide por `/\r?\n/`; teste
+que simula diretório simula o que o código LÊ.
+
+
+### 12.8 Gates da IB-2 (2026-10-15) — socrático **0,74 ✅** · adversarial **0,80 ✅** (nenhum HIGH/CRITICAL) — Valdo: "siga as recomendações dos gates"
+
+Os dois gates caíram junto com a sessão e foram RETOMADOS dos transcritos (o adversarial já atacava a versão com a trava corrigida);
+nenhum schema descartável sobrou (`setes_ib2_%` = 0) e as sondas temporárias do adversarial foram apagadas por ele.
+
+**Decisões da rodada** (Valdo: "siga as recomendações dos gates" — cada uma = a recomendação (a) do gate):
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB74** (= Q-IB74 (a)) | opSimpNac DESCONHECIDO segue a A-IB3 (vale a obrigação do não optante, 01/10/2026 — JÁ), mas o 422 DIZ a causa e as duas saídas ("regime do Simples NÃO informado no estabelecimento — vale a obrigação do não optante: informe o regime na aba Tributação do estabelecimento ou classifique os serviços"); o pré-voo lista as institutions nesse caso (hoje: nenhuma — `setes_setes` tem opSimpNac 3). A-IB3 vira decidida |
+| **D-IB75** (= Q-IB75 (a)) | o setes-app mostra a declaração JUNTO da IB-3, com prazo ANTES do lote de dezembro (≤ 30/11): relatório do lote com "saíram sem IBS/CBS: N" + motivo por linha, selo no resultado do faturamento individual. Até lá a declaração é só JSON + pré-voo do Super |
+
+**Retrabalho feito na sessão (sem decisão)**:
+1. **Trava da presunção — HIGH latente PROVADO e corrigido** (socrático): o SELECT único com LEFT JOIN travante intercalava as travas
+   (produto A → intervalo da 1:1 ausente de A → produto B) e fechava ciclo com o `PUT /services/B` (que segura o produto B e INSERE a 1:1
+   no intervalo) — **1213 provado em schema descartável, o PUT de quem classifica era a vítima**. `readServicePresumptions` agora faz TRÊS
+   leituras travantes na ORDEM do PUT (tb_product → tb_service → tb_service_ibscbs): o faturamento espera o PUT em vez de cruzar com ele, e
+   lê a classificação recém-gravada. Prova permanente: `scripts/prove-ibscbs-presumption-lock.ts` (forma antiga = 1213 CONFIRMADO · forma
+   nova = PUT confirma e o faturamento lê `900002:000001`; schema `setes_ib2_lock_<pid>` apagado). Conhecimento: **SELECT travante com
+   LEFT JOIN herda as travas de INTERVALO das linhas ausentes, na ordem da junção — trava de leitura que decide se toma por TABELA, na
+   ordem de quem escreve** (candidato a regra do PADROES §9).
+2. **Pré-voo pela UNIÃO por cliente** (socrático + ADV-IB2-01 MEDIUM, provado vermelho): a rotina mensal injeta os itens do contrato na OS
+   ABERTA do cliente (trava D5) — a nota leva OS aberta ∪ contratos vigentes; o script perguntava pelas duas partes separadas e dava "0
+   recusas" com 422 MULTI_DECLARATION no lote. Agora agrupa por cliente. 2º pré-voo real: **92 conjuntos por cliente · 137 recusas em
+   01/01/2027** (todos os 45 serviços seguem sem classificação e sem NBS).
+3. **Billing relê os itens SOB o lock** (D-IB71 no 2º produtor — socrático): `assertBillingItemsUnchanged` (mesmo critério de
+   `listBillingItems`, leitura travante que não abre o retrato) antes da declaração; mudou no intervalo = 409 RESOURCE_BUSY. O TOCTOU geral do
+   billing (ISS, totais) é pré-existente e fica registrado.
+4. **Cinto da devolução** (socrático): devolução com ramo de serviço = erro de PROGRAMAÇÃO (falha alto) — a invariante do saldo devolvível
+   não admite as leituras não travantes do catálogo antes do recomputo. **O pré-existente** (`resolveParcels`/`getPaymentTypeKinds` e o
+   `todayFor` de cache frio já leem sem trava antes do `assertReturnableInTx` — risco de devolver mais que o saldo sob concorrência) virou
+   **tarefa própria** (chip "Provar a invariante do saldo devolvível no faturamento").
+5. **Mensagem do 422 agrupada por MOTIVO com "e mais N"** (ADV-IB2-03 LOW, provado vermelho): cortava em 600 caracteres e escondia serviços
+   no relatório do lote (que descarta `fields[]`); teto de 12 nomes por motivo, nunca some calado.
+6. **Cerca do escritor único reforçada** (ADV-IB2-02 LOW): a unidade é a CHAMADA `.query(…)` inteira (SQL + parâmetros) — pega `INSERT
+   IGNORE`, `REPLACE`, `UPDATE … JOIN … SET sv.nbs` e o `??`; varre src/, scripts/ e as migrations .sql; exceção NOMEADA para a prova que
+   escreve só no schema descartável; limite conhecido: tabela por VARIÁVEL.
+7. **Texto "declarada" × "transmitida"** (socrático): até a IB-3, `declared`/`ibscbsDeclared` = CONGELADA no ramo, não prova de envio
+   (interfaces + Swagger dos três endpoints).
+8. Testes do gate promovidos a permanentes: `adversarial-ib2-gate.test.ts` (mensagem + lote) e `adversarial-ib2-preflight.test.ts` (união —
+   a sonda do teste lia o mock FORA do `jest.isolateModules`, outra instância; corrigido).
+
+**Provas**: setes-api **1899/1899** (31 ao vivo pulados) · `tsc` limpo · `swagger-parse` OK · as duas provas em schema descartável OK.
+
+**Fica registrado (não decidido)**:
+- **Q-IB76 — o `/billing/validate` não antecipa a recusa IBS/CBS** (adversarial, caso não testado): depois de 01/01/2027 "Validar" passa e
+  "Faturar" devolve 422. (a) o validate acusa a declaração pela MESMA composição em modo só-pergunta (aviso antes da obrigação, bloqueio
+  depois) · (b) só o pré-voo do Super. *Rec. (a) junto da IB-3/D-IB75 (tela e envio no mesmo ciclo do app).*
+- Pré-voo: o universo da D-IB72 não inclui pedidos de VENDA abertos com serviço (conjugada 55) — limite conhecido (a Setes fatura pela OS).
+- Notas de serviço gravadas pelo setes-sync ficam com as 3 colunas NULL (regra dos dois grupos; o leitor é da IB-3).
+- `POST /services` × faturamento (o POST trava todos os produtos da institution) — só analisado, sem ciclo.
+
+**Próximo**: "vai" do Valdo para levar a IB-2 à árvore viva (merge da branch `ib2` no `main` do setes-api → o `tsx watch` reinicia e a 070 é
+aplicada pelo runner no boot/`db:migrate`; `npm run errors:gen` para os 2 códigos novos no catálogo central; `sql/03` no repo sql) e commits/
+push (api · sql · infra). Depois: **IB-3** (nfse-api lê as 3 colunas e monta o grupo; DANFSe; D-IB75 no app; Q-IB76) e, antes de dezembro, a
+classificação + NBS de cada serviço da Setes com o contador (V2) — o pré-voo é a régua.
+
+**PUBLICADA 2026-10-15 (Valdo: "vai")**: merge fast-forward da `ib2` no `main` da árvore viva → o `tsx watch` reiniciou e o boot aplicou a
+**070 em `setes_setes` às 11:42:54 UTC** (`/health` 200 em 2 s; `ck_invoice_service_ibscbs_pair` + `_requires_nbs` ativos); `errors:gen` = 162
+códigos no catálogo central; GitHub: **api cfe9409 · sql 7cdce7e · infra (o commit desta seção)**. A worktree `setes-api-ib2` (branch `ib2`,
+já no `main`) fica até a IB-3 começar. ⏯ **Próximo: IB-3** (nfse-api lê as 3 colunas e monta o grupo IBSCBS; DANFSe com o bloco; D-IB75 no
+app; Q-IB76) — e, com o contador, a classificação + NBS dos 45 serviços da Setes antes de dezembro (o pré-voo é a régua).

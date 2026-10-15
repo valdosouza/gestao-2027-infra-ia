@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.5 (2026-10-13 — §7 ordem da rotação do `JWT_KID` (D-F157) e §11 regra 14 LÁPIDE com versão SENTINELA (D-F162), Rodada 6 da F2a; 1.4 no mesmo dia — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
+**Versão**: 1.6 (2026-10-15 — §9 regra 9: leitura travante de várias tabelas = uma por tabela na ordem do escritor, nunca LEFT JOIN travante — IB-2 da fase IBS/CBS; 1.5 em 2026-10-13 — §7 ordem da rotação do `JWT_KID` (D-F157) e §11 regra 14 LÁPIDE com versão SENTINELA (D-F162), Rodada 6 da F2a; 1.4 no mesmo dia — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -227,6 +227,13 @@ a ferro: cada uma nasceu de um CRITICAL/HIGH real.
    do domínio) FOR UPDATE`) — toda trava naquela linha fica de registro, e os valores AUSENTES levam só trava de intervalo
    (não espera ninguém e ainda segura o INSERT concorrente da mesma chave). Caso real: `lockIssuerRows` do `fiscal-api`
    (PUT da habilitação × aluguel do rodízio). Teste que fixa: `adversarial-f1r6.live.test.ts` §D "determinístico".
+9. **Leitura travante de VÁRIAS tabelas = uma leitura por TABELA, na ordem de quem ESCREVE — nunca um SELECT com LEFT JOIN
+   travante** (2026-10-15 — IB-2 da fase IBS/CBS, gate socrático; provado em schema descartável): o JOIN trava LINHA A LINHA na
+   ordem da junção e herda a trava de INTERVALO de cada linha AUSENTE do lado do LEFT JOIN (produto A → intervalo da 1:1 ausente
+   de A → produto B…). Quem escreve na ordem inversa — segura o pai B e INSERE o filho naquele intervalo — fecha ciclo: 1213, e a
+   vítima pode ser a tela de cadastro, que não reexecuta. Saída: travar TODOS os pais primeiro (ORDER BY pk), depois cada filha, na
+   MESMA ordem do escritor (o leitor espera o escritor terminar e ainda lê o que ele gravou). Caso real: `readServicePresumptions`
+   (`@shared/service-ibscbs`) × `PUT /services` — prova `setes-api/scripts/prove-ibscbs-presumption-lock.ts` (forma antiga = 1213).
 
 ## 10. Tempo: instante em UTC, data de negócio na zona do estabelecimento (2026-09-30 — Q-TZ1)
 
