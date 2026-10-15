@@ -1,6 +1,6 @@
 # 📚 Índice Central — D:\Gestao2027\Infra-IA
 
-**Versão**: 9.77 (acompanha a tabela "Histórico de Atualizações")  
+**Versão**: 9.78 (acompanha a tabela "Histórico de Atualizações")  
 **Última atualização**: 2026-10-14  
 **Propósito**: Mapa completo de documentação, agentes e skills por projeto
 **Escopo**: misto
@@ -552,6 +552,7 @@ D:\Gestao2027\Infra-IA/
 
 | Data | O quê | Versão |
 |------|-------|--------|
+| 2026-10-15 | **Boleto — defeito do INSERT CORRIGIDO** (`prompts/prompt_apis_fiscais_isoladas.md` §22.51 ⭐): o `// Q-TZ1` no meio dos parâmetros comia `value, agreement.accept,` (22 params × 24 `?`, HTTP 500 desde 30/09, commit `ad42018`); linha quebrada + teste que fixa contagem e posição (falha com o defeito) + prova ao vivo no MariaDB real (transação desfeita); suíte 1.844 ok + 19 do Inter (bomba-relógio) | 9.78 |
 | 2026-10-15 | **F2a — pós-janela no setes-api (árvore viva)** (`prompts/prompt_apis_fiscais_isoladas.md` §22.51 ⭐): conferido que NFS-e só vive na nfse-api (no setes-api restam decisão/efeito local; cercas por AST + gatilhos); dependências mortas `node-forge`/`pdfkit`/`xml-crypto` removidas; `.gitattributes` `*.sql` em LF (CRLF do autocrlf quebrava o teste da 069); testes D-F162 com fixture congelado do runner pré-janela (`src/test-setup/runner-main-pre-f2a.ts`); suíte 1.843 ok + 19 do boleto (bomba-relógio do Inter); push dos `main` | 9.77 |
 | 2026-10-15 | **F2a/F2b — A JANELA EXECUTADA em produção** (`prompts/prompt_apis_fiscais_isoladas.md` §22.51 ⭐): nfse-api no ar (:3002, migrations 001–006 no `fiscal_api` real, cerca do kid ok) → ensaios → setes-api com a F2a (merge ff `f6db0db`, 069 + 9 gatilhos) → **`--vai` do ato (ponto sem volta): `fiscal_api` SE em P com `cutover_at`, ERP SE aposentada** → app novo na :5051 (`810138e`, `NFSE_API_URL`) → 6b (7 notas da trilha canceladas; regras 1/3/4 já excluídas; lote vazio) → trilha 20 OK · 2 PENDENTE · 1 FALHA: **NFS-e 707 autorizada em PRODUÇÃO pela nfse-api e cancelada pela saga** → A1 apagado do cofre antigo (fingerprint conferido). Defeito ANTERIOR achado (fora da F2a; Valdo: só registrar): comentário `// Q-TZ1` engole `value, agreement.accept,` no INSERT do boleto (`bank-slip.ts`) — emitir boleto quebrado desde 30/09 (`ad42018`). Achado de ambiente: a "produção" de hoje é a máquina do Valdo (sem Plesk/URL pública — vem por configuração no deploy). Pendem: push dos `main`, boleto, F3/Onda 4 | 9.76 |
 | 2026-10-14 | **F2a/F2b — PUSH dos repos feito** (`prompts/prompt_apis_fiscais_isoladas.md` §22.50): núcleo `945ad2d` e nfse-api `61d0bbe` (main) · setes-api branch `f2a` `f6db0db` · setes-app branch `f2b` `810138e` (1º push; avanço puro sobre o main) · Infra-IA; varredura de segredos antes (só fixtures falsas); `f2a`/`f2b` NÃO são o main — o merge da `f2a` é o passo 4 da JANELA | 9.75 |
