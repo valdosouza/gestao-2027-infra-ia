@@ -1,0 +1,17 @@
+Escopo: misto
+Fonte: https://dfe-portal.svrs.rs.gov.br/Nfe/Avisos/3008 (página de avisos do portal DF-e da SVRS) — lida em 2026-10-15 (NE-0 da nfe-api).
+Trecho transcrito na íntegra (só os dois avisos que o acervo da NF-e usa); o resto da página são avisos de outros documentos.
+
+---
+Coordenação Técnica do ENCAT
+05/10/2026
+Comunica alteração de data de homologação e produção de Notas Técnicas publicadas.
+Informamos que as NTs com data de implantação em homologação em 05-out (NF-e 2025.002 v.1.52, NF-e 2026.007 v.1.10, NF-e 2026.008 v.1.00) ficam postergadas para: 26/out em homologação e 16/nov em produção.
+
+---
+SEFAZ Virtual RS
+29/05/2026
+ATENÇÃO: CNPJ de Teste para Alfanumérico (Novidade: Adicionados NFe e e NFCe)
+O ambiente de HOMOLOGAÇÃO da SVRS para CTe, CTe OS, GTVe, BPe, BPe TM, BPe TA, MDFe, NF3e, NFCom, NFAGg, NFGas, NFe e NFCe está disponibilizando para que seja utilizado nos testes das empresas de emissão de CNPJ Alfanumético o CNPJ PC3D315K000193 associado a Inscrição Estadual 0018001360 da SEFAZ RS (criada exclusivamente para testes).
+Desta forma as empresas emissoras destes documentos conseguem verificar regras de validação relevantes para Destinatário, Recebedor, Expeidor, Remetente, Comprador e Tomador para estes Documentos acima relacionados.
+IMPORTANTE: Os testes de NFe e NFCe também já estão liberados nos ambiente de Homologação SVRS

@@ -1,0 +1,1810 @@
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+       NORMA DE PROCEDIMENTO FISCAL Nº 063/2012
+
+          Publicada no DOE 8766 de 31.07.2012
+
+                                                           SÚMULA: Estabelece procedimentos para
+                                                           disciplinar o uso de sistemas de processamento de
+                                                           dados para escrituração fiscal, emissão de
+                                                           documentos fiscais e a sua gestão, e normatizar o
+                                                           controle sobre usuários e fornecedores. Revoga a
+                                                           NPF nº 014/2012.
+
+                   O DIRETOR DA COORDENAÇÃO DA RECEITA DO ESTADO, no exercício da
+competência que lhe foi delegada, e tendo em vista o disposto no Regulamento do ICMS, aprovado
+pelo Decreto nº 1.980, de 21 de dezembro de 2007, resolve expedir a seguinte Norma de
+Procedimento Fiscal:
+
+         1. DOS SISTEMAS INFO RMATIZADOS DE NATUREZA FISCAL
+         1.1. Para efeitos desta Norma, considera-se sistema informatizado de natureza fiscal,
+doravante denominado simplesmente SISTEMA, o sistema de processamento de dados desenvolvido
+para efetuar a escrituração fiscal, a emissão de documentos fiscais e a sua gestão.
+
+         1.2. O fornecimento e o uso de SISTEMAS, de acordo com o disposto no subitem 1.1, serão
+disciplinados e controlados pela CRE - Coordenação da Receita do Estado, e somente serão
+considerados habilitados para uso pelos contribuintes do ICMS após submetidos a procedimento de
+
+                                                             1
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+credenciamento nos termos desta Norma.
+
+         1.3. O SISTEMA poderá ser credenciado para as finalidades fiscais previstas no Anexo VI do
+Regulamento do ICMS do Paraná - RICMS/PR, cumpridos os requisitos nele estabelecidos para cada
+finalidade fiscal.
+
+         1.4. Para obtenção e manutenção da credencial do SISTEMA é obrigatório o atendimento
+pleno e cumulativo das seguintes exigências:
+
+         1.4.1. estar em conformidade com a legislação tributária vigente, em especial com os
+Convênios ICMS, os Ajustes SINIEF, os Atos COTEPE, os Manuais de Integração e Contingência, as
+NPF - Normas de Procedimento Fiscal e com o Capítulo de Processamento de Dados do RICMS/PR;
+
+         1.4.2. gerar os registros fiscais em meio eletrônico exigido pela legislação tributária vigente,
+observando-se, inclusive, os tipos de registros relativos às modalidades fiscais realizadas, definidos
+no Anexo VI do RICMS/PR;
+
+         1.4.3. não possuir qualquer artifício, função ou recurso, ocultos ou não, que possam
+comprometer a segurança fiscal, ou que permitam o gerenciamento dissimulado ou oculto de
+informações e registros paralelos, diversos ou complementares aos declarados ao fisco, e nem
+permitir a supressão da impressão de qualquer documento fiscal;
+
+         1.4.4. corresponder integralmente às informações prestadas em todos os documentos
+apresentados;
+
+         1.4.5. quando se destinar à emissão de um dos livros Registro de Entradas, Registro de
+Saídas, ou Registro de Apuração do ICMS, emitir obrigatoriamente os outros dois.
+
+                                                             2
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         2. DO FORNECEDOR DO SISTEMA INFORMATIZADO DE NATUREZA FISCAL
+         2.1.Para efeitos desta Norma, considera-se fornecedor de SISTEMAS, doravante denominado
+simplesmente FORNECEDOR:
+
+         2.1.1. a empresa que desenvolve SISTEMAS para uso de terceiros, com atividade econômica
+correlata para este fim.
+
+         2.1.1.1. São consideradas correlatas com a atividade de desenvolvedor de SISTEMAS,
+quaisquer das seguintes atividades econômicas:
+
+         2.1.1.1.1. 6201-5 - Desenvolvimento de programas de computador sob encomenda;
+
+         2.1.1.1.2. 6202-3 - Desenvolvimento e licenciamento de programas de computador
+customizáveis;
+
+         2.1.1.1.3. 6203-1 - Desenvolvimento e licenciamento de programas de computador
+não-customizáveis;
+
+         2.1.1.1.4. 6204-0 - Consultoria em tecnologia da informação;
+
+         2.1.1.1.5. 6209-1 - Suporte técnico, manutenção e outros serviços em tecnologia da
+informação.
+
+         2.1.2. A empresa que desenvolve SISTEMAS para uso próprio.
+
+         2.2. O FORNECEDOR deverá efetuar o seu cadastro, alteração e cessação, no endereço
+eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR, serviço UPD, mediante preenchimento
+
+                                                             3
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+de formulário específico, utilizando-se do código de acesso da área restrita e da senha de
+representante legal previamente cadastrado.
+
+         2.2.1. Para o cadastro ou a alteração, o FORNECEDOR deverá ser usuário do Domicílio
+Tributário Eletrônico (DT-e), serviço de comunicação eletrônica do portal de serviços da Secretaria
+de Estado da Fazenda - Sefa -, Receita/PR.
+
+                              Acrescentado o subitem pelo inciso I do art. 1º da NPF 025/2020, de 12.5.2020,
+                              produzindo efeitos a partir de 14.5.2020.
+
+         2.2.2. Os pedidos de cadastro ou de alteração, quando protocolados nos termos do subitem
+11.1, deverão conter a assinatura digital do representante legal da empresa ou a assinatura digital do
+FORNECEDOR, por meio de certificado digital emitido por autoridade certificadora credenciada na
+forma da lei federal específica.
+
+                              Acrescentado o subitem pelo inciso I do art. 1º da NPF 025/2020, de 12.5.2020,
+                              produzindo efeitos a partir de 14.5.2020.
+
+         2.3. O CADASTRO DE FORNECEDOR DE SISTEMAS deverá ser efetuado para habilitar a
+empresa perante a CRE, mediante os seguintes procedimentos:
+
+         2.3.1. FORNECEDOR INSCRITO NO CAD/ICMS - Cadastro de Contribuintes do ICMS do
+Estado do Paraná:
+
+         2.3.1.1. requerer o cadastro, nos termos do subitem 2.2, ocasião em que será gerado um
+processo após confirmação eletrônica por representante legal da empresa.
+
+         2.3.2. FORNECEDOR NÃO INSCRITO NO CAD/ICMS:
+
+         2.3.2.1. efetuar os procedimentos descritos no subitem 2.3.1.1;
+
+         2.3.2.2. apresentar, na forma e no prazo constantes dos subitens 11.1 e 11.2, os seguintes
+
+                                                             4
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+documentos:
+
+         2.3.2.2.1. o pedido emitido nos termos do subitem 2.3.1.1;
+
+                              Nova redação dada ao subitem pelo art. 1 da NPF 025/2020, de 12.5.2020, produzindo
+                              efeitos a partir de 14.5.2020.
+
+                                                      Redação original em vigor de 31.07.2012 até 13.5.2020:
+                                                      "2.3.2.2.1. o pedido emitido nos termos do subitem 2.3.1.1, assinado pelo
+                                                      representante legal da empresa, com reconhecimento de firma do signatário;"
+
+         2.3.2.2.2. cópia do Contrato Social ou de sua consolidação, ou do Requerimento de
+Empresário, ou do Estatuto ou Ata, devidamente arquivados na Junta Comercial (art. 1.150 da Lei nº
+10.406/2002);
+
+                              Nova redação dada ao subitem pelo art. 1 da NPF 025/2020, de 12.5.2020, produzindo
+                              efeitos a partir de 14.5.2020.
+
+                                                      Redação original em vigor de 31.07.2012 até 13.5.2020:
+                                                      "2.3.2.2.2. cópia autenticada do Contrato Social ou sua consolidação, ou do
+                                                      Requerimento de Empresário, ou do Estatuto ou Ata, devidamente arquivados na
+                                                      Junta Comercial (art. 1.150 da Lei n. 10.406/2002);"
+
+         2.3.2.2.3. Certidão Simplificada da Junta Comercial do Estado de origem, se empresa
+constituída ou consolidada há mais de três meses, com data de emissão inferior a noventa dias da data
+do pedido.
+
+         2.3.2.2.4. Cópia do Comprovante de Situação Cadastral, adquirida por meio da Consulta de
+Comprovante de Inscrição e Situação Cadastral no portal da Receita Federal do Brasil, contendo a
+assinatura digital do representante legal da empresa, ou assinatura digital do FORNECEDOR, por
+meio de certificado digital emitido por autoridade certificadora credenciada na forma da lei federal
+específica, quando na Certidão Simplificada da Junta Comercial do Estado de origem não constar a
+CNAE descrita no subitem 2.1.1.1.
+
+                              Acrescentado o subitem pelo inciso I do art. 1º da NPF 025/2020, de 12.5.2020,
+
+                                                             5
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                              produzindo efeitos a partir de 14.5.2020.
+
+         2.4. A ALTERAÇÃO DE DADOS DO CADASTRO deverá ser efetuada sempre que ocorrer
+qualquer modificação nas informações prestadas, mediante os seguintes procedimentos:
+
+         2.4.1. FORNECEDOR INSCRITO NO CAD/ICMS:
+
+         2.4.1.1. alterar os dados por meio do Formulário do Cadastro Eletrônico, no endereço
+eletrônico www.fazenda.pr.gov.br, nos termos da NPF nº 099/2011 (Cadastro de Contribuintes) ou de
+outra que venha a substituí-la.
+
+         2.4.2. FORNECEDOR NÃO INSCRITO NO CAD/ICMS:
+
+         2.4.2.1. para alteração de dados relativos a nome empresarial, sócios ou CNAE principal,
+emitir requerimento conforme subitem 2.2;
+
+                              Nova redação dada ao subitem pelo art. 1 da NPF 025/2020, de 12.5.2020, produzindo
+                              efeitos a partir de 14.5.2020.
+
+                                                      Redação original em vigor de 31.07.2012 até 13.5.2020:
+                                                      "2.4.2.1. para alteração de dados relativos a nome empresarial, sócios ou CNAE
+                                                      principal, emitir requerimento assinado por representante legal da empresa, com
+                                                      reconhecimento de firma do signatário;"
+
+         2.4.2.2. apresentar, na forma e no prazo constantes dos subitens 11.1 e 11.2, os seguintes
+documentos:
+
+         2.4.2.2.1. o requerimento a que se refere o subitem 2.4.2.1;
+
+         2.4.2.2.2. cópia do Contrato Social ou de sua consolidação, ou do Requerimento de
+Empresário, ou do Estatuto ou Ata, devidamente arquivados na Junta Comercial (art. 1.150 da Lei nº
+10.406/2002);
+
+                                                             6
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                              Nova redação dada ao subitem pelo art. 1 da NPF 025/2020, de 12.5.2020, produzindo
+                              efeitos a partir de 14.5.2020.
+
+                                                      Redação original em vigor de 31.07.2012 até 13.5.2020:
+                                                      "2.4.2.2.2. cópia autenticada do Contrato Social ou sua consolidação, ou do
+                                                      Requerimento de Empresário, ou do Estatuto ou Ata, devidamente arquivados na
+                                                      Junta Comercial (art. 1.150 da Lei n. 10.406/2002);"
+
+         2.4.2.2.3. Certidão Simplificada da Junta Comercial do Estado de origem, se empresa
+constituída ou consolidada há mais de três meses, com data de emissão inferior a noventa dias
+contados da data do pedido;
+
+         2.4.2.2.4. Cópia do Comprovante de Situação Cadastral, adquirida por meio da Consulta de
+Comprovante de Inscrição e Situação Cadastral no portal da Receita Federal do Brasil, contendo a
+assinatura digital do representante legal da empresa, ou assinatura digital do FORNECEDOR, por
+meio de certificado digital emitido por autoridade certificadora credenciada na forma da lei federal
+específica, quando na Certidão Simplificada da Junta Comercial do Estado de origem não constar a
+CNAE descrita no item 2.1.1.1.
+
+                              Acrescentado o subitem pelo inciso I do art. 1º da NPF 025/2020, de 12.5.2020,
+                              produzindo efeitos a partir de 14.5.2020.
+
+         2.4.2.3. para alteração de dados relativos a endereço, números de telefone e de fax, e-mail e
+URL do FORNECEDOR, proceder a manutenção do cadastro, nos termos do subitem 2.2, dispensada
+a apresentação de documentos.
+
+         2.5. A CESSAÇÃO DO CADASTRO deverá ser efetuada para desabilitar a empresa perante
+a CRE, mediante os seguintes procedimentos:
+
+         2.5.1. requerer a cessação do cadastro, nos termos do subitem 2.2, ocasião em que será
+gerado um processo após confirmação eletrônica por representante legal da empresa;
+
+         2.5.2. apresentar, na forma e no prazo constantes dos subitens 11.1 e 11.2, o pedido emitido
+
+                                                             7
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+nos termos do subitem 2.5.1, assinado por representante legal da empresa;
+
+         2.5.3. o Pedido de Cessação do Cadastro de Fornecedor de Sistema somente poderá ser
+requerido quando não houver nenhum pedido de uso ativo para qualquer sistema.
+
+         2.6. É obrigação do FORNECEDOR cadastrado nos termos desta Norma:
+
+         2.6.1. proceder, no endereço eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR,
+serviço UPD:
+
+         2.6.1.1. o credenciamento de seus SISTEMAS;
+
+         2.6.1.2. o reconhecimento dos USUÁRIOS destes SISTEMAS, sediados no Estado do
+Paraná.
+
+         2.6.1.2.1. Nos casos de erro de preenchimento de pedido pelo USUÁRIO, o FORNECEDOR
+deverá efetuar, nos termos do subitem 2.6.1, o não reconhecimento;
+
+         2.6.2. disponibilizar, quando notificado pelo fisco estadual, um técnico credenciado com
+conhecimentos suficientes para prestar todos os esclarecimentos necessários sobre o funcionamento,
+operação e manipulação de dados de seus SISTEMAS.
+
+         2.7. O reconhecimento pelo FORNECEDOR implica vinculação formal do seu SISTEMA ao
+USUÁRIO reconhecido, podendo ser responsabilizado civil e criminalmente por eventuais prejuízos
+causados ao erário, que venham a ser praticados com o auxílio do software de sua autoria.
+
+         2.8. Para cada FORNECEDOR, nos termos do subitem 2.1, será fornecido o Código de
+Segurança do Responsável Técnico - CSRT, no endereço eletrônico www.fazenda.pr.gov.br,
+
+                                                             8
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+ambiente RECEITA/PR, serviço UPD;
+
+         2.8.1. o CSRT é um código de segurança alfanumérico (16 a 36 bytes) de conhecimento
+apenas REPR e do FORNECEDOR responsável pelo sistema emissor credenciado;
+
+         2.8.2. para cada FORNECEDOR cadastrado, nos termos do subitem 2.3, poderá ser fornecido
+até 5 (cinco) CSRT válidos. Caso o FORNECEDOR já possua 5 (cinco) CSRT válidos e necessite de
+um novo CSRT deverá indicar previamente qual dos outros CSRT válidos deseja revogar;
+
+         2.8.3. será gerado um "hash" a partir da concatenação do CSRT do FORNECEDOR com a
+chave de acesso do DF-e, conforme previsto no Manual de Orientação do Contribuinte - MOC;
+
+                              Acrescentados os subitens 2.8, 2.8.1, 2.8.2 e 2.8.3 pelo inciso I do art. 1º da NPF
+                              062/2023, de 20.12.2023,, produzindo efeitos a partir de 3.1.2024.
+
+         3. DA CREDENCIAL DE SISTEMA INFORMATIZADO DE NATUREZA FISCAL
+         3.1. O FORNECEDOR deverá efetuar os procedimentos relativos ao pedido da credencial, de
+alteração da credencial e de cessação da credencial do SISTEMA, bem como à transferência de
+propriedade do SISTEMA, no endereço eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR,
+serviço UPD, mediante preenchimento de formulário específico, utilizando-se do código de acesso da
+área restrita e da senha de representante legal previamente cadastrado.
+
+         3.2. O PEDIDO DE CREDENCIAL DO SISTEMA deverá ser efetuado para habilitar o
+SISTEMA perante a CRE, mediante os seguintes procedimentos:
+
+         3.2.1. requerer o Pedido de Credencial do Sistema, nos termos do subitem 3.1, ocasião em
+que será gerado um processo após a confirmação eletrônica por representante legal da empresa;
+
+         3.2.1.1. o Pedido de Credencial do Sistema referente ao subitem 3.2.1 será deferido
+
+                                                             9
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+automaticamente desde que o fornecedor de sistema não possua irregularidades no cadastro do
+Sistema UPD.
+
+                              Acrescentado o subitem 3.2.1.1 ao subitem 3.2.1 pelo inciso I do art. 1º da NPF
+                              018/2017, de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+         3.2.2.
+
+                              Revogado o subitem 3.2.2 pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.2.2. apresentar, na forma e no prazo constantes dos subitens 11.1 e 11.2, os
+                                                      seguintes documentos:"
+
+         3.2.2.1.
+
+                              Revogado o subitem 3.2.2.1. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.2.2.1. o pedido emitido nos termos do subitem 3.2.1, assinado por representante
+                                                      legal da empresa;"
+
+         3.2.2.2.
+
+                              Revogado o subitem 3.2.2.2. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.2.2.2. Listagem de Conferência de Registros e Documentos;"
+
+         3.2.2.3.
+
+                              Revogado o subitem 3.2.2.3. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.2.2.3.Relatório “Resumo de Validação de Arquivo” do programa validador
+                                                      disponibilizado pela CRE, contendo os tipos de registros relacionados no documento
+                                                      constante no subitem 3.2.2.2, de forma a indicar que um arquivo-teste gerado pelo
+                                                      sistema a ser credenciado foi, de fato, gerado de acordo com a legislação tributária
+                                                      vigente;"
+
+                                                            10
+                   Estado do Paraná
+          Secretaria de Estado da Fazenda
+
+             Receita Estadual do Paraná
+
+3.2.2.4.   Revogado o subitem 3.2.2.4. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+3.2.3.    produzindo efeitos a partir de 9.3.2017.
+3.2.3.1.
+3.2.3.2.                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.2.2.4. cópia do Laudo de Análise Funcional de PAF-ECF emitido em conformidade
+                              com o disposto no inciso II da cláusula nona do Convênio 15/2008, ressalvado o
+                              disposto nos parágrafos 2º e 4º dessa cláusula, nos casos a que se refere o subitem
+                              3.2.3."
+
+          Revogado o subitem 3.2.3. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.2.3.a partir de 1º de julho de 2012, para o credenciamento de SISTEMAS relativos
+                              a Programas Aplicativos Fiscais para Emissor de Cupom Fiscal – PAF-ECF, deverá,
+                              ainda, obter e manter sob sua guarda, disponibilizando ao Fisco, sempre que
+                              solicitada, a seguinte documentação:"
+
+          Revogado o subitem 3.2.3.1. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.2.3.1.Termo de Autenticação de Arquivos Fontes e Executáveis, conforme modelo
+                              constante do Anexo III do Convênio 15/2008, contendo o Código de Autenticidade
+                              gerado pelo algoritmo MD-5 correspondente ao arquivo texto que contém a relação
+                              dos arquivos-fontes e executáveis autenticados conforme disposto na alínea b do
+                              inciso I da cláusula nona do mesmo Convênio;"
+
+          Revogado o subitem 3.2.3.2. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.2.3.2.Termo de Depósito de Arquivos Fontes e Executáveis, conforme modelo
+                              constante do Anexo IV do Convênio 15/2008, contendo o número do envelope de
+                              segurança a que se refere a alínea “d” do inciso I da cláusula nona do mesmo
+
+          11
+                             Estado do Paraná
+                   Secretaria de Estado da Fazenda
+
+                      Receita Estadual do Paraná
+
+                                        Convênio;"
+
+3.2.3.3.
+
+                  Revogado o subitem 3.2.3.3. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                        "3.2.3.3.arquivos eletrônicos gravados em mídia óptica não regravável, que deve ser
+                                        única e conter etiqueta que identifique os arquivos e programas nela gravados,
+                                        rubricada por representante legal da empresa, contendo:"
+
+3.2.3.3.1.
+
+                  Revogado o subitem 3.2.3.3.1. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                        "3.2.3.3.1. relação dos arquivos fontes e executáveis autenticados, gerada conforme
+                                        o disposto na alínea “a” do inciso I da cláusula nona do Convênio 15/2008, gravada
+                                        em arquivo eletrônico do tipo texto;"
+
+3.2.3.3.2.
+
+                  Revogado o subitem 3.2.3.3.1. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                        "3.2.3.3.2. manual de operação do PAF-ECF, em idioma português, contendo a
+                                        descrição do programa com informações de configuração, parametrização e operação
+                                        e as instruções detalhadas de suas funções, telas e possibilidades;"
+
+3.2.3.3.3.
+
+                  Revogado o subitem 3.2.3.3.3. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                          "3.2.3.3.3.cópia-demonstração do PAF-ECF e respectivos arquivos de instalação,
+
+                                        com possibilidade de ser instalada e de demonstrar o seu funcionamento,
+                                        acompanhada das instruções para instalação e das senhas de acesso irrestrito a
+                                        todas as telas, funções e comandos;"
+
+                                                  12
+                             Estado do Paraná
+                   Secretaria de Estado da Fazenda
+
+                      Receita Estadual do Paraná
+
+3.2.3.3.4.
+
+                  Revogado o subitem 3.2.3.3.4. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                        3.2.3.3.4. cópia do principal arquivo executável do PAF-ECF."
+
+3.2.4.
+
+                  Revogado o subitem 3.2.4. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                        "3.2.4. fica dispensada a apresentação do documento de que trata o subitem 3.2.2.3,
+                                        por ocasião do pedido de credenciamento, para as seguintes modalidades:"
+
+3.2.4.1.
+
+                  Revogado o subitem 3.2.4.1. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                        "3.2.4.1. NF-e – Nota Fiscal Eletrônica, modelo 55, a que se refere o Ajuste SINIEF
+                                        7/2005;"
+
+3.2.4.2.
+
+                  Revogado o subitem 3.2.4.2. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                        "3.2.4.2. Nota Fiscal/Conta de Energia Elétrica, modelo 6; Nota Fiscal de Serviço de
+                                        Comunicação, modelo 21; Nota Fiscal de Serviço de Telecomunicações, modelo 22;
+                                        ou qualquer outro documento fiscal relativo a prestação de serviço de comunicação
+                                        ou a fornecimento de energia elétrica, emitido em uma única via por sistema
+                                        eletrônico de processamento de dados, nos termos do Convênio ICMS 115/2003;"
+
+3.2.4.3.
+
+                  Revogado o subitem 3.2.4.3. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                  produzindo efeitos a partir de 9.3.2017.
+
+                                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+
+                                                  13
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                                                      "3.2.4.3. EFD – Escrituração Fiscal Digital, a que se referem o Convênio ICMS
+                                                      143/2006 e o Ajuste SINIEF 2/2009;"
+
+         3.2.4.4.
+
+                              Revogado o subitem 3.2.4.4. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.2.4.4. CT-e – Conhecimento de Transporte Eletrônico, modelo 57, a que se refere
+                                                      o Ajuste SINIEF 9/2007;"
+
+         3.2.4.5.
+
+                              Revogado o subitem 3.2.4.5. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.2.4.5. PAF-ECF, a que se refere o Convênio 15/2008."
+
+         3.2.4.6.
+
+                              Revogado o subitem 3.2.4.6. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original acrescentado pelo item 1 da NPF 054/2015, de 25.06.2015,
+                                                      produzindo efeitos a partir de 29.06.2015 ate 8.3.2017:
+                                                      "3.2.4.6. NF-e - Nota Fiscal Eletrônica, modelo 65, denominada NFC-e -Nota Fiscal
+                                                      de Consumidor Eletrônica, a que se refere o Ajuste SINIEF 7/2005.
+
+         3.2.5. Ficam credenciados de ofício o "Software Emissor de NF-e" e o "Software Emissor de
+CT-e", desenvolvidos e distribuídos pelo Serviço Brasileiro de Apoio às Micro e Pequenas Empresas
+do estado de São Paulo SEBRAE/SP.
+
+                              Nova redação dada ao subitem 3.2.5 pelo art. 1º da NPF 039/2018, de 7.5.2018,
+                              produzindo efeitos a partir de 14.5.2018 (publicação).
+
+                              Redações anteriores:
+                                                      a) Redação original em vigor de 31.07.2012 até 27.8.2017:
+                                                      "3.2.5. Ficam credenciados de ofício o “Software Emissor de NF-e” e o “Software
+                                                      Emissor de CT-e”, desenvolvidos e distribuídos pela Secretaria da Fazenda do
+
+                                                            14
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                                                      Estado de São Paulo - SEFAZ/SP."
+                                                      b) redação dada pelo art. 1º da NPF 091/2017, de 23.8.2017, produzindo efeitos a
+                                        partir de 28.8.2017 (publicação) até 13.5.2018.
+                                                      "3.2.5. Ficam credenciados de ofício o "Software Emissor de NF-e" e o "Software
+                                        Emissor de CT-e", desenvolvidos e distribuídos pela Secretaria da Fazenda do Estado do
+                                        Maranhão - SEFAZ/MA e pelo Serviço Brasileiro de Apoio às Micro e Pequenas Empresas do
+                                        estado de São Paulo - SEBRAE/SP."
+
+         3.2.5.1. A Inspetoria Geral de Fiscalização, IGF/CRE, fica autorizada a credenciar os
+softwares de que trata este subitem, no ambiente UPD, disponibilizando, inclusive, os seus números
+de identificação da credencial que deverão ser informados nos pedidos de autorização de uso dos
+contribuintes paranaenses.
+
+         3.2.6. É vedada a concessão de mais de uma credencial para o mesmo SISTEMA.
+
+         3.3. O PEDIDO DE ALTERAÇÃO DA CREDENCIAL DO SISTEMA deverá ser efetuado
+sempre que ocorrer qualquer modificação nas características do SISTEMA ou no conjunto de
+finalidades fiscais realizadas, mediante os seguintes procedimentos:
+
+         3.3.1. requerer, nos termos do subitem 3.1, o Pedido de Alteração da Credencial do Sistema,
+ocasião em que será gerado um processo após a confirmação eletrônica por representante legal da
+empresa;
+
+         3.3.1.1. o Pedido de Alteração de Credencial do Sistema referente ao subitem 3.3.1 será
+deferido automaticamente desde que o fornecedor de sistema não possua irregularidades no cadastro
+do Sistema UPD.
+
+                              Acrescentado o subitem 3.3.1.1 ao subitem 3.3.1 pelo inciso I do art. 1º da NPF
+                              018/2017, de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+         3.3.2.
+
+                              Revogado o subitem 3.3.2. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                            15
+                   Estado do Paraná
+          Secretaria de Estado da Fazenda
+
+             Receita Estadual do Paraná
+
+3.3.2.1.                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+3.3.2.2.                      "3.3.2. apresentar, na forma e no prazo constantes dos subitens 11.1 e 11.2, os
+3.3.2.3.                      seguintes documentos:"
+
+3.3.2.4.  Revogado o subitem 3.3.2.1. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                               "3.3.2.1. o pedido emitido nos termos do subitem 3.3.1, assinado por representante
+                              legal da empresa;"
+
+          Revogado o subitem 3.3.2.2. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.3.2.2. Listagem de Conferência de Registros e Documentos;"
+
+          Revogado o subitem 3.3.2.3. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.3.2.3. Relatório “Resumo de Validação de Arquivo” do programa validador
+                              disponibilizado pela CRE, contendo os tipos de registros relacionados no documento
+                              constante no subitem 3.3.2.2, de forma a indicar que um arquivo-teste gerado pelo
+                              sistema a ser credenciado foi, de fato, gerado de acordo com a legislação tributária
+                              vigente, somente nos casos em que o SISTEMA acrescentar novas finalidades
+                              fiscais, ressalvado o contido no subitem 3.2.4;"
+
+          Revogado o subitem 3.3.2.4. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.3.2.4. Laudo de Análise Funcional de PAF-ECF emitido em conformidade com o
+                              disposto no inciso II da cláusula nona do Convênio 15/2008, ressalvado o disposto
+                              nos parágrafos 2º e 4º dessa cláusula, nos casos a que se refere o subitem 3.2.3."
+
+          16
+                   Estado do Paraná
+          Secretaria de Estado da Fazenda
+
+             Receita Estadual do Paraná
+
+3.3.3.    Revogado o subitem 3.3.3. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+3.3.3.1.
+3.3.4.                        Redação original em vigor de 31.7.2012 até 8.3.2017:
+3.3.5.                        "3.3.3. até 30 de junho de 2015, os FORNECEDORES deverão adequar para
+                              PAF-ECF todos os seus SISTEMAS emissores de cupom fiscal, conforme Convênio
+                              15/2008, mediante os procedimentos dos subitens 3.3.1 e 3.3.2 e obedecendo ao
+                              disposto no subitem 3.2.3."
+
+          Prazo previsto neste item prorrogado para 30.06.2015 pelo item 1 da NPF 088/2014, de
+          07.10.2014, produzindo efeitos a partir de 13.10.2014.
+
+                       Prazo previsto neste item prorrogado para 31.12.2014 pelo item 1 da NPF 013/2014, em
+                       vigor em 19.02.2014, produzindo efeitos de 1º.01.2014 até 12.10.2014.
+                       Prazo previsto neste item prorrogado para 31.12.2013 pelo item 1 da NPF 004/2013, em
+                       vigor em 04.01.2013, produzindo efeitos de 1º.01.2013 até 31.12.2013.
+
+          Revogado o subitem 3.3.3.1. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.3.3.1. os FORNECEDORES que possuem SISTEMAS PAF-ECF credenciados
+                              antes da vigência desta Norma deverão atualizar as informações de seus SISTEMAS
+                              nos termos do subitem 3.3, no prazo constante do subitem 3.3.3."
+
+          Revogado o subitem 3.3.4. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+                              Redação original em vigor de 31.7.2012 até 8.3.2017:
+                              "3.3.4. fica dispensada a obtenção do documento de que trata o subitem 3.3.2.4
+                              quando o último apresentado tenha sido emitido até o dia 31 de dezembro do
+                              exercício anterior ao corrente;"
+
+          Revogado o subitem 3.3.5 pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+          produzindo efeitos a partir de 9.3.2017.
+
+          17
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.3.5. decorrido o prazo a que se refere o subitem 3.3.4, tendo ocorrido alteração no
+                                                      respectivo SISTEMA, o FORNECEDOR de SISTEMAS relativos a PAF-ECF deverá
+                                                      submeter a última versão à análise funcional, nos termos da cláusula terceira do
+                                                      Convênio 15/2008, sob pena de cassação da credencial do SISTEMA;"
+
+         3.3.6. no Pedido de Alteração da Credencial do Sistema, não será permitida a retirada de
+finalidades fiscais para as quais existam autorizações de uso ativas;
+
+         3.3.7. no Pedido de Alteração da Credencial do Sistema, deverão ser mantidas todas as
+informações que permanecerem inalteradas, sendo marcadas aquelas que serão incluídas e
+desmarcadas as que serão excluídas.
+
+         3.4. O PEDIDO DE CESSAÇÃO DA CREDENCIAL DO SISTEMA deverá ser efetuado
+para desabilitar o SISTEMA perante a CRE, mediante os seguintes procedimentos:
+
+         3.4.1. requerer, nos termos do subitem 3.1, Pedido de Cessação de Credencial do Sistema,
+ocasião em que será gerado um processo após a confirmação eletrônica por representante legal da
+empresa;
+
+         3.4.2.
+
+                              Revogado o subitem 3.4.2. pelo inciso III do art. 1º da NPF 018/2017, de 23.2.2017,
+                              produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.7.2012 até 8.3.2017:
+                                                      "3.4.2. apresentar, na forma e no prazo constantes dos subitens 11.1 e 11.2, o pedido
+                                                      emitido nos termos do subitem 3.4.1, assinado por representante legal da empresa;"
+
+         3.4.3. o Pedido de Cessação da Credencial do Sistema somente poderá ser requerido quando
+não houver nenhum USUÁRIO ativo para o SISTEMA;
+
+         3.4.4. a partir da data do requerimento, nos termos do subitem 3.4.1, o SISTEMA não poderá
+
+                                                            18
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+mais ser fornecido a qualquer USUÁRIO.
+
+         3.4.5. o Pedido de Cessação de Credencial do Sistema referente ao subitem 3.4.1 será
+deferido automaticamente desde que o fornecedor de sistema não possua irregularidades no cadastro
+do Sistema UPD.
+
+                              Acrescentado o subitem 3.4.5 ao subitem 3.4 pelo inciso I do art. 1º da NPF 018/2017,
+                              de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+         3.5. O PEDIDO DE TRANSFERÊNCIA DE PROPRIEDADE DO SISTEMA deverá ser
+efetuado quando ocorrer a transferência de titularidade do SISTEMA, por motivo de venda ou de
+cessão de direitos autorais do aplicativo ou, ainda da incorporação, da fusão ou da dissolução da
+sociedade do FORNECEDOR ATUAL, mediante os seguintes procedimentos:
+
+         3.5.1. o FORNECEDOR ATUAL deverá requerer, nos termos do subitem 3.1, o Pedido de
+Transferência de Propriedade de Sistema informando o motivo da transferência e o número do
+CNPJ/MF da empresa que estará recebendo a propriedade do SISTEMA, ocasião em que será gerado
+um processo após a confirmação eletrônica por representante legal da empresa;
+
+         3.5.2. o NOVO FORNECEDOR, cadastrado conforme disposto no subitem 2.3 desta Norma,
+deverá acessar, no endereço eletrônico www.fazenda.pr.gov.br, o ambiente RECEITA/PR, serviço
+UPD, mediante código de acesso da área restrita e senha de representante legal previamente
+cadastrado, e informar o aceite ou a rejeição da transferência de propriedade do sistema;
+
+         3.5.3. a partir do aceite da transferência de propriedade do sistema pelo NOVO
+FORNECEDOR, este deverá apresentar, na forma e no prazo constantes dos subitens 11.1 e 11.2, o
+Pedido de Credencial e Termo de Responsabilidade do Sistema, referente à aceitação da transferência
+de propriedade de sistema, emitido e assinado por representante legal do NOVO FORNECEDOR;
+
+         3.5.4. caso o NOVO FORNECEDOR rejeite a transferência, o pedido será automaticamente
+
+                                                            19
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+indeferido;
+
+         3.5.5. a transferência da propriedade de sistema produz efeitos retroativos em relação à
+responsabilidade do NOVO FORNECEDOR, iniciando-se na data de credenciamento do SISTEMA
+transferido.
+
+         3.6. A utilização, por contribuinte paranaense, de SISTEMA não credenciado pela CRE
+acarretará a aplicação de sanções administrativas e penais cabíveis.
+
+         4. DO USUÁRIO DE SISTEMA INFORMATIZADO DE NATUREZA FISCAL
+         4.1. Para efeitos desta Norma, considera-se usuário de sistemas informatizados de natureza
+fiscal, doravante simplesmente denominado USUÁRIO:
+
+         4.1.1. o contribuinte inscrito no CAD/ICMS que utiliza o SISTEMA a que se refere o
+subitem 1.1 para efetuar a escrituração fiscal e/ou a emissão de documentos fiscais;
+
+         4.1.2. o contabilista que utiliza o sistema informatizado de natureza fiscal a que se refere o
+subitem 1.1 para efetuar a escrituração fiscal, desde que esteja vinculado à empresa contribuinte
+inscrita no CAD/ICMS.
+
+         4.2. A utilização de SISTEMA sem o prévio cadastro de uso sujeitará o USUÁRIO à
+aplicação de sanções administrativas e penais cabíveis.
+
+         5. DO USO DE SISTEMA INFORMATIZADO DE NATUREZA FISCAL
+         5.1. O USUÁRIO deverá efetuar os procedimentos relativos ao cadastro, alteração e cessação
+de uso de SISTEMA, no endereço eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR,
+
+                                                            20
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+serviço UPD, mediante preenchimento de formulário específico, utilizando-se do código de acesso da
+área restrita e da senha de representante legal previamente cadastrado.
+
+         5.2. O CADASTRO DE USO DE SISTEMA deverá ser efetuado para habilitar o USUÁRIO
+perante a CRE, mediante os seguintes procedimentos:
+
+         5.2.1. informar, nos termos do subitem 5.1, Cadastro de Uso de SISTEMA, ocasião em que
+será gerado um processo após a confirmação eletrônica por representante legal da empresa;
+
+         5.2.2. solicitar o reconhecimento pelo FORNECEDOR para utilização do SISTEMA.
+
+         5.2.2.1. O reconhecimento a que se refere o subitem 5.2.2 será realizado pelo
+FORNECEDOR no endereço eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR, serviço
+UPD, utilizando-se do código de acesso da área restrita e da senha de representante legal previamente
+cadastrado, e produzirá os efeitos legais e fiscais de declaração formal junto à CRE;
+
+         5.2.2.2. o FORNECEDOR deverá proceder o reconhecimento do usuário no prazo máximo de
+trinta dias contados da data da confirmação eletrônica do pedido.
+
+         5.2.2.3. caso o FORNECEDOR não reconheça o USUÁRIO ou exceda este prazo, o cadastro
+será automaticamente indeferido;
+
+         5.2.2.4. o reconhecimento pelo FORNECEDOR, na forma e no prazo constantes dos subitens
+5.2.2.1 e 5.2.2.2, gera deferimento automático do cadastro de uso do SISTEMA, exceto para o
+subitem 5.2.3, sendo dispensada a apresentação de documentos;
+
+         5.2.2.5 o reconhecimento a que se refere o subitem 5.2.2 fica dispensado quando se tratar dos
+sistemas mencionados no subitem 3.2.5, ou de software gratuito emissor de NFC-e objeto de
+
+                                                            21
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+termo de cooperação devidamente celebrado com a Secretaria de Estado da Fazenda.
+
+                              Nova redação dada ao subitem 5.2.2.5 pelo item 2 da NPF 054/2015, de 25.06.2015,
+                              produzindo efeitos a partir de 29.06.2015.
+
+                                                      Redação original em vigor de 31.07.2012 até 28.06.2015:
+                                                      "5.2.2.5. o reconhecimento a que se refere o subitem 5.2.2 fica dispensado quando se
+                                                      tratar dos sistemas mencionados no subitem 3.2.5;"
+
+         5.2.3. Para emissão de Nota Fiscal de Serviço de Comunicação, modelo 21, e de Nota Fiscal
+de Serviço de Telecomunicações, modelo 22. em via única, nos termos do art. 454 do RICMS/PR,
+para os contribuintes que exerçam as modalidades de serviços de comunicações relacionadas nas
+alíneas 'a' a 'i' do § 1º do art. 355 do mesmo Regulamento, deverá apresentar, na ARE - Agência da
+Receita Estadual do domicílio tributário do estabelecimento, cópia do Ato de Concessão ou da
+Autorização emitida pela Agência Nacional de Telecomunicações – ANATEL, que autoriza a
+requerente a explorar o serviço de comunicação para uma das modalidades mencionadas neste
+subitem.
+
+                              Nova redação dada ao subitem 5.2.3 pelo item 2 da NPF 088/2014, de 07.10.2014,
+                              produzindo efeitos a partir de 13.10.2014.
+
+                                                      Redação original em vigor de 31.07.2012 até 12.10.2014:
+                                                      "5.2.3. Para emissão de Nota Fiscal de Serviço de Comunicação, modelo 21, e Nota
+                                                      Fiscal de Serviço de Telecomunicações, modelo 22, em via única, nos termos do art.
+                                                      412 do RICMS/PR, para os contribuintes que exerçam as modalidades de serviços de
+                                                      comunicações relacionadas nas alíneas “a” a “i” do § 1º do art. 320 do mesmo
+                                                      Regulamento, deverá apresentar, na ARE - Agência da Receita Estadual do domicílio
+                                                      tributário do estabelecimento, cópia do Ato de Concessão ou da Autorização emitida
+                                                      pela Agência Nacional de Telecomunicações - ANATEL, que autoriza a requerente a
+                                                      explorar o serviço de comunicação para uma das modalidades mencionadas neste
+                                                      subitem."
+
+         5.3. A ALTERAÇÃO DE CADASTRO DE USO DE SISTEMA deverá ser efetuada sempre
+que ocorrer qualquer modificação nas características do SISTEMA ou no conjunto de finalidades
+fiscais realizadas, mediante os seguintes procedimentos:
+
+         5.3.1. informar, nos termos do subitem 5.1, Alteração de Cadastro de Uso de SISTEMA,
+
+                                                            22
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+ocasião em que será gerado um processo após a confirmação eletrônica por representante legal da
+empresa;
+
+         5.3.2. solicitar o reconhecimento pelo FORNECEDOR, nos termos do subitem 5.2.2;
+
+         5.3.3. no Pedido de Alteração de Uso do Sistema, deverão ser mantidas todas as informações
+que permanecerem inalteradas, sendo marcadas aquelas que serão incluídas e desmarcadas as que
+serão excluídas.
+
+         5.4. A CESSAÇÃO DE CADASTRO DE USO DO SISTEMA deverá ser efetuada para
+desabilitar o USUÁRIO perante a CRE, mediante os seguintes procedimentos:
+
+         5.4.1. informar, nos termos do subitem 5.1, Cessação de Cadastro de Uso de SISTEMA,
+ocasião em que será gerado um processo após a confirmação eletrônica por representante legal da
+empresa.
+
+         5.4.1.1. A confirmação eletrônica pelo USUÁRIO cessa automaticamente o cadastro de uso
+do SISTEMA, sendo dispensada a apresentação de documentos.
+
+         6. DOS PROCESSOS DE CASSAÇÃO, SUSPENSÃO E BLOQUEIO
+
+                              Nova redação dada ao item 6 pelo inciso II do art. 1º da NPF 062/2023, de 20.12.2023,
+                              produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação que produziu efeitos de 22.3.2021 até 2.1.2024:
+                                                      "6. DOS PROCESSOS DE CASSAÇÃO E DE SUSPENSÃO DE USO DE SISTEMA"
+                                                      Redação original produziu efeitos de 31.07.2012 até 22.3.2021:
+                                                      "6. DOS PROCESSOS DE CASSAÇÃO"
+
+         6.1. A CASSAÇÃO DO CADASTRO DO FORNECEDOR E DA CREDENCIAL DO
+SISTEMA deverá ser efetuada de ofício pela Receita Estadual do Paraná - REPR, sem prejuízo das
+
+                                                            23
+                   Estado do Paraná
+          Secretaria de Estado da Fazenda
+
+             Receita Estadual do Paraná
+
+demais sanções e penalidades cabíveis, quando:
+
+                              Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                              de 17.2.2023.
+
+                                                      Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                                                      "6.1. A CASSAÇÃO DO CADASTRO DO FORNECEDOR, DA CREDENCIAL DO
+                                                      SISTEMA e DO CADASTRO DE USO DE SISTEMA deverá ser efetuada de ofício
+                                                      pela CRE, sem prejuízo das demais sanções e penalidades cabíveis, quando:"
+
+         6.1.1. houver o descumprimento de quaisquer das obrigações ou exigências por
+FORNECEDOR ou seu SISTEMA, do contido nos itens 1 a 3 desta Norma;
+
+          Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+          de 17.2.2023.
+
+                              Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                              "6.1.1. houver o descumprimento de quaisquer das obrigações ou exigências por:"
+
+6.1.1.1.
+
+          Revogado o subitem pelo art. 2º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+          de 17.2.2023.
+
+                              Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                              "6.1.1.1. FORNECEDOR ou seu SISTEMA, do contido nos itens 1 a 3 desta Norma;"
+
+6.1.1.2.
+
+                              Revogado o subitem pelo art. 2º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                              de 17.2.2023.
+
+                                                      Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                                                      "6.1.1.2. USUÁRIO, do contido nos itens 4 e 5 desta Norma;"
+
+         6.1.2. forem falsas, inexatas ou incompletas as informações prestadas por FORNECEDOR,
+para a concessão do seu cadastro ou da credencial de seu SISTEMA;
+
+                                                24
+                   Estado do Paraná
+          Secretaria de Estado da Fazenda
+
+             Receita Estadual do Paraná
+
+          Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+          de 17.2.2023.
+
+                              Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                              "6.1.2. forem falsas, inexatas ou incompletas as informações prestadas por:"
+
+6.1.2.1.
+
+          Revogado o subitem pelo art. 2º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+          de 17.2.2023.
+
+                              Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+
+                              "6.1.2.1. FORNECEDOR, para a concessão do seu cadastro ou da credencial de seu
+                              SISTEMA;"
+
+6.1.2.2.
+
+                              Revogado o subitem pelo art. 2º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                              de 17.2.2023.
+
+                                                      Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                                                      "6.1.2.2. USUÁRIO, para o cadastro de uso de SISTEMA;"
+
+         6.1.3. o FORNECEDOR negar ao fisco, ou dificultar, a prestação de informações técnicas e
+esclarecimentos relativos ao funcionamento do SISTEMA, chaves e senhas de acesso, localização,
+identificação, layout e função dos arquivos de uso do SISTEMA;
+
+         6.1.4. for constatada no SISTEMA qualquer situação em desacordo com a legislação
+tributária;
+
+6.1.5.
+
+          Revogado o subitem pelo art. 2º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+          de 17.2.2023.
+
+                              Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                              "6.1.5. o USUÁRIO utilizar o SISTEMA para infringir a legislação do ICMS ou deixar
+
+                                             25
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                                                      de cumprir quaisquer obrigações acessórias relativas a processamento de dados
+                                                      previstas na legislação tributária."
+
+         6.1.6. em relação ao FORNECEDOR:
+
+                              Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                              de 17.2.2023.
+
+                                                      Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                                                      "6.1.6. em relação ao FORNECEDOR ou ao USUÁRIO:"
+
+         6.1.6.1. o endereço informado for insuficiente ou não localizado;
+
+         6.1.6.2. for constatada a cessação de suas atividades;
+
+         6.1.6.3. houver outro motivo devidamente fundamentado em protocolo SID - Sistema
+Integrado de Documentos.
+
+         6.2. Os processos a que se refere o subitem 6.1 serão efetuados por Auditor Fiscal autorizado,
+mediante os seguintes procedimentos:
+
+         6.2.1. iniciar o procedimento de cassação no endereço eletrônico www.fazenda.pr.gov.br,
+ambiente RECEITA/PR, serviço UPD, mediante preenchimento de formulário específico,
+utilizando-se do código de acesso da área restrita e da senha, ocasião em que será gerado um processo
+após a confirmação eletrônica pelo Auditor Fiscal autorizado;
+
+         6.2.2. notificar o FORNECEDOR para apresentar a sua defesa por escrito, em até dez dias, a
+contar da data da ciência, nos termos do subitem 11.1, preferencialmente mediante postagem no
+DT-e;
+
+                              Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                              de 17.2.2023.
+
+                                                      Redação anterior dada pelo inciso II do art. 1º da NPF 049/2020, de 11.9.2020,
+
+                                                            26
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                                                      produziu efeitos de 15.9.2020 até 16.2.2023.
+                                                      "6.2.2. Notificar o FORNECEDOR ou o USUÁRIO para apresentar a sua defesa por
+                                                      escrito, em até dez dias, a contar da data da ciência, nos termos do subitem 11.1,
+                                                      preferencialmente mediante postagem no DT-e;"
+                                                      Redação original em vigor de 31.07.2012 até 14.9.2020:
+                                                      "6.2.2. notificar o FORNECEDOR ou o USUÁRIO para apresentar a sua defesa por
+                                                      escrito, em até dez dias a contar da data da ciência, nos termos do subitem 11.1."
+
+         6.2.2.1. será considerado revel o FORNECEDOR que, devidamente cientificado, não se
+manifestar no prazo constante do subitem 6.2.2, dando-se prosseguimento ao processo;
+
+                              Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                              de 17.2.2023.
+
+                                                      Redação original produziu efeitos de 31.07.2012 até 16.2.2023:
+                                                      "6.2.2.1. Será considerado revel o FORNECEDOR ou o USUÁRIO que, devidamente
+                                                      cientificado, não se manifestar no prazo constante do subitem 6.2.2, dando-se
+                                                      prosseguimento ao processo."
+
+         6.2.2.2. caso o representante legal do FORNECEDOR não possua DT-e ativo, a ciência
+deverá ser efetuada via edital;
+
+                              Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                              de 17.2.2023.
+
+                                                      Redação anterior dada pelo inciso II do art. 1º da NPF 049/2020, de 11.9.2020,
+                                                      produzindo efeitos de 15.9.2020 até 16.2.2023:
+                                                      "6.2.2.2. Caso o representante legal do fornecedor ou usuário não possua DTe ativo,
+                                                      a ciência deverá ser efetuada via edital."
+                                                      Redação original em vigor de 31.07.2012 até 14.9.2020:
+                                                      "6.2.2.2. Fica dispensada a ciência de que trata o subitem 6.2.2, mediante justificativa
+                                                      do Auditor Fiscal autorizado, na impossibilidade de encontrar de forma pessoal ou via
+                                                      AR - Aviso de Recebimento dos Correios, quaisquer dos responsáveis por
+                                                      FORNECEDOR ou por USUÁRIO."
+
+         6.2.3. protocolizar o processo no e-PROTOCOLO, instruindo-o com os seguintes
+documentos: pedido emitido nos termos do subitem 6.2.1, assinado pelo Auditor Fiscal autorizado,
+documentos comprobatórios que motivaram o pedido, defesa apresentada pelo FORNECEDOR e
+
+                                                            27
+                              Estado do Paraná
+                     Secretaria de Estado da Fazenda
+
+                        Receita Estadual do Paraná
+
+parecer conclusivo;
+
+                     Nova redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                     de 17.2.2023.
+
+                                         Redação anterior dada pelo inciso II do art. 1º da NPF 049/2020, de 11.9.2020,
+                                         produzindo efeitos de 15.9.2020 até 16.2.2023:
+
+                                         "6.2.3. Protocolizar o processo no SID, instruindo-o com os seguintes documentos:
+                                         pedido emitido nos termos do subitem 6.2.1, assinado pelo Auditor Fiscal autorizado,
+                                         documentos comprobatórios que motivaram o pedido, defesa apresentada pelo
+                                         FORNECEDOR ou pelo USUÁRIO e parecer conclusivo."
+
+6.2.4.
+
+                     Revogado o subitem pelo art. 2º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                     de 17.2.2023.
+
+                           Redação anterior dada ao subitem pelo inciso II do art. 1º da NPF 049/2020, de 11.9.2020,
+                           produzindo efeitos de 15.9.2020 até 16.2.2023:
+
+                           "6.2.4. Sendo detectadas fraudes ou irregularidades, como indícios de operações fictícias ou
+                           simulações, desde que devidamente motivada, poderá ser realizada a cassação do cadastro de
+                           uso do Sistema, como medida acautelatória dos interesses da administração fiscal, garantidos
+                           o contraditório e a ampla defesa após esse procedimento."
+
+                           Redação anterior dada ao subitem 6.2.4 pelo inciso I do art. 1º da NPF 018/2019, de 3.5.2019,
+                           produziu efeito de 10.5.2019 até 14.9.2020:
+
+                           "6.2.4. Sendo detectada fraude ou irregularidade, desde que devidamente motivado, poderá ser
+                           realizada a cassação do cadastro de uso do Sistema, como medida acautelatória dos
+                           interesses da administração fiscal, garantidos o contraditório e a ampla defesa após esse
+                           procedimento."
+
+                                         Redação original, que foi acrescentado pelo art. 1º da NPF 005/2017, de 16.1.2017,
+                                         produzindo efeitos a partir de 18.1.2017 (publicação) até 9.5.2019.
+
+                                         "6.2.4. Sendo detectada fraude ou irregularidade, desde que devidamente motivado
+                                         por relatório circunstanciado, poderá ser realizada a cassação do cadastro de uso do
+                                         Sistema, como medida acautelatória dos interesses da administração fiscal,
+                                         garantidos o contraditório e a ampla defesa após esse procedimento."
+
+6.2.4.1.
+
+                     Revogado o subitem pelo art. 2º da NPF 6/2023, de 15.2.2023, produzindo efeitos a partir
+                     de 17.2.2023.
+
+                                                        28
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                                                      Redação anterior acrescentada pelo inciso I do art. 1º da NPF 049/2020, de
+                                                      11.9.2020, produzindo efeitos de 15.9.2020 até 16.2.2023:
+                                                      "6.2.4.1. O representante do usuário deverá ser cientificado do ato de cassação,
+                                                      contendo sua motivação, preferencialmente via DT-e."
+
+         6.3. Os processos referentes à cassação de cadastro de FORNECEDOR e de credencial de
+SISTEMA serão enviados para análise da IGF/CRE, que efetuará o deferimento, ou o indeferimento,
+no ambiente RECEITA/PR, serviço UPD.
+
+         6.4. A cassação do cadastro de FORNECEDOR implicará cassação automática da credencial
+de todos os seus SISTEMAS, enquanto a cassação da credencial de SISTEMA implicará BLOQUEIO
+automático das autorizações de uso de todos os seus USUÁRIOS
+
+                              Nova redação dada pelo inciso II do art. 1º da NPF 62/2023, de 20.12.2023, produzindo
+                              efeitos a partir de 3.1.2024.
+
+                                                      Redação dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos de
+                                                      17.2.2023 até 2.1.2024:
+                                                      6.4. A cassação do cadastro de FORNECEDOR implicará cassação automática da
+                                                      credencial de todos os seus SISTEMAS, enquanto a cassação da credencial de
+                                                      SISTEMA implicará SUSPENSÃO automática das autorizações de uso de todos os
+                                                      seus USUÁRIOS;
+
+                                                      Redação anterior dada pelo inciso II do art. 1º da NPF 049/2020, de 11.9.2020,
+                                                      produzindo efeitos de 15.9.2020 até 16.2.2023:
+                                                      "6.4. A cassação do cadastro de FORNECEDOR implicará cassação automática da
+                                                      credencial de todos os seus SISTEMAS enquanto que a cassação da credencial de
+                                                      SISTEMA implicará cassação automática das autorizações de uso de todos os seus
+                                                      USUÁRIOS."
+
+         6.5. Os processos referentes a pedido de cadastramento de FORNECEDOR, que possua sócio
+com histórico de cassação de cadastro de FORNECEDOR ou de credencial de SISTEMAS, deverão
+ser encaminhados à IGF/CRE para análise e avaliação de risco à segurança fiscal dos referidos
+pedidos.
+
+         6.6. Os procedimentos de SUSPENSÃO e BLOQUEIO DE CADASTRO DE USO DE
+
+                                                            29
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+SISTEMA serão efetuados de ofício pela REPR, sem prejuízo das demais sanções e penalidades
+cabíveis, nas situações identificadas a seguir:
+
+                              Nova redação dada pelo inciso II do art. 1º da NPF 62/2023, de 20.12.2023, produzindo
+                              efeitos a partir de 3.1.2024.
+
+                                                      Redação anterior dada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo efeitos
+                                                      de 17.2.2023 até 2.1.2024
+                                                      "6.6. O procedimento de SUSPENSÃO DO CADASTRO DE USO DE SISTEMA será
+                                                      efetuado de ofício pela Receita Estadual do Paraná - REPR, por Auditor Fiscal ou
+                                                      pelo Sistema de Monitoramento Fiscal de Emissores - SiMFE, sem prejuízo das
+                                                      demais sanções e penalidades cabíveis, nas situações a seguir identificadas:"
+                                                      Redação anterior acrescentada pelo art. 1º da NPF 019/2021, de 19.3.2021,
+                                                      produzindo efeitos de 23.3.2021 até 16.2.2023
+                                                      "6.6. O procedimento de SUSPENSÃO DO CADASTRO DE USO DE SISTEMA será
+                                                      efetuado de ofício pela Receita Estadual do Paraná - REPR, sem prejuízo das demais
+                                                      sanções e penalidades cabíveis, nas situações a seguir identificadas pelo Sistema de
+                                                      Monitoramento Fiscal de Emissores - SiMFE,"
+
+         6.6.1. para efeitos desta NPF, considera-se:
+
+         6.6.1.1. BLOQUEIO DO CADASTRO DE USO DE SISTEMA, quando efetuado por
+Auditor Fiscal;
+
+         6.6.1.2. SUSPENSÃO DO CADASTRO DE USO DE SISTEMA, quando efetuado pelo
+Sistema de Monitoramento Fiscal de Emissores - SiMFE;
+
+         6.6.1.2.1. Sistema de Monitoramento Fiscal de Emissores, doravante denominado
+simplesmente SiMFE, o sistema desenvolvido para efetuar o monitoramento permanente da emissão
+de documentos fiscais por empresas potencialmente constituídas para a prática de fraudes fiscais;
+
+                              Nova redação dada ao subitem 6.6.1 pelo inciso II do art. 1º da NPF 62/2023, de
+
+                                                            30
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+                                                      Redação anterior dada pelo art. 1º da NPF 019/2021, de 19.3.2021, produzindo
+                                                      efeitos de 23.3.2021 até 2.1.2024
+                                                      6.6.1. Para efeitos desta norma, considera-se Sistema de Monitoramento Fiscal de
+                                                      Emissores, doravante denominado simplesmente SiMFE, o sistema desenvolvido
+                                                      para efetuar o monitoramento permanente da emissão de documentos fiscais por
+                                                      empresas potencialmente constituídas para a prática de fraudes fiscais;
+
+         6.6.2. a Suspensão ou Bloqueio do Cadastro de Uso de SISTEMA no serviço UPD, ambiente
+RECEITA/PR, poderá ser realizado imediatamente, quando detectada a ocorrência de indícios de
+fraudes, como operações fictícias ou simulações;
+
+                              Nova redação dada ao subitem 6.6.2 pelo inciso II do art. 1º da NPF 62/2023, de
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação anterior acrescentada pelo art. 1º da NPF 6/2023, de 15.2.2023, produzindo
+                                                      efeitos a partir de 17.2.2023 até 2.1.2024
+                                                      "6.6.2. a suspensão do cadastro de uso de SISTEMA no serviço UPD, ambiente
+                                                      RECEITA/PR, poderá ser realizada imediatamente quando detectada a ocorrência de
+                                                      indícios de fraudes, como operações fictícias ou simulações;"
+                                                      Redação anterior acrescentada pelo art. 1º da NPF 019/2021, de 19.3.2021,
+                                                      produzindo efeitos de 23.3.2021 até 16.2.2023
+                                                      "6.6.2. o SiMFE, ao detectar a ocorrência de indícios de fraudes, como operações
+                                                      fictícias ou simulações, poderá suspender imediatamente o cadastro de uso de
+                                                      SISTEMA no serviço UPD, ambiente RECEITA/PR;"
+
+         6.6.3. o USUÁRIO receberá a Notificação da Suspensão ou do Bloqueio por mensagem de
+rejeição do sistema autorizador de Documento Fiscal eletrônico a cada documento enviado, conforme
+Manual de Orientação do Contribuinte;
+
+                              Nova redação dada ao subitem 6.6.3 pelo inciso II do art. 1º da NPF 62/2023, de
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação anterior dada pelo art. 1º da NPF 019/2021, de 19.3.2021, produzindo
+                                                      efeitos de 23.3.2021 até 2.1.2024
+                                                      "6.6.3. o USUÁRIO receberá a Notificação da Suspensão por mensagem de rejeição
+                                                      do sistema autorizador de Documento Fiscal eletrônico a cada documento enviado,
+                                                      conforme Manual de Orientação do Contribuinte;"
+
+                                                            31
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         6.6.4. o USUÁRIO poderá protocolizar pedido de Revisão da Suspensão ou do Bloqueio de
+Cadastro de Uso de Sistema na Delegacia Regional da Receita de seu domicílio tributário, o qual
+deverá ser apreciado por Auditor Fiscal, deferindo ou indeferindo motivadamente, garantindo o
+contraditório e a ampla defesa.
+
+                              Nova redação dada ao subitem 6.6.4 pelo inciso II do art. 1º da NPF 62/2023, de
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação anterior dada pelo art. 1º da NPF 019/2021, de 19.3.2021, produzindo
+                                                      efeitos de 23.3.2021 até 2.1.2024
+                                                      "6.6.4. o USUÁRIO poderá protocolizar pedido de Revisão da Suspensão de
+                                                      Cadastro de Uso de Sistema na Delegacia Regional da Receita de seu domicílio
+                                                      tributário, o qual deverá ser apreciado por Auditor Fiscal, no primeiro dia útil
+                                                      subsequente ao recebimento do pedido, deferindo ou indeferindo motivadamente."
+
+         7. DAS COMPETÊNCIAS
+         7.1. É de competência do Inspetor Geral de Fiscalização:
+
+         7.1.1. a cassação de cadastro de FORNECEDOR e de credencial de SISTEMA;
+
+         7.1.2. a avaliação do pedido de cadastramento a que se refere o subitem 6.5.
+
+         7.1.3
+
+                              Revogado o subitem 7.1.3 pelo inciso IV do art. 1º da NPF 62/2023, de 20.12.2023,
+                              produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação original acrescentada pelo inciso II do art. 1º da NPF 018/2019, de
+                                                      3.5.2019, que produziu efeitos de 10.5.2019 até 2.1.2024:
+                                                      7.1.3. a cassação do cadastro de uso do Sistema prevista no item 6.2.4, sem prejuízo
+                                                      do disposto no subitem 7.2.2.
+
+         7.2. É de competência do Delegado Regional da Receita:
+
+                                                            32
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         7.2.1 o deferimento dos pedidos referentes aos subitens 2.3 a 2.5;
+
+                              Nova redação dada ao "caput" do subitem 7.2.1 pelo inciso II do art. 1º da NPF
+                              018/2017, de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.07.2012 até 8.3.2017:
+                                                      "7.2.1. o deferimento dos pedidos referentes aos subitens 2.3 a 2.5 e 3.2 a 3.5; "
+
+         7.2.2
+
+                              Revogado o subitem 7.2.2 pelo inciso IV do art. 1º da NPF 62/2023, de 20.12.2023,
+                              produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação original que produziu efeitos de 30.7.2012 até 2.1.2024:
+                                                      "7.2.2. a cassação do cadastro de uso de SISTEMA."
+
+         7.3. As competências a que se referem os subitens 7.1 e 7.2 poderão ser delegadas a Auditor
+Fiscal autorizado a efetuar os procedimentos constantes desta Norma, à critério das referidas
+autoridades.
+
+         7.4. A análise e o deferimento ou não do pedido de Revisão da Suspensão ou do Bloqueio de
+Cadastro de Uso de Sistema, previsto no subitem 6.6.4 desta NPF, é de competência de Auditor
+Fiscal lotado na Delegacia Regional da Receita do domicílio tributário do requerente.
+
+                              Nova redação dada ao subitem 7.4 pelo inciso II do art. 1º da NPF 62/2023, de
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação anterior dada pelo art. 1º da NPF 019/2021, de 19.3.2021, produzindo
+                                                      efeitos de 23.3.2021 até 2.1.2024
+                                                      "7.4. A análise e o deferimento ou não do pedido de Revisão da Suspensão de
+                                                      Cadastro de Uso de Sistema, previsto no subitem 6.6.4 desta norma, é de
+                                                      competência de Auditor Fiscal lotado na Delegacia Regional da Receita do domicílio
+                                                      tributário do requerente."
+
+         8. DAS ATRIBUIÇÕES DA INSPETORIA GERAL DE FISCALIZAÇÃO
+
+         8.1. Quanto aos processos de cassação de cadastro de FORNECEDOR e de credencial de
+
+                                                            33
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+SISTEMA:
+
+         8.1.1. analisar a documentação enviada e deferir, ou indeferir, a cassação no endereço
+eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR, serviço UPD, utilizando-se do código de
+acesso da área restrita e da senha do Auditor Fiscal autorizado, emitindo parecer fundamentado e
+conclusivo, e retornando o processo à repartição fiscal onde o mesmo teve início;
+
+         8.1.2. caso seja deferida a cassação do FORNECEDOR ou do SISTEMA, comunicar a todas
+as Delegacias Regionais da Receita a notificarem os USUÁRIOS daqueles SISTEMAS, pertencentes
+aos seus domicílios tributários, para procederem a substituição dos mesmos.
+
+         8.2. Quanto à avaliação do pedido de cadastramento a que se refere o subitem 6.5,
+analisar a documentação enviada emitindo parecer fundamentado e conclusivo, retornando-a à
+repartição fiscal onde o mesmo teve início.
+
+         9. DAS ATRIBUIÇÕES DA DELEGACIA REGIONAL DE RECEITA
+         9.1. Quanto aos pedidos constantes dos subitens 2.3 a 2.5:
+
+                              Nova redação dada ao "caput" do subitem 9.1 pelo inciso II do art. 1º da NPF 018/2017,
+                              de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.07.2012 até 8.3.2017:
+                                                      "9.1. Quanto aos pedidos constantes dos subitens 2.3 a 2.5 e 3.2 a 3.5:"
+
+         9.1.1. analisar a documentação enviada e deferir, ou indeferir, o pedido no endereço
+eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR, serviço UPD, utilizando-se do código de
+acesso da área restrita e da senha do Auditor Fiscal autorizado, emitindo justificativa no caso de
+indeferimento.
+
+         9.1.1.1. Nos casos de pedido de cadastramento a que se refere o subitem 6.5, antes do
+
+                                                            34
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+deferimento ou indeferimento do pedido, enviar o processo, devidamente acompanhado da
+documentação comprobatória da irregularidade, à IGF/CRE, para análise.
+
+         9.2. Quanto aos processos de cassação de cadastro de FORNECEDOR e de credencial de
+SISTEMA:
+
+         9.2.1. efetuar os procedimentos nos termos do subitem 6.2;
+
+         9.2.2. enviar o processo à IGF/CRE para os procedimentos constantes do subitem 8.1;
+
+         9.2.3. após o retorno do processo, enviá-lo à ARE do domicílio tributário do FORNECEDOR
+para ciência ao seu representante legal;
+
+         9.2.4. efetuar a notificação de que trata o subitem 8.1.2 em relação aos USUÁRIOS daqueles
+SISTEMAS sediados na área de sua competência.
+
+         9.3. Quanto aos processos de Suspensão ou Bloqueio do cadastro de uso de SISTEMA:
+
+                              Nova redação dada ao caput do subitem 9.3 pelo inciso II do art. 1º da NPF 62/2023, de
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação original em vigor de 31.07.2012 até 2.1.2024:
+                                                      9.3. Quanto aos processos de cassação do cadastro de uso de SISTEMA:
+
+         9.3.1
+
+                              Revogado o subitem 9.3.1 pelo inciso IV do art. 1º da NPF 62/2023, de 20.12.2023,
+                              produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação original que produziu efeitos de 30.7.2012 até 2.1.2024:
+                                                      "9.3.1. efetuar os procedimentos nos termos do subitem 6.2;"
+
+         9.3.2. analisar o pedido de Revisão de Suspensão ou do Bloqueio a que se refere o subitem
+
+                                                            35
+                Estado do Paraná
+       Secretaria de Estado da Fazenda
+
+          Receita Estadual do Paraná
+
+6.6.4, e deferir ou indeferir no endereço eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR,
+serviço UPD, emitindo parecer fundamentado e conclusivo;
+
+                              Nova redação dada ao subitem 9.3.2 pelo inciso II do art. 1º da NPF 62/2023, de
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação original em vigor de 31.07.2012 até 2.1.2024:
+                                                      9.3.2. analisar a defesa a que se refere o subitem 6.2.2 e deferir, ou indeferir, a
+                                                      cassação no endereço eletrônico www.fazenda.pr.gov.br, ambiente RECEITA/PR,
+                                                      serviço UPD, emitindo parecer fundamentado e conclusivo;
+
+         9.3.3. enviar o processo à ARE do domicílio tributário do USUÁRIO para ciência ao seu
+representante legal.
+
+9.3.4
+
+       Revogado o subitem 9.3.4 pelo inciso IV do art. 1º da NPF 62/2023, de 20.12.2023,
+       produzindo efeitos a partir de 3.1.2024.
+
+                           Redação original do subitem 9.3.4 (acrescentado pelo inciso II do art. 1º da NPF
+                           018/2019, de 3.5.2019, em vigor em 10.5.2019 (publicação), que produziu efeitos de
+                           10.5.2019 até 2.1.2024:
+
+                           9.3.4. analisar a defesa a que se refere o subitem 6.2.4, emitindo parecer
+                           fundamentado e conclusivo.
+
+                           9.3.4.1. Nos casos de aplicação dos itens 6.2.4 e 6.6.2 a defesa deverá ser instruída
+                           com documentação que comprove a regularidade do estabelecimento, bem como a
+                           efetividade das operações que deram causa à suspensão ou à cassação, tais como:
+
+                           I. identificação inequívoca do endereço do estabelecimento, com apresentação
+                           detalhada do logradouro, numeração predial, complemento (andar, sala, bloco etc.),
+                           bairro, cidade, UF, ponto de referência, coordenadas geográficas ou localização no
+                           aplicativo Google Maps ou similar, fotos do imóvel etc.;
+
+                           II. comprovante de propriedade do imóvel onde se encontra localizado o
+                           estabelecimento ou contrato de locação, com firma reconhecida e cópia atualizada da
+                           matrícula do imóvel que comprove que o locador é o proprietário do bem;
+
+                           III. comprovante da capacidade financeira para a integralização do capital social pelo
+                           sócio ou titular e da sua efetiva integralização, ainda que seja em bens móveis ou
+                           imóveis;
+
+                           IV. comprovante do efetivo aporte dos recursos na pessoa jurídica capaz de lastrear a
+                           movimentação das mercadorias descritas nos documentos fiscais de entrada e saída,
+                           acompanhados dos seguintes documentos que possam comprovar a efetividade das
+
+                                          36
+         Estado do Paraná
+Secretaria de Estado da Fazenda
+
+   Receita Estadual do Paraná
+
+      operações:
+      a. cópias dos documentos fiscais de operações de entradas e saídas;
+      b. boletos bancários quitados onde se identifique o fornecedor como beneficiário;
+      ordem de pagamento bancária; Transferência Eletrônica Disponível - TED;
+      comprovante bancário de depósito ou transferência eletrônica para a conta da
+      empresa fornecedora; ou
+      c. microfilme fornecido pelo banco, de frente e verso dos cheques compensados,
+      identificando o beneficiário sacador ou a conta corrente em favor da qual o valor foi
+      depositado; ou
+      d. outros documentos bancários similares desde que, em qualquer caso, seja
+      identificado inequivocamente como beneficiário o efetivo emitente do documento que
+      gerou o crédito de imposto;
+      e. quando for o tomador do serviço de transporte realizado por terceiro, deverá
+      apresentar cópia dos conhecimentos de transporte e dos seus respectivos
+      pagamentos, mediante cópia de um dos documentos descritos nos subitens "b" a "d"
+      deste inciso;
+      f. comprovante da movimentação física das mercadorias descritas nos documentos
+      fiscais de entradas e saídas, informando no que couber, os veículos utilizados no
+      transporte, Manifesto Eletrônico de Documentos Fiscais - MDFe, registros de
+      passagens, comprovantes de entrega, comprovantes de pedágio, indicação do local
+      de carregamento ou descarregamento;
+      g. comprovante dos registros dos documentos e cumprimento de obrigações
+      acessórias, bem como dos pagamentos dos impostos incidentes nas operações, se
+      for o caso.
+      Nova redação dada ao subitem 9.3.4.1 pelo art. 1º da NPF 019/2021, de 19.3.2021,
+      produzindo efeitos a partir de 23.3.2021.
+      Redação anterior acrescentada do subitem 9.3.4.1 pelo inciso I do art. 1º da NPF
+      049/2020, de 11.9.2020, produziu efeitos de 15.9.2020 até 22.3.2021
+      "9.3.4.1. Nos casos de aplicação do item 6.2.4, a defesa deverá ser instruída com
+      documentação que comprove a regularidade do estabelecimento, bem como a
+      efetividade das operações que deram causa a cassação, tais como:
+      I. Documentos que comprovem a efetividade das operações e prestações;
+      II. comprovante de integralização de capital social e capacidade financeira dos
+      sócios;
+      III. origem dos recursos que subsidiaram as aquisições;
+      IV. comprovante da origem das mercadorias vendidas."
+      9.3.4.2. A critério da autoridade designada para análise da defesa, poderão ser
+      realizadas diligências ou requisitada a juntada de outros documentos necessários à
+      elucidação dos fatos motivadores da cassação.
+
+                         37
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                                                      Acrescentado o subitem pelo inciso I do art. 1º da NPF 049/2020, de 11.9.2020,
+                                                      produzindo efeitos a partir de 15.9.2020
+                                                      9.3.4.3. Caso a defesa seja acatada, o auditor responsável deverá desbloquear a
+                                                      cassação e restabelecer o uso do sistema.
+                                                      Acrescentado o subitem pelo inciso I do art. 1º da NPF 049/2020, de 11.9.2020,
+                                                      produzindo efeitos a partir de 15.9.2020
+
+         9.3.5. No caso de aplicação do item 6.6.2, a defesa deverá ser instruída com documentação
+que comprove a regularidade do estabelecimento, bem como a efetividade das operações que deram
+causa à suspensão ou à cassação, tais como:
+
+         I - identificação inequívoca do endereço do estabelecimento, com apresentação detalhada do
+logradouro, numeração predial, complemento (andar, sala, bloco etc.), bairro, cidade, UF, ponto de
+referência, coordenadas geográficas ou localização no aplicativo Google Maps ou similar, fotos do
+imóvel etc.;
+
+         II - comprovante de propriedade do imóvel onde se encontra localizado o estabelecimento ou
+contrato de locação, com firma reconhecida e cópia atualizada da matrícula do imóvel que comprove
+que o locador é o proprietário do bem;
+
+         III - comprovante da capacidade financeira para a integralização do capital social pelo sócio
+ou titular e da sua efetiva integralização, ainda que seja em bens móveis ou imóveis;
+
+         IV - comprovante do efetivo aporte dos recursos na pessoa jurídica capaz de lastrear a
+movimentação das mercadorias descritas nos documentos fiscais de entrada e saída, acompanhados
+dos seguintes documentos que possam comprovar a efetividade das operações:
+
+         a) cópias dos documentos fiscais de operações de entrada e saída;
+
+         b) boletos bancários quitados onde se identifique o fornecedor como beneficiário; ordem de
+pagamento bancária; Transferência Eletrônica Disponível - TED; comprovante bancário de depósito
+
+                                                            38
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+ou transferência eletrônica para a conta da empresa fornecedora; ou
+
+         c) microfilme fornecido pelo banco, de frente e verso dos cheques compensados,
+identificando o beneficiário sacador ou a conta corrente em favor da qual o valor foi depositado; ou
+
+         d) outros documentos bancários similares desde que, em qualquer caso, seja identificado
+inequivocamente como beneficiário o efetivo emitente do documento que gerou o crédito de imposto;
+
+         e) quando for o tomador do serviço de transporte realizado por terceiro, deverá apresentar
+cópia dos conhecimentos de transporte e dos seus respectivos pagamentos, mediante cópia de um dos
+documentos descritos nos subitens "b" a "d" deste inciso;
+
+         f) comprovante da movimentação física das mercadorias descritas nos documentos fiscais de
+entrada e saída, informando, no que couber, os veículos utilizados no transporte, Manifesto
+Eletrônico de Documentos Fiscais - MDFe, registros de passagens, comprovantes de entrega,
+comprovantes de pedágio, indicação do local de carregamento ou descarregamento;
+
+         g) comprovante dos registros dos documentos e do cumprimento de obrigações acessórias,
+bem como dos pagamentos dos impostos incidentes nas operações, se for o caso.
+
+         9.3.6. A critério da autoridade designada para análise da defesa, poderão ser realizadas
+diligências ou requisitada a juntada de outros documentos necessários à elucidação dos fatos
+motivadores da cassação.
+
+         9.3.7. Caso a defesa seja acatada, o auditor responsável deverá desbloquear e restabelecer o
+uso do sistema.
+
+                              Acrescentados os subitens 9.3.5, 9.3.6 e 9.3.7 pelo inciso III do art. 1º da NPF 062/2023,
+                              de 20.12.2023,, produzindo efeitos a partir de 3.1.2024.
+
+                                                            39
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         9.4. As atribuições constantes do item 9 serão exercidas, a critério do Delegado Regional da
+Receita, por Auditor Fiscal autorizado, lotado em qualquer repartição fiscal da Regional.
+
+         10. DAS ATRIBUIÇÕES DAS AGÊNCIAS DA RECEITA ESTADUAL
+         10.1 Quanto aos pedidos constantes dos subitens 2.3 a 2.5 e 5.2.3:
+
+                              Nova redação dada ao "caput" do subitem 10.1 pelo inciso II do art. 1º da NPF 018/2017,
+                              de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.07.2012 até 8.3.2017:
+                                                      "10.1. Quanto aos pedidos constantes dos subitens 2.3 a 2.5 e 3.2 a 3.5 e 5.2.3:"
+
+         10.1.1. recepcionar a documentação e protocolizar processo no SID, instruindo-o com toda a
+documentação recebida.
+
+         10.1.2. enviar o processo ao Auditor Fiscal autorizado pela Delegacia Regional da Receita de
+seu domicílio tributário.
+
+         10.2. Quanto aos processos de cassação:
+
+         10.2.1. recepcionar a documentação referente ao subitem 6.2.2, inclusive o envelope, no caso
+de envio pelos correios;
+
+         10.2.2. enviar a documentação ao Auditor Fiscal autorizado pela Delegacia Regional da
+Receita de seu domicílio tributário;
+
+         10.2.3. cientificar o FORNECEDOR ou o USUÁRIO, conforme o caso, nos termos dos
+subitens 9.2.3 ou 9.3.3, e enviar o processo para o Auditor Fiscal autorizado da repartição fiscal onde
+
+                                                            40
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+mesmo teve início.
+
+         11. DAS DISPOSIÇÕES GERAIS
+         11.1. Os FORNECEDORES, sediados no Estado do Paraná, deverão encaminhar a
+documentação exigida em cada tipo de pedido à ARE de seu domicílio tributário, e aqueles sediados
+em outra unidade da Federação poderão selecionar qualquer uma das ARE estabelecidas no Estado
+do Paraná.
+
+         11.1.1. A documentação a que se refere o subitem 11.1 deverá ser enviada por meio da
+utilização do sistema e-Protocolo Digital, disponível no portal da Sefa, no endereço eletrônico
+http://www.fazenda.pr.gov.br.
+
+                              Acrescentado o subitem pelo inciso I do art. 1º da NPF 025/2020, de 12.5.2020,
+                              produzindo efeitos a partir de 14.5.2020.
+
+         11.1.2. Todos os documentos anexados ao protocolo mencionado no subitem 11.1.1 deverão
+conter a assinatura digital do representante legal da empresa ou a assinatura digital do
+FORNECEDOR, por meio de certificado digital emitido por autoridade certificadora credenciada na
+forma da lei federal específica, ficando dispensada a autenticação em cartório ou reconhecimento de
+firma.
+
+                              Acrescentado o subitem pelo inciso I do art. 1º da NPF 025/2020, de 12.5.2020,
+                              produzindo efeitos a partir de 14.5.2020.
+
+         11.1.2.1.
+
+                              Revogado o subitem pelo art. 1º da NPF 072/2021, de 7.12.2021, produzindo efeitos a
+                              partir de 9.12.2021.
+
+                                                      Redação anterior acrescentada do subitem pelo inciso I do art. 1º da NPF 025/2020,
+                                                      de 12.5.2020, produzindo efeitos de 14.5.2020 até 8.12.2021
+                                                      "11.1.2.1. Os arquivos com assinatura digital também deverão ser anexados no
+                                                      sistema e-Protocolo Digital, compactados em formato "zip".";"
+
+                                                            41
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         11.2. A documentação a que se refere o subitem 11.1 deverá ser apresentada no prazo
+máximo de trinta dias contados da data da confirmação eletrônica do pedido.
+
+         11.3. Para efeitos desta Norma, considera-se representante legal da empresa, o empresário
+individual, o sócio-administrador, o presidente, o diretor, o administrador ou outro responsável, assim
+definido em Requerimento de Empresário, Contrato Social ou sua consolidação, Estatuto ou Ata,
+devidamente arquivados na Junta Comercial (art. 1.150 da Lei n. 10.406/2002), que poderá ser
+representado por procurador.
+
+         11.3.1. A documentação que estiver assinada por procurador deverá ser acompanhada de
+procuração simples e com reconhecimento de assinatura, outorgada por seu responsável.
+
+         11.3.1.1. Fica dispensada a apresentação da procuração a que se refere o subitem 11.3.1
+quando o procurador constar do cadastro do FORNECEDOR, ou do USUÁRIO.
+
+         11.4 A confirmação eletrônica dos pedidos constantes dos subitens 2.3 a 2.5 não implica
+autorização automática pelo fisco, devendo os mesmos serem deferidos pela autoridade competente
+da repartição fiscal incumbida.
+
+                              Nova redação dada ao "caput" do subitem 11.4 pelo inciso II do art. 1º da NPF 018/2017,
+                              de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+                                                      Redação original em vigor de 31.07.2012 até 8.3.2017:
+                                                      "11.4. A confirmação eletrônica dos pedidos constantes dos subitens 2.3 a 2.5 e 3.2 a
+                                                      3.5 não implica autorização automática pelo fisco, devendo os mesmos serem
+                                                      deferidos pela autoridade competente da repartição fiscal incumbida."
+
+         11.5. O descumprimento do disposto nos subitens 2.3 a 2.5 ocasionará o indeferimento
+automático do pedido, devendo o interessado apresentar novo pedido.
+
+                              Nova redação dada ao "caput" do subitem 11.5 pelo inciso II do art. 1º da NPF 018/2017,
+                              de 23.2.2017, produzindo efeitos a partir de 9.3.2017.
+
+                                                            42
+               Estado do Paraná
+      Secretaria de Estado da Fazenda
+
+         Receita Estadual do Paraná
+
+                                        Redação original em vigor de 31.07.2012 até 8.3.2017:
+                                        "11.5. O descumprimento do disposto nos subitens 2.3 a 2.5 e 3.2 a 3.5 ocasionará o
+                                        indeferimento automático do pedido, devendo o interessado apresentar novo pedido."
+
+11.6. Em relação à NF-e, à NFC-e, ao CT-e, ao CT-e OS, ao BP-e e à GTV-e:
+
+                              Nova redação dada ao subitem pelo inciso II do art. 1º da NPF 049/2020, de 11.9.2020,
+                              produzindo efeitos a partir de 15.9.2020.
+
+                                        Redação anterior dada ao subitem 11.6 pelo item 3 da NPF 054/2015, de 25.06.2015, produziu
+                                        efeitos de 29.06.2015 até 14.9.2020:
+                                        "11.6. Em relação à NF-e, ao CT-e e à NFC-e:"
+
+                                                      Redação original em vigor de 31.07.2012 até 28.06.2015:
+                                                      "11.6. Em relação à NF-e e ao CT-e:"
+
+         11.6.1. o cadastramento de uso de SISTEMA credencia automaticamente o USUÁRIO para a
+sua emissão;
+
+         11.6.2. a alteração para retirada, a cessação, a suspensão ou o bloqueio do cadastro de uso
+dessas finalidades fiscais, sem que novo cadastro de uso seja formalmente requerido pelo USUÁRIO,
+ocasionará o descredenciamento para a emissão destes documentos.
+
+                              Nova redação dada ao subitem 11.6..2 pelo inciso II do art. 1º da NPF 62/2023, de
+                              20.12.2023, produzindo efeitos a partir de 3.1.2024.
+
+                                                      Redação original em vigor de 31.07.2012 até 2.1.2024:
+                                                      "11.6.2. a alteração para retirada, a cessação ou a cassação do cadastro de uso
+                                                      dessas finalidades fiscais, sem que novo cadastro de uso seja formalmente requerido
+                                                      pelo USUÁRIO, ocasionará o descredenciamento para a emissão destes
+                                                      documentos."
+
+         11.7. Finalizados os procedimentos de cada tipo de processo, este será enviado ao Auditor
+Fiscal autorizado pela repartição fiscal onde o mesmo teve início, que o encaminhará para arquivo.
+
+11.8
+
+      Revogado o subitem 11.8 pelo item 4 da NPF 054/2015, de 25.06.2015, produzindo
+
+                                         43
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                              efeitos a partir de 29.06.2015.
+                              Redação anterior dada pelo item 1 da NPF 006/2013, em vigor de 01.01.2013 até
+                              28.062015: (ver prorrogação do prazo)
+                              "11.8. A partir de 1º de julho de 2015, os usuários de equipamento emissor de cupom
+                              fiscal somente poderão utilizar, para esta finalidade, SISTEMAS PAF-ECF conforme
+                              disposto no Convênio ICMS 15/2008."
+
+                                                      Redação original em vigor de 31.07.2012 até 31.12.2012:
+                                                      "11.8. A partir de 1º de janeiro de 2013, os usuários de equipamento emissor de
+                                                      cupom fiscal somente poderão utilizar, para esta finalidade, SISTEMAS PAF-ECF
+                                                      conforme disposto no Convênio 15/2008.".
+                              Prazo previsto neste item prorrogado para 1º.07.2015 pelo item 3 da NPF 088/2014, de
+                              07.10.2014, produzindo efeitos a partir de 13.10.2014.
+                              Prazo previsto neste item prorrogado para 1º.01.2015 pelo item 2 da NPF 013/2014, em
+                              vigor em 19.02.2013, surtindo efeitos de 1º.01.2014 até 12.10.2014.
+
+         11.9. Fica dispensado o Cadastro de Uso de Sistema para a modalidade de Escrituração
+Fiscal Digital (EFD).
+
+11.10. Além dos dispositivos desta Norma, deverão ser observados os procedimentos definidos no
+Capítulo XVII e no Anexo VI do RICMS-PR.
+
+         11.11. Fica revogada a Norma de Procedimento Fiscal nº 014/2012.
+
+         11.12. Esta Norma de Procedimento Fiscal entrará em vigor na data de sua publicação.
+
+         Coordenação da Receita do Estado, Curitiba, em 26 de julho de 2012.
+
+         Leonildo Prati
+         Assessor Geral - CRE/GAB
+         Delegação de Competência - Portaria 02/2011
+
+                                                            44
+

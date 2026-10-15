@@ -5,7 +5,7 @@
 **Molde**: `prompt_onda3_nfse_adn.md` §3–§7 (mesma tabela de conceitos, mesmos nomes de peça) e `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates: ambíguo nunca fecha, reconciliar antes de reapresentar, transitório ≠ recusa).
 **Legado** (vault `D:\Gestao2016\Infra-IA\Gestao`, Decisão 65): `proc-faturamento-venda` E07, `proc-cancelamento-nfe` C00–C05, Lote 6 §2–§5, Lote 8 §2, NUM-01/02/03, AUT-01/02/03/04, CAN-01, CAN-V5/V6/V7, NF-01, `geracao-nfe-hierarquia` §3–§4 (diagnóstico: variação por MODELO duplicada = maior fonte de retrabalho; variação por PROCESSO pequena e sadia; operações do ciclo — inutilizar/consultar — são comandos, não "geradores").
 **Aberto em**: 2026-09-21 (Rodada 0 = parecer do guardião conceitual, agente `setes-conceito`, a pedido do Valdo: "desenhar o processo da NF-e mantendo a simetria de controles com a NFS-e, para que o desenho fique, se não o mesmo, seguindo o mesmo fluxo"). Fatos do parecer conferidos no disco pelo condutor (billing.service.ts:672–677, baseline 001, produtores em api/sync).
-**Estado**: **2026-10-12 (tarde) — §12.9.7: Rodada 0 da PARTE 2 da NE-1a feita (inventário + parecer do guardião + ordem interna, sem DDL) + leitura DETERMINÍSTICA do ACBr (`../nfe-api/referencia-acbr/06`) → D-NE72…D-NE74 DECIDIDAS e ordem aceita ("siga as recomendações e a ordem proposta"); EM EXECUÇÃO — passos 1–6 FEITOS (§12.9.7.1: cerca por modelo, emitter no núcleo, terminal por parâmetro + listas derivadas, escritor genérico sob `InvoiceTx`, política em peças, `ca`/cadeia do servidor — D-NE57; núcleo 327 · nfse-api 591 + 150/150 ao vivo; nada commitado); gates 0,76/0,72 → D-NE75…D-NE84; "parte 2a" PUBLICADA (núcleo 27d2aa6 · nfse 38980bb · infra f72fba4); próximo: passo 7 = N17 (parser XML) → "parte 2b"** · **2026-10-12 — §12.9 ⏯ RETOMAR POR AQUI: NE-1a PARTE 1 EXECUTADA, com GATES (0,76/0,76) e PUBLICADA — D-NE56…D-NE62 e D-NE66/68/69/70/71 (D-NE61: a denegada barra pelo FATO da view — Q-NE67 rejeitada); nenhuma questão aberta; PROMPT DE RETOMADA da parte 2 no §12.9.6; próximo: parte 2 da NE-1a (cerca por modelo, emitter, escritor/peças, `ca`/cadeia D-NE57, parser XML N17, D-NE69) → F2a** · 2026-10-11 — D-NE55 (a NE-0 vai para depois da F2a) · **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
+**Estado**: **2026-10-15 — §13 ⏯ RETOMAR POR AQUI: NE-0 ABERTA (Rodada 0)** — acervo `../nfe-api/integracoes/nfe-sefaz/` criado (README com 20 documentos a arquivar + fatos levantados na web; CONFERENCIAS com 65 itens, 26 com prévia; **nenhum download feito**); fato que reabre a D-NE18: pela NT 2026.007 (H 26/10, P 16/11/2026) emitente SEM IE autoriza só na SVRS; PR exige CSRT; prazo de cancelamento no PR = 168 h; SHA-1 e síncrono confirmados; **Rodada 3 DECIDIDA (§13.8, D-NE93…D-NE101) e NE-0 EXECUTADA (§13.9: 24 oficiais arquivados, 65 conferências fechadas — 2 DERRUBAM —, autorizadores como dado, DDL da família em RASCUNHO pelo guardião, OpenAPI v1) — Rodada 4 DECIDIDA (§13.10, D-NE102…D-NE114; D-NE103 supera o refNFe da D-NE25) — **NE-0 FECHADA**; D-NE115/D-NE116 (downloads) executadas — NENHUMA questão aberta; próximo: frente do CNPJ alfanumérico (D-NE99) → NE-1b/NE-2/NE-3** · **2026-10-12 (tarde) — §12.9.7: Rodada 0 da PARTE 2 da NE-1a feita (inventário + parecer do guardião + ordem interna, sem DDL) + leitura DETERMINÍSTICA do ACBr (`../nfe-api/referencia-acbr/06`) → D-NE72…D-NE74 DECIDIDAS e ordem aceita ("siga as recomendações e a ordem proposta"); EM EXECUÇÃO — passos 1–6 FEITOS (§12.9.7.1: cerca por modelo, emitter no núcleo, terminal por parâmetro + listas derivadas, escritor genérico sob `InvoiceTx`, política em peças, `ca`/cadeia do servidor — D-NE57; núcleo 327 · nfse-api 591 + 150/150 ao vivo; nada commitado); gates 0,76/0,72 → D-NE75…D-NE84; "parte 2a" PUBLICADA (núcleo 27d2aa6 · nfse 38980bb · infra f72fba4); próximo: passo 7 = N17 (parser XML) → "parte 2b"** · **2026-10-12 — §12.9 ⏯ RETOMAR POR AQUI: NE-1a PARTE 1 EXECUTADA, com GATES (0,76/0,76) e PUBLICADA — D-NE56…D-NE62 e D-NE66/68/69/70/71 (D-NE61: a denegada barra pelo FATO da view — Q-NE67 rejeitada); nenhuma questão aberta; PROMPT DE RETOMADA da parte 2 no §12.9.6; próximo: parte 2 da NE-1a (cerca por modelo, emitter, escritor/peças, `ca`/cadeia D-NE57, parser XML N17, D-NE69) → F2a** · 2026-10-11 — D-NE55 (a NE-0 vai para depois da F2a) · **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
 
 ---
 
@@ -84,7 +84,7 @@ Protocolo/`dhRecbto` na transmissão; `nfeProc` em disco (o arquivo É o snapsho
 
 ### 3.6 F. `tb_invoice_number_void` — inutilização de faixa (peça nova, só modelos 55/65)
 
-**Conceito**: uma faixa de números (ano, modelo, série, `number_from..number_to`) deste emissor que declaramos ao fisco que não será usada. Nasce de um ato do usuário (obrigação legal: números pulados devem ser inutilizados até o 10º dia do mês seguinte) e recebe UMA voz síncrona e definitiva (cStat 102 homologada; rejeição; 206 "já inutilizada" = confirmação de um envio ambíguo anterior). Não é sobre nota nenhuma: NUM-03/Lote 8 §2 do legado mostram o erro de quem tentou (`tb_ctrl_nf` recriando a sequência com "uma linha por número", `LiberaNumeroNota` morta, série fixa '1').
+**Conceito**: uma faixa de números (ano, modelo, série, `number_from..number_to`) deste emissor que declaramos ao fisco que não será usada. Nasce de um ato do usuário (obrigação legal: números pulados devem ser inutilizados até o 10º dia do mês seguinte) e recebe UMA voz síncrona e definitiva (cStat 102 homologada; rejeição; 206 "já inutilizada" = confirmação de um envio ambíguo anterior — ⚠️ **SUPERADO pelo fato do §13.3 (2026-10-15)**: o 206 é resposta da AUTORIZAÇÃO de número inutilizado; quem confirma o envio ambíguo é o **563**, que traz o `nProt` do pedido anterior — D-NE40). Não é sobre nota nenhuma: NUM-03/Lote 8 §2 do legado mostram o erro de quem tentou (`tb_ctrl_nf` recriando a sequência com "uma linha por número", `LiberaNumeroNota` morta, série fixa '1').
 
 - PK `(tb_institution_id, id)` (`id` MAX+1 sob `lockInstitutionCounters`); `model` VARCHAR(2), `serie` VARCHAR(5), `year` SMALLINT, `number_from`/`number_to` INT, `reason` VARCHAR(255) (xJust 15–255), `environment` CONGELADO, `void_id` CHAR(43) (o `Id` do `infInut`, nosso), `tb_user_id`; **write-once** pela resposta: `authority_code`, `message`, `protocol`, `dh`. Sem tabela de voz: a inutilização tem exatamente UMA resposta, síncrona e irreversível — modelar `_event` aqui seria simetria por gosto. Tentativa rejeitada fica como história; nova tentativa = nova linha. Estado derivado: enviada (sem código) · homologada (102/206) · rejeitada.
 - **Guardas por construção**: a faixa não pode conter nota `deleted='N'` do mesmo modelo/série (409 `FISCAL_VOID_RANGE_IN_USE`); nota soft-deletada com número na faixa é o caso normal; **o contador `nextInvoiceNumber` passa a ser `MAX(MAX(tb_invoice viva), MAX(number_to homologado)) + 1`** por modelo/série — D4 continua ("reaproveita se era a última") e a faixa inutilizada nunca é reusada, sem regra de aplicação.
@@ -221,7 +221,7 @@ ramo · **D-E7** denegada = voz D sem efeito automático, nota mantida · **D-E8
 `dt_emission`) · **D-E10** e-mail pós-autorização como ato explícito, mesmo hook para os dois documentos · **D-E11**
 conjugada = dois pedidos, parcial visível; prazos só como aviso · **D-E12** contingência fora · **D-E13** DANFE
 nesta família (`@shared/danfe`, motor único com o DANFSe) · **D-E14** privilégio TRANSMITIR por ramo; inutilização e
-certificado = admin · **D-E15** devolução: `finality` por presença, `refNFe` = chave autorizada da âncora · **D-E16**
+certificado = admin · **D-E15** devolução: `finality` por presença, `refNFe` = chave autorizada da âncora (⚠️ *`refNFe` SUPERADO pela D-NE103, §13.10 — referência POR ITEM*) · **D-E16**
 modelo 65 = onda do PDV · **D-E17** IBS/CBS = fase própria ANTES da produção, mesma mesa da D-N14 · **D-E18** `tb_nfe_*`
 ficam como estão (sem produtor; a emissão nativa nunca as toca) · **D-E19** contrato da SEFAZ = 1ª tarefa técnica da
 NF-e; homologação com o A1 da Setes · **D-E20 (a)** executar AGORA só as peças comuns junto com a Onda 3; adaptador
@@ -528,7 +528,7 @@ Cada D-NE*n* = a recomendação da Q-NE*n* (§11.5). As que mudam o rumo:
 | **D-NE3** | `authorizers.ts` = tabela COMPLETA (27 UF + SVRS/SVAN + SVC-AN/RS + AN) como constante versionada; homologação na UF do 1º cliente |
 | **D-NE4** | IBS/CBS = fase PRÓPRIA antes de qualquer produção, **prompt aberto JÁ** (o marco de 01/01/2027 já obriga pela NFS-e da Setes) |
 | **D-NE18** | homologação PARCIAL com o A1 da Setes (status/consulta; inutilização se aceita sem IE); autorização em H com um cliente-piloto de mercadoria (a Setes não tem IE) |
-| **D-NE25** | 1º release = venda (finNFe 1) + devolução (finNFe 4, `refNFe` da âncora); exige TRANSMITIR em `order-returns` |
+| **D-NE25** | 1º release = venda (finNFe 1) + devolução (finNFe 4, `refNFe` da âncora); exige TRANSMITIR em `order-returns` — ⚠️ *a parte "`refNFe` da âncora" foi SUPERADA pela **D-NE103** (2026-10-15, §13.10): a devolução referencia POR ITEM (`DFeReferenciado`), `refNFe` proibido (rej. 321)* |
 
 Desenho (o guardião opina no DDL da NE-2): **D-NE7** `life_event` na tentativa + chave nova só com a anterior resolvida ·
 **D-NE8** faixa inutilizada no `fiscal_api` + VIEW lida pelo setes-api ao cunhar · **D-NE9** módulo emitter no NÚCLEO com
@@ -775,7 +775,7 @@ Cada D-NE*n* = a recomendação da Q-NE*n* (§12.5), na íntegra. Numeração pe
 | **D-NE42** | parser XML de verdade (`@xmldom/xmldom`), tolerante a apóstrofos; `chNFe` ≠ enviada nunca vira A; a dívida igual da nfse-api (regex em `dps-builder.ts:228-231` e na DANFSe) é paga na extração da máquina comum | NE-1a/NE-3 |
 | **D-NE43** | pré-validação em TRÊS CAMADAS (nfe-api valida só o que deriva + XSD, sobre o candidato que a reserva grava igual · conteúdo no `validate` do ERP · resto com a SEFAZ); catálogo do ACBr = ÍNDICE que cresce por evidência, cada regra com `moc_version` + dono + revisão por NT; violação = 422 com a lista inteira, sem tentativa, sem alerta silencioso — **refina a D-NE16** | NE-4/NE-6 |
 | **D-NE44** | Setes como responsável técnica: dados = config da plataforma; CSRT por UF = segredo de PLATAFORMA da nfe-api (não o cofre do estabelecimento — D-F34), nasce só quando a UF do 1º cliente exigir | NE-4 |
-| **D-NE45** | em `tpAmb=2` o builder aplica os textos padrão do fisco (`dest/xNome`, `xProd` do item 1) | NE-4 |
+| **D-NE45** | em `tpAmb=2` o builder aplica os textos padrão do fisco (`dest/xNome`, `xProd` do item 1) — *dado do §13.3 (2026-10-15): no 55 o oficial exige só o `dest/xNome` (598); o `xProd` do item 1 é da NFC-e (373, F5)* | NE-4 |
 | **D-NE46** | emitente pessoa física (CPF, séries 910–969) fora da F4 | — |
 | **D-NE47** | finNFe 5/6 (crédito/débito da reforma) fora da F4 — entra pela fase IBS/CBS | — |
 | **D-NE48** | devolução (finNFe 4) sai com `tPag=90` e sem `cobr`, mesmo herdando `tb_order_billing` (D-A4) — o builder deriva da finalidade | NE-4 |
@@ -819,7 +819,7 @@ pelo vocabulário COMUM aceita S, P e D para qualquer família — provado no `a
 8. Depois da extração: `voiceSProducers()`, `voiceWriterViolations()` (a peça `nfse-api/src/__tests__/voice-kind-fence.ts` — ajustar o
    escopo e os `VOICE_SQL_WRITERS` ao escritor do núcleo), as testemunhas e a suíte inteira da nfse-api (unit + 150 ao vivo).
 
-### 12.9 D-NE55 — a NE-0 vai para DEPOIS da F2a (Valdo 2026-10-11) + NE-1a ABERTA (Rodada 0) — ⏯ RETOMAR POR AQUI
+### 12.9 D-NE55 — a NE-0 vai para DEPOIS da F2a (Valdo 2026-10-11) + NE-1a ABERTA (Rodada 0) — (a retomada passou para o §13, NE-0)
 
 **Q-NE55** (levantada pelo condutor ao retomar a NE-0/NE-1a): o §12.4 punha "NE-0 → NE-1a → F2a", mas pelo próprio plano a NE-0 não é
 pré-requisito da F2a nem da NE-1a — o §12.2 diz "nada da nfe-api entra antes da F2a se não for pré-requisito dela"; no §12.3 a NE-1a
@@ -1383,3 +1383,340 @@ liga a assinatura ao nó lido? (o xml-crypto reparsa com o @xmldom leniente; que
 assinatura embrulhada/XSW); leitura por nó-escopo (D-NE86). Segue EM PAUTA a D-NE82 (c).
 
 **Provas**: núcleo **405/405** · nfse-api **665 unit** (44 suítes) · `tsc` limpo nos dois · `dist/` refeito · ao vivo **150/150**. **PUBLICADA a "parte 2b" (Valdo: "pode publicar a parte 2b", 2026-10-12)** — núcleo 604117a · nfse ebbaf44 · infra afcbebb. Próximo: F2a.
+
+---
+
+## 13. NE-0 — ABERTA e FECHADA em 2026-10-15 (Valdo: "agora abra a NE-0 da nfe-api") — ⏯ RETOMAR PELO §13.10
+
+> Este bloco NÃO decide: organiza o escopo da NE-0, registra o que o levantamento na web já disse e numera as escolhas (Q-NE94…Q-NE101,
+> mais a Q-NE93 reapresentada) com recomendação. Insumos — dois levantamentos em paralelo, só leitura: **(A)** o oficial na web (fontes
+> primárias datadas, [SEC] marcado, "não confirmado" explícito) e **(B)** o inventário de tudo que o acervo mandou "conferir no oficial"
+> (relatórios do ACBr, este prompt, APIs fiscais, IBS/CBS — com arquivo:linha). Nenhum download, nenhum código, nenhum DDL executado.
+> Acervo novo: `../nfe-api/integracoes/nfe-sefaz/` — `README.md` (documentos a arquivar + fatos levantados com fonte) e
+> `CONFERENCIAS.md` (65 itens com a decisão que cada um sustenta).
+
+### 13.1 Lugar no calendário e natureza
+
+- Ordem da D-NE55: NE-1a ✅ (12/10, publicada) → F2a/F2b ✅ (JANELA executada em produção em 14–15/10 — APIs fiscais §22.51) + fase
+  IBS/CBS da NFS-e (IB-3 publicada em 15/10; a IB-4 — prova em H — espera o fisco de H, E1000; `prompt_fase_ibs_cbs.md` §13.8) →
+  **NE-0** → NE-1b/NE-2/NE-3.
+- A NE-0 é DOCUMENTO: acervo oficial, conferências, autorizadores como dado, parecer do guardião com DDL em RASCUNHO, OpenAPI
+  design-first. Não toca a árvore viva do setes-api (`tsx watch` = deploy), nem o `src` do núcleo (deploy no restart — D-F133), nem o
+  `fiscal_api`. Não disputa o caminho crítico de 01/01/2027: a IB-4 espera fato externo e a Q-IB1 (30/10) é decisão de negócio.
+- Esforço do plano: 3–4 sessões (§12.3); esta Rodada 0 é a 1ª.
+
+### 13.2 Entregáveis
+
+| # | Entregável | Onde | Estado |
+|---|---|---|---|
+| E1 | acervo oficial arquivado (README com arquivo · bytes · SHA-256 · URL — molde IB-0) | `../nfe-api/integracoes/nfe-sefaz/` | lista proposta (Q-NE94); 0 arquivos |
+| E2 | conferências — cada linha fecha CONFIRMA · AJUSTA · DERRUBA · NÃO OFICIAL, com a fonte | `…/nfe-sefaz/CONFERENCIAS.md` | 65 itens; 26 com prévia (§13.3) |
+| E3 | autorizadores como DADO conferido: UF × modelo × ambiente × serviço/evento × presença de IE → URL; serviço oferecido por UF; prazo de cancelamento por UF; parâmetros do 656 — insumo do `authorizers.ts` (D-NE3/D-NE37) | `…/nfe-sefaz/AUTORIZADORES.md` | a fazer |
+| E4 | parecer do guardião (`setes-conceito`) + `revisar-ddl`: DDL da família NF-e no `fiscal_api` em RASCUNHO — tentativa (chave/cNF/cDV write-once; autorizador, `tpEmis` e presença de IE congelados — D-NE37), voz (domínio do `kind` pela lista da família — D-F107/D-F108), voz do EVENTO `(tpEvento, chave, nSeq)` (D-NE39), inutilização (chave natural da faixa; 102/563 — D-NE8/D-NE40), views (`authority_recorded` = protocolo — D-NE56; D-NE61) | `prompt_onda_nfe_sefaz-ddl-ne2-rascunho.sql` (ao lado deste prompt; não executado) | a fazer |
+| E5 | OpenAPI `/v1` design-first das rotas do 1º release (D-NE25: venda + devolução; transmitir, consultar, reconfirmar, cancelar, inutilizar, XML, DANFE, status, numeração) | `D:\Gestao2027\nfe-api\openapi\nfe-api.v1.yaml` (molde `nfse-api/openapi/nfse-api.v1.yaml`) | a fazer |
+| E6 | Rodada 4 da nfe-api com o que as conferências DERRUBAREM | este prompt | — |
+
+### 13.3 O que o levantamento na web já disse (PRÉVIA — fecha ao arquivar; fontes no README do acervo)
+
+**Confirma** (a decisão segue como está):
+- **SHA-1** segue exigido (RSA-SHA1 + digest SHA-1; nenhuma NT de SHA-256) — a assinatura do núcleo fica sem mudança (NE-1a).
+- **1 NF-e = SÍNCRONO obrigatório**: assíncrono com 1 nota = rej. **452** desde 13/10/2025 (NT 2025.001) — a D-NE33 fica mais forte.
+- **Não existe consulta de inutilização**; reenviar a mesma faixa devolve **563 com o `nProt` do pedido anterior** — a D-NE40 (o 563 é a
+  prova) é exatamente o caminho oficial.
+- Mensagem até **500 KB** — o teto de 1 MB da D-NE88 cabe.
+- `dhEmi` = instante da assinatura (D-NE21): 703 só acima de 5 min à frente; atraso > 7 dias vira 150; > 30 dias só contingência.
+- Texto: UTF-8; acentos "devem ser evitados", não proibidos; `TString` só U+0020–U+00FF, sem CR/LF/TAB, sem espaço nas pontas (D-NE28 —
+  o mesmo padrão que pegou a NFS-e: D-F65).
+- A 4.00 eliminou o `nfeCabecMsg` (envelope mínimo sem Header — §12.3, NE-3).
+
+**Ajusta** (a decisão vale com DADO novo — sem questão):
+- **D-NE45**: no 55 o texto de homologação é só o `dest/xNome` (rej. 598); o do `xProd` do item 1 é da NFC-e (373) — vale para a F5.
+- **D-NE26 / §3.9**: o prazo do cancelamento é DADO POR UF — **PR = 168 h** (RICMS/PR), não 24 h; o aviso `FISCAL_CANCEL_DEADLINE` e o
+  teto do rodízio leem da tabela de autorizadores (E3); a recusa continua sendo da SEFAZ (501).
+- **D-NE26 / D-NE54 (b)**: parâmetros do 656 — consulta da MESMA chave > 10/h bloqueia até 1 h (intervalo mínimo por chave ≥ 6 min);
+  autorização com > 30 rejeições iguais (o disjuntor CNPJ × cStat fica abaixo disso).
+- **D-NE38**: esperar ≥ 15 s antes de consultar o recibo; `tMed` mínimo 1 s.
+- **§3.6**: o **206 NÃO é resposta da inutilização** (é a autorização de número inutilizado); a inutilização responde 102 · 563 · 256 (faixa
+  com número já inutilizado) · 201 (faixa > 10.000) — o §3.6 fica marcado.
+- **D-NE3 / D-NE37**: AC, BA e SP deixam de usar o pedido de inutilização a partir de 01/11/2026 (Ajuste SINIEF 40/26 — conferir no texto) →
+  a tabela de autorizadores ganha "serviço oferecido por UF".
+- **D-NE17 / D-NE54 (a)**: a SEFA-PR publica a raiz ICP-Brasil v5 + o pacote do certificado do servidor (servidor ICP-Brasil = inferência);
+  SVRS não confirmado; o ITI publica as cadeias em zip com SHA-512 — é a fonte do DADO recarregável.
+
+**Pede decisão** (→ §13.6):
+- **NT 2026.007** (H **26/10**, P **16/11/2026**): emitente SEM IE autoriza só na **SVRS** (eventos também); exige CRT = cadastro da RFB
+  (rej. 180 — vale para TODOS os emitentes a partir de 16/11), CFOP da IT 2023.002, ICMS proibido, IBSCBS obrigatório; não trata
+  inutilização nem contingência → Q-NE95, Q-NE96.
+- **CSRT obrigatório no PR** (H desde 19/01/2026, P desde 23/02/2026) + produção no PR exige o software cadastrado pelo fornecedor no UPD
+  → Q-NE97 (a D-NE44 dizia "nasce quando a UF do 1º cliente exigir": o PR exige).
+- **O MOC muda de dono em 01/11/2026** → MOC Online do PR (só http) → Q-NE98.
+- **CNPJ alfanumérico na NF-e em produção desde 01/07/2026** e a frente da D-NE29 sem prompt → Q-NE99.
+- **DANFE da reforma** (NT 2026.010, produção 01/12/2026, sem fase de teste) → Q-NE100.
+
+**Divergência (não decide — fecha no arquivo oficial)**: a cópia [SEC] da NT 2025.002 v1.52 dá a UB12-10 (rej. 1115) obrigatória para CRT
+1/2/4 em **04/01/2027**; a fase IBS/CBS (`prompt_fase_ibs_cbs.md` §1.1) registrou as datas RISCADAS na v1.52 e o anúncio da RFB (01/08/2026)
+de que a ausência deixa de rejeitar. Afeta a premissa do §1 ("sem o grupo nenhuma NF-e é autorizável") e o calendário da IB-N — não a NFS-e.
+
+**Não confirmado** (vai à NE-3, com o A1): `action` × `SOAPAction` (o WSDL só abre com mTLS); cadeia do servidor da SVRS; prefixos e
+namespaces devolvidos (D-NE86); apóstrofos do PR (D-NE42); CSRT e credenciamento exigidos pela SVRS para quem não tem IE.
+
+### 13.4 Herdado para a NE-2 em diante (não é da NE-0 — listado para não se perder; arquivo:linha no inventário B)
+
+Q-NE93 (teto do corpo HTTP — reapresentada no §13.6) · XSW no `verifyXml` (quem valida XML do fisco lê do nó ASSINADO) · leitura por
+nó-escopo (D-NE86) · D-NE82 (c) em pauta · D-NE61 (a view da família prova que toda voz D publicada está registrada) · D-NE56
+(`authority_recorded` = protocolo, COLLATE bin) · `voiceView` sem peça de leitura (L5 da NE-1a) · domínio do `kind` da tabela da NF-e pela
+lista da família (D-F105/D-F107/D-F108 — S/P/D com a saída de cada um na mesma entrega) · a família entra em `VOICE_READINGS` com a
+conferência de boot da view e sobe ANTES do setes-api (D-NE76/D-F113) · a voz D no plano de cancelamento da conjugada (APIs fiscais §22.5
+item 9) · série do 55 só leitura no ERP até o 1º cliente (D-F112/D-F137) · "A1 por duas APIs" e `app/shared/fiscal` no 2º consumidor
+(F2b) · **lacuna EXISTENTE**: a tela de pedidos (`orders`) não tem "No fisco" — venda conjugada com NFS-e autorizada não cancela a NFS-e por
+ali · NE-1b/NE-2 em worktrees irmãs (núcleo = deploy — D-F133) · escopo da NE-2 já fixado no §12.3 · NE-1b (PDF/Code128, alfanumérico no
+núcleo) · IB-N dentro da F4 (`ibscbsObligationStart` falha alto para modelo ≠ SE).
+
+### 13.5 Ordem interna proposta (Q-NE101)
+
+1. Arquivar os lotes 1 e 2 (Q-NE94) — README com bytes e SHA-256.
+2. Fechar primeiro as conferências que podem DERRUBAR premissa: a divergência da UB12-10; o texto oficial da NT 2026.007; CSRT/UPD; depois
+   as 39 linhas sem prévia.
+3. E3 — autorizadores como DADO.
+4. E4 — guardião + `revisar-ddl` com os fatos já fechados (o DDL nasce do oficial, não do ACBr).
+5. E5 — OpenAPI.
+6. Rodada 4 (se alguma linha DERRUBAR) → NE-0 fechada → NE-1b/NE-2/NE-3 (D-NE55).
+
+### 13.6 ⚠️ Rodada 3 da nfe-api — questões para o Valdo (recomendação entre parênteses)
+
+- **Q-NE94 Downloads** (cada documento com nome, origem e tamanho no README do acervo, "Documentos a arquivar"): (a) **lote 1 — 8 itens
+  oficiais de acesso direto (MOC 7.00 Visão Geral e Anexos I–III; ATC RFB/CGIBS nº 8; cadeias ICP-Brasil do ITI; certificados de servidor e
+  normas de credenciamento do PR — ≈ 10,7 MB nos itens de tamanho conhecido) + lote 2 — 12 itens do Portal Nacional pelo navegador do app
+  (NT 2025.002 v1.52, 2026.007 v1.10, 2026.008, 2026.010, 2026.004, Conjunta 2025.001, 2025.001, 2018.005, 2013.007, PL_010f, schemas
+  dos eventos, IT 2023.002); cópia [SEC] nunca é arquivada como oficial** · (b) só o lote 1; o Valdo baixa o lote 2 à mão e larga na
+  pasta · (c) só links. *(Rec.: (a) — o portal só recusa cliente sem cookie; o que o navegador também não abrir cai em (b).)*
+- **Q-NE95 Prova em homologação com o A1 da Setes pela SVRS (revisita a D-NE18)**: a D-NE18 deixou a autorização em H para o
+  cliente-piloto porque a Setes não tem IE; com a NT 2026.007 (H 26/10) o emitente sem IE autoriza na SVRS. (a) manter a D-NE18 · (b)
+  **somar: o ciclo completo (autorizar, consultar, cancelar, evento) provado em H pela SVRS com o A1 da Setes, como HIPÓTESE da NE-3/NE-5
+  — com os pré-requisitos do próprio fisco: CRT igual ao da RFB (Setes = 1), CFOP da IT 2023.002, sem ICMS e com o grupo IBSCBS (puxa a
+  parte do builder da IB-N para antes da prova); o que é do PR (apóstrofos, CSRT, 168 h, credenciamento, inutilização) segue com o
+  cliente-piloto** · (c) trocar o cliente-piloto pela SVRS. *(Rec.: (b) — prova real sem esperar cliente; o PR continua precisando de um.)*
+- **Q-NE96 Emitente sem IE no produto**: (a) **o autorizador passa a ser f(UF, modelo, ambiente, tpEmis, PRESENÇA de IE do emitente) — a
+  IE vem da fonte de fatos do emitente e o autorizador já é gravado na tentativa (D-NE37); as restrições do sem-IE (CFOP, ICMS proibido,
+  IBSCBS obrigatório) entram na camada 2 da pré-validação (D-NE43, NE-6); o escopo do 1º release segue a D-NE25** · (b) emitente sem IE
+  fora do produto (recusa local). *(Rec.: (a) — é fato do mundo e custa UMA entrada a mais na derivação; sem ela a Q-NE95 (b) não existe.)*
+- **Q-NE97 CSRT e software no UPD do PR (ajusta o QUANDO da D-NE44)**: (a) **tarefas do Valdo com prazo "antes da 1ª autorização em H no
+  PR" (cliente-piloto, NE-5): pedir o CSRT de homologação e de produção da Setes como responsável técnica e cadastrar o software no UPD;
+  a nfe-api guarda o CSRT como segredo de PLATAFORMA (D-NE44)** · (b) pedir já. *(Rec.: (a) — status, consulta e inutilização não levam
+  `infRespTec`; nada da NE-0…NE-3 depende disso.)*
+- **Q-NE98 MOC depois de 01/11/2026**: (a) **arquivar agora os PDFs 7.00 (versão congelada) e, a partir de 01/11, conferir no MOC Online do
+  PR pelo navegador quando uma linha pedir — o acervo guarda o trecho lido em texto com a data da leitura** · (b) espelhar o MOC Online
+  inteiro periodicamente. *(Rec.: (a) — o MOC muda pouco; quem muda são as NT.)*
+- **Q-NE99 CNPJ alfanumérico (a frente da D-NE29 não tem prompt)**: a NF-e aceita desde 01/07/2026, a NFS-e desde 10/08/2026, e a RFB só
+  atribui a inscrições NOVAS (desde jul/2026); o produto inteiro recusa (§12.1 item 8). (a) **Rodada 0 da frente em sessão PRÓPRIA logo
+  depois da NE-0** · (b) agora, em paralelo · (c) esperar o 1º cliente com CNPJ alfanumérico (revoga a D-NE29). *(Rec.: (a) — o risco é o
+  cliente NOVO (empresa aberta depois de jul/2026): crescente, ainda pequeno; o inventário já existe.)*
+- **Q-NE100 DANFE**: (a) **o DANFE A4 da nfe-api nasce no leiaute da NT 2026.010 (produção 01/12/2026, antes de qualquer NF-e nossa em
+  produção); o Anexo II 7.00 vale no que a NT não muda** · (b) Anexo II puro; a reforma depois. *(Rec.: (a); conferir no arquivo se a
+  2026.010 vale para todo emitente ou só para nota com o grupo.)*
+- **Q-NE93 (reapresentada — aberta desde 12/10) Teto do corpo HTTP da resposta do fisco**: com o dado "mensagem até 500 KB": (a) **teto no
+  transporte do núcleo (2 MB); recusa = ambíguo pela causa que já existe na transmissão/consulta; executa na NE-2, junto do SOAP** · (b)
+  limite conhecido. *(Rec.: (a).)*
+- **Q-NE101 Ordem interna da NE-0** (§13.5). *(Rec.: aceitar.)*
+
+### 13.7 Correções sem decisão (feitas nesta rodada)
+
+§3.6 marcado (o 206); D-NE45 anotada (o dado do §13.3); §12.9 deixa de ser o ponto de retomada; `../nfe-api/INDEX.md` (a pasta
+`integracoes/nfe-sefaz/` agora existe; estado da NE-0); `D:\Gestao2027\nfe-api\CLAUDE.md` (o estado era de 2026-10-03 e as decisões
+citadas iam só até D-F108). Efeito colateral do levantamento: o WebFetch guardou cópias dos PDFs que leu no cache da SESSÃO (fora do
+projeto) — não são o acervo nem contam como download autorizado.
+
+### 13.8 Rodada 3 da `nfe-api` DECIDIDA (Valdo 2026-10-15: "siga as recomendações") — D-NE93…D-NE101
+
+Cada D-NE*n* = a recomendação da Q-NE*n* (§13.6), na íntegra. Numeração permanente.
+
+| Decisão | O que fixa | Onda |
+|---|---|---|
+| **D-NE93** (= Q-NE93 (a)) | teto do corpo HTTP da resposta do fisco no transporte do núcleo = **2 MB**; recusa = ambíguo pela causa que já existe na transmissão/consulta; executa na NE-2, junto do SOAP | NE-2 |
+| **D-NE94** (= Q-NE94 (a)) | **downloads AUTORIZADOS**: lote 1 (8 itens oficiais de acesso direto) + lote 2 (12 itens do Portal Nacional pelo navegador do app), exatamente a lista do README do acervo; cópia [SEC] nunca é arquivada como oficial; o que o navegador não abrir cai para o Valdo baixar à mão | NE-0 |
+| **D-NE95** (= Q-NE95 (b)) | **soma à D-NE18**: o ciclo completo (autorizar, consultar, cancelar, evento) é provado em H **pela SVRS com o A1 da Setes (sem IE)**, como HIPÓTESE da NE-3/NE-5, com os pré-requisitos do fisco (CRT = RFB, CFOP da IT 2023.002, sem ICMS, grupo IBSCBS — puxa a parte do builder da IB-N para antes da prova); o que é do PR (apóstrofos, CSRT, 168 h, credenciamento, inutilização) segue com o cliente-piloto | NE-3/NE-5 |
+| **D-NE96** (= Q-NE96 (a)) | autorizador = f(UF, modelo, ambiente, tpEmis, **presença de IE do emitente**); a IE vem da fonte de fatos do emitente e o autorizador é gravado na tentativa (D-NE37); as restrições do sem-IE entram na camada 2 da pré-validação (D-NE43); o escopo do 1º release segue a D-NE25 — **refina a D-NE3/D-NE37** | NE-2/NE-3/NE-6 |
+| **D-NE97** (= Q-NE97 (a)) | CSRT de H e de P da Setes como responsável técnica + cadastro do software no UPD = **tarefas do Valdo com prazo "antes da 1ª autorização em H no PR"** (cliente-piloto, NE-5); a nfe-api guarda o CSRT como segredo de PLATAFORMA — **ajusta o QUANDO da D-NE44** | NE-5 |
+| **D-NE98** (= Q-NE98 (a)) | o acervo arquiva os PDFs do MOC 7.00 (versão congelada); a partir de 01/11/2026 confere no MOC Online do PR pelo navegador quando uma linha pedir e guarda o trecho lido em texto com a data da leitura | NE-0 em diante |
+| **D-NE99** (= Q-NE99 (a)) | frente do CNPJ alfanumérico (D-NE29): Rodada 0 em sessão PRÓPRIA logo depois da NE-0 | depois da NE-0 |
+| **D-NE100** (= Q-NE100 (a)) | o DANFE A4 da nfe-api nasce no leiaute da NT 2026.010; o Anexo II 7.00 vale no que a NT não muda; conferir no arquivo se a 2026.010 vale para todo emitente — **refina a D-NE51/D-NE20** | NE-5 |
+| **D-NE101** (= Q-NE101) | ordem interna da NE-0 = §13.5 (arquivar → conferências que derrubam premissa → autorizadores → guardião + DDL em rascunho → OpenAPI → Rodada 4 se houver derrubada) | NE-0 |
+
+### 13.9 NE-0 EXECUTADA na ordem da D-NE101 (2026-10-15) — E1…E5 feitos; Rodada 4 decidida no §13.10
+
+**E1 — acervo arquivado** (`../nfe-api/integracoes/nfe-sefaz/` — README com arquivo · bytes · SHA-256 · origem; todo PDF com `.txt` ao lado): MOC
+7.00 (Visão Geral + Anexos I–III), NT 2025.002 v1.52, 2026.007 v1.10, 2026.008, 2026.010, 2026.004, Conjunta 2025.001, 2025.001 v1.03,
+2018.005 v1.52, 2013.007, PL_010f_v1.04 + schemas do cancelamento e da CC-e (extraídos), IT 2023.002 **v2.10** (a vigente; o levantamento
+achara a 2.00), ATC RFB/CGIBS nº 8, NPF 101/2014 e 063/2012 do PR, cadeias ICP-Brasil do ITI (SHA-512 confere), zips de certificado do
+servidor do PR, transcrição do aviso ENCAT de 05/10. **Como**: o "too many redirects" do Portal Nacional era só o teste de cookie do
+ASP.NET — `curl -c/-b` resolve (o navegador do app só leu os links); o ITI tem um nó com certificado TLS VENCIDO intermitente (2ª tentativa
+passou, hash confere); nenhuma verificação TLS foi desligada. **Não arquivado** (fora da lista da D-NE94 → Q-NE104): o pacote com as
+MENSAGENS de serviço (o PL_010f traz só o leiaute da NF-e) e as NT 2023.001, 2023.004 e 2017.001.
+
+**E2 — conferências**: as **65 linhas FECHADAS** (`CONFERENCIAS.md`, fonte = linha do `.txt` + página do PDF) — 26 CONFIRMA · 28 AJUSTA ·
+**2 DERRUBA** (20 → D-NE95/D-NE96, já decididas; **51 → Q-NE103**) · 5 NÃO OFICIAL · 3 fora da F4. Três leitores em paralelo (A+B, C+D,
+E+F+G) + o condutor (14, 20, 49, 53).
+
+**E3 — autorizadores como DADO**: `AUTORIZADORES.md` + `autorizadores-2026-10-15.json` gerados da "Relação de Serviços Web" OFICIAL (produção
+e homologação, lidas em 15/10): 10 SEFAZ próprias + SVAN (MA) + SVRS (16 UF) + SVC-AN/SVC-RS + AN; a SVC não tem inutilização; a SVRS tem
+consulta cadastro também em H (o levantamento da web dizia o contrário); **o PI está na SVC-AN em P e na SVC-RS em H** (divergência da
+própria relação, registrada por ambiente); o mapa UF→SVC do Anexo III (2020) diverge da relação atual — vale a relação com a data.
+**TLS provado no handshake** (só leitura, sem certificado de cliente): PR = AC SOLUTI SSL EV G4 e SVRS = AC SERPRO SSLv1, ambas sob a **Raiz
+ICP-Brasil v10** — a v10 sozinha como `ca` valida as duas (o zip de certificados publicado pelo PR tem a folha VENCIDA em 03/07/2026).
+
+**E4 — parecer do guardião + DDL em RASCUNHO** (`prompt_onda_nfe_sefaz-ddl-ne2-rascunho.sql`, ao lado deste prompt — NÃO executado; sqlglot
+OK; checklist do revisar-ddl feita pelo guardião e conferida no disco pelo condutor): **6 comandos** — `tb_invoice_merchandise_transmission`
+(PK `(institution, invoice, terminal, attempt)`; `life_event`; chave NOSSA write-once com CHECK do `TChNFe` alfanumérico + mod 55/65 + tpEmis
+1/6/7; `authorizer` com CHECK pela lista da relação; `digest_value` COLLATE bin; `receipt`/`protocol` (15 ou 17)/`dh_recbto` write-once;
+`last_queried_at`), `…_transmission_event` (voz append-only, lista da família A R D P C K F N — sem S; cStat 3–4 dígitos; o 110111 com o
+tpEvento em `authority_code` da voz C, molde D-F68) e `tb_invoice_number_void` (Id de 43, faixa, 102/563 como prova) + 3 views para o
+setes-api (`authority_recorded` = protocolo, COLLATE bin — D-NE56). **Fora por construção**: cNF/cDV/tpEmis/série/número/modelo em coluna
+própria (estão na chave), presença de IE (Q-NE105), tabela de vida, tabela de valores do fisco (na NF-e quem calcula é o emitente), tabela de
+eventos (Q-NE106), mapa item→nItem (Q-NE103). Ainda NÃO provado (exige banco descartável na NE-2): coluna gerada STORED com UNIQUE no MariaDB
+10.4 e no MySQL 8; EXPLAIN das três views.
+
+**E5 — OpenAPI design-first**: `D:\Gestao2027\nfe-api\openapi\nfe-api.v1.yaml` (15 rotas; 110 referências resolvem — conferido com o js-yaml):
+health com a cadeia do servidor e o estado por autorizador (D-NE54) · emitter do núcleo (55 só com o ambiente — a série é do ERP) · pendentes
+paginados por ramo (`orders`/`order-returns`) · situação fiscal (estados `processing`/`denied`; `authorityRecorded`) · transmitir (201 A / 202 P;
+409 `FISCAL_DENIED`; 422 com a lista inteira da pré-validação) · refresh (429 `FISCAL_QUERY_TOO_SOON` pelo 656) · cancelar (xJust 15–255;
+prazo por UF como aviso) · XML (`procNFe` + `procEventoNFe`) · DANFE (NT 2026.010) · e-mail (ato explícito) · passada do rodízio · numeração
+(buracos derivados) · inutilização (102/563/256). Pontos que dependem da Rodada 4 estão marcados `[Q-NE…]`.
+
+**Ajustes por FATO (sem questão — o dado oficial muda o conteúdo, não o rumo)**:
+- **D-NE45**: no 55 só o `dest/xNome` (598); o `xProd` do item 1 é da NFC-e (373, F5); o DANFE de H traz "SEM VALOR FISCAL".
+- **D-NE46**: o aplicativo com CPF usa 920–969 (910–919 é o site do fisco); o 55 com CNPJ pelo nosso aplicativo só usa as séries **0–889**.
+- **D-NE48**: o oficial exige só `tPag=90` (871) e `vPag=0` (904); omitir o `cobr` na devolução vira ESCOLHA nossa (a devolução não cobra).
+- **D-NE36**: o 539 é FACULTATIVO — a UF que não o aplica devolve 204 também para chave diferente; o caminho "consultar as chaves de todas
+  as tentativas" cobre (a consulta da nossa chave dá 217 e cai na rota do 539).
+- **D-NE14/D-NE56**: cStat 3–4 dígitos e nProt 15 ou 17 (NT 2025.002 §5.1) — no DDL e no contrato.
+- **D-NE27**: a tolerância OFICIAL nos totais é ZERO (só R$ 0,50 presa ao vServ; a 610 é facultativa e a 564 virou obrigatória) — a
+  conferência `vNF` derivado × ERP não pode ser mais frouxa que isso.
+- **D-NE44/D-NE97**: no PR o GRUPO `infRespTec` inteiro é obrigatório desde 2019 (972/973) e o CNPJ do responsável técnico tem de ser o
+  CADASTRADO para o emitente (974) — no PR o uso do sistema é pedido pelo ESTABELECIMENTO no UPD com a Setes como fornecedora (tarefa de
+  implantação POR CLIENTE, além do CSRT da Setes); `hashCSRT` = Base64(SHA-1(CSRT + chave)).
+- **D-NE26/D-NE38/D-NE54**: parâmetros do 656 (facultativos e parametrizáveis por autorizador); status em laço ≥ 3 min; ≥ 15 s antes do
+  recibo; a SEFAZ processa até 3 min; consulta protocolo até 180 dias.
+- **D-NE32/D-NE20**: Code-128C; com CNPJ alfanumérico a NT Conjunta sugere código HÍBRIDO 128C/128A — a lib única precisa dos dois.
+- **D-NE43**: o subconjunto do 1º release perde a 785 (só NFC-e); X10/X16/X21 não são regras.
+- **D-NE100**: fechado o "conferir" — a NT 2026.010 vale para TODO DANFE 55 (com ou sem IBS/CBS) e imprime o CRT do emitente.
+- **D-NE18**: expectativa do smoke da Setes no PR — status e consulta protocolo passam; consulta cadastro → 257; inutilização → 203.
+
+**Conhecimento negativo novo** (README do acervo): o `.txt` de NT não mostra o tachado (ferramenta `ferramentas/riscados.py`); o `-layout`
+desalinha colunas de cronograma e troca IDs de regra no Anexo I (usar `-raw` e a posição no PDF); a data que vale pode estar num AVISO e não
+na NT; o zip de certificado do servidor publicado pela UF envelhece — o que vale é a raiz.
+
+#### 13.9.1 ⚠️ Rodada 4 da nfe-api — questões para o Valdo (recomendação entre parênteses)
+
+- **Q-NE102 vProd com IBS/CBS a partir de 2027** (NT 2026.008 — CONFERENCIAS 40): IBS, CBS e IS passam a COMPOR o `vProd` (logo o `vNF`);
+  campos novos `vUnComLiq`/`vProdLiq`/`vProdLiqTot`; o Simples recebe a regra em NT futura. (a) **parecer do guardião: nenhum conceito nem
+  coluna nova — é regra do motor (ERP, IB-N) e do builder (NE-4), com três guardas: o preço do item no ERP mantém UM significado (o líquido
+  = `vUnComLiq`) e o bruto é derivado pelo builder; o IBS/CBS/IS do item é snapshot do ERP, nunca voz do fisco; o `total_value` do ramo segue
+  sendo o `vNF` e a base dos títulos (D-NE27/D-IB12), com a fórmula datada pelo fato (D-IB13); "líquido" entra no glossário de palavras
+  ocupadas (na comissão = "depois do desconto"; na NT = "sem tributos")** · (b) o preço do item passa a ser o bruto a partir de 2027. *(Rec.:
+  (a) — (b) daria à mesma coluna dois significados conforme a data.)*
+- **Q-NE103 Devolução referencia POR ITEM** (rej. 321 — `DFeReferenciado` = chave + nItem em cada item; `refNFe` proibido; 1048, 1072, 1130,
+  1193, 1194; produção 16/11/2026 — derruba a parte "`refNFe` da âncora" da D-NE25/D-E15). Onde nasce "o item X foi o nItem N da NF-e K"?
+  (a) fato write-once no `fiscal_api` (a nfe-api grava o mapa na reserva) · (b) **DERIVAÇÃO determinística por UMA peça — a que o builder usa
+  para numerar o `det` (só o que está congelado na vida: itens com snapshot de imposto do ramo, em ordem pelo id do item — nunca
+  `tb_product.kind`), reusada pela devolução (e pelos eventos RTC que também citam nItem); antes de referenciar, confere o `det[nItem]` do
+  `procNFe` ARQUIVADO da origem (cProd, qCom, vUnCom) — divergência = 422, nunca chute; nada é gravado (D-F10/D-F31 intactos);
+  conhecimento negativo: mudar a ordem da peça muda o passado — a conferência pelo XML é a cerca** · (c) o ERP grava o nItem no item ao
+  faturar. *(Rec.: (b) — (a) grava N cópias do mesmo mapa por vida e põe a API como dona de conteúdo; (c) é dado da nota guardado no item do
+  pedido, sem consumidor no ERP.)*
+- **Q-NE104 Downloads adicionais** (Portal Nacional da NF-e, `exibirArquivo.aspx`, tamanhos lidos no cabeçalho): `PL_010d_v1.03.zip` (67.813
+  B — pacote com as mensagens de serviço e o CNPJ alfanumérico) · `CNPJ Alfanumérico - NT2026.004.v.1.01 PL Eventos e Cad Consulta Cadastro
+  CCC.zip` (65.203 B — schemas de evento e consulta cadastro alfanuméricos; os de 2014/2018 arquivados não validam o 110111 com CNPJ
+  alfanumérico) · NT 2023.001 v1.60 monofásico (1.752.521 B — CONFERENCIAS 44) · NT 2023.004 v1.20 `indDeduzDeson` (714.686 B — a W16 do MOC
+  deve estar defasada por ela — 40/45) · NT 2017.001 v1.50 GTIN (727.901 B — 47). (a) **os cinco** · (b) só os dois pacotes de schema · (c)
+  nenhum. *(Rec.: (a) — sem eles a validação XSD local (D-NE16/D-NE43) não roda nas mensagens e três linhas ficam NÃO OFICIAL.)*
+- **Q-NE105 Presença de IE como coluna** (G1 do guardião — refina o E4 do §13.2 e a D-NE96): (a) **não vira coluna: o autorizador é a coluna
+  (consequência); a presença de IE fica no XML enviado (`emit/IE`) — guardar entrada e resultado seriam dois fatos que podem se contradizer**
+  · (b) coluna `state_registration_absent` ao lado do autorizador. *(Rec.: (a).)*
+- **Q-NE106 Voz do EVENTO na F4** (G2 — refina a D-NE39): (a) **sem tabela própria: o 110111 (único evento da F4, nSeq sempre 1) é o C/K/N da
+  voz da tentativa, com o tpEvento em `authority_code` da voz C (molde D-F68); a tabela de eventos nasce com a CC-e ou os eventos RTC, agregando
+  sem reformar; a NE-3 confere se o 136 vale como C** · (b) tabela `…_document_event` já na NE-2. *(Rec.: (a) — a F2a já lê `last_kind = 'C'` na
+  view; dois lugares para "cancelada" seria maquete.)*
+- **Q-NE107 Voz S na família NF-e** (G3): (a) **fora da lista de escrita (a "tentativa sem voz" já é o em voo; S sem saída é a D-F102); entra
+  só se a NE-5 precisar, junto com a saída** · (b) S na lista desde a NE-2. *(Rec.: (a).)*
+- **Q-NE108 cStat 106 "lote não localizado"** (G4 — a D-NE33 não o mapeia): (a) **não grava voz; a tentativa segue P; a saída é a consulta pela
+  NOSSA chave; só se reenvia o mesmo XML depois dessa consulta** · (b) 106 = F. *(Rec.: (a) — a SEFAZ processa por até 3 min e reenvio às cegas
+  consome o 656.)*
+- **Q-NE109 UNIQUE da faixa inutilizada** (G5): (a) **UNIQUE só entre os pedidos NÃO rejeitados (coluna gerada) — um 203/256 corrigível não
+  bloqueia novo pedido da mesma faixa; provar a coluna gerada no MariaDB 10.4 e no MySQL 8 na NE-2** · (b) UNIQUE simples. *(Rec.: (a) — a
+  Setes deve receber 203 no PR; com (b) a faixa ficaria presa.)*
+- **Q-NE110 Corrida inutilização × cunhagem de número** (G6): (a) **a view publica faixas PENDENTES e homologadas e o ERP pula as duas ao
+  cunhar; a reserva da inutilização toma a TRAVA do contador da institution no ERP como 1º comando (antes de conferir que a faixa não tem
+  nota viva) — entra na lista da D-F31 como 2ª trava admitida (hoje só a da nota); no MySQL 8 da F3 o `FOR UPDATE` exige GRANT** · (b) só a
+  view (corrida aceita como limite conhecido). *(Rec.: (a) — número cunhado dentro de faixa inutilizada é documento inválido.)*
+- **Q-NE111 Prova de "não registrada" na NF-e** (G7 — análogo da D-F90): (a) **regra e coluna nascem na NE-5 com a política (um 217 cedo demais
+  vira F prematuro e o número seria reaproveitado com a nota antiga podendo autorizar depois); ADD COLUMN agrega** · (b) já no DDL da NE-2.
+  *(Rec.: (a).)*
+- **Q-NE112 Devolução com duas linhas do mesmo item de origem** (G9 — rej. 1072; `tb_order_item_return` sem UNIQUE `(tb_order_id,
+  tb_order_item_id_ori)`): (a) **a camada 2 do `validate` do faturamento recusa (NE-6); o builder nunca soma** · (b) a tela agrega as linhas.
+  *(Rec.: (a), com a tela avisando já na digitação.)*
+- **Q-NE113 Devolução de venda do LEGADO** (G10 — nota sincronizada, sem tentativa nativa): (a) **fora do 1º release com recusa legível
+  (`INVOICE_LEGACY_NOT_TRANSMITTABLE` já existe); reabre com o 1º cliente de mercadoria vindo do Gestao2016** · (b) casar pelo XML autorizado da
+  origem (a nfe-api leria o storage do setes-sync — cruza a fronteira dos grupos) · (c) escolha manual na tela, gravada no ERP. *(Rec.: (a)
+  agora; o guardião prefere (b) como alvo — a decisão de ler o storage do outro grupo fica para quando houver o cliente.)*
+- **Q-NE114 Coluna `digest_value`** (G11 — não estava nas decisões): (a) **manter — sustenta a D-NE41 dentro da transação (o arquivo em disco não
+  é transacional)** · (b) ler o digest do arquivo. *(Rec.: (a).)*
+
+**Depois da Rodada 4**: arquivar a Q-NE104 (se autorizada) e fechar 40/44/45/47 e o XSD das mensagens; NE-0 FECHADA → frente do CNPJ alfanumérico
+em sessão própria (D-NE99) → NE-1b/NE-2/NE-3 (D-NE55).
+
+### 13.10 Rodada 4 da `nfe-api` DECIDIDA (Valdo 2026-10-15: "siga as recomendações") — D-NE102…D-NE114 — e NE-0 FECHADA
+
+Cada D-NE*n* = a recomendação da Q-NE*n* (§13.9.1), na íntegra. Numeração permanente.
+
+| Decisão | O que fixa | Onda |
+|---|---|---|
+| **D-NE102** | IBS/CBS/IS no `vProd` a partir de 2027 (NT 2026.008) = **regra do motor (ERP, IB-N) e do builder (NE-4)**, sem conceito nem coluna nova: o preço do item mantém UM significado (o líquido = `vUnComLiq`) e o bruto é derivado pelo builder; IBS/CBS/IS do item = snapshot do ERP; `total_value` do ramo segue sendo o `vNF` e a base dos títulos (D-NE27/D-IB12), fórmula datada pelo fato (D-IB13); **a W16 vigente é a da NT 2023.004** (`indDeduzDeson`, vICMSMonoReten, PIS/COFINS-ST com indicador); "líquido" entra no glossário de palavras ocupadas | IB-N · NE-4 · NE-6 |
+| **D-NE103** | devolução referencia POR ITEM (`DFeReferenciado` chave + nItem; `refNFe` proibido — rej. 321) — **supera a parte "`refNFe` da âncora" da D-NE25/D-E15**; o nItem é DERIVADO por UMA peça (a que o builder usa para numerar o `det`: itens com snapshot de imposto do ramo, em ordem pelo id do item, nunca `tb_product.kind`), reusada pela devolução e pelos eventos RTC; antes de referenciar, confere o `det[nItem]` do `procNFe` arquivado da origem (cProd, qCom, vUnCom) — divergência = 422 `FISCAL_RETURN_REFERENCE_MISMATCH`, nunca chute; nada gravado (D-F10/D-F31 intactos); conhecimento negativo: mudar a ordem da peça muda o passado | NE-4 · NE-6 |
+| **D-NE104** | downloads dos cinco (PL_010d_v1.03, pacote de eventos/consulta cadastro alfanuméricos, NT 2023.001, 2023.004, 2017.001) — **FEITOS** (abaixo) | NE-0 |
+| **D-NE105** | presença de IE NÃO vira coluna: o autorizador é a coluna; a presença fica no XML enviado (`emit/IE`) — **refina a D-NE96 e o E4 do §13.2** | NE-2 |
+| **D-NE106** | o 110111 (único evento da F4, nSeq 1) é o C/K/N da voz da tentativa, tpEvento em `authority_code` da voz C (molde D-F68); a tabela de eventos nasce com a CC-e ou os eventos RTC, agregando; a NE-3 confere se o 136 vale como C — **refina a D-NE39** | NE-2/NE-3 |
+| **D-NE107** | voz S FORA da lista de escrita da família NF-e; entra só se a NE-5 precisar, junto com a saída | NE-2 |
+| **D-NE108** | cStat 106 "lote não localizado": não grava voz, a tentativa segue P, a saída é a consulta pela NOSSA chave; só se reenvia o mesmo XML depois dela — **completa a D-NE33** | NE-3/NE-5 |
+| **D-NE109** | UNIQUE da faixa inutilizada só entre os pedidos NÃO rejeitados (coluna gerada `withdrawn_void_id`); provar no MariaDB 10.4 e no MySQL 8 na NE-2 | NE-2 |
+| **D-NE110** | corrida inutilização × cunhagem: a view publica faixas PENDENTES e homologadas e o ERP pula as duas ao cunhar; a reserva da inutilização toma a trava do CONTADOR da institution no ERP como 1º comando — **2º item da lista fechada da D-F31** (nota registrada junto da D-F31 no prompt das APIs fiscais); GRANT do `FOR UPDATE` no MySQL 8 da F3 | NE-2/NE-5/NE-6 |
+| **D-NE111** | prova de "não registrada" (217) na NF-e: regra e coluna nascem na NE-5 com a política (análogo da D-F90); ADD COLUMN agrega | NE-5 |
+| **D-NE112** | devolução com duas linhas do mesmo item de origem (rej. 1072): a camada 2 do `validate` recusa (a tela avisa na digitação); o builder nunca soma | NE-6 |
+| **D-NE113** | devolução de venda do LEGADO fora do 1º release, com recusa legível; reabre com o 1º cliente de mercadoria vindo do Gestao2016 (o guardião prefere casar pelo XML como alvo — exige decidir a leitura do storage do setes-sync) | NE-6 |
+| **D-NE114** | `digest_value` na tentativa (sustenta a D-NE41 dentro da transação) | NE-2 |
+
+**Executado na mesma sessão**:
+- **D-NE104 — arquivados** (README do acervo, SHA-256): `PL_010d_v1.03.zip` e o pacote de eventos/consulta cadastro (extraídos — os schemas de evento e de
+  inutilização agora aceitam CNPJ alfanumérico: Id do evento `ID[0-9]{12}[0-9A-Z]{12}[0-9]{28}`, Id da inutilização `ID[0-9]{4}[0-9A-Z]{12}[0-9]{25}`,
+  TProt 15|17, TStat 3–4; a raiz `ProcInutNFe` é oficial), NT 2023.001, NT 2023.004, NT 2017.001 (com `.txt`).
+- **Conferências reabertas e fechadas** (CONFERENCIAS): 1 (versões; faltam só as RAÍZES das mensagens — pacote-base), 8 (`ProcInutNFe` oficial), 31 (Id
+  alfanumérico), 40 (**W16 da NT 2023.004**), 44 (o Simples pode usar os CST monofásicos — exceção da 590), 45 (`indDeduzDeson` — o ERP precisa
+  congelá-lo por item com desoneração, NE-6), 47 ("SEM GTIN" aceito; exigência por cronograma CNAE × NCM; a NT vigente é a 2021.003 v1.50).
+- **DDL em rascunho v1.1**: cabeçalho com a Rodada 4; a alternativa (a) da Q-NE103 marcada REJEITADA (fica como conhecimento negativo). As demais
+  decisões já estavam no rascunho do guardião (sem coluna de IE, voz sem S, UNIQUE da faixa pela coluna gerada, view com faixas pendentes).
+- **OpenAPI**: marcas `[Q-NE…]` → `[D-NE…]`; transmitir ganha `FISCAL_RETURN_REFERENCE_MISMATCH` e `FISCAL_RETURN_DUPLICATED_ITEM` (D-NE103/D-NE112) e a
+  recusa da origem do legado (D-NE113).
+- **D-F31** (prompt das APIs fiscais): nota com a D-NE110 junto da decisão.
+
+**NE-0 FECHADA** (2026-10-15): E1…E5 entregues, as 65 conferências fechadas, Rodadas 3 e 4 decididas. Ficam abertos só dois DOWNLOADS, que não bloqueiam
+nada antes da NE-3/NE-4:
+
+- **Q-NE115 Pacote-base das mensagens** — `PL_009_V4_00_NT_2020_006_v1.20.zip` (Portal NF-e, 70.894 B): as raízes `enviNFe`/`inutNFe`/`consReciNFe`/
+  `consStatServ` e retornos que os pacotes de atualização não trazem; sem ele a validação XSD local (D-NE16/D-NE43) não roda nessas mensagens. (a) **baixar**
+  · (b) usar a cópia do ACBr só como conferência. *(Rec.: (a) — validação de produção nunca por cópia de terceiro.)*
+- **Q-NE116 NT 2021.003 v1.50** (GTIN, publicada 25/09/2026 — `NT2021.003_v1_50 - Validacao GTIN Grupo V.pdf`, Portal NF-e, 1.240.427 B): a NT VIGENTE
+  do GTIN (a 2017.001 arquivada é a anterior). (a) **baixar** · (b) depois, na NE-4. *(Rec.: (a) — custa nada e fecha a linha 47.)*
+
+**Próximo (D-NE55 + D-NE99)**: frente do **CNPJ alfanumérico** — Rodada 0 em sessão PRÓPRIA (inventário no §12.1 item 8; fatos oficiais no acervo: NT
+Conjunta 2025.001 e NT 2026.004 — produção 01/07/2026, DV ASCII − 48, Code-128 híbrido no DANFE) → **NE-1b / NE-2 / NE-3** (a NE-2 nasce do DDL em
+rascunho + `nfe-api.v1.yaml`; a NE-3 do `AUTORIZADORES.md` e do smoke H — status/consulta no PR com o A1 da Setes; autorização pela SVRS sem IE a partir
+de 26/10 em H — D-NE95).
+
+#### 13.10.1 D-NE115 e D-NE116 DECIDIDAS e EXECUTADAS (Valdo 2026-10-15: "siga as recomendações") — NE-0 sem pendência
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE115** (= Q-NE115 (a)) | pacote-base `PL_009_V4_00_NT_2020_006_v1.20.zip` ARQUIVADO (70.894 B, SHA-256 be222eb8336bfb38): todas as RAÍZES das mensagens (enviNFe, retEnviNFe, consReciNFe, inutNFe, retInutNFe, consStatServ, retConsStatServ, procNFe). Validação XSD local = **sobreposição de camadas** base `PL_009_V4` → `PL_010d_v1.03` → `PL_010f_v1.04` (README do acervo — conhecimento negativo: os pacotes 010d/010f são atualizações, não versões completas) |
+| **D-NE116** (= Q-NE116 (a)) | NT 2021.003 v1.50 ARQUIVADA (1.240.427 B, SHA-256 28b7e26b1a515cdd): é a NT VIGENTE do GTIN (substitui a 2017.001 na matéria); Grupo IV em produção desde 01/10/2025, **Grupo V H 01/04/2027 · P 01/09/2027** — a pré-validação da NE-4 parte dela (CONFERENCIAS 47) |
+
+**NE-0 FECHADA SEM PENDÊNCIA**: nenhuma questão da nfe-api aberta. Próximo (D-NE55 + D-NE99): frente do **CNPJ alfanumérico** — Rodada 0 em sessão
+PRÓPRIA → NE-1b / NE-2 / NE-3.

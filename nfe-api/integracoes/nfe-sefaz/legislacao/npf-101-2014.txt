@@ -1,0 +1,230 @@
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+       NORMA DE PROCEDIMENTO FISCAL Nº 101/2014
+
+            Publicado no DOE 9334 de 17.11.2014
+
+                                                           SÚMULA: Dispõe sobre o processo de
+                                                           credenciamento para emissão de DF-e -
+                                                           Documentos Fiscais Eletrônicos e revoga a NPF n.
+                                                           009/2012.
+
+         O DIRETOR DA CRE - COORDENAÇÃO DA RECEITA DO ESTADO, no uso das
+atribuições que lhe confere o inciso X do art. 9º do Regimento da CRE, aprovado pela Resolução
+SEFA n. 88, de 15 de agosto de 2005, e considerando o disposto no Regulamento do ICMS aprovado
+pelo Decreto n. 6.080, de 28 de setembro de 2012, resolve:
+
+         1. DAS DISPOSIÇÕES INICIAIS:
+         1.1. Para os efeitos desta NPF - Norma de Procedimento Fiscal, a definição de DF-e -
+Documentos Fiscais Eletrônicos se aplica aos seguintes tipos de documento fiscal:
+
+          1.1.1. Nota Fiscal Eletrônica, modelo 55, doravante denominado NF-e;
+          1.1.2. Nota Fiscal Eletrônica, modelo 65, doravante denominado NFC-e - Nota Fiscal de Consumidor
+Eletrônica;
+          1.1.3. Conhecimento de Transporte Eletrônico, modelo 57, doravante denominado CT-e.
+
+         1.1.4. Conhecimento de Transporte Eletrônico para Outros Serviços, modelo 67, doravante
+denominado CT-e OS.".
+
+                              Acrescentado o subitem 1.1.4 ao item 1 pelo art. 1º, inc. I da NPF 063/2017, produzindo
+
+                                                             1
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+                              efeitos a partir de 8.6.2017.
+
+         1.1.5. Bilhete de Passagem Eletrônico, modelo 63, doravante denominado BP-e.
+
+                              Acrescentado o subitem pelo art. 1º, inciso I, da NPF 009/2018, produzindo efeitos a
+                              partir de 26.1.2018.
+
+         1.1.6. Nota Fiscal Fatura de Serviços de Comunicação Eletrônica, modelo 62, doravante
+denominada NFCom.
+
+                              Acrescentado o subitem pelo art. 1º, inciso I, da NPF 024/2024, produzindo efeitos a
+                              partir de 8.5.2024.
+
+         1.2. Estão sujeitos ao credenciamento para a emissão de DF-e os estabelecimentos:
+
+          1.2.1. obrigados ao uso por atuarem em ramos econômicos sujeitos à obrigatoriedade;
+
+          1.2.2. obrigados ao uso por praticarem operações sujeitas à obrigatoriedade;
+
+         1.2.3. que possuam interesse em voluntariamente aderir à emissão de quaisquer DF-e, desde
+que exerçam atividade que envolva a utilização do DF-e solicitado.
+
+                                    Nova redação dada ao subitem 1.2.3 pelo art. 1º, inc. II da NPF 063/2017,
+                        produzindo efeitos a partir de 8.6.2017.
+
+                                                      Redação original em vigor de 1º.11.2014 até 7.6.2017:
+                                                      "1.2.3. que possuam interesse em voluntariamente aderir à emissão de quaisquer
+                                                      DF-e."
+
+         2. DO CREDENCIAMENTO:
+
+         2.1. O processo de credenciamento para a emissão de DF-e, bem como o de
+descredenciamento, em caráter temporário ou definitivo, deve seguir o que determina a NPF n.
+063/2012, que estabelece os procedimentos para disciplinar o uso de sistemas de processamento de
+dados para escrituração fiscal, emissão de documentos fiscais e a sua gestão, sendo que, cumpridas
+essas exigências, o emitente estará na condição de autorizado à emissão.
+
+         2.2. Para o credenciamento para a emissão de NF-e, deverá ser requerida a autorização de uso
+para o sistema emissor de documento fiscal modelo 55.
+
+                                                             2
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         2.3. Para o credenciamento para a emissão de CT-e, deverá ser requerida a autorização de uso
+para o sistema emissor de documento fiscal modelo 57.
+
+         2.4. Para o credenciamento para a emissão de NFC-e, deverá ser requerida a autorização de
+uso para o sistema emissor de documento fiscal modelo 65.
+
+         2.5. O estabelecimento autorizado a emitir NF-e deve utilizá-la em todas as suas operações,
+sendo vedada a emissão da Nota Fiscal, modelo 1 ou 1-A, ressalvadas as hipóteses previstas na
+legislação.
+
+         2.6. É vedada ao estabelecimento autorizado a emitir CT-e, CT-e OS e BP-e a emissão dos
+documentos discriminados no art. 51 do Capítulo IV e no art. 114 do Capítulo VIII, ambos do
+Subanexo I do Anexo III do RICMS.
+
+                              Nova redação dada ao subitem pelo art. 1º, inciso II, da NPF 009/2018, produzindo
+                              efeitos a partir de 26.1.2018.
+
+                                        Redação anterior dada pelo art. 1º, inc. III da NPF 063/2017, produzindo efeitos de 8.6.2017
+                                        até 25.1.2018:
+                                        "2.6. É vedada ao estabelecimento autorizado a emitir CT-e e CT-e OS a emissão dos
+                                        documentos discriminados nos incisos do art. 34 do Anexo IX do RICMS."
+
+                                                      Redação original em vigor de 1º.11.2014 até 7.6.2017:
+                                                      "2.6. É vedada ao estabelecimento autorizado a emitir CT-e a emissão dos
+                                                      documentos discriminados nos incisos do art. 34 do Anexo IX do RICMS."
+
+         2.7. A obrigatoriedade de uso de DF-e vigora a partir:
+
+          2.7.1. da data definida em norma de procedimento específica, para os estabelecimentos indicados nos
+subitens 1.2.1 e 1.2.2 desta norma de procedimento;
+
+          2.7.2. da data da autorização do pedido de uso de sistema, para os estabelecimentos indicados no
+subitem 1.2.3 desta norma de procedimento.
+
+         2.8. Para o credenciamento para a emissão de CT-e OS, deverá ser requerida a autorização de
+uso para o sistema emissor de documento fiscal modelo 67;
+
+                              Acrescentado o subitem 2.8 ao item 2 pelo art. 1º, inc. IV da NPF 063/2017, produzindo
+                              efeitos a partir de 8.6.2017.
+
+                                                             3
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         2.9. Para o credenciamento para emissão de BP-e deverá ser requerida a autorização de uso
+para o sistema emissor de documento fiscal modelo 63.
+
+                              Acrescentado oo subitem pelo art. 1º, inciso II, da NPF 009/2018, produzindo efeitos a
+                              partir de 26.1.2018.
+
+         2.10. Para o credenciamento para emissão de NFCom deverá ser requerida a autorização de
+uso para o sistema emissor de documento fiscal modelo 62;
+
+                              Acrescentado o subitem pelo art. 1º, inciso I, da NPF 024/2024, produzindo efeitos a
+                              partir de 8.5.2024.
+
+         2.11. É vedada ao estabelecimento autorizado a emitir NFCom a emissão dos documentos
+discriminados nos incisos I e II do art. 176 do Capítulo XII do Subanexo I do Anexo III do RICMS.
+
+                              Acrescentado o subitem pelo art. 1º, inciso I, da NPF 024/2024, produzindo efeitos a
+                              partir de 8.5.2024.
+
+         3. DOS AMBIENTES DE HOMOLOGAÇÃO E DE PRODUÇÃO:
+         3.1. Para a emissão de DF-e serão disponibilizados:
+
+          3.1.1. ambientes de homologação, com a finalidade exclusiva de realização de testes de implementação
+e de adequação dos sistemas emissores utilizados pelo estabelecimento, sendo que os documentos por eles
+autorizados não possuem validade jurídica;
+
+          3.1.2. ambientes de produção, cujos documentos por eles autorizados se revestem de validade jurídica.
+
+         3.2. A disponibilidade efetiva dos sistemas autorizadores de DF-e será feita pela
+infraestrutura tecnológica fornecida pela Secretaria de Estado da Fazenda do Paraná.
+
+          3.2.1 O ambientes de homologação e produção para emissão da NFCom serão disponibilizados pela
+infraestrutura tecnológica fornecida pela SEFAZ Virtual do Rio Grande do Sul – SVRS.
+
+                              Acrescentado o subitem pelo art. 1º, inciso I, da NPF 024/2024, produzindo efeitos a
+                              partir de 8.5.2024.
+
+         3.3. Poderão acessar os ambientes de homologação, independentemente de prévia autorização
+
+                                                             4
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+de uso de sistema emissor de documento fiscal:
+
+         3.3.1. para a NF-e e NFC-e, todos os estabelecimentos ativos inscritos no Cadastro de
+Contribuintes do ICMS - CAD/ICMS com código de regime tributário que contemple emissão de
+documento fiscal;
+
+         3.3.2. para o CT-e e para o CT-e OS, todos os estabelecimentos ativos inscritos no
+CAD/ICMS com código de regime tributário que contemple emissão de documento fiscal e que
+estejam enquadrados nos códigos da Classificação Nacional de Atividades Econômicas - CNAE
+específicos para as atividades de transporte.
+
+                                    Nova redação dada ao subitem 3.3.2. pelo art. 1º, inc. V da NPF 063/2017,
+                        produzindo efeitos a partir de 8.6.2017.
+
+                                                      Redação original em vigor de 1º.11.2014 até 7.6.2017:
+                                                      "3.3.2. para o CT-e, todos os estabelecimentos ativos inscritos no CAD/ICMS com
+                                                      código de regime tributário que contemple emissão de documento fiscal e que
+                                                      estejam enquadrados nos códigos da Classificação Nacional de Atividades
+                                                      Econômicas - CNAE específicos para as atividades de transporte de carga.".
+
+         3.3.3. para o BP-e, todos os estabelecimentos ativos inscritos no CAD/ICMS com código de
+regime tributário que contemple emissão de documento fiscal e que estejam enquadrados nos códigos
+da CNAE específicos para as atividades de transporte regular de passageiros, nos modais rodoviário,
+ferroviário e aquaviário.
+
+                              Acrescentado oo subitem pelo art. 1º, inciso III, da NPF 009/2018, produzindo efeitos a
+                              partir de 26.1.2018.
+
+         3.4. O acesso aos ambientes de produção somente será feito após a obtenção do
+credenciamento de que trata esta norma de procedimento.
+
+         4. DAS DISPOSIÇÕES FINAIS:
+
+         4.1. Os casos omissos serão submetidos à apreciação da Inspetoria Geral de Fiscalização,
+com competência decisória do Diretor da Coordenação da Receita do Estado.
+
+         4.2. Fica revogada a Norma de Procedimento Fiscal n. 009/2012.
+
+                                                             5
+                                     Estado do Paraná
+                           Secretaria de Estado da Fazenda
+
+                              Receita Estadual do Paraná
+
+         4.3. Esta Norma de Procedimento Fiscal entra em vigor na data de sua publicação,
+produzindo efeitos a partir do dia 1º de novembro de 2014.
+
+                             COORDENAÇÃO DA RECEITA DO ESTADO, Curitiba, 5 de novembro de
+                   2014.
+
+                                             José Aparecido Valencio da Silva,
+                                                         Diretor.
+
+                                                             6
+
