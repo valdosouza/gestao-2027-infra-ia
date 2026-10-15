@@ -5524,6 +5524,40 @@ nenhuma 069, mesmos PIDs 3000/3306; nenhum banco `f2a_*` sobrou). Investigação
 | cliques "perdidos" logo depois de fechar um diálogo | o clique cai durante a animação de fechamento da barreira modal (esperar ~1 s) — artefato da automação, não do app | nada |
 | `FISCAL_DPS_INVALID` "0102" · 7368 "Falha · Homologação" · 7372 sem cancelar com outra OS aberta do cliente | dado da trilha (passo 6b) · dado de um teste anterior em H · trava D5 (1 OS aberta por cliente — por desenho, agora com a frase certa) | nada (6b na janela) |
 
+#### 22.51 A JANELA — EXECUTADA em produção (2026-10-14 noite → 2026-10-15, 5ª sessão; o Valdo deu o "vai" de cada passo)
+
+> **Achado de ambiente que mudou o roteiro**: a "produção" de hoje é ESTA máquina — setes-api em `tsx watch` na :3000 (MariaDB 3306) e o
+> app em `flutter run` na :5051; **não há Plesk/URL pública** (as URLs https reais entram por CONFIGURAÇÃO no deploy do servidor — Onda 4/F3).
+> O passo 6 virou "trocar o `flutter run` antigo pela árvore nova com `NFSE_API_URL=http://localhost:3002`"; a nfse-api sobe local na :3002.
+
+| Passo | O que foi feito (UTC) | Resultado |
+|---|---|---|
+| pré-voo | só leitura: migrations do `fiscal_api`, habilitação P/`cutover_at` NULL, 20 tentativas/23 vozes, árvores vivas limpas, merges = avanço puro | ok |
+| 2 | nfse-api `db:migrate` no `fiscal_api` REAL (**006** aplicada) · nfse-api no ar (:3002, `npx tsx` sem watch) · **cerca do kid**: token `default` (script `token:dev`, TTL 5 min, não impresso) → `GET /v1/nfse/invoices/pending` **200** (388 pendentes), sem token 401 · GRANT do `setes_api` NÃO se aplica (o setes-api usa o usuário `setes`; `setes_api` é a checklist da F3) | ok |
+| 3 | `migrate:setes` (réplica 20·23 = origem) · ENSAIO do ato (dry-run) **exit 0** só com o D-F50 "sem F2a" · ENSAIO do aborto `{dryRun:true, triggers:[], migrationRow:false, tombstone:false}` · produção intacta depois | ok |
+| 4 | PARADO o watcher inteiro (as 4 camadas: filho, `tsx watch`, `cmd`, `npm run dev`; as abas de terminal ficam) · `git merge --ff-only f2a` (`f5eee3b` → `f6db0db`, 18 commits) · `tsc` limpo · `npm run dev` · log: "Voz do fisco (views): fiscal_api — família(s) service" + "**Migration aplicada: 069**" + "**Gatilhos de TRAVA da F2a: 9**" + porta 3000 | ok |
+| 5 | re-sincronia (20·23 = 20·23) · ensaio SEM bloqueio (exit 0, sem `bloqueios`) · setes-api parado · **`--vai` às 00:39:18Z → `committed: true`**: `fiscal_api` SE **P** com `cutover_at`, ERP SE `deleted='S'` · setes-api de volta (boot: 9 gatilhos, `/health` ok) | **PONTO SEM VOLTA ATRAVESSADO** |
+| 6 | app: `merge --ff-only f2b` na árvore viva (`f3f8abf` → `810138e`, 28 commits) · `apps/web/.env` ganhou `NFSE_API_URL=http://localhost:3002` (arquivo local, fora do git) · `flutter run` antigo (:5051) parado, o novo no ar | ok (login do Valdo na aba do Chrome) |
+| 6b | **7 notas canceladas** pela tela, uma a uma (6783…6789, ids 8004–8010; entre cada uma a OS reaberta foi cancelada — a trava D5 só admite 1 OS aberta por cliente; motivo "D-F207 limpeza da trilha"): último evento `C` nas 7 (a 6784, com a tentativa antiga recusada em H, também). Regras de ISS 1/3/4: **já estavam EXCLUÍDAS** (`deleted='S'`; só a regra 2 está viva, código municipal vazio) — nada a desativar. Lote "Transmitir notas sem NFS-e": **"Nenhuma nota da OS sem NFS-e"** | ok |
+| 7 | trilha completa (`scripts/trilha-primeiro-cliente.ts`): **20 OK · 2 PENDENTE · 1 FALHA**. **P8b: NFS-e 707 AUTORIZADA em PRODUÇÃO pela nfse-api** (DPS nº 5 — a série continuou do 4 —, chave `41069022207742094000113000000000070726104568930640`, XML + DANFSe servidos) e em seguida **CANCELADA pela saga** (fisco primeiro, evento 101101, depois a nota; OS 7376 "Cancelada — somente leitura"). A FALHA é o **P7 (boleto)**: ver o defeito abaixo — NÃO é da F2a. P7b/P9 seguem PENDENTE (Inter sandbox só 8h–20h; produção = Onda 4) | ok com 1 defeito anterior |
+| 8 | **A1 apagado do cofre ANTIGO do setes-api** (`secrets/setes_setes/establishment/1/P/certificate.pem` + `private.key`; fingerprint SHA-256 `4815233C41CB…` IGUAL ao do `fiscal_api`, válido até 05/10/2027, `cipher_key_version` 1; a cópia canônica fica cifrada no `fiscal_api` com `FISCAL_MASTER_KEYS` da nfse-api — ⚠️ guardar essa chave-mestra é o backup do A1). Ficaram o `jwt/` e o cofre do Inter (conta 5, sandbox). | ok |
+
+**⚠️ DEFEITO ANTERIOR achado pela trilha (fora da F2a/F2b — Valdo: "só registrar", não mexer)**: `src/shared/bank-slip/bank-slip.ts`, `INSERT` do boleto
+(`issueBankSlip`, ~linha 495): um comentário `// Q-TZ1` ficou NO MEIO da linha de parâmetros (`…, await todayFor(...), dtExpiration,   // Q-TZ1
+value, agreement.accept,`) e **engole `value, agreement.accept,`** — o SQL sai com 2 parâmetros a menos e o MariaDB devolve `ER_PARSE_ERROR` → HTTP 500
+em `POST /api/bank-slips` (log `[ref U96NBE7Y]`). Introduzido no commit `ad42018` (onda TZ-1, 2026-09-30): **emitir boleto está quebrado desde então**.
+Correção (2 palavras + teste que fixa a ordem/quantidade dos parâmetros) AGUARDA o Valdo — o teste de unidade não pega porque os 19 testes do boleto
+já estão quebrados pela bomba-relógio do Inter (§22.13.1; outra sessão).
+
+**Ainda pendente depois da janela**: (a) PUSH dos `main` (setes-api `f6db0db`, setes-app `810138e`) e da Infra-IA — as branches `f2a`/`f2b` já estão no GitHub; (b) o defeito do boleto
+(acima); (c) a F3/Onda 4: usuário próprio do setes-api SEM o privilégio TRIGGER + diagnóstico (checklist D-F132 × D-F135), deploy na SaveInCloud com as URLs
+https por configuração, chaves JWT/mestra; (d) os 2 chips fora do caminho crítico ("Levar D-F206/D-F217 às listas do app" e "Levar D-F209/D-F210 aos
+módulos do app") e o escape do app dentro de módulos de interface (§22.50); (e) a nota de exibição: o "No fisco" mostra o corpo HTML cru do 403 numa tentativa
+antiga de H ("Situação: Falha 403 — Fisco recusou a autenticação (403): <!DOCTYPE html …") — texto técnico na tela (candidato a D-F2xx: nunca exibir corpo de HTML).
+**Processos de produção hoje** (subidos nesta sessão em segundo plano — o Valdo reinicia pelos terminais dele quando quiser): setes-api `npm run dev` na
+árvore viva (:3000), nfse-api `npx tsx --require tsconfig-paths/register src/server.ts` em `D:\Gestao2027\nfse-api` (:3002, sem watch), app `flutter run -d
+web-server --web-port 5051 --dart-define-from-file=.env` em `D:\Gestao2027\setes-app\apps\web` (:5051).
+
 #### 22.47 ⏯ PROMPT DE RETOMADA CURTO (SUPERADO pelo §22.48)
 
 ```
