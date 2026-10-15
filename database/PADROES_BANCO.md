@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.6 (2026-10-15 — §9 regra 9: leitura travante de várias tabelas = uma por tabela na ordem do escritor, nunca LEFT JOIN travante — IB-2 da fase IBS/CBS; 1.5 em 2026-10-13 — §7 ordem da rotação do `JWT_KID` (D-F157) e §11 regra 14 LÁPIDE com versão SENTINELA (D-F162), Rodada 6 da F2a; 1.4 no mesmo dia — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
+**Versão**: 1.7 (2026-10-15 — §11 regra 17: biblioteca carregada pelo `src` em produção = a árvore viva é o deploy (D-IB83); 1.6 no mesmo dia — §9 regra 9: leitura travante de várias tabelas = uma por tabela na ordem do escritor, nunca LEFT JOIN travante — IB-2 da fase IBS/CBS; 1.5 em 2026-10-13 — §7 ordem da rotação do `JWT_KID` (D-F157) e §11 regra 14 LÁPIDE com versão SENTINELA (D-F162), Rodada 6 da F2a; 1.4 no mesmo dia — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -406,3 +406,10 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     VARCHAR); domínio de CHAR(1) segue com `COLLATE utf8mb4_bin` (regra 11). A sonda do boot grava o valor com espaço e exige a recusa
     pelo CHECK de NOME certo (`nfse-api` migration 006, `assertServiceVoiceDomainsEnforced`); a cópia `INSERT IGNORE … SELECT` confere
     o MESMO domínio na origem antes (ela rebaixa a violação a aviso — F2A1-08).
+17. **Biblioteca carregada pelo `src` em produção: a árvore viva É o deploy** (fase IBS/CBS, IB-3 — D-IB83, extensão da D-F133;
+    2026-10-15): a nfse-api de produção resolve o núcleo por `../fiscal-api/src` (tsconfig/paths) — uma edição salva em
+    `D:\Gestao2027\fiscal-api\src` entra em produção no próximo restart da nfse-api, sem build nem commit. Enquanto for assim (até a F3
+    trocar a produção para o `dist`): (a) NADA se edita no núcleo da árvore viva fora de uma janela de deploy decidida; (b) frente que
+    precisa do núcleo trabalha em pastas-IRMÃS de worktrees (`D:\Gestao2027\<frente>\{fiscal-api,nfse-api,…}`) — o `../fiscal-api` do
+    tsconfig resolve para o núcleo da worktree; (c) o checklist de deploy da nfse-api (`nfse-api/INDEX.md`) confere "núcleo da árvore viva
+    com `git status` limpo e no commit esperado" ANTES de reiniciar o serviço.

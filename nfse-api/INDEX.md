@@ -21,6 +21,32 @@
 - Regras da NFS-e que MIGRAM junto com o código: `../prompts/prompt_onda3_nfse_adn.md` (D-N1…D-N38 — ambíguo nunca fecha, F só conclusivo, vigente = quem detém a chave, vida da nota, cancelamento autorizado) e `../prompts/prompt_cancelamento_nota.md` §15 (D3/D4 — nota com registro fiscal cancelada FICA viva).
 - Contrato oficial do ADN/Sefin Nacional: `../setes-api/integracoes/nfse-adn/` (muda para `integracoes/nfse-adn/` aqui na F1).
 
+## Checklist de deploy da nfse-api (D-IB83 — 2026-10-15; PADROES_BANCO §11 regra 17)
+
+A nfse-api de produção carrega o núcleo pelo `src` (`../fiscal-api/src`): o restart é o deploy do núcleo TAMBÉM. Antes de reiniciar:
+
+1. **Núcleo da árvore viva** — `git -C D:\Gestao2027\fiscal-api status --short` VAZIO e `git -C D:\Gestao2027\fiscal-api rev-parse HEAD` = o
+   commit esperado (o mesmo da worktree onde a frente foi provada). Diferente = PARA (alguém editou o núcleo vivo).
+2. **nfse-api** — o merge da frente aplicado, `npm test` verde, `.env` intacto.
+3. **Migrations** — as novas rodam no boot (`_migrations (project, version)`); o boot falha ALTO em número repetido (regra 14) e confere
+   CHECKs/views pelo nome. Conferir no log do boot.
+4. **Harness ao vivo** — tabela nova da família entra em `FISCAL_COPY_TABLES` (a cópia descartável e o `CHECKSUM` que vigia o
+   `fiscal_api` real) — a cerca do teste acusa tabela de migration fora da lista.
+5. **Depois** — `GET /health`, uma leitura `GET /v1/nfse/invoices/{id}` de nota conhecida, log sem erro.
+6. **Fase IBS/CBS (D-IB82/D-IB85/D-IB90/D-IB96)** — ANTES do deploy da nfse-api da IB-3 confira o CADASTRO **e o que já CONGELOU** (o que vai
+   ao fisco é o RAMO, não o cadastro — gate do delta da IB-3, M1):
+   - cadastro: nenhum serviço classificado nem com NBS em produção
+     (`SELECT COUNT(*) FROM setes_setes.tb_service_ibscbs WHERE deleted='N'` e `SELECT COUNT(*) FROM setes_setes.tb_service sv JOIN setes_setes.tb_product p ON p.id=sv.id AND p.tb_institution_id=sv.tb_institution_id WHERE sv.nbs IS NOT NULL AND sv.deleted='N' AND p.deleted='N'` — a exclusão do serviço marca só o `tb_product`; o ramo `tb_service` fica vivo);
+   - congelados: ramos vivos com classificação/NBS ainda sem NFS-e
+     (`SELECT COUNT(*) FROM setes_setes.tb_invoice_service s WHERE s.deleted='N' AND (s.classification_code IS NOT NULL OR s.nbs IS NOT NULL)
+       AND NOT EXISTS (SELECT 1 FROM fiscal_api.tb_invoice_service_transmission t WHERE t.tb_institution_id=s.tb_institution_id
+       AND t.tb_invoice_id=s.id AND t.terminal=s.terminal AND t.access_key IS NOT NULL)`) — se > 0, vale a D-IB96: depois do deploy transmita
+     UMA dessas notas, confira em "No fisco" e só então o resto; recuo do que já congelou = cancelar e refaturar (tirar a NBS do cadastro não
+     desfaz o ramo).
+   Depois do deploy, o "liga" em P é a classificação — um serviço e uma nota primeiro, conferindo o grupo e os valores do fisco em "No fisco".
+
+Trocar a produção para o `dist` (e aposentar o item 1) = F3.
+
 ## O que a nfse-api faz (D-F10)
 
 O app manda a REFERÊNCIA da nota (`/v1/nfse/invoices/{invoiceId}/…`); a nfse-api coleta no banco do produto (SÓ SELECT — D-F15) tudo o que o DPS precisa — nota e ramo de serviço congelado, emitente (cadeia + `tb_entity_tax`), tomador, cidade de incidência, zona do estabelecimento — e controla o ciclo inteiro com o fisco: envio, autorização, consulta, cancelamento no fisco, XML e DANFSe. O C LOCAL da nota é do setes-api, que lê a voz C nas views do `fiscal_api` (D-F11).

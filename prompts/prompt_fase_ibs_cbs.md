@@ -10,7 +10,7 @@ Ato Conjunto nº 4/2026) · D-NE4 ("prompt aberto JÁ") · D-NE31 (vigência de 
 XSD 1.01, NT 007/008/009, anexos I e II, FAQ) · (B) inventário do produto (setes-api, nfse-api, fiscal-api, sql) · (C) fotografia do legado
 Gestao2016 (agente legacy-analyst) · (D) legislação e documentos oficiais na web (fontes primárias, datadas) · + `Infra-IA/nfe-api/referencia-acbr/03-ibs-cbs-rtc.md`
 (ACBr, terceiro — só conferência).
-**Estado**: **⏯ 2026-10-15: IB-2 EXECUTADA na worktree `setes-api-ib2` (branch `ib2`) — Rodada 1 D-IB62…D-IB73 (§12.6), execução (§12.7), gates 0,74/0,80 + D-IB74/D-IB75 e retrabalho (§12.8: trava da presunção provada e corrigida — 1213; pré-voo pela união por cliente); setes-api 1899/1899; PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e; 070 aplicada em produção); Q-IB76 aberta; próximo = IB-3.** (antes: 2026-10-14 Rodada 0 da IB-2) (antes:) **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
+**Estado**: **⏯ 2026-10-15 (tarde): IB-3 PUBLICADA (§13 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac; 007 em produção) — D-IB98: nenhum serviço classificado em produção até a prova em H passar (fisco de H com E1000); RETOMAR pela prova em H (§13.8).** (antes:) **⏯ 2026-10-15: IB-2 EXECUTADA na worktree `setes-api-ib2` (branch `ib2`) — Rodada 1 D-IB62…D-IB73 (§12.6), execução (§12.7), gates 0,74/0,80 + D-IB74/D-IB75 e retrabalho (§12.8: trava da presunção provada e corrigida — 1213; pré-voo pela união por cliente); setes-api 1899/1899; PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e; 070 aplicada em produção); Q-IB76 aberta; próximo = IB-3.** (antes: 2026-10-14 Rodada 0 da IB-2) (antes:) **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
 guardião). Antes: Rodada 1 DECIDIDA (2026-10-10, "siga as recomendações" — §8, D-IB1…D-IB21).
 ⚠️ A opção de regime da Setes (D-IB1) segue com o Valdo e o contador até **30/10/2026**; o patch do legado (D-IB3) está COMMITADO (SVN r1300) e
 compilado — falta só a versão aos clientes (conferência dispensada: nenhum cliente de serviço emitiu com a reforma).
@@ -1551,3 +1551,271 @@ classificação + NBS de cada serviço da Setes com o contador (V2) — o pré-v
 códigos no catálogo central; GitHub: **api cfe9409 · sql 7cdce7e · infra (o commit desta seção)**. A worktree `setes-api-ib2` (branch `ib2`,
 já no `main`) fica até a IB-3 começar. ⏯ **Próximo: IB-3** (nfse-api lê as 3 colunas e monta o grupo IBSCBS; DANFSe com o bloco; D-IB75 no
 app; Q-IB76) — e, com o contador, a classificação + NBS dos 45 serviços da Setes antes de dezembro (o pré-voo é a régua).
+
+## 13. IB-3 — PUBLICADA 2026-10-15 (§13.1–§13.8 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac) — ⚠️ RETOMAR: prova em H (IB-4) quando o fisco normalizar (§13.8)
+
+**Escopo** (§4 + decisões já tomadas): (1) a fonte de fatos da nfse-api lê a DECLARAÇÃO congelada no ramo (`classification_code`,
+`place_indicator_code`, `nbs` — IB-2) e nunca reconsulta o catálogo (D-IB41); (2) o montador do DPS emite o grupo IBS/CBS (CST e `indDest`
+derivados) e o `cNBS` (D-IB2/D-IB62); (3) calendário de LEIAUTE por ambiente × data (D-IB13/D-IB14 — absorve a D-NE31); (4) a VOZ IBS/CBS do
+fisco lida do XML autorizado, write-once no `fiscal_api` + VIEW para o setes-api (D-IB10); (5) DANFSe com o bloco (NT 008); (6) D-IB12 (títulos ×
+`vTotNF`); (7) D-IB75 — o setes-app mostra a declaração (resultado do faturamento + relatório do lote) ANTES do lote de dezembro (≤ 30/11);
+(8) Q-IB76 — o `/billing/validate` antecipa a pendência. Depois: IB-4 (prova em produção restrita + envio voluntário em dezembro — D-IB16).
+
+**Restrições conhecidas**: a nfse-api está em PRODUÇÃO (:3002, máquina do Valdo, `tsx` sem watch — reiniciar = deploy); **D-F133: proibido
+recompilar o núcleo (`fiscal-api`) na máquina de produção até a F3** — o que exigir o núcleo precisa de outro caminho ou espera; o app tem
+build web próprio (`build-web.ps1`).
+
+**Estado em 2026-10-15**: inventário do código (Explore) e parecer do guardião (`setes-conceito`) lançados em paralelo, só leitura. Ao voltarem:
+consolidar aqui (fatos com caminho:linha + modelo + **Rodada 1 da IB-3 — Q-IB77 em diante**, com a Q-IB76 na mesma rodada). Nenhum código
+antes das decisões do Valdo. Se a sessão cair: relançar os dois levantamentos (ou retomá-los pelo id, se o transcrito sobreviver).
+
+
+### 13.1 Fatos (2026-10-15 — inventário Explore + guardião; os que sustentam questão conferidos no disco)
+
+| # | Fato | Onde |
+|---|---|---|
+| T1 | XSD 1.01: `infDPS/IBSCBS` (`TCRTCInfoIBSCBS`, opcional) é o ÚLTIMO filho de `infDPS`; filhos: `finNFSe` (só "0"), `indFinal`?, `cIndOp`, `tpOper`?, `gRefNFSe`?, `tpEnteGov`?, `indDest` (0 = o próprio tomador), `dest`?, `imovel`?, `valores/trib/gIBSCBS{CST, cClassTrib, cCredPres?, gTribRegular?, gDif?}`; `cNBS` fica em `serv/cServ` depois de `xDescServ` | `Infra-IA/setes-api/integracoes/nfse-adn/xsd/Schemas/1.01/tiposComplexos_v1.01.xsd:744-847, 838, 2207-2280, 2388-2431, 2625-2663, 1329-1362` |
+| T2 | A NFS-e autorizada tem DOIS `IBSCBS`: `infNFSe/IBSCBS` (`TCRTCIBSCBS` — valores do FISCO, opcional: `valores{vBC, uf, mun, fed}` + `totCIBS{vTotNF, gIBS{vIBSTot…}, gCBS{vCBS}}`) e `infNFSe/DPS/infDPS/IBSCBS` (a NOSSA declaração); `parseNfseXml` lê "o 1º elemento com o nome" — se o fisco omitir o grupo dele, leríamos a nossa declaração como voz do fisco | `tiposComplexos_v1.01.xsd:142-148, 287-369, 452-617`; `nfse-api/src/authority/dps-builder.ts:255-266, 309-324` |
+| T3 | `vTotNF` = `vLiq` em 2026 e `vLiq + vCBS + vIBSTot` a partir de 2027 (o 1.01 não distingue o Simples) — a divergência título × `vTotNF` (D-IB12) é provável já na competência 01/2027 e não aparece em dezembro nem em H antes de 2027 | `tiposComplexos_v1.01.xsd:454-460` |
+| T4 | A fonte de fatos NÃO lê as 3 colunas; `buildDpsBase` monta `cServ` sem `cNBS` e nenhum grupo; `DpsInput` sem IBS/CBS ("sem IBS/CBS" no comentário); `LAYOUT_VERSION='1.01'` serve ao DPS E ao pedido de evento; não existe calendário de leiaute nem validação local contra XSD (o README do acervo diz "validação local antes de assinar") | `nfse-api/src/facts/service-facts.ts:25-37, 63-103, 245-303`; `authority/types.ts:17-20, 64, 87-100`; `dps-builder.ts:16, 168, 203-217, 247` |
+| T5 | ⚠️ **A nfse-api de PRODUÇÃO carrega o núcleo pelo `src`, não pelo `dist`**: o `tsconfig` mapeia `fiscal-api` → `../fiscal-api/src/index.ts` e a produção roda `tsx` — a D-F133 protege o `dist` (que o setes-api usa), mas QUALQUER edição em `fiscal-api/src` entra na nfse-api de produção no próximo restart | `nfse-api/tsconfig.json:12-15`; `nfse-api/package.json:22`; processo de produção (`tsx … src/server.ts`) |
+| T6 | O setes-api só lê o `fiscal_api` pela superfície `fiscal-api/reading` (porta "sem SQL próprio" + cercas) → leitor de view nova exige o núcleo (`dist`) = D-F133; `ErrorCodes` e a lista fechada `AMBIGUOUS_CAUSES` também moram no núcleo | `setes-api/src/shared/fiscal-voice/fiscal-voice.ts:13-26`; `fiscal-api/src/reading.ts:19-34`; `fiscal-api/src/errors/` |
+| T7 | O escritor genérico da voz (`defineVoiceFamily`) só aceita tabelas `^tb_…_transmission_event$` — os valores do fisco gravados na tentativa seguem o molde `fillAuthorityData` (escrita da FAMÍLIA sob `InvoiceTx`), sem núcleo | `fiscal-api/src/voice/event-table.ts:68`; `nfse-api/src/nfse/repository.ts:286-299` |
+| T8 | O DANFSe é da nfse-api (pdfkit) e lê o XML autorizado, nunca o banco; NT 008 pede o bloco IBS/CBS (CST/cClassTrib, cIndOp e localidade de incidência, base, alíquotas e efetivas por esfera, valores, "Total do IBS/CBS" e "Valor Líquido + IBS/CBS") | `nfse-api/src/nfse/danfse.ts:65-178`; `Infra-IA/setes-api/integracoes/nfse-adn/nt008.txt:316-407` |
+| T9 | `/billing/validate` existe só na VENDA — a OS (como a Setes fatura) não tem validação; no app `canInvoice = issues.isEmpty` (qualquer issue BLOQUEIA) e `ValidationIssue` não tem severidade | `setes-api/src/modules/billing/billing.routes.ts:60`; `setes-app/apps/web/lib/app/modules/orders/domain/entity/order_entity.dart:321` |
+| T10 | O app RECALCULA o relatório do lote pelas linhas (`fromEntries`/`merge`) — contadores do topo da API seriam descartados; nenhuma ocorrência de "ibscbs" no app | `setes-app/.../service_orders/domain/entity/service_order_entity.dart:419-484` |
+| T11 | O XSD 1.01 do acervo não tem `indZFMALC` (NT 007) nem nada da NT 009; `opSimpNac` 1/2/3 — a IB-2 aceita '4' na regra da obrigação, a nfse-api recusa '4' (coerente até a NT 009) | `tiposSimples_v1.01.xsd` (`TSOpSimpNac`); `service-facts.ts:161-164` |
+| T12 | Smoke em H existe (`npm run smoke:adn-h -- --nota <id> [--vai]`, banco descartável `fiscal_api_smoke`); testes ao vivo pelo harness com cópia `fiscal_api_adv_*` (`FISCAL_COPY_TABLES` precisa da tabela nova) | `nfse-api/scripts/smoke-adn-homologacao.ts:1-19`; `src/__tests__/live-harness.ts:23-26` |
+
+### 13.2 Modelo (parecer do guardião, 2026-10-15)
+
+A IB-3 **leva ao fisco a declaração que o ERP já congelou e guarda o que o fisco devolveu** — não decide classificação nem obrigação (IB-2).
+Três peças da família NFS-e, nenhuma linha no núcleo (D-F133):
+
+| Peça | Faz | Não faz |
+|---|---|---|
+| **Fonte de fatos** (`readServiceInvoice`) | lê as 3 colunas do ramo → `ServiceBranchRow.declaration {classificationCode, placeIndicatorCode} \| null` + `nbs`; confere a FORMA (par completo, grupo exige NBS, 6/6/9 dígitos) → 422 `FISCAL_DPS_INVALID` (código existente), nunca descarta calado | nunca lê `tb_service_ibscbs`, `tb_service.nbs` nem o catálogo (D-IB41 — cerca na SQL); nunca decide a obrigação |
+| **Montador** (`buildDpsXml`) | `DpsIbscbs {cIndOp, cClassTrib}` → grupo como ÚLTIMO filho de `infDPS`: `finNFSe`=0, `cIndOp`, `indDest`=0, `valores/trib/gIBSCBS{CST = prefixo(cClassTrib), cClassTrib}`; `cNBS` em `cServ` | o tipo NÃO tem CST/`indDest`/`finNFSe` (derivados por construção) nem `tpRetPisCofins` (D-IB19) |
+| **Valores do fisco** (`parseNfseIbscbs` + `fillAuthorityIbscbs` + migration 007 `tb_invoice_service_transmission_ibscbs`) | leitura pura, escopada no filho DIRETO de `infNFSe`, tudo-ou-nada; gravação write-once na tentativa que detém a chave, nos mesmos pontos de `fillAuthorityData` (transmissão P e consulta Q) | não é VOZ (não muda estado, sem kind/source); a voz A nunca espera os valores |
+
+Mais: **calendário de leiaute** `authority/layout-calendar.ts` (`dpsLayoutAt(environment, instant)` — documento × ambiente × `valid_from`; o
+evento com a linha dele) · **DANFSe** com o bloco lido do XML autorizado (declaração do `infDPS/IBSCBS` embutido + valores do `infNFSe/IBSCBS`)
+· **setes-api**: declaração CONGELADA lida do ramo no detalhe faturado; declaração PREVISTA pela composição só-pergunta da IB-2 · **app**: só
+renderiza (`ibscbs`, contadores pelas linhas, motivos por i18n). Glossário: **"valores do fisco (IBS/CBS)"** (dado gravado uma vez — não é voz)
+e **"leiaute"** (versão por ambiente × INSTANTE da transmissão ≠ "obrigação" por competência). **Maquetes**: nfse-api re-derivando a declaração
+ou decidindo a obrigação · CST/`indDest`/`finNFSe` como entrada ou coluna · chave/flag/variável/data de "go-live" ligando o grupo · ler "o 1º
+IBSCBS" · espelhar o XML em 13 colunas sem leitor ou DANFSe lendo a tabela · valores como voz que prende a A · linha parcial com NULL ou coluna
+de motivo · UPDATE de título por `vTotNF` · setes-api lendo o `fiscal_api` com SQL próprio · recompilar o núcleo "só por um código" · app
+calculando omissão/obrigação/divergência · corrigir a declaração na nfse-api · calendário consultado por `dCompet`.
+**Correções de documentação (sem decisão)**: §4 (linha IB-3) "enquadramento pela competência" — superado pela D-IB66, nada na IB-3; §6.4
+"exibida no DANFSe" — cumpre-se pelo XML, não pela tabela; §3 item 10 chama de "voz A" o que é dado gravado uma vez.
+
+### 13.3 Rodada 1 da IB-3 (recomendação entre parênteses) — DECIDIDA (Valdo 2026-10-15: "siga as recomendações da Rodada 1 da IB-3")
+
+- **Q-IB76 (reformulada — fato T9)** Declaração PREVISTA antes de faturar. (a) **pela MESMA composição só-pergunta da IB-2, no validate da
+  VENDA e no detalhe da OS ABERTA (a Setes fatura pela OS): antes da obrigação = AVISO num campo próprio da resposta (`ibscbs`), NUNCA em
+  `issues` (no app toda issue bloqueia — T9); depois = issue de bloqueio com os mesmos códigos do 422; a CONGELADA lida do ramo no detalhe
+  faturado; o app só renderiza** · (b) só o validate da venda · (c) só o pré-voo. *(Rec. (a), no ciclo do app da D-IB75.)*
+- **Q-IB77 (G1) Tabela dos valores do fisco.** (a) **nasce na IB-3 só com `total_invoice_value` (vTotNF), `ibs_total_value` (vIBSTot) e
+  `cbs_value` (vCBS) — NOT NULL, sem default — + `created_at`/`updated_at`/`deleted`; PK = a da tentativa, FK para ela; escritor único da
+  família no molde `fillAuthorityData`; o resto do rascunho C1 fica no XML até surgir consumidor (carga do XML, molde D-IB27)** · (b) as 13
+  colunas · (c) nenhuma tabela até o leitor no setes-api. *(Rec. (a).)*
+- **Q-IB78 (G2) View e leitor no setes-api × D-F133.** (a) **a view nasce com o 1º leitor (conferência D-IB12) no deploy do núcleo da F3; se o
+  gatilho vier antes (Q-IB1 (b)/(c) ou divergência real em janeiro que exija ato), decide-se uma "janela do núcleo" com checklist, molde F2a** ·
+  (b) publicar a view já sem leitor · (c) SQL próprio no setes-api (fere a D-F33). *(Rec. (a) — a IB-3 não toca o núcleo.)*
+- **Q-IB79 (G3) D-IB12 na IB-3 (fato T3).** (a) **só VISIBILIDADE (seção "No fisco" + DANFSe); pergunta ao contador junto da Q-IB1 (30/10):
+  "no DAS, NFS-e com `vTotNF` > título — o que se faz?"; prévia da Calculadora com data de 2027 na IB-4; pendência/ato no ERP só com a resposta
+  e o leitor da Q-IB78** · (b) pendência no setes-api já (exige o núcleo) · (c) a nfse-api compara com o total do ERP. *(Rec. (a).)*
+- **Q-IB80 (G4) Valores ausentes/ilegíveis.** (a) **a voz A nunca espera; leitura pura, escopada no filho direto de `infNFSe`, tudo ou nada,
+  FORA da transação (dentro, só o INSERT com valor conferido na faixa DECIMAL(15,2) — servidor sem modo estrito); ausente/ilegível = sem linha
+  + alarme no log (rótulo fixo, sem conteúdo do XML — D-F100); a consulta seguinte preenche; releitura divergente = fica a 1ª + alarme; sem
+  causa nova de ambíguo, sem coluna de motivo** · (b) ilegível = ambíguo e a A não grava · (c) linha parcial com NULL. *(Rec. (a).)*
+- **Q-IB81 (G5) Calendário de leiaute.** (a) **mínimo já: constante congelada no adaptador (documento × ambiente × `valid_from` → versão),
+  consultada pelo INSTANTE da transmissão e pelo ambiente congelado da tentativa; um consumidor (o `versao` do DPS); o evento com a linha dele;
+  no 1.01 não decide o grupo** · (b) adiar para a IB-5. *(Rec. (a) — critério §6.5; veda a flag da NT 009.)*
+- **Q-IB82 (G6) Guarda do envio em PRODUÇÃO (D-IB16).** (a) **a guarda é a ORDEM: prova em produção restrita pela instância de ensaio ANTES
+  do deploy; em P o "liga" é a CLASSIFICAÇÃO do serviço (um serviço e uma nota primeiro), o recuo é desclassificar; nota recusada = cancelar e
+  refaturar no ERP** · (b) data "grupo em P a partir de 01/12" no calendário · (c) flag/variável. *(Rec. (a) — (b)/(c) = maquete nº 2.)*
+- **Q-IB83 (fato T5) O furo do "src do núcleo" na produção da nfse-api.** (a) **conhecimento registrado (prompt das APIs fiscais + PADROES
+  §11): a D-F133 vale para o `src` TAMBÉM — nada se edita em `D:\Gestao2027\fiscal-api` enquanto a nfse-api de produção carregar o `src`; a IB-3
+  trabalha em pasta-irmã `D:\Gestao2027\ib3\{nfse-api,fiscal-api}` (worktrees — o `../fiscal-api` do tsconfig resolve para o núcleo da
+  worktree); o checklist de deploy da nfse-api ganha "núcleo da árvore viva com `git status` limpo e no commit conferido"; trocar a produção da
+  nfse-api para o `dist` fica para a F3** · (b) trocar o `tsconfig` da produção da nfse-api para o `dist` já. *(Rec. (a) — não muda a produção
+  fora de uma decisão da frente fiscal.)*
+- **Q-IB84 (fato T4) Validação local contra o XSD.** (a) **não agora: a prova é a produção restrita (IB-4) + testes de ORDEM e FORMA do grupo
+  contra o XSD lido do acervo (teste que extrai a sequência de `TCRTCInfoIBSCBS`/`TCInfDPS` do arquivo oficial); o README do acervo ganha nota
+  "não há validação local — decisão Q-IB84"** · (b) dependência de validação XSD (libxml) na nfse-api. *(Rec. (a) — dependência nativa nova na
+  máquina de produção não vale o risco agora.)*
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB76** (= Q-IB76 (a)) | declaração PREVISTA pela composição só-pergunta no validate da venda e no detalhe da OS aberta; aviso em campo próprio antes da obrigação, issue de bloqueio depois; congelada lida do ramo; app só renderiza |
+| **D-IB77** (= Q-IB77 (a)) | `tb_invoice_service_transmission_ibscbs` com vTotNF/vIBSTot/vCBS NOT NULL + auditoria, escritor único da família, resto no XML |
+| **D-IB78** (= Q-IB78 (a)) | view + leitor no setes-api só com o 1º leitor, no deploy do núcleo da F3 (ou "janela do núcleo" decidida se o gatilho vier antes) |
+| **D-IB79** (= Q-IB79 (a)) | D-IB12 na IB-3 = só visibilidade; pergunta ao contador com a Q-IB1; prévia da Calculadora 2027 na IB-4 |
+| **D-IB80** (= Q-IB80 (a)) | valores ausentes/ilegíveis: a A nunca espera; tudo ou nada fora da transação; alarme no log; 1ª gravação vence |
+| **D-IB81** (= Q-IB81 (a)) | calendário de leiaute mínimo (documento × ambiente × `valid_from`, pelo instante da transmissão) |
+| **D-IB82** (= Q-IB82 (a)) | a guarda do envio em P é a ORDEM (prova em H pela instância de ensaio antes do deploy; o "liga" em P é a classificação) |
+| **D-IB83** (= Q-IB83 (a)) | D-F133 vale para o `src` do núcleo; IB-3 em `D:\Gestao2027\ib3\{nfse-api,fiscal-api}`; checklist de deploy da nfse-api; troca para o `dist` na F3 |
+| **D-IB84** (= Q-IB84 (a)) | sem validação local contra XSD agora; testes de ordem/forma contra o XSD do acervo; nota no README |
+
+**Ordem de execução** (guardião §7): (1) worktrees `ib3`; (2) nfse-api: fonte de fatos + cerca D-IB41, montador do grupo + `cNBS`, calendário,
+`parseNfseIbscbs` + migration 007 + escritor, "No fisco" com os valores, DANFSe com o bloco; (3) prova em produção restrita pela instância de
+ensaio (D-IB82); (4) gates; (5) deploy da nfse-api com "vai"; (6) setes-api (D-IB76) em worktree, merge com "vai"; (7) build web do app (D-IB75,
+≤ 30/11); (8) dezembro: envio voluntário em P, um serviço por vez. Estimativa 4–6 sessões.
+
+### 13.4 Execução da IB-3 — nfse-api (2026-10-15, worktrees `D:\Gestao2027\ib3\{nfse-api,fiscal-api}` — D-IB83; NADA na árvore viva)
+
+- **Fonte de fatos**: `readServiceInvoice` lê as 3 colunas CRUAS (`ServiceBranchRow.declaration`); `declarationForDps` confere a FORMA só no
+  caminho do DPS (par completo, grupo exige NBS, 6/6/9 dígitos → 422 `FISCAL_DPS_INVALID` com o campo — o cancelamento e as leituras não
+  passam por ela); `buildDpsBase` passa `cServ.cNBS` e `ibscbs {cIndOp, cClassTrib}`.
+- **Montador**: `DpsIbscbs` só com os dois códigos escolhidos; `ibscbsXml` = último filho de `infDPS` (`finNFSe` 0, `cIndOp`, `indDest` 0,
+  `valores/trib/gIBSCBS{CST = prefixo, cClassTrib}`); grupo sem `cNBS` = erro de programação (cinto da E0322).
+- **Calendário** `src/authority/layout-calendar.ts` (`layoutAt(documento, ambiente, instante)` — DPS e EVENTO com linha própria; constante
+  congelada; piso nomeado "desde o 1º envio"); `LAYOUT_VERSION` aposentada.
+- **Valores do fisco**: `parseNfseIbscbs` por CAMINHO (só o `IBSCBS` filho direto de `infNFSe`; texto TSDec15V2); migration **007**
+  `tb_invoice_service_transmission_ibscbs` (**DECIMAL(17,2)** — o TSDec15V2 admite 15 inteiros; o rascunho/guardião diziam (15,2), que
+  truncaria em silêncio); escritor único `fillAuthorityIbscbs` (INSERT … SELECT … chave presente AND NOT EXISTS; `inserted/same/divergent/
+  no-key`); `src/nfse/ibscbs-values.ts` (`readFiscalIbscbs` pura FORA da transação + `recordIbscbsValues` com alarmes de rótulo fixo — E1515
+  ausente, ilegível, divergente) ligado nos dois pontos da voz A (transmissão P e consulta Q).
+- **"No fisco"**: `ServiceFiscalView.ibscbs {declared (do DPS embutido no XML — D-F76), values (da tabela)}`; OpenAPI atualizado.
+- **DANFSe**: bloco "IBS / CBS" (NT 008) — declaração do DPS embutido + valores do grupo do FISCO por caminho; "Valor Líquido + IBS/CBS" com
+  fundo cinza; o campo `ibscbs` é AUSENTE quando a nota não declarou o grupo (o oráculo congelado do N17 é por hash — paridade mantida).
+- **Testes**: `src/__tests__/ibscbs-ib3.test.ts` (ordem/forma contra o XSD OFICIAL lido do acervo — D-IB84; calendário; forma da declaração;
+  dois IBSCBS; escritor; alarmes; cercas D-IB41 e escritor único; "No fisco"; DANFSe). Ajuste da cerca de contexto `adversarial-ne1a-gate`
+  (Q-NE68): 4º ponto que lê `access_key IS NOT NULL` = o escritor dos valores (só onde há chave — D-N26). **nfse-api 795/795** (19 pulados) ·
+  `tsc` limpo.
+- **Conhecimento**: (1) a worktree sai em CRLF (autocrlf) — os arquivos tocados ficam em LF como no `main` (testes que leem fonte por regex
+  `[^\n]*` pegavam o `\r`); (2) os testes adversariais da nfse-api precisam de `SETES_API_DIR` apontando para o setes-api real quando rodam
+  fora da raiz do workspace; (3) **a bateria AO VIVO (`NFSE_ADV_LIVE=1`) está indisponível no dev pós-janela**: exige 6 notas "frescas" no ERP
+  — falha IGUAL no `main` (25/25 no `adversarial-f1.live`) — pré-condição de DADOS, não regressão; refazer a massa é tarefa própria da frente
+  fiscal; (4) ~~`FISCAL_COPY_TABLES` do harness ganha a tabela nova só DEPOIS do deploy~~ (SUPERADO pelos gates — §13.6: a tabela já está na
+  lista; a cópia tolera a ausência no real só enquanto a migration dela não foi aplicada lá + cerca `copy-tables-fence.test.ts`).
+- **Pendente**: gates do delta (lançados); prova em PRODUÇÃO RESTRITA pela instância de ensaio (D-IB82 — exige um serviço de teste
+  CLASSIFICADO + NBS no cadastro e uma OS de teste de cliente interno faturada DEPOIS disso; `smoke:adn-h -- --vai` só com o "vai"); setes-api
+  D-IB76 e app D-IB75.
+
+### 13.5 Execução da IB-3 — setes-api (D-IB76) e setes-app (D-IB75) (2026-10-15, worktrees `D:\Gestao2027\ib3\{setes-api,setes-app}`, branch `ib3`)
+
+- **setes-api**: `previewServiceIbscbs` (a MESMA composição da IB-2, só-pergunta, sem trava, na data de emissão do estabelecimento) no
+  `POST /api/billing/validate` (campo `ibscbs`; antes da obrigação só aviso, depois a recusa também vira issue `scope:'ibscbs'`) e no
+  `GET /api/service-orders/:id` (bloco `ibscbs {preview, frozen}` — prevista na OS aberta, CONGELADA lida do ramo na faturada/cancelada,
+  `readFrozenIbscbs`); Swagger; testes `ibscbs-ib3-erp.test.ts` + mocks ajustados.
+- **setes-app**: peça `app/shared/ibscbs/ibscbs.dart` (formas + `IbscbsCard` que só renderiza) — cartão no detalhe da OS (prevista ×
+  congelada + enviada/valores da nfse-api), selo no sucesso do faturamento individual (OS e venda: "saiu SEM o grupo IBS/CBS: motivos"),
+  relatório do lote com "Faturadas SEM o grupo IBS/CBS: N" + motivo por linha (contadores RECONTADOS das linhas — D27), prévia no diálogo de
+  pendências da venda; i18n pt/en; `test/ibscbs_ib3_test.dart`.
+
+### 13.6 Gates da IB-3 (2026-10-15) — nfse-api 0,70/0,70 · setes-api+app 0,77/0,82 — e a Rodada 2 da IB-3 (D-IB85…D-IB94, "siga as recomendações" — autorização em pé)
+
+**Gates da nfse-api** — socrático **0,70** (3 MEDIUM) · adversarial **0,70** (2 MEDIUM, 2 LOW; testes `adv-ib3-xml|facts|db.test.ts`). Achados e
+retrabalho (sem decisão nova):
+- **1213 PROVADO entre vozes A de notas DIFERENTES** (adversarial (d9): 10 concorrentes = 17–23 perdidas em 150; linha de base pré-IB-3 = 0): o
+  `INSERT … SELECT … NOT EXISTS` do escritor dos valores travava o INTERVALO do índice. **Corrigido**: a trava da NOTA (D-F27) já serializa o
+  escritor da mesma nota — leitura de existência SEM trava + `INSERT … VALUES`; corrida sem a trava = 1062 → releitura travante da linha que
+  existe. **Re-prova no MariaDB real (banco descartável): (d9) 0 perdida, 0 reexecução com 2/5/10 concorrentes; (d10) realista 75/75.**
+- **A gravação dos valores derrubava a voz A** (socrático M1 + adversarial (c)): **COMPARTIMENTO** — SAVEPOINT em volta; deadlock repassa (o
+  InnoDB desfez a transação inteira — seguir rodaria a A em AUTOCOMMIT, fora da trava da nota); outro erro = ROLLBACK TO SAVEPOINT + `failed`
+  com o código + alarme; a voz A segue (D-IB80). Teste com a 007 renomeada no banco real: a A grava.
+- **Amarra XML × tentativa** (socrático L3): os valores só pousam se `infNFSe/@Id` do XML = a chave da voz (`key-mismatch` = alarme) E a
+  tentativa detém ESSA chave (`access_key = ?`, nunca "tem alguma chave").
+- **E0234/E0903 locais** (adversarial MEDIUM): o grupo abre duas rejeições do Anexo I sabidas na montagem — cIndOp ∈ {030102 … 100301 …
+  100601} exige o endereço do tomador (RN 255) e cTribNac 25.05/15.09/17.12/10.05 exige `tpOper` (RN 547, não emitido) → 422 local
+  (`assertIbscbsGroupDeliverable`; molde E0322/E0166/E0712). Setes hoje: 0 de 76 tomadores com endereço incompleto; 01.02 não cai na E0903.
+- Cinto ESTRITO no montador (`exactDigits` — `digits()` normalizava "000-001"); cerca D-IB41 contra QUALQUER menção solta a `tb_service`;
+  cerca do harness (`copy-tables-fence.test.ts` + cópia tolerante à migration ainda não aplicada no real); DANFSe e "No fisco" sem 500 por
+  dado de exibição, valor do fisco formatado do TEXTO (BigInt na soma; ausente = "—", nunca "0,00").
+- Conhecimento registrado (D-IB83/D-IB84 — socrático M3): PADROES_BANCO §11 regra 17 (v1.7), extensão da D-F133 no prompt das APIs fiscais,
+  **checklist de deploy da nfse-api** em `nfse-api/INDEX.md`, nota "sem validação local contra o XSD" no README do acervo.
+- **Errata da D-IB80**: a tabela dos valores é **DECIMAL(17,2)** (o TSDec15V2 admite 15 inteiros; "(15,2)" do rascunho truncaria) — assunção
+  confirmada pelo socrático.
+
+**Gates do setes-api + app** — socrático **0,77** (3 MEDIUM, 8 LOW) · adversarial **0,82** (3 LOW no app, com testes
+`adversarial_ib3x_gate_test.dart`; 7 testes novos da montagem do detalhe da OS em `adv-ib3x-os-detail.test.ts`). Retrabalho sem decisão nova:
+parse TOLERANTE no app (tipo trocado = vazio/null — uma linha não derruba o relatório do lote), valor do fisco formatado do TEXTO (ilegível =
+"—", exato até 15 inteiros), predicado ÚNICO "saiu sem o grupo" (`IbscbsOutcome.leftWithoutGroup`), data da prévia no cartão, texto do
+`nbs-not-accepted` sem "na data" (D-IB69), terminal do ramo em `readFrozenIbscbs` (nunca `terminal = 0`).
+
+**Rodada 2 da IB-3** (questões dos gates; Valdo em pé: "siga as recomendações" — nenhuma irreversível, nenhuma HIGH; as do adversarial do app
+vieram numeradas Q-IB90…Q-IB92 e foram RENUMERADAS para Q-IB92…Q-IB94 por colidirem com as do socrático):
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB85** (= Q-IB85 (a)) | a NBS SOZINHA (cNBS sem o grupo) também muda o que vai ao fisco em P: entra na MESMA ordem da D-IB82 (prova em H do caso só-NBS antes do deploy; em P um serviço e uma nota primeiro; recuo = tirar a NBS do cadastro) |
+| **D-IB86** (= Q-IB86 (a)) | o bloco IBS/CBS do DANFSe aparece com a declaração OU com o grupo do fisco — o que faltar sai "não informado" (paridade do N17 mantida) |
+| **D-IB87** (= Q-IB87 (a)) | a prévia/congelada que falha no detalhe da OS DEGRADA TIPADA (`ibscbs {preview:null, frozen:null, unavailable:true}` + alarme de rótulo fixo); o app diz "indisponível"; o validate da venda segue falhando alto |
+| **D-IB88** (= Q-IB88 (a)) | DONO ÚNICO da data de emissão/competência fiscal: `invoiceEmissionDateFor` (`@shared/invoice/emission-date`) — billing, OS e prévia; cerca `emission-date-fence.test.ts` |
+| **D-IB89** (= Q-IB89 (a)) | antes da obrigação a prévia traz o veredito NA DATA DA OBRIGAÇÃO (`atObligation` — "a partir de 01/01/2027 seria RECUSADA: …") |
+| **D-IB90** (= Q-IB90 (a)) | "congelada × enviada": a visão fiscal da nfse-api diz se o DPS autorizado levou o grupo (`groupInDps` true/false/null); o app mostra o alerta quando o ERP congelou e a NFS-e não leva; **ordem de deploy**: nenhum serviço classificado em P antes do deploy da nfse-api IB-3 (checklist) |
+| **D-IB91** (= Q-IB91 (a)) | motivos de omissão = CONTRATO publicado: `IBSCBS_OMISSIONS` (o tipo sai dela), Swagger enumera, o app guarda o espelho `kIbscbsOmissions` conferido contra a constante da API por teste |
+| **D-IB92** (= Q-IB92 (b), adversarial) | na venda, o aviso de antes da obrigação no caminho SEM pendências fica no selo pós-faturamento (a Setes fatura pela OS, onde o cartão mostra a prévia) — limite conhecido |
+| **D-IB93** (= Q-IB93 (a), adversarial) | a prévia responde só o IBS/CBS — não repete as conferências anteriores do faturamento (item inativo/excluído/sem regra de ISS); limite conhecido |
+| **D-IB94** (= Q-IB94 (a), adversarial) | a issue `scope:'ibscbs'` do validate não leva `code` — o código está em `ibscbs.refusal.code` |
+
+**Contagens**: nfse-api **863** unit (179 pulados — ao vivo/banco) + `adv-ib3-db` 10/10 no MariaDB real (banco descartável apagado; `fiscal_api`
+real intocado, na 006) · setes-api e app: §13.7.
+
+### 13.7 Gates do DELTA do retrabalho da IB-3 (2026-10-15) — socrático **0,78 ✅** · adversarial **0,84 ✅** (nenhum HIGH) — e D-IB95…D-IB97
+
+Valdo (2026-10-15): "vamos finalizar ib-3" — autorização em pé ("siga as recomendações") mantida para as questões dos gates.
+
+**Retrabalho sem decisão (na sessão)**:
+- **ADV-IB3Y-01** (LOW): `fillAuthorityIbscbs` confere o `InvoiceTx` de NOVO logo antes do INSERT (chamada sem await que sobrevivesse ao
+  COMMIT gravaria em AUTOCOMMIT — regra NE1A2-02); provado no banco descartável (y4) e corrigido.
+- **Cabeçalho da 007** reescrito ANTES de ela ser aplicada (ensinava o `INSERT … SELECT … NOT EXISTS` que o d9 provou causar 1213);
+  promessa do `recordIbscbsValues` alinhada (a única exceção que sai é o deadlock — de propósito).
+- **D-IB88 completa**: a grade prévia da negociação (`orders.repository.ts`) usa o dono único; a cerca `emission-date-fence.test.ts` varre o
+  `src` INTEIRO e pega atribuição E propriedade (`x: await todayFor(`); Swagger × `IBSCBS_OMISSIONS` cercado no mesmo teste.
+- Alarme da D-IB87 com `kind` (nome do erro) — TypeError de programação × banco fora do ar.
+- **Checklist de deploy da nfse-api, item 6** (socrático M1): confere o CADASTRO **e os RAMOS já congelados** sem NFS-e (o que vai ao fisco é o
+  ramo). Conferência na produção (2026-10-15, só leitura): 0 serviço classificado · 0 ramo congelado · **2 serviços com NBS — resíduo de teste
+  da IB-1 (61 "ADV-IB1 smoke retrabalho", 62 "PASSEIO IB-1 aba IBS/CBS"), sem OS aberta; desativar = ação na produção, aguarda o Valdo.**
+
+**Provas**: os ataques do delta resistiram no banco real descartável (y1/y1b duas vozes A da MESMA nota com a trava; y2 sem a trava; y3 1205
+fabricado → `failed` e a voz A segue; y5 deadlock real dentro do escritor → reexecução e tudo gravado uma vez) + re-prova do d9 (0 perdas).
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB95** (= Q-IB95 (a) do socrático = Q-IB100 (b) do adversarial) | E0903 (subitens 25.05/15.09/17.12/10.05 exigem `tpOper`) = LIMITE CONHECIDO com GATILHO: na implantação de cliente desses subitens o `tpOper` (fato novo — passa pelo guardião) entra ANTES da data da obrigação dele; linha no roteiro de implantação por cliente. A Setes (01.02) não é atingida |
+| **D-IB96** (= Q-IB96 (a)) | ramos JÁ congelados com o grupo/NBS no momento do deploy seguem a D-IB82: depois do deploy, UMA nota primeiro, conferida em "No fisco", e só então o resto; recuo do que congelou = cancelar e refaturar (tirar a NBS do cadastro não desfaz o ramo) |
+| **D-IB97** (= Q-IB101 (b)) | o alarme dos valores (divergente/key-mismatch/E1515) segue a cada passada do rodízio até a prova da IB-4 mostrar se o fisco devolve o grupo; se o E1515 aparecer de verdade, decide-se "alarmar só na 1ª vez" |
+
+**Contagens** (2026-10-15): nfse-api **869** unit (185 pulados — ao vivo/banco) + banco descartável `adv-ib3-db` + `adv-ib3y-db` **16/16** ·
+setes-api **1923/1923** (31 pulados, com o delta) · app **615/615** (28 pulados) + `flutter analyze` limpo + 46/46 nos
+testes IBS/CBS (inclusive os adversariais ib3x/ib3y).
+
+**Prova em PRODUÇÃO RESTRITA (D-IB82) — preparada na INSTÂNCIA DE ENSAIO** (kit `fiscal-api/scripts/ensaio-janela/`: 2ª MariaDB :3307 de dump
+só-leitura da produção, usuários com senhas novas, fisco/Inter de PRODUÇÃO bloqueados no processo): serviço 1 classificado (000001/100301/NBS
+115021000) pelo código da `ib3`; OS **8014** (cliente da D-F54) com prévia "COM o grupo" hoje e na obrigação; faturada → nota **6794**,
+`ibscbs.declared: true`, congelada no ramo; smoke SEM `--vai` = pré-condições OK; DPS montado localmente com `cNBS` e `<IBSCBS>` como último
+filho do `infDPS`. **Falta o "vai" do Valdo** para `smoke:adn-h -- --nota 8014 --vai` (transmitir em H → consultar → XML/DANFSe → bloco
+IBS/CBS → cancelar no fisco de H).
+
+**"vai" do Valdo (2026-10-15) — resultado**: 3 transmissões em H (16:33–16:36 UTC, DPS novos) → **R E1000** "A calculadora integrada ao sistema
+NFS-e retornou o seguinte erro: The operation has timed out". Leitura: o DPS com o grupo PASSOU a validação de forma (o fisco chegou a acionar a
+Calculadora com a nossa classificação); quem caiu foi a integração da Sefin de H com a Calculadora — a Calculadora pública (piloto-cbs) responde
+em < 1 s, e o fórum do ACBr registra o mesmo E1000/timeout para todos desde **14/10/2026 08h16** no ambiente de homologação. Conhecimento: E1000
+= erro da Calculadora integrada (pode ser TRANSITÓRIO — a voz é R e a nota segue retransmissível, cada tentativa com DPS novo). A prova dos VALORES
+devolvidos fica pendente da normalização do fisco de H. Junto do "vai": serviços 61/62 (resíduo da IB-1) DESATIVADOS na produção (`active='N'`;
+já estavam excluídos no `tb_product` — achado: a exclusão do serviço não alcança o ramo `tb_service`, que fica vivo com a NBS).
+
+### 13.8 IB-3 PUBLICADA (2026-10-15) — D-IB98
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB98** (Valdo 2026-10-15: "(b), pode publicar") | com o fisco de H fora (E1000 — Calculadora integrada em timeout desde 14/10), a IB-3 é PUBLICADA ANTES da prova completa em H — inverte a ordem literal da D-IB82, mantendo o que ela protege: **NENHUM serviço classificado (nem com NBS) em PRODUÇÃO até a prova em H passar** (autorização + valores do fisco lidos + cancelamento em H). Com 0 classificado e 0 ramo congelado, o deploy é INERTE em P: o "liga" segue sendo a classificação |
+
+**Publicação** (checklist de deploy da nfse-api conferido — núcleo vivo limpo em 945ad2d; item 6: 0 classificado · 0 ramo congelado · os 2
+serviços com NBS (61/62, resíduo da IB-1) DESATIVADOS a pedido do Valdo):
+- **setes-api** `e4af7aa` (merge ff da `ib3` na árvore viva — `tsx watch` reiniciou; health 200);
+- **nfse-api** `ba78074` (merge ff; processo REINICIADO na aba do Terminal "nfse-api producao" — **migration 007 aplicada no boot no `fiscal_api`
+  de produção**; `/v1/health` ok; leitura da visão "No fisco" de 3 notas reais pelo código publicado: `groupInDps: false` (saíram antes da IB-3),
+  tabela nova vazia);
+- **setes-app** `fbc2fac` (merge ff; `flutter run -d web-server --web-port 5051` reiniciado na aba "setes-app web 5051");
+- GitHub: os três `main` empurrados.
+
+**Pendente (fecha a IB-4)**: refazer a prova em H quando o fisco normalizar — instância de ensaio 3307 (scratchpad desta sessão) ou nova
+(kit `fiscal-api/scripts/ensaio-janela/`): classificar o serviço de teste na CÓPIA, faturar, `smoke:adn-h -- --nota <id> --vai` (o roteiro já
+imprime o bloco IBS/CBS no passo 3b); só DEPOIS dela classificar em produção (um serviço e uma nota primeiro — D-IB82/D-IB96). Q-IB1 (opção de
+regime até 30/10) segue com o Valdo + contador.
+

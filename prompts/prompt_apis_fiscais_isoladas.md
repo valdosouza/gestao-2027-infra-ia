@@ -891,6 +891,9 @@ branch `sessao-2026-10-10`):**
   pela cerca por AST até lá) + sonda no boot da F3 ("INSERT no `fiscal_api` negado ao usuário do setes-api").
 - **D-F133 (= Q-F141 (b)) — o núcleo na janela por checklist**: HEAD e `dist` do núcleo conferidos e registrados no passo 4; proibido
   recompilar o núcleo na máquina de produção até a F3; na F3, tag/tarball versionado como dependência (R13).
+  **Extensão (fase IBS/CBS, D-IB83 — 2026-10-15)**: a D-F133 vale para o `src` TAMBÉM — a nfse-api de produção carrega `../fiscal-api/src`,
+  então editar o núcleo da árvore viva É deploy no próximo restart; frente que precisa do núcleo trabalha em pastas-irmãs de worktrees
+  (a IB-3 em `D:\Gestao2027\ib3\{fiscal-api,nfse-api}`); checklist de deploy da nfse-api em `nfse-api/INDEX.md`; PADROES §11 regra 17.
 - **D-F134 (= Q-F142 (a)) — aborto antes do `--vai` por script ensaiado**: válido SÓ até o passo 5 da janela (DROP dos 9 gatilhos, remover a
   linha `f2a_fiscal_passivo` do `_migrations`, reverter o código, re-sincronizar), provado em banco descartável antes da janela; depois do
   `--vai` o rollback segue proibido (D-F50). *(EMENDADA pela D-F153: a linha não é removida — vira a LÁPIDE `f2a_fiscal_passivo_abortada`,

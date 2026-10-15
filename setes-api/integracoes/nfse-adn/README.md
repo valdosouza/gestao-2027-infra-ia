@@ -122,7 +122,7 @@ https://www.nfse.gov.br/consultapublica).
 | Arquivo | O quê |
 |---|---|
 | `anexo_b-lista_servico_nacional-v1.01.xlsx` | Anexo B v1.01 (22/01/2026): aba `LISTA.SERV.NAC.` = **338 códigos de tributação nacional** (`cTribNac`, 6 dígitos = item(2)+subitem(2)+desdobro(2); a planilha grava sem o zero à esquerda: `10201` = `010201`) + aba `LISTA.NBS_v2.0` (1.210 códigos NBS) |
-| `nfse-esquemas_xsd-v1.01-20260209.zip` → `xsd/Schemas/` | XSD oficiais v1.01 (DPS, NFS-e, eventos, componentes) — validação local antes de assinar |
+| `nfse-esquemas_xsd-v1.01-20260209.zip` → `xsd/Schemas/` | XSD oficiais v1.01 (DPS, NFS-e, eventos, componentes) — ⚠️ **não há validação local contra o XSD (decisão Q-IB84 → D-IB84, 2026-10-15)**: os XSD servem de FONTE para os testes de ordem/forma do grupo IBS/CBS (`nfse-api/src/__tests__/ibscbs-ib3.test.ts` extrai a sequência de `TCInfDPS`/`TCRTCInfoIBSCBS` daqui); a prova é a produção restrita (IB-4). Dependência de validação XSD (libxml) na máquina de produção = decisão nova |
 
 **Fato que decide o modelo do código nacional**: 338 códigos para os ~200 subitens da LC 116 → um subitem pode ter
 VÁRIOS desdobros nacionais (ex.: 1.01 tem 01.01.01; 7.02 tem vários). Logo `cTribNac` NÃO cabe como coluna de
