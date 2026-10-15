@@ -4,7 +4,7 @@
 devolução referencia POR ITEM (nItem derivado por peça única + conferência no procNFe da origem; `refNFe` proibido — supera parte da D-NE25);
 D-NE102: IBS/CBS no vProd em 2027 = regra do motor e do builder; W16 vigente = NT 2023.004. Cinco documentos novos arquivados (PL_010d_v1.03 —
 eventos e inutilização com CNPJ alfanumérico —, NT 2023.001/2023.004/2017.001). D-NE115/D-NE116 (pacote-base das mensagens + NT 2021.003 do GTIN)
-ARQUIVADOS — nenhuma questão aberta; validação XSD = camadas PL_009_V4 → PL_010d → PL_010f. Próximo: frente do CNPJ alfanumérico (D-NE99) → NE-1b/NE-2/NE-3.
+ARQUIVADOS — nenhuma questão aberta; **PUBLICADA 2026-10-15 (infra 5a1633d · nfe-api a9ef9ac)**; validação XSD = camadas PL_009_V4 → PL_010d → PL_010f. Próximo: frente do CNPJ alfanumérico (D-NE99) → NE-1b/NE-2/NE-3.
 **2026-10-15 (tarde): NE-0 EXECUTADA (§13.9).** Rodada 3
 decidida (D-NE93…D-NE101). Acervo oficial ARQUIVADO em [`integracoes/nfe-sefaz/`](integracoes/nfe-sefaz/README.md) (24 arquivos + `.txt`,
 SHA-256); [`CONFERENCIAS.md`](integracoes/nfe-sefaz/CONFERENCIAS.md) com as 65 linhas FECHADAS (2 DERRUBAM: a NF-e sem IE vai à SVRS — já
