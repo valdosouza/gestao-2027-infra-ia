@@ -12,7 +12,9 @@ grupo do sync é tarefa SEPARADA (§7).
 **Anexo**: `prompt_frente_cnpj_alfanumerico-inventario.md` (110 pontos com arquivo:linha).
 **Estado (2026-10-15)**: Rodada 0 ORGANIZADA — inventário (anexo), fatos oficiais (§2), parecer do guardião INTEGRADO (§4), ondas (§5);
 PUBLICADA (infra 024f914). **Rodada 1 DECIDIDA ("siga as recomendações" → D-CJ1…D-CJ13, §6.1)**; **onda 0 EXECUTADA em worktree com gates
-socrático 0,76 / adversarial 0,82 (§8)** — nada publicado; ⏯ **rodada 2 (Q-CJ14…Q-CJ18, §8.7) e a JANELA (§8.5) aguardam o Valdo; retomar pelo §9.**
+socrático 0,76 / adversarial 0,82 (§8)**; **rodada 2 DECIDIDA (D-CJ14…D-CJ18, §8.8) e ONDA 1 EXECUTADA em worktree (2026-10-16, §8.9) com gates
+socrático 0,74 / adversarial 0,80 e retrabalho na sessão (§8.10)** — commits LOCAIS no branch `cnpj`, nada publicado; ⏯ **rodada 3 (Q-CJ19…
+Q-CJ22, §8.10) e a JANELA única onda 0 + onda 1 (§8.5) aguardam o Valdo; retomar pelo §9.**
 
 ---
 
@@ -429,14 +431,96 @@ cliente, fornecedor, transportadora, nota de serviço — e depois voltamos [à 
   anterior foi retomar a nfe-api e caiu na NFS-e — a frente é TRANSVERSAL (a onda 0 não tinha o que mexer na nfe-api, que não tem emissão ainda);
   dizer isso de saída em qualquer retomada.
 
+### 8.9 Onda 1 — EXECUTADA em worktree (2026-10-16) — a porta aberta nos transversais
+
+Commits locais no branch `cnpj` (sem merge, sem push): onda 0 = núcleo 4b17b23 · nfse 62c5fcf · api f53a618 · app 2f621c1 (+ Infra-IA d2593e8);
+onda 1 = núcleo 50271c4 · nfse a1bdcbd · api a44ce04 · app afa2b59. Tarefa SEPARADA do grupo do sync aberta (inventário + acordo do CHECK).
+
+- **Cadastros (setes-api) — D-CJ3/D-CJ8**: `companyBody`/`personBody` pela peça (`federalIdIssue`): a porta dos 5 papéis (institution, cliente,
+  fornecedor, transportadora, colaborador) aceita o CNPJ alfanumérico CANÔNICO; fora da forma mas canonicalizável → 400 com `fields[].expected`
+  TEXTO = a forma canônica (só quando ela é VÁLIDA — máscara sobre DV errado não sugere nada); `FieldError.expected` virou `number | string`
+  (aditivo à D-N3) e o `zodToFields` leva o `params.expected` do issue.
+- **App — D-CJ8**: `CnpjInputFormatter` (literais nas posições do CNPJ numérico, minúscula sobe, DV só dígito, cursor no fim) + teclado de TEXTO
+  (B9); julgamento ÚNICO `cnpjProblem`/`cpfProblem` (`shared/entity/domain/federal_id_check.dart`) para a marca inline E as 5 pendências — R3
+  por construção (antes 6 cópias de "14 dígitos"; agora forma + DV); o objeto guarda e envia a forma canônica (`cnpjCanonical`; `cnpjDigits`
+  MORREU — S2); `FailureField.expectedText` no core (o `as num?` derrubava o parse com texto); i18n "CNPJ inválido (12 letras ou números e 2 DV)".
+- **NFS-e (nfse-api) — D-CJ7/D-CJ15/D-CJ16**: `layout-calendar.ts` por PACOTE XSD (`LAYOUT_SCHEMAS` com a fonte arquivada; `layoutLineAt`,
+  `cnpjAlphanumericAccepted`): H aceita letra desde 10/08/2026 (implantação registrada no portal; XSD de 27/07), P segue numérico. A fonte de
+  fatos devolve o FATO (o `DPS_NUMERIC_CNPJ` provisório da onda 0 saiu); `buildDpsBase` recusa legível (422 `FISCAL_DPS_INVALID` com o campo,
+  ANTES de nDPS/tentativa/fisco) quando o leiaute do ambiente não aceita; o montador não usa mais `digits()` em inscrição (`cnpjForLayout`/
+  `cpfForLayout`; `buildDpsId` aceita o CNPJ canônico; `buildDpsXml` confere o Id pelo leiaute — o literal "DPS" fica fora da conferência; o
+  `CNPJAutor` segue o leiaute do EVENTO); `emitterCnpj` (leitura/arquivamento de documento já autorizado) canonicaliza o gravado sem DV (D-CJ16).
+- **Cercas — D-CJ15**: regra 5 do predicado gêmeo (helper de dígitos aplicado a campo de inscrição alarma); o `digits()` do montador só cMun/CEP/
+  fone/códigos; na cerca Dart saíram as entradas do formulário de entidade.
+- **DDL do CHECK — D-CJ4**: RASCUNHO `prompt_frente_cnpj_alfanumerico-ddl-check-rascunho.sql` PROVADO em schema descartável (criado e apagado):
+  o MariaDB 10.4 VALIDA as linhas existentes no `ADD CONSTRAINT`; com `COLLATE utf8mb4_bin` recusa minúscula/máscara/letra no DV; sem ele aceita
+  minúscula (o defeito da 067); ⚠️ o `mysql2` rotula o errno 4025 como `ER_INNODB_AUTOEXTEND_SIZE_OUT_OF_RANGE` — conferir pelo NÚMERO. NÃO aplicado.
+- **Testes (worktrees, depois da onda 1)**: núcleo 633 · nfse-api 960 · setes-api 2012 (128 suítes) · setes_validators 96 · core 79 · app 637.
+- **Fica pendente (com motivo)**: o CHECK (acordo do grupo do sync); a sonda do Inter (D-CJ10 — o sandbox só atende seg–sex 8h–20h; até lá o
+  boleto recusa CNPJ com letra, legível) e o `ChargePayer` como `FederalId` junto com ela; o certificado SE-S por consenso (D-CJ6 — amostra real);
+  a linha de P no calendário quando o fisco publicar o XSD de produção com letra (onda 2); a NF-e nasce aceitando na nfe-api (NE-1b).
+
+### 8.10 Gates da onda 1 (2026-10-16) — PASSARAM, com retrabalho na sessão
+
+- **Socrático 0,74 ✅** (revisor independente; nenhum CRITICAL — os de maior peso MEDIUM). Conferido certo por ele: o 422 do leiaute em P vem
+  antes de qualquer reserva em todo caminho de transmissão (um transmit só; o 0b depois do passo (c); throw dentro da reserva desfaz até o
+  `dps_last_number`); o `expected` texto não quebra app antigo (que só envia dígitos); R3 por construção. Pontos abertos e destino:
+  - **(e) pasta do arquivo fiscal / (b) `CNPJAutor` de documento JÁ autorizado** saem do CADASTRO de hoje, não do emitente embutido na chave →
+    **Q-CJ19**. Corrigido na sessão só o que não depende de decisão: cancelar em P com o cadastro do emitente hoje alfanumérico dava 500 (o
+    `cnpjForLayout` lançava DEPOIS da reserva K) → agora 422 `FISCAL_DPS_INVALID` legível ANTES de reservar (`nfse/transmission.ts`, teste
+    "D-CJ7" em `transmission.test.ts`). O autor ≠ emitente quando o cadastro mudou para OUTRO CNPJ numérico segue na Q-CJ19.
+  - **(a) a porta grava CNPJ com letra no central antes do CHECK e do inventário do sync** → **Q-CJ21**.
+  - **(f) o `CnpjInputFormatter` APAGAVA o que não cabia** (contra a D-CJ2) → CORRIGIDO: a edição que traz caractere fora de `[0-9A-Za-z./- ]`,
+    passa de 14 posições ou põe letra no DV NÃO ENTRA (fica o valor anterior; nada já digitado muda; colar "CNPJ 12.ABC…" não vira outra
+    sequência de 14); literal só antes de um caractere seguinte; o cursor fica onde o usuário estava (`federal_id.dart`).
+  - **(c) o calendário supõe linhas cada vez mais permissivas sem conferir** → teste de MONOTONIA (`cnpj-alfa-onda1.test.ts` da nfse-api: por
+    documento × ambiente o "aceita letra" nunca volta atrás, e o EVENT aceita sempre que o DPS aceita — senão a nota autorizada com letra fica
+    sem leiaute para o próprio cancelamento); a "tentativa controlada no 1º caso real" da linha de P → **Q-CJ22**.
+  - **(10) a porta abriu sem a sonda do Inter (desvio da D-CJ10)** → **Q-CJ20**; corrigido na sessão: a recusa do boleto diz a SAÍDA ("cancele
+    este boleto — nada foi ao banco; o título fica livre — e cobre por outro meio"), e o A1 de estabelecimento ALFANUMÉRICO cujo titular o
+    leitor do CN não lê recebe 409 que diz o limite NOSSO ("o A1 não precisa ser trocado; a conferência entra com a leitura por consenso —
+    D-CJ6"), nunca "não é um e-CNPJ" (`fiscal-api/src/secret/certificate.ts`; teste em `cofre.test.ts`).
+  - Menores: a regra 5 reconhecia a inscrição só pelo NOME do argumento → CORRIGIDO (taint por escopo, abaixo); o `zodToFields` repassa
+    `params.expected` de QUALQUER issue `custom` (só texto/número) — limite conhecido: pôr `expected` num issue é decisão explícita de quem escreve.
+- **Adversarial 0,80 ✅, sem HIGH/CRITICAL** (revisor independente; 5 arquivos de teste NOVOS e PERMANENTES `adversarial-cnpj-onda1-gate` —
+  setes-api, nfse-api, setes_validators, core, app web; resistiram: os 10 DTOs dos 5 papéis num fuzz de 6.000, o envelope `expected`
+  número × texto sem conversão, app OK ⇔ API aceita o que o app ENVIA num fuzz de 8.000, P com letra = 422 antes de nDPS/tentativa/fisco
+  inclusive com reserva em voo e com o ambiente virando H→P no meio). Os **9 LOW CORRIGIDOS na sessão** (testes `[CORRIGIDO na sessão — ACHADO
+  LOW]`): (1) CNPJ/CPF de dígitos iguais recebiam "dígito verificador não confere" → "com todos os dígitos iguais não é válido"; (2) cancelar
+  em P com cadastro alfanumérico = 500 → 422 antes da reserva (acima); (3) o `emitterCnpj` tolerante (D-CJ16) aceitava `00000000000000` como
+  pasta → veto dos 14 iguais; (4)+(5) a cerca TS gêmea (idêntica nos 3 repositórios) — taint POR ESCOPO de função a partir de nomes/campos de
+  inscrição (inclusive `insc`, `.doc`, `.ni`, desestruturação, alias, `.call/.apply`, callback de iterador), helper de dígitos por apelido,
+  conversão numérica (`Number`/`parseInt`/`parseFloat`/`isNaN`), padrão em constante, `\p{…}`/hex/`\P{N}`, `/\d/` sem flag, `includes`
+  — as formas que escapavam são SONDAS permanentes (`FENCE_PROBES_CAUGHT/CLEAN`); (6) a cerca Dart ganhou o padrão em variável RESOLVIDO pela
+  atribuição literal, a faixa de código (`c >= 48 && c <= 57`, decimal/hex, nos dois sentidos), `\p{L}`/`\P{N}`/hex e `int|num|double.parse`/
+  helper "digits" num comando que fala de inscrição — as três faixas do `CnpjInputFormatter` (classificação, não filtro) na lista branca com
+  o motivo; achado de passagem: o `_uncomment` da cerca Dart nunca tirava comentário de arquivo CRLF (o `.` do Dart não casa `\r`); (7) NEL
+  nas pontas: o app julga e envia pelo `FederalIdRules.trimLikeJs` (o `trim()` do JS) — mesma decisão da API; (8)+(9) formatter (acima).
+- **Testes (worktrees, depois dos gates)**: núcleo 634 (+1 skip) · nfse-api 983 (+185 skip — ao vivo) · setes-api 2045 (129 suítes, +31 skip) ·
+  setes_validators 104 · core 84 · app web 642 (+28 skip) · `tsc --noEmit` nos 3 TS e `flutter analyze` limpos. Commits LOCAIS do retrabalho no
+  branch `cnpj`: núcleo c84eaf5 · nfse e3b891a · api dcf4e1e · app db92f38 (o `dist` do núcleo da worktree reconstruído).
+- **Questões para a rodada 3 (recomendação entre parênteses)**:
+  - **Q-CJ19 Pasta do arquivo fiscal e `CNPJAutor` de documento JÁ autorizado**: (a) tirados do emitente EMBUTIDO na chave pela peça
+    `access-key` (o cadastro vale só para a emissão — supera em parte a D-CJ16: a 2ª via deixa de depender do cadastro) · (b) manter o cadastro
+    canonicalizado sem DV e aceitar o limite. *(Rec.: (a).)*
+  - **Q-CJ20 A porta abriu sem a sonda do Inter (desvio da D-CJ10)**: (a) aceitar o desvio — o boleto recusa CNPJ com letra até a sonda, com a
+    saída dita (já feito na sessão) · (b) a janela da onda 1 espera a sonda. *(Rec.: (a).)*
+  - **Q-CJ21 A janela única publica a porta antes do inventário do grupo do sync** (contra o "todo consumidor" da D-CJ8 — o indexador do sync,
+    "achou pelo CPF/CNPJ → reusa o id", está fora da nossa vista): (a) publicar e aceitar o risco, com conferência só-leitura de duplicidade de
+    CNPJ canonicalizado no central depois da janela · (b) a onda 0 vai na janela e a PORTA (`companyBody` aceitando letra) espera o retorno do
+    sync. *(Rec.: (b) se o sync não responder antes da janela.)*
+  - **Q-CJ22 Linha de P na onda 2**: (a) abrir P exige a "tentativa controlada no 1º caso real com o vai" (porta (c) da D-CJ7); a cerca de
+    monotonia já entrou · (b) só pela data anunciada. *(Rec.: (a).)*
+
 ## 9. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
 
 ```
 Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\Infra-IA\prompts\prompt_frente_cnpj_alfanumerico.md
-(Rodada 1 DECIDIDA — D-CJ1…D-CJ13 no §6.1; ONDA 0 EXECUTADA em worktrees D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,setes-app},
-branch `cnpj`, com gates socrático 0,76 e adversarial 0,82 — §8; acervo oficial em Infra-IA/setes-api/integracoes/cnpj-alfanumerico/).
-Comece pela JANELA de deploy do §8.5 SÓ com o meu "vai" (ordem núcleo → nfse-api → setes-api → app; o `dist` do núcleo vivo antes do
-setes-api). Apresente a rodada 2 (Q-CJ14…Q-CJ18 do §8.7) com as recomendações; decidida, registre D-CJ14… e siga para a onda 1 (§8.6: a porta
-do cadastro + o CHECK de forma depois do acordo com o grupo do sync + o escritor do DPS pelo calendário por LEIAUTE). NÃO ler setes-sync nem
-sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
+(TRANSVERSAL — cadastros, NFS-e, boleto, certificado; a nfe-api não tem emissão ainda e volta DEPOIS desta frente, na NE-1b).
+Rodadas 1 e 2 DECIDIDAS (D-CJ1…D-CJ18, §6.1/§8.8); ONDAS 0 e 1 EXECUTADAS em worktrees D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,
+setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0) e 0,74/0,80 (onda 1) com retrabalho — §8.7/§8.10.
+1) Apresente a rodada 3 (Q-CJ19…Q-CJ22 do §8.10) com as recomendações; decidida, registre D-CJ19… e execute o que couber em worktree.
+2) A JANELA única onda 0 + onda 1 (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api →
+app); a Q-CJ21 diz se a PORTA do cadastro vai junto ou espera o grupo do sync. 3) O CHECK de forma (rascunho provado) só depois do acordo
+com o grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
 ```
