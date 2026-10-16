@@ -10,8 +10,9 @@ estado OFICIAL na web, fontes primárias datadas) + parecer do guardião (`setes
 **Regra dos dois grupos**: setes-sync e sincronizador NÃO foram lidos — são a outra porta de escrita de `setes_central.tb_company.cnpj`; o pedido ao
 grupo do sync é tarefa SEPARADA (§7).
 **Anexo**: `prompt_frente_cnpj_alfanumerico-inventario.md` (110 pontos com arquivo:linha).
-**Estado (2026-10-15)**: ⏯ **Rodada 0 ORGANIZADA** — inventário (anexo), fatos oficiais (§2), parecer do guardião INTEGRADO (§4), ondas (§5);
-**Rodada 1 (Q-CJ1…Q-CJ13, §6) aguarda o Valdo**. Retomar pelo §8. PUBLICADA 2026-10-15 (infra 024f914).
+**Estado (2026-10-15)**: Rodada 0 ORGANIZADA — inventário (anexo), fatos oficiais (§2), parecer do guardião INTEGRADO (§4), ondas (§5);
+PUBLICADA (infra 024f914). **Rodada 1 DECIDIDA ("siga as recomendações" → D-CJ1…D-CJ13, §6.1)**; **onda 0 EXECUTADA em worktree com gates
+socrático 0,76 / adversarial 0,82 (§8)** — nada publicado; ⏯ **rodada 2 (Q-CJ14…Q-CJ18, §8.7) e a JANELA (§8.5) aguardam o Valdo; retomar pelo §9.**
 
 ---
 
@@ -249,18 +250,193 @@ Princípio (G7 → Q-CJ8): **a porta do cadastro só abre quando todo consumidor
 - **Q-CJ13 Fora da frente** (G13): a falha ao gravar o XML autorizado gera só aviso no log (S6/D19 — independe de letra). *(Rec.: tarefa própria na fase
   fiscal.)*
 
+### 6.1 Rodada 1 DECIDIDA (2026-10-15, Valdo: "siga as recomendações") — D-CJ1…D-CJ13
+
+Antes da apresentação, auditoria só-leitura do banco vivo (anexo §8.1): 249 CNPJ em `tb_company`, TODOS `^[0-9]{14}$`, zero `'0'`, zero
+letra/minúscula; certificado do `fiscal_api` numérico; nenhum campo CPF/CNPJ no catálogo de campos configuráveis e nenhuma máscara configurada.
+
+- **D-CJ1** (= Q-CJ1 (Rec.)): acervo em `Infra-IA/setes-api/integracoes/cnpj-alfanumerico/` (molde `nfse-adn`, README com origem/data/SHA-256);
+  5 documentos NOVOS — Perguntas e Respostas da RFB · Manual do DV · XSD 1.01 da produção restrita da NFS-e (`esquemas-nfse-rtc-v1-01-20260727.zip`)
+  · DOC-ICP-04 v8.3 compilado · DRN do Bacen v1.02; os outros 3 (NT 009 v1.01, XSD 1.01 de produção, contrato do Inter) já estão nos acervos e são
+  só REFERENCIADOS. Cada download com o "vai" do Valdo (nome, origem e tamanho pelo HEAD da hora).
+- **D-CJ2** (= Q-CJ2 (a)): fonte TS ÚNICA no núcleo, superfície pública pura e sem banco `fiscal-api/federal-id` (molde `fiscal-api/reading`, D-F33),
+  reexportada pelo `@shared/validation` do setes-api; Dart em `setes_validators`; o espelho TS × Dart é garantido por UM vetor oficial de casos
+  (JSON) lido pelas duas suítes. Nuance da decisão 18 dos campos configuráveis: a superfície fica, a implementação vira uma só.
+- **D-CJ3** (= Q-CJ3 (a)): as portas de ESCRITA aceitam só a forma canônica e recusam o resto com `fields[].expected` (decisão 19 + "o que valida é
+  o que grava"); as LEITURAS (prefill by-document, fiscal-exists, pesquisa) canonicalizam a entrada.
+- **D-CJ4** (= Q-CJ4 (c)): colação mantida + CHECK BINÁRIO de forma provado no boot pelo nome (`ck_company_cnpj_form`,
+  `ck_establishment_certificate_cnpj_form`) + o CHECK da 067 ganha `COLLATE utf8mb4_bin`; pré-condições: auditoria (FEITA — §8.1 do anexo, 0
+  linha fora da forma), prova em schema descartável do `ADD CONSTRAINT` do MariaDB 10.4 sobre linhas existentes, e **acordo com o grupo do sync
+  ANTES do DDL** (o CHECK é o contrato entre os grupos). Entra na onda 1.
+- **D-CJ5** (= Q-CJ5 (a)): o CHECK tolera o sentinela `'0'` explicitamente até a decisão; "sem documento" já é `tb_no_doc`; a saída do
+  `DEFAULT '0'` vai à revisão do sync. Hoje nenhuma linha tem `'0'`.
+- **D-CJ6** (= Q-CJ6 (a)): o titular do certificado por CONSENSO das fontes (OID 2.16.76.1.3.3 × `serialNumber` 2.5.4.5 × CN legado; divergência =
+  409 "certificado incoerente"; nenhuma = 409 "sem a inscrição do titular"), codificado na onda 0 SÓ depois de arquivar o DOC-ICP-04 v8.3 e ter
+  uma amostra REAL de SE-S. Risco aceito: um A1 no perfil novo chegar antes quebra o upload (vale para CNPJ numérico) — o certificado é a 1ª
+  coisa a destravar quando a amostra existir.
+- **D-CJ7** (= Q-CJ7 (a), porta (c) aberta): o dado NOSSO sai conforme o leiaute oficial do ambiente — H aceita letra já; P recusa local legível
+  (422, ANTES de reservar o nDPS) enquanto o XSD de produção for numérico; o `layout-calendar.ts` passa a identificar o LEIAUTE (o XSD publicado),
+  não a versão; linha nova por deploy, nunca flag; tentativa controlada no 1º caso real só com o "vai". O dado do TERCEIRO (voz) entra pela forma
+  geral e volta como veio — a leitura tolerante vem antes e não depende do resto.
+- **D-CJ8** (= Q-CJ8): ondas 0 → 1 → 2; a porta do cadastro só abre quando todo consumidor que hoje mutila o valor já lê certo ou recusa legível.
+- **D-CJ9** (= Q-CJ9 (a); DIVERGE da D-BA20/21 no critério "Documento"): pesquisa por PREFIXO com kind próprio `federalId` (o operador é da peça
+  pelo kind — D-BA4); normaliza pela peça (caractere estranho = 422); `LIKE 'X%'` com `escapeLike`; morre o "Informe só números".
+- **D-CJ10** (= Q-CJ10 (a)): sonda no sandbox do Inter ANTES da onda 1 — aceitou → envia a forma canônica; recusou → recusa local legível; mutilar
+  NUNCA (o `replace(/\D/g,'')` do pagador sai na onda 0).
+- **D-CJ11** (= Q-CJ11 (a)): CPF/CNPJ saem do motor de máscara configurável (a formatação é fato da RFB); nenhum dado configurado a migrar (§8.1).
+- **D-CJ12** (= Q-CJ12): cerca `federal-id-fence` (molde `time-zone-fence`/`voice-kind-fence`) proíbe `replace(/\D/g…)` sobre inscrição e chave,
+  com lista branca CEP/fone/IBGE/CPF.
+- **D-CJ13** (= Q-CJ13): S6/D19 (falha ao gravar o XML autorizado vira só aviso no log) é tarefa própria da fase fiscal, fora desta frente.
+
 ## 7. Fora desta frente / outro grupo
 
 - **setes-sync e sincronizador** (regra dos dois grupos): indexam a entity por CPF/CNPJ (`setes_central.tb_company.cnpj`, `tb_sync_conflict.document`) e
   o Firebird do legado guarda CNPJ — o grupo do sync faz o próprio inventário e a própria correção (tarefa separada).
 - **NF-e**: já nasce aceitando (D-NE29) — a chave e o Code-128 híbrido estão no acervo da nfe-api e entram na NE-1b/NE-4.
 
-## 8. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
+## 8. Onda 0 — EXECUTADA em worktree (2026-10-15)
+
+Worktrees irmãs (PADROES §11 regra 17): `D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,setes-app}`, branch `cnpj` a partir do `main`
+(núcleo 945ad2d · nfse ba78074 · api e4af7aa · app fbc2fac). **Nada na árvore viva**; o merge é a JANELA (§8.5). O `.env` e o `package-lock.json`
+do setes-api foram COPIADOS da árvore viva (não versionados — como nas worktrees `ib3`/`f2a`).
+
+### 8.1 Acervo (D-CJ1) — ARQUIVADO
+
+`Infra-IA/setes-api/integracoes/cnpj-alfanumerico/` (README com origem, bytes e SHA-256; texto extraído ao lado de cada PDF): Perguntas e Respostas
+da RFB · Manual do DV · XSD 1.01 da produção restrita (10 XSD extraídos) · DOC-ICP-04 v8.3 (o do link principal, já com a Res. 215/2025 — o PDF
+rotulado "V.8.3" da lista de versões é a mesma versão SEM a 215, descartado) · DRN do Bacen v1.02. Fatos NOVOS lidos no arquivo:
+- **DOC-ICP-04 v8.3 não tem mais o tipo "A1"**: usuário final = A3/A4 (só PF), **SE-S/SE-H (selo eletrônico, só PJ — PC 2.16.76.1.2.201.n/202.n)**,
+  T3/T4, AE-S/AE-H, A CF-e-SAT, OM-BR. Perfil SE-S: `CN = <Razão Social>`, **`serialNumber = <número CNPJ>`** (o documento não diz se com máscara);
+  OID 2.16.76.1.3.3 "obrigatório com restrição" até 31/12/2028 "para que as aplicações possam ser ajustadas" ao `serialNumber`. Reforça a D-CJ6.
+- **XSD de produção restrita × produção** (mesma 1.01): tabela no README; o defeito do `TSChaveNFSe` de H tem ORIGEM — é o padrão da chave de 44
+  da NF-e (`[0-9]{6}([0-9A-Z]{14})[0-9]{24}`, no mesmo XSD) colado na chave de 50; o `TSIdNFSe` e o Id do pedido de evento (`PRE` + 8 dígitos +
+  tpInsc + 14) põem a inscrição nas posições certas (10–23).
+- Manual do DV: exemplo resolvido `12.ABC.345/01DE-35` (somatórios 459 e 424) — entrou no vetor.
+
+### 8.2 O que mudou (códigos do inventário)
+
+- **Núcleo (fiscal-api)** — peça pura `src/federal-id/federal-id.ts` (`FederalId`, `CNPJ_FORM`, `mod11Ascii48` — primitiva partilhada com o DV
+  da chave da NF-e —, `cnpjCheckDigits`, `canonicalizeFederalIdText`, `normalizeCnpj/Cpf`, `isValidCnpj/Cpf`, `formatCnpj/Cpf`, `federalIdOf`,
+  `readFederalIdFact` em TRÊS estados com o sentinela `'0'` = ausente — D-CJ5) + vetor oficial `federal-id.vector.json` + subpath
+  `fiscal-api/federal-id` (package.json `exports`/`typesVersions`; cerca `ne1a-superficie` admite o 2º subpath). C3 (A1 conferido contra o fato
+  em três estados — "CNPJ inválido no cadastro" ≠ "sem CNPJ"), C5 (`establishmentCnpjFact` + `establishmentCnpj` só válido), C7 (pasta fiscal
+  pela forma canônica — nunca outra pasta). **C1/C2 (CNPJ do CN do certificado) NÃO mexidos** — D-CJ6: consenso das fontes só com amostra real
+  de SE-S.
+- **nfse-api** — peça `src/authority/access-key.ts` (OUTRA peça: forma geral da chave `^[0-9]{9}[0-9A-Z]{12}[0-9]{29}$` e do Id do DPS
+  `^DPS[0-9]{8}[0-9A-Z]{12}[0-9]{22}$` — letra só nas 12 primeiras posições da inscrição, sem presumir o domínio do tpInsc; `issuerOf*` +
+  `sameEmbeddedIssuer` num lugar só; DV da chave NFS-e NUNCA calculado). Leitores: D12 (`asAccessKey` pela forma geral — chave alfanumérica
+  AUTORIZADA vira voz A), D13 (`looseKeyOf`: tira só a formatação — D-F88 preservada —, as letras ficam), D14 (`GET /dps` acha a chave pela forma
+  geral e confere o emitente pela peça), D15/D16 (substituta pela peça), D17 (nome do arquivo = a chave como é), D5 (o pedido de cancelamento
+  ECOA a chave). Fonte de fatos: D8/D9 (emitente em três estados; o caminho feliz segue com UMA leitura), D10 (tomador PF × PJ pelo LUGAR, três
+  estados — o CNPJ de 3 letras nunca mais vira `<CPF>`), e o CNPJ alfanumérico VÁLIDO de emitente/tomador é **recusado legível (422) antes de
+  reservar o nDPS até a onda 1** (`DPS_NUMERIC_CNPJ` — o escritor pelo calendário de leiaute é da onda 1). D20/S7 (DANFSe formata pelo ELEMENTO
+  `<CNPJ>`/`<CPF>`, fora do `DanfseFields` — paridade N17 com o oráculo congelado; chave agrupada de 4 em 4 com letra).
+- **setes-api** — `@shared/validation` REEXPORTA a peça do núcleo (A1/A2 — a superfície da decisão 18 fica, a implementação vira uma só);
+  `stripNonDigits` MORREU (A3). Pesquisa: kind `federalId` = PREFIXO canonicalizado (A13/A14 — S1, o que estragava HOJE; 422 legível para
+  caractere estranho, só máscara, > 14); o `digits` do critério morreu. `by-document`/`fiscal-exists` canonicalizam a entrada (A8/A9 — D-CJ3).
+  Boleto: pagador na forma canônica, três estados, CNPJ com letra recusado legível até a sonda (A15/A16 — S3; teste A23 INVERTIDO). A **porta do
+  cadastro segue numérica** (`companyBody` `^\d{14}$` — D-CJ8, comentado no código). Swagger: kind `federalId` nas 23 rotas `search-criteria`
+  e a nova semântica do `by-document`/`fiscal-exists`.
+- **setes-app** — espelho Dart `packages/setes_validators/lib/src/federal_id.dart` (`FederalIdRules`/`FederalId`), lendo o MESMO vetor do núcleo
+  pela pasta-irmã (`FISCAL_API_DIR` sobrescreve; sem o arquivo FALHA ALTO); `SetesValidators.isValidCnpj/Cpf` delegam (B1/B2). Painel da pesquisa
+  avançada com o kind `federalId` (validação local = a mesma canonicalização; i18n pt/en `search.federalIdHint/Invalid/TooLong`). App ANTIGO
+  descarta o kind desconhecido (L4) — API e app sobem em qualquer ordem (no pior caso o "Documento" some do painel até o app novo).
+- **Cercas D-CJ12** — `federal-id-fence` por AST nos 3 repositórios TS (lista branca com MOTIVO: conta bancária, CEP, filtro de código NBS,
+  IBGE, CEP do tomador e o `digits()` do montador da nfse-api — este último "vence na onda 1") + gêmea Dart em `apps/web/test` (o `cnpjDigits` e a
+  validação do CNPJ do formulário "vencem na onda 1"). A lista não apodrece (entrada que sumiu quebra).
+
+### 8.3 Testes (worktrees)
+
+Depois dos gates e do retrabalho (final): núcleo **633** (era 531) · nfse-api **949** (era 823 + 1 falha + 1 suíte que não rodava — ver 8.4) ·
+setes-api **1996** (127 suítes; 31 pulados) · setes_validators **92** · app **631** (28 pulados). Typecheck limpo nos 3 TS; `flutter analyze` limpo
+na pesquisa, na cerca e no pacote. Fixtures que só passavam porque o código olhava o COMPRIMENTO (CNPJ `12345678000199`/`98765432000188` com DV errado, CNPJ gravado
+COM máscara no ERP falso) trocados por CNPJ de DV válido na forma canônica — em ~30 arquivos da nfse-api e 4 do setes-api/núcleo.
+
+### 8.4 Pré-existente corrigido de passagem
+
+Na nfse-api do `main`, 2 testes dependiam do fim de linha da CÓPIA (`autocrlf` no Windows): `adversarial-r22-gate` (`[^\n]*` capturava o `\r`) e
+`adv-ib3-xml` (a suíte nem rodava — `\/\n` sobre um arquivo CRLF). Agora `[^\r\n]*` e `\/\r?\n`.
+
+### 8.5 JANELA de deploy (precisa do "vai" do Valdo — nada foi publicado)
+
+Ordem (o setes-api de produção roda `tsx watch` na árvore viva e resolve `fiscal-api/federal-id` pelo `dist` do núcleo VIVO — `dist/` NÃO é
+versionado; a nfse-api resolve o núcleo pelo `src`, também em `tsx watch`): (1) NÚCLEO vivo: merge `cnpj` → `main` em fast-forward +
+`npm run build` + PROVA `node -e "require('fiscal-api/federal-id')"` executado DE DENTRO de `D:\Gestao2027\setes-api` (o `dist` com `federal-id`
+tem de existir ANTES do passo 3 — sem ele o `@shared/validation` não carrega e o ERP inteiro cai no boot); (2) nfse-api viva: merge (o watch
+reinicia — o checklist do `nfse-api/INDEX.md` confere o núcleo vivo limpo e no commit esperado) + DANFSe de uma nota de H e uma transmissão em H
+como prova (as funções novas só falham NA CHAMADA, não no boot nem no /health — gate socrático); (3) setes-api vivo: merge (o `tsx watch`
+recarrega) + /health + uma pesquisa "Documento"; (4) app: merge + `build-web.ps1`. Sem DDL nesta onda. Push dos 4 repos + Infra-IA depois.
+Q-CJ14 (§8.7) decide se o boot do setes-api passa a PROVAR a peça carregada.
+
+### 8.6 Fica para a onda 1 (D-CJ8)
+
+A porta: os 5 DTOs (`companyBody`) + o campo do app (formatter, teclado, pendências B7–B15, `cnpjDigits` — S2) + o CHECK de forma (D-CJ4, depois do
+acordo com o grupo do sync) + o escritor do DPS pelo calendário por LEIAUTE (D-CJ7 — D2/D3/D4/D6/D18 e o `CNPJAutor`) + textos/catálogo de erros
+"14 dígitos" (A21/B18) + `ChargePayer` como `FederalId` (parecer §4.6). O certificado por consenso (D-CJ6) entra quando houver amostra real de
+SE-S. A sonda do Inter (D-CJ10) antes da onda 1.
+
+### 8.7 Gates da onda 0 (2026-10-15) — PASSARAM, com retrabalho na sessão
+
+- **Socrático 0,76 ✅** (revisor independente). Corrigido na sessão: (1) a borda do upload do A1 na nfse-api (`modules/emitter/emitter.service.ts`)
+  passa o FATO em três estados (`establishmentCnpjFact`) — com o valor achatado, DV errado ainda virava "sem CNPJ"; (2) `buildDpsId` recebe a
+  inscrição COMO É (CNPJ 14 dígitos / CPF 11) e LANÇA no resto — o `digits()` SEM tamanho tirava letras e completava com zeros, e o Id é
+  write-once na vida da nota (cenário da onda 1: H aberto, o Id nasceria mutilado e a correção cairia em 409 `FISCAL_DPS_ID_CHANGED`).
+  Conferido por ele: a forma da chave segue a formação da RFB; o `looseKeyOf` não confunde chaves (conferido contra o `<chNFSe>` real da nota 707).
+- **Adversarial 0,82 ✅, sem HIGH/CRITICAL** (revisor independente; 171 ataques em 4 arquivos de teste NOVOS e PERMANENTES —
+  `adversarial-cnpj-onda0-gate.test.ts` no núcleo (44), na nfse-api (39) e no setes-api (58) + `adversarial_cnpj_onda0_gate_test.dart` no
+  setes_validators; resistiram: o BMP inteiro no meio do texto, 5.000 raízes aleatórias de DV contra oráculo independente, 20.000 CNPJ numéricos
+  com decisão idêntica à do algoritmo antigo, injeção no `federalId`, todos os DTOs de papel recusando letra). Os 4 LOW CORRIGIDOS na sessão
+  (testes `[CORRIGIDO na sessão — ACHADO LOW]`): (a) a CERCA via só regex literal em `.replace` — o predicado saiu para um arquivo GÊMEO idêntico
+  nos 3 TS (`src/__tests__/federal-id-fence.ts`; no setes-api `src/test-setup/` — o jest de lá roda todo .ts de `__tests__`) e pega regex em
+  qualquer posição, `RegExp` construído, coleta de dígitos, remoção de letras e filtro por '0'/'9' (as 9 formas que escapavam são SONDAS); a
+  cerca Dart varre o arquivo inteiro (RegExp sem raw, argumento na linha de baixo, classes, `'0123456789'.contains`) com CONTAGEM por arquivo —
+  o `cnpjDigits` e a validação do CNPJ do formulário estão marcados "vencem na onda 1"; (b) o espelho Dart aparava o NEL (U+0085) e o TS não —
+  o Dart apara pelo `\s` do RegExp (semântica ECMAScript) e o vetor oficial ganhou NEL e NBSP; (c) `GET /dps`: campo DECLARADO manda — presente e
+  fora da forma = 502, a busca no texto só sem campo (ela achava a `chaveSubstituta`); (d) `readFederalIdFact` só lê texto/número/Buffer (array ou
+  objeto = inválido) e `isFederalIdFact` reconhece o fato pela forma (array no `validateIssuerPair` = 422, não 500).
+- **Questões para a rodada 2 (recomendação entre parênteses)**:
+  - **Q-CJ14 Prova da peça no deploy/boot**: (a) só o passo de prova no roteiro da janela (§8.5) até a F3 trocar a produção para o `dist`
+    versionado · (b) o boot do setes-api prova a peça carregada (versão/hash do vetor) e falha alto. *(Rec.: (a) agora; (b) com a F3.)*
+  - **Q-CJ15 Cerca pelo VALOR**: a cerca hoje vigia o padrão; o `digits()` do montador ainda recebe o CNPJ do prestador/tomador/autor (sempre com
+    tamanho — lança). (a) a onda 1 tira a inscrição do `digits()` (escritor pelo calendário) e a cerca passa a acusar helper de dígitos aplicado
+    a campo de inscrição · (b) já agora. *(Rec.: (a) — o caminho silencioso, o `buildDpsId`, já foi fechado na sessão.)*
+  - **Q-CJ16 Leitura de documento JÁ autorizado com o cadastro fora da forma**: XML/DANFSe/selo pegam o CNPJ do estabelecimento estrito (forma +
+    DV); se o setes-sync regravar o cadastro fora da forma antes do CHECK (onda 1), a 2ª via vira 422. (a) manter estrito e pôr o acordo com o
+    grupo do sync como pré-requisito da onda 1 · (b) a leitura do ARQUIVO canonicaliza o CNPJ gravado (máscara sai, minúscula sobe, sem DV;
+    nunca apaga) — a emissão segue estrita. *(Rec.: (b) — D-CJ3 no espírito; hoje 249/249 na forma, risco baixo, mas a 2ª via não deve depender
+    do cadastro de hoje.)*
+  - **Q-CJ17 Cadastro sincronizado com CNPJ alfanumérico antes da onda 1**: o formulário do app ainda exige 14 dígitos — editar telefone/endereço
+    de um cliente assim fica bloqueado por um campo que o usuário não tocou. (a) aceitar (hoje 0 casos; a onda 1 resolve) · (b) pedir ao grupo do
+    sync um alerta até lá. *(Rec.: (a) + a onda 1 começa pelo campo do app.)*
+  - **Q-CJ18 Pesquisa por prefixo sem ganho de plano**: o critério segue escalar correlacionado por linha (custo igual ao "contém" anterior; a
+    UNIQUE central não é usada). (a) aceitar e medir na cerca M5 quando houver 10⁵ papéis · (b) semi-join pela UNIQUE escopado ao papel (forma
+    nova de critério — parecer do guardião). *(Rec.: (a).)*
+
+### 8.8 Rodada 2 DECIDIDA (2026-10-16, Valdo: "vamos finalizar a frente CNPJ alfanumérico e todos os transversais — cadastro de institution,
+cliente, fornecedor, transportadora, nota de serviço — e depois voltamos [à nfe-api]" + "siga as recomendações") — D-CJ14…D-CJ18
+
+- **D-CJ14** (= Q-CJ14 (a)): a prova da peça carregada fica no ROTEIRO da janela (§8.5); a prova no boot entra com a F3.
+- **D-CJ15** (= Q-CJ15 (a)): a cerca passa a vigiar o VALOR (helper de dígitos aplicado a campo de inscrição) junto com o escritor do DPS — onda 1.
+- **D-CJ16** (= Q-CJ16 (b)): a LEITURA de documento já autorizado (XML, DANFSe, selo, substituta) canonicaliza o CNPJ gravado do emitente (máscara
+  sai, minúscula sobe, sem DV, nunca apaga); a EMISSÃO segue estrita (forma canônica + DV).
+- **D-CJ17** (= Q-CJ17 (a)): aceito — 0 casos hoje; o campo do app abre nesta onda.
+- **D-CJ18** (= Q-CJ18 (a)): prefixo sem otimizar o plano; medir na cerca M5 quando houver 10⁵ papéis.
+- **D-CJ4 confirmada na ordem**: a onda 1 abre a porta com validação na API e no app; o DDL do CHECK fica PRONTO e PROVADO em schema descartável, e
+  só é aplicado depois do acordo com o grupo do sync (tarefa separada aberta nesta data).
+- **Publicação**: commit LOCAL no branch `cnpj` das 4 worktrees + Infra-IA agora (sem push, sem merge); onda 0 + onda 1 numa JANELA ÚNICA no fim,
+  com o "vai".
+- **Escopo do fecho**: depois desta frente, volta-se à nfe-api (NE-1b — a NF-e nasce com CNPJ alfanumérico, D-NE29). Valdo (2026-10-16): a sessão
+  anterior foi retomar a nfe-api e caiu na NFS-e — a frente é TRANSVERSAL (a onda 0 não tinha o que mexer na nfe-api, que não tem emissão ainda);
+  dizer isso de saída em qualquer retomada.
+
+## 9. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
 
 ```
 Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\Infra-IA\prompts\prompt_frente_cnpj_alfanumerico.md
-(Rodada 0 ORGANIZADA: §2 fatos oficiais, §4 parecer do guardião, §5 ondas 0/1/2; anexo prompt_frente_cnpj_alfanumerico-inventario.md com os
-110 pontos). Apresente-me a Rodada 1 (Q-CJ1…Q-CJ13 do §6) com as recomendações; quando eu decidir, registre D-CJ1… no §6.x, faça os downloads
-da Q-CJ1 (só com o meu "vai", nome/origem/tamanho por HEAD) e siga a ordem do §5 (onda 0 primeiro — núcleo em WORKTREE, PADROES §11 regra 17).
-Regra dos dois grupos: NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
+(Rodada 1 DECIDIDA — D-CJ1…D-CJ13 no §6.1; ONDA 0 EXECUTADA em worktrees D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,setes-app},
+branch `cnpj`, com gates socrático 0,76 e adversarial 0,82 — §8; acervo oficial em Infra-IA/setes-api/integracoes/cnpj-alfanumerico/).
+Comece pela JANELA de deploy do §8.5 SÓ com o meu "vai" (ordem núcleo → nfse-api → setes-api → app; o `dist` do núcleo vivo antes do
+setes-api). Apresente a rodada 2 (Q-CJ14…Q-CJ18 do §8.7) com as recomendações; decidida, registre D-CJ14… e siga para a onda 1 (§8.6: a porta
+do cadastro + o CHECK de forma depois do acordo com o grupo do sync + o escritor do DPS pelo calendário por LEIAUTE). NÃO ler setes-sync nem
+sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
 ```

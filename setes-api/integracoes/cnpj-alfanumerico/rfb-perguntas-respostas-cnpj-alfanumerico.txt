@@ -1,0 +1,559 @@
+Objetivo
+
+O objetivo deste documento é informar e esclarecer dúvidas relacionadas ao novo formato
+alfanumérico de CNPJ.
+
+Dúvidas e Respostas – Visão Pessoa Jurídica:
+
+1) O que é o CNPJ alfanumérico?
+
+O CNPJ alfanumérico é a nova forma de identificar empresas no Brasil, combinando
+letras e números. A nova identificação da pessoa jurídica (PJ) será composta por números
+de 0 a 9 e quaisquer uma das 26 letras de A até Z.
+
+2) Como será a composição do novo CNPJ alfanumérico? O que muda?
+
+No novo CNPJ alfanumérico, a grande mudança é que ele passará a incluir letras, além
+de números, na sua composição, mantendo os 14 dígitos atuais (14 posições):
+AA.AAA.AAA/AAAA-DV onde:
+A – Alfanumérico. Poderá ser numerais de 0 a 9 e letras maiúsculas de A até Z.
+DV – Dígito Verificador utilizando o cálculo pelo módulo 11
+
+OBS: O que é módulo 11?
+Para saber como se calcula pelo Módulo 11 veja a pergunta 14 abaixo.
+
+3) Por que o CNPJ está mudando para um formato alfanumérico?
+
+Porque existe uma demanda crescente de obtenção de números de CNPJ e, para garantir
+a continuidade das políticas públicas nacionais, essa mudança é necessária, pois aumenta
+a quantidade de combinações possíveis, evitando a repetição de CNPJ e melhorando a
+identificação única das empresas.
+
+4) Quando serão iniciadas as inscrições de CNPJ no formato alfanumérico?
+
+A data para início de entrada em produção dos primeiros CNPJ alfanuméricos será a partir
+de Julho de 2026.
+
+5) A mudança do formato do CNPJ para alfanumérico ocorrerá imediatamente para
+todas as pessoas jurídicas? Como será a transição?
+
+A Receita Federal iniciará o processo de fornecimento de novo número do CNPJ no
+formato alfanumérico de forma progressiva e adotará uma política de comunicação ativa,
+utilizando todos os meios possíveis a fim de que este processo seja o mais transparente e
+suave possível. Será elaborado um calendário de quais tipos de empresas ou de atividades
+econômicas iniciarão a identificação do CNPJ com o novo formato.
+
+6) Minha Empresa já tem um CNPJ. Vai alterar meu número?
+Não. A identificação atual do CNPJ, composta apenas por números, continuará válida e
+não será necessária nenhuma ação por parte do contribuinte junto à Receita Federal do
+Brasil ou junto à Administração Tributária no Estado ou no Município.
+
+7) Coexistirão CNPJs nos formatos numérico e alfanumérico?
+
+Sim, tanto o formato numérico quanto o alfanumérico será válido em todos os processos
+que utilizam a identificação do CNPJ.
+
+8) O procedimento de inscrição atual do CNPJ será alterado?
+
+O procedimento de inscrição atual do CNPJ não será alterado. A mudança para o formato
+alfanumérico afetará apenas a estrutura do número do CNPJ, mas o processo de inscrição
+continuará o mesmo. As empresas continuarão a seguir os mesmos passos e requisitos
+para obter um CNPJ, garantindo uma transição suave e livre de complicações para o
+contribuinte. Todos os sistemas para obtenção do CNPJ estarão adaptados e integrados à
+Rede Nacional para a Simplificação do Registro e da Legalização de Empresas e
+Negócios – REDESIM.
+
+9) Que providências nossa empresa deve adotar junto aos órgãos do poder público,
+    dos diversos entes da federação?
+
+Nenhuma providência será necessária junto aos órgãos públicos. Os sistemas públicos que
+utilizam a identificação pelo CNPJ serão evoluídos para poderem “ler” tanto o formato
+atual numérico quanto o novo formato alfanumérico.
+
+10) Como as demais administrações fazendárias no âmbito estadual e municipal
+    conhecerão as regras do novo formato alfanumérico? Eles estarão preparados
+    para este novo formato?
+
+Sim. A Receita Federal comunicará as alterações na identificação do CNPJ, com bastante
+antecedência, para todas as Secretarias da Fazenda dos Estados e para as Secretarias de
+Finanças dos Municípios, a fim de que promovam atualização em seus sistemas
+informatizados acolhendo, também, o novo formato alfanumérico. A Receita Federal
+também colocará à disposição de todos os parceiros e dos contribuintes as regras para o
+cálculo do Dígito Verificador no formato alfanumérico (ver pergunta 04).
+
+11) Minha empresa deverá adotar alguma providência internamente ou junto aos
+    parceiros comerciais, fornecedores, clientes, instituições financeiras e outros?
+
+Nenhuma providência será necessária junto aos parceiros comerciais, fornecedores,
+clientes ou instituições financeiras. Todos os sistemas públicos e privados deverão ser
+ajustados para que seja possível identificar a pessoa jurídica tanto no formato numérico
+quanto no alfanumérico.
+Internamente deverão ser realizados ajustes nos seus sistemas para que seja possível
+identificar a pessoa jurídica tanto no formato atual numérico, quanto no alfanumérico.
+Serão disponibilizadas rotinas em linguagens mais usuais para cálculo do Dígito
+Verificador de forma a minimizar o impacto nos sistemas informatizados.
+12) Quais as consequências para as empresas que não adotarem as providências
+    necessárias no prazo indicado?
+
+Se as empresas não atualizarem seus sistemas para ler o novo formato alfanumérico de
+CNPJ dentro do prazo, poderão enfrentar alguns problemas. Isso inclui dificuldades na
+emissão de notas fiscais e falhas na comunicação com fornecedores e clientes, podendo
+haver atrasos em processos administrativos e fiscais, impactando negativamente as
+operações da empresa. Portanto é crucial que as empresas façam essa atualização para
+evitar inconvenientes e garantir o funcionamento sem interrupções.
+
+13) Qual impacto fiscal da mudança do CNPJ para alfanumérico?
+
+O impacto fiscal para as pessoas jurídicas que serão inscritas com identificação
+alfanumérica serão os ajustes na emissão de documentos fiscais eletrônicos, obrigações
+acessórias e principais nas quais ela estará submetida. Os sistemas internos de apoio à
+escrituração contábil e fiscal das pessoas jurídicas que tiverem identificação alfanumérica
+também deverão estar preparados para “ler” o formato alfanumérico. Os sistemas
+governamentais de controle das obrigações acessórias e principais do contribuinte já
+deverão estar alterados para receberem o novo formato alfanumérico.
+
+14) Como será calculado o Dígito Verificador do formato alfanumérico?
+
+O Dígito Verificador será calculado pelo algoritmo do módulo 11. Como este algoritmo
+de validação é um cálculo numérico, todos os caracteres que comporão a nova
+identificação do CNPJ numéricos e alfanuméricos, serão transformados pelo código
+ASCII conforme tabela abaixo:
+
+     TABELA ASCII - Parte
+
+Caractere  Valor Decimal
+
+...        ...
+
+0          48
+
+1          49
+
+2          50
+
+3          51
+
+4          52
+
+5          53
+
+6          54
+
+7          55
+
+8          56
+9    57
+
+...  ...
+
+A    65
+
+B    66
+
+C    67
+
+D    68
+
+E    69
+
+F    70
+
+G    71
+
+H    72
+
+I    73
+
+J    74
+
+K    75
+
+L    76
+
+M    77
+
+N    78
+
+O    79
+
+P    80
+
+Q    81
+
+R    82
+
+S    83
+
+T    84
+
+U    85
+
+V    86
+
+W    87
+
+X    88
+
+Y    89
+
+Z    90
+
+A Receita Federal oferecerá rotinas de cálculo do Dígito Verificador em linguagens de
+programação mais usuais.
+Exemplo de Cálculo de Dígito Verificador de um CNPJ alfanumérico:
+
+Vamos tomar como exemplo o número do CNPJ 12.ABC.345/01DE-dv, onde dv é o
+dígito verificador.
+
+Tomemos a letra “A” cujo decimal correspondente, no código ASCII, é 65. Subtraindo 48
+temos o valor 17 para o cálculo do módulo 11.
+
+Para o cálculo do dígito verificador pelo Módulo 11 do número CNPJ 12.ABC.345/01DE
+– dv temos:
+
+CNPJ   1 2. A B C. 3 4 5 /     01DE
+
+       1 2 17 18 19 3 4 5       0 1 20 21 (Valores ASCII - 48)
+       54 3 2 9 8 7 6          5 4 3 2 (Pesos atribuídos)
+       5 8 51 36 171 24 28 30  0 4 60 42 (Valores x Pesos)
+
+=> Soma = 459
+Mod (459/11) = 8
+Primeiro dv = 11- 8 = 3
+
+Repete-se o processo acrescentando o primeiro Dígito Verificador no CNPJ
+
+CNPJ   1 2. A B C. 3 4 5 / 0 1 D E - 3
+
+       1 2 17 18 19 3 4 5 0 1 20 21 3 (Valores ASCII -48)
+
+6 5 4 3 2 9 8 7 6 5 4 3 2 (Pesos atribuídos)     6 10
+
+68 54 38 27 32 35 0 5 80 63 6 (Valores x Pesos)
+
+=> Soma = 424
+Mod (424/11) = 6
+Segundo dv = 11- 6 = 5
+
+=> Concluindo o cálculo do Dígito Verificador pelo Módulo 11 temos o número do CNPJ:
+
+CNPJ:  1 2. A B C. 3 4 5 / 0 1 D E - 3 5
+
+15) A mudança será obrigatória para todos ou apenas para novos CNPJ?
+
+Para quem já tem o número do CNPJ nada muda. Os atuais números permanecerão válidos
+assim como os seus dígitos verificadores. Não há nenhuma necessidade de quem possui
+o número atual buscar atualização.
+O formato alfanumérico do CNPJ alcançará novas inscrições, inclusive de filiais de
+empresas já constituídas no formato atual.
+16) Haverá algum custo para as empresas devido às alterações no CNPJ?
+
+Haverá custos associados à atualização dos seus sistemas, objetivando dois resultados: ler
+o número do CNPJ no formato alfanumérico e efetuar o cálculo do dígito verificador
+conforme demonstrado na pergunta 14.
+
+17) Os números das Filiais geradas também serão no formato alfanumérico ou
+     apenas numérico?
+
+Quando o novo sistema alfanumérico do CNPJ entrar em produção, as filiais poderão ter
+letras na composição do número de ordem (numeração das filiais).
+
+Por exemplo: O CNPJ 12.345.678/0001-95 quer inscrever sua primeira filial. No novo
+sistema tanto a primeira filial, quanto as demais, poderão ter letras ou números na sua
+identificação. O sistema interno da Receita Federal rodará algoritmo para confecção do
+número de ordem no formato alfanumérico.
+
+Se a pessoa jurídica já tiver outras filiais contendo apenas números, estas (matriz e filiais)
+permanecerão com os mesmos algarismos e dígito verificador.
+
+18) As letras incluídas no CNPJ Alfanumérico serão completamente aleatórias ou
+     terão algum tipo de conexão com a Unidade da Federação (UF) de localização,
+     com Natureza Jurídica ou com algum atributo específico?
+
+As letras serão completamente aleatórias e não haverá inteligência na formação do
+identificador alfanumérico do CNPJ. Não conterão a Unidade da Federação (UF), nem
+conexão com sua natureza jurídica ou com algum atributo específico.
+
+19) Os sites de serviços na internet (como SERASA, telefonia, Light, Cedae, SPC
+     etc.) atualizarão automaticamente o CNPJ numérico para o CNPJ alfanumérico
+     nos seus cadastros e telas de acesso com senha?
+
+Todos os sistemas informatizados que utilizam o número do CNPJ deverão estar
+preparados para receberem o número de identificação pelo formato alfanumérico. A
+Receita Federal adotará uma política de comunicação ativa para garantir transparência do
+processo de transição da identificação com a utilização do formato alfanumérico. Os
+serviços de internet deverão estar preparados para este novo modelo.
+
+20) Haverá um período de dupla convivência entre o sistema atual e o novo? Se sim,
+     como seria essa convivência?
+
+Sim, haverá coexistência entre os tipos de CNPJ (numéricos e alfanuméricos), o que torna
+a transição muito mais eficiente e menos impactante a todos. É importante saber que o
+processo para atualização dos sistemas deve ser iniciado o quanto antes. Não se deve
+aguardar a data prevista para implementação do CNPJ alfanumérico (julho de 2026) para
+iniciar a atualização dos sistemas internos.
+Ademais, cabe esclarecer que os CNPJ`s já existentes permanecerão exatamente os
+mesmos, ou seja, caso uma empresa possua determinado CNPJ esse não sofrerá nenhuma
+alteração. O CNPJ Alfanumérico será destinado a novas inscrições.
+
+21) CNPJ`s com menos de 14 posições devem ser preenchidos com zeros à esquerda?
+
+A máscara dos CNPJ`s alfanuméricos será exatamente igual ao do CNPJ numérico, ou
+seja, ambos terão o mesmo formato e conterão os mesmos 14 caracteres hoje utilizados
+("XX.XXX.XXX/XXXX- DV" ).
+
+Para o CNPJ alfanumérico, a alteração ocorrerá nos 12 primeiros números (raiz e ordem),
+os quais poderão conter letras e números. Apesar disso, é importante estar claro que todos
+os CNPJ`s conterão 14 caracteres, podendo inclusive conter zeros a esquerda, como já
+ocorre atualmente.
+
+22) Os sistemas governamentais (Receita Federal, SEFAZ, INSS etc.) também
+    precisarão atualizar seus sistemas e seguir as mesmas regras?
+
+Sim, os sistemas dos órgãos governamentais seguirão as regras, já comunicadas a todos
+os órgãos públicos, a fim de que possam demandar as alterações necessárias em seus
+sistemas para funcionarem adequadamente.
+
+23) É possível existir um cenário onde o CNPJ Raiz (8 primeiras posições) seja
+    alfanumérico e a ordem da filial seja numérica ?
+
+Sim, é possível. O número raiz do CNPJ (8 primeiras posições do CNPJ), numérico ou
+alfanumérico caracterizam uma determinada entidade. Esta identificação chamada de raiz
+é a mesma para um estabelecimento matriz e para alguma filial que venha a ser criada.
+Porém, o número de ordem da filial (9ª a 12ª posições) poderá ser numérico ou
+alfanumérico.
+
+Seguem exemplos abaixo para demonstrar as possibilidades:
+
+         Ex1: AA345678/0003-29
+         Ex2: AA345678/000A-29
+         Ex3:12.345.678/000A-08
+
+24) Para um novo CNPJ do tipo alfanumérico, a filial padrão será numérica ou será
+    atribuída uma identificação alfanumérica aleatória?
+
+Quando o novo sistema alfanumérico do CNPJ entrar em produção, as novas inscrições
+seguirão o padrão alfanumérico. Desta forma, o número de ordem das filiais (9ª a 12ª
+posições do CNPJ) poderá conter letras e números. A atribuição de letras e números será
+feita pelo sistema interno da Receita Federal do Brasil de forma aleatória.
+
+25) Atualmente o sufixo 0001 tradicionalmente é associado à matriz, como ficará
+    essa situação após a implementação do CNPJ alfanumérico?
+Após a implementação do CNPJ alfanumérico, o sufixo 0001 continuará indicando a
+matriz no momento da geração do CNPJ. No entanto, essa associação não será
+permanente. Com o tempo, uma filial pode se tornar a matriz (estabelecimento principal),
+mesmo possuindo um número de ordem diferente de 0001.
+
+Assim, o sufixo 0001 deixa de ser um identificador definitivo de matriz e passa a ter um
+caráter apenas inicial, exigindo que os sistemas das empresas sejam ajustados para refletir
+corretamente essa dinâmica.
+
+26) A implementação do CNPJ alfanumérico ocorrerá mesmo em julho de 2026?
+
+Sim, conforme consta da Instrução Normativa 2.119/2022, com as alterações introduzidas
+pela Instrução Normativa RFB 2.229/2024, o cronograma para implementação do CNPJ
+alfanumérico será julho de 2026. É importante salientar que o processo de transição será
+suave e que os CNPJ`s no novo formato serão destinados apenas a novas inscrições. Como
+os dois formatos de CNPJ coexistirão, é de fundamental importância que todos já iniciem
+a atualização de seus sistemas, para evitarem contratempos futuros.
+
+27) É possível que a uma filial, após julho de 2026, seja atribuído um CNPJ
+    totalmente numérico?
+
+Sim, a atribuição de letras e números será feita pelo sistema interno da Receita Federal
+do Brasil de forma aleatória. Dessa forma, essa possibilidade ainda poderá ocorrer.
+
+28) Os CNPJ´s numéricos serão utilizados até se esgotarem as opções, mesmo depois
+     de julho/2026? Ou A partir de 1º de Julho somente serão criados CNPJ´s
+     alfanuméricos?
+
+A atribuição de letras e números será feita pelo sistema interno da Receita Federal do
+Brasil de forma aleatória. Dessa forma, há a possibilidade de que após julho de 2026,
+ainda que eventualmente, sejam atribuídos aleatoriamente um CNPJ numérico a uma
+nova inscrição. Convém salientar que a Receita Federal do Brasil está atenta e trabalhando
+duramente para que a transição entre os formatos de CNPJ seja a mais suave possível. O
+objetivo é que o novo formato seja atribuído aos poucos às novas inscrições.
+
+29) É necessário que uma Entidade, que já possua um CNPJ faça alguma alteração
+     neste?
+
+Não, aqueles que já possuem um CNPJ não precisarão fazer nenhuma alteração ou mesmo
+solicitação à Receita Federal do Brasil. Os números dos CNPJ`s já existentes continuarão
+exatamente os mesmos. Entretanto, é necessário que todos atualizem seus sistemas para
+o novo formato alfanumérico.
+
+30) O CNPJ do Microempreendedor Brasileiro – MEI será alterado?
+Não. Quem já possui o CNPJ do MEI permanecerá com o mesmo número e não haverá
+nenhuma alteração.
+31) Poderá haver CNPJ de MEI com número alfanumérico?
+
+Sim. No futuro poderão existir números para microempreendedores com o formato
+alfanumérico.
+
+32) A Receita Federal usará o novo número do CNPJ Alfanumérico para investigar
+    as pessoas?
+
+Não. O fornecimento do número não é utilizado para investigar nem pessoas físicas e nem
+pessoas jurídicas. O número do CNPJ é um número exclusivo para identificar e
+determinar quem é a pessoa jurídica, assim como o CPF identifica a pessoa física.
+
+33) É verdade que o CNPJ alfanumérico, na prática, funcionará como um código
+    secreto de rastreamento das movimentações financeiras e que sua adoção seria
+    apenas uma fachada?
+
+Não, isso não é verdade. O número de identificação no Cadastro Nacional de Pessoas
+Jurídicas é único e público e não há nenhum tipo de codificação secreta em sua formação.
+A adoção do CNPJ alfanumérico visa apenas ampliar a capacidade de numeração, sem
+qualquer intenção oculta de rastreamento das movimentações financeiras.
+
+34) O novo código Alfanumérico é incompatível com empresas pequenas, forçando
+    micro e pequenas empresas a interromperem suas atividades?
+
+Não, isso não é verdade. O CNPJ, inclusive em seu novo formato alfanumérico, é um
+identificador que permite que empresas de todos os portes operem legalmente no Brasil.
+Micro e pequenas empresas, assim como as demais, não serão prejudicadas pela mudança
+e continuarão exercendo suas atividades normalmente.
+
+35) A Receita Federal usará inteligência artificial (AI) no número do CNPJ
+    Alfanumérico?
+
+Não. O número de identificação no CNPJ é um identificador único e inédito e não há
+nenhuma inteligência artificial em seu fornecimento.
+
+36) Quem não migrar para o novo sistema vai ter o CNPJ cancelado?
+
+Não. Nenhum CNPJ será cancelado ou anulado. Os CNPJ`s já existentes continuarão
+válidos e não passarão por nenhuma alteração. O novo modelo alfanumérico será
+destinado apenas para novas inscrições no Cadastro Nacional de Pessoas Jurídicas.
+
+37) Eu poderei perder minha empresa se não tiver o CNPJ Alfanumérico?
+
+Não. Se a empresa já possui um CNPJ, não é necessário realizar nenhum recadastramento
+nem qualquer solicitação à Receita Federal do Brasil. As empresas manterão seus
+identificadores atuais, sem risco de perda por não possuírem o CNPJ no formato
+alfanumérico.
+38) A adição de caracteres alfabéticos no CNPJ será usada para inserção de
+    mensagens subliminares para discriminação de empresas?
+
+Não. Não há qualquer possibilidade disso. Para evitar a formação de palavras
+inadequadas, algumas combinações de letras serão proibidas durante a geração do
+identificador, garantindo que o CNPJ seja um identificador único, inédito e livre de
+qualquer conteúdo inadequado.
+
+39) O grande aumento de possibilidades de geração de CNPJ facilitará a criação de
+    empresas fantasmas ou organizações criminosas?
+
+Não. A geração de novos números de CNPJ não tem relação com a criação de empresas
+fantasmas ou de organizações criminais. Pelo contrário, a Receita Federal do Brasil tem
+intensificado suas ações para garantir a conformidade cadastral das Pessoas jurídicas e
+combater fraudes.
+
+40) O CNPJ alfanumérico possibilitará que multinacionais criem milhares de novos
+    estabelecimentos para exercerem um monopólio econômico no Brasil?
+
+Não. Não há qualquer relação entre o CNPJ alfanumérico e a formação de monopólios. A
+inscrição no cadastro CNPJ tem como objetivo identificar corretamente as pessoas
+jurídicas. O controle e a prevenção de práticas anticoncorrenciais são de responsabilidade
+dos órgãos reguladores e de defesa da concorrência, por meio de políticas públicas
+específicas.
+
+41) O Brasil só está implantando o CNPJ alfanumérico porque foi exigido pelo FMI
+    /ONU/ Fórum Econômico Mundial, que querem padronizar o controle das
+    empresas no planeta e as transformar todas em partes de um único cadastro
+    global.
+
+Essa informação é falsa. A decisão de tornar o CNPJ Alfanumérico é exclusiva do
+Governo Brasileiro. O CNPJ é um número do Brasil que identifica todas as pessoas
+jurídicas.
+
+42) Com o novo formato, o CNPJ alfanumérico tornará os sistemas mais vulneráveis
+    a ataques cibernéticos?
+
+Não. A adoção do formato alfanumérico não aumenta o risco de invasões. Os sistemas
+informatizados que armazenam os dados das entidades seguem rigorosos protocolos
+técnicos de segurança da informação, com constantes atualizações e inovações,
+exatamente para prevenir vulnerabilidades e proteger os dados contra acessos indevidos.
+
+43) A Receita Federal do Brasil (RFB) estabelecerá alguma cobrança ou taxa para a
+    atualização dos CNPJs existentes ou para a inscrição de novos CNPJs em virtude
+    da implementação do novo formato alfanumérico?
+Não. A Receita Federal não efetuará nenhuma cobrança para atualização dos CNPJ`s
+existentes nem em novas inscrições. O único custo será o da própria empresa para
+atualizar seus sistemas conforme o planejamento interno.
+
+44) A Receita Federal entrará em contato em qualquer meio de comunicação (
+    whatsapp, e-mails, SMS, etc. ) solicitando atualizações, pagamentos de taxas ou
+    para falar de qualquer assunto relacionado ao CNPJ alfanumérico?
+
+Não. A Receita Federal não entrará em contato por nenhum meio solicitando atualizações,
+pagamentos ou qualquer informação relacionada ao CNPJ alfanumérico. Se isso ocorrer,
+provavelmente se trata de algum tipo de golpe.
+
+45) Na pergunta 38 foi mencionado que algumas combinações de letras serão
+    proibidas. Como será feito esse controle e como as empresas devem ajustar seus
+    sistemas a fim de validar corretamente suas rotinas?
+
+A orientação da Receita Federal é que as adaptações nos sistemas considerem todas as
+letras do alfabeto brasileiro. O controle das combinações proibidas — para evitar palavras
+ofensivas ou que gerem confusão com números — será feito internamente pela própria
+Receita Federal.
+
+46) A chave PIX vinculada ao CNPJ alfanumérico continuará funcionando
+    normalmente?
+
+Sim. O uso do CNPJ como chave PIX continua igual. Quem já usa o CNPJ numérico
+mantém a chave. As empresas que passarem a ter um CNPJ alfanumérico também
+poderão usar esse novo número como chave PIX.
+
+47) Existe alguma ferramenta disponibilizada pela Receita Federal para que os
+    desenvolvedores e equipes de tecnologia possam testar a adaptação dos sistemas
+    para a recepção e reconhecimento do CNPJ no formato alfanumérico?
+
+Sim! A Receita Federal disponibilizou uma ferramenta chamada Simulador Nacional de
+CNPJ.
+
+Essa ferramenta é gratuita e foi criada para ajudar desenvolvedores e equipes de
+tecnologia a realizar testes, validações e homologações sem usar dados reais.
+
+48) Como posso acessar o Simulador Nacional de CNPJ?
+
+Você pode acessar o Simulador Nacional de CNPJ pelos seguintes canais oficiais da
+Receita Federal:
+
+    • Portal de Serviços da Receita Federal:
+         https://servicos.receitafederal.gov.br/servico/cnpj-alfa/simular
+    • Página oficial do projeto CNPJ Alfanumérico:
+         https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/acoes-e-
+         programas/programas-e-atividades/cnpj-alfanumerico
+
+49) Quais são as principais funcionalidades do Simulador Nacional de CNPJ?
+
+Com essa aplicação é possível gerar até 1.000 CNPJs fictícios, de matriz e de filial, por
+usuário; validar se um CNPJ atende às regras de formação e dígitos verificadores; e exibir
+o histórico com todos os CNPJs gerados.
+
+50) Quais as vantagens de utilizar o Simulador Nacional de CNPJ para testar os
+     sistemas?
+
+O Simulador Nacional de CNPJ possui diversas vantagens, dentre elas: permite testes
+com dados fictícios garantindo conformidade com a LGPD; opera totalmente no
+navegador do usuário, garantindo sigilo e autonomia; facilita a adaptação dos sistemas ao
+novo padrão sem depender de dados reais, acelerando processos internos; ajuda a validar
+regras de formação e dígitos verificadores do novo CNPJ, evitando falhas futuras; e
+contribui para a atualização tecnológica das empresas e órgãos públicos, preparando-os
+para o novo formato.
+
+51) É possível usar o simulador sem conexão com a internet?
+
+Sim. Após carregado no navegador, o simulador funciona localmente, sem necessidade
+de conexão contínua.
+
+52) Com a implementação do CNPJ alfanumérico, os Documentos de Arrecadação
+     de Receitas Federais (DARF) passarão a ser exclusivamente numerados ou
+     poderão conter CNPJ alfanumérico no código para digitação?
+
+O DARF não numerado continuará existindo e não será substituído pelo DARF
+numerado.
+O DARF preenchido manualmente (não numerado), campo a campo, permanecerá
+disponível e poderá ter o campo CPF/CNPJ preenchido com CNPJ alfanumérico.
+

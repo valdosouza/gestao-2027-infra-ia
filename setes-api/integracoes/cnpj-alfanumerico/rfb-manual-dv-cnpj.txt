@@ -1,0 +1,91 @@
+serpro.gov.br
+
+Cálculo dos dígitos verificadores de
+CNPJ alfanumérico
+                                                                      Cálculo dos dígitos verificadores de CNPJ alfanumérico
+
+1.Cálculo dos dígitos veriﬁcadores ...................................................................................................3
+   1.1.Cálculo do primeiro dígito veriﬁ cador ......................................................................................3
+   1.2. Cálculo do segundo dígito veriﬁ cador .....................................................................................4
+
+serpro.gov.br  2
+                                                                      Cálculo dos dígitos verificadores de CNPJ alfanumérico
+
+1.Cálculo dos dígitos veriﬁcadores
+
+O CNPJ alfanumérico é composto por doze caracteres alfanuméricos e dois dígitos veriﬁcadores
+numéricos.
+Os dígitos veriﬁ cadores (DV) são calculados a par r dos doze primeiros caracteres em duas
+etapas, u lizando o módulo de divisão 11e pesos distribuídos de 2 a 9.
+
+1.1.Cálculo do primeiro dígito veriﬁ cador
+
+Para cada um dos caracteres do CNPJ, atribuir o valor da coluna “Valor para cálculo do DV”,
+conforme a tabela abaixo (ou subtrair 48 do “Valor ASCII”):
+
+Exemplo:       1 2 ABC3 4 5 0 1 DE
+CNPJ           1 2 17 18 19 3 4 5 0 1 20 21
+Valor
+
+serpro.gov.br                                3
+                                     Cálculo dos dígitos verificadores de CNPJ alfanumérico
+
+Distribuir os pesos de 2 a 9 da direita para a esquerda (recomeçando depois do oitavo caracter),
+conforme o exemplo:
+
+CNPJ           1 2 ABC3 4 5 0 1 DE
+
+Valor          1 2 17 18 19 3 4 5 0 1 20 21
+
+Peso           543298765432
+
+Mul plicar valor e peso de cada coluna e somar todos os resultados:
+
+CNPJ           1 2 A B C 3 4 5 01                                    DE
+                                                                     20 21
+Valor          1 2 17 18 19 3 4 5 0 1                                32
+                                                                     60 42
+Peso           5 4 3 2 9 8 7 6 54
+
+Mul plicação   5 8 51 36 171 24 28 30 0 4
+
+Somatório (5+8+...+42) = 459
+
+Obter o resto da divisão do somatório por 11.
+Se o resto da divisão for igual a 1ou 0, o primeiro dígito será igual a 0 (zero).
+Senão, o primeiro dígito será igual ao resultado de 11– resto.
+
+No exemplo:
+Resto da divisão 459/11 = 8.
+
+     1º DV = 3 (resultado de 11-8)
+
+1.2. Cálculo do segundo dígito veriﬁ cador
+
+Para o cálculo do segundo dígito é necessário acrescentar o primeiro DV ao ﬁnal do CNPJ,
+formando assim treze caracteres, e repe r os passos realizados para o primeiro dígito.
+
+Assim, no exemplo, temos:
+
+CNPJ 1 2 A B C 3 4 5 0                 1DE3
+                                       1 20 21 3
+Atribuição de                          5432
+                                       5 80 63 6
+Valor          1 2 17 18 19 3 4 5 0
+
+Atribuição de
+
+Peso           65 4 3 2 9 8 7 6
+
+Mul plicação 6 10 68 54 38 27 32 35 0
+
+Somatório (6+10+...+6) = 424
+
+Resto da divisão 424/11 = 6
+
+ 2º DV = 5 (resultado de 11-6)
+
+ Resultado final: 12.ABC.345/01DE-35
+
+serpro.gov.br                                                                             4
+

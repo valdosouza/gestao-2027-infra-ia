@@ -33,6 +33,11 @@
 
 ## O que o núcleo guarda (§12.2 do prompt)
 
+**Inscrição federal (frente do CNPJ alfanumérico, D-CJ2 — onda 0 em worktree `D:\Gestao2027\cnpj\fiscal-api`, branch `cnpj`, NÃO publicada em
+2026-10-15)**: peça PURA `src/federal-id/federal-id.ts` = 2º subpath publicado `fiscal-api/federal-id` (o setes-api o reexporta pelo
+`@shared/validation`; ⚠️ o setes-api lê o `dist` — build do núcleo ANTES do merge dele) + vetor oficial `federal-id.vector.json` lido também pelo
+espelho Dart; cerca `federal-id-fence` com predicado GÊMEO (`src/__tests__/federal-id-fence.ts`). Ver `../prompts/prompt_frente_cnpj_alfanumerico.md` §8.
+
 transporte mTLS + XMLDSig paramétrico · `tb_establishment_certificate` (A1 cifrado — D-F34) + `tb_establishment_issuer` (habilitação por modelo, CHECK `SE/55/65` — D-F45) · contrato de leitura da voz (`voice/`) · storage do XML · auth pelo JWT do produto · base da fonte de fatos Gestão 2027 (leitura; a única "escrita" no ERP é a trava da nota — D-F27/D-F31) · migrations e views do `fiscal_api`. *(2026-10-10: a máquina tentativa × voz e o motor de PDF prometidos aqui ainda vivem na nfse-api — Q-NE13/Q-NE20 da Rodada 0 da nfe-api.)*
 
 ## Regras inegociáveis para quem for codificar

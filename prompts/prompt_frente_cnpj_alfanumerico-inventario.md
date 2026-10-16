@@ -163,3 +163,14 @@ precisa de `COLLATE utf8mb4_bin`; `tb_company` é central e o setes-sync escreve
 Não verificado: colação real e dados do banco vivo (já existe CNPJ com letra/minúscula vindo do setes-sync? máscara de CNPJ configurada em
 `tb_institution_has_field`?); setes-sync e sincronizador; o leiaute oficial com letra (o XSD do acervo é numérico); comportamento em execução
 (nada rodado); NF-e (sem código).
+
+### 8.1 Auditoria só-leitura do banco vivo (2026-10-15, retomada da Rodada 1 — fecha o "não verificado" acima)
+
+MariaDB 10.4.20 da máquina do Valdo (= produção de hoje). `setes_central.tb_company.cnpj` = `char(14)` `utf8mb4_general_ci`, `NOT NULL`,
+`DEFAULT '0'`: **249 linhas, TODAS `^[0-9]{14}$`** — zero sentinela `'0'`, zero vazio, zero letra/minúscula (o setes-sync não trouxe nada fora da
+forma); um CHECK de forma passaria sobre os dados de hoje. `fiscal_api.tb_establishment_certificate.cnpj` = `char(14)` `utf8mb4_unicode_ci`, 1 linha
+numérica. `tb_invoice_cancel_waiver` (CHECK da 067) e `tb_sync_conflict`: vazias. **Máscara configurável**: o catálogo `tb_interface_has_field`
+(150 campos, 23 interfaces) NÃO tem campo de CPF/CNPJ/documento e `setes_setes.tb_institution_has_field` está vazio — nenhum cliente pode ter
+configurado máscara de CNPJ (`setes_ws` nem tem a tabela). O risco da Q-CJ11 fica só no CÓDIGO (A4/B4/B5), não no dado.
+**DV conferido pela peça nova** (onda 0, mesma data): os 249 CNPJ de `tb_company` e os 12 CPF de `tb_person` (inclusive soft-deletados) fecham o
+DV — exigir forma canônica + DV na leitura do fato (três estados) não muda o comportamento para nenhum dado vivo.
