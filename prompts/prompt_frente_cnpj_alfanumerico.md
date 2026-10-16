@@ -14,8 +14,9 @@ grupo do sync é tarefa SEPARADA (§7).
 PUBLICADA (infra 024f914). **Rodada 1 DECIDIDA ("siga as recomendações" → D-CJ1…D-CJ13, §6.1)**; **onda 0 EXECUTADA em worktree com gates
 socrático 0,76 / adversarial 0,82 (§8)**; **rodada 2 DECIDIDA (D-CJ14…D-CJ18, §8.8) e ONDA 1 EXECUTADA em worktree (2026-10-16, §8.9) com gates
 socrático 0,74 / adversarial 0,80 e retrabalho na sessão (§8.10)**; **rodada 3 DECIDIDA (D-CJ19…D-CJ22, §8.11) e D-CJ19 EXECUTADA com gates
-do delta 0,75/0,72 (§8.12)** — commits LOCAIS no branch `cnpj`, nada publicado; ⏯ **rodada 4 (Q-CJ23…Q-CJ27, §8.12) e a JANELA (§8.5 —
-pela D-CJ21, só a onda 0 enquanto o grupo do sync não responder) aguardam o Valdo; retomar pelo §9.**
+do delta 0,75/0,72 (§8.12)**; **rodada 4 DECIDIDA ("siga as recomendações" → D-CJ23…D-CJ27, §8.13) e EXECUTADA com gates do delta 0,76/0,76
+(§8.14)** — commits LOCAIS no branch `cnpj`, nada publicado; ⏯ **rodada 5 (Q-CJ28/Q-CJ29, §8.14) e a JANELA (§8.5 — pela D-CJ21, só a onda 0
+enquanto o grupo do sync não responder) aguardam o Valdo; retomar pelo §9.**
 
 ---
 
@@ -572,15 +573,70 @@ onda 1 = núcleo 50271c4 · nfse a1bdcbd · api a44ce04 · app afa2b59. Tarefa S
     fisco (como a consulta da A já faz) · (c) limite conhecido. *(Rec.: (b) — torna verdadeira a mensagem "consulte a nota para regravar" sem
     reabrir o cadastro como fonte.)*
 
+### 8.13 Rodada 4 DECIDIDA (2026-10-16, Valdo: "siga as recomendações") — D-CJ23…D-CJ27
+
+- **D-CJ23** (= Q-CJ23 (a)): sem recurso ao cadastro para documento JÁ autorizado — chave que não traz CNPJ do emitente do DPS = erro legível
+  "emitente fora do suporte"; conferência SÓ-LEITURA no `fiscal_api` de que nenhuma chave gravada foge disso.
+- **D-CJ24** (= Q-CJ24 (b)): a recusa E0812 do fisco no cancelamento (raiz do certificado ≠ emitente da nota) volta traduzida com a SAÍDA;
+  a conferência local da raiz entra junto da D-CJ6.
+- **D-CJ25** (= Q-CJ25 (a)): o cancelamento tira da NOTA o que precisa (cMun da chave para o prazo do município, CNPJ da chave para o autor)
+  e deixa de chamar o `buildEmitter` estrito; o "Município gerador" do DANFSe vem do documento.
+- **D-CJ26** (= Q-CJ26 (a)): mantida a assunção executada no §8.12 — chave × DPS incoerentes = ambígua em todos os pontos.
+- **D-CJ27** (= Q-CJ27 (b)): a consulta de nota JÁ cancelada regrava o XML da NFS-e que o fisco devolve quando ele falta na pasta da chave
+  (como a consulta da autorizada já faz) — nunca procura na pasta do cadastro.
+
+### 8.14 Rodada 4 EXECUTADA em worktree (2026-10-16) — nfse-api 6b0f277
+
+- **D-CJ23**: `documentCnpj` (transmission.ts) é a peça ÚNICA de todo escritor, leitor e ato sobre documento JÁ autorizado — confere a
+  chave contra o DPS (D-CJ26) e exige o CNPJ embutido; sem ele, 422 `FISCAL_EMITTER_INCOMPLETE` "emitente fora do suporte". O recurso ao
+  cadastro morreu (`emitterCnpj` sai da transmissão). **Conferência SÓ-LEITURA no `fiscal_api` (dev = produção da Setes)**: 21 tentativas
+  (14 H sem chave, 7 P com 4 chaves — as notas 704–707): **0** chave sem CNPJ, **0** sem DPS, **0** emitente divergente do DPS, **0** fora de
+  50 posições (script na scratchpad da sessão, só SELECT com `SET SESSION TRANSACTION READ ONLY`, credenciais lidas do `.env` vivo sem eco).
+- **D-CJ24**: `cancelRefusalWayOut` — E0812 do fisco no cancelamento volta com "envie o A1 do emitente da nota ou cancele pelo Emissor
+  Nacional"; outras recusas seguem só com o texto do fisco.
+- **D-CJ25**: o preparo do cancelamento usa o autor (`documentCnpj`) e o cMun da CHAVE (`access-key.cMunOfAccessKey`, posições 0–6) para o
+  prazo do PAM; o `buildEmitter` estrito saiu (cadastro vazio não trava mais — teste). DANFSe: "Município gerador" = `infNFSe/xLocEmi`
+  (obrigatório no XSD 1.01), com o endereço do cadastro só como recurso quando o XML não traz o campo.
+- **D-CJ27**: `archiveCancelEventIfMissing` confere as DUAS peças na pasta da chave (NFS-e e evento); faltando qualquer uma, relê o fisco e
+  regrava a NFS-e (só se a resposta é da MESMA chave) e o evento (só se do mesmo código); nada de voz. O LOW do gate do delta D-CJ19 virou
+  teste verde.
+- `saveXmlSafe` recebe a pasta por FUNÇÃO (a peça pode recusar — depois de um fato do fisco, só avisa).
+- Testes: `transmission.test.ts` (D-CJ23/24/25/27), `danfse.test.ts` (D-CJ25); testes antigos que supunham o cadastro no cancelamento ou a C
+  sem regravar a NFS-e ajustados com o motivo; cerca D-CJ12 com 1 entrada nova na lista branca (`Number(terms?.cancelDays)` — dias do PAM,
+  falso positivo do rastreio pela tentativa). nfse-api **1015** (+185 skip).
+- **Gates do delta da rodada 4 (2026-10-16) — PASSARAM**: socrático **0,76** · adversarial **0,76** (sem HIGH; 28 ataques no arquivo
+  PERMANENTE `adversarial-cnpj-rodada4-gate.test.ts` — resistiram: cancelamento com cadastro vazio/ilegível/de outro estabelecimento, A1
+  ausente/vencido, réplica, cMun estranho, disco cheio; E0812 em todas as formas e os parecidos (E08120, e0812…) não traduzidos; consulta da C
+  com resposta de outra chave/ilegível/sem XML, nunca sobrescreve; 422 do emitente nos leitores sem 500; DANFSe com xLocEmi de 3.000
+  caracteres). **Corrigido na sessão (núcleo 5cb70a2 · nfse 5e45174)**: (MEDIUM, os dois gates) a guarda da regravação da C comparava a chave
+  da resposta com a da tentativa — mas o adaptador devolve a chave PERGUNTADA: não provava nada; resposta trocada (DPS de outro emitente/outra
+  vida, sem Id) virava o XML DESTA nota no arquivo de raiz ÚNICA → peça `nfseXmlIsOfAttempt` (DPS embutido = o da tentativa; chave do Id,
+  quando vem, = a dela) em TODA gravação de XML vindo de consulta (C e A); (LOW) E0812 em qualquer posição da recusa; (LOW) código próprio
+  `FISCAL_EMITTER_UNSUPPORTED` no núcleo (o `FISCAL_EMITTER_INCOMPLETE` mandava completar o cadastro, que não resolve); (LOW — D-CJ25 até o
+  fim) DANFSe SEM recurso ao cadastro: "Município gerador" = `xLocEmi` / UF do emitente (`emit/enderNac/UF`, NT 008 §2.4.5), "—" quando o
+  documento não diz; `emitterDisplay` só o nome; `emitterCnpj` marcado como CONHECIMENTO NEGATIVO (sem uso em produção — não religar). nfse-api
+  **1043** · núcleo 634. Limites registrados: no caminho da C a resposta ambígua segue só `warn` (padrão R13-06, sem o alarme "Fisco ambíguo
+  persistente"); H não tinha chave gravada na conferência da D-CJ23 (as autorizações de H foram em instância descartável).
+- **Questões para a rodada 5 (recomendação entre parênteses)**:
+  - **Q-CJ28 A saída do E0812**: o upload do A1 exige o CNPJ EXATO do cadastro e há UM A1 por estabelecimento (D-N31) — "envie o A1 do emitente
+    da nota" (decidido na D-CJ24) não é caminho direto: obriga voltar o cadastro ao CNPJ antigo e trocar o A1 que emite hoje (para a emissão
+    corrente). (a) a mensagem diz só a saída que existe: "cancele pelo Emissor Nacional com o acesso/certificado do emitente da nota (o A1
+    deste estabelecimento segue o CNPJ do cadastro)" · (b) manter as duas saídas explicando o custo · (c) certificado por CNPJ de documento JÁ
+    autorizado, só para eventos — fase própria junto da D-CJ6. *(Rec.: (a) agora; (c) só no 1º caso real.)*
+  - **Q-CJ29 Teto do rodízio × D-CJ25**: o teto da consulta ativa (`cancelDaysOf`) ainda pergunta o prazo do PAM pelo município do CADASTRO
+    (`buildEmitter`); o cancelamento já usa o cMun da CHAVE (o E0822 diz "município emissor da NFS-e"). (a) levar a D-CJ25 ao teto: prazo pelo
+    cMun das chaves da janela (o maior), sem o `buildEmitter` estrito · (b) manter o cadastro (o teto nunca fica abaixo de 60 e cai no padrão
+    com cadastro incompleto) como limite conhecido. *(Rec.: (b) com registro; reabrir no 1º estabelecimento que mude de município emissor.)*
+
 ## 9. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
 
 ```
 Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\Infra-IA\prompts\prompt_frente_cnpj_alfanumerico.md
 (TRANSVERSAL — cadastros, NFS-e, boleto, certificado; a nfe-api não tem emissão ainda e volta DEPOIS desta frente, na NE-1b).
-Rodadas 1–3 DECIDIDAS (D-CJ1…D-CJ22, §6.1/§8.8/§8.11); ONDAS 0 e 1 + D-CJ19 EXECUTADAS em worktrees D:\Gestao2027\cnpj\{fiscal-api,
-nfse-api,setes-api,setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0), 0,74/0,80 (onda 1) e 0,75/0,72
-(delta D-CJ19) com retrabalho — §8.7/§8.10/§8.12.
-1) Apresente a rodada 4 (Q-CJ23…Q-CJ27 do §8.12) com as recomendações; decidida, registre D-CJ23… e execute o que couber em worktree
+Rodadas 1–4 DECIDIDAS (D-CJ1…D-CJ27, §6.1/§8.8/§8.11/§8.13); ONDAS 0 e 1 + D-CJ19 + rodada 4 EXECUTADAS em worktrees
+D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0),
+0,74/0,80 (onda 1), 0,75/0,72 (delta D-CJ19) e 0,76/0,76 (rodada 4) com retrabalho — §8.7/§8.10/§8.12/§8.14.
+1) Apresente a rodada 5 (Q-CJ28/Q-CJ29 do §8.14) com as recomendações; decidida, registre D-CJ28… e execute o que couber em worktree
 (gates do delta). 2) A JANELA (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api → app);
 pela D-CJ21 ela leva só a onda 0 (por commit) enquanto o grupo do sync não responder. 3) O CHECK de forma (rascunho provado) só depois do
 acordo com o grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
