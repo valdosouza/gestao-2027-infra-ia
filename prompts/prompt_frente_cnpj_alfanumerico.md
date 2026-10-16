@@ -11,7 +11,7 @@ estado OFICIAL na web, fontes primárias datadas) + parecer do guardião (`setes
 grupo do sync é tarefa SEPARADA (§7).
 **Anexo**: `prompt_frente_cnpj_alfanumerico-inventario.md` (110 pontos com arquivo:linha).
 **Estado (2026-10-15)**: ⏯ **Rodada 0 ORGANIZADA** — inventário (anexo), fatos oficiais (§2), parecer do guardião INTEGRADO (§4), ondas (§5);
-**Rodada 1 (Q-CJ1…Q-CJ13, §6) aguarda o Valdo**. Retomar pelo §8.
+**Rodada 1 (Q-CJ1…Q-CJ13, §6) aguarda o Valdo**. Retomar pelo §8. PUBLICADA 2026-10-15 (infra 024f914).
 
 ---
 
