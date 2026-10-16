@@ -13,8 +13,9 @@ grupo do sync é tarefa SEPARADA (§7).
 **Estado (2026-10-15)**: Rodada 0 ORGANIZADA — inventário (anexo), fatos oficiais (§2), parecer do guardião INTEGRADO (§4), ondas (§5);
 PUBLICADA (infra 024f914). **Rodada 1 DECIDIDA ("siga as recomendações" → D-CJ1…D-CJ13, §6.1)**; **onda 0 EXECUTADA em worktree com gates
 socrático 0,76 / adversarial 0,82 (§8)**; **rodada 2 DECIDIDA (D-CJ14…D-CJ18, §8.8) e ONDA 1 EXECUTADA em worktree (2026-10-16, §8.9) com gates
-socrático 0,74 / adversarial 0,80 e retrabalho na sessão (§8.10)** — commits LOCAIS no branch `cnpj`, nada publicado; ⏯ **rodada 3 (Q-CJ19…
-Q-CJ22, §8.10) e a JANELA única onda 0 + onda 1 (§8.5) aguardam o Valdo; retomar pelo §9.**
+socrático 0,74 / adversarial 0,80 e retrabalho na sessão (§8.10)**; **rodada 3 DECIDIDA (D-CJ19…D-CJ22, §8.11) e D-CJ19 EXECUTADA com gates
+do delta 0,75/0,72 (§8.12)** — commits LOCAIS no branch `cnpj`, nada publicado; ⏯ **rodada 4 (Q-CJ23…Q-CJ27, §8.12) e a JANELA (§8.5 —
+pela D-CJ21, só a onda 0 enquanto o grupo do sync não responder) aguardam o Valdo; retomar pelo §9.**
 
 ---
 
@@ -369,6 +370,9 @@ reinicia — o checklist do `nfse-api/INDEX.md` confere o núcleo vivo limpo e n
 como prova (as funções novas só falham NA CHAMADA, não no boot nem no /health — gate socrático); (3) setes-api vivo: merge (o `tsx watch`
 recarrega) + /health + uma pesquisa "Documento"; (4) app: merge + `build-web.ps1`. Sem DDL nesta onda. Push dos 4 repos + Infra-IA depois.
 Q-CJ14 (§8.7) decide se o boot do setes-api passa a PROVAR a peça carregada.
+**D-CJ21 (2026-10-16) recorta a janela por COMMIT**: sem o retorno do grupo do sync, a janela leva SÓ a onda 0 — `git merge --ff-only` até
+núcleo 4b17b23 · nfse 62c5fcf · api f53a618 · app 2f621c1 (nunca a ponta do branch `cnpj`); a onda 1 e o retrabalho dos gates (§8.9–§8.12)
+seguem juntos, na mesma ordem, depois do retorno. Se o sync responder antes, uma janela só com a ponta.
 
 ### 8.6 Fica para a onda 1 (D-CJ8)
 
@@ -512,15 +516,72 @@ onda 1 = núcleo 50271c4 · nfse a1bdcbd · api a44ce04 · app afa2b59. Tarefa S
   - **Q-CJ22 Linha de P na onda 2**: (a) abrir P exige a "tentativa controlada no 1º caso real com o vai" (porta (c) da D-CJ7); a cerca de
     monotonia já entrou · (b) só pela data anunciada. *(Rec.: (a).)*
 
+### 8.11 Rodada 3 DECIDIDA (2026-10-16, Valdo: as quatro recomendações) — D-CJ19…D-CJ22
+
+- **D-CJ19** (= Q-CJ19 (a)): o que é de documento JÁ autorizado — a PASTA do arquivo fiscal (XML da NFS-e, do evento, 2ª via) e o `CNPJAutor`
+  do pedido de evento — sai do emitente EMBUTIDO na chave pela peça `access-key`; o cadastro de hoje governa só o que vai NASCER (emissão).
+  Supera em parte a D-CJ16 (a leitura tolerante do cadastro fica só onde não há chave). Executada em worktree (§8.12).
+- **D-CJ20** (= Q-CJ20 (a)): aceito o desvio da D-CJ10 — o boleto recusa CNPJ com letra até a sonda do Inter, com a saída dita (feito no §8.10).
+- **D-CJ21** (= Q-CJ21 (b)): a JANELA leva a onda 0; a PORTA do cadastro (aceitar CNPJ com letra no central) espera o retorno do grupo do
+  sync. Como os commits da onda 1 misturam a porta com o resto, a onda 1 vai INTEIRA depois do retorno do sync (se ele responder antes da
+  janela, vão juntas). Nenhuma flag: a separação é por commit.
+- **D-CJ22** (= Q-CJ22 (a)): a linha de P (onda 2) abre só com uma tentativa CONTROLADA no 1º caso real, com o "vai" (porta (c) da D-CJ7); a
+  cerca de monotonia já está no `cnpj-alfa-onda1.test.ts`.
+
+### 8.12 D-CJ19 EXECUTADA em worktree (2026-10-16) — nfse-api c67bcc4
+
+- Peça `access-key.cnpjOfAccessKey(chave)`: o CNPJ do emitente EMBUTIDO (tpInsc 2 + forma canônica `[0-9A-Z]{12}[0-9]{2}`, como veio, sem DV
+  conferido — a inscrição é voz do fisco que autorizou); null quando a chave não traz CNPJ na forma.
+- `transmission.ts`: `documentCnpj(chave)` = a chave, com o cadastro (`emitterCnpj`, leitura tolerante da D-CJ16) só como RECURSO — gravar e
+  procurar o XML da NFS-e (autorização, consulta, 2ª via, tela "No fisco", IBS/CBS) e do evento (cancelamento, arquivamento tardio,
+  substituta) pelo MESMO lugar; o `CNPJAutor` do pedido de cancelamento e a conferência do leiaute do EVENTO (422 antes do K) pelo emitente da
+  NOTA. Documento arquivado antes da mudança foi gravado pela pasta do CADASTRO — é a mesma enquanto o cadastro for o emitente da chave (o
+  caso de hoje: a Setes nunca trocou de CNPJ); nada a migrar agora.
+- Limite conhecido (não decidido aqui): o cancelamento ainda passa pelo `buildEmitter` (endereço/IBGE do cadastro, para o prazo do PAM) —
+  cadastro incompleto hoje recusa o preparo (N, 422) mesmo com a nota autorizada.
+- Testes: `transmission.test.ts` ("D-CJ19 — documento JÁ autorizado pela chave dele…": cadastro trocado para OUTRO CNPJ → autor e pasta seguem
+  a nota e a 2ª via é achada; P com cadastro hoje alfanumérico e nota numérica cancela; nota com letra em P recusa antes do K; chave sem CNPJ
+  → recurso) + `cnpj-alfa-onda1.test.ts` (a peça). nfse-api 989 (+185 skip).
+- **Gates do delta D-CJ19 (2026-10-16) — PASSARAM**: socrático **0,75** · adversarial **0,72** (sem HIGH; 22 ataques no arquivo PERMANENTE
+  `adversarial-cnpj-dcj19-gate.test.ts` — resistiram chaves forjadas/Unicode/traversal em fuzz de 30 mil, gravação × busca na MESMA pasta,
+  leiaute do evento, substituta, documentos antigos com o cadastro nunca trocado). **Corrigido na sessão — 2 MEDIUM, mesma causa (nfse
+  2d49f43)**: a chave decide a pasta (raiz ÚNICA para todos os clientes) e o autor, mas o emitente embutido nela não era conferido contra o
+  DPS — chave de OUTRO emitente gravada numa tentativa servia a 2ª via/DANFSe/substituta de OUTRO cliente, gravava na pasta dele e saía no
+  `CNPJAutor` do cancelamento. Agora: o `POST /nfse` confere (a mesma regra do `GET /dps`); a transmissão repete como cinto (a reserva fica
+  em voo, nada gravado); `documentIssuerCnpj` só usa a chave quando ela é do emitente do DPS da tentativa — senão 502 ambígua
+  `nfse-chave-divergente` (no cancelamento, ANTES do K). Fixtures de chave MALFORMADA (sem o tpInsc — ~15 suítes antigas, a que mantinha o
+  "recurso" vivo nos testes) corrigidas; a cerca D-F98 conhece o produtor novo. nfse-api **1011** (+185 skip — ao vivo NÃO rodados: gravam
+  em cópias do dev). Limite registrado: o `checkXmls` do `migrate:setes` procura pela pasta do CNPJ do A1 (3ª fonte) — script da re-sincronia,
+  morto depois da virada de 14–15/10.
+- **Questões para a rodada 4 (recomendação entre parênteses)**:
+  - **Q-CJ23 Recurso ao cadastro quando a chave não traz CNPJ**: com a conferência chave × DPS ele só é alcançado em tentativa SEM Id do DPS
+    gravado. (a) tirar o recurso: chave sem CNPJ = erro legível "emitente fora do suporte" + conferência só-leitura no `fiscal_api` de que
+    nenhuma chave gravada tem tpInsc ≠ 2 ou emitente ≠ DPS (`SUBSTRING(access_key,10,14) <> SUBSTRING(dps_id,12,14)`) · (b) manter o recurso
+    numa peça só · (c) como está. *(Rec.: (a).)*
+  - **Q-CJ24 Autor da chave × A1 de hoje** (Anexo II: E0812 confere só a RAIZ do CNPJ do certificado; E0813 exige autor = emitente): (a)
+    conferir a raiz localmente ANTES do K · (b) deixar o fisco decidir e traduzir o E0812 numa mensagem com a SAÍDA (carregar o A1 do emitente
+    da nota ou cancelar no Emissor Nacional) · (c) nada. *(Rec.: (b) agora; (a) junto da D-CJ6.)*
+  - **Q-CJ25 Levar a D-CJ19 até o fim**: (a) o cancelamento tira da NOTA o que precisa (cMun da chave para o prazo do PAM, CNPJ para o autor) e
+    deixa de chamar o `buildEmitter` estrito; o "Município gerador" do DANFSe vem do documento · (b) manter: cadastro incompleto bloqueia o
+    cancelamento com 422 legível e o DANFSe mostra o município de hoje. *(Rec.: (a).)*
+  - **Q-CJ26 (assunção EXECUTADA na sessão — confirmar)**: chave × DPS incoerentes = ambígua 502 `nfse-chave-divergente` no adaptador, na
+    transmissão, nos leitores e no autor (falha fechada; o "Fisco ambíguo persistente" alarma) · (b) só no adaptador (linhas já gravadas —
+    inclusive as do `migrate:setes` — seguiriam decidindo pela chave). *(Rec.: (a) — manter.)*
+  - **Q-CJ27 Documento cancelado arquivado pela versão anterior na pasta de um cadastro JÁ trocado** (LOW do adversarial — teste `it.failing`):
+    (a) a busca procura também na pasta do cadastro quando a da chave não tem · (b) a consulta da C regrava o XML da NFS-e que já recebe do
+    fisco (como a consulta da A já faz) · (c) limite conhecido. *(Rec.: (b) — torna verdadeira a mensagem "consulte a nota para regravar" sem
+    reabrir o cadastro como fonte.)*
+
 ## 9. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
 
 ```
 Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\Infra-IA\prompts\prompt_frente_cnpj_alfanumerico.md
 (TRANSVERSAL — cadastros, NFS-e, boleto, certificado; a nfe-api não tem emissão ainda e volta DEPOIS desta frente, na NE-1b).
-Rodadas 1 e 2 DECIDIDAS (D-CJ1…D-CJ18, §6.1/§8.8); ONDAS 0 e 1 EXECUTADAS em worktrees D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,
-setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0) e 0,74/0,80 (onda 1) com retrabalho — §8.7/§8.10.
-1) Apresente a rodada 3 (Q-CJ19…Q-CJ22 do §8.10) com as recomendações; decidida, registre D-CJ19… e execute o que couber em worktree.
-2) A JANELA única onda 0 + onda 1 (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api →
-app); a Q-CJ21 diz se a PORTA do cadastro vai junto ou espera o grupo do sync. 3) O CHECK de forma (rascunho provado) só depois do acordo
-com o grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
+Rodadas 1–3 DECIDIDAS (D-CJ1…D-CJ22, §6.1/§8.8/§8.11); ONDAS 0 e 1 + D-CJ19 EXECUTADAS em worktrees D:\Gestao2027\cnpj\{fiscal-api,
+nfse-api,setes-api,setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0), 0,74/0,80 (onda 1) e 0,75/0,72
+(delta D-CJ19) com retrabalho — §8.7/§8.10/§8.12.
+1) Apresente a rodada 4 (Q-CJ23…Q-CJ27 do §8.12) com as recomendações; decidida, registre D-CJ23… e execute o que couber em worktree
+(gates do delta). 2) A JANELA (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api → app);
+pela D-CJ21 ela leva só a onda 0 (por commit) enquanto o grupo do sync não responder. 3) O CHECK de forma (rascunho provado) só depois do
+acordo com o grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
 ```
