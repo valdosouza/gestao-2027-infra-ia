@@ -591,7 +591,8 @@ onda 1 = núcleo 50271c4 · nfse a1bdcbd · api a44ce04 · app afa2b59. Tarefa S
   chave contra o DPS (D-CJ26) e exige o CNPJ embutido; sem ele, 422 `FISCAL_EMITTER_INCOMPLETE` "emitente fora do suporte". O recurso ao
   cadastro morreu (`emitterCnpj` sai da transmissão). **Conferência SÓ-LEITURA no `fiscal_api` (dev = produção da Setes)**: 21 tentativas
   (14 H sem chave, 7 P com 4 chaves — as notas 704–707): **0** chave sem CNPJ, **0** sem DPS, **0** emitente divergente do DPS, **0** fora de
-  50 posições (script na scratchpad da sessão, só SELECT com `SET SESSION TRANSACTION READ ONLY`, credenciais lidas do `.env` vivo sem eco).
+  50 posições (script `Infra-IA/fiscal-api/scripts/cnpj-alfanumerico/conferir-chave-x-dps-somente-leitura.js`, só SELECT com `SET SESSION
+TRANSACTION READ ONLY`, credenciais lidas do `.env` vivo sem eco — rodar de novo antes da janela).
 - **D-CJ24**: `cancelRefusalWayOut` — E0812 do fisco no cancelamento volta com "envie o A1 do emitente da nota ou cancele pelo Emissor
   Nacional"; outras recusas seguem só com o texto do fisco.
 - **D-CJ25**: o preparo do cancelamento usa o autor (`documentCnpj`) e o cMun da CHAVE (`access-key.cMunOfAccessKey`, posições 0–6) para o
@@ -648,7 +649,8 @@ Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\In
 Rodadas 1–5 DECIDIDAS (D-CJ1…D-CJ29, §6.1/§8.8/§8.11/§8.13/§8.15); ONDAS 0 e 1 + rodadas 3–5 EXECUTADAS em worktrees
 D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0),
 0,74/0,80 (onda 1), 0,75/0,72 (delta D-CJ19) e 0,76/0,76 (rodada 4) com retrabalho — §8.7/§8.10/§8.12/§8.14.
-1) Nenhuma questão aberta (§8.15). 2) A JANELA (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api → app);
+1) Nenhuma questão aberta (§8.15). Pontas LOCAIS do branch `cnpj` em 2026-10-16: núcleo 5cb70a2 · nfse-api 1d09e83 · setes-api dcf4e1e ·
+setes-app db92f38 (Infra-IA no `main` local: 6b40441+); nada empurrado ao GitHub. 2) A JANELA (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api → app);
 pela D-CJ21 ela leva só a onda 0 (por commit) enquanto o grupo do sync não responder. 3) O CHECK de forma (rascunho provado) só depois do
 acordo com o grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
 ```
