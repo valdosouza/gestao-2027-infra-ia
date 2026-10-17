@@ -15,8 +15,8 @@ PUBLICADA (infra 024f914). **Rodada 1 DECIDIDA ("siga as recomendações" → D-
 socrático 0,76 / adversarial 0,82 (§8)**; **rodada 2 DECIDIDA (D-CJ14…D-CJ18, §8.8) e ONDA 1 EXECUTADA em worktree (2026-10-16, §8.9) com gates
 socrático 0,74 / adversarial 0,80 e retrabalho na sessão (§8.10)**; **rodada 3 DECIDIDA (D-CJ19…D-CJ22, §8.11) e D-CJ19 EXECUTADA com gates
 do delta 0,75/0,72 (§8.12)**; **rodada 4 DECIDIDA ("siga as recomendações" → D-CJ23…D-CJ27, §8.13) e EXECUTADA com gates do delta 0,76/0,76
-(§8.14)** — commits LOCAIS no branch `cnpj`, nada publicado; ⏯ **rodada 5 (Q-CJ28/Q-CJ29, §8.14) e a JANELA (§8.5 — pela D-CJ21, só a onda 0
-enquanto o grupo do sync não responder) aguardam o Valdo; retomar pelo §9.**
+(§8.14)**; **rodada 5 DECIDIDA e EXECUTADA (D-CJ28/D-CJ29, §8.15)** — commits LOCAIS no branch `cnpj`, nada publicado; NENHUMA questão aberta;
+⏯ **a JANELA (§8.5 — pela D-CJ21, só a onda 0 enquanto o grupo do sync não responder) aguarda o "vai" do Valdo; retomar pelo §9.**
 
 ---
 
@@ -628,16 +628,27 @@ onda 1 = núcleo 50271c4 · nfse a1bdcbd · api a44ce04 · app afa2b59. Tarefa S
     cMun das chaves da janela (o maior), sem o `buildEmitter` estrito · (b) manter o cadastro (o teto nunca fica abaixo de 60 e cai no padrão
     com cadastro incompleto) como limite conhecido. *(Rec.: (b) com registro; reabrir no 1º estabelecimento que mude de município emissor.)*
 
+### 8.15 Rodada 5 DECIDIDA e EXECUTADA (2026-10-16, Valdo: "siga as recomendações") — D-CJ28/D-CJ29 — nfse-api 1d09e83
+
+- **D-CJ28** (= Q-CJ28 (a)): a recusa E0812 do cancelamento diz só a saída que EXISTE — "cancele pelo Emissor Nacional com o acesso ou o
+  certificado do emitente da nota" (o A1 deste estabelecimento segue o CNPJ do cadastro de hoje). O "envie o A1 do emitente da nota" da D-CJ24
+  saiu: o upload exige o CNPJ EXATO do cadastro e há UM A1 por estabelecimento (D-N31) — seguir ao pé da letra pararia a emissão corrente.
+  Certificado só para eventos de documento antigo (opção (c)) = fase própria junto da D-CJ6, no 1º caso real. Teste fixa que "envie o A1" não
+  volta.
+- **D-CJ29** (= Q-CJ29 (b)): o teto do rodízio (`cancelDaysOf`) segue pelo município do CADASTRO — LIMITE CONHECIDO registrado no código (o
+  teto nunca fica abaixo do padrão; cadastro incompleto cai no padrão); reabrir no 1º estabelecimento que mude de município emissor sem trocar
+  a habilitação (aí, o prazo das chaves da janela, o maior).
+- Delta só de TEXTO de mensagem e de comentário (nenhuma lógica nova) — sem rodada de gates; nfse-api **1043** (+185 skip).
+
 ## 9. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
 
 ```
 Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\Infra-IA\prompts\prompt_frente_cnpj_alfanumerico.md
 (TRANSVERSAL — cadastros, NFS-e, boleto, certificado; a nfe-api não tem emissão ainda e volta DEPOIS desta frente, na NE-1b).
-Rodadas 1–4 DECIDIDAS (D-CJ1…D-CJ27, §6.1/§8.8/§8.11/§8.13); ONDAS 0 e 1 + D-CJ19 + rodada 4 EXECUTADAS em worktrees
+Rodadas 1–5 DECIDIDAS (D-CJ1…D-CJ29, §6.1/§8.8/§8.11/§8.13/§8.15); ONDAS 0 e 1 + rodadas 3–5 EXECUTADAS em worktrees
 D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0),
 0,74/0,80 (onda 1), 0,75/0,72 (delta D-CJ19) e 0,76/0,76 (rodada 4) com retrabalho — §8.7/§8.10/§8.12/§8.14.
-1) Apresente a rodada 5 (Q-CJ28/Q-CJ29 do §8.14) com as recomendações; decidida, registre D-CJ28… e execute o que couber em worktree
-(gates do delta). 2) A JANELA (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api → app);
+1) Nenhuma questão aberta (§8.15). 2) A JANELA (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api → app);
 pela D-CJ21 ela leva só a onda 0 (por commit) enquanto o grupo do sync não responder. 3) O CHECK de forma (rascunho provado) só depois do
 acordo com o grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
 ```
