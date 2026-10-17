@@ -15,8 +15,11 @@ PUBLICADA (infra 024f914). **Rodada 1 DECIDIDA ("siga as recomendações" → D-
 socrático 0,76 / adversarial 0,82 (§8)**; **rodada 2 DECIDIDA (D-CJ14…D-CJ18, §8.8) e ONDA 1 EXECUTADA em worktree (2026-10-16, §8.9) com gates
 socrático 0,74 / adversarial 0,80 e retrabalho na sessão (§8.10)**; **rodada 3 DECIDIDA (D-CJ19…D-CJ22, §8.11) e D-CJ19 EXECUTADA com gates
 do delta 0,75/0,72 (§8.12)**; **rodada 4 DECIDIDA ("siga as recomendações" → D-CJ23…D-CJ27, §8.13) e EXECUTADA com gates do delta 0,76/0,76
-(§8.14)**; **rodada 5 DECIDIDA e EXECUTADA (D-CJ28/D-CJ29, §8.15)** — commits LOCAIS no branch `cnpj`, nada publicado; NENHUMA questão aberta;
-⏯ **a JANELA (§8.5 — pela D-CJ21, só a onda 0 enquanto o grupo do sync não responder) aguarda o "vai" do Valdo; retomar pelo §9.**
+(§8.14)**; **rodada 5 DECIDIDA e EXECUTADA (D-CJ28/D-CJ29, §8.15)**; NENHUMA questão aberta.
+**Estado (2026-10-17)**: 🎉 **JANELA da ONDA 0 EXECUTADA em produção e PUBLICADA** (Valdo: "ainda estamos em desenvolvimento, então vai" — §8.16):
+núcleo 4b17b23 · nfse-api 62c5fcf · setes-api f53a618 · setes-app 2f621c1 no `main` vivo e no GitHub. O RESTO do branch `cnpj` (onda 1 + rodadas
+3–5: núcleo 3 · nfse-api 7 · setes-api 2 · app 2 commits, ainda fast-forward sobre o `main`) espera o grupo do sync (D-CJ21) junto com o CHECK.
+⏯ Próximo: nfe-api NE-1b (`prompt_onda_nfe_sefaz.md`); esta frente reabre com o retorno do sync — retomar pelo §9.
 
 ---
 
@@ -641,6 +644,34 @@ TRANSACTION READ ONLY`, credenciais lidas do `.env` vivo sem eco — rodar de no
   a habilitação (aí, o prazo das chaves da janela, o maior).
 - Delta só de TEXTO de mensagem e de comentário (nenhuma lógica nova) — sem rodada de gates; nfse-api **1043** (+185 skip).
 
+### 8.16 JANELA da ONDA 0 EXECUTADA em produção (2026-10-16 23:20 → 2026-10-17, Valdo: "ainda estamos em desenvolvimento, então vai")
+
+Pelo §8.5 recortado pela D-CJ21 (só a onda 0, por commit). Pré-condição conferida: os 4 `main` vivos limpos e ANCESTRAIS dos commits da onda 0
+(fast-forward, nenhum commit no `main` fora do `cnpj`); nenhuma migration no delta dos três TS.
+
+| Passo | O que foi feito | Prova |
+|---|---|---|
+| 1 núcleo | `merge --ff-only` 945ad2d → **4b17b23**; `dist` antigo copiado para a scratchpad da sessão; `npm run build` com a árvore LIMPA | `require('fiscal-api/federal-id')` DE DENTRO do `setes-api` → resolvido em `fiscal-api/dist/federal-id.js`, 17 exports; árvore limpa depois do build |
+| 2 nfse-api | `merge --ff-only` ba78074 → **62c5fcf**; typecheck limpo; `npm test` na árvore viva **949** (+185 skip — o número do §8.3); `.env` intacto; processo de 15/10 (tsx SEM watch) parado e reiniciado na aba do Terminal **"nfse-api producao"** desta sessão | `/v1/health` ok; `GET /v1/nfse/invoices/:id` 200 nas 4 notas de P com chave (704–707, todas canceladas); DANFSe 200 nas 4 — no da 707 o CNPJ do prestador `07.742.094/0001-13` e o do tomador saem pela peça, chave em blocos de 4, carimbo CANCELADA |
+| 3 setes-api | `merge --ff-only` e4af7aa → **f53a618**; o `tsx watch` recarregou sozinho (processo novo 23:26:10) | `/health` 200; `GET /api/customers/search-criteria` serve `document` com kind `federalId`; pesquisa por prefixo: `53120661` e `53.120.661/0001` → 1 cliente, `12ABC` → 200 com 0, `abc!` → 422 `SEARCH_CRITERION_INVALID` no campo |
+| 4 setes-app | `merge --ff-only` fbc2fac → **2f621c1** (delta só Dart, sem `pubspec`); o `flutter run -d web-server --web-port 5051 --dart-define-from-file=.env` (cwd `apps/web`) de 15/10 parado e reiniciado na aba **"setes-app web 5051"** desta sessão | login carregado na :5051, console sem erro |
+| 5 GitHub | push dos 4 `main` (varredura do delta: nenhum segredo nem `.env`/`.pem`) | núcleo 945ad2d..4b17b23 · nfse ba78074..62c5fcf · api e4af7aa..f53a618 · app fbc2fac..2f621c1 |
+
+Fatos/limites registrados:
+- **A "transmissão em H como prova" do §8.5 não cabe na instância de produção**: a habilitação viva é só P (H só em instância de ensaio — kit
+  `fiscal-api/scripts/ensaio-janela/`) e o fisco de H está instável (E1000, D-IB98). A transmissão ficou coberta pelos 949 testes na árvore viva
+  (fisco falso); a prova ao vivo em H fica PENDENTE junto com a da IB-4. O §8.5 serve de roteiro para a próxima janela com essa correção.
+- **D-F133 × §8.5**: a D-F133 proíbe recompilar o núcleo na máquina de produção até a F3, mas o setes-api resolve `fiscal-api/federal-id` pelo
+  `dist` NÃO versionado — sem build o ERP não sobe. Seguiu-se o §8.5 (D-CJ14), no espírito da D-F133: build da árvore limpa no commit conferido
+  (HEAD 4b17b23), prova registrada aqui. Some com a F3 (tag/tarball versionado).
+- A rota do DANFSe devolve JSON `{ accessKey, pdfBase64 }` (não `application/pdf`) — quem prova pelo HTTP decodifica o base64.
+- A nfse-api e o app de produção agora rodam nas abas do Terminal desta sessão; as abas antigas (outra sessão) ficaram sem o processo.
+- **Passeio logado** na pesquisa "Documento" do app = com o Valdo (o agente não digita senha) — opcional; a API já provou o critério.
+- O resto do branch `cnpj` continua fast-forward sobre o `main` novo (núcleo 3 · nfse-api 7 · setes-api 2 · app 2 commits) — a próxima janela
+  (depois do retorno do grupo do sync) é `merge --ff-only` até as pontas 5cb70a2 · 1d09e83 · dcf4e1e · db92f38, na MESMA ordem (núcleo + build →
+  nfse-api + restart → setes-api → app), com o CHECK de forma depois do acordo. ⚠️ A NE-1b vai mexer no `danfse.ts` da nfse-api (base de PDF no
+  núcleo) — as rodadas 4–5 do `cnpj` também mexem: quem chegar ao `main` depois faz rebase.
+
 ## 9. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
 
 ```
@@ -649,8 +680,10 @@ Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\In
 Rodadas 1–5 DECIDIDAS (D-CJ1…D-CJ29, §6.1/§8.8/§8.11/§8.13/§8.15); ONDAS 0 e 1 + rodadas 3–5 EXECUTADAS em worktrees
 D:\Gestao2027\cnpj\{fiscal-api,nfse-api,setes-api,setes-app}, branch `cnpj`, commits LOCAIS (sem push/merge), gates 0,76/0,82 (onda 0),
 0,74/0,80 (onda 1), 0,75/0,72 (delta D-CJ19) e 0,76/0,76 (rodada 4) com retrabalho — §8.7/§8.10/§8.12/§8.14.
-1) Nenhuma questão aberta (§8.15). Pontas LOCAIS do branch `cnpj` em 2026-10-16: núcleo 5cb70a2 · nfse-api 1d09e83 · setes-api dcf4e1e ·
-setes-app db92f38 (Infra-IA no `main` local: 6b40441+); nada empurrado ao GitHub. 2) A JANELA (§8.5) SÓ com o meu "vai" (núcleo build + prova da peça a partir do setes-api → nfse-api → setes-api → app);
-pela D-CJ21 ela leva só a onda 0 (por commit) enquanto o grupo do sync não responder. 3) O CHECK de forma (rascunho provado) só depois do
-acordo com o grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
+1) Nenhuma questão aberta (§8.15). A ONDA 0 está em PRODUÇÃO e no GitHub desde 2026-10-17 (§8.16: núcleo 4b17b23 · nfse-api 62c5fcf ·
+setes-api f53a618 · setes-app 2f621c1). Pontas LOCAIS do resto no branch `cnpj`: núcleo 5cb70a2 · nfse-api 1d09e83 · setes-api dcf4e1e ·
+setes-app db92f38 (ainda fast-forward sobre o `main` — conferir; se a NE-1b chegou antes ao `danfse.ts`, rebase). 2) A próxima JANELA (onda 1 +
+rodadas 3–5) SÓ com o retorno do grupo do sync E o meu "vai", pelo roteiro do §8.5 com a correção do §8.16 (nfse-api sem watch = restart
+manual; app = `flutter run` na :5051; prova em H só em instância de ensaio). 3) O CHECK de forma (rascunho provado) só depois do acordo com o
+grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
 ```

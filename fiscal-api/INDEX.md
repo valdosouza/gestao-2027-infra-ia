@@ -33,8 +33,8 @@
 
 ## O que o núcleo guarda (§12.2 do prompt)
 
-**Inscrição federal (frente do CNPJ alfanumérico, D-CJ2 — onda 0 em worktree `D:\Gestao2027\cnpj\fiscal-api`, branch `cnpj`, NÃO publicada em
-2026-10-15)**: peça PURA `src/federal-id/federal-id.ts` = 2º subpath publicado `fiscal-api/federal-id` (o setes-api o reexporta pelo
+**Inscrição federal (frente do CNPJ alfanumérico, D-CJ2 — onda 0 PUBLICADA em 2026-10-17: `main` 4b17b23 + `dist` reconstruído na janela, §8.16
+do prompt da frente; o resto do branch `cnpj` — onda 1/rodadas 3–5 — espera o grupo do sync)**: peça PURA `src/federal-id/federal-id.ts` = 2º subpath publicado `fiscal-api/federal-id` (o setes-api o reexporta pelo
 `@shared/validation`; ⚠️ o setes-api lê o `dist` — build do núcleo ANTES do merge dele) + vetor oficial `federal-id.vector.json` lido também pelo
 espelho Dart; cerca `federal-id-fence` com predicado GÊMEO (`src/__tests__/federal-id-fence.ts`). Ver `../prompts/prompt_frente_cnpj_alfanumerico.md` §8.
 
