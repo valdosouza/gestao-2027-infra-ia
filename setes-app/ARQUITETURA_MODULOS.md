@@ -31,7 +31,7 @@ apps/web/lib/app/
 │       ├── entity/<x>_lookup_entity.dart
 │       └── datasource/<x>_lookup_datasource.dart
 └── modules/
-    ├── home/                        # shell: menu + RouterOutlet
+    ├── home/                        # shell: menu + RouterOutlet (UM content adaptativo — "Shell adaptativo único")
     │   ├── interface_routes.dart    # registro i18nKey → rota (+ navigateToInterface)
     │   └── home_module.dart         # ModuleRoute de CADA interface como filha de '/'
     └── <interface>/                 # ex.: countries, states, cities
@@ -111,7 +111,7 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
 ## Navegação (RouterOutlet)
 
 - HomeModule: `ChildRoute('/', child: HomePage, children: [ModuleRoute de cada interface])`.
-- O conteúdo central dos shells (desktop/mobile) é `RouterOutlet()`.
+- O conteúdo central do shell é `RouterOutlet()` — UM shell adaptativo (`home/presentation/content/content_home.dart`), ver abaixo.
 - Clique no menu → `navigateToInterface(item)` (`home/interface_routes.dart`):
   resolve a rota pelo `i18nKey` e navega com `arguments = nome da interface no menu`
   (título das telas). Sem rota → `/home/pending/` (placeholder).
@@ -119,6 +119,31 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
   `args.data as String? ?? trCatalog('<i18nKey>', ...)` (fallback p/ refresh na URL).
 - `/home/welcome/` é o conteúdo inicial (HomePage navega para lá quando abre em `/home`).
 - Binds de um módulo só vivem enquanto sua rota está ativa (DI correto do modular).
+
+## Shell adaptativo único (2026-10-18, onda D da densidade — `Infra-IA/prompts/prompt_densidade_layout_web.md` §5–§7)
+
+- **Uma árvore só** (`ContentHome`): o shell nunca escolhe entre dois contents pela largura. O `RouterOutlet` fica SEMPRE na mesma
+  posição (filho com chave de um `Row` que existe em toda largura); o que muda é o CONTEÚDO do espaço do menu (colunas × vazio) e da
+  barra. ⚠️ **CONHECIMENTO NEGATIVO**: o antigo `Responsive(mobile: ContentHomeMobile, desktop: ContentHomeDesktop)` recriava o
+  `RouterOutlet` ao cruzar o breakpoint (maximizar/restaurar a janela) — a tela aberta nascia de novo e o formulário em edição voltava
+  para a lista, perdendo a digitação. É EXCEÇÃO à decisão 5 da Fase 1 (page + contents por breakpoint): `Responsive` só serve onde
+  nada guarda estado que o usuário não pode perder. Provas: `apps/web/test/home_shell_resize_test.dart` (1366 → 1093 → coluna
+  recolhida → 800 → 1366, texto e foco intactos, o form nasce 1 vez) e `home_shell_drawer_test.dart` (☰ a 375 px).
+- **O login segue a mesma regra** (`ContentLogin` no core, 2026-10-18): o `LoginForm` (controllers de usuário e senha) fica numa
+  posição fixa e só a moldura muda de medida — 400 px fixos a partir de 1100 px de área útil, largura toda com 24 px de margem
+  abaixo. ⚠️ Moldura que muda de medida nunca pode SUMIR da árvore: `SingleChildScrollView(padding: null)` tira o `Padding` e o
+  filho muda de posição — use `EdgeInsets.zero`. Prova: `apps/web/test/login_resize_test.dart`. Desde então nenhuma tela usa o
+  `Responsive` (fica no core com o aviso; não é peça morta, só sem consumidor).
+- **Breakpoint pela ÁREA ÚTIL** (`LayoutBuilder`, nunca `MediaQuery`): menu ao lado a partir de **840 px** (D-DL7 — faixa "expandida" do
+  M3, a mesma da `SetesFormGrid`); abaixo, gaveta com ☰. O `Responsive` do core também mede pela área útil.
+- **Barra (D-DL6)**: com o menu ao lado NÃO há barra do shell — logomarca no topo da coluna de módulos, usuário + idioma + tema no pé
+  dela; os cabeçalhos das colunas têm a altura e a cor da barra da tela (uma faixa só). Na gaveta: barra enxuta = ☰ + logomarca +
+  `UserBadge(compact: true)` (nome, idioma, tema e Sair dentro do menu dele). ⚠️ As ações da barra estreita NUNCA podem somar mais que
+  a largura livre: a `AppBar` alinha as ações à direita POR CIMA do leading — com ~360 px de ações o logo (uma `Image`, que absorve o
+  toque) cobria o ☰ a 375 px e o menu ficava sem acesso.
+- **2ª coluna recolhível (D-DL7)**: botão « no cabeçalho dela (`MenuInterfacesCollapseToggled` no `MenuBloc`); recolhida, o módulo
+  aberto mostra ›; clicar num módulo a mostra de novo.
+- Tela sem barra própria (welcome, pending) aparece sem barra com o menu ao lado — normal; no celular a barra do shell segue lá.
 
 ## Checklist para criar módulo de interface novo
 
