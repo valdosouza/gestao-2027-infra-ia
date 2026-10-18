@@ -177,3 +177,22 @@ Sem `WildcardRoute` o `selectRoute` do flutter_modular lança o `RouteNotFound` 
 - Módulo novo de cadastro NÃO precisa de escape próprio (o da casa cobre `/home/<qualquer-coisa>/`); só endereço desconhecido DENTRO
   de um módulo de interface (`/home/customers/nada/`) segue sem cerca.
 - Testes de roteamento: o Modular é singleton — um cenário por arquivo (`route_fallback_*_test.dart`).
+
+## Privilégio de CRUD na tela (D-PV2 — onda executada em worktree `privilegios-crud`, 2026-10-18; NÃO publicada)
+
+Detalhe: `Infra-IA/prompts/prompt_privilegios_interfaces.md` §11. Até o merge, esta seção é a REGRA para tela nova.
+
+- **Fábrica = um ponto só**: `app/shared/session/crud_privileges.dart` (`CrudPrivileges.canInsert/canUpdate/canDelete/canSave(creating:)`
+  sobre a `CurrentInterface`). A `RegisterSearchPage` esconde o "Novo" sem INSERIR; a `RegisterFormPage` (parâmetro `creating`) e a casca
+  `app/shared/register/register_form_shell.dart` (sobre a `SetesFormShell`) mostram o ✓ com INSERIR (registro novo) ou ALTERAR (edição) e
+  a lixeira com EXCLUIR. **Cadastro novo do cliente usa `RegisterFormShell(creating: ...)`**, nunca a `SetesFormShell` crua.
+- **Tela de processo**: cada botão pergunta `CurrentInterface.can('NOME')` com o nome LITERAL do catálogo (a cerca da D-PV9 lê o par
+  estaticamente) — ex.: abrir = INSERIR, mudar = ALTERAR, excluir o documento aberto = EXCLUIR, falar com o banco = TRANSMITIR, PDF =
+  IMPRIMIR, estornar boleto/cheque = CANCELAR, rotina mensal = FATURAR (D-PV7/D-PV8/A-PV7).
+- **O módulo só fala com o SEU `/api/<m>`** (reafirmada: a API agora confere o privilégio POR ROTEADOR). Lista de apoio de outro cadastro
+  = rota do próprio módulo (`/api/<m>/<y>-lookup`); peça compartilhada com caminho parametrizado (ex.: `SalesmanLookupDatasource(path:)`).
+- **Peça compartilhada da aba de interfaces** (D-PV11): `app/shared/institution_interfaces/` (entidade + fonte abstrata
+  `InstitutionInterfacesSource` + aba com `canChange`) — consumida pelo cadastro de Estabelecimentos (Super) e pela tela "Interfaces dos
+  clientes" (`modules/institution_interfaces/`, delegável), cada uma com o datasource do PRÓPRIO módulo.
+- **Limite conhecido**: o app só conhece os privilégios da tela aberta PELO MENU — engrenagem (painel de configs), aba 'R' (Parceria) e o
+  "Devolver" do pedido não se escondem; a API decide (403 com mensagem). Q-PV13.

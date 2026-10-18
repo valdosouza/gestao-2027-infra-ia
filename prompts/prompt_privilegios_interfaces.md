@@ -11,6 +11,15 @@ recomendações da Rodada 2") → A-PV1…A-PV4 confirmadas, D-PV5…D-PV8 — N
 (134 pares) ESCRITO e PROVADO em schema descartável (§9) e **APLICADO em `setes_central` em 2026-10-18 (Valdo: "Vai: aplique o seed 64",
 §10) — 157 pares vivos; C1 corrigido no menu do admin**; COMMITADO sem push em 2026-10-18 (sql 3672ee2 = seed 64 + comentário do 06; Infra-IA no commit seguinte, só os trechos desta tarefa).
 Entregas próprias em curso (sessões abertas pelo Valdo em 2026-10-18): a cerca da D-PV9 e a onda da D-PV2 (com A-PV1/D-PV5/D-PV6/D-PV8).
+**Cerca da D-PV9 ENTREGUE em worktree em 2026-10-18 (§12 — lista única `privilege-catalog.ts` + cerca + teste ao vivo + boot que grita;
+C1 provado ao vivo; gates 0,80/0,78; NADA commitado; A-PV12 e Q-PV16…Q-PV20 aguardam o Valdo).**
+**Onda da D-PV2 EXECUTADA em worktree em 2026-10-18 (§11 — guarda por roteador + A-PV1 na API e na nfse-api + fábrica do app; worktrees
+`privilegios/*`, branch `privilegios-crud`; gates 0,76/0,82 com 2 HIGH anteriores à onda corrigidos por barreiras INTERINAS; NADA
+commitado; A-PV5…A-PV11 a ratificar; Q-PV10…Q-PV15 e Q-PV21…Q-PV29 aguardam o Valdo — a Q-PV11 trava a PUBLICAÇÃO).**
+**D-PV10/D-PV11 DECIDIDAS e EXECUTADAS na mesma worktree em 2026-10-18 (§11.9 — a Setes é cliente comum, D-PV10 fecha a Q-PV11 = (a);
+tela delegável "Interfaces dos clientes"; seed `sql/65` provado, não aplicado; gates do delta 0,74 · adversarial 0,64 → re-prova 0,76;
+NADA commitado; D-PV12 fecha a Q-PV37 = (b) — o admin troca a senha de todos menos do super; D-PV13 = Q-PV38 em tarefa própria;
+Q-PV30…Q-PV36 + A-PV13 aguardam o Valdo).**
 **Regra dos dois grupos**: setes-sync e sincronizador NÃO foram lidos.
 **Transversal (leve)**: o seed é do `setes_central` (catálogo), mas o efeito aparece no setes-app (menu, botões, cadastro de privilégios do
 usuário) e na nfse-api (as guardas dela leem `tb_user_has_privilege` do schema do cliente — `nfse-api/src/modules/guards.ts:12`).
@@ -200,7 +209,8 @@ A Q-PV8 não acrescenta par: service-orders já fica com 1,2,3,5,6,7,9 — ela s
   V agora (uniforme), aceitando menu + 403 até as guardas mudarem; (c) o princípio da D-GE20 ("o privilégio decide, não o perfil") vale
   para TODAS as telas de Sistema — `users` e `establishment` também trocam `adminGuard` por privilégio (tarefa própria). **Rec.: (a)**.
   Ligada à **A-GE2** (frente do grupo, §12.5): se até o admin precisar da Módulos marcada, o admin passa a precisar de linha em
-  `tb_user_has_privilege` — decidir as duas juntas.
+  `tb_user_has_privilege` — decidir as duas juntas. → **A-GE2 RESOLVIDA 2026-10-18 (Valdo): o admin passa como sempre; só o não admin
+  precisa da Módulos concedida** — a `modules` segue a regra geral; nenhuma linha de privilégio para o admin.
   **→ sem resposta; revista na Rodada 2 (A-PV4 + Q-PV5', §4.2)** — com a D-PV1/D-PV3 o catálogo entra; resta a GUARDA.
 - **Q-PV6 — `interface-fields` salva sem conferir admin** (`interface-fields.service.ts:59`) — qualquer usuário autenticado da institution
   aperta campo obrigatório de todo o estabelecimento chamando a API (o backfill só o põe no menu). (a) **fica como está até a Q-PV2**: a
@@ -363,6 +373,492 @@ Efeito colateral esperado e conferido no mesmo `getMenus`: o menu do admin passa
 (ex.: bank-slips INSERIR, ALTERAR, IMPRIMIR, VISUALIZAR, CANCELAR, TRANSMITIR). Na tela, hoje, só o C1 muda — os demais gates do app
 (FATURAR, CANCELAR, TRANSMITIR, DESCONTO) já estavam no catálogo; INSERIR/EXCLUIR/IMPRIMIR só passam a valer na onda da D-PV2.
 
+## 11. Onda da D-PV2 — Rodada 0 + execução (2026-10-18, sessão própria, em WORKTREE — NADA commitado)
+
+**Transversal**: setes-api + setes-app + nfse-api. Worktrees `D:\Gestao2027\privilegios\{setes-api,setes-app,nfse-api}` (branch
+`privilegios-crud`, base = `main` de cada repo: api f53a618 · app 2f621c1 · nfse 62c5fcf), junções `privilegios\fiscal-api` e
+`node_modules` (molde da `grupo-leitores`). Banco: só leitura (sessão `READ ONLY`). setes-sync/sincronizador não lidos.
+Pré-condição conferida: **o seed 64 JÁ está aplicado em `setes_central`** (157 pares, 2026-10-18).
+
+### 11.1 Fatos novos (corrigem premissas da Rodada 1/2)
+
+- **F1 — a premissa da D-PV2 era falsa.** "possível porque o módulo do app só fala com o seu `/api/<m>`": **13 chamadas cruzadas vivas**
+  no app — 12 LEITURAS de lista de apoio (pedido, OS e contrato → `/api/customers`; contrato, OS e Baixas → `/api/payment-types`; Baixas e
+  Caixa → `/api/bank-accounts`; Formas → `/api/financial-plans`; aba Parceria → `/api/collaborators`; Devolução → `/api/cfop`; pedido →
+  `/api/customers/salesman-lookup` pela peça `SalesmanLookupDatasource`) + 1 ESCRITA (pedido → `POST /api/order-returns` = "Devolver").
+  Com a guarda, quem só tem a OS precisaria de VISUALIZAR em Clientes. A regra vigente (CLAUDE.md, Serviços/ISS) já mandava o contrário →
+  corrigido como aplicação da regra (A-PV5): cada tela lê a SUA lista (§11.3).
+- **F2 — defeito pré-existente**: o diálogo de CFOP do faturamento da devolução lia `/api/cfop`, que é `superGuard` ⇒ **o admin recebia
+  403 e só o super faturava devolução pela tela**. Caiu de carona (rota própria `order-returns/cfop-lookup`).
+- **F3 — licença no CRUD tira acesso do ADMIN da Setes** (provado no banco, só leitura): a guarda reaproveita a conferência existente
+  (licença ANTES do privilégio — D-F37). O contrato da Setes tem 14 telas; as flags habilitam 26 módulos e `isModuleEnabled` libera TUDO
+  à institution 1 ⇒ depois da onda, os 2 admins recebem 403 `INTERFACE_NOT_ALLOWED` em Clientes, Colaboradores, Vendedores,
+  Transportadoras, Fornecedores, Categorias, Plano de contas, Formas, Contratos, Contas bancárias, Campos e Configurações (e na
+  "Configurações Gerais"). O MENU deles já não mostra essas telas (D-GE19 parte 2); hoje chegavam por deep link e pelas chamadas cruzadas
+  (já resolvidas). O super segue vendo tudo (A-PV1). ⇒ **Q-PV11** (decidir ANTES de publicar).
+- **F4** — os 10 usuários `kind='user'` do `setes_setes` (265–274) são RESÍDUO de teste com `tb_user.deleted='S'` (não logam) ⇒ o §2.4 se
+  mantém: nenhum usuário regular vivo. (O vínculo `tb_institution_has_user` deles segue `deleted='N'` — inofensivo, não é desta tarefa.)
+- **F5** — `partnerships` (kind 'R') não está contratada em lugar nenhum nem entra no `grantStructuralInterfaces`; com a A-PV2 a aba
+  Parceria passa a exigir a licença DELA ⇒ **Q-PV12**.
+- **F6** — o app só conhece os privilégios da tela aberta PELO MENU (`CurrentInterface`): a engrenagem de qualquer lista abre o painel de
+  configs com a interface de ORIGEM; as 'R' não vêm no menu (`ONLY_SCREEN_KIND`); o "Devolver" do pedido grava em outra interface ⇒ nesses
+  três o app não esconde o botão e a API decide (403 com mensagem) ⇒ **Q-PV13**.
+- **F7** — `state-tax-rates` (MVA/FCP por UF×NCM) não tem interface no catálogo ⇒ fica FORA da guarda: qualquer autenticado escreve dado
+  fiscal pela API ⇒ **Q-PV14**.
+- **F8** — o `OPTIONS` (preflight CORS) é respondido em `app.ts` antes da autenticação — não chega à guarda.
+
+### 11.2 O que foi feito
+
+**setes-api**
+- Peça `src/shared/auth/module-privilege-gate.ts`: `gatedModule('<m>', routes)` no gateway (25 módulos de tela do cliente:
+  interface-fields, interface-configs, customers, collaborators, salesmen, carriers, providers, tax-rules, categories, financial-plans,
+  payment-types, contracts, bank-accounts, settlement-rules, bank-slips, bank-charge-agreements, checks, services, price-lists,
+  service-tax-rules, service-orders, settlements, cashier, orders, order-returns). Verbo → GET/HEAD 6 · POST 1 · PUT/PATCH 2 · DELETE 3
+  na interface do módulo; atos marcados NA ROTA com `privilegeAct(PRIVILEGE_X[, interface])`; exceções com `openRoute(motivo)`. A guarda
+  acha a rota casada no `stack` do roteador do módulo (a mesma `regexp` que o Express usa — sem efeito colateral); rota sem marcador vale
+  pelo VERBO (esquecer nega, nunca libera). Fora da guarda, por nome: core, erp, admin, entities, billing/* (ações pela interface do RAMO),
+  geográficos (leitura aberta), as do Super (`superGuard`), users/establishment (D-PV5), modules (`adminGuard` até a onda 0 — D-GE20) e
+  state-tax-rates (F7). `listGatedRoutes()` = a tabela dos pares consumidos (insumo da cerca D-PV9).
+- **A-PV1**: `require-privilege.ts` ganhou a peça `licensedFor` (super → basta existir no catálogo central; admin/regular → contratada) +
+  `privilegeVerdict`/`denyPrivilege` (mesmo envelope em toda guarda). `requirePrivilege`/`requirePrivilegeFor`/`requireInterfaceFor` usam
+  a peça. Interface que NÃO existe no catálogo nega também para o super (integridade, não licença).
+- **D-PV7/D-PV8 no código**: settlements baixa = I (verbo) · estorno = E · trocar cobrança = A (o `requirePrivilege` duplicado da rota
+  saiu); bank-slips emitir = I · liquidar = A · cancelar/estornar = 7 · registrar = 9 · PDF = 4 · consultar/simular/reaplicar = 9 (A-PV7);
+  checks movimentos = A · estornar = 7; cashier abrir = I · retirada/fechar = A; OS rotina mensal = 5 · excluir = E · faturar/lote = 5
+  (viraram marcador); pedido/devolução excluir = E; canal API da conta bancária = A em toda escrita (A-PV9; o `adminGuard` segue).
+- **Exceções e interface trocada**: `GET /interface-fields/key/:k`, `GET /interface-configs/key/:k` e `PUT /interface-configs/key/:k/:n`
+  (A-PV6) abertos; aba Parceria (`GET/PUT /customers/:id/partnership` + a lista de apoio dela) confere `partnerships` (A-PV2); o painel de
+  configs aceita o privilégio da "Configurações Gerais" no painel DELA (A-PV8 — `interface-configs.privilege-policy.ts`, resolvedor
+  dinâmico pelo `:id`). D-PV6: salvar campo = ALTERAR do painel de campos.
+- **D-PV5**: o cadastro de privilégios do usuário não lista users/establishment (lista nomeada `ADMIN_PROFILE_INTERFACE_KEYS` no
+  service) e o salvar recusa (400 `PRIVILEGE_ADMIN_PROFILE` no campo `privilegeIds`) — para qualquer usuário-alvo (A-PV10). Códigos
+  novos no catálogo de erros: `PRIVILEGE_ADMIN_PROFILE`, `CONFIG_INSTITUTION_VIA_PANEL` (rodar `npm run errors:gen` na publicação).
+- **Listas de apoio próprias (A-PV5)**: novas `settlements/payment-types`, `settlements/bank-accounts`, `cashier/bank-accounts`,
+  `service-orders/payment-types`, `payment-types/financial-plans`, `customers/collaborator-lookup`, `order-returns/cfop-lookup`,
+  `orders/active-salesman-lookup`; peça nova `@shared/bank-account` (2 consumidores); as de cliente do pedido/OS/contrato e a de formas do
+  contrato ganharam campos ADITIVOS (`nickTrade`/`nameCompany`/`description` — a pesquisa avançada segue lendo `name`). Cada uma reproduz o
+  conjunto de linhas que a tela lia antes (formas: só as HABILITADAS — as que o ato aceita). Swagger em todas.
+
+**nfse-api** (caminho fiscal de PRODUÇÃO — só código + testes com dublês; nada ao vivo): A-PV1 em `src/modules/guards.ts` por uma peça
+`licensed` (super → sempre; chaves da nfse-api são sempre reais) em `requireBranchPrivilege`, `requireBranchInterface`,
+`requireAnyInterface`, `visibleInterfaces` e `passScope` (para o super todo ramo vai a `[interfaces]` — nada "só vivas") (A-PV11). A cerca
+da virada (`requireCutover`) NÃO é licença: segue barrando o super.
+
+**setes-app**
+- Ponto único DA FÁBRICA `app/shared/session/crud_privileges.dart`: `CrudPrivileges.canInsert/canUpdate/canDelete/canSave(creating:)`
+  sobre a `CurrentInterface`, com o nome LITERAL do catálogo. As telas de processo (`modules/<m>/`) perguntam direto
+  `CurrentInterface.can('NOME')` — a cerca da D-PV9 lê o par estaticamente e reprova nome que não seja literal (por isso uma lista de
+  constantes `PrivilegeNames`, que chegou a ser escrita, saiu).
+- Fábrica: `RegisterSearchPage` "Novo" ← INSERIR; `RegisterFormPage` (novo parâmetro `creating`) e a casca nova `RegisterFormShell`
+  (sobre a `SetesFormShell` do design system) — ✓ ← INSERIR no registro novo / ALTERAR na edição, lixeira ← EXCLUIR. As 15 telas de
+  cadastro do cliente trocaram `SetesFormShell` por `RegisterFormShell`; as 11 da `RegisterFormPage` passam `creating` (OBRIGATÓRIO —
+  deduzir de `canDelete` erraria na tela que não exclui). Árvores
+  (Categorias, Plano de contas): novo nível/subnível ← INSERIR.
+- Telas de processo uma a uma: pedido/OS/devolução (novo ← I; item novo ← I, mudar ← A, tirar ← E — literal; excluir o documento ← E;
+  negociação ← A; rotina mensal ← FATURAR); Baixas (baixar ← I, estornar ← E, trocar cobrança ← A); Boletos (emitir ← I, liquidar ← A,
+  cancelar/estornar ← CANCELAR, registrar/consultar/reaplicar ← TRANSMITIR — inclusive a consulta silenciosa ao abrir a tela, PDF ←
+  IMPRIMIR); Cheques (movimentos ← A, estornar ← CANCELAR); Caixa (abrir ← I, retirada/fechar ← A).
+- As 12 leituras cruzadas trocadas pelas rotas próprias (§11.1 F1); `SalesmanLookupDatasource` ganhou o `path` do módulo de quem usa.
+- Fora do portão no app (a API decide): painéis de campos/configs (F6), aba Parceria (F6), "Devolver" do pedido (F6), Meu
+  Estabelecimento e as telas do Super (perfil — admin/super recebem o catálogo inteiro).
+
+### 11.3 Assunções executadas (A-PVn — ratificar)
+
+- **A-PV5** — as leituras cruzadas viram lista de apoio do PRÓPRIO módulo (regra vigente "módulo só fala com o seu /api"), reproduzindo o
+  conjunto de hoje; a escrita cruzada "Devolver" fica como está (abrir devolução = INSERIR em `order-returns` — o sentido certo).
+- **A-PV6** — `PUT /interface-configs/key/:moduleKey/:name` (o override PESSOAL do itens/página que TODA lista grava) aberto como a leitura
+  por chave — e por ser aberto, **só `target: 'U'`**: o valor da institution (`'I'`) tem UMA porta, a do painel guardado (`PUT
+  /:id/:name`); pela chave responde 403 `CONFIG_INSTITUTION_VIA_PANEL` (achado do gate socrático: eram duas portas para o mesmo ato, e a
+  aberta era a mais fraca). O app só grava `'U'` pela chave.
+- **A-PV7** — falar com o BANCO = TRANSMITIR (registrar — D-PV7 — e também consultar, simular no sandbox e reaplicar a voz dele), simétrico
+  ao fisco, onde consultar também é TRANSMITIR (`nfse-api` `refresh`/rodízio).
+- **A-PV8** — o privilégio da "Configurações Gerais" vale no painel de configs filtrado nela (vitrine + o `:id` dela); outra tela, só o do
+  painel (`interface-configs`).
+- **A-PV9** — canal API da conta bancária: toda escrita = ALTERAR (o inventário do §3 já dizia "canal = A").
+- **A-PV10** — D-PV5 vale para qualquer usuário-alvo (o cadastro nunca oferece users/establishment; admin não precisa — passa o privilégio).
+- **A-PV11** — A-PV1 alcança também as LEITURAS fiscais da nfse-api (`requireBranchInterface`, `requireAnyInterface`, `visibleInterfaces`) —
+  "todas as verificações"; a cerca da virada não é licença.
+
+### 11.4 Questões — Rodada 3 (aguardam o Valdo; nenhuma trava o que foi feito, a Q-PV11 trava a PUBLICAÇÃO)
+
+- **Q-PV10 — itens dos documentos abertos (pedido, OS, devolução)**: executado o LITERAL da D-PV2 (item novo = INSERIR, mudar = ALTERAR,
+  tirar = EXCLUIR). Efeito: quem monta pedido precisa dos três, e quem pode tirar item também pode excluir o pedido aberto. (a) manter o
+  verbo; (b) **todo ato sobre o documento aberto = ALTERAR** (itens, negociação) — INSERIR = abrir o documento, EXCLUIR = apagá-lo; quem
+  lança pedido precisa de I + A; (c) item = INSERIR **ou** ALTERAR. **Rec.: (b)** — cada verbo com um sentido só sobre o DOCUMENTO
+  (mesmo princípio da D-PV8).
+- **Q-PV11 — DECIDIDA: D-PV10 = (a)** (a Setes é cliente como os outros; só o super tem tudo). Texto original da questão: a licença no CRUD (F3): a guarda executa a licença (D-F37 ao pé da letra). Além dos cadastros não
+  contratados, o gate socrático achou a regressão que dói HOJE: a **engrenagem de tela CONTRATADA** (Meu Estabelecimento → fuso; Baixas →
+  `max_discount_aliquot`; OS; Boletos) abre o painel `interface-configs`, que a Setes NÃO contrata ⇒ os 2 admins deixam de mudar essas
+  configs pela tela (só o super). (a) manter a licença e, ANTES do merge, contratar na Setes as telas que os admins usam (no mínimo as
+  estruturais `interface-configs`/`users`/`modules`, que o `grantStructuralInterfaces` dá a todo cliente novo e a Setes não tem); (b) os
+  PAINÉIS de sistema (`interface-configs`, `interface-fields`, `general-configs`) ficam fora da licença como infraestrutura — já eram
+  `FLAG_EXEMPT` — e só o privilégio decide neles; (c) a guarda do CRUD confere só o privilégio (licença fica nas ações, no menu e nas
+  flags); (d) aceitar que só o super os usa. **Rec.: (a) + (b)** — tela de cliente não contratada não existe (D-GE19 parte 2); painel
+  de sistema é a moldura das telas contratadas, não um produto vendido.
+- **Q-PV12 — licença das interfaces 'R' (F5)**: executado (a): a aba Parceria exige a licença de `partnerships`. (a) manter — a 'R' é
+  vendida no contrato junto da tela-mãe (implantação + `grantStructuralInterfaces`/aba Interfaces do Super); (b) a 'R' herda a licença da
+  tela-mãe (Clientes) e só o privilégio é dela. **Rec.: (a)** — é o que a D-GE19 diz ("as interfaces farão parte do contrato"); a aba que
+  some quando não contratada depende da Q-PV13.
+- **Q-PV13 — privilégios de OUTRAS interfaces no app (F6)**: (a) o `/api/core/menus` (ou `/me`) entrega, junto da tela, os privilégios das
+  'R' que ela hospeda e das telas que ela aciona (engrenagem → `interface-configs`; "Devolver" → `order-returns`), e o app ganha um
+  `can(i18nKey, X)` de sessão; (b) a API decide (403 com mensagem) — limite conhecido. **Rec.: (a)** em entrega própria de UX, sem
+  urgência (nenhum regular vivo).
+- **Q-PV14 — portas de ESCRITA fora da guarda**: `state-tax-rates` (CRUD de MVA/FCP sem interface no catálogo — F7), `PUT
+  /api/entities/:id/tax` (grava `tb_entity_tax` por fora do ALTERAR do papel; sem consumidor no app) e `POST /api/billing/validate` (grava a
+  regra por item, origin 'A', sem guarda nenhuma). (a) `state-tax-rates` sob `adminGuard` até a tela nascer; `entities/:id/tax` retirada
+  (o salvar vai pela aba Tributação DO PAPEL, na transação dele); `billing/validate` sob FATURAR pela interface do RAMO (o mesmo resolvedor
+  do `/invoice`); (b) cada uma ganha interface/privilégio próprio agora; (c) limite conhecido. **Rec.: (a)**.
+- **Q-PV15 — A-PV1 × conferências de licença que NÃO são guarda** (`isInterfaceAcquired` do painel de campos/configs — gravar config de tela
+  não adquirida; elegibilidade do menu da Módulos): o super escapa também? (a) **não** — é regra de domínio do contrato (o dado gravado é
+  da institution), não acesso; (b) sim. **Rec.: (a)**.
+
+- **Q-PV21 — quem governa as configs da tela X aberta pela engrenagem**: (a) o privilégio do PAINEL (executado; a A-PV8 abre exceção só
+  para a "Configurações Gerais"); (b) o V/A da PRÓPRIA tela X (coerente com a A-PV2 — "billing = V + A, o conteúdo dela são as configs").
+  **Rec.: (b)** — quem pode alterar a tela pode ajustar o comportamento dela; o painel solto (menu Sistema) segue pelo privilégio dele.
+- **Q-PV22 — reaplicar a voz do banco (`POST /bank-slips/:id/reapply`)**: executado TRANSMITIR (A-PV7), mas o ato NÃO fala com o banco —
+  aplica no ERP a liquidação ou o cancelamento que o banco já disse. (a) TRANSMITIR (o canal com o banco, como está); (b) o privilégio do
+  EFEITO (ALTERAR = liquidar · CANCELAR = cancelar), decidido pela voz reaplicada. **Rec.: (b)** — quem aplica o efeito responde pelo
+  efeito.
+- **Q-PV23 — a janela de publicação**: API e app têm de mudar JUNTOS (app velho sobre API nova: o seletor de cliente da OS e as contas do
+  Caixa/Baixas leem `/api/customers`/`/api/bank-accounts`, não contratadas → 403 para o admin; app novo sobre API velha: `GET
+  /api/service-orders/payment-types` cai no `GET /:id` → 400). (a) roteiro de janela única (merge da API + recarga das abas do app
+  publicado) e conferência depois; (b) a guarda nasce em modo "registra e deixa passar" por um período (log de quem SERIA barrado) e só
+  depois nega. **Rec.: (a)** — hoje não há regular e a produção é uma máquina só; (b) se a Q-PV11 não for decidida a tempo.
+- **Q-PV24 — custo e escopo da conferência**: cada requisição de tela do cliente custa +1 consulta (contrato) para o admin e +2 para o
+  regular, sem cache (o `flag.service` tem TTL de 60 s). E o `userHasPrivilege(schema, user, interface, privilégio)` não recebe a
+  institution — com a 1ª filial no mesmo schema (onda 0 do grupo, D-GE3), o privilégio dado na matriz valeria na filial. (a) medir agora e
+  decidir cache depois (revogação imediata); a D-GE3 entra na peça única (`privilegeVerdict` ganha a institution) na onda 0; (b) cache do
+  veredito com TTL curto e invalidação ao salvar privilégio/contrato. **Rec.: (a)**.
+
+- **Q-PV25 — tributação AVULSA da entidade (`GET/PUT /api/entities/:id/tax`)** — achado HIGH do gate adversarial; interino já no código:
+  `adminGuard`. (a) **remover as duas rotas** (sem consumidor no app; a tributação se grava na transação do PAPEL — aba Tributação — e a do
+  emitente pelo Meu Estabelecimento, com as validações); (b) manter com `adminGuard` (como está); (c) exigir ALTERAR da tela do papel e
+  recusar `:id` = institution. **Rec.: (a)** — porta sem consumidor é só superfície; menos uma exceção na guarda.
+- **Q-PV26 — rotas abertas do `/api/core` e da leitura por chave**: `PUT /api/core/theme` deixa qualquer regular trocar cores e logo da
+  institution; `GET /interface-configs/key/:k` (aberta — monta toda tela) devolve as configs resolvidas da institution de qualquer tela.
+  (a) o tema passa a exigir admin (é marca da empresa); a leitura por chave fica aberta (a tela precisa da config para se montar — não há
+  segredo em config de comportamento); (b) as duas como estão. **Rec.: (a)**.
+
+- **Q-PV27 — o ALTERAR do painel de configs × a decisão 4 do Framework de Configurações** (o valor da institution `'I'` é só do admin —
+  `interface-configs.service.ts:99`): para o usuário regular, o ALTERAR de `interface-configs`/`general-configs` hoje não muda nada (o
+  override pessoal `'U'` já entra pela porta aberta por chave) — o cadastro oferece um privilégio que nenhum código consome (o defeito que a
+  Q-G29 veio fechar). (a) o ALTERAR do painel passa a abrir o `'I'` também para o regular (a decisão 4 vira "valor da institution = quem tem
+  ALTERAR"; admin segue passando); (b) manter a decisão 4 e o catálogo desses painéis ficar só com VISUALIZAR; (c) limite conhecido.
+  **Rec.: (a)** — é o que a D-PV1 pôs no catálogo ("V, A — os painéis não incluem nem excluem").
+- ⚠️ **Q-PV11, Q-PV15, Q-PV21 e Q-PV27 regem o MESMO caminho** (engrenagem da tela X → painel → service: licença do painel na guarda,
+  `isInterfaceAcquired` de X no service, privilégio de qual interface, valor `'I'` de quem) — decidir JUNTAS, com a regra escrita por
+  caminho (menu Sistema → painel × engrenagem da tela X → painel).
+
+- **Q-PV28 — o próprio estabelecimento como papel** (achado HIGH do adversarial; interino no código: 409 `ROLE_IS_OWN_ESTABLISHMENT`):
+  (a) **os papéis recusam a entity do próprio estabelecimento** (como está — a empresa não é cliente/fornecedor/transportadora/colaborador de
+  si mesma; OS interna usa um cliente interno, como o smoke da D-F54); (b) o papel pode existir, mas a aba Tributação e a cadeia ficam
+  somente leitura quando a entity é a institution (o emitente só se edita pelo Meu Estabelecimento); (c) separar a tributação do EMITENTE
+  da tributação da RELAÇÃO numa peça própria (tabela datada da D-IB7) — pede o guardião. **Rec.: (a)** agora; (c) quando a D-IB7 nascer.
+- **Q-PV29 — cadeia GLOBAL last-write-wins entre institutions (Fase 3, decisões 1/9)**: o cadastro de um papel numa institution reescreve
+  a cadeia (razão social, IE/IM, endereços) da mesma entity — inclusive a de um EMITENTE de OUTRA institution, cujo CNPJ alguém cadastre
+  como cliente. Fora do alvo desta onda (decisão anterior da Fase 3); registrado para rodada própria (com o guardião), ligado à frente do
+  grupo (D-GE1/D-GE21: a institution enxerga só o próprio dado + o compartilhado por consulta).
+
+- **Q-PV30 — trilha do vínculo e da delegação** (o vínculo é a LICENÇA e agora é editado por quem não é Super): hoje a trilha é o log
+  (`added`/`removed` + autor nas duas portas e na concessão de privilégio — feito no gate). (a) tabela de eventos append-only (quem,
+  estabelecimento alvo, interface, concedeu/revogou, quando), no molde dos `_event` do produto; (b) o log basta; (c) limite conhecido.
+  **Rec.: (a)** — log gira; licença comercial precisa de história consultável.
+- **Q-PV31 — gravação simultânea do vínculo**: a aba manda a lista COMPLETA montada quando abriu; o Super concede numa porta e o liberado,
+  com a aba aberta, revoga em silêncio na outra. (a) a aba grava a DIFERENÇA de cada marca (concede/revoga um id); (b) versão otimista
+  (409 se mudou desde a leitura); (c) limite conhecido. **Rec.: (a)** — cada marca já é um ato.
+- **Q-PV32 — o que a porta delegada pode vincular**: (a) só interfaces vendáveis (fora do grupo Super), e as ESTRUTURAIS (users, modules,
+  interface-configs, establishment) não se revogam por ela; (b) o catálogo inteiro, como a aba do Super. **Rec.: (a)**.
+- **Q-PV33 — a flag técnica dos módulos que já passam pela guarda**: sem o atalho da Setes, a flag é uma 2ª licença sem tela (nenhuma
+  porta a sincroniza com o vínculo). (a) a flag morre para os módulos guardados (o vínculo já é a licença — D-F37/D-PV2); (b) a peça grava
+  a flag junto do vínculo; (c) manter, com conferência no deploy. **Rec.: (a)** — liga à D-GE22 item 3.
+- **Q-PV34 — "a própria Setes" no mundo do grupo** (hoje o literal id 1 em 5 lugares; na onda 1 do grupo o vínculo é do GRUPO e uma filial
+  da Setes teria outro id): (a) predicado da peça pelo grupo/schema já agora; (b) id 1 até a onda 1, com nota no roteiro dela. **Rec.:
+  (b)**.
+- **Q-PV35 — LER o vínculo da própria Setes** (`GET /api/institution-interfaces/1` pelo liberado): (a) 403 como o salvar (coerente com a
+  lista, que a esconde); (b) leitura permitida (como está). **Rec.: (a)**.
+- **Q-PV36 — config de tela do Super que ninguém contrata** (o `page_size` da tela nova não persiste: o painel de configs recusa tela não
+  "adquirida") — ligada à Q-PV15: (a) tela do Super delegável conta como adquirida pela Setes para as configs dela; (b) limite conhecido.
+  **Rec.: (a)**.
+
+- **Q-PV37 — quem mexe na CONTA (senha, e-mail, ativo, exclusão)** — achado HIGH do adversarial do delta; interino no código: o não-super
+  só mexe em conta cujos vínculos vivos são todos com o próprio estabelecimento e nenhum super. (a) manter a regra interina e acrescentar:
+  **a conta que recebeu uma liberação de tela do Super também passa a ser gerida só pelo Super** (senão o admin troca a senha do liberado
+  e herda a delegação — o MEDIUM restante); (b) só a regra interina (o liberado segue editável pelo admin da Setes); (c) outra forma.
+  **Rec.: (a)** — a liberação é ato do Super (D-PV11 (b)); a credencial de quem a recebeu é a própria liberação. (Re-prova: a regra
+  interina passou a contar TODO vínculo, vivo ou adormecido — vínculo revogado que o Super revive entregava a conta.)
+  → **DECIDIDA pelo Valdo = (b) — D-PV12** (Valdo divergiu da recomendação; ver "Rodada 4" nas Decisões).
+- **Q-PV38 — força bruta no código de 6 dígitos do `/auth/change-password`** (MEDIUM ANTERIOR à onda, achado de passagem na re-prova): o
+  código não morre depois de N tentativas erradas; só freia o limite de 300/min por IP (sem `trust proxy` atrás do proxy, o IP é o do
+  proxy — ou todos dividem o limite, ou ninguém). (a) tarefa própria: N tentativas erradas (ex.: 5) invalidam o código + limite por
+  e-mail; (b) limite conhecido até a Onda 4. **Rec.: (a)** — fora desta onda (não mexe em privilégio), tarefa separada.
+  → **DECIDIDA pelo Valdo = (a) — D-PV13**: tarefa própria, iniciada em sessão separada em 2026-10-18 ("Força bruta no código do
+  /auth/change-password (Q-PV38)"); o resultado é registrado lá, não nesta onda.
+
+### 11.5 Testes
+
+- setes-api: **2149 testes, 134 suítes** (31 pulados — os ao vivo; última volta depois dos retrabalhos dos gates) com os novos — `module-privilege-gate.test.ts` (22: mapa do verbo, atos, exceção, interface
+  trocada/dinâmica, HEAD, rota inexistente, perfis, A-PV1, a tabela), `privilegios-rotas-d-pv2.test.ts` (38: o mapa REAL do gateway — os
+  25 módulos, os atos da D-PV7/D-PV8, canal, exceções, e a CERCA dos POST: rota nova com POST tem de ser classificada), 
+  `privilegios-lookups-proprios.test.ts` (16, de ponta a ponta: a tela consumidora lê a sua lista; o privilégio da dona NÃO basta),
+  `users-privileges-admin-profile.test.ts` + casos D-PV5 em `users.test.ts`, A-PV1 em `require-privilege.test.ts`. Testes antigos que
+  fixavam o super barrado pela licença foram atualizados para a A-PV1 (decisão nova); os de rota que usavam regular SEM privilégio ganharam o
+  dublê `src/test-setup/privilege-db.ts` (`grantingPrivileges`). As 3 suítes que leem o `.env` rodaram com cópia temporária (apagada).
+- Smoke SÓ-LEITURA no banco real (sessão `READ ONLY` provada — a escrita é recusada pelo banco): todas as consultas novas rodam, contagens
+  = as de hoje (contas 2/2, vendedores ativos 2/2, plano de contas 0/0, formas habilitadas 6), cadastro de privilégios do admin 2 = 13 telas
+  sem users/establishment; veredito do admin em Clientes = `not-contracted` (F3), do super = `ok`. **Pares da guarda × catálogo vivo**:
+  os 233 pares que `listGatedRoutes()` exige existem nos 157 do seed 64 (0 faltando) — o verbo-padrão não pede par inexistente.
+- nfse-api: **965** (185 pulados — os ao vivo), +5 em `privilegios-apv1.test.ts` e +11 da sonda adversarial. setes-app: `flutter analyze` limpo; suíte inteira
+  **640** (28 pulados) com `crud_privileges_test.dart` (8: o ponto único, a casca, o "Novo" da pesquisa, a `RegisterFormPage`).
+
+### 11.6 Gates
+
+- **Socrático, 1ª passada: 0,68 — REPROVOU** (limiar 0,70). Mecanismo da guarda conferido contra o despacho real do Express (mesma
+  `regexp`/`keys`, HEAD→GET, OPTIONS no CORS, nenhum `next('route')`/`router.param`/`mergeParams`/sub-roteador nos 25 módulos); A-PV1
+  segura no caminho fiscal (a Setes contrata os 3 ramos — `passScope` sem mudança hoje; cerca da virada intacta). Retrabalho feito na
+  sessão: (1) **duas portas para o valor da institution** — a rota aberta por chave aceitava `target: 'I'` → agora só `'U'`, 403
+  `CONFIG_INSTITUTION_VIA_PANEL` (A-PV6 revista); (3) **a cerca falhava aberta para módulo novo** → `privilegios-rotas-d-pv2.test.ts` lê o
+  `gateway/router.ts` e exige que TODO `router.use` seja `gatedModule('<chave = URL>')` ou exceção nomeada (e conta cada `router.use(`);
+  (4) **o marcador ignorava o verbo** (`router.route(x).get(act).post(h)` daria ao POST o privilégio do GET) → `actOf(layer, method)` pelo
+  `method` de cada handler; (5) **erro sem código** → `PRIVILEGE_ADMIN_PROFILE`. Pontos que pedem decisão viraram Q-PV11 (reescrita: a
+  engrenagem das telas contratadas quebra para os admins da Setes), Q-PV14 (ampliada), Q-PV21…Q-PV24.
+- **Socrático, re-score: 0,76 — PASSOU.** Os 5 retrabalhos conferidos no código. Sobras corrigidas na sessão: a cerca do gateway passou a
+  casar `router.use` indentado e a conferir que o `app.ts` monta em `/api` só o gateway; a negação da guarda deixa RASTRO no log (quem,
+  interface, privilégio, veredito, rota — insumo da conferência da janela, Q-PV23); o comentário do cache de interface virou conhecimento
+  negativo (o id por `i18n_key` não expira no processo). Pontos que pedem decisão: Q-PV26 (tema) e Q-PV27 (abaixo); o 403 sem código do
+  `interface-configs.service` (linhas 88/100/103 — anterior à onda) fica como limite.
+- **Adversarial, 1ª passada: 0,74 com 1 HIGH — REPROVOU.** HIGH (provado por sonda, rota ANTIGA na exceção nomeada `/api/entities`):
+  `PUT /api/entities/:id/tax` deixava o usuário regular SEM privilégio reescrever a tributação de qualquer entidade — inclusive a do
+  EMITENTE (regime do Simples, apuração, pTotTribSN, que a nfse-api lê para o DPS de produção), por fora do `adminGuard` e das validações
+  do Meu Estabelecimento (D41/D-PV5, Q-N36/Q-N37). **Corrigido na sessão (interino)**: `adminGuard` em `GET/PUT /api/entities/:id/tax`
+  (o app não usa essas rotas; o prefill `by-document` segue aberto); as sondas viraram `[CORRIGIDO]` → Q-PV25 para o definitivo. Resistiu:
+  truques de URL e verbo (caixa, barra final, `%2F`, `;jsessionid`, `//`, HEAD/PATCH/PROPFIND, method-override), grafias do `:id` do painel
+  (`011`, `1.1e1`, `%2011`…), perfis forjados (super fora da Setes, `Super`), banco fora do ar (500 sem vazar), LIKE escapado e institution
+  só do JWT nas listas novas, D-PV5 em qualquer grafia do id; na nfse-api a A-PV1 vale só para o super legítimo e a cerca da virada barra o
+  super nos dois grãos. Sondas: `setes-api/src/__tests__/adversarial-pv2-gate.test.ts` (41) e `nfse-api/src/__tests__/adversarial-pv2-
+  gate.test.ts` (11). Achados restantes: MEDIUM state-tax-rates (Q-PV14), LOW `PUT /api/core/theme` (qualquer regular troca cores/logo —
+  Q-PV26), LOW `POST /billing/validate` (Q-PV14), LOW leitura aberta de configs por chave (Q-PV26), LOW cache i18n_key→id sem expiração
+  (limite).
+- **Adversarial, re-prova 1: 0,76 com 1 HIGH NOVO — REPROVOU.** A correção do 1º HIGH resistiu (admin de OUTRA institution grava só a
+  relação dele, no próprio schema; regular e super falso → 403; o prefill segue aberto). HIGH novo, ANTERIOR à onda (antes estava aberto a
+  qualquer autenticado; a onda já reduziu a INSERIR/ALTERAR): **cadastrar o próprio estabelecimento como Cliente/Fornecedor/Transportadora**
+  — o reuso pelo documento resolve o CNPJ da empresa para a entity da INSTITUTION e a aba Tributação grava a linha do EMITENTE em
+  `tb_entity_tax` (e a cadeia — razão social, IE/IM, endereços — na mesma transação), por fora do Meu Estabelecimento; pode acontecer até
+  por engano. **Corrigido na sessão (INTERINO — Q-PV28)**: peça `@shared/entity/own-establishment.ts` (`assertNotOwnEstablishment` → 409
+  `ROLE_IS_OWN_ESTABLISHMENT`) nos 4 papéis com cadeia fiscal (clientes, fornecedores, transportadoras, colaboradores), na criação logo
+  depois do reuso (o throw cai no rollback) e na edição antes da cadeia; nenhum papel da Setes é a própria Setes (conferido no banco, só
+  leitura) — nada muda nos dados. Provas: as 2 sondas viraram `[CORRIGIDO]` + `own-establishment-role.test.ts` (cerca dos 4 papéis). LOW
+  novo: o ADMIN grava a tributação do emitente por `/api/entities/:id/tax` sem as regras do Meu Estabelecimento (Q-PV25 (a) resolve).
+- **Adversarial, re-prova 2 (final): 0,82 — PASSOU** (sem HIGH/CRITICAL). A barreira interina resistiu: varredura de TODO escritor da
+  cadeia/tributação da entity = institution (sobram os 4 papéis com a barreira, `entities` com `adminGuard`, `establishment` e `institutions`
+  — sonda que fixa a lista e reprova escritor novo), POST e PUT dos 4 papéis (409, rollback, nunca commit), id como texto (`02`, `2.0`,
+  `+2`, `%202`, `0x2`), REVIVE de papel soft-deletado (a barreira vem antes), o 409 não vaza id/CNPJ/schema, sem oráculo de outro tenant.
+  Restam (registrados): MEDIUM state-tax-rates (Q-PV14); LOW admin × `entities/:id/tax` (Q-PV25), tema (Q-PV26), `billing/validate`
+  (Q-PV14), leitura aberta de configs por chave (Q-PV26), override `'U'` de qualquer tela (A-PV6), cache sem expiração (limite); LIMITE
+  INTERINO: papel já existente cuja entity é a própria institution (ex.: vindo do sincronizador) fica não editável pelo app até a Q-PV28 —
+  hoje nenhum. Sondas finais: setes-api `adversarial-pv2-gate.test.ts` 59 (4 `[CORRIGIDO]`, 4 `it.failing` documentando os abertos) ·
+  nfse-api `adversarial-pv2-gate.test.ts` 11.
+- **Gates FECHADOS: socrático 0,68 → 0,76 ✅ · adversarial 0,74 (HIGH) → 0,76 (HIGH novo) → 0,82 ✅.**
+
+### 11.7 Limites conhecidos (conhecimento negativo)
+
+- A guarda depende da forma interna do Router do **Express 4** (`stack[].route`, `.regexp`, `.keys`, `route.methods`,
+  `route.stack[].handle`). A prova `module-privilege-gate.test.ts` quebra alto se a forma mudar (Express 5). Sub-roteador DENTRO de módulo
+  guardado é recusado por `listGatedRoutes()`.
+- Cada requisição de tela do cliente custa +1 consulta de contrato (admin/regular) e +1 de vínculo (regular), além do id da interface
+  (cacheado). Sem cache de contrato — mesmo custo das guardas de ação de hoje.
+- O app esconde botões só pela `CurrentInterface`: deep link libera, e tela aberta FORA do menu herda a interface do último clique (ex.:
+  "Devolver" no pedido abre a Devolução com os privilégios de `orders` — Q-PV20 da cerca, mesma família da Q-PV13); quem decide é a API.
+
+### 11.8 Publicação — roteiro (só com o "vai"; NADA commitado)
+
+1. Decidir a **Q-PV11** e, se (a), contratar na Setes as telas que os admins usam (conferir de novo que não há usuário regular vivo).
+2. Juntar com a cerca da D-PV9 (sessão própria, worktree `privilegios-catalogo`): a lista dela deve ler `listGatedRoutes()` e os
+   consumos do app (`CurrentInterface.can('NOME')` literal nas telas; a fábrica via `CrudPrivileges` — peça compartilhada a registrar
+   com as telas que cobre) — avisado por mensagem; a cerca dela exige `requirePrivilege`/primitivas registradas: a guarda por roteador
+   (`modulePrivilegeGate`) e as 3 primitivas novas de `require-privilege.ts` (`licensedFor`, `privilegeVerdict`, `denyPrivilege`) entram
+   no registro dela no merge.
+3. App: os branches `densidade`/`shell` mexem na `RegisterFormPage` — merge com atenção (o portão é um parâmetro e duas condições).
+4. Publicar **API e app JUNTOS** (as rotas antigas que o app lia continuam existindo, mas o app novo precisa das rotas próprias); nfse-api
+  = restart manual (produção roda tsx SEM watch).
+5. `npm run errors:gen` no setes-api (3 códigos novos: `PRIVILEGE_ADMIN_PROFILE`, `CONFIG_INSTITUTION_VIA_PANEL`,
+   `ROLE_IS_OWN_ESTABLISHMENT`; e a descrição do `INTERFACE_NOT_ALLOWED` mudou — o super passa).
+6. O commit da onda leva as sondas dos gates (`adversarial-pv2-gate.test.ts` nos dois repositórios — achado confirmado vira teste).
+7. Depois: a onda 0 do grupo troca o `adminGuard` da `/api/modules` por `gatedModule('modules', modulesRoutes)` (uma linha) + D-GE3
+   (o `privilegeVerdict` passa a receber a institution — Q-PV24).
+
+### 11.9 Rodada 3 — D-PV10/D-PV11 executadas (2026-10-18, mesma worktree; NADA commitado; seed 65 NÃO aplicado)
+
+**D-PV10 (a Setes é cliente como os outros)**: morreu o atalho de flags da institution 1 (`flag.service.ts` — só o super escapa das flags,
+no middleware); conferido que as flags da Setes cobrem todo módulo que o app usa. A licença no CRUD fica (Q-PV11 = (a)); o contrato da
+Setes recebe as telas que os admins usam (as estruturais primeiro) — **implantação com o "vai" e a lista do Valdo** (§11.8).
+
+**D-PV11 (delegação do vínculo de interfaces dos clientes)**:
+- API: peça ÚNICA `@shared/institution-interfaces` (leitura escopada pela institution — a forma da D-GE4 — e a escrita do vínculo; a aba do
+  Super em `/api/admin` passou a usar a mesma peça — o `admin.repository` re-exporta, o `admin.service` ficou com a MESMA linha da D-GE4);
+  módulo novo `institution-interfaces` (6 arquivos: `GET /` paginado, `GET/PUT /:id`; interface fora do catálogo = 400; `:id` = a Setes =
+  403 `SETES_INTERFACES_SUPER_ONLY` para quem não é super; a lista do usuário liberado não traz a Setes; trilha no log de quem mudou o quê).
+- Guarda DELEGADA (`gatedModule(..., { delegatedSuper: true })` + peça `@shared/auth/super-delegation`): super passa; usuário da Setes —
+  **admin inclusive** — só com o privilégio marcado (GET → VISUALIZAR, PUT → ALTERAR); outra institution / "super" fora da Setes → 403 (a
+  tela não existe para ela); SEM licença (tela do Super não é vendida). Só as chaves de `DELEGABLE_SUPER_INTERFACES` (hoje 1) podem ser
+  montadas assim — a montagem lança com outra (D-PV11 (d)).
+- Menu: a tela entra no menu do usuário da Setes SÓ com o VISUALIZAR marcado, e os botões dela são os privilégios que o Super marcou
+  (nunca o catálogo — o admin não "passa" privilégio de tela delegada).
+- Cadastro de privilégios: a tela delegável só é LISTADA e GRAVADA quando quem edita é o super e o usuário é da Setes — o admin recebe 403
+  `SUPER_DELEGATION_SUPER_ONLY` (nunca concede, nem a si).
+- Seed `sql/65_institution_interfaces_seed.sql` (interface no grupo Super, V+A, page_size, flag só da institution 1, SEM vínculo no
+  contrato de ninguém; conferência que falha alto) **PROVADO em schema descartável** (2026-10-18: id dinâmico, 2ª execução idempotente,
+  falha alta com privilégio faltando; `setes_central` intacto em 157 pares; o descartável apagado) — **aplicar só com o "vai"**, ANTES do
+  app novo.
+- App: a aba de interfaces virou peça COMPARTILHADA (`app/shared/institution_interfaces/` — entidade, fonte abstrata, aba com
+  `canChange`); o cadastro de Estabelecimentos (Super) usa a dele, e o módulo novo `institution_interfaces` (lista paginada → aba) a
+  sua (`/api/institution-interfaces`); sem ALTERAR a aba fica só leitura; rota, módulo e traduções pt/en registrados.
+- Provas: `super-delegation-d-pv11.test.ts` (7), D-PV11 em `users.test.ts` (3), `menus-super-delegation.test.ts` (3), cerca do gateway
+  (o 26º módulo guardado, único com a guarda delegada), D-PV10 em `feature-flag.middleware.test.ts` (admin da Setes segue as flags; o
+  super passa); app `institution_interfaces_tab_test.dart` (2).
+- **Gate socrático do delta: 0,74 — PASSOU** (nenhum caminho de escalada nem escrita em schema de outro cliente: o único escritor de
+  `tb_user_has_privilege` passa pela trava; `/api/admin`, `/api/interfaces`, `/api/privileges` e `/institutions` seguem do super; o schema
+  alvo vem sempre da central). Corrigido na sessão: (1) **desligar a delegação abria a trava** — soft-deletar a tela fazia o
+  `findInterfaceKey` (filtro `deleted='N'`) devolver nada e a trava do cadastro ser pulada → agora a busca devolve chave + estado e o
+  salvar recusa interface inexistente ou EXCLUÍDA (falha fechado); (3) **trilha** — as duas portas do vínculo e a concessão de privilégio
+  registram o que entrou/saiu (`added`/`removed`, a peça devolve a diferença com `FOR UPDATE`) e o autor; (5) a tela delegável NUNCA entra
+  pela listagem do contrato (nem para o admin, nem duplicada para o super); (6) catálogo vivo e sem repetidos viraram regra da PEÇA (as
+  duas portas); (9) o seed 65 RELIGA a flag que já existe desligada e a conferência passou a olhar a flag (reprovado no descartável); (10)
+  o 403 da flag ganhou código (`MODULE_NOT_ENABLED`); (11) o literal 6 virou a constante. Fica como limite: o cache do id da interface não
+  expira; duas leituras de "vinculado" (`active IS NULL` na guarda × `active='S'` na aba — anterior ao delta). Questões Q-PV30…Q-PV36
+  (§11.4).
+- **Gate adversarial do delta, 1ª passada: 0,64 com 2 HIGH — REPROVOU.** A delegação resistiu a tudo (truques de URL e verbo, 8 grafias
+  do id na auto-concessão, 14 grafias de "1" no vínculo da Setes, outra institution/"super" forjado, corpo do PUT, alvo inexistente, flags,
+  montagem). HIGH (anteriores ao delta, no módulo `users`, mas derrubam a D-PV10/D-PV11): (1) o admin da Setes editava e excluía a conta
+  do SUPER (senha, e-mail, `active`) — com ela concedia a si a delegação; (2) o admin de OUTRO cliente trocava senha/e-mail de usuário
+  vinculado também à Setes (o login é global). **Corrigido na sessão (INTERINO — Q-PV37)**: `assertAccountManageable` no editar/excluir
+  conta — quem não é super só mexe na conta cujos vínculos vivos são TODOS com o próprio estabelecimento e nenhum de perfil super (403
+  `USER_MANAGED_BY_SUPER`); as sondas viraram `[CORRIGIDO]` pelo motivo certo (o dublê passou a responder a consulta nova). Restam:
+  MEDIUM o admin da Setes troca a senha do usuário que o Super LIBEROU e herda a delegação (Q-PV37); LOW leitura do vínculo da Setes
+  (Q-PV35), id 1 literal no mundo do grupo (Q-PV34), telas do Super vinculáveis a cliente (Q-PV32), menu duplicado se a tela delegável
+  sair do grupo Super, liberação lida pelo schema do token (defesa em profundidade). Sondas: `adversarial-pv11-gate.test.ts` (35).
+- **Gate adversarial do delta, re-prova: 0,76 — PASSOU** (sem HIGH/CRITICAL; nenhum outro caminho de tomar a conta do Super — as outras
+  portas da conta, desvínculo, e-mail de login do Super na própria conta, `/auth` por e-mail resistiram). MEDIUM **corrigido na sessão**:
+  a barreira contava só vínculos VIVOS — com um vínculo super REVOGADO (`active='N'`) ou um vínculo com outro estabelecimento
+  soft-deletado, o admin do cliente trocava a senha e, quando o Super revivesse o vínculo (`setInstitutionLinks` revive a linha), entrava
+  como super → agora a barreira conta TODO vínculo existente, vivo ou adormecido (o escopo de 404 segue pelo vínculo vivo com o próprio
+  estabelecimento; `listActiveUserLinks` devolve `alive`). Restam: MEDIUM o liberado editável pelo admin da Setes (Q-PV37); MEDIUM
+  ANTERIOR e FORA do delta — força bruta no `/auth/change-password` (Q-PV38); LOW a barreira lê os vínculos fora da transação da gravação
+  (o Super vinculando a conta no meio não barra a escrita — janela de milissegundos, só o Super abre); os LOW da 1ª passada. Sondas:
+  `adversarial-pv11-gate.test.ts` (46; 4 `it.failing` documentam os achados abertos — depois da D-PV12 são 3: a sonda do liberado virou
+  teste que FIXA a semântica decidida, `[DECIDIDO D-PV12]`, para ninguém "consertar" depois). Suíte do setes-api depois da re-prova: **2225
+  testes, 137 suítes, verdes** (31 pulados — os ao vivo); app 641 · nfse-api 965 (inalterada pelo delta).
+- ⚠️ Merge: `admin.repository.ts` conflita com a `grupo-leitores` (ela mudou o corpo de `listInterfacesWithGrant`; aqui virou re-export da
+  peça, que já tem o filtro dela) — resolver ficando com a peça; `admin.service.ts` tem a MESMA linha nos dois.
+
+## 12. Cerca da D-PV9 — lista única + cerca + conferência no boot (2026-10-18, sessão própria, em WORKTREE — NADA commitado)
+
+**Onde**: `D:\Gestao2027\privilegios-catalogo\setes-api` (branch `privilegios-catalogo`, base `main` f53a618). Só o setes-api muda;
+nfse-api, fiscal-api, setes-app e o repo `sql` são LIDOS. Na pasta `privilegios-catalogo\` há junções `nfse-api` e `fiscal-api` (os testes
+da F2a leem `../`) e o `.env` da worktree é um link físico do `.env` vivo (gitignored). Banco: só SELECT, sessão `READ ONLY`.
+setes-sync/sincronizador não lidos. Coordenado por mensagem com a sessão da onda D-PV2 (§11.8 item 2).
+
+### 12.1 O que foi feito
+
+- **Lista única** `src/shared/auth/privilege-catalog.ts` — `CONSUMED_PRIVILEGES`, cada par com os consumidores EXATOS (`api` guarda/política
+  do setes-api · `nfse` guarda da nfse-api · `app` botão) e onde: orders FATURAR/CANCELAR/TRANSMITIR · service-orders FATURAR/CANCELAR/
+  TRANSMITIR · order-returns FATURAR (+ CANCELAR/TRANSMITIR ausentes por decisão — A-PV12) · settlements ALTERAR (o C1) e DESCONTO ·
+  bank-charge-agreements DESCONTO = 12 pares (10 exigidos). Mais: `PRIVILEGE_ID` (nome = `tb_privilege.description`, que o app compara),
+  `ORDER_BRANCH_INTERFACES` (domínio da `vw_order_interface`), `MENU_PRIVILEGE` (o menu consome VISUALIZAR em toda tela do cliente —
+  REGRA, não par) e a conferência PURA `privilegeCatalogProblems`.
+- **Cerca** `src/__tests__/privilege-catalog-fence.test.ts` (predicado `src/test-setup/privilege-fence.ts`, ~55 sondas):
+  - setes-api por AST — primitivas `requirePrivilege`/`requirePrivilegeFor`/`userHasPrivilege`; função que REPASSA interface/privilégio por
+    parâmetro vira primitiva derivada, seguida pelo SÍMBOLO (inclusive pelos barris `export *` das peças `@shared`); interface e privilégio
+    resolvidos pelo ESCOPO LÉXICO (`PRIVILEGE_*` só vale importado de `@shared/auth/privileges`); resolver do `requirePrivilegeFor` = o
+    símbolo de `billing.interface-resolver.ts`;
+  - nfse-api — `requireBranchPrivilege` (o RAMO) e `passScope`; o núcleo `fiscal-api/src/erp/facts.ts` conferido (ids + `OrderInterfaceKey`);
+  - setes-app por tokenizador de Dart (textos, raw, triplos, interpolação, bloco aninhado) — `CurrentInterface.can('NOME')` (ou `static
+    const` de texto); módulo → i18n_key pelo `interfaceRoutes`; peça COMPARTILHADA → telas DERIVADAS do grafo de import (a exceção é
+    EXCLUSÃO com motivo — subtrai, nunca substitui);
+  - reprova: par fora da lista · entrada sem o consumidor exato ("não apodrece") · consumo ilegível · `PRIVILEGE_*` solto · SQL de
+    `tb_user_has_privilege` por CONTAGEM por arquivo · leitores da concessão (`getUserPrivileges`, `getAllInterfacePrivileges`…) fora dos
+    arquivos registrados · export novo das implementações (`require-privilege.ts`, `guards.ts`) sem classificação · `absentBy` em par de
+    botão · `CurrentInterface.value` lido direto · `can` sem chamada (tear-off).
+- **Ao vivo** `src/__tests__/privilege-catalog-live.test.ts` — lista ⊂ catálogo do banco (sessão READ ONLY provada): fecha o triângulo
+  código → lista → catálogo no JEST, antes do deploy.
+- **Boot** `src/shared/auth/assert-privilege-catalog.ts`, chamado em `server.ts` depois dos gatilhos da F2a — 4 SELECT no `setes_central`
+  pelo MESMO predicado do `getAllInterfacePrivileges` (os botões do admin/super). Uma linha `[ALARME D-PV9]` por classe: par faltando ·
+  nome trocado (comparado como o app: `toLowerCase`, sem trim) · nome repetido em outra linha · telas do cliente sem VISUALIZAR (C2) ·
+  `i18n_key` repetida ou fora da forma canônica (comparada como o banco: sem caixa, acento e espaço no fim) · marca `absentBy`
+  desatualizada. NUNCA lança (nem com getter de `.message` que lança, nem com logger quebrado) — sobe assim mesmo.
+- **Script** `scripts/check-privilege-catalog.ts` — a mesma conferência fora do boot, READ ONLY, sai 1 com alarme.
+- **Regra**: skills `setes-api/skills/novo-modulo.md` (item 5) e `setes-app/skills/criar-formulario-cadastro.md` (item 6),
+  `setes-api/ARQUITETURA_MODULOS_API.md` ("Privilégio de AÇÃO").
+
+### 12.2 Prova do C1 (ao vivo, só leitura)
+
+O seed 64 já estava aplicado (§10). Reconstruído o catálogo de ANTES pelo MESMO predicado do boot sem as linhas que o seed criou
+(`created_at < '2026-10-18 01:34'`): **23 pares → alarme EXATO `settlements × ALTERAR (2)`**, e em linha própria as 28 telas sem VISUALIZAR
+(C2). Catálogo atual (157 pares) → nenhum alarme. Os testes puros repetem: catálogo de 23 = só o C1; os 157 pares lidos do próprio
+`sql/64` = limpo; o boot com o catálogo de 23 grita as duas linhas.
+
+### 12.3 Testes e gates
+
+- setes-api, rodada FINAL (depois de todas as correções dos gates): suíte completa **130 arquivos · 2085 verdes (31 pulados) · 0 falha**
+  (as 3 suítes da D-PV9: 89, inclusive a ao vivo); `npx tsc --noEmit` limpo.
+- **Gate socrático** 0,72 → **0,80** ✅ (corrigidos: primitiva desconhecida — exports classificados, derivada pelo símbolo —; comparação de
+  nome igual à do app; ids do núcleo; `absentBy` × botão; triângulo no jest; exclusão que subtrai).
+- **Gate adversarial** 0,66 ✗ (5 MEDIUM de falso negativo da cerca, provados: constante resolvida pelo NOME sem escopo — lia o par
+  ERRADO —, resolver aceito pelo nome, tear-off no Dart, `/*` dentro de texto, SQL registrado por arquivo) → corrigidos com sonda →
+  re-gate **0,78** ✅ (MEDIUM novo: derivada importada pelo BARRIL some — corrigido depois, com sonda; LOWs baratos também: `loose` da
+  nfse-api, `.can` citado em texto, `part`/import condicional no grafo, acento na `i18n_key`).
+- A cerca da F2a (`f2a-a3-cerca`) pegou a própria entrega: o rótulo `'nfse-api'` em literal do `src/` violava a D-F4 → consumidor `'nfse'`.
+
+### 12.4 Assunção executada (ratificar)
+
+- **A-PV12** — `order-returns × CANCELAR` e `× TRANSMITIR` são consumidos só pela guarda do RAMO (`/billing/cancel…` e a nfse-api
+  resolvem a interface pela `vw_order_interface`) e ficam AUSENTES do catálogo por decisão (`absentBy`): cancelar devolução é a Onda 2 do
+  cancelamento (`invoice-cancel.ts:163` responde 409) e devolução é NF-e (a nfse-api não emite por ela). A tela não tem o botão. A marca
+  deixa de valer se um botão consumir o par.
+
+### 12.5 Questões — Rodada 4 (gates da D-PV9; nenhuma trava a entrega)
+
+- **Q-PV16 — fusão com a D-PV2**: (a) **os módulos guardados entram pela `listGatedRoutes()` da D-PV2** (uma verdade só) e a lista à mão
+  fica para o que não se deriva (atos fora do roteador, políticas, guardas da nfse-api, botões do app); quem chegar por último ao `main`
+  escreve o adaptador (combinado por mensagem); (b) lista 100 % à mão (~130 entradas) com a cerca conferindo igualdade. **Rec.: (a)**.
+- **Q-PV17 — o C1 em tempo de execução**: tirar um par da lista pela tela Interfaces (o `syncInterfacePrivileges` apaga o que não veio no
+  array) ou renomear um privilégio consumido na tela Privilégios recria o C1 na hora — o boot só vê no próximo restart. (a) **as duas
+  telas recusam (409, nomeando o consumidor)** — integridade do catálogo, não autorização, então não contradiz a D-PV3; (b) só pedem
+  confirmação; (c) limite conhecido. **Rec.: (a)**.
+- **Q-PV18 — publicação bloqueante**: (a) **o roteiro de publicação (deploy do setes-api/app e aplicação de seed de privilégios) roda
+  `scripts/check-privilege-catalog.ts` e para com exit 1** — a D-PV9 só proíbe o BOOT de recusar subir; (b) só documentado. **Rec.: (a)**.
+- **Q-PV19 — o teste ao vivo na suíte padrão**: (a) **obrigatório, como está** — a suíte do setes-api já exige o banco em dezenas de
+  suítes, e o banco do dev é o de produção (vermelho = o seed não foi ao banco ANTES do código); na Onda 4 (bancos separados) ele prova só
+  o catálogo do dev e o roteiro (Q-PV18) cobre a produção; (b) opt-in no molde do `F2A_ADV_LIVE`. **Rec.: (a)**.
+- **Q-PV20 — a interface de um botão no app**: hoje é a do ÚLTIMO item clicado no menu (`CurrentInterface`), não a do módulo da tela:
+  pedido → "Devolver" navega para `/home/order-returns/` sem trocar a interface (`order_page.dart:534`), então o FATURAR da devolução olha
+  os privilégios de `orders` (a cerca e a Q-G22 assumem a do MÓDULO). (a) **a do módulo**: navegação entre módulos troca o `CurrentInterface`
+  pelo item do menu da tela de destino (sem o item no menu, `can` = falso) — junto da Q-PV13 da D-PV2 (privilégios de outras interfaces no
+  app); (b) manter (a API decide). **Rec.: (a)**, na entrega da Q-PV13.
+
+### 12.6 Limites conhecidos (conhecimento negativo)
+
+- **O verde certifica uma COMBINAÇÃO de checkouts**: o setes-api da worktree + nfse-api/fiscal-api/setes-app/sql achados pelo ancestral
+  mais próximo (ou `NFSE_API_DIR`/`SETES_APP_DIR`/`FISCAL_API_DIR`/`SQL_DIR`). Nesta rodada: as junções para o `main` da nfse-api e do
+  núcleo, `D:\Gestao2027\setes-app` (main) e `D:\Gestao2027\sql`. Um merge no app pode deixar o setes-api vermelho sem tocar nele; CI de
+  repositório único precisa das 4 variáveis.
+- **Repositórios varridos = conjunto FECHADO** (setes-api, nfse-api, setes-app): guarda nova no núcleo `fiscal-api` ou na nfe-api precisa
+  entrar no predicado (do núcleo hoje só os ids e o domínio do ramo são conferidos).
+- Evasão DELIBERADA não é alvo: chave computada (`obj['require'+'Privilege']`), `export { X as Y }` sobre const não exportada, `var`
+  içada (o tsc estrito recusa o uso), envoltório novo de um leitor da concessão dentro de arquivo já registrado, `MenuInterface.privileges`
+  lido fora do `can` (objeto vindo do bloc).
+- O boot só vê no próximo restart (o setes-api de produção roda sem watch); antes do deploy, quem confere é o teste ao vivo e o script.
+- O app compara o privilégio pelo NOME e a API pelo id: renomear na tela Privilégios esconde o botão de todos (Q-PV17).
+
+### 12.7 Publicação (só com o "vai")
+
+1. Merge da branch `privilegios-catalogo` no `main` do setes-api — a árvore viva roda `tsx watch` (= deploy ao salvar); o boot passa a
+   conferir (contra o catálogo de hoje sai OK).
+2. Se a onda D-PV2 entrar antes ou junto: o adaptador do §11.8 item 2 (pares de `listGatedRoutes()`, `privilegeAct` como consumidor,
+   classificação de `licensedFor`/`privilegeVerdict`/`denyPrivilege`/`resolveInterfaceId`, os sites do `crud_privileges.dart` com as
+   exclusões de interface-configs/interface-fields, que só têm 2,6 no catálogo). Varredura só-leitura da worktree dela feita: 0 consumo
+   ilegível; os pares do app estão todos no seed 64.
+3. Ao remover a worktree: apagar as junções `privilegios-catalogo\{nfse-api,fiscal-api}` e o link do `.env`.
+
 ## Decisões arquiteturais registradas
 
 ### Rodada 1 — respondida em parte (Valdo, 2026-10-18)
@@ -399,7 +895,77 @@ Efeito colateral esperado e conferido no mesmo `getMenus`: o menu do admin passa
   (`DELETE /service-orders/:id`) sob **EXCLUIR**; CANCELAR fica só para cancelar NOTA. **Fecha a Q-R5.5** do
   `prompt_primeiro_cliente_setes.md` (nota lá). Efeito na onda da D-PV2.
 
+### Rodada 3 — Valdo, 2026-10-18 (na sessão da onda da D-PV2: "considere que a Setes é um cliente do próprio sistema e o admin da Setes segue o padrão dos outros clientes. Apenas o Superuser entrando é que tem acesso a tudo. O admin da Setes com as devidas liberações feitas pelo Super user vai poder alterar as interfaces disponíveis para os clientes" + as 6 respostas, todas pela recomendação)
+
+- **D-PV10** (fecha a **Q-PV11 = (a)**) — **a Setes é um cliente como os outros**: o admin da Setes segue o padrão de todo admin (só telas
+  CONTRATADAS, todos os privilégios delas); **só o SUPER tem acesso a tudo** (A-PV1). Consequências: (1) a licença no CRUD fica como está
+  (sem tirar os painéis de sistema da conferência — a Q-PV11 (b) cai); (2) o contrato da Setes recebe, antes de publicar, as telas que os
+  admins dela usam, a começar pelas ESTRUTURAIS que todo cliente novo ganha no onboarding (`users`, `modules`, `interface-configs`, além
+  da `establishment` que já tem) — é isso que devolve a engrenagem (fuso, teto de desconto) — decisão de implantação com o "vai" e a lista
+  do Valdo; (3) **morre o atalho de flags da institution 1** (`flag.service.ts`: "a própria Setes tem acesso a tudo") — o super já escapa
+  das flags no middleware; conferido (2026-10-18, só leitura): as flags da Setes cobrem todos os módulos que o app usa.
+- **D-PV11** — **delegação do contrato de telas dos clientes ao usuário da Setes**, só pela liberação do Super:
+  (a) o que se delega = o CONTRATO de telas de cada cliente (`tb_institution_has_interface` — quais telas cada estabelecimento tem); o
+      catálogo de interfaces segue só do Super;
+  (b) a liberação é POR USUÁRIO e SÓ o Super concede: o privilégio da tela delegada é marcado no cadastro do usuário da Setes, e **até o
+      admin da Setes precisa estar marcado** (exceção à regra "admin passa o privilégio" — mesma forma da A-GE2 da Módulos); o admin
+      nunca concede a si mesmo nem a outro;
+  (c) o usuário liberado NÃO altera o contrato da PRÓPRIA Setes — só o Super;
+  (d) só essa tela é delegável agora; as demais do grupo Super seguem só do Super (entram uma a uma quando o Valdo pedir);
+  (e) **tela própria** "Interfaces dos clientes" (interface nova no grupo Super, `institution-interfaces` — o glossário do guardião proíbe
+      "contrato" em código; o vínculo é `_has_`), com VISUALIZAR + ALTERAR próprios — não reaproveita a tela Estabelecimentos, cujo ALTERAR
+      emite a chave do sincronizador (A-PV3).
+
+### Rodada 4 — Valdo, 2026-10-18 (respostas à Q-PV37 e à Q-PV38, na sessão da onda da D-PV2)
+
+- **D-PV12** (fecha a **Q-PV37 = (b)** — Valdo DIVERGIU da recomendação (a)): "troca de senha não pode ficar sobre o SuperUser por se
+  tratar de tarefa de rotina; caso só o super faça, teríamos que elevar o nível do usuário para super, que não pode porque super é apenas
+  1; então o admin pode trocar senha de todos menos do super — temos apenas este usuário sofrendo exceções ao longo do sistema". Fica a
+  regra do código (`assertAccountManageable`): o admin mexe na conta (senha, e-mail, ativo, exclusão) de todos do próprio
+  estabelecimento, MENOS a do super (vínculo super vivo ou adormecido); o usuário LIBERADO pelo Super segue editável pelo admin da Setes —
+  a liberação não muda quem gere a conta. Risco aceito (o MEDIUM restante do gate): o admin da Setes que troca a senha do liberado entra
+  com a liberação dele — a defesa é a trilha (o autor da troca vai ao log) e a escolha de QUEM o Super libera. Sem código novo; a sonda do
+  gate virou teste que fixa a semântica. **RATIFICADA pelo Valdo (2026-10-18, "D-PV12 - Ratifico").**
+- **A-PV13** (assunção a ratificar — ponto em que a frase "só o super sofre exceção" difere do código): a conta com vínculo com OUTRO
+  estabelecimento continua só do Super (403 `USER_MANAGED_BY_SUPER`). É a correção do HIGH 2 do gate: sem ela, o admin de um cliente
+  trocaria a senha de quem também é usuário (ou admin) da Setes ou de outro cliente e entraria lá com aquele perfil — o login é global.
+  Vínculo com vários estabelecimentos já é ato exclusivo do super (`saveInstitutionLinks`), então o caso é raro e o Super já é quem o cria.
+- **D-PV13** (fecha a **Q-PV38 = (a)**): força bruta no código de 6 dígitos do `/auth/change-password` = tarefa própria, iniciada em
+  sessão separada em 2026-10-18; fora desta onda.
+- **A-PV13 — cenário do Valdo (2026-10-18), sem ratificar**: "tenho dois clientes, o cliente 1 é fornecedor do cliente 2. O cliente 2
+  poderia criar um usuário (o mesmo usado no cliente 1) com permissões diferentes, como tirar relatório de estoque. O cliente 1, ao
+  logar, poderia escolher entre a própria empresa ou a empresa em que é fornecedor, vendo diferentes permissões. Analise se abrimos uma
+  frente para isso". **Análise (código conferido na worktree, só leitura)**:
+  - JÁ EXISTE: o login com N estabelecimentos ("Escolha a empresa" — `/auth/login` devolve `select` + `/auth/select-institution`,
+    `/auth/switch-institution` sem sair); privilégio POR schema (`tb_user_has_privilege` no schema de cada cliente) — permissões
+    diferentes em cada empresa já são o modelo.
+  - FALTA: o admin do cliente 2 VINCULAR um login que já existe — hoje o cadastro recusa com 409 "e-mail já usado como login de outro
+    usuário" (`assertLoginEmailFree`) e o vínculo com vários estabelecimentos é exclusivo do super (`saveInstitutionLinks`). Esse 409 já
+    revela a qualquer admin que o e-mail existe em algum cliente (vazamento menor, anterior à onda — entra na frente).
+  - O cenário PRECISA da A-PV13: sem ela, o admin do cliente 2 trocaria a senha do usuário do cliente 1 e entraria no cliente 1 com o
+    perfil dele. O que a frente acrescenta é o DONO DA CREDENCIAL: quem criou o login (cliente 1) gere senha/e-mail/exclusão, como na
+    D-PV12; quem só convidou (cliente 2) gere apenas o próprio vínculo (ativo/inativo) e os privilégios no próprio schema — nunca a
+    credencial. Hoje, com 2 vínculos, nem o admin do dono troca a senha (só o Super) — a frente devolve isso a ele.
+  - Pontos da frente (decisões do Valdo): aceite do usuário convidado (convite pendente até ele aceitar no login) × vínculo direto;
+    perfil do convidado (só `user`, nunca admin da empresa que convida?); licença/assento do convidado; se o convite se amarra à
+    relação comercial (o cliente 1 é `tb_provider` no cliente 2 — guardião conceitual); a busca do login sem revelar se o e-mail existe;
+    a trilha (quem convidou, quem aceitou). Coordenar com a frente do grupo de estabelecimentos (mesmo schema — D-GE): lá o problema é
+    vizinho, mas o vínculo já é dentro do mesmo grupo.
+- **Q-PV39 — abrir a frente "usuário convidado entre estabelecimentos"?** (a) sim, prompt próprio com Rodada 0 (inventário de auth/users/
+  login do app + parecer do guardião) em sessão separada; a A-PV13 fica como está até a frente definir o dono da credencial; (b) não
+  agora — a A-PV13 vale e o vínculo cruzado segue só pelo Super. **Rec.: (a)** — o login e o privilégio por schema já sustentam o
+  cenário; falta o convite com dono da credencial, e é TRANSVERSAL (setes-api auth/users, setes-app login/usuários, frente do grupo).
+
 ## Questões pendentes
 
 Nenhuma. Ficam para entregas próprias: a onda da D-PV2 (guardas por roteador + gates na fábrica + A-PV1 + D-PV5/D-PV6/D-PV8) e a cerca
 da D-PV9. Aplicar o seed 64 em `setes_central` = só com o "vai".
+**Cerca da D-PV9 (§12, 2026-10-18)**: ratificar a **A-PV12**; **Q-PV16…Q-PV20** aguardam o Valdo (nenhuma trava a entrega; merge = "vai").
+**Onda da D-PV2 (§11, 2026-10-18)**: ratificar **A-PV5…A-PV11**; **Q-PV10…Q-PV15 e Q-PV21…Q-PV29** aguardam o Valdo — a **Q-PV11** (licença
+no CRUD tira do admin da Setes os cadastros não contratados e a engrenagem das telas contratadas) trava a PUBLICAÇÃO; Q-PV11/Q-PV15/
+Q-PV21/Q-PV27 decidem juntas (mesmo caminho); a Q-PV13 e a Q-PV20 (da cerca) são a mesma família (o app só conhece
+os privilégios da tela aberta pelo menu) — decidir juntas.
+**D-PV10/D-PV11 (§11.9, 2026-10-18)**: a Q-PV11 FECHOU pela D-PV10 = (a); a Q-PV37 fechou pela D-PV12 (b) e a Q-PV38 pela D-PV13
+(tarefa própria, em sessão separada); D-PV12 RATIFICADA. **Q-PV30…Q-PV36** aguardam o Valdo — nenhuma trava a entrega; a **A-PV13**
+(conta com vínculo com outro estabelecimento segue só do Super) aguarda a **Q-PV39** (abrir a frente do usuário convidado — Rec. (a)). Publicar = "vai" com a lista de telas do contrato da Setes (implantação da D-PV10)
++ seed 65 antes do app.

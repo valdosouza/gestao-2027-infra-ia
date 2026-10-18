@@ -133,4 +133,37 @@ RAMO**. Admin e super passam sempre. Teto configurável vive no Framework de Con
 seção "Interface e privilégios"): VISUALIZAR + o CRUD do que a tela faz + as ações, inclusive nas telas
 do Super e nas kind 'R'; seed por `i18n_key` ANTES do app — os botões do admin e do super vêm do
 catálogo, e par faltando esconde o botão até do admin. O super escapa de todas as verificações (D-PV3).
-Hoje a API confere só os de AÇÃO; o CRUD vira guarda por roteador na onda da D-PV2.
+Hoje (`main`) a API confere só os de AÇÃO; o CRUD vira guarda por roteador na onda da D-PV2 — abaixo.
+
+## Guarda de privilégio POR ROTEADOR (D-PV2 — onda executada em worktree `privilegios-crud`, 2026-10-18; NÃO publicada)
+
+Detalhe e decisões: `Infra-IA/prompts/prompt_privilegios_interfaces.md` §11. Até o merge, esta seção é a REGRA para módulo novo.
+
+- **Um ponto só**: `src/shared/auth/module-privilege-gate.ts`. Módulo de tela do CLIENTE monta no gateway com
+  `router.use('/<m>', ...gatedModule('<m>', routes))` — `<m>` = segmento da URL = `i18n_key` da interface. O VERBO decide:
+  GET/HEAD → VISUALIZAR (6) · POST → INSERIR (1) · PUT/PATCH → ALTERAR (2) · DELETE → EXCLUIR (3), na interface do módulo.
+- **Ato que não é CRUD** (mapa da D-PV7/D-PV8): marcador NA ROTA — `router.post('/reversal', privilegeAct(PRIVILEGE_EXCLUIR), ...)`;
+  outra interface (aba kind 'R'): `privilegeAct(PRIVILEGE_VISUALIZAR, 'partnerships')`; interface pelos parâmetros: `DynamicInterfaces`.
+  Rota sem privilégio (só leitura de motor que toda tela consome): `openRoute('motivo')`. Rota SEM marcador vale pelo verbo — esquecer o
+  marcador NEGA, nunca libera. POST de criação fica pelo verbo e entra na lista fechada da cerca `privilegios-rotas-d-pv2.test.ts`.
+- **Mesma conferência das guardas de ação** (`privilegeVerdict`): licença antes do privilégio (D-F37 — admin e regular só em tela
+  CONTRATADA); o super passa as duas (A-PV1 — `licensedFor`); admin passa o privilégio. Interface fora do catálogo nega para todos.
+- **Fora da guarda, por NOME**: core, erp, admin, entities, billing/* (guardas de ação pela interface do RAMO), geográficos (leitura
+  aberta), roteadores do Super (`superGuard`), users/establishment (perfil admin — D-PV5), modules (`adminGuard` até a onda 0 — D-GE20).
+- **Lista de apoio é do PRÓPRIO módulo** (premissa da D-PV2): a tela X nunca lê `/api/<outro>`; precisou do dado de outro cadastro →
+  rota `/api/X/<y>-lookup` lendo a peça compartilhada (ex.: `@shared/bank-account`, `@shared/payment-types`). Com a guarda, chamar o
+  módulo vizinho exigiria o privilégio da tela vizinha.
+- **Tela do Super DELEGÁVEL (D-PV11, 2026-10-18)**: `gatedModule('<m>', routes, { delegatedSuper: true })` — o super passa; usuário da
+  Setes (institution 1), **admin inclusive**, só com o privilégio marcado PELO SUPER no cadastro dele; outra institution: a tela não existe;
+  sem licença (tela do Super não é vendida). Só chaves de `DELEGABLE_SUPER_INTERFACES` (`@shared/auth/super-delegation` — hoje só
+  `institution-interfaces`); a montagem lança com outra. O cadastro de privilégios só oferece/grava essas telas quando quem edita é o super.
+- **A Setes é cliente como os outros (D-PV10)**: nenhum atalho por `institutionId === 1` (as flags também não); só o SUPER tem tudo. A
+  CONTA de usuário (senha, e-mail, ativo, exclusão — login global) é rotina do admin: ele altera a de todos do próprio estabelecimento,
+  MENOS a do super (vínculo super vivo ou adormecido) e a de quem tem vínculo com outro estabelecimento (`assertAccountManageable` —
+  D-PV12; o segundo caso é a A-PV13, a ratificar). O usuário liberado pelo Super segue editável pelo admin — não "consertar".
+- **Conhecimento negativo**: a guarda acha a rota no `stack` do Router do **Express 4** (`route`, `regexp`, `keys`, `methods`,
+  `route.stack[].handle`) — a prova `module-privilege-gate.test.ts` quebra se a forma mudar; sub-roteador (`router.use`) DENTRO de módulo
+  guardado é recusado por `listGatedRoutes()` (a guarda não o enxergaria).
+**Todo par que o código consome mora na lista única `src/shared/auth/privilege-catalog.ts`** (D-PV9, §12 do prompt): a cerca
+`privilege-catalog-fence.test.ts` reprova guarda/política/botão com par fora dela (ou ilegível estaticamente) e o boot confere a lista
+contra o catálogo — par faltando = `[ALARME D-PV9]` no log, sem recusar subir.

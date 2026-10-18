@@ -109,8 +109,16 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
    `CurrentInterface.can('<DESCRIÇÃO>')` com a descrição do catálogo (`'FATURAR'`, `'CANCELAR'`, `'ALTERAR'`…); sem interface conhecida
    (deep link) libera — quem decide é a API. ⚠️ Conhecimento negativo: esta skill prometia `MenuInterface.can('insert'|'update'|'delete')`
    na fábrica — isso NUNCA existiu (as descrições são em português e a `RegisterSearchPage`/`RegisterFormPage` não consultam privilégio;
-   `canDelete` é `!creating`). Os gates de INSERIR/ALTERAR/EXCLUIR entram num ponto só da fábrica na onda da D-PV2. Super escapa de todas
-   as verificações (D-PV3).
+   `canDelete` é `!creating`). Os gates de INSERIR/ALTERAR/EXCLUIR estão num ponto só da fábrica desde a onda da D-PV2 (worktree
+   `privilegios-crud`, 2026-10-18 — até o merge, só lá): `CrudPrivileges` (`app/shared/session/crud_privileges.dart`) na
+   `RegisterSearchPage` ("Novo" ← INSERIR), na `RegisterFormPage` (`creating:`) e na casca `RegisterFormShell(creating: ...)` — que o
+   cadastro novo usa no lugar da `SetesFormShell` crua (✓ ← INSERIR/ALTERAR, lixeira ← EXCLUIR). Super escapa de todas
+   as verificações (D-PV3). **Cerca da D-PV9** (setes-api `privilege-catalog-fence.test.ts`): o `can` tem de ser
+   `CurrentInterface.can('NOME')` com o nome LITERAL do catálogo (ou um `static const` de texto, ex.: `PrivilegeNames.cancel`), dentro
+   de `modules/<m>/` (a interface sai do `interfaceRoutes`), e o par tem de estar na lista única do setes-api (`CONSUMED_PRIVILEGES`);
+   ler `CurrentInterface.value` direto, `.can` em outro objeto ou `can` sem chamada (tear-off) reprova; `can` numa peça compartilhada
+   (a fábrica, `crud_privileges.dart`) é registrado em `APP_SHARED_CONSUMERS` — as telas cobertas saem do grafo de import (tela nova
+   que usa a peça entra sozinha) e a exceção é uma EXCLUSÃO com motivo.
 7. **Validar**: `flutter analyze` no apps/web e nos packages tocados; abrir a tela e
    testar o ciclo criar → editar → excluir → pesquisar.
 

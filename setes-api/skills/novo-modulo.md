@@ -162,16 +162,28 @@ os devidos priviegios"*.
    seeds `sql/51`…`sql/59`, com **conferência no fim** (pares esperados que faltam = 0).
 4. **O seed vai ANTES do app**: os botões do admin e do super vêm do CATÁLOGO da interface (`core.service.ts` — `getAllInterfacePrivileges`);
    par que falta no catálogo esconde o botão até do admin (defeito C1: "trocar cobrança" ficou invisível de 2026-09-13 a 2026-10-18).
-5. **Todo par que o código consome** (`requirePrivilege`/`requirePrivilegeFor` na rota, `CurrentInterface.can('X')` no app) entra na lista
-   única da D-PV9 (`@shared/auth/privilege-catalog.ts` — entrega própria; até lá, conferir à mão contra o seed).
+5. **Todo par que o código consome** (`requirePrivilege`/`requirePrivilegeFor` na rota, `userHasPrivilege` numa política de controller,
+   `requireBranchPrivilege`/`passScope` na nfse-api, `CurrentInterface.can('X')` no app) entra na lista única da D-PV9
+   (`src/shared/auth/privilege-catalog.ts` — `CONSUMED_PRIVILEGES`, com os consumidores exatos). A CERCA
+   (`src/__tests__/privilege-catalog-fence.test.ts`) reprova par consumido fora da lista, entrada que nenhum código consome mais e consumo
+   ilegível (interface/privilégio que não dá para ler estaticamente — resolvido pelo ESCOPO, nunca pelo nome solto); o teste AO VIVO
+   (`privilege-catalog-live.test.ts`, só leitura) reprova se o par não estiver no catálogo do banco; o BOOT confere de novo e grita
+   `[ALARME D-PV9]` no log (sobe assim mesmo) — `scripts/check-privilege-catalog.ts` faz a mesma conferência fora do boot (sai 1 com
+   alarme). Guarda nova de consumo DINÂMICO (ex.: privilégio pelo verbo HTTP) = registrar a primitiva em `src/test-setup/privilege-fence.ts`
+   (`API_PRIMITIVES`, aceita vários privilégios fixos) com o que ela consome; export novo em `require-privilege.ts` exige classificação
+   no teste; `can()` numa peça compartilhada do app = registro `APP_SHARED_CONSUMERS` (telas derivadas do grafo de import; exceção =
+   exclusão com motivo). Detalhes: §12 do prompt (entregue em worktree `privilegios-catalogo` em 2026-10-18 — até o merge, só lá).
 6. **Super escapa de todas as verificações** (D-PV3) — os privilégios das telas do Super servem aos botões dele e ao dia em que a tela for
    delegada. Alcance sobre a licença (tela não contratada): A-PV1 do prompt, a confirmar.
-7. Enquanto a onda da D-PV2 não sai, a API só confere os privilégios de AÇÃO; INSERIR/ALTERAR/EXCLUIR/VISUALIZAR passam a ser conferidos
-   pela guarda POR ROTEADOR (GET → V, POST → I, PUT → A, DELETE → E) quando ela entrar — o módulo novo já nasce compatível com isso se a
-   rota respeitar o verbo (não esconder ALTERAR num POST sem dizer qual privilégio ele exige).
+7. **Guarda POR ROTEADOR (D-PV2 — executada em worktree `privilegios-crud` em 2026-10-18, até o merge só lá; §11 do prompt)**: o módulo
+   de tela do cliente monta no gateway com `router.use('/<m>', ...gatedModule('<m>', routes))` — GET → V, POST → I, PUT → A, DELETE → E
+   na interface do módulo. Ato que não é CRUD = `privilegeAct(PRIVILEGE_X[, interface])` NA ROTA; leitura de motor sem privilégio =
+   `openRoute('motivo')`; POST de criação fica pelo verbo e entra na lista fechada da cerca `privilegios-rotas-d-pv2.test.ts`. Lista de
+   apoio de outro cadastro = rota do PRÓPRIO módulo (`/<m>/<y>-lookup`), nunca o app chamando o `/api` vizinho. Regra completa:
+   `ARQUITETURA_MODULOS_API.md`, seção "Guarda de privilégio POR ROTEADOR".
 
 - [ ] Seed da interface + privilégios por `i18n_key`, com conferência, aplicado antes do app
-- [ ] Todo `requirePrivilege`/`can('X')` novo tem o par no seed (e, depois da D-PV9, na lista única)
+- [ ] Todo `requirePrivilege`/`can('X')` novo tem o par no seed E na lista única `CONSUMED_PRIVILEGES` (a cerca da D-PV9 cobra)
 
 ## Campos configuráveis (Fase 2 — OBRIGATÓRIO em todo módulo novo, 2026-07-12)
 
