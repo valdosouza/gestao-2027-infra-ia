@@ -127,3 +127,10 @@ Em ambos os casos vale a regra da Q-G29 (Valdo, 2026-09-10): **o privilégio exi
 privilégios do usuário só oferece o que a interface tem) e o CÓDIGO valida pela interface do
 RAMO**. Admin e super passam sempre. Teto configurável vive no Framework de Configurações
 (scope I), nunca hard-coded.
+
+**Toda tela nasce com interface + privilégios no seed** (D-GE19 + D-PV1…D-PV9, 2026-10-18 —
+`Infra-IA/prompts/prompt_privilegios_interfaces.md`; passo a passo na skill `skills/novo-modulo.md`,
+seção "Interface e privilégios"): VISUALIZAR + o CRUD do que a tela faz + as ações, inclusive nas telas
+do Super e nas kind 'R'; seed por `i18n_key` ANTES do app — os botões do admin e do super vêm do
+catálogo, e par faltando esconde o botão até do admin. O super escapa de todas as verificações (D-PV3).
+Hoje a API confere só os de AÇÃO; o CRUD vira guarda por roteador na onda da D-PV2.

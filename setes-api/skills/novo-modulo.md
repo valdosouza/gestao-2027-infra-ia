@@ -144,6 +144,34 @@ rotas documentadas ficaram invisíveis no /docs). Doc `@swagger` SEMPRE no
 - [ ] Swagger em todas as rotas (tag = módulo; security BearerAuth; responses
       200/201/400/401/403/500) e rotas VISÍVEIS em /docs; montado em /api/<plural> com o guard certo
 - [ ] tsc limpo + smoke; módulo gêmeo no app criado/atualizado
+- [ ] Interface + privilégios no seed (seção abaixo) — aplicado ANTES do app
+
+## Interface e privilégios (OBRIGATÓRIO em toda tela nova — D-GE19 + D-PV1…D-PV9, 2026-10-18)
+
+Prompt: `Infra-IA/prompts/prompt_privilegios_interfaces.md`. Valdo (D-GE19): *"para cada tela desenvolvido devemos criar um registro com
+os devidos priviegios"*.
+
+1. **Toda tela nasce com o registro em `setes_central.tb_interface`** (seed com `i18n_key` = nome do módulo, `group_default`, `kind` 'T'
+   tela / 'R' recurso) **e os seus privilégios em `tb_interface_has_privilege`, no MESMO seed**. Vale para TODA tela — inclusive as do
+   grupo Super e as kind 'R' (D-PV3/D-PV4).
+2. **Quais privilégios = o que a tela FAZ** (D-PV1), no catálogo existente (`@shared/auth/privileges`): VISUALIZAR (6) sempre — é o que
+   põe a tela no menu do usuário regular; INSERIR (1) se cria, ALTERAR (2) se altera, EXCLUIR (3) se exclui, IMPRIMIR (4) se imprime; e cada
+   privilégio de AÇÃO que a rota ou o botão exige (FATURAR 5, CANCELAR 7, DESCONTO 8, TRANSMITIR 9). Privilégio NOVO no `tb_privilege` só
+   quando um ato precisa de autoridade diferente (como o DESCONTO) — e passa pelo guardião.
+3. **Seed por `i18n_key`, nunca por id fixo de interface** (lição do seed 40v1: o `INSERT IGNORE` silenciou a colisão), no molde dos
+   seeds `sql/51`…`sql/59`, com **conferência no fim** (pares esperados que faltam = 0).
+4. **O seed vai ANTES do app**: os botões do admin e do super vêm do CATÁLOGO da interface (`core.service.ts` — `getAllInterfacePrivileges`);
+   par que falta no catálogo esconde o botão até do admin (defeito C1: "trocar cobrança" ficou invisível de 2026-09-13 a 2026-10-18).
+5. **Todo par que o código consome** (`requirePrivilege`/`requirePrivilegeFor` na rota, `CurrentInterface.can('X')` no app) entra na lista
+   única da D-PV9 (`@shared/auth/privilege-catalog.ts` — entrega própria; até lá, conferir à mão contra o seed).
+6. **Super escapa de todas as verificações** (D-PV3) — os privilégios das telas do Super servem aos botões dele e ao dia em que a tela for
+   delegada. Alcance sobre a licença (tela não contratada): A-PV1 do prompt, a confirmar.
+7. Enquanto a onda da D-PV2 não sai, a API só confere os privilégios de AÇÃO; INSERIR/ALTERAR/EXCLUIR/VISUALIZAR passam a ser conferidos
+   pela guarda POR ROTEADOR (GET → V, POST → I, PUT → A, DELETE → E) quando ela entrar — o módulo novo já nasce compatível com isso se a
+   rota respeitar o verbo (não esconder ALTERAR num POST sem dizer qual privilégio ele exige).
+
+- [ ] Seed da interface + privilégios por `i18n_key`, com conferência, aplicado antes do app
+- [ ] Todo `requirePrivilege`/`can('X')` novo tem o par no seed (e, depois da D-PV9, na lista única)
 
 ## Campos configuráveis (Fase 2 — OBRIGATÓRIO em todo módulo novo, 2026-07-12)
 

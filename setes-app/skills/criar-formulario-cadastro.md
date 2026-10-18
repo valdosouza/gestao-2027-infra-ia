@@ -101,8 +101,16 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
 4. **Internacionalizar** tudo (ver skill `internacionalizar-form.md`) — pt.json + en.json.
 5. **Registrar a rota**: `home/interface_routes.dart` (i18nKey → rota) +
    ModuleRoute em `home_module.dart`.
-6. **Privilégios** (decisão 21): botões respeitam `MenuInterface.can('insert'|'update'|'delete')`
-   — exceto módulo Super, que bypassa ACL (isSuper() é a única verificação).
+6. **Interface + privilégios no seed** (D-GE19 + D-PV1…D-PV9, 2026-10-18 — `Infra-IA/prompts/prompt_privilegios_interfaces.md`):
+   toda tela nasce com o registro em `setes_central.tb_interface` E os seus privilégios em `tb_interface_has_privilege` no MESMO seed
+   (inclusive telas do grupo Super e kind 'R'): VISUALIZAR sempre (é o que põe a tela no menu do usuário regular) + INSERIR/ALTERAR/
+   EXCLUIR/IMPRIMIR conforme o que a tela faz + as AÇÕES que o botão exige. Seed por `i18n_key` (nunca id fixo), aplicado ANTES do app: os
+   botões do admin e do super vêm do CATÁLOGO da interface — par faltando esconde o botão até do admin (defeito C1). O app pergunta
+   `CurrentInterface.can('<DESCRIÇÃO>')` com a descrição do catálogo (`'FATURAR'`, `'CANCELAR'`, `'ALTERAR'`…); sem interface conhecida
+   (deep link) libera — quem decide é a API. ⚠️ Conhecimento negativo: esta skill prometia `MenuInterface.can('insert'|'update'|'delete')`
+   na fábrica — isso NUNCA existiu (as descrições são em português e a `RegisterSearchPage`/`RegisterFormPage` não consultam privilégio;
+   `canDelete` é `!creating`). Os gates de INSERIR/ALTERAR/EXCLUIR entram num ponto só da fábrica na onda da D-PV2. Super escapa de todas
+   as verificações (D-PV3).
 7. **Validar**: `flutter analyze` no apps/web e nos packages tocados; abrir a tela e
    testar o ciclo criar → editar → excluir → pesquisar.
 

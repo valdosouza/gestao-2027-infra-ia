@@ -948,6 +948,9 @@ trilha **17 OK · 7 PENDENTE · 0 FALHA** (rodada 3× no dia, inclusive com a re
   criar privilégios (ex.: COBRANCA para a rotina; CANCELAR já existe, id 7) ou aceitar que qualquer
   usuário com a interface abre a cobrança do mês? **Rec.: rotina sob FATURAR (id 5) e DELETE da OS
   sob CANCELAR (id 7) — sem privilégio novo.**
+  **→ FECHADA 2026-10-18 pela D-PV8** (`prompt_privilegios_interfaces.md`, Valdo: "siga as recomendações da
+  Rodada 2"): rotina mensal sob **FATURAR**; DELETE da OS aberta sob **EXCLUIR** (id 3 — CANCELAR fica só
+  para cancelar NOTA). Ninguém cria privilégio novo; o código passa a conferir na onda da D-PV2.
 - **Q-R5.6** (pré-existente, transversal) — JWT de usuário soft-deletado continua válido até expirar;
   barrar no gateway (consulta por request, ou cache curto) ou aceitar a janela do token?
   **Rec.: barrar com cache TTL curto**, tarefa transversal fora desta fase.
