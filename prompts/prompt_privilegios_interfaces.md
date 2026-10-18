@@ -1174,6 +1174,15 @@ tempo e a A-PV14 já foi usada pela cerca da D-PV9): questões **Q-RS1…Q-RS6**
 4. Passeio: pedir código, errar 5, a 6ª certa recusada, código novo funciona; e-mail inexistente responde igual.
 5. Códigos pedidos antes do deploy morrem — o usuário pede outro. O setes-app não muda; `errors:gen` não é preciso (nenhum código novo).
 
+### 13.9 Retomada (prompt curto)
+
+> Retomar a Q-PV38 (§13 deste prompt). Código SALVO no GitHub, branch `recuperacao-senha`: setes-api **d19de9d** e sql **e1aa574**
+> (worktrees `D:\Gestao2027\recuperacao-senha\{setes-api,sql}`; base setes-api `main` f53a618). NADA no `main` e o `sql/67` NÃO
+> aplicado. Esperam o Valdo: ratificar **A-RS1…A-RS4** e responder **Q-RS1…Q-RS6** (§13.6 — o N = 5 e o `trust proxy` são decisões
+> dele). Publicar só com o "vai", pelo §13.8 (sql/67 ANTES e DEPOIS do merge). Antes do merge, conferir conflito com a `privilegios-crud`
+> (ela não toca `auth.*`, `rate-limit.middleware.ts` nem `product-token.ts` até onde se viu) e rodar a suíte inteira com a máquina
+> livre (testes de tempo).
+
 ## Decisões arquiteturais registradas
 
 ### Rodada 1 — respondida em parte (Valdo, 2026-10-18)
