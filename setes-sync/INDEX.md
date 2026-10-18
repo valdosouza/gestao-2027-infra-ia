@@ -41,6 +41,18 @@ Instruções passo a passo para testar
 
 ---
 
+### 4. **verificacao-comissao-margem-mercadoria.md** ⭐ 2026-10-17
+Verificação SÓ LEITURA pedida pela frente de produtos (D-PR26/Q-PR26)
+- Inversão comissão × margem de 2013: NÃO existe no sync atual (arquivo:linha de cada elo + git)
+- Achado real: flag `kickback_product` recebe `CLB_CALC_COM_VDA` — comissão por produto nunca liga
+- Origem de cada campo da mercadoria (codebar, st, outline, composition, indEscala fixo 'N', Base64 da aplicação)
+- 1 chave = 1 institution: `*_CODMHA` não viaja
+- D-SY1…D-SY7 DECIDIDAS 2026-10-17 (§7) — patch 10 do sincronizador + setes-sync; D-SY3 travada pela D-SY4
+
+**Leia se:** Vai mexer em preço, comissão, vendedor ou mercadoria no sync
+
+---
+
 ## 🎯 Quick Start
 
 ### Passo 1: Setup

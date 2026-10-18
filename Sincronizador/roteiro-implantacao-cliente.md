@@ -13,6 +13,13 @@ Aplicar em CADA instalação (Gestao2016 + Sincronizador local). Pré-requisitos
   (API: GET/POST `/api/institutions/:id/sync-api-key`; grava em `setes_central.tb_sync_api_key`) —
   uma chave POR estabelecimento; a tela só GERA quando não existe (trocar chave = intervenção
   manual no banco, de propósito)
+- **Quantos estabelecimentos o Firebird tem? (D-SY7, Valdo 2026-10-17)** — o sync assume hoje
+  1 Firebird = 1 estabelecimento: UMA chave por instalação = UMA institution, e nenhum `*_CODMHA`
+  viaja (`Infra-IA/setes-sync/verificacao-comissao-margem-mercadoria.md` §4.1). Conferir na cópia
+  do banco: `SELECT NFL_CODMHA, COUNT(*) FROM TB_NOTA_FISCAL GROUP BY 1` (e `PED_CODMHA` em
+  TB_PEDIDO). **Mais de um estabelecimento com movimento = NÃO implantar** — tudo cairia numa
+  institution só. Fica para a frente "matriz × filiais" (§11 do `prompts/prompt_modulo_products.md`:
+  chave por estabelecimento + filtro por `*_CODMHA` + catálogo compartilhado)
 - Confirmar a URL base da setes-sync (porta 3001) acessível a partir da rede do cliente
 - Fazer backup/cópia do banco Firebird do cliente e validar o DDL na cópia primeiro (o script avisa: não testado em produção)
 
@@ -144,6 +151,27 @@ Validações por entidade:
 - Deixar o ciclo automático rodando e acompanhar 2–3 ciclos completos
 - Revisar `TB_SINCRONIA.SRC_LOG` — zerar pendências ou justificar
 - Registrar: cliente, data, chave criada, versão do executável
+- **Conferir preço × comissão no MySQL (D-SY1, Valdo 2026-10-17)** — só leitura, no schema do
+  cliente (`<schema>`):
+
+  ```sql
+  SELECT tb_institution_id, COUNT(*) linhas, SUM(aliq_kickback <> 0) comissao_nz,
+         SUM(aliq_profit <> 0) margem_nz, MAX(aliq_kickback) comissao_max, MAX(aliq_profit) margem_max
+    FROM <schema>.tb_price WHERE deleted = 'N' GROUP BY 1;
+  SELECT kickback_product, COUNT(*) FROM <schema>.tb_salesman WHERE deleted = 'N' GROUP BY 1;
+  ```
+
+  `comissao_max` com cara de margem (dezenas/centenas) e `margem_max` pequeno = inversão (o
+  envio de 2013 gravava trocado; o sync atual não) → parar e avisar o Valdo. Valor fora de S/N
+  em `kickback_product` é o esperado até a D-SY3 ser executada (comissão por produto desligada).
+
+### Reenviar TODOS os produtos (depois de recompilar com D-SY5/D-SY6, 2026-10-17)
+
+Produto já sincronizado só ganha o indEscala real e a aplicação em texto quando é reenviado:
+**Configuração → Primeira carga → marcar só Produtos, SEM período** (`Fc_Produto` em
+`Task/tas_config.pas` põe TODO produto na `TB_SINCRONIA`). ⚠️ Rebobinar o `LAST_UPDATE` NÃO
+basta aqui: o envio lê a FILA (`ControllerSincronia.getList`), e a limpeza de 48h já tirou os
+produtos enviados com OK. Idempotente: o setes-sync faz upsert com lista de colunas.
 
 ### Reenviar registros que FALHARAM (mecânica confirmada 2026-08-02)
 

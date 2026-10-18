@@ -141,7 +141,7 @@ vêm sem tipo; 164 barradas na rodada de 2026-07-31).
                    "promotion": "N", "highlights": "N", "active": "S", "published": "N", "note": "..." },
   "merchandise": { "nameBrand": "COCA-COLA", "internalId": "...", "ncm": "22021000", "cest": "...",
                    "kindTributary": "T", "source": "0", "kind": "00", "print": "S", "controlSeries": "N",
-                   "exclusiveDealer": "N", "application": "...", "composition": "N", "manufSignIndScale": "S" },
+                   "exclusiveDealer": "N", "application": "texto", "composition": "1", "manufSignIndScale": "S" },
   "stock":       { "namePackage": "GARRAFA", "nameMeasure": "UND", "codebar": "789...", "st": "N",
                    "divisor": null, "location": "...", "weight": 0, "width": 0, "length": 0, "height": 0,
                    "costManufactures": 0, "actualCost": 0, "costPrice": 0, "negative": "N", "outline": "N" }
@@ -158,6 +158,13 @@ default final é 'P' (PRO_TIPO null → 'P' — decisão Valdo 2026-08-01).
 `merchandise.composition` = PRO_COMPOSICAO **como está** (domínio legado '1'/'2'/'3'/'5' —
 não é S/N; a web não consome, só espelha) e `stock.divisor` = PRO_DIVISOR **como está**
 (0 é valor legítimo). O snFlag S/N em composition barrava o catálogo inteiro (8.588 itens).
+**D-SY5/D-SY6 (Valdo 2026-10-17 — `verificacao-comissao-margem-mercadoria.md`)**:
+`merchandise.manufSignIndScale` = **INDESCALA** do Firebird (antes ia 'N' FIXO); 'S'/'N' como está,
+vazio/ausente = **NULL** ("não informado" — o legado omite a tag indEscala da NF-e); o Delphi
+manda '' para qualquer valor fora de S/N (o setes-sync recusa outro valor com 400).
+`merchandise.application` = **TEXTO**: o legado grava PRO_APLICACAO em Base64 e o Delphi decodifica
+antes de enviar, igual ao legado (valor sem forma de Base64 segue como está). Produtos já
+sincronizados só se corrigem com o REENVIO (Primeira carga → Produtos, sem período).
 
 ### POST /service/sincronize (notas M×S, 2026-07-26 — produto de SERVIÇO, D2)
 ```jsonc
@@ -290,6 +297,12 @@ Deve sincronizar antes dos movimentos — eles referenciam o autor no bloco `use
 }
 ```
 Grava `tb_collaborator` SEMPRE + `tb_salesman` quando o bloco vem (precedência obrigatória).
+⚠️ **`kickbackProduct` HOJE ≠ o contrato** (verificação de 2026-10-17): o Delphi manda
+`CLB_CALC_COM_VDA` (MODO do cálculo — 'C'/'V'…) e não `CLB_COM_VDA` ("recebe por produto", S/N);
+o setes-sync grava como veio ⇒ a comissão por produto nunca liga para vendedor sincronizado.
+Correção DECIDIDA (D-SY3: Delphi manda `CLB_COM_VDA`, setes-sync valida S/N, reenvio dos
+colaboradores) mas **TRAVADA pela D-SY4** — só depois que a frente de comissão decidir a fórmula
+(legado combina vendedor + item; setes-api substitui pela alíquota do produto). Não mexer antes.
 E-mail deixou de ser obrigatório (o legado descartava colaborador sem e-mail).
 Fix do bug C5: o contrato novo traz fones na lista `phones` (kinds distintos FONE/CELULAR).
 
