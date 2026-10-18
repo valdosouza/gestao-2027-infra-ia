@@ -977,6 +977,11 @@ O seed 64 já estava aplicado (§10). Reconstruído o catálogo de ANTES pelo ME
 
 ### 12.9 Retomada da cerca (prompt curto — estado salvo em 2026-10-18, fim da sessão)
 
+> **2026-10-18 (noite) — Fase 1 do plano de retomada (`prompts/plano_retomada_2026-10-18.md`, Valdo: "Commita")**: a cerca está COMMITADA
+> na branch `privilegios-catalogo` — setes-api **8b1fe27** (os 18 caminhos abaixo) · setes-app **53a1497** (`build-web.ps1`; `.dart_tool/*`
+> fora) — sem push e sem merge. O item 3 ("Commit, só com o 'vai'") está CUMPRIDO; o "NADA commitado" abaixo está SUPERADO só nesse ponto.
+> Decisões (item 1), numeração (2), publicação (4) e limpeza (5) seguem valendo.
+
 **Onde está o trabalho** (NADA commitado; as duas worktrees saem do `main` e ficam no disco até o "vai"):
 
 - `D:\Gestao2027\privilegios-catalogo\setes-api` — branch `privilegios-catalogo`, base `main` f53a618.

@@ -248,6 +248,10 @@ pelos usuários da fundadora · (c) tudo por qualquer admin de qualquer estabele
 
 ## 12. D-GE4 EXECUTADA — leitores latentes corrigidos sem DDL (2026-10-18, worktree; commit LOCAL ff2795f na branch `grupo-leitores` (2026-10-18, "vai" do Valdo), sem push e sem merge)
 
+> **2026-10-18 (noite) — Fase 1 do plano de retomada (`prompts/plano_retomada_2026-10-18.md`)**: a branch `grupo-leitores` (ff2795f) foi
+> EMPURRADA ao GitHub (`origin/grupo-leitores`, só a branch) a pedido do Valdo. Segue SEM merge no `main`; publicar continua sendo o "vai"
+> (Fase 2, 2º passo — antes do bloco de privilégios, por causa do `admin.repository.ts`).
+
 Tarefa própria pedida pela D-GE4. Worktree `D:\Gestao2027\grupo-leitores\setes-api` (branch `grupo-leitores`, base f53a618; junções
 só-leitura `grupo-leitores\{fiscal-api,nfse-api}` e `node_modules` → árvore viva). Zero DDL, zero seed. **Neutro com 1 institution por
 schema**: a institution que o código passa a exigir é a única que o schema tem (o gate socrático conferiu no dev, só leitura: 0 linhas de

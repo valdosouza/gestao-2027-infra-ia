@@ -612,6 +612,11 @@ A consulta das medidas de mesma abreviação entrou no roteiro (Fase 1).
 
 ### 10.7 ⏯ Ponto de retomada (salvo 2026-10-18, a pedido do Valdo: "salve tudo para recomeçarmos depois")
 
+> **2026-10-18 (noite) — Fase 1 do plano de retomada (`prompts/plano_retomada_2026-10-18.md`, Valdo: "Commita")**: o passo (1) abaixo foi
+> CUMPRIDO — commit só dos caminhos desta seção, no `main` LOCAL de cada repositório, **sem push**: setes-sync **edbaad4** (20 arquivos) ·
+> sincronizador **b6c6ebe** (11 arquivos). Ficaram de fora, como listado: `scripts/reset-institution-sync-data.ts` e `Sincronizador.dproj`.
+> O "NADA commitado" está SUPERADO; "nem publicado" segue valendo (push = implantação, passo (3)).
+
 **Estado**: tudo salvo em disco e NADA commitado nem publicado. Conferido no momento do salvamento: setes-sync `tsc` limpo e jest
 76/76; sincronizador compila (msbuild Debug/Win32 em pasta temporária, EXIT=0). setes-sync NÃO está no ar (porta 3001 livre).
 

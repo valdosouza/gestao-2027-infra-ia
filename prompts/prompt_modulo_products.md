@@ -306,6 +306,11 @@ carga do catálogo NCM/CEST (D-PR6).
 
 ## 9. Retomada
 
+> **2026-10-18 (noite) — Fase 1 do plano de retomada (`prompts/plano_retomada_2026-10-18.md`, Valdo: "Commita")**: o trabalho da worktree
+> `merchandise` está COMMITADO na branch `merchandise` — setes-api **2171f20** (66 arquivos) · sql **8b8cedf** (03 + seed 66) — e a D-PR13
+> na branch `taxrules-ncm` — setes-api **b651354** · setes-app **ef99e60**. Sem push, sem merge, NADA aplicado ao banco. O "NADA commitado"
+> do bloco abaixo está SUPERADO só nesse ponto; o resto (Rodada 7, Q-PR52 trava a janela, publicar só com o "vai") segue valendo.
+
 ```
 Retome a frente do cadastro de produtos (mercadoria) pelo Infra-IA/prompts/prompt_modulo_products.md.
 Estado (2026-10-18, fim da sessão): onda 1 da API + Rodadas 4, 5 e 6 implementadas na WORKTREE
