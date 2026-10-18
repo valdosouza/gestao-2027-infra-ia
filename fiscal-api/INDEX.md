@@ -38,6 +38,15 @@ do prompt da frente; o resto do branch `cnpj` — onda 1/rodadas 3–5 — esper
 `@shared/validation`; ⚠️ o setes-api lê o `dist` — build do núcleo ANTES do merge dele) + vetor oficial `federal-id.vector.json` lido também pelo
 espelho Dart; cerca `federal-id-fence` com predicado GÊMEO (`src/__tests__/federal-id-fence.ts`). Ver `../prompts/prompt_frente_cnpj_alfanumerico.md` §8.
 
+**Base de PDF (NE-1b — PUBLICADA em 2026-10-18, `main` 4110957 + `dist`; janela D-NE123, §14.17 do `../prompts/prompt_onda_nfe_sefaz.md`)**: 3º subpath
+`fiscal-api/pdf` (SÓ ele carrega `pdfkit 0.20.2` e `bwip-js 4.11.4` — versões EXATAS, D-NE124; índice/`reading`/`federal-id` não os carregam, provado
+de dentro do setes-api): `createPdf` (folha A4/cm, `sheetStart` por folha, passada por folha com o TOTAL — "Folha n/N"; documento MARCADO, D-NE127),
+`registerFontRoles`/`writeText`/`measureText` (fontes-padrão WinAnsi, porta ÚNICA de texto com lista FECHADA de opções; linha única = célula do DANFE;
+`advance` para juntar trechos), `drawBars` (Code-128 HÍBRIDO C/A da chave pela NT Conjunta 2025.001 — o TEXTO da NT erra, vale o EXEMPLO),
+`drawMatrix` (QR), `drawWatermark`. CONHECIMENTO NEGATIVO do pdfkit no `src/pdf/state.ts` (o `save()` só guarda a matriz; estado de texto vive no JS;
+o quebrador de linha abre folha). Decisões D-NE117…D-NE152 (Rodadas 5–12) no §14 do prompt; a NE-5 (DANFE) nasce com a CERCA da família (D-NE129/
+D-NE142 — `doc.text` cru, `doc.font` fora dos papéis, `clip()` fora de `save()`, `doc.on('pageAdded')` candidato).
+
 transporte mTLS + XMLDSig paramétrico · `tb_establishment_certificate` (A1 cifrado — D-F34) + `tb_establishment_issuer` (habilitação por modelo, CHECK `SE/55/65` — D-F45) · contrato de leitura da voz (`voice/`) · storage do XML · auth pelo JWT do produto · base da fonte de fatos Gestão 2027 (leitura; a única "escrita" no ERP é a trava da nota — D-F27/D-F31) · migrations e views do `fiscal_api`. *(2026-10-10: a máquina tentativa × voz e o motor de PDF prometidos aqui ainda vivem na nfse-api — Q-NE13/Q-NE20 da Rodada 0 da nfe-api.)*
 
 ## Regras inegociáveis para quem for codificar

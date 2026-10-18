@@ -5,7 +5,7 @@
 **Molde**: `prompt_onda3_nfse_adn.md` §3–§7 (mesma tabela de conceitos, mesmos nomes de peça) e `prompt_onda2_banco_inter.md` §3 (dono × apresentação × voz do terceiro) e §10 (lições dos gates: ambíguo nunca fecha, reconciliar antes de reapresentar, transitório ≠ recusa).
 **Legado** (vault `D:\Gestao2016\Infra-IA\Gestao`, Decisão 65): `proc-faturamento-venda` E07, `proc-cancelamento-nfe` C00–C05, Lote 6 §2–§5, Lote 8 §2, NUM-01/02/03, AUT-01/02/03/04, CAN-01, CAN-V5/V6/V7, NF-01, `geracao-nfe-hierarquia` §3–§4 (diagnóstico: variação por MODELO duplicada = maior fonte de retrabalho; variação por PROCESSO pequena e sadia; operações do ciclo — inutilizar/consultar — são comandos, não "geradores").
 **Aberto em**: 2026-09-21 (Rodada 0 = parecer do guardião conceitual, agente `setes-conceito`, a pedido do Valdo: "desenhar o processo da NF-e mantendo a simetria de controles com a NFS-e, para que o desenho fique, se não o mesmo, seguindo o mesmo fluxo"). Fatos do parecer conferidos no disco pelo condutor (billing.service.ts:672–677, baseline 001, produtores em api/sync).
-**Estado**: **2026-10-15 — §13 ⏯ RETOMAR POR AQUI: NE-0 ABERTA (Rodada 0)** — acervo `../nfe-api/integracoes/nfe-sefaz/` criado (README com 20 documentos a arquivar + fatos levantados na web; CONFERENCIAS com 65 itens, 26 com prévia; **nenhum download feito**); fato que reabre a D-NE18: pela NT 2026.007 (H 26/10, P 16/11/2026) emitente SEM IE autoriza só na SVRS; PR exige CSRT; prazo de cancelamento no PR = 168 h; SHA-1 e síncrono confirmados; **Rodada 3 DECIDIDA (§13.8, D-NE93…D-NE101) e NE-0 EXECUTADA (§13.9: 24 oficiais arquivados, 65 conferências fechadas — 2 DERRUBAM —, autorizadores como dado, DDL da família em RASCUNHO pelo guardião, OpenAPI v1) — Rodada 4 DECIDIDA (§13.10, D-NE102…D-NE114; D-NE103 supera o refNFe da D-NE25) — **NE-0 FECHADA**; D-NE115/D-NE116 (downloads) executadas — NENHUMA questão aberta; PUBLICADA (infra 5a1633d · nfe-api a9ef9ac); próximo: frente do CNPJ alfanumérico (D-NE99) → NE-1b/NE-2/NE-3** · **2026-10-12 (tarde) — §12.9.7: Rodada 0 da PARTE 2 da NE-1a feita (inventário + parecer do guardião + ordem interna, sem DDL) + leitura DETERMINÍSTICA do ACBr (`../nfe-api/referencia-acbr/06`) → D-NE72…D-NE74 DECIDIDAS e ordem aceita ("siga as recomendações e a ordem proposta"); EM EXECUÇÃO — passos 1–6 FEITOS (§12.9.7.1: cerca por modelo, emitter no núcleo, terminal por parâmetro + listas derivadas, escritor genérico sob `InvoiceTx`, política em peças, `ca`/cadeia do servidor — D-NE57; núcleo 327 · nfse-api 591 + 150/150 ao vivo; nada commitado); gates 0,76/0,72 → D-NE75…D-NE84; "parte 2a" PUBLICADA (núcleo 27d2aa6 · nfse 38980bb · infra f72fba4); próximo: passo 7 = N17 (parser XML) → "parte 2b"** · **2026-10-12 — §12.9 ⏯ RETOMAR POR AQUI: NE-1a PARTE 1 EXECUTADA, com GATES (0,76/0,76) e PUBLICADA — D-NE56…D-NE62 e D-NE66/68/69/70/71 (D-NE61: a denegada barra pelo FATO da view — Q-NE67 rejeitada); nenhuma questão aberta; PROMPT DE RETOMADA da parte 2 no §12.9.6; próximo: parte 2 da NE-1a (cerca por modelo, emitter, escritor/peças, `ca`/cadeia D-NE57, parser XML N17, D-NE69) → F2a** · 2026-10-11 — D-NE55 (a NE-0 vai para depois da F2a) · **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
+**Estado**: **2026-10-18 — §14.17 ⏯ NE-1b PUBLICADA (janela D-NE123 — núcleo 4110957; subpath `fiscal-api/pdf`; Rodadas 5–12 = D-NE117…D-NE152; gates do último delta em curso → §14.18); próximo: NE-2/NE-3** · **2026-10-17 — §14: NE-1b Rodada 0 ORGANIZADA, SÓ NF-e (base de PDF no núcleo: Code-128 híbrido C/A + QR por bwip-js — spike provado —, passada por folha, marca d'água; "documento alfanumérico" já feito pela frente do CNPJ; DANFSe FORA — tarefa da família NFS-e); Q-NE117…Q-NE123 aguardam o Valdo** · **2026-10-15 — §13: NE-0 ABERTA (Rodada 0)** — acervo `../nfe-api/integracoes/nfe-sefaz/` criado (README com 20 documentos a arquivar + fatos levantados na web; CONFERENCIAS com 65 itens, 26 com prévia; **nenhum download feito**); fato que reabre a D-NE18: pela NT 2026.007 (H 26/10, P 16/11/2026) emitente SEM IE autoriza só na SVRS; PR exige CSRT; prazo de cancelamento no PR = 168 h; SHA-1 e síncrono confirmados; **Rodada 3 DECIDIDA (§13.8, D-NE93…D-NE101) e NE-0 EXECUTADA (§13.9: 24 oficiais arquivados, 65 conferências fechadas — 2 DERRUBAM —, autorizadores como dado, DDL da família em RASCUNHO pelo guardião, OpenAPI v1) — Rodada 4 DECIDIDA (§13.10, D-NE102…D-NE114; D-NE103 supera o refNFe da D-NE25) — **NE-0 FECHADA**; D-NE115/D-NE116 (downloads) executadas — NENHUMA questão aberta; PUBLICADA (infra 5a1633d · nfe-api a9ef9ac); próximo: frente do CNPJ alfanumérico (D-NE99) → NE-1b/NE-2/NE-3** · **2026-10-12 (tarde) — §12.9.7: Rodada 0 da PARTE 2 da NE-1a feita (inventário + parecer do guardião + ordem interna, sem DDL) + leitura DETERMINÍSTICA do ACBr (`../nfe-api/referencia-acbr/06`) → D-NE72…D-NE74 DECIDIDAS e ordem aceita ("siga as recomendações e a ordem proposta"); EM EXECUÇÃO — passos 1–6 FEITOS (§12.9.7.1: cerca por modelo, emitter no núcleo, terminal por parâmetro + listas derivadas, escritor genérico sob `InvoiceTx`, política em peças, `ca`/cadeia do servidor — D-NE57; núcleo 327 · nfse-api 591 + 150/150 ao vivo; nada commitado); gates 0,76/0,72 → D-NE75…D-NE84; "parte 2a" PUBLICADA (núcleo 27d2aa6 · nfse 38980bb · infra f72fba4); próximo: passo 7 = N17 (parser XML) → "parte 2b"** · **2026-10-12 — §12.9 ⏯ RETOMAR POR AQUI: NE-1a PARTE 1 EXECUTADA, com GATES (0,76/0,76) e PUBLICADA — D-NE56…D-NE62 e D-NE66/68/69/70/71 (D-NE61: a denegada barra pelo FATO da view — Q-NE67 rejeitada); nenhuma questão aberta; PROMPT DE RETOMADA da parte 2 no §12.9.6; próximo: parte 2 da NE-1a (cerca por modelo, emitter, escritor/peças, `ca`/cadeia D-NE57, parser XML N17, D-NE69) → F2a** · 2026-10-11 — D-NE55 (a NE-0 vai para depois da F2a) · **2026-10-11 — §12.8: nota de implantação da NE-1a para a ESCRITA DA VOZ por família (D-F105/D-F106/D-F108 das APIs fiscais) — entra no escopo da NE-1a** · **2026-10-10 (tarde) — §12: plano ajustado pela leitura do ACBr (`../nfe-api/referencia-acbr/`) + Rodada 2 da nfe-api DECIDIDA (§12.7, D-NE27…D-NE54 = recomendações); NE-1 partida em 1a (antes da F2a) / 1b (depois); nenhuma questão da nfe-api aberta — o bloco F vai ao prompt IBS/CBS** · **2026-10-10 — Rodada 0 da `nfe-api` ORGANIZADA (§11) e Rodada 1 DECIDIDA (§11.7, D-NE1…D-NE26 = recomendações; D-F20 suspensa em parte — NE-0…NE-3 liberadas)** · **Rodada 1 DECIDIDA (2026-09-21, D-E1…D-E25 = recomendações)** · execução pela D-E20 (a): peças comuns junto com a Onda 3 (§10); a NF-e em si espera o 1º cliente com mercadoria — várias questões REABREM de propósito itens da Onda 3 (Q-N4/Q-N6/Q-N9/Q-N13/Q-N14) porque agora custam zero e depois custam migration · contrato oficial da SEFAZ NÃO levantado (MOC 7.0, NT 2025.002 IBS/CBS, schemas PL, tabela de autorizadores — 1ª tarefa técnica, como foi com o Inter e o ADN) · nenhuma linha de código
 
 ---
 
@@ -1720,3 +1720,457 @@ de 26/10 em H — D-NE95).
 
 **NE-0 FECHADA SEM PENDÊNCIA**: nenhuma questão da nfe-api aberta. **PUBLICADA 2026-10-15** ("pode publicar a NE-0") — infra 5a1633d · nfe-api a9ef9ac. Próximo (D-NE55 + D-NE99): frente do **CNPJ alfanumérico** — Rodada 0 em sessão
 PRÓPRIA → NE-1b / NE-2 / NE-3.
+
+## 14. NE-1b — Rodada 0 (2026-10-17): a base de PDF no núcleo — SÓ NF-e
+
+> Valdo (2026-10-17): "vamos para a NE-1b" e, quando a rodada derivou para o DANFSe, "por que estamos falando de nfs-e?" → **o escopo desta onda é
+> a NF-e**. A lacuna do DANFSe achada no caminho virou tarefa SEPARADA da família NFS-e (chip "Conformar o DANFSe à NT 008 (v2.0)" — §14.4, último
+> item) e NÃO entra aqui. Antes: a frente do CNPJ alfanumérico teve a janela da onda 0 executada em produção na mesma noite (`prompt_frente_cnpj_alfanumerico.md` §8.16).
+
+### 14.1 O que a NE-1b entrega
+
+Linha do §12.3: "base de PDF (D-NE20) com código de barras (Q-NE32), 'Folha n/N', marca d'água por página; documento alfanumérico no núcleo (Q-NE29)".
+
+- **Base de PDF no núcleo para o DANFE** (e para a NFC-e na F5): régua em cm, papéis de fonte, escritor com PASSADA POR FOLHA (índice e total),
+  marca d'água, Code-128 da chave no híbrido C/A da NT Conjunta 2025.001, QR (lib única — D-NE32).
+- **"Documento alfanumérico no núcleo" = FEITO pela frente do CNPJ**: a peça `fiscal-api/federal-id` está em produção desde 2026-10-17 (núcleo 4b17b23).
+  Nada a fazer aqui.
+- **Não entra**: o leiaute do DANFE (NE-5 — NT 2026.010 / D-NE100), o TEXTO "Folha n/N" e o cabeçalho repetido nas folhas adicionais (layout da família
+  — Q-NE122), os formatadores de valor/chave, qualquer coisa do DANFSe.
+
+### 14.2 Fatos oficiais (acervo já arquivado — nada baixado nesta rodada)
+
+- **MOC 7.00 Anexo II** (`../nfe-api/integracoes/nfe-sefaz/moc-7.00/moc7-anexo-ii-danfe-codigo-barras.txt`): DANFE pode ter várias folhas; "o número de
+  ordem e o número total de folhas deverão ser impressos na parte superior de cada uma das folhas, inclusive na primeira" (3.10.2, `:1375-1378`);
+  folhas adicionais repetem emitente, "DANFE", número/série/tipo, total e ordem da folha, código de barras, natureza e chave (3.5, `:645-668`); marca
+  d'água permitida se não prejudicar a leitura (3.10.1, `:1370-1373`); homologação = "SEM VALOR FISCAL" em infCpl OU marca d'água destacada (`:302-304`);
+  fontes Times New Roman ou Courier New, tamanhos mínimos por campo (3.7, `:714-772`); margens 0,2–0,8 cm (3.6.2, `:696-699`); A4 a Ofício II.
+- **NT Conjunta 2025.001 §6** (`…/nt/nt-conjunta-2025-001.txt:166-343`): código de barras da chave = CODE-128 HÍBRIDO — Start C; troca para A antes de letra
+  e no dígito ímpar que antecede letra; volta para C em grupos ≥ 4 dígitos (par: antes do grupo; ímpar: depois do 1º dígito); DV mód. 103 (exemplo
+  "5225AB83": soma 1987 → DV 30, `:236-271`); largura mínima 11,5 cm, altura 0,8 cm, módulo ≥ 0,02 cm, margem clara ≥ 10 módulos (`:201-227`).
+  **CONHECIMENTO NEGATIVO — o texto da NT tem dois erros**: "código 100 para alternar os subtipos A e C" (`:179` — 100 é Code B; o exemplo correto usa
+  101 = Code A a partir de C e 99 = Code C a partir de A) e "o valor 103 que corresponde ao caractere de início (start) para o padrão Code C" (`:263` —
+  103 é Start A; Start C = 105, como a própria NT diz em `:235`). Seguir o EXEMPLO, nunca a frase.
+- **NT 2026.010** (DANFE da Reforma, produção 01/12/2026 — `…/nt/nt-2026-010-v1-00.txt:253-264`): o QR Code (ZX02) passará a valer também no DANFE
+  modelo 55, retrato e paisagem, com regra a publicar → **a lib de QR serve a NE-5, não só a NFC-e da F5** (reforça a D-NE32).
+
+### 14.3 Prova de conceito (scratchpad da sessão — nada no repositório)
+
+- **bwip-js 4.11.4** (MIT, zero dependências, publicada 2026-08-19; ~12,6 MB no disco com todos os builds): `bwip.raw()` existe; com `raw: true` aceita os
+  CODEWORDS ditados por nós e **reproduz o exemplo da NT símbolo por símbolo** (`StartC 52 25 CodeA 33 34 CodeC 83 30 Stop` — DV 30); no modo AUTOMÁTICO
+  troca para **Code B** (válido, mesma largura, mas foge do A "sugerido"); a chave alfanumérica de 44 posições sai com 31 símbolos no automático. QR:
+  matriz 37×37 da URL de consulta, **decodificada de volta pelo jsQR 1.4.0 (Apache-2.0) = igual à URL**.
+- **pdfkit 0.20.2** (o mesmo da nfse-api): com `bufferPages`, a passada final escreve "FOLHA i/3" em cada uma das 3 folhas DEPOIS de conhecer o total e a
+  marca d'água diagonal em todas; Code-128 vetorial numa caixa de 11,5 × 0,8 cm (132 módulos de 0,087 cm ≥ 0,02 cm); QR vetorial; acentos pt-BR em
+  Times/Courier (fontes-padrão, WinAnsi) — texto extraído do PDF conferido.
+
+### 14.4 Parecer do guardião (agente `setes-conceito`, 2026-10-17 — integrado; referências de código conferidas no disco pelo condutor)
+
+**Conceito**: a base de PDF é o vocabulário de DESENHO comum aos documentos auxiliares (folha, fonte por papel, marca d'água, barras, matriz) — cega ao
+fisco: não sabe o que é nota, voz ou estado. DANFE e DANFSe são COMPOSIÇÕES da família; a base não compõe nada.
+
+| Peça | O que é | Natureza | Onde (núcleo) |
+|---|---|---|---|
+| `cmToPt` | a régua em cm das normas → ponto do PDF | pura | `src/pdf/units.ts` |
+| `code128Symbols` → `code128Bars` | texto [0-9A-Z] → símbolos no híbrido C/A (Start C 105, CODE A 101, CODE C 99, DV mód. 103, Stop) → larguras | pura | `src/pdf/barcode/code128.ts` |
+| `qrMatrix` | texto → matriz de módulos (a ÚNICA porta para a lib) | pura na saída | `src/pdf/barcode/qr.ts` |
+| `createPdf` → `{ doc, end(sheetPass) }` | A4, margens em cm, passada final POR FOLHA com `{ index, total }` (`bufferPages`) | pdfkit | `src/pdf/pdf-writer.ts` |
+| `registerFontRoles` | papel (título, conteúdo, fixo) → fonte escolhida pela FAMÍLIA | pdfkit | `src/pdf/fonts.ts` |
+| `drawBars` / `drawMatrix` | módulos → retângulos vetoriais numa caixa; devolve o módulo efetivo (a família confere o mínimo da norma) | pdfkit | `src/pdf/draw.ts` |
+| `drawWatermark` | texto diagonal na folha corrente (tamanho, ângulo, cor CMYK) — sem enum de estados | pdfkit | `src/pdf/draw.ts` |
+| superfície `fiscal-api/pdf` | 3º subpath publicado — FORA do índice principal e do `reading` (o setes-api não carrega pdfkit) | — | `src/pdf.ts` |
+
+- **Marcas = decisão da FAMÍLIA, desenho da BASE**: na NE-5 nasce `danfeMarksOf` (homologação → "SEM VALOR FISCAL"; contingência pelo `tpEmis` do XML —
+  hoje fora, D-E12); a base só oferece `drawWatermark(texto, estilo)`. Um "DocumentoAuxiliar" genérico precisaria de parâmetro "página única × Folha
+  n/N" e de enum com os estados de todas as famílias — a regra morre por construção.
+- **Paginação**: a base dá só a passada por folha; "Folha n/N" + cabeçalho repetido é layout do DANFE (NE-5); o DANFSe (quando for consumidor) afirma
+  `total === 1` e falha alto se transbordar.
+- **Fontes**: a base dá o mecanismo de papéis; a escolha é da norma de cada família (MOC: Times/Courier).
+- **Palavras ocupadas**: "carimbo" (carimbo de tempo do rodízio — D-F90) e "selo" (selo fiscal da OS, selo da aba IBS/CBS) — a base fala `pdf`, `sheet`,
+  `watermark`, `bars`, `matrix`; nunca "documento"/"nota".
+- **Fora do núcleo**: quadros e coordenadas de cada norma, textos das marcas, leitura do XML, logomarcas, configs `danfe_*` (D-NE51), persistência do PDF,
+  caixa de texto que encolhe/corta; os formatadores (`fmtDecText`/`addDecText`/`fmtKey`) só sobem com o 2º consumidor.
+- **Publicação**: pdfkit como `peerDependency` (precedente do express) + devDependency do núcleo; consumidor que usar `fiscal-api/pdf` pelo `src` precisa
+  mapear o subpath no `tsconfig` `paths` e no `moduleNameMapper` do jest (sem isso o tsx cai no `dist` — cópia velha, `instanceof` quebrado). **Duas cercas
+  novas**: `src/pdf/**` não importa `voice/`, `erp/`, `establishment/` nem `errors/`; nem `reading`, nem `federal-id`, nem o índice principal alcançam `pdf/`.
+- **Divergência registrada**: o guardião recomendou fazer o DANFSe v2.0 (NT 008) DENTRO da NE-1b como 1º consumidor real da base (peça sem consumidor =
+  risco de abstração errada). Com o direcionamento do Valdo (só NF-e), isso vai como **Q-NE117**. Os achados da NT 008 — QR obrigatório, "SUBSTITUÍDA"
+  saindo como "CANCELADA" (toda voz C vira `cancelled` — `fiscal-api/src/voice/reading.ts:254` → `nfse-api/src/nfse/transmission.ts:1225`, embora
+  `isSubstitutionCancel` exista em `fiscal-api/src/voice/families/service.ts:71`), sem aviso de homologação, sem marca d'água diagonal, margens fora da
+  faixa, leiaute fora do Anexo I — estão no chip da família NFS-e.
+
+### 14.5 ⚠️ Rodada 5 da nfe-api — questões para o Valdo (recomendação entre parênteses)
+
+- **Q-NE117 Consumidor da base nesta onda.** (a) **NE-1b só NF-e: a base provada pelos próprios testes + uma "folha de prova" no teste (3 folhas, Code-128
+  da chave + QR + marca d'água, decodificados e conferidos); o DANFSe fica com a tarefa da família NFS-e, que vira o 1º consumidor real quando rodar** ·
+  (b) o DANFSe v2.0 dentro da NE-1b (recomendação do guardião; +1 sessão e volta à NFS-e). *(Rec.: (a) — o direcionamento é a NF-e; o risco de abstração
+  errada fica contido porque as formas são DITADAS pelas normas (Code-128, QR, cm) e o resto da base é fino.)*
+- **Q-NE118 Como sai o Code-128.** (a) **plano C/A NOSSO (peça pura `code128Symbols`, regras 1–4 da NT + DV) e a lib em modo `raw` só converte os símbolos
+  em larguras; o teste decodifica as barras com uma tabela-ORÁCULO própria (independente da lib)** · (b) plano nosso e larguras pela nossa tabela também em
+  produção (a lib fica só no QR) · (c) modo automático da lib (Code B no lugar do A). *(Rec.: (a) — D-NE32 ao pé da letra, provado no spike; a tabela
+  Code-128 vive só no teste, como verificador da lib.)*
+- **Q-NE119 A lib.** **bwip-js 4.11.4** como dependência do núcleo (carregada só pelo subpath `pdf`) + **jsqr 1.4.0 só em devDependency** (oráculo do QR nos
+  testes). *(Rec.: sim.)*
+- **Q-NE120 Fontes do DANFE.** (a) **as 14 fontes-padrão (Times-Roman/Courier, sem embutir, WinAnsi); caractere fora do WinAnsi = substituição VISÍVEL definida
+  numa regra da base, com teste** · (b) Liberation Serif/Mono embutidas (OFL, Unicode completo, +~1 MB por fonte). *(Rec.: (a) — é a norma ao pé da letra;
+  embutir só se aparecer texto real fora do WinAnsi ou validador que recuse.)*
+- **Q-NE121 Publicação da base.** Subpath `fiscal-api/pdf`, pdfkit como `peerDependency`, as duas cercas do guardião. *(Rec.: sim.)*
+- **Q-NE122 O texto "Folha n/N".** A base entrega a passada por folha (`index`, `total`); o TEXTO "Folha n/N" e a repetição do cabeçalho nascem com o DANFE na
+  NE-5 (ajusta a linha do §12.3). *(Rec.: sim.)*
+- **Q-NE123 Janela da NE-1b.** A onda só ACRESCENTA o subpath no núcleo — o índice principal não muda, a nfse-api de produção não importa `pdf/` e não precisa
+  de restart: publicar = `merge --ff-only` + `npm install` (bwip-js) + `npm run build` no núcleo vivo + push, depois dos gates. *(Rec.: sim.)*
+
+### 14.6 Plano de execução (depois das decisões)
+
+Worktree `D:\Gestao2027\ne1b\fiscal-api` (branch `ne1b`, a partir do `main` 4b17b23 — o núcleo vivo é deploy da nfse-api pelo `src`, D-F133): (1) `units`
+→ (2) `code128` puro (exemplo da NT, chaves numéricas e alfanuméricas, alfabeto fora = recusa, os dois erros da NT fixados em teste) → (3) `qr` → (4)
+`pdf-writer` com a passada por folha → (5) `fonts` (+ regra do WinAnsi) → (6) `draw` (barras/matriz/marca d'água com os mínimos conferidos) → (7) superfície
+`fiscal-api/pdf` + cercas → (8) folha de prova decodificada no teste → (9) gates (socrático + adversarial) → (10) janela (Q-NE123). Estimativa: 1 sessão.
+
+### 14.7 Rodada 5 da `nfe-api` DECIDIDA (Valdo 2026-10-17: "siga as recomendações") — D-NE117…D-NE123
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE117** (= Q-NE117 (a)) | NE-1b SÓ NF-e: a base é provada pelos próprios testes + uma folha de prova (3 folhas) decodificada no teste; o DANFSe NÃO entra (tarefa da família NFS-e — o 1º consumidor real quando rodar). Diverge do guardião, registrado no §14.4 |
+| **D-NE118** (= Q-NE118 (a)) | Code-128: plano C/A NOSSO (peça pura `code128Symbols` — regras 1–4 da NT + DV mód. 103); a lib em modo `raw` só converte símbolos em larguras; a tabela Code-128 vive só no TESTE, como oráculo independente da lib |
+| **D-NE119** (= Q-NE119) | bwip-js 4.11.4 (versão EXATA) como dependência do núcleo, carregada só pelo subpath `pdf`, por UMA porta (`barcode/lib.ts`); jsqr 1.4.0 só em devDependency |
+| **D-NE120** (= Q-NE120 (a)) | as 14 fontes-padrão (Times-Roman/Courier no DANFE), sem embutir; caractere fora do WinAnsi = substituição VISÍVEL por regra da base, com teste |
+| **D-NE121** (= Q-NE121) | subpath `fiscal-api/pdf`; pdfkit como `peerDependency` (opcional — o setes-api não instala) + devDependency do núcleo; as duas cercas do guardião |
+| **D-NE122** (= Q-NE122) | a base entrega a passada por folha (`index`, `total`); o TEXTO "Folha n/N" e o cabeçalho repetido nascem com o DANFE na NE-5 — ajusta a linha da NE-1b no §12.3 |
+| **D-NE123** (= Q-NE123) | janela da NE-1b = `merge --ff-only` + `npm install` + `npm run build` no núcleo vivo + push, DEPOIS dos gates; sem restart (nada em produção importa `pdf/`) |
+
+### 14.8 NE-1b EXECUTADA em worktree (2026-10-17) — núcleo 1072916 (branch `ne1b`)
+
+Worktree `D:\Gestao2027\ne1b\fiscal-api` (branch `ne1b` do `main` 4b17b23) + irmãs SEM mudança `ne1b\{nfse-api,setes-api}` (as cercas do núcleo leem
+os repositórios vizinhos; `node_modules` delas = JUNÇÃO para as árvores vivas — sem instalar de novo).
+
+- **Peças** (`src/pdf/`, superfície `src/pdf.ts` = subpath `fiscal-api/pdf`): `units` (`cmToPt`/`ptToCm`); `fonts` (`registerFontRoles` papel → fonte-padrão;
+  `toWinAnsi` = NFC, `\n` único, tab → espaço, fora do CP1252 → `?` contado; sem `Set` em memória — a cerca do núcleo cego acusou e virou texto
+  constante); `pdf-writer` (`createPdf` → `{ doc, end(sheetPass) }`: A4 ou papel em cm, margens em cm, `sheetStart` ao abrir cada folha — inclusive as
+  que o pdfkit abre sozinho no transbordo —, passada por folha com `{ sheet, total }`, a passada que abre folha falha alto, fecha uma vez, `creationDate`
+  fixa dá PDF reprodutível); `draw` (`drawBars` com margem clara dentro da caixa, `drawMatrix` por corridas, `drawWatermark` que preserva `doc.x/y` e
+  devolve quantos viraram `?`; todos devolvem o módulo efetivo); `barcode/code128` (`code128Symbols` puro + `code128Bars`, que confere o tamanho que a lib
+  devolveu); `barcode/qr` (`qrMatrix`, só ASCII imprimível, L/M/Q/H); `barcode/lib` = a ÚNICA porta do `bwip-js` (opção `raw` pela forma de texto — a
+  tipagem da lib não a declara).
+- **Regra do Code-128**: as 4 da NT + "grupo PAR de dígitos até o FIM volta para C" — só para reproduzir o exemplo oficial (mesmo comprimento; numa chave
+  real nunca acontece: depois do CNPJ vêm 26+ dígitos).
+- **Testes** (35 novos; núcleo **668** verdes, 48 suítes): oráculo Code-128 PRÓPRIO (`pdf-oracle.ts` — tabela ISO + decodificador A/B/C com DV e Stop),
+  exemplo da NT símbolo a símbolo, regras 1–4 caso a caso, 3000 chaves alfanuméricas (decodifica a chave exata; o DV desenhado pela lib = o nosso;
+  nunca mais símbolos que o automático da lib; cabe nas 539 posições da NT), pior caso de CNPJ com módulo ≥ 0,02 cm em 11,5 cm, 3000 textos quaisquer;
+  QR lido de volta pelo jsQR nos 4 níveis; desenho remontado dos retângulos e decodificado; folha de prova com transbordo (marca d'água por baixo, "FOLHA
+  i/N" por cima, 160 itens, acentos); ida e volta de TODO caractere WinAnsi nas 12 fontes; cercas `pdf-cerca.test.ts` (base cega; índice/reading/federal-id
+  não alcançam `pdf/` nem as libs — também conferido em EXECUÇÃO no `dist`; bwip-js por uma porta; superfície sem a porta). Mutação conferida: DV com peso
+  errado, regra 3 sem o ímpar, total errado na passada e marca d'água que move a posição — todas pegas.
+- **Cerca D-CJ12** (nunca tirar dígito de inscrição/chave): o `c >= '0' && c <= '9'` do Code-128 entrou na lista branca COM motivo (escolhe o conjunto C × A;
+  nada é removido — a chave inteira volta no leitor).
+- **Gates**: §14.9.
+
+### 14.9 Gates da NE-1b (2026-10-17) — 1ª rodada REPROVOU; Rodada 6 decidida; retrabalho no núcleo 3d37aea
+
+**1ª rodada sobre 1072916** (revisores independentes; os dois gates da sessão anterior pararam com ela e foram relançados do zero):
+- **Socrático 0,64 ✗** e **adversarial 0,55 ✗** — pelo MESMO **HIGH**, provado pelos dois: a marca d'água trocava fonte, corpo, cor e opacidade do
+  pdfkit sem devolver (no pdfkit 0.20.2 o `save()`/`restore()` guarda só a MATRIZ) e, no `sheetStart` — que roda também nas folhas abertas sozinhas
+  no transbordo —, o texto da família das folhas seguintes saía em Helvetica 50 cinza K35 translúcido (a própria folha de prova saía com 15 folhas,
+  14 ilegíveis; o teste só conferia "total ≥ 3" e o texto). Com `continued`, a marca reusava o quebrador de linha VIVO da família.
+- Adversarial (arquivo permanente `src/__tests__/adversarial-ne1b-gate.test.ts`, 36 ataques): MEDIUM A2 (marca com `width` quebra linha e ABRE FOLHA —
+  no `sheetStart`, recursão até estourar a pilha), A3 (cor inválida ignorada em silêncio pelo pdfkit — barras na cor corrente, até branca; CMYK fora da
+  faixa cru no PDF), A4 (o WinAnsi só valia para quem lembrasse do `toWinAnsi`); LOWs A5–A12b (passada assíncrona, `flushPages`, data inválida tardia,
+  ângulo/caixa absurdos depois do `save()`, papel "toString", símbolos forjados, matriz/barras malformadas, `ecLevel` lido duas vezes, erro cru da lib).
+  RESISTIRAM: Code-128 exaustivo nas 4.096 formas de CNPJ (decodifica, DV = o nosso, comprimento ÓTIMO A/C, pior caso 385 de 539 posições), 312 chaves
+  letra × posição, 20.000 textos ótimos, barras e QR de ponta a ponta no pdfkit real, QR no limite de capacidade, 200 folhas, reentrância.
+- Socrático: MEDIUM o "peer opcional" do pdfkit não vale no arranjo `file:`/`src` (quem desenha é sempre a cópia do núcleo); MEDIUM a folha de prova
+  não lia barras/QR do próprio PDF; LOWs (contrato do `sheetStart` não escrito, `end()` misto síncrono × promessa, nome `{ sheet }` × `{ index }` — o
+  código usa `{ sheet, total }`, 1…total, e ESTE é o registro —, o 2º exemplo da NT "123A" narrado começando em C, `code128Bars` aceitando forjados).
+
+**Rodada 6 da `nfe-api` DECIDIDA (Valdo 2026-10-17: "Q-NE124, Q-NE125, Q-NE126 segue recomendação")** — D-NE124…D-NE126:
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE124** (= Q-NE124 (b)) | pdfkit = DEPENDÊNCIA comum do núcleo, versão EXATA 0.20.2 (como o bwip-js da D-NE119) — um motor de desenho em todo ambiente; a base depende de internos dele (`pdf/state.ts`). **Revê a D-NE121** (o peer opcional saiu) |
+| **D-NE125** (= Q-NE125 (a)) | contrato do `sheetStart`: roda ISOLADO — fonte, corpo, cor, opacidade, matriz e texto encadeado da família voltam; o `y` em que ele PARA fica como começo do conteúdo da folha (o cabeçalho repetido da NE-5 reserva o espaço assim); o `x` volta; papéis de fonte pela opção `fontRoles` do `createPdf`, já na 1ª folha |
+| **D-NE126** (= Q-NE126 (b)) | `writeText(doc, papel, texto, opções)` = a porta de texto da família, sempre pelo `toWinAnsi`; `doc.text` direto fica FORA da garantia — a cerca que o proíbe na família nasce com o DANFE (NE-5) |
+
+**Retrabalho (núcleo 3d37aea, branch `ne1b`)**: `pdf/state.ts` (`isolated` — guarda e devolve o estado JS do pdfkit + q/Q; conhecimento negativo dos
+internos 0.20.2); todo `draw*` isolado; marca d'água em UMA linha sem `width`; `normalizeColor` (hex, black/white/gray, CMYK 0–100 arredondado a
+centésimos); caixas até 14.400 pt, ângulo, matriz e barras validados ANTES do `save()`; `createPdf` com `fontRoles`, `sheetStart` isolado com o `y`
+mantido, assíncronos e `flushPages` recusados, data validada — contrato de erro: **erro de USO lança na hora; o PDF vem pela promessa** (resposta ao LOW
+do `end()`); `writeText`; papel com nome de propriedade do JS recusado; Code-128 com teto 128, runs lineares e `code128Bars` recusando símbolos que a
+peça não produziria (máquina A/C + DV); recusa de entrada da lib → RangeError da base sem a mensagem dela; `ecLevel` lido uma vez. Testes: a folha de
+prova confere o LAYOUT (total = o da mesma folha sem marca = 3), fonte/corpo/cor/opacidade de CADA trecho (só a marca a 50 pt cinza translúcido) e lê
+as barras e o QR dos retângulos do PRÓPRIO PDF; contrato da D-NE125 (cabeçalho com papel na folha 1, estilo do `sheetStart` não vaza, conteúdo abaixo
+do `y` reservado, `x` da margem); A1–A12b do arquivo do gate viraram verdes (A4 pela porta `writeText`). Mutação conferida: sem devolver o estado, 8
+testes falham; marca de volta ao quebrador de linha, 3 falham. Núcleo **709** verdes (49 suítes); índice/reading/federal-id seguem sem carregar
+pdfkit/bwip-js (conferido em execução no `dist`).
+
+**Re-gate do delta**: §14.10.
+
+### 14.10 Re-gate do delta 1072916..3d37aea (2026-10-17) e Rodada 7 da `nfe-api`
+
+- **Socrático 0,72 ✅** (revisor independente; sondas só na scratchpad): o HIGH fechado nos caminhos da base (transbordo, `addPage` da família,
+  `continued`, `sheetStart` que mexe no estilo); D-NE124 fecha o MEDIUM do peer. Achados NOVOS, corrigíveis sem decisão: **MEDIUM N1** barras e QR
+  herdam a OPACIDADE da família (`fillColor(c)` sem opacidade não emite `gs` — código translúcido); **MEDIUM N2** `_lineGap` fora do isolamento (o
+  `lineGap(8)` do `sheetStart` levou 4 folhas a 8); LOW N3 `isolated` não confere o equilíbrio do q/Q (save sem restore no `sheetStart` = q aberto
+  em toda folha); LOW N4 `sheetStart` sem trava de reentrada (cabeçalho que transborda → "Maximum call stack"); LOW N5 `y` mantido não conferido
+  (além do pé → 21 folhas com 1 linha fora da folha; `columns` reabre no topo — limite a escrever); LOW N6 passada por folha não isolada (texto
+  encadeado do fim do conteúdo leva o "FOLHA 1/1" para fora da folha); LOW N7 `@types/pdfkit` só em dev e d.ts sem referência ao namespace `PDFKit`;
+  LOW N8 comentários desatualizados (`pdf.ts` ainda fala em peer; 14400 = limite dos LEITORES de PDF, não do pdfkit; literal repetido em `fonts.ts`;
+  `_strokeColor` não existe no 0.20.2). Janela: segue segura (lock só acrescenta; sem script de instalação); o `npm run build` reescreve o `dist`
+  que o `tsx watch` do setes-api lê pelo link `file:` — observar o log dele (restart aceitável).
+- **Rodada 7 DECIDIDA (Valdo 2026-10-17: "Q-NE127, Q-NE128, Q-NE129 segue recomendação")** — D-NE127…D-NE129:
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE127** (= Q-NE127 (a)) | a base só desenha em documento que ELA criou: o `createPdf` marca o documento (SÍMBOLO privado no próprio objeto — nenhuma coleção em memória, regra do núcleo cego) e as portas que recebem documento (`drawBars`, `drawMatrix`, `drawWatermark`, `registerFontRoles`, `writeText` e a porta de medida) recusam documento sem a marca — a D-NE124 ("um motor") vale de fato |
+| **D-NE128** (= Q-NE128 (a)) | a passada por folha roda ISOLADA como o `sheetStart`, por folha, sem manter nada |
+| **D-NE129** (= Q-NE129 (a)) | porta de MEDIDA de texto (altura/largura) com a MESMA normalização do `writeText` — medir o texto cru e escrever o convertido daria alturas diferentes e quebraria a grade de itens do DANFE; a cerca da NE-5 na família cobre `doc.text`, `doc.list`, `doc.table`, as medidas cruas do pdfkit (`heightOfString`/`widthOfString`) e `doc.font` fora dos papéis |
+
+- **Adversarial 0,72 ✅** (sem HIGH; arquivo permanente `src/__tests__/adversarial-ne1b-delta-gate.test.ts`, 27 ataques): A1–A12b fechados;
+  MEDIUM D1 (= N2 `_lineGap`), **D2** (`writeText` com `y` e sem `x` DESCARTAVA as opções — no pdfkit 0.20.2 o `x` ausente vira o objeto de
+  opções), **D3** (`save()` sem `restore()` no `sheetStart` fechava o `q` ERRADO — conteúdo vermelho translúcido, o sintoma do HIGH por outra
+  porta); LOWs D4 (folha trocada no `sheetStart`), D5 (`y` não conferido), D6 (`columns` reabre a 2ª coluna no topo), D7 (cabeçalho herdava o
+  corpo da família), D8 (= N6), D9 (thenable recusado não observado → `unhandledRejection`), D10 (CMYK com buraco), D11 (ângulo gigante),
+  D12 (opções do `writeText` sem conferência), D13 (ano > 9999), D14 (`writeText` aceitava papel do registro do PDFKIT — `doc.registerFont`
+  com Symbol). RESISTIRAM: `sheetStart` que lança no meio, estado sem `save`, encadeado nos dois sentidos, marca nos extremos, cores no limite,
+  3.000 textos Code-128 de 21–120, QR acima da capacidade sem eco, reprodutibilidade com tudo, `state.ts` fora da superfície.
+- **Rodada 7 EXECUTADA — núcleo 756d244** (branch `ne1b`): `pdf/base-document.ts` (D-NE127: marca por símbolo + registro de papéis DA BASE; as
+  seis portas recusam documento alheio — D14 fechado); `state.ts` (`_lineGap`; q/Q conferido e CORRIGIDO + erro de uso; folha trocada volta +
+  erro de uso; `neutral`; o erro de quem rodou nunca é trocado pelo de uso); `pdf-writer.ts` (`sheetStart` com estado de entrada NEUTRO — preto
+  opaco, corpo 12, espaçamento 0, o cabeçalho sai igual em toda folha —, trava de reentrada, `y` finito/na folha/com lugar para 1 linha;
+  passada por folha ISOLADA e neutra — D-NE128; thenable recusado e OBSERVADO; ano 0–9999); `draw.ts` (cor E opacidade afirmadas — N1;
+  CMYK por índice; ângulo módulo 360 — D11 vira aceito, o ataque verde já exigia 1e300); `fonts.ts` (lista FECHADA de opções do texto —
+  `columns` fora = LIMITE CONHECIDO, a NE-5 decide; só-`y` usa o `x` corrente; `measureText` — D-NE129); `@types/pdfkit` dependência exata e
+  `/// <reference types="pdfkit" preserve="true" />` (o TypeScript 5.9 só mantém a diretiva no `.d.ts` com `preserve`); comentários corrigidos
+  (N8; `MAX_COORDINATE_PT` em `units`). Oráculo: `pdfContentOps` anota a opacidade REAL de cada ExtGState (o `gs` de opacidade 1 que a base
+  emite para afirmar o desenho opaco não é "translúcido"). Mutação conferida (sem `_lineGap`, passada sem neutro, `drawBars` sem marca, barras
+  sem opacidade — todas pegas). Núcleo **739** verdes (50 suítes); isolamento do índice/reading/federal-id conferido em execução.
+- **Gates do delta 3d37aea..756d244**: §14.11.
+
+### 14.11 Gates do delta 3d37aea..756d244, Rodada 8 da `nfe-api` e as duas últimas levas (2026-10-17)
+
+- **Socrático 0,76 ✅** — N1/N2-D1/D2/D3 fechados. Novos: MEDIUM **S1** (o `writeText` CONFERIA o papel no registro da base mas DESENHAVA pela
+  resolução do pdfkit pelo nome — `doc.registerFont` direto ainda punha Symbol); LOWs S2 (restore a mais), S3 (neutro parcial — face da fonte, posição
+  da passada, traço; o recorte herdado não se desfaz), S4 (medida sem `width` dependia do `x` do momento), S5 (marca pela cadeia de protótipo), S6
+  (depois de erro no `sheetStart`, o `end()` culpava o flushPages). Janela segura (o `npm ci` dos consumidores não quebra — link `file:`; a diretiva de
+  tipos sobrevive no `.d.ts`).
+- **Adversarial 0,74 ✅** (sem HIGH; arquivo permanente `adversarial-ne1b-r7-gate.test.ts`, 30 ataques): **MEDIUM R7-M1** (`restore()` a mais no
+  `sheetStart`/passada passava CALADO — corpo vermelho a 30 % girado 90° em toda folha; `restore(); save()` equilibrava a contagem), **MEDIUM R7-M2**
+  (`lineBreak:false` com `width` — a célula alinhada do DANFE — quebrava a linha e abria folha); LOWs R7-L1 (= S1), L2 (`wordSpacing` apaga quebras de
+  linha; `characterSpacing` duplicado no sublinhado), L3 (escritor travado depois de `sheetStart` que abre folha; `save()` noutra folha), L4 (recorte
+  atravessando a quebra deixa o "Folha n/N" invisível), L5 (getters lidos várias vezes), L6 (espaçamento negativo leva o texto para fora da folha),
+  L7 (depois de `lineBreak:false` o `x` ficava no fim — coluna de rótulos em escada), L8 (`sheetStart` que não é função).
+- **Leva sem decisão — núcleo 23dee91**: `restore()` a mais BARRADO NA HORA (guarda que substitui o `restore` da instância durante o `isolated`, antes
+  de emitir o `Q` — acusar depois não desfazia o vazamento) + identidade da entrada do `save()`; desenho e medida pela fonte do REGISTRO DA BASE;
+  estado neutro = folha nova (Helvetica 12, preto opaco, traço 1 pt contínuo) e a passada entra nas margens; `measureText` com `x`; marca só como
+  propriedade PRÓPRIA; `sheetStart` que abre folha deixa o documento INVÁLIDO e o `end()` diz a causa; `save()` noutra folha fecha lá;
+  `wordSpacing`/`characterSpacing` FORA da lista (defeitos do pdfkit — o DANFE não precisa); espaçamentos só positivos e `lineGap` > 0; opções/estilos
+  lidos uma vez; `sheetStart` tem de ser função.
+- **Rodada 8 DECIDIDA (Valdo 2026-10-17: "Q-NE130 a Q-NE134 segue recomendação")** — executada no núcleo 428e282:
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE130** (= Q-NE130 (a)) | texto GIRADO (canhoto vertical do DANFE paisagem, MOC 3.8.2) = LIMITE CONHECIDO: sem `rotation` na porta; a família gira o DOCUMENTO em volta do `writeText` — caminho que a cerca da NE-5 permite |
+| **D-NE131** (= Q-NE131 (a)) | um papel, UMA fonte no documento: religar com OUTRA fonte é recusado (a grade medida não muda no meio); com a mesma, inofensivo; lote inválido não registra nada |
+| **D-NE132** (= Q-NE132 (a)) | `lineBreak: false` COM `width` = LINHA ÚNICA: a base mede, alinha (left/center/right) e escreve uma linha; não cabe = RangeError legível (a família mede antes e abrevia/reduz); sem `\n` nem continued/height/ellipsis/indent/gaps nessa forma |
+| **D-NE133** (= Q-NE133 (a)) | depois de toda escrita de linha única (`lineBreak: false`, com ou sem `width`) o `x` volta para onde ela COMEÇOU |
+| **D-NE134** (= Q-NE134 (a)) | `save()` da família aberto na abertura de uma folha (o `addPage` do pdfkit reinicia a matriz mas NÃO a pilha) = erro de uso legível |
+
+- Testes: os achados viraram verdes nos arquivos permanentes (M1 com recusa NA HORA e PDF limpo; M2/L4/L7 pelas decisões); testes positivos da linha
+  única (posições exatas) e do papel único. Mutação conferida (guarda do restore; D-NE131…D-NE134). Núcleo **771** verdes (51 suítes).
+- **Gate rápido do delta 756d244..428e282**: §14.12.
+
+### 14.12 Gate rápido do delta 756d244..428e282 e Rodada 9 da `nfe-api` (2026-10-17)
+
+- **Socrático 0,74 ✅** (sondas na scratchpad): guarda do `restore()` segura (aninhada, erro dentro, documento reutilizado — o método próprio sai
+  em todo caminho; ressalva só para espião de teste instalado DURANTE o isolado); D-NE131/`measureText` com `x` OK; D-NE134 sem falso positivo.
+  **MEDIUM M1**: a linha única (D-NE132) com uma cadeia `continued` ABERTA — o pdfkit funde `width`/`align` da cadeia e reusa o quebrador de linha
+  (célula fora do lugar; perto do pé, abre folha). LOWs: L1 (o nome da FONTE-PADRÃO ainda passa pelo registro/cache do pdfkit —
+  `doc.registerFont('Times-Roman','Symbol')`), L2 (erro de uso de dentro do `pageAdded` que não invalida o documento — D-NE134 e o fecho do R7-L3b),
+  L3 (`save()`+recorte aberto no FIM do conteúdo deixa o "Folha n/N" invisível), L4 (D-NE133 × trechos seguidos na mesma linha com `lineBreak:false`
+  sem `x` — sobrepostos), L5 (espaços no fim contam na medida/alinhamento da linha única), L6 (dentro da rotação da D-NE130 o quebrador confere o
+  `y` girado contra o pé da folha — só a linha única é segura girada).
+- **Rodada 9 DECIDIDA (Valdo 2026-10-17: "Q-NE135, Q-NE136, Q-NE137 segue recomendação")**:
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE135** (= Q-NE135 (a)) | linha única pedida com texto encadeado (`continued`) ABERTO = erro de uso legível ("feche o texto encadeado antes") |
+| **D-NE136** (= Q-NE136 (a)) | `continued` junto com `lineBreak: false` (com ou sem `width`) é RECUSADO; para juntar trechos na mesma linha a família usa `x` explícito pelo `measureText` ou `continued` com `width` |
+| **D-NE137** (= Q-NE137 (a)) | na linha única, os espaços do FIM não contam: a base mede, alinha e desenha o texto sem eles (como o pdfkit faz no alinhamento à direita) |
+
+- **Adversarial do delta 0,76 ✅** (sem HIGH; arquivo permanente `src/__tests__/adversarial-ne1b-final-gate.test.ts`). **MEDIUM F-M1** = o M1 do
+  socrático provado no PDF: com um encadeado aberto, a célula de linha única sai em 3 linhas com o número partido (F-M1a) e, perto do pé, abre
+  folha (F-M1b). LOWs: F-L1 (`{lineBreak:false, continued:true}` sem largura aceito, mas a D-NE133 joga o `continued` fora — o trecho seguinte cai
+  POR CIMA), F-L2 (= L1 do socrático: `registerFont('Times-Roman','Symbol')` põe a Symbol na porta do WinAnsi), F-L3 (o erro da D-NE134 deixava
+  folha ÓRFÃ, sem o sheetStart, e o documento ainda fechava), F-L4 (a guarda do `restore()` contava a pilha do JS, não a da FOLHA: `save()` noutra
+  folha + `restore()` nesta fechava o `q` do isolamento sem erro), F-L5 (`measureText` com `x` além da margem direita: a medida dizia N linhas e o
+  `writeText` empilhava todas no mesmo `y`), F-L6 (texto posto EXATAMENTE no pé pela medida: o pdfkit abre folha antes — arredondamento float32 do
+  `maxY`). Resistiram: guarda do `restore()` aninhada/reentrante/com espião do jest, linha única nos limites (tolerância 1e-6), D-NE134 sem falso
+  positivo, D-NE131 em lote misto, reprodutibilidade byte a byte.
+- **Leva executada (núcleo c99309e, branch `ne1b`, LOCAL)**: D-NE135/D-NE136 no `writeText` (F-M1 e F-L1 fechados pela recusa); D-NE137 (aparar
+  antes de medir/alinhar/desenhar); `assertStandardFontIntact` em `fontOfRole` e no `drawWatermark` (F-L2/L1); `broken` também para a D-NE134 — o
+  `end()` recusa com a causa e o documento não fecha (F-L3/L2); `end()` recusa `save()` aberto no fim do conteúdo (L3); `isolated` guarda a FOLHA de
+  cada `save()`, barra `restore()` noutra folha NA HORA e, na limpeza, fecha cada `save()` extra na folha em que abriu chamando a função ORIGINAL
+  (`GUARD`/`rawOf` — F-L4); `writeText`/`measureText` sem largura útil = recusa legível (F-L5); F-L6 e L6 = LIMITES CONHECIDOS documentados no
+  código (F-L6 segue `it.failing` rotulado). Núcleo **790** verdes (52 suítes); mutação conferida (D-NE135/136/137 e guarda por folha).
+- **Gate curto do delta 428e282..c99309e**: §14.13 (Rodada 10 — Q-NE138…Q-NE143 aguardam o Valdo; janela parada).
+
+### 14.13 Gate curto do delta 428e282..c99309e e Rodada 10 da `nfe-api` (2026-10-17)
+
+- **Socrático 0,72 ✅** (no piso). **Achado 1 (MEDIUM-baixo, REGRESSÃO do delta)**: o `save()` de ENTRADA de um isolado aninhado passava pela guarda
+  do de fora e ficava para sempre na lista de folhas dele — `save()` na folha 2 + desenho da base na folha 1 + volta + `restore()` na 2 era acusado
+  como "noutra folha"; sem o `restore()`, a limpeza fechava o `q` da folha 2 na folha 1 (PDF desbalanceado que ainda fechava). Achado 2 (LOW): 4
+  proteções sem teste que as pegue (recusa do `end()` com `save()` aberto, F-L2 na marca, limpeza por folha do F-L4, F-L5 da medida) e 6 testes do
+  final-gate aceitando qualquer `RangeError`. Achado 3 (LOW): `measureText` sem `width` depende do `x` corrente. Achado 4 (LOW): a D-NE137 só na
+  escrita — a medida mede os espaços do fim (D-NE129 deixa de valer) e o NBSP não é aparado. Achado 5 (LOW): o comentário do `state.ts` dizia que o
+  recorte "só vive dentro de save()" — falso (`clip()` fora de `save()` recorta o "Folha n/N"). Achado 6 (informativo): `continued: false` explícito
+  recusado; F-L6 + `broken` = bloco recortado no pé exato deixa o documento sem conserto.
+- **Adversarial 0,80 ✅** (sem HIGH; arquivo permanente `src/__tests__/adversarial-ne1b-r9-gate.test.ts`, 32 ataques). LOWs: R9-L1 (TOCTOU — a
+  conferência da fonte rodava ANTES de ler opções/texto/cor: getter/`toString` sobrepunha a fonte depois), R9-L2 (fonte EMBUTIDA com nome
+  PostScript de fonte-padrão passava — o `Times.ttc` do macOS), R9-L3 (NBSP do fim não aparado — o pdfkit, que a D-NE137 cita, apara `\s`), R9-L4
+  (poda `/ +$/` quadrática), R9-L5 (= achado 1 do socrático), R9-L6 (`save()` numa folha + `restore()` noutra no nível de cima zera a pilha: o
+  `end()` aceita e o "Folha n/N" sai recortado), R9-L7 (CMYK lido 5 vezes por elemento). Resistiram: D-NE135/136 sem rastro, D-NE137 com
+  tab/mistura/500 espaços, `broken` da D-NE134, `end()` com recorte aberto, guarda por folha sem aninhamento, F-L5 nos limites.
+- **Leva executada (núcleo 623a2a7, branch `ne1b`, LOCAL)**: achado 1/R9-L5 — guardas, entrada, saída e limpeza pela função ORIGINAL (`rawOf`):
+  cada isolado conta só os `save()` da família feitos sob a guarda DELE; R9-L1 — `useStandardFont` confere no próprio `doc.font` (as 3 portas);
+  R9-L2 — a conferência exige o PROTÓTIPO da fonte-padrão do pdfkit (tirado da Helvetica de abertura, guardado na marca do documento); R9-L4 — poda
+  linear (só U+0020 até a Q-NE141); R9-L7 — CMYK lido uma vez; achado 2 — os testes casam a mensagem de cada decisão e as 4 mutações são
+  detectadas; achados 3 e 5 — documentados no código. R9-L3 e R9-L6 seguem `it.failing` (dependem da Rodada 10). Núcleo **822** verdes (53 suítes).
+- **⚠️ JANELA D-NE123 PARADA** — a Rodada 10 abaixo aguarda o Valdo (regra do pedido: achado que exige decisão para antes da janela).
+
+#### 14.13.1 Rodada 10 da `nfe-api` — questões para o Valdo (recomendação entre parênteses)
+
+| Questão | O quê | Opções |
+|---|---|---|
+| **Q-NE138** (adversarial Q-NE138 + socrático Q1) | Trocar de folha com `save()` da família aberto (fecha R9-L6 na raiz) | (a) erro de uso: no nível de cima, `switchToPage` com `save()` aberto é recusado (extensão da D-NE134); dentro do `sheetStart` e da passada, trocar de folha é proibido de vez — guarda que barra na hora, e o controle de folha por `save()` do isolado sai (simplifica); voltar a uma folha anterior SEM `save()` aberto (preencher totais depois do transbordo) segue livre · (b) manter a troca e registrar o R9-L6 como limite conhecido — **(a)** |
+| **Q-NE139** (adversarial) | Linha única só de espaços com sublinhado/riscado não desenha nada (o traço de "ABC   " cobre só "ABC") | (a) manter — linha de preenchimento é desenho vetorial da família; já fixado por teste · (b) recusar sublinhado/riscado quando a linha aparada fica vazia — **(a)** |
+| **Q-NE140** (socrático Q2) | F-L6 + `broken`: bloco recortado posto EXATAMENTE em `pé − altura medida` deixa o documento sem conserto (o `end()` recusa) | (a) a base compensa o arredondamento float32 do pdfkit na escrita (~1e-4 pt) — a promessa da medida passa a valer · (b) limite documentado + regra de folga na cerca da NE-5 — **(a)** |
+| **Q-NE141** (socrático Q3 + adversarial R9-L3 — os revisores divergem no NBSP) | A D-NE137 também na MEDIDA, e quais "espaços" | (a) a medida também apara os espaços do fim de cada linha, e "espaço" = U+0020 e NBSP U+00A0 nos dois (como o pdfkit faz — a letra da D-NE137) · (b) os dois aparam só U+0020; NBSP no fim é intencional, documentado · (c) a medida não muda — **(a)** |
+| **Q-NE142** (socrático Q4) | `clip()` FORA de `save()`/`restore()` recorta o "Folha n/N" e a base não desfaz | (a) entra na cerca da NE-5 (lista da D-NE129): `clip` só com `save()` aberto · (b) só o limite documentado (já no código) — **(a)** |
+| **Q-NE143** (socrático achado 6) | `continued: false` explícito junto de `lineBreak: false` é recusado (letra da D-NE136) — montador genérico de opções tropeça | (a) aceitar `false` (é o padrão); a D-NE136 recusa só `continued: true` · (b) manter a recusa de qualquer valor — **(a)** |
+
+Depois das decisões: executar → gate curto do delta → JANELA D-NE123 (`merge --ff-only` + `npm install` + `npm run build` no núcleo vivo + push; sem restart).
+
+#### 14.13.2 Rodada 10 DECIDIDA (Valdo 2026-10-17: "Q-NE138 a Q-NE143 segue recomendação") e EXECUTADA
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE138** (= Q-NE138 (a)) | No nível de cima, `switchToPage` com `save()` da família aberto = erro de uso legível ANTES de trocar (guarda instalada pelo `createPdf` — extensão da D-NE134); dentro do `sheetStart` e da passada (todo `isolated`) trocar de folha é barrado NA HORA; o controle de folha por `save()` (`savedOn` — F-L4/R9-L5) SAIU; voltar a uma folha anterior SEM `save()` aberto (totais depois do transbordo) segue livre |
+| **D-NE139** (= Q-NE139 (a)) | Linha única que fica vazia depois de aparada não desenha nada, nem sublinhado/riscado — a linha de preenchimento é desenho vetorial da família (só documentado; o teste já fixava) |
+| **D-NE140** (= Q-NE140 (a)) | A base compensa o arredondamento float32 do pdfkit na ENTRADA do bloco (`fitFloat32` no `writeText`): 1ª linha que cabe no pé EXATO e não no arredondado — o `y` sobe < 1e-4 pt; o que não cabe de verdade segue com o pdfkit; fora do encadeado aberto. CONHECIMENTO NEGATIVO (sonda na execução): com `height` o pdfkit NÃO perde a linha (a conferência só avança a coluna) — não há o que compensar; o ramo que eu tinha escrito para isso saiu (a mutação sobreviveu e a sonda mostrou por quê) |
+| **D-NE141** (= Q-NE141 (a)) | "Espaço do fim" = U+0020 e NBSP U+00A0, na linha única E na `width` da medida (por linha) |
+| **D-NE142** (= Q-NE142 (a)) | `clip()` só com `save()` aberto entra na cerca da NE-5 (lista da D-NE129 — com `doc.text` cru e `doc.font` fora dos papéis); hoje: limite documentado no `state.ts` |
+| **D-NE143** (= Q-NE143 (a)) | `continued: false` (o padrão) passa com `lineBreak: false`; a D-NE136 recusa só `continued: true` |
+
+- **Consequência vista na execução (sem nova decisão — o gate revisa)**: com a D-NE141 a `width` de "CNPJ: " sai SEM o espaço e medir um espaço
+  sozinho dá 0 — o caminho que a própria D-NE136 indica ("junte trechos com x pelo measureText") colaria o número no rótulo. O `measureText` passou a
+  devolver também **`advance`** (a mesma medida COM os espaços do fim = o quanto o `x` anda para o próximo trecho); a mensagem da D-NE136 diz "x pelo
+  advance do measureText". As duas decisões seguem valendo.
+- Testes: `src/__tests__/pdf-rodada10.test.ts` (positivos de cada decisão, no PDF real — D-NE140 em 4 corpos no pé exato com recorte aberto); R9-L3, R9-L6 e F-L6 viraram `it`; os testes que trocavam de folha dentro do `sheetStart` passaram a esperar a recusa da D-NE138.
+  Mutação conferida: cada decisão (D-NE138 nos dois níveis, D-NE140, D-NE141 NBSP e medida, `advance`, D-NE143) derruba testes. Núcleo **833**
+  verdes (54 suítes).
+
+### 14.14 Gate curto do delta c99309e..2e16ea6 e Rodada 11 da `nfe-api` (2026-10-18)
+
+- **Socrático 0,68 ❌** (reprovou por pouco) · **Adversarial 0,74 ✅** (sem HIGH; arquivo permanente `src/__tests__/adversarial-ne1b-r10-gate.test.ts`,
+  23 ataques). O MESMO MEDIUM pelos dois lados (**socrático M1 = R10-M1**): o `fitFloat32` tratava `y + lh > pé` como "não cabe de verdade" sem
+  folga, mas a altura que a medida devolve é `(y + lh) − y` em float64 e erra 1 a 3 ulps — ~5 % dos corpos do DANFE (Times-Bold 8/8,5, Courier 8…),
+  com a medida feita onde o conteúdo parou, ainda abriam folha, e com o recorte aberto o documento não fechava (a D-NE140 cumprida só em parte; o
+  teste dos 4 corpos media no `y` onde o erro quase não aparece). LOWs sem decisão: socrático L2 (guarda do `save()` virou código morto), L4 = R10-L2
+  (espião/embrulho sem a marca no `switchToPage` escondia a original do `rawOf` — a volta à folha tropeçava na D-NE138), L5 (testes aceitando
+  qualquer `RangeError` / asserções condicionais / título que dizia "fecha" sem fechar). LOWs que pedem decisão: socrático L1 (`advance` = linha mais
+  larga, não a última), socrático L3 (`sheetStart` barrado no meio do transbordo deixa meia folha e o documento ainda fecha), R10-L1 (texto VAZIO
+  mede 0 e, posto no pé, abre folha vazia), R10-L3 (`lineBreak: false` sem `width` com `\n`: o pdfkit cola as linhas na mesma linha de base e o
+  `advance` não descreve a escrita). Resistiram: D-NE138 nos dois níveis (passada e `sheetStart` legítimos intactos; `addPage`/`continueOnNewPage`
+  crus caem na D-NE134), `rawOf` aninhado com erro no meio, D-NE140 fora do R10-M1 (sobe < 1e-4 pt no A4/Ofício II; 1e-6 pt além do pé vai para a
+  folha seguinte), D-NE141, D-NE143, R9-L1/R9-L2.
+- **Leva executada (núcleo a180971, branch `ne1b`, LOCAL)**: R10-M1 — "cabe no pé exato" com folga RELATIVA de 2^-40 × pé (~7e-10 pt no A4; o que
+  passa 1e-6 pt segue para a folha seguinte); R10-L2 — a volta à folha do isolado pelo `switchToPage` do PRÓPRIO pdfkit (protótipo); L2 — guarda
+  morta fora; L5 — testes casam a mensagem; a D-NE140 provada por VARREDURA (3 fontes × corpos 5–12 × cursor da medida no topo/meio/baixo × 2
+  margens, recorte aberto, documento fechado); mutações conferidas (sem a folga a varredura falha; sem a volta pela original, 2 do R10 falham).
+  Núcleo **854** verdes (55 suítes). R10-L1 e R10-L3 seguem `it.failing` até a Rodada 11.
+- **⚠️ JANELA D-NE123 PARADA** — Rodada 11 abaixo aguarda o Valdo.
+
+#### 14.14.1 Rodada 11 da `nfe-api` — questões para o Valdo (recomendação entre parênteses)
+
+| Questão | O quê | Opções |
+|---|---|---|
+| **Q-NE144** (socrático L3) | O `sheetStart` que FALHA (D-NE138, erro da própria família, `y` fora da área útil) no meio de um transbordo deixa a folha com meio cabeçalho; o erro escapa pelo `writeText` do conteúdo (pode ser engolido) e o documento ainda fecha | (a) toda falha do `sheetStart` deixa o documento INVÁLIDO (`broken` — como a D-NE134/F-L3): o `end()` recusa dizendo a causa · (b) manter: só folha órfã invalida — **(a)** |
+| **Q-NE145** (socrático L1 — ratifica o `advance` da consequência da D-NE141) | O `advance` devolve o avanço da linha MAIS LARGA — num texto de 2 linhas o próximo trecho entra no fim da última | (a) manter o `advance`, definido como o avanço da ÚLTIMA linha (sem quebra; com `width` que quebra, documentado que não se aplica) · (b) manter como está (linha mais larga), só documentar · (c) tirar o `advance` (a família soma o espaço) — **(a)** |
+| **Q-NE146** (adversarial Q-NE150 — R10-L3) | `lineBreak: false` SEM `width` com `\n`: o pdfkit escreve as linhas uma depois da outra na MESMA linha de base | (a) recusar `\n` em toda escrita `lineBreak: false` (estende a D-NE132 — a linha única já recusa); o `advance` vale sempre para uma linha · (b) trocar `\n` por espaço (como a marca d'água) · (c) manter e documentar — **(a)** |
+| **Q-NE147** (adversarial Q-NE151 — R10-L1) | Texto VAZIO mede altura 0, mas posto no pé (`pé − 0`) o pdfkit abre folha vazia; com o recorte aberto a D-NE134 recusa (campo opcional vazio, p.ex. infCpl, num bloco ancorado no rodapé) | (a) `writeText` de texto vazio sem `continued` não chama o pdfkit (é o que a medida 0 promete) · (b) a medida do vazio passa a ser uma linha · (c) limite documentado — **(a)** |
+
+Depois das decisões: executar → gate curto do delta → JANELA D-NE123.
+
+#### 14.14.2 Rodada 11 DECIDIDA (Valdo 2026-10-18: "Q-NE144 a Q-NE147 segue recomendação") e EXECUTADA (núcleo 15f3373, LOCAL)
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE144** (= Q-NE144 (a)) | TODA falha do `sheetStart` (erro da família, erro de uso da base, `y` fora da área útil) deixa o documento INVÁLIDO: o erro sobe na hora e o `end()` recusa sempre, com a causa em TEXTO FIXO da base ("o sheetStart falhou (a folha ficou sem o cabeçalho inteiro — D-NE144)") — nunca a mensagem de quem falhou (sem eco de dado) |
+| **D-NE145** (= Q-NE145 (a)) | `advance` RATIFICADO = o avanço da ÚLTIMA linha com os espaços do fim (onde o próximo trecho entra); com `width` que quebra o texto, não se aplica (documentado) |
+| **D-NE146** (= Q-NE146 (a)) | Toda escrita `lineBreak: false` (com ou sem `width`) recusa quebra de linha — o pdfkit, sem quebrador, cola as linhas na mesma linha de base |
+| **D-NE147** (= Q-NE147 (a)) | `writeText` de texto VAZIO sem `continued` (e sem cadeia aberta) não chama o pdfkit — nada escrito, nenhuma folha nova (a medida 0 vale); `x`/`y` ficam como informados; com a cadeia aberta o vazio a FECHA (vai ao pdfkit) |
+
+- Consequência nos testes: os que fechavam o documento depois de uma falha do `sheetStart` (R7, R9, R10, final, delta, rodada10) passaram a esperar a
+  recusa da D-NE144 — e o equilíbrio q/Q por folha continua conferido no conteúdo VIVO (oráculo `liveContentOps`/`qDepth`: o pdfkit guarda o conteúdo
+  da folha sem comprimir em `page.content.buffer` até o `end()`, com a opacidade anotada como no `pdfContentOps`). Positivos em
+  `src/__tests__/pdf-rodada11.test.ts`; R10-L1/R10-L3 viraram `it`; mutação de cada decisão detectada. Núcleo **863** verdes (56 suítes).
+- **Gate curto do delta 2e16ea6..15f3373**: §14.15.
+
+### 14.15 Gate curto do delta 2e16ea6..15f3373 e Rodada 12 da `nfe-api` (2026-10-18)
+
+- **Socrático 0,80 ✅** (sem HIGH/MEDIUM, nenhuma questão; sondas por PROPRIEDADE: 1.500 casos aleatórios de medida → escrita em `pé − altura` com
+  recorte aberto, zero falha; sem a folga de 2^-40 a sonda reprova; a D-NE147 deixa `x`/`y` idênticos ao pdfkit cru com texto vazio; o conteúdo vivo
+  = o PDF final byte a byte). LOWs: L1 (asserções que ficaram VAZIAS nos testes adaptados à D-NE144 — "palavra" na folha 2 nunca existe), L2
+  (`RangeError` genérico no R10-L3), L3 (`liveContentOps` falhava ABERTO depois do `end()`), L4 (sobra morta), L5 (o JSDoc público não dizia D-NE138/
+  D-NE144/D-NE146/D-NE147 nem o limite do `advance` com quebra pela largura que sobra/`indent`). Nota para a NE-5: um `doc.on('pageAdded')` da família
+  desenharia fora do contrato do `sheetStart` (sem isolamento, D-NE134, D-NE144) — candidato à lista da cerca (D-NE129/D-NE142).
+- **Adversarial 0,82 ✅** (sem HIGH; arquivo permanente `src/__tests__/adversarial-ne1b-r11-gate.test.ts`, 27 ataques). LOWs: R11-L1 (pede decisão —
+  abaixo), R11-L2 ("lugar para 1 linha" depois do `sheetStart` sem folga: o cabeçalho medido para terminar em `pé − 1 linha` passava por 1e-13 pt e,
+  pela D-NE144, invalidava o documento — ~28 % de 252 combinações), R11-L3 (a mensagem imediata repetia a 1ª causa guardada), R11-L4 (conferência do
+  `y` fora do trecho que invalida — acessor que lança escapava), R11-L5 (o oráculo vivo anotava a opacidade sem o arredondamento do PDF final).
+  Resistiram: `fitFloat32` em 864 combinações (até 14.400 pt, margem 0, corpo 1000, `y` negativo), D-NE144 sem falso positivo (medida, marca,
+  barras, QR, linha única e vazio dentro do `sheetStart`) e sem falso negativo (`throw` de string/null/undefined/objeto sem protótipo/thenable
+  quebrado — a causa nunca ecoa), D-NE145, D-NE146 (U+2028/U+2029/NEL/VT/FF viram `?`), D-NE147, volta pelo protótipo sob espiões.
+- **Leva executada (núcleo 877402f, branch `ne1b`, LOCAL)**: R11-L2 — folga relativa de 2^-40 também no "lugar para 1 linha"; R11-L3 — a mensagem
+  da PRÓPRIA causa; R11-L4 — o `y` lido uma vez dentro do trecho que invalida; R11-L5/socrático L3 — o oráculo vivo arredonda como o PDF e falha
+  FECHADO sem a matriz-base; socrático L1/L2 — asserções vazias e genéricas endurecidas; L4/L5 — sobra morta fora e o contrato público com as
+  decisões. Mutações conferidas (R11-L2, L3, L4 detectadas). Núcleo **890** verdes (57 suítes). R11-L1 segue `it.failing`.
+- **⚠️ JANELA D-NE123 PARADA** — Rodada 12 abaixo aguarda o Valdo.
+
+#### 14.15.1 Rodada 12 da `nfe-api` — questão para o Valdo (recomendação entre parênteses)
+
+| Questão | O quê | Opções |
+|---|---|---|
+| **Q-NE152** (adversarial R11-L1) | O texto VAZIO que fecha uma cadeia aberta (D-NE147 manda ao pdfkit) não avança o `y`: o pdfkit deixa o `y` no topo da linha encadeada — "INF. COMPL.: " encadeado + campo opcional vazio + o próximo bloco só com `x` sai POR CIMA do rótulo; e uma cadeia de 7 pt no pé fechada com vazio de outro papel em 12 pt abre folha VAZIA | (a) a base fecha a cadeia ela mesma no vazio, deixando `x`/`y` onde o fechamento com texto deixaria (sem chamar o pdfkit) · (b) recusar o vazio com cadeia aberta (a família fecha com texto ou não encadeia quando o campo é vazio) · (c) limite conhecido documentado — **(a)** |
+
+Depois da decisão: executar → gate curto do delta → JANELA D-NE123.
+
+#### 14.15.2 Rodada 12 DECIDIDA (Valdo 2026-10-18: "Q-NE152 segue recomendação") e EXECUTADA
+
+| Decisão | O que fixa |
+|---|---|
+| **D-NE152** (= Q-NE152 (a)) | O texto VAZIO sem `continued` com a cadeia ABERTA é fechado pela BASE, sem chamar o pdfkit: `x` no início da cadeia; `y` uma linha abaixo da linha encadeada — altura da linha na fonte/corpo do fechamento + `lineGap` + `paragraphGap`, as opções da cadeia valendo onde o fechamento não diz (como o `_initOptions` do pdfkit); nenhuma folha abre |
+
+- Testes: paridade "fechar com vazio" × "fechar com texto" em 16 combinações (opções da cadeia × papel/corpo/gaps do fechamento) no `pdf-rodada11`;
+  R11-L1a/b viraram `it`; mutação detectada (ramo desligado, sem `lineGap`, sem `paragraphGap`). Núcleo **907** verdes (57 suítes).
+- **Gate curto do delta 15f3373..HEAD**: §14.16.
+
+### 14.16 Gate curto do delta 15f3373..f2ca95a (2026-10-18) — em curso na hora da janela
+
+- Socrático e adversarial disparados sobre o delta (877402f + f2ca95a). O Valdo mandou seguir a janela ("segue D-NE123") com os gates no ar: o
+  subpath `fiscal-api/pdf` não tem consumidor em produção — achado que vier entra numa publicação seguinte (fast-forward de novo). Resultado: §14.18.
+
+### 14.17 JANELA D-NE123 EXECUTADA e PUBLICADA (2026-10-18 — Valdo: "segue D-NE123")
+
+1. Conferido antes: `D:\Gestao2027\fiscal-api` limpo, no `main` 4b17b23 = `origin/main`, ancestral do `ne1b` (12 commits); fora de `src/pdf` e dos
+   testes o delta só ACRESCENTA (`package.json`, `package-lock.json`, `src/pdf.ts`). `dist` antigo guardado em `scratchpad\janela-ne1b\dist-4b17b23`.
+2. `git merge --ff-only ne1b` → f2ca95a; `npm install` (NUNCA `npm ci`) — entraram SÓ `pdfkit 0.20.2`, `bwip-js 4.11.4`, `@types/pdfkit 0.17.6` (e
+   `jsqr 1.4.0` de teste); as demais dependências nas MESMAS versões; o lock não mudou; `npm run build`.
+3. Prova DE DENTRO do setes-api (pelo `dist`, link `file:`): `fiscal-api`, `fiscal-api/reading` e `fiscal-api/federal-id` NÃO carregam pdfkit/bwip-js;
+   `fiscal-api/pdf` exporta as peças e gera um PDF real (`createPdf` + `writeText` + `code128Bars` + `drawBars` → `%PDF-1.3`).
+4. Suíte na árvore viva: 1 falha AMBIENTAL — a asserção da 1ª linha do `src/pdf.ts` quebrava só por `\n` e o checkout do Windows (`core.autocrlf`)
+   grava CRLF (no worktree os arquivos estavam em LF) → corrigida no `ne1b` (4110957, `split(/\r?\n/)`) e o `main` vivo avançou de novo por fast-forward;
+   **57 suítes / 907 verdes** na árvore viva. CONHECIMENTO NEGATIVO: teste que lê fonte do repositório quebra por linha com `/\r?\n/`.
+5. **Push**: `valdosouza/gestao-2027-fiscal-api` `main` 4b17b23..**4110957**. Sem restart (D-NE123).
+6. ⚠️ Achado de ambiente (fora da janela): na hora da janela NADA escutava nas portas 3000 (setes-api), 3002 (nfse-api) e 5051 (app) — as abas do
+   Terminal de produção da sessão de 2026-10-17 ("nfse-api producao", "setes-app web 5051") não existiam mais (o app reiniciou); os serviços já
+   estavam fora do ar ANTES do merge. Não subidos por conta própria (subir = deploy) — fica com o Valdo.
