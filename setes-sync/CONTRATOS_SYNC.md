@@ -48,6 +48,37 @@ Header `X-Api-Key: <chave da instalação>` — cadastrada em `setes_central.tb_
 A chave resolve `institutionId` + `schemaName` no servidor: **o payload NÃO envia
 tb_institution_id** (era injetado pelo Delphi; agora é derivado da chave).
 
+**Recusas da chave (D-SY13, Valdo 2026-10-18 — `verificacao-comissao-margem-mercadoria.md` §9.4/§10)** —
+valem para TODO `/sincronize` (`sync.auth.middleware.ts`):
+
+| HTTP | `code` | Quando |
+|---|---|---|
+| 401 | `SYNC_KEY_MISSING` | header `X-Api-Key` ausente (FApiKey vazio no sincronizador) |
+| 401 | `SYNC_KEY_INVALID` | chave inexistente (ou `deleted='S'`) |
+| 403 | `SYNC_KEY_INACTIVE` | chave EXISTENTE e `active='N'` (interruptor do Super — D-PR43) |
+
+```jsonc
+{ "ok": false, "error": "API Key inativa", "code": "SYNC_KEY_INACTIVE" }
+```
+
+O sincronizador que recebe a recusa NÃO grava `SRC_LOG` no registro (fica pendente na fila), grava o
+estado "sincronia inativa" (CONFIG.INI, seção SISWEB), interrompe o ciclo e não volta a sincronizar até
+o usuário usar **Tarefas → Ativar sincronia**. A-SY1 (a ratificar pelo Valdo): o 401 tem o MESMO
+efeito do 403. Limite conhecido: a chave VÁLIDA fica 5 min em cache no processo do setes-sync — desativar
+vale em até 5 min (a consulta abaixo lê o banco e acerta o cache).
+
+### GET /sync-key/status (D-SY13 — consulta do botão "Ativar sincronia")
+```jsonc
+// header X-Api-Key: <chave da instalação>; sem corpo
+// → 200 { "ok": true, "active": true }      chave ativa: o sincronizador limpa o estado e retoma
+// → 403 { ok:false, code: "SYNC_KEY_INACTIVE" }  segue inativa — nada muda
+// → 401 { ok:false, code: "SYNC_KEY_INVALID" | "SYNC_KEY_MISSING" }
+```
+FORA do middleware de propósito: lê `tb_sync_api_key` SEM o cache de 5 min e acerta o cache (ativa =
+guarda; inativa/inexistente = esquece — o próximo `/sincronize` já recebe a recusa). Não devolve
+institution nem schema. Passa pelo rate limit (500/min). Servidor antigo (sem a rota) = 404 → o
+sincronizador trata como "não deu para consultar" e segue inativo.
+
 ## Soft delete (D2)
 
 Todo payload aceita `"deleted": "S" | "N"` (default `"N"`). `"S"` = soft delete no destino.
@@ -107,18 +138,36 @@ Regras:
 ```
 Dedupe por descrição (D17); `deleted:'S'` desativa o VÍNCULO (`tb_institution_has_brand.active='N'`)
 — a linha central permanece. Id local MRC_CODIGO descartado.
+**Trava nomeada (D-SY10, 2026-10-18)**: marca, embalagem e medida têm DOIS escritores (setes-sync e
+setes-api) — os dois serializam a CRIAÇÃO pela MESMA `GET_LOCK('setes_central.<tabela>', 10)` ANTES da
+transação (`sync.catalog.ts` `ensureAndLinkCatalogItem` × `@shared/central-catalog` do setes-api;
+`database/PADROES_BANCO.md` §9 regra 11). No setes-sync o item que já existe VIVO é reusado por leitura sem
+trava (o caso comum não toma a trava global) e o vínculo do cliente é gravado FORA da seção global (esperar o
+lock de um cliente segurando a trava de todos pararia a frota). Sem a trava em 10 s → **409 `RESOURCE_BUSY`**
+(⚠️ o sincronizador hoje estaciona o registro com qualquer não-200 — Q-SY18).
+Linha central soft-deletada é ressuscitada SÓ quando não existe linha VIVA com a mesma chave (a viva
+vem primeiro — o setes-api só enxerga as vivas).
 
 ### POST /package/sincronize (Onda 3 — catálogo central)
 ```jsonc
 { "description": "CAIXA", "abbreviation": "CX", "deleted": "N" }
 ```
-Mesmo padrão do brand; `abbreviation` só entra na CRIAÇÃO da linha central.
+Mesmo padrão do brand (dedupe por DESCRIÇÃO, trava nomeada `setes_central.tb_package`); `abbreviation`
+(até 3 — `tb_package.abbreviation` é VARCHAR(3)) só entra na CRIAÇÃO da linha central.
 
-### POST /measure/sincronize (Onda 3 — catálogo central; endpoint NOVO)
+### POST /measure/sincronize (Onda 3 — catálogo central; endpoint NOVO; chave = ABREVIAÇÃO desde a D-SY10)
 ```jsonc
 { "description": "UNIDADE", "abbreviation": "UND", "escale": 1, "deleted": "N" }
 ```
-Mesmo padrão do brand; atributos só na criação. (Não existia na setes-sync — gap fechado.)
+**Chave = `abbreviation` (D-SY10 = D-PR39, Valdo 2026-10-18)**: a medida é ÚNICA na `setes_central` e a
+busca pela abreviação unifica o cadastro de todos os clientes — a MESMA sistemática do setes-api
+(`UPPER(TRIM(abbreviation)) COLLATE utf8mb4_bin` + trava nomeada `setes_central.tb_measure`).
+`abbreviation` é OBRIGATÓRIA no payload (sem o campo → 400); vazia ou `null` (legado com
+MED_ABREVIATURA vazia) resolve pela DESCRIÇÃO, como antes, com aviso no log do setes-sync. Até 5
+caracteres (VARCHAR(5) do legado — a coluna central de 6 da D-PR35 comporta). `description` e `escale`
+são atributos gravados só na CRIAÇÃO (reuso nunca sobrescreve o catálogo compartilhado).
+⚠️ Duas medidas do MESMO Firebird com a mesma abreviação e descrições diferentes passam a apontar para
+a MESMA linha central (conferência no `Sincronizador/roteiro-implantacao-cliente.md`, Fase 1).
 
 ### POST /category/sincronize (Onda 3 — id local + árvore)
 ```jsonc
@@ -131,6 +180,12 @@ Pai ainda não sincronizado → **409 `PARENT_NOT_SYNCED`** (reenviar no próxim
 `kind` do filho deve = `kind` do pai (árvores P/S independentes).
 `kind` vazio/ausente = **'P'** (decisão Valdo 2026-08-01 — categorias migradas do legado
 vêm sem tipo; 164 barradas na rodada de 2026-07-31).
+**Categoria por natureza (D-SY11, Valdo 2026-10-18)**: mercadoria = `kind 'P'`, serviço = `kind 'S'`; a
+recategorização acontece SÓ na origem — a conversão grupo/subgrupo do "Preparar o banco"
+(`un_dm.pas` `MigraGruposParaCategoria`, patch 11) cria a árvore 'S' própria (mesmo nome do grupo/
+subgrupo) quando há produto PRO_TIPO 'S' e reaponta cada produto para a categoria da SUA natureza.
+O setes-sync não recategoriza; recusar serviço em categoria 'P' (e mercadoria em 'S') no `/service` e
+no `/merchandise` depois do reenvio é a **Q-SY15** (aguarda o Valdo — hoje nenhum dos dois confere).
 
 ### POST /merchandise/sincronize (Onda 3 — produto: 3 tabelas em transação)
 ```jsonc
@@ -142,13 +197,22 @@ vêm sem tipo; 164 barradas na rodada de 2026-07-31).
   "merchandise": { "nameBrand": "COCA-COLA", "internalId": "...", "ncm": "22021000", "cest": "...",
                    "kindTributary": "T", "source": "0", "kind": "00", "print": "S", "controlSeries": "N",
                    "exclusiveDealer": "N", "application": "texto", "composition": "1", "manufSignIndScale": "S" },
-  "stock":       { "namePackage": "GARRAFA", "nameMeasure": "UND", "codebar": "789...", "st": "N",
+  "stock":       { "namePackage": "GARRAFA", "measureAbbreviation": "UND", "nameMeasure": "UNIDADE",
+                   "codebar": "789...", "st": "N",
                    "divisor": null, "location": "...", "weight": 0, "width": 0, "length": 0, "height": 0,
                    "costManufactures": 0, "actualCost": 0, "costPrice": 0, "negative": "N", "outline": "N" }
 }
 ```
-`nameBrand`/`namePackage`/`nameMeasure` = DESCRIÇÕES → resolvidas no catálogo central + vínculo
-(fallbacks legados: 'NÃO INFORMADA' / 'UND'). Categoria ausente → **409 `CATEGORY_NOT_SYNCED`**.
+`nameBrand`/`namePackage` = DESCRIÇÕES e **`measureAbbreviation` = ABREVIAÇÃO da medida (D-SY10,
+2026-10-18 — MED_ABREVIATURA, até 5; `nameMeasure` = descrição da medida, atributo da criação)** →
+resolvidas no catálogo central + vínculo, cada uma na sua transação curta sob a trava nomeada do
+catálogo, ANTES da transação do produto. Executável antigo (só `nameMeasure`) continua aceito: a
+medida resolve pela descrição, com aviso no log. Fallbacks legados: marca 'NÃO INFORMADA', embalagem
+'UND' (descrição) e medida **'UND' como ABREVIAÇÃO** (antes era descrição e criava uma 2ª linha "UND" sem
+abreviação ao lado da UNIDADE/UND). Categoria ausente → **409 `CATEGORY_NOT_SYNCED`** — conferida ANTES
+de tocar no catálogo (o 409 não cria item central) e de novo dentro da transação. Trava do catálogo
+ocupada por mais de 10 s → **409 `RESOURCE_BUSY`**. Se a gravação do produto falhar DEPOIS dos
+catálogos, o item central e o vínculo ficam (dado real do legado; o reenvio os reusa).
 `quantity`/`minimum` NÃO viajam aqui (domínio do /stock-balance). `id_provider` fica NULL (Onda 4).
 **Natureza (D2 — notas M×S, 2026-07-26)**: `product.kind` 'P'/'M' (gravado em `tb_product.kind`;
 fallback de transição: `merchandise.kind` legado); 'S'/'A' → **422 `KIND_NOT_ALLOWED`**

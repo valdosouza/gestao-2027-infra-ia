@@ -178,6 +178,30 @@ Sem `WildcardRoute` o `selectRoute` do flutter_modular lança o `RouteNotFound` 
   de um módulo de interface (`/home/customers/nada/`) segue sem cerca.
 - Testes de roteamento: o Modular é singleton — um cenário por arquivo (`route_fallback_*_test.dart`).
 
+## Telas vinculadas — ficha enxuta + telas que abrem a partir do registro (DECIDIDO 2026-10-17, D-PR25)
+
+**Estado**: decidido na frente do cadastro de produtos (`Infra-IA/prompts/prompt_modulo_products.md` §10.5, D-PR25); o 1º consumidor
+é o módulo `merchandise` (onda 1). Até a entrega, esta seção é a REGRA; a entrega confere o texto contra o código e o ajusta.
+**Origem**: Valdo — "Temos 14 abas no cadastro que deixam a tela legada muito complexa… considere não abrir muitas abas e sim uma
+maneira em que outras telas se abram vinculadas ao produto". Critério de corte: **quem é o DONO do fato** (guardião).
+
+- **Ficha**: no máximo 3–4 abas com o que é do PRÓPRIO cadastro. Abaixo das abas, um **painel de cartões** (ícone, título, contagem,
+  "Abrir") — só com o registro JÁ salvo. O cartão só aparece se a interface de destino está contratada e o usuário tem o privilégio
+  (o contrato esconde por construção; nunca config `*_ABA_*` como no legado).
+- **Tipo B — vinculada do PRÓPRIO módulo** (o fato é do catálogo e só este cadastro o escreve): `ChildRoute('/:id/<x>')` no próprio
+  módulo, mesmos binds; na API `/api/<m>/:id/<x>` (simetria). Ex.: `merchandise` → "Unidades e GTIN".
+- **Tipo C — vinculada de OUTRA interface** (o dono do fato é outro processo; este cadastro nunca o escreve): navega pela ROTA da
+  interface de destino — **nenhum import entre módulos** — levando um critério inicial no vocabulário da **Pesquisa Avançada do destino**
+  (`?criteria=<json>`; a lista branca dele recusa o resto) + `returnTo`. O destino abre a lista já filtrada e o "Novo" pré-seleciona o
+  registro de origem em somente leitura. Nenhum parâmetro novo por módulo. Ex.: produto → `tax-rules` (D38).
+- **Volta**: `returnTo` só é aceito se for rota `/home/…`; a ficha tem deep link `/home/<m>/?id=N` (resolve também o F5).
+- **Contagens**: `GET /api/<m>/:id/links`, lido pelas peças shared de cada dono — o app nunca chama o módulo vizinho.
+- **Ficha salva e limpa**: vinculada só abre com a ficha SALVA e sem edição pendente; a vinculada mostra o cabeçalho do registro em
+  somente leitura (mata o "abrir outra tela e perder a edição" do legado).
+- **Peça** `app/shared/linked/`: o cartão + `openLinkedInterface(i18nKey, criteria, returnTo)` resolvendo a rota pela
+  `interface_routes.dart`; a `RegisterFormPage` ganha o espaço do painel.
+- **Rota de escape**: módulo com sub-rotas declara o próprio escape (volta à lista) e ganha o teste de laço `route_fallback_*`.
+
 ## Privilégio de CRUD na tela (D-PV2 — onda executada em worktree `privilegios-crud`, 2026-10-18; NÃO publicada)
 
 Detalhe: `Infra-IA/prompts/prompt_privilegios_interfaces.md` §11. Até o merge, esta seção é a REGRA para tela nova.

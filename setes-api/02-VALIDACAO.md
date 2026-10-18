@@ -313,3 +313,13 @@ Regra para qualquer valor monetário que a API compara ou grava:
 3. Passe ao INSERT o valor **normalizado** — o que passou na validação é o que fica no banco.
 4. Nada de `round2` local por módulo (há 9 cópias legadas; migre por frente, com os testes de borda
    .xx5 de cada uma) — a peça é a fonte única.
+
+### Número para coluna DECIMAL(p, s): a FAIXA e as CASAS também (2026-10-18 — gate adversarial da onda 1 de produtos)
+
+O servidor roda **sem modo estrito** (`sql_mode` sem `STRICT_*`, e a sessão do pool não o liga): valor acima do teto
+da coluna é **GRAMPEADO** em silêncio (preço 12.345.678.901,25 gravou 9.999.999,999999 com 201) e casa decimal a mais
+é **ARREDONDADA** (fator 0,0000004 virou 0 → CHECK → 500; 12,0000001 virou 12 e colidiu com outro nível). Regra:
+o DTO usa a peça **`decimalField({ scale, max, … })`** de `@shared/validation` — recusa mais casas que a coluna guarda
+(ruído binário de até 1e-9 é limpo), recusa acima do teto e ENTREGA o valor normalizado. Grade de preço = UMA forma,
+`productPriceInputDto` de `@shared/price` (serviço e mercadoria). Ligar o modo estrito na sessão seria a alternativa
+transversal — decisão própria, não tomada.

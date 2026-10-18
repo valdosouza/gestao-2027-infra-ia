@@ -675,6 +675,11 @@ Q-A3 sim · Q-A4 herdar.
    (`tb_bank_charge_agreement.aliq_discount`) passa a QUITAR título e já está SOB o privilégio
    DESCONTO (seed 55 vincula o privilégio 8 também à interface `bank-charge-agreements`) — quem
    mantém carteira com desconto em cada cliente precisa do privilégio, senão recebe 403 ao salvar.
+7. **Cadastros de Serviços e de Produtos só para cliente SEM legado (D3 do `prompt_modulo_services.md` + D-PR14 do
+   `prompt_modulo_products.md`, 2026-10-17)**: o id de `tb_product` é cunhado por MAX+1 na web e o sync grava o `PRO_CODIGO` do
+   legado como id — os dois escritores no mesmo cliente colidem. Antes de contratar as interfaces `services` ou `merchandise`
+   (`tb_institution_has_interface`), conferir que a institution NÃO tem `setes_central.tb_sync_api_key` ativa; cliente que ainda
+   sincroniza recebe os cadastros pelo legado.
 
 ### 10.4 Socrático da Rodada 2 — 1ª passada: **0.58 REPROVOU** (leitura; banco parado)
 

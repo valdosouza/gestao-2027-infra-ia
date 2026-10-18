@@ -28,7 +28,18 @@
    o customer_register (Principal / Endereço / Fone / Outros). Cadastro com poucos
    campos simples e sem agrupamento natural (ex.: Estado — código, país, sigla,
    nome, alíquota) → coluna única com scroll; não criar aba única artificial.
-3. **Espaçamento**: `SizedBox(height: 10–16)` entre campos; `Padding` externo de 16.
+3. **Espaçamento e LAYOUT** (grade — 2026-10-17, `../../prompts/prompt_densidade_layout_web.md` D-DL3/D-DL4;
+   ⚠️ até a publicação, a peça só existe no branch `densidade` do setes-app — no `main` ainda vale a coluna
+   única com `SizedBox(height: 16)`):
+   os campos NUNCA ficam em coluna única esticada na largura da janela. Use a `SetesFormGrid`
+   (setes_widgets): cada campo declara um TAMANHO semântico — `small` (código, data, documento,
+   valor), `medium` (texto curto, lookup, e-mail), `large` (nome, descrição; é o padrão) ou `full`
+   (texto longo, seção, grupo de opções) — e a grade distribui os campos em 12 colunas pela área
+   DISPONÍVEL (no celular, cada campo ocupa a linha inteira; o formulário tem teto de 1200 px,
+   alinhado à esquerda). Na fábrica, isso é o `RegisterField(size: ...)`; numa tela artesanal,
+   `SetesFormGrid(items: [SetesFormGridItem(size: ..., child: campo)])`. Respiro de 16 entre
+   campos e linhas (a grade já aplica); `Padding` externo de 16. Densidade (altura do campo, fonte,
+   barras) é do TEMA (`SetesDensity`) — tela nenhuma define altura ou fonte de campo.
 4. **Ícones**: só Material Icons conhecidos do Android — `search`, `check`, `add`,
    `delete_outline`, `edit`, `arrow_back_ios_rounded`, `close`. Nada de ícones custom.
 5. **Tela de pesquisa** (lista do cadastro) — mesmo estilo Android da tela de
@@ -127,6 +138,9 @@ como eventos. **Evoluir a fábrica** em vez de criar forms artesanais.
 - `SetesFormShell` (packages/setes_widgets) — casca do contrato visual item 1
   (AppBar com voltar/título/check/delete_outline, `saving` desabilita ações).
   `RegisterFormPage` já usa; formulários novos herdam de graça.
+- `RegisterField.size` (2026-10-17 — grade do item 3): padrão `large`, o
+  `RegisterField.lookup` nasce `medium`; `applyFieldConfig` preserva o tamanho;
+  os `extraChildren` viram uma linha inteira abaixo dos campos.
 - `RegisterField` tem `readOnly` (campo visível e não editável — ex.: código
   imutável na edição) e `RegisterFormPage` já traz confirmação de exclusão
   (`register.confirmDelete`) + SnackBar de sucesso/erro (`register.saved` /

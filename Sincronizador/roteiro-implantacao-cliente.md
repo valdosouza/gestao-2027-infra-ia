@@ -31,10 +31,26 @@ Rodar `patches-revisao-2026-07/01_firebird_ddl.sql`:
 - `ADD DELETED CHAR(1) DEFAULT 'N'` nas 23 tabelas sincronizadas (TB_MARCA_PRODUTO ... TB_CAIXA — lista completa no script)
 - `UPDATE ... SET DELETED='N' WHERE DELETED IS NULL` em TODAS as 23 (Firebird legado não aplica default em linhas existentes) + COMMIT
 - Conferir antes com `00_inventario_tb_lista_sincronia.sql` se o inventário real do cliente bate com a lista do DDL (clientes antigos podem ter divergência de schema)
+- **Medidas (D-SY10, patch 11 — 2026-10-18)**: a medida é ÚNICA na `setes_central` e a chave é a ABREVIAÇÃO. Só leitura:
+
+  ```sql
+  -- mesma abreviação, descrições diferentes = vão apontar para UMA linha central
+  SELECT UPPER(TRIM(MED_ABREVIATURA)) AS ABREV, COUNT(*) AS N, LIST(MED_DESCRICAO, ' | ') AS DESCRICOES
+    FROM TB_MEDIDA GROUP BY 1 HAVING COUNT(*) > 1;
+  -- sem abreviação = resolvem pela descrição (aviso no log do setes-sync)
+  SELECT MED_CODIGO, MED_DESCRICAO FROM TB_MEDIDA WHERE COALESCE(TRIM(MED_ABREVIATURA), '') = '';
+  ```
+
+  Resultado na 1ª consulta = avisar o Valdo antes de sincronizar (o legado preenche abreviação vazia com as 3
+  primeiras letras da descrição — "PACOTE" e "PACOTE 10" viram os dois 'PAC').
 
 ## Fase 2 — Configuração do Sincronizador (registro do Windows, seção SISWEB)
 
+> Fato do código (2026-10-18): o `Fc_Aq_Geral` grava no `CONFIG.INI` ao lado do executável (seção `SISWEB`) —
+> é ali que moram `FApiKey`, `FPathURL`, `TERMINAL` e, desde o patch 11, o estado `SincroniaInativa` (D-SY13).
+
 - `FApiKey` = chave criada na Fase 0 (**a MESMA para todos os terminais do estabelecimento** — decisão 2 do indexador terminal)
+  — se algum ciclo já rodou com `FApiKey` vazio/errado, o sincronizador ficou INATIVO (401, D-SY13/A-SY1): depois de gravar a chave certa, **Tarefas → Ativar sincronia**
 - `FPathURL` = URL base da setes-sync (porta 3001)
 - `TERMINAL` = número do terminal desta instalação (**0 = Servidor Local/Base única; 1..N = PDVs** — decisões 1 do `prompt_indexador_terminal_pdv.md`, 2026-07-26)
 - Conferir intervalo / nominuto (ciclo de 5 min padrão)
@@ -172,6 +188,44 @@ Produto já sincronizado só ganha o indEscala real e a aplicação em texto qua
 `Task/tas_config.pas` põe TODO produto na `TB_SINCRONIA`). ⚠️ Rebobinar o `LAST_UPDATE` NÃO
 basta aqui: o envio lê a FILA (`ControllerSincronia.getList`), e a limpeza de 48h já tirou os
 produtos enviados com OK. Idempotente: o setes-sync faz upsert com lista de colunas.
+
+### Depois do patch 11 (D-SY10, D-SY11, D-SY13 — 2026-10-18)
+
+Ordem (`sincronizador/patches-revisao-2026-07/11_medida_categoria_chave_inativa.md`):
+1. **setes-sync novo no ar ANTES** do sincronizador novo e antes (ou junto) do setes-api com a medida por
+   abreviação — enquanto um deduplica a medida por descrição e o outro por abreviação, a central ganha linhas repetidas.
+2. Build oficial do sincronizador → ⚠️ antes, fila vazia e sincronia ATIVA (o "Preparar o banco" zera a `TB_SINCRONIA`,
+   inclusive o que estiver pendente) → **Tarefas → Prepara Local** (a conversão grupo/subgrupo cria a árvore de
+   categorias por NATUREZA: 'P' mercadoria, 'S' serviço). ⚠️ Grupo/subgrupo só de serviço tinha categoria 'P' — o
+   Passo 0 a trata como sujeira e reconverte do zero; o generator volta a 0, então os ids RECOMEÇAM do 1 e podem
+   cair em cima de ids vivos na web com outro significado (só se acerta com a Primeira carga abaixo — Q-SY16); no fim
+   o "Preparar o banco" limpa a fila.
+3. **Configuração → Primeira carga → Categorias + Medidas/Unidades + Produtos, SEM período**. Rebobinar o
+   `LAST_UPDATE` NÃO reenvia (a fila já foi limpa pelas 48h / pelo Preparar).
+4. Conferir (só leitura):
+
+   ```sql
+   -- Firebird, depois do Preparar: produto em categoria de outra natureza (esperado: 0)
+   SELECT COUNT(*) FROM TB_PRODUTO P JOIN TB_CATEGORY C ON (C.ID = P.PRO_CODCAT)
+    WHERE (P.PRO_TIPO = 'S' AND C.KIND <> 'S') OR (COALESCE(P.PRO_TIPO, '') <> 'S' AND C.KIND <> 'P');
+   -- MySQL, depois do reenvio: serviço (S) só em categoria S
+   SELECT p.kind AS produto, c.kind AS categoria, COUNT(*)
+     FROM <schema>.tb_product p
+     JOIN <schema>.tb_category c ON c.id = p.tb_category_id AND c.tb_institution_id = p.tb_institution_id
+    WHERE p.deleted = 'N' GROUP BY 1, 2;
+   ```
+
+   Categorias antigas que a reconversão não reproduziu continuam VIVAS na web (o DELETE do Firebird não viaja) — Q-SY16.
+
+### Sincronia INATIVA — chave recusada (D-SY13, patch 11)
+
+Super desligou a chave do estabelecimento (interruptor D-PR43) ou a chave não existe → o setes-sync responde 403
+`SYNC_KEY_INACTIVE` (ou 401) → o sincronizador para no registro, mostra "Sincronia INATIVA" e não sincroniza mais (nem
+timer nem Iniciar/F5); os registros ficam PENDENTES (sem `SRC_LOG`). Para voltar: religar a chave na web → no
+sincronizador **Tarefas → Ativar sincronia** (consulta `GET /sync-key/status`; só reativa se a chave estiver ativa).
+Não rodar "Preparar o banco" com a sincronia inativa: ele zera a fila e os pendentes se perdem (voltam só por Primeira carga).
+Limite conhecido: a chave válida fica até 5 min em cache no setes-sync. ⚠️ Executável ANTERIOR ao patch 11 não conhece
+o estado: grava "API Key inativa"/"API Key invalida" no `SRC_LOG` de cada registro e precisa do UPDATE abaixo.
 
 ### Reenviar registros que FALHARAM (mecânica confirmada 2026-08-02)
 

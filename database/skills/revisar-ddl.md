@@ -31,6 +31,10 @@
 ### Padrões da casa (PADROES_BANCO.md)
 - [ ] Prefixo `tb_`, inglês, singular; N:N como `tb_a_has_b`
 - [ ] Colunas `created_at`/`updated_at`/`deleted char(1) 'N'` presentes
+- [ ] Exclusão só por SOFT DELETE (PADROES §3.1 — D-PR37): nenhum `DELETE`/`REPLACE INTO`/`TRUNCATE` de dado de negócio fora da lista
+      de exceções com motivo; FK nova apontando para um pai: alguém apaga esse pai fisicamente (inclusive o setes-sync)? → 1451
+- [ ] UNIQUE além da PK: nenhum `INSERT … ON DUPLICATE KEY UPDATE` nessa tabela (PADROES §9 regra 10 — a colisão secundária vira UPDATE
+      da linha que colidiu, calada)
 - [ ] Flags `'S'`/`'N'` (caso real: `main DEFAULT 'Y'` destoando)
 - [ ] Sem AUTO_INCREMENT (IDs pela aplicação); sem `DEFAULT 0` em coluna que é FK (caso real: `tb_phone.id DEFAULT 0` quebraria a FK)
 - [ ] `DEFAULT NULL` real, não a string `'NULL'` (caso real: `tb_interface.position`)

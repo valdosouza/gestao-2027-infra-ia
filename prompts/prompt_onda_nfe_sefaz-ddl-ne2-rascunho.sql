@@ -254,7 +254,10 @@ SELECT v.`tb_institution_id`, v.`id`,
 --  * sondas do boot pelo NOME da constraint (regras 11/16), cada uma com PK propria numa transacao desfeita: kind 'S' e 'a';
 --    source 'X' e 'q'; environment 'X' e 'h'; C com '110111 ' (espaco); A com '1000 0'; chave com minuscula e com tpEmis '2';
 --    authorizer 'pr', 'PR ' e 'AN'; void_id com 'id' minusculo e faixa invertida; protocolo de 16 digitos.
---  * GRANT SELECT nas tres views ao usuario do setes-api; a nfe-api: controle total so no `fiscal_api` (D-F31).
+--  * GRANT ao usuario do setes-api SO na view de TENTATIVAS, e so quando houver o 1o leitor (GRANT minimo — nfse-api/ops/grants.sql secao 2;
+--    correcao sem decisao do parecer do guardiao da NE-2, prompt §15.3 item 6.3 — era "nas tres views"); a nfe-api: controle total so no
+--    `fiscal_api` (D-F31). A NE-2 ainda revisa este rascunho pelas Q-NE160 (4.2), Q-NE161 (4.3 sem authority_recorded) e Q-NE163 (UNIQUE
+--    da faixa com o AMBIENTE — defeito real: o Id de 43 nao leva tpAmb).
 --  * prova em banco descartavel: a coluna GERADA STORED com UNIQUE (MariaDB 10.4 e o MySQL 8 da F3); EXPLAIN das tres views.
 --  * a familia declara `MERCHANDISE_VOICE_WRITE_KINDS` = A R D P C K F N (teste: = CHECK da secao 2) e o descritor com
 --    eventTable `tb_invoice_merchandise_transmission_event` (regex do nucleo) e a convencao vw_<x> sobre tb_<x> (D-NE76).

@@ -1,6 +1,6 @@
 # Padrões de Banco de Dados — Setes (Gestão 2027)
 
-**Versão**: 1.7 (2026-10-15 — §11 regra 17: biblioteca carregada pelo `src` em produção = a árvore viva é o deploy (D-IB83); 1.6 no mesmo dia — §9 regra 9: leitura travante de várias tabelas = uma por tabela na ordem do escritor, nunca LEFT JOIN travante — IB-2 da fase IBS/CBS; 1.5 em 2026-10-13 — §7 ordem da rotação do `JWT_KID` (D-F157) e §11 regra 14 LÁPIDE com versão SENTINELA (D-F162), Rodada 6 da F2a; 1.4 no mesmo dia — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
+**Versão**: 2.2 (2026-10-18 — §9 regra 11: o setes-sync adota a MESMA trava do catálogo central para marca/embalagem/medida, D-SY10; forma de pagamento fica como limite, Q-SY17); 2.1 no mesmo dia — §9 regra 13: filhos de um pai serializador são lidos CONSISTENTES depois da trava do pai, nunca com a faixa travada (Q-PV38, pedido de troca de senha); 2.0 no mesmo dia — §3.1 NOVO: nada se apaga fisicamente, só soft delete; exceção física só registrada com motivo (D-PR37, regra do sistema); 1.9 no mesmo dia — §9 regras 10–12: upsert só com a PK como único UNIQUE; catálogo central serializado por trava nomeada; trava de registro só em linha que existe — gates da onda 1 do cadastro de produtos; 1.8 no mesmo dia — §12 NOVO: grupo de estabelecimentos — a tabela é do GRUPO ou do ESTABELECIMENTO, nunca das duas (D-GE2); §6 privilégio por institution (D-GE3); 1.7 em 2026-10-15 — §11 regra 17: biblioteca carregada pelo `src` em produção = a árvore viva é o deploy (D-IB83); 1.6 no mesmo dia — §9 regra 9: leitura travante de várias tabelas = uma por tabela na ordem do escritor, nunca LEFT JOIN travante — IB-2 da fase IBS/CBS; 1.5 em 2026-10-13 — §7 ordem da rotação do `JWT_KID` (D-F157) e §11 regra 14 LÁPIDE com versão SENTINELA (D-F162), Rodada 6 da F2a; 1.4 no mesmo dia — §11 regras 14 (LÁPIDE de migration abortada: pelo NOME, número reservado) e 15 (aborto grava a lápide ANTES do DDL e exige ver todos os gatilhos), Rodada 5 da F2a e o seu gate socrático; 1.3 no mesmo dia — §11 regra 7 (espera curta = duas variáveis) e regra 15 (corpo normalizado, `EVENT_OBJECT_SCHEMA`, aborto por schema), gates do delta da Rodada 4 da F2a; 1.2 no mesmo dia — regra 15 ampliada e regra 16, gates da A3; 1.1 em 2026-10-12 — regras 11 e 12)
 **Origem**: 21 decisões arquiteturais da Fase 2 (Gerenciamento Central), registradas em `setes-api/prompt_fase2_gerenciamento_central.md`
 **Scripts canônicos**: `D:\Gestao2027\sql\01..05_*.sql`
 **Escopo**: misto
@@ -37,6 +37,26 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
 - Flags booleanas: `char(1)` com `'S'`/`'N'` (nunca `'Y'`, nunca boolean — exceção: `tb_feature_flag.enabled` boolean por compatibilidade com o flag.service)
 - Datas: nunca `0000-00-00` (falha em modo estrito); seeds usam `NOW()` ou datas reais
 - Defaults: `DEFAULT NULL` real, nunca a string `'NULL'`
+
+### 3.1 Nada se apaga fisicamente — exclusão é SOFT DELETE (Valdo, 2026-10-18 — D-PR37 do cadastro de produtos)
+
+Regra do SISTEMA (vale para os dois grupos — setes-api/setes-app e Sincronizador/setes-sync): excluir um dado = `deleted = 'S'`
+(e o que a peça do conceito disser — ex.: estado derivado de evento). `DELETE`, `REPLACE INTO` (= apagar + inserir) e `TRUNCATE`
+sobre dado de negócio são PROIBIDOS, salvo exceção **explícita nesta lista, com o motivo** (e um comentário no código apontando para
+cá). Revive = `UPDATE … SET deleted = 'N'` da MESMA linha, e a linha revivida não herda o que a morta carregava (regra 10 do §9 +
+ADV2-01 da onda 1 de produtos). DDL de migration (DROP de tabela legada vazia, realinhamento) não é "apagar dado" — segue o §8.
+
+Por quê: o histórico é a prova (nota, título, comissão e o legado referenciam o id); e as chaves estrangeiras novas (ex.: a 071 —
+`tb_merchandise_trade_unit` ↔ `tb_merchandise`) contam com isso: um `REPLACE`/`DELETE` físico do pai passa a falhar com 1451.
+
+**Exceções registradas** (física com motivo):
+
+| Onde | O que | Motivo |
+|---|---|---|
+| `setes-api` `billing.repository.ts` (gravação do FCP do item) | `DELETE FROM tb_order_item_icms_fcp` do item antes de regravar | a tabela veio do baseline SEM PK; o refaturamento recalcula o FCP e duplicaria a linha — a correção definitiva é dar PK à tabela (tarefa própria) |
+| `setes-sync` `scripts/reset-institution-sync-data.ts` e `scripts/smoke-*.ts` | `DELETE` dos dados sincronizados de um institution de teste (com FK checks desligadas, inclusive entidades da `setes_central`) e das linhas que cada smoke criou | ferramentas de ENSAIO em ambiente de teste (Valdo, 2026-10-18 — D-SY8: "eventualmente vai morrer"); nunca rodam contra cliente real. ⚠️ o reset apaga TODAS as entidades da central exceto uma, e o `smoke-onda3.ts:71` apaga categoria por faixa de id (`setes-sync/verificacao-comissao-margem-mercadoria.md` §8.1) |
+
+Achou um `DELETE`/`REPLACE`/`TRUNCATE` fora desta lista = defeito (ou exceção a registrar aqui, com o "vai" do Valdo).
 
 ## 4. IDs
 
@@ -138,6 +158,10 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
 - `tb_user` controla **somente autenticação** (1 registro por entity; PK simples `id`)
 - Senha: MD5 sem salt (decisão registrada; risco de rainbow table aceito), hash aplicado **no backend**, nunca na query
 - Perfil do usuário: `tb_institution_has_user.kind` — **por institution** (o mesmo usuário pode ter poderes diferentes em cada empresa)
+- Privilégio do usuário (`tb_user_has_privilege`): **por institution** (decisão 10 da Fase 2 + D-GE3, 2026-10-18). ⚠️ Hoje a tabela está
+  SEM `tb_institution_id` (a migration 003 recriou sem a coluna) — defeito latente, inofensivo com 1 institution por schema; volta a ter a
+  coluna na PK na onda 0 da frente do grupo (`prompts/prompt_frente_grupo_estabelecimentos.md`). Leitor novo de privilégio já nasce
+  filtrando pela institution.
 - `'super'` só vale na institution 1 (Setes) — hard coded no backend (`@shared/auth/roles.ts`)
 - Licença do cliente: `tb_institution.active`
 - Email de login: grupo 2 (`sistema`) em `tb_mailing_group`
@@ -162,6 +186,9 @@ Tabelas-filhas de `tb_entity` usam `id` como **PK e FK ao mesmo tempo** para `tb
   virada; (3) só então virar o `JWT_KID` do setes-api (a chave anterior fica na lista dele e nas das APIs até o último token dela expirar —
   24 h); (4) tirar a anterior. Virar antes do (2) = todo ato fiscal recusado com 401 `unknown_kid` (o núcleo LOGA a classe de cada 401, com o
   kid — nunca o token). Desde a D-F165 o núcleo, como o setes-api, exige `kid` e `exp` no token.
+  **Efeito colateral da rotação (Q-PV38, 2026-10-18)**: o HMAC do código de troca de senha (`tb_user_password_reset.code_hmac`) usa um
+  segredo DERIVADO (HKDF) da chave privada de assinatura (`deriveProductSecret`) — no passo (3) os códigos abertos (≤ 15 min) deixam de
+  casar e as tentativas com eles caem no log como `wrong`: avise quem estiver recuperando a senha naquela hora (pede outro código).
 - Fluxo multi-institution: ver `setes-api/04-AUTH-MULTI-INSTITUTION.md`
 
 ## 8. Validação antes de executar
@@ -234,6 +261,38 @@ a ferro: cada uma nasceu de um CRITICAL/HIGH real.
    vítima pode ser a tela de cadastro, que não reexecuta. Saída: travar TODOS os pais primeiro (ORDER BY pk), depois cada filha, na
    MESMA ordem do escritor (o leitor espera o escritor terminar e ainda lê o que ele gravou). Caso real: `readServicePresumptions`
    (`@shared/service-ibscbs`) × `PUT /services` — prova `setes-api/scripts/prove-ibscbs-presumption-lock.ts` (forma antiga = 1213).
+10. **Upsert (`INSERT … ON DUPLICATE KEY UPDATE`) só em tabela cujo ÚNICO índice UNIQUE é a PK** (2026-10-18 — cadastro de produtos,
+   onda 1, gates ADV-01/ADV-02 provados em schema descartável no MariaDB 10.4): com outro UNIQUE na tabela, a colisão NELE não lança
+   ER_DUP_ENTRY — vira UPDATE da linha que colidiu. O nível novo de um produto "atualizava" o nível de OUTRO produto (corrida de GTIN)
+   ou o nível vizinho do mesmo produto (fator igual depois do arredondamento), e a API respondia 200/201 com o dado trocado. Saída:
+   separar a linha que É MINHA (UPDATE pela PK) da linha que NASCE (INSERT puro) e deixar o UNIQUE de negócio falhar ALTO → 409
+   tipado. Troca de valores únicos entre linhas do MESMO dono = gravação em DUAS FASES (estacionar as que mudam — `deleted = 'S'` tira a
+   linha dos UNIQUE de "vivos" — e regravar pela PK). Caso real: `tb_merchandise_trade_unit` (071) — `writeBaseUnit`/`saveTradeUnits`.
+11. **Catálogo CENTRAL criado pelo cliente: a serialização é a trava NOMEADA do catálogo, não a da institution** (2026-10-18 — mesma
+   onda, ADV-06): a regra 7 não serve — o catálogo é compartilhado e institutions diferentes não se esperam; dedupe `FOR UPDATE` num valor
+   ausente + `MAX(id) FOR UPDATE` só tomam travas de intervalo (compatíveis): 8 criadores → 1 ok e 7 × 1213. `GET_LOCK('setes_central.
+   <tabela>', 10)` ANTES da transação (a transação começa depois dela: o retrato já vê o item do criador anterior e a dedupe o reusa),
+   `RELEASE_LOCK` no `finally` (a trava é da SESSÃO — o pool devolve a conexão), sem trava em 10 s = 409 RESOURCE_BUSY. Provado: 8
+   concorrentes → 8 ok, 0 deadlock, 0 duplicata. Peça `@shared/central-catalog`. ~~Limite: o setes-sync cria itens centrais pelo protocolo
+   dele.~~ SUPERADO para marca/embalagem/medida (D-SY10, 2026-10-18): o setes-sync usa a MESMA trava, o MESMO nome e a MESMA chave
+   (`setes-sync/src/modules/sync/sync.catalog.ts` `ensureAndLinkCatalogItem` — no caminho quente do sync o item VIVO é reusado por
+   leitura sem trava e o vínculo do cliente fica FORA da seção global: nunca esperar o lock de um cliente segurando a trava de
+   todos). Limite que fica: a forma de pagamento (`tb_payment_types`) tem dois escritores sem trava nomeada e com comparações
+   diferentes (setes-api `_ci`, setes-sync binária) — Q-SY17 do `setes-sync/verificacao-comissao-margem-mercadoria.md`.
+12. **Trava de REGISTRO só serializa se a linha EXISTE** (complemento da regra 7 — prova `setes-api/scripts/prove-product-id-protocol.ts`,
+   2026-10-18): `SELECT … WHERE id = ? FOR UPDATE` sobre PK INEXISTENTE vira trava de INTERVALO — compatível com a de qualquer outro: 11 de
+   12 cunhadores pegaram o MESMO id numa institution fictícia. Prova de protocolo de contador roda contra uma linha REAL (por milissegundos)
+   ou cria a linha no schema descartável — nunca contra um id que não existe.
+13. **Filhos de um pai que é o SERIALIZADOR: leitura CONSISTENTE depois da trava do pai — nunca a FAIXA do filho travada** (2026-10-18 —
+   Q-PV38, pedido de troca de senha; prova `setes-api/scripts/prove-password-reset-lock.ts`): quando TODA transação que escreve nas linhas
+   filhas de um pai trava PRIMEIRO a linha do pai (registro que EXISTE — regra 12) e só depois lê/escreve as filhas, a leitura das filhas que
+   decide (contagem, MAX+1 do `seq` do pai, "a vigente") é CONSISTENTE, sem `FOR UPDATE`: o retrato do InnoDB nasce na 1ª leitura consistente
+   — DEPOIS da espera pela trava — e já vê o que o dono anterior confirmou (a regra 2 protege do retrato tirado ANTES da espera; aqui ele
+   não existe). Travar a faixa (`… WHERE pai_id = ? FOR UPDATE`) põe trava de INTERVALO na fronteira com o pai VIZINHO, e o INSERT do
+   vizinho fecha ciclo: 1ª rodada da prova, 12 contas emitindo juntas = 1 deadlock que passou de 5 retentativas; com a leitura consistente,
+   40 contas + rodada mista de 96 operações = 0 deadlock. Condições (sem elas, volta a regra 2): (a) o 1º statement da transação é a trava do
+   pai — nenhuma leitura consistente antes; (b) só quem segura a trava do pai escreve nas filhas dele; (c) as gravações nas filhas são pela PK
+   (UPDATE de linha existente / INSERT). Caso real: `tb_user_password_reset` sob `tb_user` (`auth.repository.ts`).
 
 ## 10. Tempo: instante em UTC, data de negócio na zona do estabelecimento (2026-09-30 — Q-TZ1)
 
@@ -413,3 +472,25 @@ rodam na MESMA instância MySQL do produto, com banco próprio.
     precisa do núcleo trabalha em pastas-IRMÃS de worktrees (`D:\Gestao2027\<frente>\{fiscal-api,nfse-api,…}`) — o `../fiscal-api` do
     tsconfig resolve para o núcleo da worktree; (c) o checklist de deploy da nfse-api (`nfse-api/INDEX.md`) confere "núcleo da árvore viva
     com `git status` limpo e no commit esperado" ANTES de reiniciar o serviço.
+
+## 12. Grupo de estabelecimentos: a tabela é do GRUPO ou do ESTABELECIMENTO, nunca das duas (2026-10-18 — D-GE2)
+
+Origem: frente do grupo de estabelecimentos (`prompts/prompt_frente_grupo_estabelecimentos.md`, D-GE1…D-GE17). O GRUPO (matriz e filiais de
+um cliente) É o schema `setes_<cliente>` com N institutions; a chave do grupo é o id da institution FUNDADORA, gravado uma vez numa tabela
+de linha única do schema (D-GE1). Enquanto o schema tiver UMA institution, chave do grupo = institution e toda regra abaixo é neutra.
+
+1. **Toda tabela do schema do cliente é de UM escopo só**: do GRUPO (o `tb_institution_id` da linha = a chave do grupo — catálogo do bem,
+   categoria, plano financeiro, tabelas de preço e grade, papéis de entidade, menus, contrato de interfaces — D-GE22) OU do ESTABELECIMENTO (o `tb_institution_id` = a
+   institution que operou — pedidos, notas, financeiro, caixa, estoque, regra tributária/MVA/FCP/ISS, emissor, configurações, privilégios).
+   **Nunca as duas**: numa tabela mista a linha do grupo e a linha da fundadora teriam a MESMA PK. Fato da RELAÇÃO estabelecimento × dado do
+   grupo vira VÍNCULO próprio (`tb_institution_has_<x>` — ex.: `tb_institution_has_service` para a regra de ISS, `tb_institution_has_price_list`
+   para as tabelas que a filial usa), nunca coluna na tabela do grupo.
+2. **Leitura**: tabela do grupo filtra pela chave do grupo (`groupInstitutionId`, peça `@shared/group`); tabela do estabelecimento pela
+   institution da sessão; **NUNCA** `p.tb_institution_id = x.tb_institution_id` entre uma tabela do grupo e uma do estabelecimento.
+3. **Leitura AGREGADA de operação** (somar estabelecimentos do grupo — ex.: dívida do cliente para o limite de crédito, D-GE10) só por
+   `tb_institution_id IN (<institutions do schema>)` resolvido pela peça, e só se constar da lista nomeada da cerca (A-GE1).
+4. **Contadores**: id de tabela do grupo cunha pela chave do grupo; quando a mesma transação cunha número do estabelecimento E do grupo, a
+   ordem de trava é estabelecimento → grupo (complementa a regra 7 do §9).
+5. **Exceções do SCHEMA inteiro** (sem `tb_institution_id`) só em lista branca da cerca: a linha do grupo e os menus (`tb_module*`, D-GE5).
+   ⚠️ Hoje `tb_user_has_privilege` também está sem a coluna (migration 003) — é DEFEITO latente, não exceção: volta a ter a institution na PK
+   (D-GE3, decisão 10 da Fase 2).

@@ -51,6 +51,25 @@ cadastro de cliente futuro usa o guard próprio dele, na mesma posição.
 router.use('/<plural>', superGuard, <plural>Routes)   // → /api/<plural>
 ```
 
+### Cadastro que o LEGADO alimenta → `syncWriteGuard` (D-PR41 revista, Rodada 6 de produtos — 2026-10-18)
+
+Se a tabela do cadastro é **ID LOCAL no `Infra-IA/setes-sync/MAPA_INDEXACAO.md`** (o legado manda o id DELE — ex.: `tb_product.id` =
+`PRO_CODIGO`, upsert pela PK no setes-sync) e a web cunha id por MAX+1 nela, o módulo **monta com `syncWriteGuard`**: estabelecimento
+com chave do sincronizador ATIVA só CONSULTA na web (escrita = 409 `SYNC_MANAGED_CATALOG`); sem a guarda o id da web cai no espaço do
+gerador do legado e o próximo envio SOBRESCREVE a linha sem aviso. É um MÉTODO aplicado caso a caso (Valdo), não um bloqueio geral.
+
+```ts
+router.use('/<plural>', syncWriteGuard, <plural>Routes)   // hoje: merchandise, services, price-lists, categories
+```
+
+E na MESMA entrega: (1) a tabela entra em `SYNC_FED_TABLES` (`@shared/sync-key`) — é por ela que religar a chave
+(`PUT /api/institutions/:id/sync-api-key/active` 'S') recusa com 409 `SYNC_KEY_WEB_ROWS` quando a web criou linha no período desligado
+(Q-PR47); (2) o Swagger das rotas de escrita documenta o 409 `SYNC_MANAGED_CATALOG`; (3) teste da guarda pelo app real (molde
+`src/__tests__/adversarial-merchandise-r3-guard.test.ts`); (4) o INSERT que cunha o id trava a institution (PADROES §9 regra 7) e logo
+depois chama `assertNoActiveSyncKey(conn, institutionId)` — a guarda lê a chave FORA da transação, e o ato de religar segura a mesma
+trava (sem a reconferência, quem passou pela guarda e esperou o religar insere com a chave já ativa). Pedido (`tb_order`) NÃO entra: a
+origem é separada pelo `terminal` (Valdo, Rodada 6 — conferir a Q-SY14 do grupo do sync antes de contar com isso).
+
 ## Passo 4 — Regras que NUNCA quebram
 
 - FK para exibição: LEFT JOIN devolvendo `<pai>Name` (o app mostra no lookup)
@@ -144,6 +163,7 @@ rotas documentadas ficaram invisíveis no /docs). Doc `@swagger` SEMPRE no
 - [ ] Swagger em todas as rotas (tag = módulo; security BearerAuth; responses
       200/201/400/401/403/500) e rotas VISÍVEIS em /docs; montado em /api/<plural> com o guard certo
 - [ ] tsc limpo + smoke; módulo gêmeo no app criado/atualizado
+- [ ] Tabela ID LOCAL do MAPA_INDEXACAO (o legado alimenta)? → `syncWriteGuard` + `SYNC_FED_TABLES` + 409 no Swagger (Passo 3)
 - [ ] Interface + privilégios no seed (seção abaixo) — aplicado ANTES do app
 
 ## Interface e privilégios (OBRIGATÓRIO em toda tela nova — D-GE19 + D-PV1…D-PV9, 2026-10-18)
@@ -173,6 +193,10 @@ os devidos priviegios"*.
    (`API_PRIMITIVES`, aceita vários privilégios fixos) com o que ela consome; export novo em `require-privilege.ts` exige classificação
    no teste; `can()` numa peça compartilhada do app = registro `APP_SHARED_CONSUMERS` (telas derivadas do grafo de import; exceção =
    exclusão com motivo). Detalhes: §12 do prompt (entregue em worktree `privilegios-catalogo` em 2026-10-18 — até o merge, só lá).
+   **Rodada 5 (D-PV15/D-PV16)**: as telas do Super Interfaces e Privilégios RECUSAM (409) tirar do catálogo um par da lista, criar
+   tela do menu sem VISUALIZAR, trocar/repetir a chave que o código usa (a chave só na forma `^[a-z0-9]+(-[a-z0-9]+)*$`) e renomear
+   privilégio consumido — então o seed da tela nova é o caminho, não a tela; e o `build-web.ps1` do app PARA a publicação se o
+   catálogo do destino não cobre a lista ou se o app consome par fora dela (ordem: seed → setes-api → app).
 6. **Super escapa de todas as verificações** (D-PV3) — os privilégios das telas do Super servem aos botões dele e ao dia em que a tela for
    delegada. Alcance sobre a licença (tela não contratada): A-PV1 do prompt, a confirmar.
 7. **Guarda POR ROTEADOR (D-PV2 — executada em worktree `privilegios-crud` em 2026-10-18, até o merge só lá; §11 do prompt)**: o módulo

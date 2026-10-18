@@ -1,5 +1,10 @@
 # nfe-api — Índice (espelho de conhecimento)
 
+**⏯ 2026-10-18 (noite): NE-2 Rodada 0 ORGANIZADA (`../prompts/prompt_onda_nfe_sefaz.md` §15 = ponto de retomada).** Escopo E1–E6 (esqueleto no
+molde da nfse-api, migration 001 da família provada em banco descartável, descritor de escrita + sondas, leitura publicada no núcleo, GRANT); a NE-3
+entra só como vista (§15.5). Parecer do guardião integrado (§15.3): a família entra no catálogo `VOICE_READINGS` com o 1º leitor (NE-6), não na
+NE-2; `humanEffectCancel` = `() => false`; autorizadores = constante DATADA na nfe-api (NE-3); **defeito real no rascunho do DDL: a UNIQUE da faixa
+inutilizada não tem o ambiente**. **Rodada 15 em revisão UMA A UMA (§15.8): D-NE158 e D-NE159 decididas; ⏯ retomar pela Q-NE160 (Q-NE160…Q-NE168 pendentes).** Antes: NE-1b FECHADA e PUBLICADA (2026-10-18, núcleo abce0b8 — §14.20).
 **⏯ 2026-10-15 (noite): Rodada 4 DECIDIDA (D-NE102…D-NE114 — §13.10 do prompt = ponto de retomada) e NE-0 FECHADA.** D-NE103: a
 devolução referencia POR ITEM (nItem derivado por peça única + conferência no procNFe da origem; `refNFe` proibido — supera parte da D-NE25);
 D-NE102: IBS/CBS no vProd em 2027 = regra do motor e do builder; W16 vigente = NT 2023.004. Cinco documentos novos arquivados (PL_010d_v1.03 —
