@@ -12,7 +12,8 @@ recomendações da Rodada 2") → A-PV1…A-PV4 confirmadas, D-PV5…D-PV8 — N
 §10) — 157 pares vivos; C1 corrigido no menu do admin**; COMMITADO sem push em 2026-10-18 (sql 3672ee2 = seed 64 + comentário do 06; Infra-IA no commit seguinte, só os trechos desta tarefa).
 Entregas próprias em curso (sessões abertas pelo Valdo em 2026-10-18): a cerca da D-PV9 e a onda da D-PV2 (com A-PV1/D-PV5/D-PV6/D-PV8).
 **Cerca da D-PV9 ENTREGUE em worktree em 2026-10-18 (§12 — lista única `privilege-catalog.ts` + cerca + teste ao vivo + boot que grita;
-C1 provado ao vivo; gates 0,80/0,78; NADA commitado; A-PV12 e Q-PV16…Q-PV20 aguardam o Valdo).**
+C1 provado ao vivo; gates 0,80/0,78; NADA commitado). Rodada 5 (D-PV14…D-PV17) com D-PV15/D-PV16 EXECUTADAS (§12.8; gates do delta
+0,76/0,72 → 0,80). Aguardam o Valdo: A-PV12, A-PV14, Q-PV19 (resposta veio repetida) e Q-PV50…Q-PV53. ⏯ Retomar pelo §12.9.**
 **Onda da D-PV2 EXECUTADA em worktree em 2026-10-18 (§11 — guarda por roteador + A-PV1 na API e na nfse-api + fábrica do app; worktrees
 `privilegios/*`, branch `privilegios-crud`; gates 0,76/0,82 com 2 HIGH anteriores à onda corrigidos por barreiras INTERINAS; NADA
 commitado; A-PV5…A-PV11 a ratificar; Q-PV10…Q-PV15 e Q-PV21…Q-PV29 aguardam o Valdo — a Q-PV11 trava a PUBLICAÇÃO).**
@@ -333,6 +334,9 @@ institution 1).
    (D-PV9 — entrega própria).
 
 ## 8. Retomada (prompt curto)
+
+> ⏯ **Cerca da D-PV9 (lista única, guarda das telas do Super, publicação que para): retomar pelo §12.9.** Este §8 é a retomada do
+> seed 64, já aplicado.
 
 > ✅ **Seed 64 APLICADO em 2026-10-18 (§10).** Resta: ver o ícone ⇄ na tela de Baixas quando a API e o app estiverem no ar, e o push
 > (só com o "vai"). Commits feitos sem push: sql 3672ee2 + Infra-IA. O roteiro abaixo fica como registro do que foi feito.
@@ -970,6 +974,57 @@ O seed 64 já estava aplicado (§10). Reconstruído o catálogo de ANTES pelo ME
   tela mesmo com a outra equivalente. (a) **antes de deixar sair, conferir em cada schema de cliente que a linha não é contratada** (ou
   migrar o vínculo para a que fica, no mesmo ato); (b) limite conhecido — duplicata de chave não existe hoje (conferido) e a criação está
   barrada. **Rec.: (b)** enquanto a Q-PV51 (a) não entra; com o UNIQUE, a duplicata deixa de existir.
+
+### 12.9 Retomada da cerca (prompt curto — estado salvo em 2026-10-18, fim da sessão)
+
+**Onde está o trabalho** (NADA commitado; as duas worktrees saem do `main` e ficam no disco até o "vai"):
+
+- `D:\Gestao2027\privilegios-catalogo\setes-api` — branch `privilegios-catalogo`, base `main` f53a618.
+  - Alterados: `package.json` (`check:privileges`), `src/server.ts` (boot), `src/shared/errors/error-codes.ts` (3 códigos),
+    `src/modules/interfaces/interfaces.{dto,repository,routes,service}.ts`, `src/modules/privileges/privileges.{routes,service}.ts`.
+  - Novos: `src/shared/auth/privilege-catalog.ts`, `src/shared/auth/assert-privilege-catalog.ts`, `src/test-setup/privilege-fence.ts`,
+    `src/__tests__/privilege-catalog-{fence,boot,live,guard}.test.ts`, `scripts/check-privilege-catalog.ts`,
+    `scripts/lib/require-target-env.ts`.
+- `D:\Gestao2027\privilegios-catalogo\setes-app` — branch `privilegios-catalogo`, base `main` a450909. Só `apps/web/build-web.ps1`
+  (UTF-8 com BOM e CRLF — o PowerShell 5.1 precisa do BOM).
+- Fora do git: na pasta `privilegios-catalogo\`, as junções `nfse-api` e `fiscal-api` (os testes da F2a leem `../`); dentro da worktree
+  do setes-api, o `.env` (gitignored), que é um link físico do `.env` vivo.
+- Estado conferido ao salvar (2026-10-18): `npx tsc --noEmit` limpo; `npx jest src/__tests__/privilege-catalog src/__tests__/swagger-parse`
+  = 5 suítes · 119 verdes (fence, boot, live, guard e swagger), inclusive a ao vivo. A suíte completa da rodada final deu 131 arquivos ·
+  2113 verdes · 31 pulados · 0 falha.
+
+**O que falta, em ordem**:
+
+1. **Decisões do Valdo**:
+   - **A-PV12** (§12.4, a relembrar): devolução × CANCELAR/TRANSMITIR ficam FORA do catálogo de propósito. Cancelar devolução é a
+     Onda 2 do cancelamento (hoje dá 409), devolução é NF-e (a nfse-api não emite por ela) e a tela não tem os botões. A marca cai
+     sozinha se um botão passar a consumir o par.
+   - **A-PV14**: a guarda das telas do Super vale também para o super.
+   - **Q-PV19** (§12.5): a resposta veio repetida como "Q-PV17 - a". Com (a), o teste ao vivo fica obrigatório na suíte e não há código
+     novo. Com (b), o `privilege-catalog-live.test.ts` vira opt-in no molde do `F2A_ADV_LIVE`
+     (`adversarial-f2a-a2-gate.test.ts:397`), e o roteiro da publicação (D-PV16) passa a ser o único a conferir o banco antes do deploy.
+   - **Q-PV50…Q-PV53** (§12.8). A (a) da Q-PV50 e a (a) da Q-PV51 são entregas próprias. A Q-PV51 é DDL: guardião, depois
+     `PADROES_BANCO` + `revisar-ddl`, prova em schema descartável.
+2. **Numeração**: a sessão da D-PV2 usa D-PV18+, A-PV15+, Q-PV40–49 e Q-PV54+. Antes de numerar algo novo da cerca, conferir o maior
+   número no prompt e combinar com ela.
+3. **Commit**, só com o "vai": nas duas branches `privilegios-catalogo`, com `git add` só dos caminhos listados acima. Os
+   `.dart_tool/*` da worktree do app ficam de fora.
+4. **Publicação** (§12.7 + o que a Rodada 5 somou):
+   - (a) `npm run errors:gen` com os 3 códigos novos (escreve em `setes_central.tb_error_catalog`);
+   - (b) a ordem é seed dos pares → setes-api → app;
+   - (c) antes do `flutter build`, `build-web.ps1 -CheckOnly` (só as conferências) tem de sair 0;
+   - (d) o merge do `error-codes.ts` com os 7 códigos da D-PV2 é SOMA. A branch dela, `privilegios-crud`, já está commitada e no
+     GitHub (api 50b928f);
+   - (e) a D-PV14: quem chegar por último ao `main` escreve o adaptador da `listGatedRoutes()` (§12.7 item 2).
+5. **Limpeza**, ao remover a worktree: apagar as junções `privilegios-catalogo\{nfse-api,fiscal-api}` e o link do `.env`. É `rmdir`
+   da junção, nunca apagar com recursão: a recursão apagaria o conteúdo do repo de verdade.
+
+> **Prompt curto para a nova sessão**: "Retome a cerca da D-PV9 pelo §12.9 do
+> `Infra-IA/prompts/prompt_privilegios_interfaces.md`. As worktrees são `D:\Gestao2027\privilegios-catalogo\{setes-api,setes-app}`
+> (branch `privilegios-catalogo`, nada commitado). Antes de tudo, rode `npx tsc --noEmit` e
+> `npx jest src/__tests__/privilege-catalog` no setes-api da worktree. Minhas respostas: A-PV12 …, A-PV14 …, Q-PV19 …,
+> Q-PV50…Q-PV53 …. Regras: nada de commit, push ou seed sem o meu 'vai'; não editar `D:\Gestao2027\setes-api` (tsx watch = deploy);
+> banco só em sessão READ ONLY; não ler setes-sync nem sincronizador."
 
 ## 13. Q-PV38 / D-PV13 — força bruta no código do `/auth/change-password` (2026-10-18, sessão própria, em WORKTREE — NADA commitado)
 
