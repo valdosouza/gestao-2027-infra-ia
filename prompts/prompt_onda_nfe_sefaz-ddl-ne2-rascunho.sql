@@ -1,4 +1,9 @@
 -- Escopo: setes
+-- SUPERADO (2026-10-20, NE-2 — prompt §15.9): este rascunho VIROU a migration `nfe-api/src/migrations/sql/001_nfe_baseline.sql` (worktree
+--   `D:\Gestao2027\ne2\nfe-api`, branch ne2, ate a publicacao D-NE168), com as decisoes da Rodada 15: D-NE160 (a view 4.2 NAO nasce; so
+--   `dh_emission` publicada), D-NE161 (view 4.3 SEM authority_recorded), D-NE163 (colunas GERADAS do Id + UNIQUE da faixa retirada por
+--   (institution, model, serie, environment, number_from, number_to, withdrawn) + UNIQUE da prova (environment, withdrawn_void_id) — corrige a
+--   UNIQUE sem ambiente abaixo). A FONTE agora e a migration; este arquivo fica como historia (nao editar).
 -- v1.1 (2026-10-15): Rodada 4 DECIDIDA (prompt §13.10 — D-NE102…D-NE114 = recomendacoes): G1…G11 do parecer viram D-NE105…D-NE114;
 --      a alternativa (a) da Q-NE103 (tabela item->nItem) foi REJEITADA pela D-NE103 (derivacao, sem DDL) — fica no fim so como conhecimento negativo.
 -- RASCUNHO v1 do DDL da FAMILIA NF-e (ramo `merchandise`, modelos 55/65) no banco `fiscal_api` — NE-0, entregavel E4

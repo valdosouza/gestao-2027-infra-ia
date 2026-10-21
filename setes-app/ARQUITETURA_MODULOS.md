@@ -96,7 +96,10 @@ módulo** — dependências cruzadas passam por shared (ex.: cities usa
 - **fábrica Register\***: apresentação PURA. RegisterSearchPage recebe
   `items`/`loading` prontos e notifica `onFilterChanged`/`onNew`/`onView`;
   RegisterFormPage valida e DISPARA `onSave(values)`/`onDelete` (void — quem executa
-  é o bloc). A carga inicial é evento do bloc no initState da página.
+  é o bloc). A carga inicial é evento do bloc no initState da página. A lista é a peça
+  `SetesDataList` (setes_widgets — onda C da densidade, 2026-10-20, branch `densidade-c` até a publicação):
+  tabela no desktop (≥ 840 px de área, cabeçalho pelas `columns` da tela) e item no celular — a FÁBRICA decide
+  a forma, a tela só declara as colunas (`prompts/prompt_densidade_layout_web.md` §9).
 - **paginação (2026-08-03 — OBRIGATÓRIA em lista nova)**: contrato
   `PagedResult<T>` (packages/core) atravessa datasource → usecase → state;
   a página repassa `page/pageSize/total` + `onPageChanged`/`onPageSizeChanged`

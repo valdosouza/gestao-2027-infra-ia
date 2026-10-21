@@ -1,5 +1,8 @@
 # Plano de retomada — frentes abertas da noite de 2026-10-17 → 2026-10-18
 
+> **SUCEDIDO em 2026-10-21 por `plano_retomada_2026-10-21.md`** (Fases 0 e 1 daqui cumpridas; a rodada de decisões de 2026-10-20 e as seis
+> sessões de execução reescreveram o resto). Fica como história; retomar SEMPRE pelo plano de 21/10.
+
 **Escopo**: setes
 **Gerado em**: 2026-10-18 (domingo), a pedido do Valdo: "analise de todos os chats trabalhados desde ontem à noite que não foram
 encerrados … compile num plano de execução, em ordem, checando o que deve ser commitado".

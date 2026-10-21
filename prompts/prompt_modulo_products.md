@@ -1378,3 +1378,186 @@ de `SYNC_TRANSITION_ENDED` e a chave por estabelecimento dos PDVs (destino P) s�
 do terminal (Q-TG3/Q-TG4: o guardião propôs o "ponteiro na linha do grupo" para o mesmo fato — decidir UM lugar quando o bloco do terminal
 for revisto). Próximo número: **D-PR53**. Execução: a branch `merchandise` refaz a Rodada 6 sobre D-PR47/D-PR48 (retrabalho sobre commit),
 rebase sobre o `main` pós-privilégios, DDL da coluna com o guardião; depois a janela (§9) e a onda 1 do app.
+
+### Rodada 7 — execução (2026-10-20, worktree `merchandise/{setes-api,sql}` — retrabalho sobre o commit 2171f20/8b8cedf; NADA commitado nem aplicado ao banco)
+
+Sessão própria (pedido do Valdo; a sessão-mãe coordena). A Rodada 6 foi REFEITA sobre D-PR45/D-PR47/D-PR48/D-PR49/D-PR51/D-PR52. Parecer do
+guardião (`setes-conceito`) ANTES do DDL — integrado, com DOIS nomes corrigidos: **`catalog_source` → `source_kind`** ("origem do catálogo"
+mentiria no modo P, em que a web é a dona: o valor é o TIPO DA FONTE EXTERNA que alimenta o estabelecimento — as mesmas letras do
+`tb_terminal.kind`, D-TM9) e **`legacy_ended_at` → `transition_ended_at`** (no destino P os PDVs do legado continuam; o que acabou foi a
+TRANSIÇÃO). ⚠️ A D-TM10 do prompt do terminal cita `catalog_source` — é o MESMO fato com o nome final `source_kind` (ajustar lá quando o bloco
+do terminal for revisto; não editado aqui). O que entrou, item a item:
+
+1. **O FATO (D-PR47) — migration `072_institution_source_kind.sql`** (CENTRAL, `setes_central.tb_institution`; o runner roda por schema, por
+   isso cada passo é guardado por `information_schema` — precedente da 027 — ou re-executável): `source_kind` CHAR(1) **NOT NULL SEM DEFAULT**
+   (fato declarado, nunca presumido — guardião) + `transition_ended_at` DATETIME NULL (write-once), logo depois de `schema_name`; backfill
+   UMA vez nas linhas NULL (chave do sincronizador VIVA — ativa OU pausada, `deleted = 'N'`: a pausa não muda o dono — = 'L' — dev:
+   `setes_setes`; demais = 'W'; 'P' não nasce de backfill); CHECK BINÁRIO
+   nomeado `ck_institution_source_kind` (`COLLATE utf8mb4_bin IN ('W','L','P')`) + `ck_institution_transition_ended` ("L com data" não existe
+   por construção). TODO DDL da 072 é guardado por `information_schema` (ADD COLUMN ×2, `MODIFY NOT NULL` por `is_nullable`, CHECKs por
+   `CHECK_CONSTRAINTS` — 4 blocos `SET/PREPARE/EXECUTE`): o re-run por schema, inclusive AO VIVO no onboarding, não emite ALTER nenhum (gate
+   socrático: um ALTER em `tb_institution` pede o MDL da linha que todo cunhador trava). **Renumeração**: a 072 da Rodada 6 (categorias
+   padrão) virou **073** — ela passa a ler `source_kind` e tem de rodar DEPOIS da coluna (nenhum banco tinha a 072 antiga registrada;
+   `_migrations` nunca a viu — se algum dia um schema a tiver, o remédio é apagar a linha 072 do `_migrations` dele, não renumerar). Espelho no
+   repo `sql`: `01_setes_central_ddl.sql` (tabela com as colunas e os CHECKs) + `02` (a Setes nasce `'L'` — ADV-R7-02) + nota no `03` (a 073).
+   **Boot** (`server.ts`, DEPOIS das migrations): `assertInstitutionSourceKindSchema` (`@shared/catalog-owner`) confere coluna NOT NULL sem
+   default, os dois CHECKs pelo NOME em `information_schema.CHECK_CONSTRAINTS` e SONDA o motor (PADROES §11 regra 11) com linhas de prova de
+   PK PRÓPRIA (`id = -1`, entity + institution) numa transação sempre desfeita — 'X', a minúscula 'l' e "L com data", cada um recusado pela
+   constraint ESPERADA; nunca toca a linha da Setes (a que todo cunhador trava — gate socrático). **Provas em schema descartável**
+   (`scripts/prove-072-institution-source-kind.ts` — cópias `LIKE` da central real, a migration com `setes_central` trocado): 20/20 —
+   ADD/backfill/NOT NULL/CHECKs, re-execução idempotente (zero ALTER; a pausa da chave não reescreve o backfill), 'X'/'l'/'p' recusados pelo
+   CHECK certo, "L com data" recusado, o ato com a condição no comando afeta 0 linhas na 2ª vez, **o INSERT sem `source_kind` (o `sql_mode` do
+   dev NÃO é estrito: gravaria '') é recusado pelo CHECK** — o fato é declarado por construção —, e a 073 sobre a cópia cria só para W/P;
+   `scripts/prove-073-default-categories.ts` (reescrito da prova da antiga 072): 19/19 — casos W/L/P, idempotência, `ensureDefaultCategories`.
+   Conhecimento negativo (MariaDB 10.4.20): (a) `information_schema.COLUMNS.COLUMN_DEFAULT` da coluna nullable com `DEFAULT NULL` vem como a
+   STRING `'NULL'` (a sem default vem `null`); (b) no INSERT que viola FK E CHECK ao mesmo tempo o motor acusa o CHECK primeiro (4025);
+   (c) `ADD CONSTRAINT IF NOT EXISTS` é só MariaDB (a ida ao MySQL 8 — F3 — revê a cadeia; o boot já aceita o errno 3819 do MySQL).
+2. **A guarda (D-PR47/D-PR51/D-PR52) — `syncWriteGuard` → `catalogOwnerGuard`** (`src/gateway/catalog-owner.guard.ts`) e **`@shared/sync-key`
+   → `@shared/catalog-owner`** (`sourceKindOf(institutionId)` — hoje a própria institution; quando `@shared/group` nascer resolve a FUNDADORA
+   pelo `groupInstitutionId`, D-TM10; `catalogOwnerOf(kind)` puro: L → legado, W/P → web; `sourceKindHasSync`; duas listas: **`BASE_CATALOG_TABLES`**
+   = a lista literal da D-PR52 (unidade de venda, medida/embalagem + vínculos, categorias, produtos, serviços — só o cadastro —, tabela de
+   preço, preço, lista e saldo de estoque) e **`LEGACY_OWNED_TABLES`** = base + plano de contas + contas bancárias (D-PR51); `LEGACY_OWNED_MODULES`
+   = merchandise, services, price-lists, categories, financial-plans, bank-accounts). Escrita em L = 409 **`CATALOG_LEGACY_OWNED`** (código novo;
+   `SYNC_MANAGED_CATALOG` e `SYNC_KEY_WEB_ROWS` SAÍRAM do catálogo — nunca publicados); leitura passa sem banco; falha fechado (fato ilegível =
+   409; erro do banco nunca libera). **A reconferência transacional morreu** (`assertNoActiveSyncKey` fora de `allocateProductId`, `insertCategory`,
+   `insertPriceList`): o fato é MONOTÔNICO (L → W/P, nunca de volta) — quem passou pela guarda nunca é alcançado por um fechamento. **O canal
+   API da conta bancária** (Inter — `tb_bank_account_channel`, segredos, webhook) é fato só da web: as rotas `/:id/channel…` saíram de
+   `bank-accounts.routes.ts` para **`bank-accounts.channel.routes.ts`, montado ANTES da guarda** (mesmo princípio da D-PR45 — senão a Setes,
+   que é L, perderia o canal do Inter); o cadastro da conta (`tb_bank_account`) fica guardado.
+3. **Interruptor da chave (D-PR48 item 1)** — `PUT /api/institutions/:id/sync-api-key/active` = só PAUSA/RETOMADA (`switchSyncApiKeyTx`:
+   trava da institution → fato → chaves `FOR UPDATE` → UPDATE do `active`); saíram o aviso, a "Serviços" do desligar, o `webBornSince` e o
+   409 `SYNC_KEY_WEB_ROWS`. Retomar em W = 409 **`SYNC_KEY_NOT_FOR_SOURCE`** (nativo web, ou L encerrado para W — a chave nunca reativa);
+   `POST /sync-api-key` recusa em W pelo mesmo código (a chave só existe para L e P — D-PR47).
+4. **O ato (D-PR48/D-PR49) — `POST /api/institutions/:id/end-legacy-transition`** (Super; corpo `{ destination: 'W' | 'P', reason ≥ 5 }` —
+   "destination" é a palavra da D-PR49): `endLegacyTransitionTx` numa transação — trava da institution (a MESMA que todo cunhador de id e o
+   interruptor travam) → fato `FOR UPDATE` → só L passa (não-L = 409 **`LEGACY_TRANSITION_NOT_APPLICABLE`**, inclusive "já foi encerrada": o
+   ato é único, sem 2º código) → `UPDATE … SET source_kind = destino, transition_ended_at = NOW() WHERE id = ? AND source_kind = 'L' AND
+   transition_ended_at IS NULL` (condição NO COMANDO — PADROES §11 regra 10; 0 linhas = falha alta) → destino W: chaves vivas → `active = 'N'`
+   em definitivo; destino P: a chave FICA (é a dos PDVs — **A-PR4**, ver Q-PR60) → `ensureDefaultCategories` ("Produtos"/"Serviços" que
+   faltarem — a 073 virou peça TS em `@shared/category-kind`, chamada pelo ato; no onboarding W/P é a própria 073 rodando no schema novo que
+   as cria, porque a linha da institution já existe com o fato). `withDeadlockRetry` 3 (o ato cunha id de categoria). Resposta `{ sourceKind,
+   transitionEndedAt, defaultCategories: { P, S }, syncKeysInactivated }`; trilha no log com autor, destino e MOTIVO (só log — Q-PR59); o
+   instante do "já foi encerrada" vai em `fields[transitionEndedAt]`, nunca na prosa (PADROES §10). **BARREIRA INTERINA (A-PR5 / Q-PR61)**: o
+   destino **P** responde 409 **`LEGACY_TRANSITION_DESTINATION_PENDING`** antes de qualquer transação (`OPEN_TRANSITION_DESTINATIONS = {W}` no
+   service) — com a chave viva para os PDVs (A-PR4) e sem o setes-sync honrar o fato, L → P abriria DOIS escritores no catálogo (o desktop
+   pela chave + a web, agora dona) num ato irreversível; cai quando o contrato `SYNC_TRANSITION_ENDED` existir. **Cadastro**:
+   `POST /api/institutions` exige `sourceKind` (DTO sem default — ⚠️ o app da tela Institutions precisa mandar o campo: CONDIÇÃO DA JANELA,
+   Q-PR62; cerca `institutions-contract-fence.test.ts`); `PUT` aceita `sourceKind` só como conferência — diferente do gravado = 409
+   **`SOURCE_KIND_IMMUTABLE`** (nunca descarte silencioso); `GET /:id` devolve `sourceKind`/`transitionEndedAt`; a lista devolve `sourceKind`;
+   `POST /sync-api-key` decide DENTRO da transação (trava → fato `FOR UPDATE` → chave viva — ADV-R7-03: o ato podia comitar entre a leitura e o
+   INSERT e nascer chave ativa numa institution W). **Contexto de sessão** (`/api/core/me`, login/select/switch — bloco `context`): `sourceKind`
+   e `catalogOwner` (`@shared/session-context` — o app trava o cadastro em L e libera só os blocos da D-PR45; invalidação por institution no
+   ato; a guarda lê o fato ao vivo).
+5. **D-PR45 — rotas próprias do enquadramento fiscal** `PUT /api/services/:id/tax-rule` (`{ serviceTaxRuleId | null }`) e `PUT /api/services/
+   :id/ibscbs` (`{ nbs?, ibscbs? }` — ao menos um; mesma semântica do PUT: ausente não mexe, null remove) em **`services.fiscal.routes.ts`,
+   montado ANTES do roteador guardado** (`router.use('/services', servicesFiscalRoutes)` e só depois `router.use('/services', catalogOwnerGuard,
+   servicesRoutes)` — só PUT vive lá; outro método cai na guarda), privilégio **ALTERAR em `services`** (`requirePrivilege` — a guarda por
+   roteador do `privilegios-crud` não existe nesta branch; na fusão vira `privilegeAct`), `assertClientRequired(..., only)` (parâmetro novo da
+   peça `field-config`: a obrigatoriedade do cliente vale só sobre os campos da rota). Escritores: `updateServiceTaxRule` e
+   `updateServiceFiscalClassification` em `services.repository.ts`, reusando os MESMOS escritores únicos do PUT (`upsertServiceRule`,
+   `syncServiceClassification` — 4 pontos de chamada; `assertServiceTaxRuleRef`/`assertClassificationIfChanged` extraídos do `assertRefs`),
+   trava do produto (kind S) 1º. Cerca por varredura em `adversarial-r7-gate.test.ts`.
+6. **Trilha** (`scripts/trilha-primeiro-cliente.ts`, P1): lê `source_kind` (nunca a chave); em L usa um serviço vivo do legado e, se ele não tem
+   regra de ISS ativa, a VINCULA pela rota própria da D-PR45 (prova viva do ato); sem serviço nenhum = PENDENTE. NÃO rodada (cria dados em
+   `setes_setes` e exigiria subir a API da worktree, que aplicaria 072/073 no dev).
+7. **Documentos**: skill `setes-api/skills/novo-modulo.md` (seção "Cadastro que o LEGADO alimenta → `catalogOwnerGuard`" + checklist); Swagger
+   das 6 rotas guardadas (409 `CATALOG_LEGACY_OWNED`), do interruptor, do ato e das 2 rotas fiscais. `CLAUDE.md`/`INDICE_CENTRAL` NÃO editados
+   (sessão-mãe).
+8. **Testes** (tsc limpo): `catalog-owner-guard` (guarda, regras puras, as 2 listas, cerca de MONTAGEM — a guarda em exatamente os 6 módulos,
+   os roteadores fiscal e do canal ANTES dela —, cunhadores sem reconferência, CATALOGAR), `sync-key-switch` (pausa; ato L→W/L→P; 409 fora de L;
+   affectedRows 0 = falha alta; falha na categoria desfaz tudo; deadlock reexecuta; DTOs; `SOURCE_KIND_IMMUTABLE`; chave em W),
+   `adversarial-catalog-owner-r7` (app real: 15 escritas × admin/super em L = 409; URL/método; leitura sem banco; JWT; L→W libera na hora; falha
+   fechada; D-PR45 passa em L, 403 sem ALTERAR/sem interface; canal do Inter passa em L), `adversarial-sync-switch-gate` (app real: quem alcança
+   os dois atos; bordas; pausa não libera o catálogo; ato com rollback REAL no modelo em memória; irreversível; deadlock; ordem das travas;
+   lookup pelo fato), `adversarial-r7-gate` (cercas estáticas: escritores das `LEGACY_OWNED_TABLES`, central-catalog, peças, os 2 escritores
+   fiscais e seus 4 chamadores, UM UPDATE de `source_kind` que comita, a 072/073 re-executáveis, o boot), `services` (+4 das rotas próprias),
+   `adversarial-merchandise-r3-guard` adaptado (fato em vez de chave). Removidos: `sync-write-guard`, `adversarial-sync-guard-r6`,
+   `adversarial-r6-gate` (os 3 `it.failing` da R6: o HIGH virou `it` resolvido por D-PR45; os 2 MEDIUM ficaram sem objeto).
+   Suíte completa: **139/142 suítes · 2.141 testes · 0 falhando** (as 3 suítes que não sobem são os gates ao vivo da F2a sem `.env` na worktree — ambiente, a mesma linha de base da Rodada 6); tsc limpo. Cercas novas: `institutions-contract-fence` (payload do app × DTO; seed 02 × DDL 01). Gates: ver "Rodada 7 — gates" abaixo.
+
+**Contratos pendentes (fora desta frente)**:
+- **Grupo do sync** (fronteira dos grupos — nada lido nem escrito lá): (1) o setes-sync passa a LER `tb_institution.source_kind` e recusa
+  CADASTRO quando `≠ 'L'` com código **`SYNC_TRANSITION_ENDED`** (D-PR48 diz 403, D-TM10 diz 409 simétrico à guarda — reconciliar lá; é
+  transporte); a chave INATIVA segue sendo só a pausa (`SYNC_KEY_INACTIVE`, D-SY13) — no destino W a chave fica inativa e o setes-sync a
+  recusa já pela pausa; no destino P a chave segue viva para os PDVs (movimento) e o cadastro é recusado pelo FATO; (2) **Q-SY24** (o upsert
+  de `tb_category` pelo `/category/sincronize` regrava `kind` e `posit_level`?) — conferência, não trava (D-PR47 superou a D-PR46).
+- **Frente do terminal** (D-TM9/D-TM10): o ato inativa o terminal L e, no destino P, confere "P exige terminal kind P registrado"; o nome do
+  fato é `source_kind`.
+- **App** (onda 1 de produtos / tela Institutions): o POST manda `sourceKind` (W/L/P, obrigatório); o Super vê `sourceKind`/`transitionEndedAt`
+  e tem o botão "Encerrar a transição" (destino + motivo); em L o formulário do serviço mostra só os blocos regra de ISS/IBS-CBS editáveis
+  (D-PR45) e o resto travado; códigos novos no app: `CATALOG_LEGACY_OWNED`, `SYNC_KEY_NOT_FOR_SOURCE`, `SOURCE_KIND_IMMUTABLE`,
+  `LEGACY_TRANSITION_NOT_APPLICABLE`.
+- **Publicação** (janela, com "vai"): 072 e 073 rodam no boot do setes-api (072 na central UMA vez — dev: `setes_setes` = L); `npm run errors:gen`
+  (catálogo derivado); a D-PR50 (ids 16–79/3–4 da Setes no espaço do legado) segue como limite até a Setes encerrar a transição.
+
+**Questões novas (aguardam o Valdo)** — numeração continua de Q-PR59; assunções executadas: **A-PR4** (chave fica em L → P) e **A-PR5**
+(barreira interina do destino P):
+- **Q-PR59 — motivo e autor do ato: só log ou colunas?** (guardião) O Valdo disse "trilha no log com autor" — executado assim (log com autor,
+  destino e motivo). O log é operação (gira, não aparece na tela Institutions); a casa guarda decisão humana irreversível como fato do objeto
+  (`tb_invoice_cancel_waiver`: `reason` + `tb_user_id`). **(a) Recomendado**: `transition_ended_by` INT NULL + `transition_end_reason`
+  VARCHAR(255) NULL, write-once na mesma linha (três colunas de UM ato — não é maquete; viram `_event` só se nascer um 2º ato), E o log —
+  migration aditiva pequena · (b) só log (como está).
+- **Q-PR60 — a chave no destino P** (guardião; executado como **A-PR4 = (a)**): D-PR48 manda "inativar a chave em definitivo", mas
+  D-PR49/D-TM11 mantêm os PDVs sincronizando com a chave POR ESTABELECIMENTO — hoje a MESMA linha que o servidor desktop usava. Matá-la em
+  L → P reinstalaria todos os PDVs (Pipoteca: 7). **(a) Recomendado — executado**: o ato NÃO toca a chave em L → P (o servidor desktop é
+  excluído pelo FATO lido no setes-sync e, com a frente do terminal, pelo terminal L inativado); em L → W a chave é inativada e nunca reativa
+  (`SYNC_KEY_NOT_FOR_SOURCE`) · (b) manter o literal: emitir chave nova para os PDVs no ato (contrato novo + reinstalação).
+- **Q-PR61 — destino P enquanto o setes-sync não lê o fato** (gates socrático e adversarial; executado como **A-PR5 = (a)**): o ato L → P
+  deixa a chave viva para os PDVs e conta com o setes-sync recusar o servidor desktop por `SYNC_TRANSITION_ENDED` — contrato que ainda não
+  existe; até lá, L → P = dois escritores no catálogo, num ato irreversível. **(a) Recomendado — executado**: destino P recusado (409
+  `LEGACY_TRANSITION_DESTINATION_PENDING`) até o grupo do sync publicar a recusa pelo fato; nenhum cliente P hoje · (b) liberar como limite
+  conhecido de implantação (roteiro: parar o servidor desktop ANTES do ato).
+- **Q-PR62 — o POST do app sem `sourceKind`** (ADV-R7-01): o DTO exige o campo sem default (guardião: "fato declarado, nunca presumido" — um
+  cliente de legado cadastrado como W nunca conseguiria a chave e W não volta). Até a tela Institutions mandar o campo, o cadastro de
+  estabelecimento pelo app atual responde 400 `fields[sourceKind]` (cerca `institutions-contract-fence.test.ts` documenta o payload do app).
+  **(a) Recomendado**: manter e fazer do form de Institutions (seletor W/L/P obrigatório na inclusão, só leitura na edição) CONDIÇÃO DA
+  JANELA desta branch (nenhum cadastro novo de cliente pelo app antes disso) · (b) default 'W' no DTO até a onda do app (abre a armadilha).
+- **Q-SY25 (grupo do sync — conferência, como a Q-SY24)**: o upsert de `tb_service` pelo `/service/sincronize` PRESERVA `tb_service_tax_rule_id`
+  e `nbs` (não lista as colunas nem as zera)? Se regravar a linha, o enquadramento feito pela web em L (D-PR45) é apagado no próximo envio do
+  legado e o faturamento volta a bloquear sem aviso — a D-PR45 precisaria de forma própria (coluna/tabela que o sync não toca). Hoje, no
+  dev, o setes-sync não escreve `tb_service` (as 65 linhas nasceram na web) — pergunta de contrato, não de código desta frente.
+
+**Limites registrados (Rodada 7)**:
+- A monotonia L → W/P vale na APLICAÇÃO e no ato (condição no comando); os CHECKs recusam "L com data", mas um `UPDATE … SET source_kind =
+  'L', transition_ended_at = NULL` por SQL é aceito (ADV-R7-09). Reparo de um W/P declarado errado = SQL com motivo registrado no roteiro de
+  implantação, ANTES de qualquer cunhagem de id na web naquele estabelecimento; gatilho de monotonia (PADROES §11 regra 15) só se virar caso.
+- `SessionContext` tem cache de 60 s por usuário: o ato invalida a institution inteira no processo que o executou; outro processo (ou outra
+  instância na Onda 4) vê o dono novo em até 60 s — UX apenas, a guarda lê ao vivo.
+- Merge: a fixture `src/test-setup/two-institutions.ts` da branch `grupo-leitores` (entra ANTES de `merchandise`) insere `tb_institution` sem
+  `source_kind` — ajustar no merge seguinte; e a cerca da D-PV9/`listGatedRoutes()` do `privilegios-crud` precisa aceitar os dois roteadores
+  montados FORA do módulo guardado (`servicesFiscalRoutes`, `bankAccountsChannelRoutes`) ou eles entram no `gatedModule` com `privilegeAct`
+  ALTERAR — item do rebase, com o `catalog-owner-guard.test.ts` de montagem como régua.
+- A frente do terminal acrescenta ao ato "inativar o terminal L" e, no destino P, "exige terminal kind P" (D-TM9/D-TM10 item 4) — o lugar é
+  `endLegacyTransitionTx`, depois do UPDATE do fato.
+
+### Rodada 7 — gates (2026-10-20/21)
+
+- **Socrático: 0,73 ✅** (parecer: transação do ato na ordem certa — trava → fato `FOR UPDATE` → UPDATE condicionado → affectedRows → chave →
+  categorias —, rollback total, monotonia sustenta a ausência de reconferência, CHECK binário + boot + prova; "nada CRITICAL"). Pontos
+  abertos corrigidos NA SESSÃO: (1) a 072 emitia `MODIFY`/`ADD CONSTRAINT` em TODO schema (MDL exclusivo em `tb_institution` ao vivo no
+  onboarding) → TODO DDL guardado por `information_schema`, zero ALTER no re-run (prova: as guardas resolvem para "nada a fazer"); (2) a sonda
+  do boot fazia UPDATE na linha da Setes (a que todo cunhador trava — sem `WAIT`, derrubaria o boot por contenção) → linhas de prova com PK
+  própria, sempre desfeitas; (3) nenhum endpoint do cliente expunha o fato → `sourceKind`/`catalogOwner` no `SessionContext`, invalidado por
+  institution no ato; (4) `only` conferia obrigatoriedade de campo AUSENTE ("ausente = não mexe") → o par só é conferido quando vem no corpo;
+  (5) destino P sem o contrato do sync → barreira interina (A-PR5/Q-PR61); (7) instante ISO na prosa do 409 → `fields[transitionEndedAt]`.
+  Registrados: (6) nota de rebase (`listGatedRoutes()` × os 2 roteadores fora do `gatedModule`) e o passo do terminal no ato (acima, em
+  "Limites"). Dica arquitetural retida: *migration central no runner por schema só é segura quando CADA statement é idempotente por
+  `information_schema`, não só re-executável; e todo fato que o app precisa para travar tela entra no bloco `context` da sessão*.
+- **Adversarial, 1ª passada: 0,64 ✗** — 2 HIGH + 4 MEDIUM + 4 LOW, quase todos na BORDA da entrega: **ADV-R7-01 HIGH** o app publicado não
+  manda `sourceKind` (POST = 400) → condição da janela + cerca `institutions-contract-fence` (Q-PR62); **ADV-R7-02 HIGH** `sql/02` inseria a
+  Setes sem `source_kind` (instalação limpa quebraria: estrito = 1364, não estrito = '' recusado pelo CHECK) → `'L'` no seed + cerca
+  permanente derivada do CREATE; **ADV-R7-03 MEDIUM provado** TOCTOU do `POST /sync-api-key` (o ato comitava entre a leitura e o INSERT →
+  chave VIVA numa institution W) → decisão dentro da transação (trava → fato `FOR UPDATE` → chave viva); **ADV-R7-04** Swagger do
+  POST/PUT/GET/lista → atualizado; **ADV-R7-05** destino P = dois escritores → barreira interina; **ADV-R7-06** backfill tratava chave PAUSADA
+  como W (irreversível) → chave VIVA = L; **ADV-R7-07 LOW** cerca cega a UPDATE multi-tabela/DELETE alias → regex `multi` sobre o texto sem
+  prefixo de schema + 4 casos de controle positivo (autoteste da cerca); **ADV-R7-08 LOW** `only` × ausente → corrigido; **ADV-R7-09 LOW**
+  monotonia só na aplicação (reparo por SQL) e **ADV-R7-10 LOW** `IF NOT EXISTS` só MariaDB → registrados em "Limites"/conhecimento negativo.
+  **Re-check: 0,82 ✅ passou** — 7 corrigidos e provados, a ADV-R7-01 virou condição registrada da janela, sobrou **ADV-R7-11 LOW** (a sonda
+  com `id = -1` segura um next-key lock no gap abaixo do menor id por milissegundos, antes do `listen` — inofensivo; se a sonda um dia rodar
+  com o servidor servindo, usar id alto fora da faixa viva). Casos não testados retidos: autoteste da cerca (feito), Q-SY25, a fixture
+  `two-institutions` no merge, "depois do ato `/api/core/me` diz W sem esperar o TTL" (sem teste), renumeração 072→073 em schema que tenha a
+  antiga (nenhum hoje), concorrência real do ato (só em mock — `prove-merchandise-races.ts` não cobre o ato).
+- **Veredito**: implementação pronta para a janela da branch (§9) SOB DUAS CONDIÇÕES já registradas: o form de Institutions mandando
+  `sourceKind` (Q-PR62) e a resposta do Valdo à Q-PR61 (o destino P fica barrado até o contrato do sync — hoje nenhum cliente P).
+  Próximo número: **D-PR53** · questões: **Q-PR63** · assunções: **A-PR6**.
+

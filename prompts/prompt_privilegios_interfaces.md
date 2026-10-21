@@ -804,6 +804,181 @@ Setes recebe as telas que os admins usam (as estruturais primeiro) — **implant
 - ⚠️ Merge: `admin.repository.ts` conflita com a `grupo-leitores` (ela mudou o corpo de `listInterfacesWithGrant`; aqui virou re-export da
   peça, que já tem o filtro dela) — resolver ficando com a peça; `admin.service.ts` tem a MESMA linha nos dois.
 
+### 11.10 Execução das D-PV19…D-PV40 (2026-10-20 → 2026-10-21, sessão própria, nas WORKTREES `privilegios-crud` — NADA commitado)
+
+**Onde**: `D:\Gestao2027\privilegios\{setes-api,setes-app,nfse-api}` (branch `privilegios-crud`, sobre api 50b928f · app 5a06d73 ·
+nfse b62d55b) + worktree NOVA `D:\Gestao2027\privilegios\sql` (branch `privilegios-crud` a partir do `main` 9f4fcf3 do repo `sql`).
+Banco: só leitura (sondas e a prova do seed 68 em schema descartável). setes-sync/sincronizador não lidos. ⚠️ O `.env` da worktree do
+setes-api NÃO existia (o §11.5 registrou a cópia temporária apagada); foi RECRIADO como link físico do vivo (`mklink /H`) para a suíte
+rodar — é ignorado pelo git. Fora de escopo e NÃO tocados: fusão com `privilegios-catalogo` (D-PV14/D-PV42), D-PV33, D-PV43, D-PV46,
+merge, publicação, `errors:gen`.
+
+#### 11.10.1 O que foi feito, decisão a decisão
+
+| Decisão | setes-api | setes-app | nfse-api / sql |
+|---|---|---|---|
+| **D-PV17** | — | `CurrentInterface` ganhou o MENU como fonte (`menu` = módulos carregados, `bindRoute(path)` liga a tela ao item do módulo da rota `/home/<chave>/…`, `listenable`); o `MenuBloc` entrega o menu ao carregar e a `HomePage` religa a cada navegação (`Modular.to.addListener`); `can` = FALSO com o menu carregado e a tela fora dele; menu ausente (deep link antes do `/menus`) libera — a API decide. "Configurações Gerais" liga à interface DELA (`interfaceKey` explícita pelos `arguments`). | — |
+| **D-PV19** (3b) | `DELETE /api/users/:id` SAIU (rota/controller/service/repository); `editUser` recusa trocar o e-mail de login — 409 `LOGIN_EMAIL_IMMUTABLE`; "ativo" = `tb_institution_has_user.active` do estabelecimento alvo (admin = JWT; super = `institutionId` do corpo — 400 sem alvo com `active`); `GET /users/:id?institutionId=` devolve o ativo do vínculo em foco (sem foco = `null`); lista = `COALESCE(ihu.active, u.active)` e mostra o vínculo INATIVO; **A-PV13 morreu** — `assertAccountManageable` só protege a conta do super (vivo ou adormecido); o escopo do admin inclui o vínculo INATIVO (é o que ele reativa). | cadastro sem lixeira; e-mail `readOnly` na edição (tela e diálogo do Estabelecimento); checkbox "ativo" só para o admin (na tela global do super não há foco); diálogo do Estabelecimento manda `institutionId` no GET/PUT; `UserDelete` (usecase/evento/bind) removido. | — |
+| **D-PV21** | `orders`/`service-orders` `POST /:id/items` e `DELETE /:id/items/:itemId`, `order-returns` `DELETE /:id/items/:itemId` → `privilegeAct(ALTERAR)` (os `PUT` já eram A pelo verbo; negociação `PUT` = A); INSERIR só abre, EXCLUIR só apaga. | item novo/tirar item nas três telas ← ALTERAR. | — |
+| **D-PV23/D-PV30** | `state-tax-rates` sob `adminGuard`; `GET/PUT /api/entities/:id/tax` REMOVIDAS (controller/service/swagger); `POST /api/billing/validate` sob FATURAR pela interface do RAMO (`resolveFromBody`). As 3 sondas `it.failing` do gate anterior viraram CERCAS. | — | — |
+| **D-PV25/D-PV26** | peça `@shared/auth/configure-privilege` (`configureVerdict`/`canConfigure`/`assertCanConfigure` — veredito CONFIGURAR da interface ALVO pela MESMA peça das guardas); `interface-configs.service`: `target 'I'` = CONFIGURAR em X (a conferência `isAdmin` saiu); `interface-fields.service`: salvar campo = CONFIGURAR em X; os `PUT` dos dois painéis passam na guarda com VISUALIZAR (navegar); `canConfigure` sai em cada config/campo resolvido (aditivo — `GET /:id` e `/key/:k`). | engrenagem (`RegisterConfigButton`) só com `can('CONFIGURAR')`; o painel decide o alvo (`I` × `U`) por `canConfigure` da API, não pelo perfil (`_isAdmin` saiu); o cadastro de usuário oferece o verbo porque o catálogo o traz (seed 68). | **seed 68** (worktree `sql`): CONFIGURAR (11) e CONSULTAR (12) em `tb_privilege`; pares CONFIGURAR DERIVADOS do catálogo (toda interface com config ou campo + `general-configs`); CONSULTAR em bank-slips/orders/service-orders/order-returns; ALTERAR dos painéis `interface-configs`/`interface-fields`/`general-configs` removido (soft — C1); conferência falha alto. **Provado em `prova_seed68_descartavel`** (cópia das 5 tabelas de `setes_central`): 157 → **197** pares (39 CONFIGURAR + 4 CONSULTAR − 3 ALTERAR), 2ª execução idempotente, ALTERAR revivido é removido de novo, par removido pelo Super NÃO revive, par impossível FALHA alto; `setes_central` intacto (157/9) — **NÃO aplicado**. |
+| **D-PV27** | `POST /bank-slips/:id/reapply`: a guarda pede VISUALIZAR (chegar ao boleto); a POLÍTICA `bank-slips.reapply-policy.ts` lê a VOZ do evento (`peekReapplyEvent`, sem trava) e exige ALTERAR (R → liquidação) ou CANCELAR (C/V → cancelamento) ANTES de executar. | reaplicar ← `p.kind == 'R' ? ALTERAR : CANCELAR`. | — |
+| **D-PV29** | cache do VEREDITO em `require-privilege.ts` por (institution, schema, usuário, interface, privilégio), TTL `PRIVILEGE_VERDICT_CACHE_TTL_MS` (60 s; 0 desliga — a suíte roda desligada pelo setup `test-setup/privilege-cache.ts`), teto 50.000 entradas; invalidado em `setUserPrivileges` (usuário), `setInstitutionInterfaceLink` (institution), `updateUserCascade` com ativo e `setInstitutionLinks` (usuário); sem cache para o super; `privilege-verdict-cache.test.ts` prova guarda/reuso/invalidação por escopo/expiração. | — | — |
+| **D-PV31** | `PUT /api/core/theme` sob `adminGuard`. | — | — |
+| **D-PV32** | peça `@shared/entity/own-establishment.ts` reescrita: `isOwnEstablishment`, `isOwnEstablishmentDocument` (criação — pelo documento, ANTES da transação), `ownEstablishmentChanges` + `assertOwnEstablishmentChainUnchanged` (compara só o que o corpo TROUXE com a cadeia/tributação gravadas) → 409 `OWN_ESTABLISHMENT_READ_ONLY` com os campos nomeados; os 4 papéis (customers/providers/carriers/collaborators) PULAM a escrita da cadeia e de `tb_entity_tax` quando a entity é a institution e gravam só a linha do papel; `GET` devolve `ownEstablishment`; o 409 `ROLE_IS_OWN_ESTABLISHMENT` da criação SAIU (código removido do catálogo). | `ownEstablishment` nos 4 objetos (fromJson/copyWith/mergeFiscal); peça `OwnEstablishmentFrozen` + `freezeChainTabs` congela as abas da cadeia e a Tributação (as do papel seguem vivas) com a frase `register.ownEstablishment` (pt/en). | — |
+| **D-PV34** | peça `@shared/institution-interfaces`: `setInstitutionInterfaceLink(schema, inst, iface, linked)` — leitura TRAVANTE da linha, upsert (corrida de PK inexistente — PADROES §9 regras 10/12), idempotente (`changed:false`); `PUT /api/institution-interfaces/:id/interfaces/:interfaceId {linked}` e `PUT /api/admin/institutions/:id/interfaces/:interfaceId {linked}`; os `PUT` da LISTA inteira saíram das duas portas; trilha só quando muda. | `InstitutionInterfacesSource.setInterface(inst, iface, linked)` nos dois datasources; a aba grava UMA marca e reflete o estado devolvido pela API. | — |
+| **D-PV35** | `STRUCTURAL_INTERFACE_KEYS` virou constante da peça (o onboarding a importa); `isSellableInterface` (kind T/R fora do grupo Super); porta delegada: não vendável = 400 `INTERFACE_NOT_SELLABLE`, revogar estrutural = 409 `INTERFACE_STRUCTURAL_LOCKED`, lista só vendáveis (`sellableOnly`); a aba do Super (`/api/admin`) segue com o catálogo inteiro. | — | — |
+| **D-PV36** | `featureFlagMiddleware` ignora módulo guardado (`isGatedModule` da própria guarda — `flagApplies`); `insertDefaultFlags` só cria flag para `FLAG_ONLY_MODULES` = core, users, modules, establishment, billing, state-tax-rates; cerca `feature-flags-d-pv36.test.ts` (lista × `listGatedModules()` disjuntas; todo item montado no gateway). O DROP das linhas = DDL à parte. | — | — |
+| **D-PV37/D-PV38** | `isOwnVendorInstitution(id)` em `roles.ts` (módulo-folha), re-exportado com `SETES_INSTITUTION_ID` pela peça `@shared/institution-interfaces`; os consumidores (`super-delegation`, `users.service` ×2, `institution-interfaces.service`, `core.service`, `auth.service`) usam o predicado; `GET /api/institution-interfaces/:id` da Setes pelo liberado = 403 `SETES_INTERFACES_SUPER_ONLY` (um predicado nas três portas). | — | — |
+| **D-PV39** | `interfaceAcquiredFor(inst, interfaceId)` em `require-privilege.ts`: super escapa (D-PV24) OU tela delegável + Setes OU contrato. | — | — |
+| **D-PV24** | `escapesLicense(inst)` = a regra única; `licensedFor`, `interfaceAcquiredFor` e a elegibilidade da Módulos (`listEligibleInterfaces`/`findIneligibleInterfaceIds(…, ignoreLicense)` para o super — catálogo inteiro de kind 'T' FORA do grupo Super) a consomem. | — | — |
+| **D-PV40** | `bank-slips` `POST /refresh` e `/:id/refresh` = CONSULTAR (12); `register`/`pay-sandbox` = TRANSMITIR; constante `PRIVILEGE_CONSULTAR` (e `CATALOGAR` 10 reservado) em `privileges.ts`. | consulta silenciosa ao abrir Boletos, "Atualizar com o banco", "Consultar" do boleto e "Consultar" da OS no fisco ← CONSULTAR. | nfse-api: `src/modules/privileges.ts` (`PRIVILEGE_CONSULTAR = 12` — LOCAL até o núcleo recebê-la, Q-PV56); `refresh` por nota e `passScope` da passada conferem CONSULTAR; `transmit` segue TRANSMITIR; `privilegios-d-pv40.test.ts` + cerca lida das rotas. |
+| **D-PV20** | `scripts/sql/dpv20-contrato-setes.sql` (NÃO aplicado): lido SÓ LEITURA do dev — 28 flags vivas da institution 1 × catálogo vendável + as 4 estruturais nomeadas = **29** interfaces (14 já contratadas + **15 novas**: bank-accounts, billing, carriers, categories, collaborators, contracts, customers, financial-plans, general-configs, interface-configs, modules, payment-types, providers, salesmen, users); fora: `state-tax-rates` (sem interface), `partnerships` (flag `deleted='S'` — D-PV22), `interface-fields` (sem flag, não estrutural — Q-PV57). Idempotente, por `i18n_key`, conferência falha alto. | — | — |
+
+**Códigos de erro** (catálogo `error-codes.ts`; `npm run errors:gen` NÃO rodou — escreve no banco): novos `LOGIN_EMAIL_IMMUTABLE`,
+`OWN_ESTABLISHMENT_READ_ONLY`, `INTERFACE_STRUCTURAL_LOCKED`, `INTERFACE_NOT_SELLABLE`; REMOVIDO `ROLE_IS_OWN_ESTABLISHMENT`; descrição
+alterada `USER_MANAGED_BY_SUPER` (sem a cláusula "outro estabelecimento").
+
+**Arquivos** (fora os testes): setes-api — `shared/auth/{privileges,roles,require-privilege,super-delegation,module-privilege-gate,
+delegable-interfaces(novo),configure-privilege(novo)}.ts`, `shared/institution-interfaces/index.ts`, `shared/entity/own-establishment.ts`,
+`shared/errors/error-codes.ts`, `shared/bank-slip-registration/index.ts`, `gateway/{router,feature-flag.middleware}.ts`,
+`modules/{users/*, institution-interfaces/*, admin/{routes,service,repository}, institutions/repository, interface-configs/{service,routes,
+privilege-policy}, interface-fields/{service,routes}, modules/{repository,service,controller}, bank-slips/{routes,registration.controller,
+registration.service,reapply-policy(novo)}, orders/routes, service-orders/routes, order-returns/routes, entities/{routes,controller,service},
+billing/routes, core/{routes,service}, auth/service, customers|providers|carriers|collaborators/{repository,interface}}`, `test-setup/
+privilege-cache.ts` (novo) + `package.json` (setupFiles), `scripts/sql/dpv20-contrato-setes.sql` (novo). nfse-api — `modules/privileges.ts`
+(novo), `modules/guards.ts`, `modules/nfse/nfse.routes.ts`. setes-app — `shared/session/current_interface.dart`, `shared/register/
+register_config_button.dart`, `shared/entity/widgets/own_establishment_frozen.dart` (novo), `shared/institution_interfaces/{source,grant,tab}`,
+`shared/interface_config/entity`, `shared/users/{datasource,entity}`, `modules/home/{bloc/menu_bloc,page/home_page}`, `modules/
+{orders,service_orders,order_returns}/…/page`, `modules/bank_slips/…/{page,detail_view}`, `modules/service_orders/…/fiscal_section`,
+`modules/interface_configs/…/page`, `modules/{customers,providers,carriers,collaborators}/{entity,page}`, `modules/institution_interfaces/
+datasource`, `modules/institutions/{datasource,users_tab}`, `modules/users/{module,repository,impl,bloc,event,page}` (usecase `user_delete`
+APAGADO), `assets/translations/{pt,en}.json`. sql — `68_privilege_configure_consult_seed.sql` (novo).
+
+#### 11.10.2 Testes
+
+- setes-api: **2324 testes, 142 suítes** (31 pulados — os ao vivo), `npx tsc --noEmit` limpo. Novos: `privilege-verdict-cache` (D-PV29, 11),
+  `feature-flags-d-pv36` (cerca + middleware, 7), `configure-privilege` (D-PV24/25/26/39 — veredito, painéis, `canConfigure`, 12),
+  `bank-slips-reapply-policy` (D-PV27/D-PV40 pela borda real, 11), `institution-interfaces-d-pv34` (D-PV34/35/37/38 nas duas portas, 10);
+  reescritos: `own-establishment-role` (D-PV32 — peça + cerca estática dos 4 papéis), `adversarial-pv11-gate` (marca por marca; D-PV19/36/38
+  — 3 `[DECIDIDO]`, 3 `it.failing` que já eram: menu duplicado, força bruta pré-existente, corrida da barreira), `adversarial-pv2-gate`
+  (as 3 sondas da Q-PV14/Q-PV25/Q-PV26 viraram cercas; seção D-PV32 com 8 sondas, inclusive "não é oráculo de outro tenant" e a
+  varredura dos escritores da cadeia sem a porta avulsa), `users.test` (D-PV19), `privilegios-rotas-d-pv2` (D-PV21/25/27/40; verbos 11/12),
+  `super-delegation-d-pv11` (marca), `modules.test` (3º argumento da elegibilidade).
+- nfse-api: **1154 testes, 70 suítes** (185 + 2 suítes pulados — os ao vivo), `tsc` limpo; novo `privilegios-d-pv40.test.ts` (6).
+- setes-app: `flutter analyze` sem issues; suíte ****655 testes verdes** (28 pulados)**. Novos: `current_interface_test` (D-PV17, 9), `own_establishment_frozen_test`
+  (D-PV32, 3); reescritos `institution_interfaces_tab_test` (marca), `crud_privileges_test` (+ menu), `service_order_fiscal_section_test` e os
+  `adversarial_r6…r16` (CONSULTAR no setUp — D-PV40).
+- Sonda SÓ-LEITURA no banco real (pares que o código consome × catálogo vivo): **145 pares consumidos** (gateway + políticas + ramos +
+  CONFIGURAR derivado); faltam no `setes_central` exatamente os do **seed 68** (39 × CONFIGURAR, 4 × CONSULTAR) e os 2 da tela do
+  **seed 65** (`institution-interfaces` × V/A — seed não aplicado) — nenhum outro par consumido está fora do catálogo.
+
+#### 11.10.3 Gates (skills `revisar-riscos-sistemicos` + `testar-adversarial`, sobre o delta)
+
+- **Socrático, 1ª passada: 0,68 — REPROVOU** (3 pontos de retrabalho, corrigidos na sessão): (1) **a marca inseria com `INSERT` puro
+  depois de `FOR UPDATE` em PK INEXISTENTE** (trava de intervalo, compatível — PADROES §9 regra 12): duas marcas simultâneas do mesmo par
+  chegariam as duas ao INSERT → `ER_DUP_ENTRY` → 500 → virou upsert (a tabela só tem a PK como UNIQUE — regra 10); (2) **o cache do
+  veredito não varria expirados** → teto `VERDICT_CACHE_MAX` (50.000; acima disso limpa); (3) **o escopo do admin era "vínculo VIVO"** —
+  com o ativo no vínculo (D-UC2) o admin não alcançava o usuário INATIVO para reativá-lo (404 no GET e no PUT) → o escopo passou a
+  "vínculo não excluído" (`listActiveUserLinks` devolve `deleted`). Pontos que pedem decisão: Q-PV55…Q-PV58 (abaixo).
+  **Re-score: 0,76 — PASSOU.**
+  ```json
+  { "alvo": "D-PV19…D-PV40 nas três APIs/app (setes-api, nfse-api, setes-app) + seed 68 + script D-PV20",
+    "score": 0.76,
+    "pontosAbertos": [
+      "Com vários processos Node (Onda 4), uma revogação de privilégio feita num processo vale nos outros só na expiração do TTL de 60 s — o que acontece se a janela de 60 s cair numa ação irreversível (faturar, transmitir)? (D-PV29: limite registrado; a institution já está na chave)",
+      "A A-PV13 morreu: o admin do cliente X troca a senha de um login que o Super também vinculou ao cliente Y — até a onda 0 do convidado (D-UC6, senha do titular), qual é a exposição real? (vínculo cruzado só o Super cria — Q-PV55)",
+      "A conferência 'mudou?' da D-PV32 lê a cadeia pelo pool ANTES da transação do papel: duas edições simultâneas do próprio estabelecimento (uma pelo Meu Estabelecimento) podem fazer o papel passar com dado que já mudou — o que se perde é só o 409 informativo, nunca uma escrita (a cadeia não se grava pelo papel)",
+      "O menu virou a fonte dos privilégios no app (D-PV17): a tela montada ANTES do /menus chegar fica com `can` liberado até o próximo rebuild — quem decide é a API; vale registrar como limite de UX ou forçar o rebuild?"
+    ],
+    "dicaArquitetural": "Veredito de privilégio, licença e 'adquirida' saem de UMA peça (`require-privilege`): toda conferência nova entra nela, nunca ao lado.",
+    "questoesParaRodada": ["Q-PV55", "Q-PV56", "Q-PV57", "Q-PV58"] }
+  ```
+- **Adversarial, 1ª passada: 0,74 com 1 MEDIUM — REPROVOU pelo achado** (corrigido na sessão): **a rota do reaplicar estava ABERTA na
+  guarda** (`openRoute`, para a política decidir pela voz) — quem não tem NEM VISUALIZAR em boletos sondava a existência de apresentação/evento
+  (404 × 403 antes da política) → a guarda passou a pedir VISUALIZAR (chegar ao boleto) e a política segue decidindo o EFEITO (D-PV27 mantida);
+  sonda virou teste (`bank-slips-reapply-policy.test.ts`). Resistiu: grafias do id da Setes nas três portas (D-PV38), corpo/`interfaceId`
+  inválidos e fora do catálogo na marca, estrutural/não vendável pela porta delegada (o Super também obedece à regra da porta), idempotência
+  da marca, truques de URL/verbo da D-PV11 refeitos para a marca, A-PV13 morta sem reabrir a tomada da conta do SUPER (vínculo super vivo ou
+  adormecido segue barrando), DELETE de usuário = 404 para todos, e-mail de login imutável (inclusive para o do Super), reaplicar com
+  TRANSMITIR/CONSULTAR negado, consultar com TRANSMITIR negado (nos boletos e no fisco), CONFIGURAR da interface ALVO (ALTERAR/CONFIGURAR
+  do painel não configuram Clientes), super grava config em tela não contratada (D-PV24 — latente), D-PV32: 6 grafias do id, 409 sem vazar
+  id/CNPJ/schema, outro tenant não é oráculo, `personType 'N'` não alcança a entity do emitente, varredura dos escritores da cadeia.
+  Restam (LOW, registrados): a janela do deep link no app; o cache entre processos (limite da D-PV29); `tb_user.active` (credencial) segue lido
+  no login e nunca mais escrito pelo cadastro — conta que já estava `'N'` fica inativa em TODOS os estabelecimentos (limite — a reativação é
+  do operador até a frente do convidado decidir); a flag `institution-interfaces` do seed 65 nasce MORTA (D-PV36 — módulo guardado).
+  **Re-prova: 0,80 — PASSOU** (sem HIGH/CRITICAL).
+  ```json
+  { "alvo": "guarda/políticas/peças das D-PV19…D-PV40 pela borda HTTP real (setes-api e nfse-api, banco dublado) + sondas estáticas",
+    "score": 0.80, "passou": true,
+    "vulnerabilidades": [
+      { "tipo": "DATA_EXPOSURE", "severidade": "MEDIUM", "descricao": "POST /bank-slips/:id/reapply aberto na guarda: sem privilégio algum em boletos, o 404/403 da política revelava a existência de apresentação/evento — CORRIGIDO (VISUALIZAR na guarda)", "evidencia": "provado (bank-slips-reapply-policy.test.ts)" },
+      { "tipo": "AUTH_BYPASS", "severidade": "LOW", "descricao": "app: tela montada antes do /menus chegar libera os botões até o próximo rebuild (a API decide)", "evidencia": "analisado (current_interface.dart)" },
+      { "tipo": "RACE_CONDITION", "severidade": "LOW", "descricao": "revogação de privilégio vale nos OUTROS processos só na expiração do TTL (60 s) — limite da D-PV29 até a Onda 4", "evidencia": "analisado (require-privilege.ts)" },
+      { "tipo": "DATA_EXPOSURE", "severidade": "LOW", "descricao": "tb_user.active deixou de ser escrito pelo cadastro: conta já 'N' fica inativa em todos os estabelecimentos até o operador", "evidencia": "analisado (users.repository.ts / auth.service.ts)" }
+    ],
+    "casosNaoTestados": [
+      "Corrida real de duas marcas do MESMO par (o upsert resolve por construção — regra 10; sem prova em banco descartável nesta sessão)",
+      "Passeio logado (engrenagem só com CONFIGURAR, boletos com CONSULTAR, aba de interfaces por marca, papel do próprio estabelecimento congelado) — depende do seed 68 e da D-PV20 aplicados"
+    ] }
+  ```
+
+#### 11.10.4 Assunções executadas (A-PVn — ratificar)
+
+- **A-PV16** — o ALTERAR de `general-configs` saiu do catálogo junto com o dos dois painéis: a exceção da A-PV8 (ALTERAR da "Configurações
+  Gerais" abria o painel dela) foi substituída pelo CONFIGURAR nela (D-PV25 regra 2) — par sem consumidor é defeito (C1). Se o Valdo quiser
+  manter o ALTERAR lá, o seed 68 tira a chave da lista de remoção.
+- **A-PV17** — reaplicar: VISUALIZAR na guarda do roteador (chegar ao boleto) + o privilégio do EFEITO na política (gate adversarial; a
+  D-PV27 fala só do efeito).
+- **A-PV18** — D-PV24 na Módulos: para o super o catálogo inteiro de kind 'T' FORA do grupo Super (o menu do cliente nunca renderiza o grupo
+  Super — regra do menu, não licença); a decisão diz "catálogo inteiro de kind 'T'".
+- **A-PV19** — "ativo" do usuário: `GET /users/:id` sem foco (super na tela global) devolve `active: null` e a tela esconde o checkbox; a lista
+  sem foco cai em `tb_user.active` (a credencial). O PUT do super com `active` exige `institutionId`.
+- **A-PV20** — D-PV32: "tenta mudar" = diferença entre o que o corpo TROUXE e o gravado (campo ausente e lista ausente não são mudança —
+  mesma convenção da cadeia); a comparação normaliza `''`/`null` e números.
+- **A-PV21** — D-PV20: `interface-fields` ficou FORA do contrato da Setes (sem flag e não estrutural) — ver Q-PV57.
+
+#### 11.10.5 Questões — Rodada 6 (aguardam o Valdo; nenhuma trava a entrega)
+
+- **Q-PV55 — a janela da A-PV13 morta**: até a onda 0 do convidado (D-UC6: o admin define só a senha INICIAL; "minha senha"/"esqueci" do
+  titular), o admin do cliente X pode redefinir a senha de um login que o Super também vinculou ao cliente Y (ou à Setes) e entrar em Y com
+  o perfil dele. Hoje vínculo cruzado só o Super cria. (a) **aceitar como limite até a onda 0** (merge desta onda antes da do convidado —
+  a ordem já prevista); (b) interino: o admin só redefine senha de conta cujos vínculos são todos com o próprio estabelecimento (a A-PV13 só
+  para a SENHA); (c) a onda 0 do convidado entra antes do merge. **Rec.: (a)** — é o que a D-PV19 decidiu, com a trilha no log.
+- **Q-PV56 — a constante CONSULTAR da nfse-api**: vive em `nfse-api/src/modules/privileges.ts` porque a worktree não toca o núcleo
+  (`fiscal-api/src/erp/facts.ts`, junção para a árvore viva). (a) **mover para o núcleo na fusão/janela** (ao lado de TRANSMITIR/CANCELAR) e
+  apagar a local; (b) deixar na nfse-api. **Rec.: (a)**.
+- **Q-PV57 — `interface-fields` e `general-configs` no contrato**: a D-PV20 dá `general-configs` à Setes (nomeada) mas não `interface-fields`
+  (sem flag, não estrutural); o onboarding dá as 4 estruturais (sem `general-configs`), então a D-PV35 a deixou fora da lista de estruturais.
+  (a) **como está** — o Super contrata o painel de campos a quem precisar (D-PV11); (b) `interface-fields` e `general-configs` viram
+  estruturais (onboarding + D-PV20 + lista da D-PV35). **Rec.: (a)**.
+- **Q-PV58 — Módulos para o super (D-PV24)**: o grupo Super ficou fora da elegibilidade mesmo para o super (regra do menu do cliente).
+  (a) **manter**; (b) "catálogo inteiro de kind 'T'" ao pé da letra, inclusive o grupo Super. **Rec.: (a)**.
+
+#### 11.10.6 Limites conhecidos (conhecimento negativo)
+
+- O cache do veredito (D-PV29) é por PROCESSO; a invalidação por salvar privilégio/contrato/vínculo vale só nele — a Onda 4 ganha roteiro
+  (TTL curto é a defesa). Super nunca entra no cache.
+- A flag técnica `institution-interfaces` da Setes (seed 65) e as flags dos módulos guardados ficam MORTAS (D-PV36) até o DDL que as apaga.
+- `tb_user.active` (credencial) deixou de ser escrito pelo cadastro; o login ainda o lê.
+- O app lê os privilégios do MENU: a tela aberta por deep link antes do `/menus` chegar fica liberada até o próximo rebuild (a API decide).
+- A sonda dos pares × catálogo foi um script da sessão (rodado de dentro da worktree e apagado); a cerca permanente é a da D-PV9
+  (`privilegios-catalogo`) — na fusão, `CONSUMED_PRIVILEGES` ganha: CONFIGURAR em toda interface com config/campo (dinâmico pela peça
+  `configure-privilege`), CONSULTAR em bank-slips/orders/service-orders/order-returns, ALTERAR/CANCELAR do reaplicar (política), FATURAR do
+  `validate` (ramo), a primitiva `interfaceAcquiredFor` e, no app, `RegisterConfigButton` (peça compartilhada → telas pelo grafo de import).
+
+#### 11.10.7 Roteiro de publicação revisto (só com o "vai")
+
+1. Aplicar `scripts/sql/dpv20-contrato-setes.sql` (D-PV20 — 15 interfaces novas no contrato da Setes; conferir de novo as 14 e as flags).
+2. Aplicar o seed 65 (tela delegável) e DEPOIS o seed 68 (CONFIGURAR/CONSULTAR) em `setes_central` — reconferir o número do seed (66
+   merchandise, 67 recuperação).
+3. Fusão com `privilegios-catalogo` (D-PV14/D-PV15/D-PV42): o adaptador lê `listGatedRoutes()` + as entradas do §11.10.6; `error-codes.ts`
+   junta as listas (aqui: +4 códigos, −1).
+4. Merge da API + `npm run errors:gen` + nfse-api reiniciada à mão (Q-PV56: mover a constante ao núcleo nessa janela) + app publicado
+   JUNTO (janela única — D-PV28).
+5. Passeio logado: engrenagem/CONFIGURAR, boletos/CONSULTAR, aba de interfaces por marca, papel do próprio estabelecimento, usuário sem
+   lixeira e e-mail imutável.
+
 ## 12. Cerca da D-PV9 — lista única + cerca + conferência no boot (2026-10-18, sessão própria, em WORKTREE — NADA commitado)
 
 **Onde**: `D:\Gestao2027\privilegios-catalogo\setes-api` (branch `privilegios-catalogo`, base `main` f53a618). Só o setes-api muda;
@@ -1187,23 +1362,245 @@ tempo e a A-PV14 já foi usada pela cerca da D-PV9): questões **Q-RS1…Q-RS6**
 - A sessão JWT aberta antes da troca de senha segue válida até expirar (24 h) — não existe revogação de JWT (fora do escopo).
 - O limite em memória zera no reinício e não soma entre instâncias (D-F9: 1 instância por serviço).
 
-### 13.8 Publicação (só com o "vai")
+### 13.8 Publicação (só com o "vai") — REVISTA 2026-10-21 (D-RS4/D-RS5/D-PV46)
 
-1. Aplicar `sql/67_user_password_reset_ddl.sql` em `setes_central` (re-executável) — ANTES do código: o boot desta branch não sobe sem a tabela.
-2. Merge da branch `recuperacao-senha` no `main` do setes-api (árvore viva = deploy) e no `main` do repo `sql`; conferir no log do boot
-   `Pedido de troca de senha (script 67): ok`.
-3. Rodar o sql/67 DE NOVO (limpa a `activation_key` que o código antigo ainda gravou entre o passo 1 e o merge).
-4. Passeio: pedir código, errar 5, a 6ª certa recusada, código novo funciona; e-mail inexistente responde igual.
-5. Códigos pedidos antes do deploy morrem — o usuário pede outro. O setes-app não muda; `errors:gen` não é preciso (nenhum código novo).
+0. **SMTP REAL no `.env` vivo do setes-api ANTES do merge** (D-RS4/D-RS5): `SMTP_HOST`, `SMTP_PORT` (465 SSL ou 587 STARTTLS),
+   `SMTP_USER` + `SMTP_PASSWORD` (os dois, ou nenhum), `SMTP_FROM` — valores fornecidos pelo Valdo, nunca em arquivo versionado;
+   `SMTP_SECURE` pode ficar (a peça deriva a criptografia da porta e a ignora). Conferir com o pré-voo
+   `npx tsx --require tsconfig-paths/register scripts/pre-deploy-tz-check.ts` (seção "D-RS5: SMTP do ambiente" — abre a conexão e
+   autentica, sem enviar). Enquanto o dev não é produção (`NODE_ENV` ausente), SMTP ausente = aviso; com `NODE_ENV=production` o boot
+   RECUSA subir sem SMTP completo. Com SMTP real configurado o código DEIXA de ir ao log. **Conferido em 2026-10-21 no dev: o `.env`
+   vivo JÁ tem o SMTP da Setes (`setes.com.br:465`, SSL, com autenticação) e o pré-voo abriu a conexão e autenticou com sucesso — o
+   código de recuperação do dev já sai por e-mail real, não pelo log; no destino da Onda 4 falta só `NODE_ENV=production`.**
+1. Aplicar `sql/67_user_password_reset_ddl.sql` em `setes_central` (re-executável; cria as DUAS tabelas — pedido e aviso ao dono) — ANTES
+   do código: o boot desta branch não sobe sem as duas.
+2. Merge da branch `recuperacao-senha` no `main` do setes-api (árvore viva = deploy) e no `main` do repo `sql` (atenção: o `main` do sql
+   já recebeu o seed 65 — o merge soma, não substitui); conferir no log do boot `Pedido de troca de senha (script 67): ok` e
+   `E-mail (SMTP): smtp <host>:<porta> …`.
+3. Rodar o sql/67 DE NOVO (limpa a `activation_key` que o código antigo ainda gravou entre o passo 1 e o merge; as tabelas já existem).
+4. Passeio: pedir código, errar 5, a 6ª certa recusada, código novo funciona; e-mail inexistente responde igual; **conferir o aviso
+   (D-RS4): depois da 5ª errada o DONO recebe o e-mail "Setes — aviso de segurança da sua conta" (neutro, sem código); errar mais 5 no
+   código novo na mesma hora NÃO manda outro; pedir o 4º código na hora manda só se a hora ainda não tiver aviso** (linhas em
+   `tb_user_password_reset_notice`, kind E/C — só leitura).
+5. Ensaio do script do Super (D-PV46), sem `--vai`: `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts` lista o
+   Super com o e-mail mascarado e "ENSAIO — nada gravado". O `--vai` NÃO faz parte da publicação (só quando a senha do Super se perder).
+6. Códigos pedidos antes do deploy morrem — o usuário pede outro. O setes-app não muda; `errors:gen` não é preciso (nenhum código novo).
+7. Depois: a onda 0 do convidado traz "minha senha" (D-UC7/D-UC8 — a MESMA peça do código confirma a troca do titular logado) e o
+   prompt `prompts/prompt_endurecer_autenticacao.md` (D-RS5) organiza o resto da autenticação (Rodada 0 em §13.10.7).
 
-### 13.9 Retomada (prompt curto)
+### 13.9 Retomada (prompt curto) — ATUALIZADA 2026-10-21
 
-> Retomar a Q-PV38 (§13 deste prompt). Código SALVO no GitHub, branch `recuperacao-senha`: setes-api **d19de9d** e sql **e1aa574**
-> (worktrees `D:\Gestao2027\recuperacao-senha\{setes-api,sql}`; base setes-api `main` f53a618). NADA no `main` e o `sql/67` NÃO
-> aplicado. Esperam o Valdo: ratificar **A-RS1…A-RS4** e responder **Q-RS1…Q-RS6** (§13.6 — o N = 5 e o `trust proxy` são decisões
-> dele). Publicar só com o "vai", pelo §13.8 (sql/67 ANTES e DEPOIS do merge). Antes do merge, conferir conflito com a `privilegios-crud`
-> (ela não toca `auth.*`, `rate-limit.middleware.ts` nem `product-token.ts` até onde se viu) e rodar a suíte inteira com a máquina
-> livre (testes de tempo).
+> Retomar a recuperação de senha (§13 deste prompt — D-PV47 revogou a D-PV18; §13.6 FECHADO: A-RS1…A-RS4 ratificadas, D-RS1…D-RS6).
+> Código na branch `recuperacao-senha` (worktrees `D:\Gestao2027\recuperacao-senha\{setes-api,sql}`; base setes-api `main` f53a618):
+> commits d19de9d (api) · e1aa574 (sql) no GitHub **+ o delta de 2026-10-21 (D-RS4/D-RS5/D-PV46 — §13.10) NÃO commitado**. NADA no
+> `main`, sql/67 NÃO aplicado. Esperam o Valdo: **A-RS5…A-RS11** (§13.10.4 — leitura da D-PV46 sem `tb_user.kind`/`updated_by`,
+> momento do aviso C, texto único, Super inativo/2+ ativos recusados, `npm start` = produção, "ativo" = predicado do login, timeouts
+> SMTP), **Q-RS7…Q-RS14** (§13.10.5 — nenhuma trava a entrega; Q-RS10/Q-RS11/Q-RS12/Q-RS14 já executadas pela recomendação, a
+> ratificar) e a Rodada 0 do `prompt_endurecer_autenticacao.md` (Q-EA1…Q-EA12). Publicar só com o "vai", pelo §13.8 (SMTP real ANTES,
+> sql/67 ANTES e DEPOIS do merge). Antes do merge, conferir conflito com a `privilegios-crud` (ela não toca `auth.*`, `mailer.ts`,
+> `rate-limit.middleware.ts` nem `product-token.ts` até onde se viu) e rodar a suíte inteira com a máquina livre (testes de tempo).
+
+### 13.10 Execução de D-RS4 / D-RS5 (código) / D-PV46 — 2026-10-21 (sessão própria, nas MESMAS worktrees; NADA commitado)
+
+**Onde**: `D:\Gestao2027\recuperacao-senha\{setes-api,sql}` (branch `recuperacao-senha`, delta sobre d19de9d/e1aa574). O `.env` da
+worktree do setes-api é link físico do vivo (recriado nesta sessão — não existia). Banco: `setes_central` só LIDA; schemas DESCARTÁVEIS
+`setes_pwreset_probe_<pid>` (prova) e `setes_superpw_probe_<ts>` (teste do Super), apagados. Parecer do guardião (agente `setes-conceito`)
+ANTES do DDL e da forma do script — resumido em §13.10.1. O setes-app NÃO muda (rotas, corpos e envelopes iguais).
+
+#### 13.10.1 Parecer do guardião (2026-10-21) — o que entrou e o que foi recusado
+
+- **Aviso ao dono = fato da CONTA, não do código** (no caso do teto não existe código): tabela IRMÃ `setes_central.tb_user_password_reset_notice`
+  sob `tb_user` — PK `(tb_user_id, seq)` com `seq` MAX+1 sob a MESMA trava da linha de `tb_user` (regras 12/13), `kind` char(1) = a CAUSA
+  de lista fechada, FORENSE (E = código esgotado por erradas · C = teto atingido; nunca vai ao e-mail), `created_at` = instante em que o
+  sistema TOMOU a vaga da hora (o SMTP corre depois do COMMIT); **sem FK para o código**; **sem `sent_at`/status** (SMTP aceito ≠ entregue
+  — não é fato nosso). Recusados: coluna no código (o aviso do teto penduraria numa linha que não o gerou), coluna em `tb_user` (MDL na
+  tabela do login + um slot sem história), tabela genérica de notificações. Entrou no PRÓPRIO sql/67 (não aplicado, re-executável) +
+  espelho no sql/01; `assertPasswordResetSchema` confere as DUAS tabelas.
+- **Script do Super = (a) refinada**: o FATO vai na linha do domínio pela MESMA peça do fluxo normal (`updatePassword` do auth: senha +
+  `activation_key = NULL` + `updated_at`; por construção mata qualquer código de recuperação aberto), sob `lockUserForPasswordReset`;
+  o AUTOR (operador do SO) vai ao LOG + roteiro — `tb_user` não tem `updated_by`, e o `updated_by` da casa SIGNIFICA id de tb_user (gravar
+  o id do super "mentiria" o autor; linha em `tb_user_password_reset` sem código seria abuso da peça). Conceito irmão registrado para o
+  futuro: "senha INICIAL definida por TERCEIRO" (admin na criação — D-UC8; Super que cria Super; operador) — hoje nenhum deixa fato
+  durável; se nascer (`tb_user_password_assignment`), o script passa a gravar nele com uma linha. **Divergência literal devolvida ao
+  Valdo: a D-PV46 cita `tb_user.kind = 'super'` e `updated_by`, que não existem** (super = `tb_institution_has_user.kind = 'super'` na
+  institution 1, como o `isSuper` do login) → **A-RS5**. Com 2+ Supers ATIVOS o script RECUSA e aponta a tela (um define a do outro —
+  complemento da D-PV46) → **Q-RS7**.
+
+#### 13.10.2 O que foi feito
+
+- **D-RS4** — `auth.repository.ts`: `hasRecentPasswordResetNotice` (EXISTS na janela de 60 min, leitura consistente depois da trava) e
+  `insertPasswordResetNotice` (MAX+1 por usuário + INSERT pela PK); `auth.service.ts`: `claimOwnerNotice` chamado na MESMA transação do
+  gatilho — na tentativa errada que ESGOTA o código (`failedAttempts + 1 >= 5`, dentro de `judgePasswordResetCode`) e no pedido CALADO
+  pelo teto (`issuePasswordResetCode`, veredito `capped`); os dois devolvem `{ verdict, notice? }` (os antigos `consumePasswordResetCode`
+  / `createPasswordResetCode` seguem como atalhos só do veredito, para a prova e os testes); `sendOwnerNotice` (assunto
+  `OWNER_NOTICE_SUBJECT` = "Setes — aviso de segurança da sua conta"; texto neutro único para as duas causas: "tentativas de recuperação
+  não concluídas; se foi você, peça outro código; se não foi, ignore — nada mudou e o login com a sua senha segue") ao e-mail de login
+  GRAVADO, depois do COMMIT, em segundo plano (`runInBackground` — a mesma borda do job da emissão; `waitForPendingPasswordResets`
+  cobre os dois); falha do SMTP no aviso = log de erro, sem retentativa, a vaga fica tomada; em dev sem SMTP o aviso vai ao log (sem
+  segredo). O +1 da tentativa e a vaga do aviso COMMITAM juntos; a 401 é a mesma; o piso de 400 ms esconde o INSERT a mais.
+- **D-RS5 (código)** — `src/shared/mailer/mailer.ts`: `isProduction()` (`NODE_ENV === 'production'` exato), `mailerConfigProblems()`
+  (host; porta inteira 1–65535, vazia = 587; usuário E senha ou nenhum dos dois; remetente = `SMTP_FROM` ou `SMTP_USER`),
+  `describeMailerConfig()` (host:porta, SSL/STARTTLS, remetente, com/sem autenticação — NUNCA a senha), `assertMailerReady()` (produção
+  sem SMTP completo = Error com as chaves e "D-RS5"; dev = resumo ou aviso de modo dev), `verifyMailerConnection(timeout)` (EHLO/
+  STARTTLS/AUTH sem enviar, falha fechado por tempo/erro/configuração incompleta — só para o pré-voo, NUNCA no boot: SMTP fora não
+  derruba a API). `server.ts`: `E-mail (SMTP): …` no boot, depois do script 67. `auth.service.ts`: o código vai ao log só se
+  `!isMailerConfigured() && !isProduction()` (cinto além do boot). `.env.example`: `NODE_ENV` + bloco SMTP comentado ("valores reais só no
+  `.env` vivo, fornecidos pelo Valdo na publicação"; `SMTP_SECURE` é ignorada — a porta manda). `scripts/pre-deploy-tz-check.ts`: seção
+  "D-RS5: SMTP do ambiente" — em produção ausente/incompleto/sem resposta é item BLOQUEANTE; fora dela aviso.
+- **D-PV46** — peça `src/modules/auth/super-password-reset.ts` (`listSuperAccounts`, `generateInitialPassword` 16 chars de alfabeto sem
+  0/O/1/l/I ≈ 91 bits, `hashInitialPassword` = `md5Password`, `resetSuperPasswordTx` = trava → vínculo super na institution 1 → `updatePassword`;
+  recusas `not-super` (inclusive conta inexistente/excluída — a mesma) e `inactive`; hash fora da forma recusado antes do banco) + CLI
+  `scripts/reset-super-password.ts` (ensaio sem `--vai`; alvo implícito só com EXATAMENTE um Super ativo; `--user-id`/`--email` nomeiam
+  entre inativos; 2+ ativos = recusa; `withDeadlockRetry`; senha impressa UMA vez no stdout; log `D-PV46: senha do Super REDEFINIDA pelo
+  operador` com usuário do SO, host, instante, id e e-mail mascarado — nunca a senha). Nota de operação no `setes-api/CLAUDE.md` da
+  worktree (seções "Recuperação de senha, aviso ao dono e SMTP" e "Senha perdida do SUPER").
+- **sql**: `67_user_password_reset_ddl.sql` (cabeçalho D-RS4 + `tb_user_password_reset_notice`, CHECKs `seq > 0` e `kind IN ('E','C')`,
+  FK NO ACTION para tb_user) e espelho em `01_setes_central_ddl.sql`. `scripts/reset-dev-data.ts` apaga os dois filhos antes do usuário.
+- **Prova** `scripts/prove-password-reset-lock.ts` — passo 8 novo: 25 erradas em paralelo = 1 vaga (E); 10 pedidos calados na mesma hora =
+  nenhuma vaga nova; hora seguinte (created_at recuado) = vaga C (seq 2); CHECK recusa kind 'X'; zero deadlock. **9/9 OK no InnoDB real**
+  (schema descartável apagado; `setes_central` intacta antes/depois).
+
+#### 13.10.3 Testes
+
+- `auth-password-reset-q-pv38.test.ts` **37/37** (26 anteriores + 9 da D-RS4: 5ª errada = 1 aviso e a mesma 401; teto = 1 aviso no 4º
+  pedido calado, sem gerar código; coalescência das duas causas e seq 2 na hora seguinte; neutralidade (inexistente nunca gera aviso nem
+  linha; uma só resposta); vaga COMMITADA antes do e-mail e e-mail não segura a 401; rajada paralela = seq 1 e um e-mail; SMTP fora no aviso
+  = 401 igual, log sem alarme, vaga tomada; texto neutro e e-mail GRAVADO; boot com as duas tabelas · + 2 da D-RS5: dev loga o código,
+  produção nunca). O dublê ganhou a tabela irmã (handler ANTES dos do pedido — as regexes antigas casavam `…_notice`) e e-mails
+  RESERVADOS `n1…n9@x.com` (o limite por e-mail em memória é do processo: reutilizar e-mail gasto dava 429 — lição de dublê).
+- `adversarial-q-pv38-gate.test.ts` **26/26** (dublê com a irmã; `lastCode` só pelo e-mail do código; mock do `isProduction`).
+- `adversarial-d-rs4-gate.test.ts` **23/23** (gate adversarial desta entrega — 19 `[RESISTIU]` + 4 `[CORRIGIDO]`; §13.10.6).
+- `mailer-d-rs5.test.ts` **17/17** (peça real, nodemailer dublado: produção recusa ausente/incompleto/porta inválida/remetente ausente;
+  completo sobe sem a senha no resumo; relay sem autenticação válido; dev = modo dev/⚠️; `Production`/`production ` SÃO produção com
+  aviso de grafia, `prod` não é e o resumo nomeia; `SMTP_HOST` só espaços = não configurado; `verify` sem enviar, incompleto não conecta,
+  erro sem a senha, tempo estourado = falha).
+- `super-password-reset-d-pv46.test.ts` **11/11** (dublê: reset pela peça, recusas sem escrita — admin, inexistente, usuário inativo,
+  VÍNCULO adormecido —, hash fora da forma, senha/alfabeto/md5, máscara · AO VIVO em schema descartável `setes_superpw_probe_*` com cópias
+  vazias de 4 tabelas e usuários 9xxxxx: lista só os Supers da institution 1 (vínculo adormecido = inativo), recusa admin / 'super' de
+  outra institution / vínculo excluído / inativo / vínculo adormecido / inexistente sem escrita, redefine só o Super ativo com o MESMO
+  hash e `activation_key` limpa; `setes_central` com impressão digital igual antes/depois · o script sem `--vai` contra o banco real =
+  ensaio, só leitura, nada gravado).
+- Provas em InnoDB real: `prove-password-reset-lock.ts` **9/9** (passo 8: CHECK recusa 'X' e 'e') · `adv-d-rs4-probe.ts` do gate
+  **7/7** (P1 agora RESISTIU: o +1 sobrevive à falha do aviso; P4 kind minúsculo recusado).
+- Suíte inteira do setes-api na worktree, DEPOIS das correções dos gates (com a máquina ocupada por outras sessões): ver §13.10.6
+  (números finais); antes delas: 131 suítes · 2087 verdes · 31 pulados. `tsc --noEmit` limpo.
+
+**Correções dos gates no código (2026-10-21, mesma sessão)**: SAVEPOINT `owner_notice` em volta da vaga (`claimOwnerNotice` — falha do
+aviso = `ROLLBACK TO SAVEPOINT` + alarme com a rota de origem; 1213 sobe para o retry); `isProduction()` normalizado + `nodeEnvWarning()`
+no boot e no pré-voo; `isMailerConfigured()` aparado; código ao log em dev também quando o SMTP falha (A-RS12 — a conferência do mailer
+fica FORA do try para erro de bug subir à borda do job); timeouts do transporte (A-RS11); `npm start` → `scripts/start-production.js`
+(A-RS9); "Super ativo" = usuário E vínculo (A-RS10); `--user-id` só dígitos e argumento repetido recusado; CHECK do `kind` com
+`COLLATE utf8mb4_bin` (sql/67 + 01); texto do aviso válido para as duas causas (Q-RS12).
+
+#### 13.10.4 Assunções executadas (a ratificar)
+
+- **A-RS5** — a D-PV46 lida SEM as colunas que cita: elegibilidade pelo vínculo `tb_institution_has_user.kind = 'super'` na institution da
+  Setes (como o `isSuper` do login); autoria em `tb_user.updated_at` + LOG do script + nota de operação; nenhum ALTER em `tb_user`
+  (parecer do guardião: `updated_by` da casa = id de tb_user; gravar o id do super mentiria o autor).
+- **A-RS6** — o aviso 'C' é tomado no pedido CALADO (o 4º na hora / 11º no dia), não no 3º emitido: "teto atingido" = alguém bateu nele.
+- **A-RS7** — texto do aviso ÚNICO para as duas causas e sem link de ação (a causa é só forense; um link seria vetor de phishing por
+  imitação).
+- **A-RS8** — o Super inativo é recusado pelo script (reativar é ato pela tela de outro Super; o script não reativa) e o script recusa
+  2+ Supers ativos (um define a do outro pela tela — complemento da D-PV46).
+- **A-RS9** (gate socrático, Q-RS11) — `npm start` É produção: `scripts/start-production.js` liga `NODE_ENV=production` quando a variável
+  está vazia e sobe o `dist/`; `npm run dev`/`tsx watch` seguem dev. Sem dependência nova (nada instalado na worktree — o `node_modules`
+  é junção do vivo).
+- **A-RS10** (gate socrático, Q-RS14) — "Super ativo" no script = `tb_user.active = 'S'` E `tb_institution_has_user.active = 'S'` (o
+  predicado do login — `getInstitutionsForUser`); vínculo adormecido = recusa `inactive`.
+- **A-RS11** (gate socrático, LOW) — o transporte SMTP ganha tetos de tempo (`connectionTimeout` 15 s, `greetingTimeout` 15 s,
+  `socketTimeout` 30 s): um SMTP mudo não prende o trabalho em segundo plano por 10 min (padrão do nodemailer). Não muda o comportamento
+  de sucesso.
+- **A-RS12** (gate adversarial, LOW) — em DEV, se o SMTP configurado FALHAR no envio do código, o código vai ao log (antes ia a lugar
+  nenhum e consumia o teto); em produção a falha do SMTP real fica só no log de erro — o código nunca vai ao log de produção (D-RS5).
+  `isMailerConfigured()` apara o host (`SMTP_HOST` só espaços = não configurado, igual ao `mailerConfigProblems`).
+
+#### 13.10.5 Questões (aguardam o Valdo — nenhuma trava a entrega)
+
+- **Q-RS7 — script com 2+ Supers ATIVOS**: (a) recusar e apontar a tela (como executado — a exceção fica mínima; "os dois perderam a senha"
+  fica sem saída além do SQL manual); (b) permitir com `--user-id` explícito (cobre "os dois perderam"; o log registra). **Rec.: (a)**
+  enquanto houver UM Super; rever quando nascer o 2º.
+- **Q-RS8 — momento do aviso 'C'**: (a) no pedido calado (executado — A-RS6); (b) na 3ª emissão da hora ("você usou o limite"); (c) só
+  na TRANSIÇÃO para o teto (1 aviso por "episódio" de teto, não 1/h enquanto o atacante insistir — fecha o pior caso de 34 e-mails/dia
+  do gate adversarial: 10 códigos + 24 avisos). **Rec.: (a)** enquanto o volume for teórico; (c) se o passeio ou um cliente mostrar fadiga.
+- **Q-RS9 — `OPS_ALERT_EMAIL`/alarme de operação** quando o SMTP falha repetidamente no aviso (hoje: log de erro, sem alarme na
+  crashlytics — falha de SMTP não é pane nossa): (a) manter; (b) alarme depois de N falhas seguidas. **Rec.: (a)** até a Onda 2 do prompt
+  de autenticação (teto global + alarme) decidir o canal de operação (Q-EA4).
+
+- **Q-RS10 — o +1 da tentativa errada deve SOBREVIVER à falha do INSERT do aviso?** (gate socrático, MEDIUM: na 1ª forma o aviso vinha
+  DEPOIS do +1 na mesma transação, sem savepoint — um GRANT da Onda 4 que esquecesse a tabela irmã faria toda 5ª errada desfazer o +1 e o
+  código nunca esgotaria). (a) **SAVEPOINT em volta da vaga — EXECUTADO na sessão**: falha só no aviso = `ROLLBACK TO SAVEPOINT` + aviso
+  no log, o +1 e a 401 seguem; (b) vaga em transação própria sob a trava do usuário depois do COMMIT do +1 (rec. do gate); (c) manter o
+  limite. **Rec.: (a) como está** — mantém o parecer do guardião ("na MESMA transação que detectou o gatilho") e protege o fato primário;
+  (b) só se o savepoint incomodar.
+- **Q-RS11 — marcador de produção (gate socrático, MEDIUM: `isProduction()` é opt-in — nada no repositório liga `NODE_ENV=production`;
+  um deploy da Onda 4 que esqueça a variável deixa o SMTP opcional e o código no log)**: (a) **`npm start` passa a ligar
+  `NODE_ENV=production` por padrão (`scripts/start-production.js`, sem dependência nova) — EXECUTADO (A-RS9)**; o único caminho fail-open
+  fica sendo `npm run dev`/`tsx watch` (a árvore viva de hoje); (b) manter opt-in e item do roteiro. **Rec.: (a)** + item do roteiro da
+  Onda 4 mesmo assim (o deploy pode não usar `npm start`).
+- **Q-RS12 — texto do aviso para a causa C** (gate socrático, LOW: "basta pedir um novo código" falha em silêncio por até 1 h quando o
+  teto foi atingido): o texto ÚNICO foi AJUSTADO na sessão para valer nas duas causas ("se precisar de um novo código, peça-o mais
+  tarde — por segurança, os pedidos ficam limitados por um tempo"). (a) manter o texto único (como executado); (b) texto próprio para C
+  dizendo "aguarde até 1 h" (o canal é só do dono — não fere a neutralidade da RESPOSTA). **Rec.: (a)**.
+- **Q-RS13 — o reset do Super pelo operador deve deixar FATO durável e/ou avisar o Super por e-mail?** (gate socrático, LOW: hoje só
+  `updated_at` + log no host do operador). (a) nada agora (guardião: o fato "senha inicial definida por terceiro" nasce com a onda 0 do
+  convidado, D-UC8); (b) e-mail neutro ao e-mail de login do Super ("sua senha foi redefinida pelo operador em T; se não reconhece,
+  avise") pela peça `@shared/mailer` — sem DDL; (c) (a)+(b) depois. **Rec.: (b)** — barato e fecha o sinal fora da máquina; fica para o
+  "vai" porque muda o comportamento descrito na D-PV46.
+- **Q-RS14 — "Super ativo" no script = `tb_user.active` E `tb_institution_has_user.active`** (gate socrático, LOW: o script ignorava o
+  `active` do vínculo e listaria como ativo um Super que o login recusa com 403). **EXECUTADO na sessão (A-RS10)**: o mesmo predicado
+  do login; vínculo adormecido = `inactive` (recusa). Ratificar.
+
+#### 13.10.6 Gates do delta
+
+- **Socrático (agente, skill `revisar-riscos-sistemicos`): 0,77 — PASSOU** (sem HIGH/CRITICAL). MEDIUM: (1) o +1 da tentativa errada
+  podia ser desfeito pela falha do INSERT do aviso (fato secundário desfazendo o primário) → **corrigido**: `SAVEPOINT` em volta da vaga
+  (`claimOwnerNotice`), falha do aviso = log de aviso, o +1 e a 401 seguem (Q-RS10); (2) `NODE_ENV=production` é opt-in → **corrigido**:
+  `npm start` liga produção por padrão (`scripts/start-production.js`), `tsx watch` segue dev (Q-RS11). LOW: texto do aviso para a
+  causa C → **ajustado** (Q-RS12); ato do operador sem fato/sinal fora da máquina → Q-RS13; "ativo" do Super ≠ do login → **corrigido**
+  (Q-RS14); `sendMail` sem teto de tempo (nodemailer: 10 min) e `pendingJobs` sem teto → **mitigado**: `connectionTimeout`/
+  `greetingTimeout`/`socketTimeout` no transporte (15 s / 15 s / 30 s — A-RS11). Julgamento dos pontos do executor: todos aceitos
+  (vaga antes do e-mail, aviso ao dono legítimo, `trust proxy` na Onda 4, senha no stdout — registrar que transcript/CI capturam
+  stdout —, EXISTS pela PK, pré-voo com conexão real, e-mail GRAVADO; aviso por USUÁRIO e não por institution está certo: a credencial é
+  global — D-UC1/D-UC3). Dica arquitetural: fato secundário nunca desfaz fato primário; todo ato de operador deixa FATO no banco, não
+  só log (→ Q-RS13).
+- **Adversarial (agente, skill `testar-adversarial`): 0,76 — PASSOU** (sem HIGH/CRITICAL). 23 sondas jest em
+  `src/__tests__/adversarial-d-rs4-gate.test.ts` (19 `[RESISTIU]` + 4 `[ACHADO]` que viraram `[CORRIGIDO]` na sessão) + 7 sondas em
+  InnoDB real (`scripts/adv-d-rs4-probe.ts`, schema `setes_advrs4_probe_<pid>` apagado) + ensaio real do script do Super (só leitura).
+  **MEDIUM (o mesmo do socrático)**: INSERT do aviso negado (1142, GRANT da Onda 4) → o +1 da 5ª errada era desfeito, `failed` ficava em 4
+  e o código CERTO depois TROCAVA a senha — provado em InnoDB (CHECK extra na irmã: 7 erradas → 4; `changed`) → **corrigido** com o
+  SAVEPOINT (a sonda agora prova que o +1 sobrevive e o certo é recusado). **LOW corrigidos**: `NODE_ENV` com caixa/espaço desligava a
+  exigência em silêncio → normalizado (`Production`/`production ` = produção) e `prod`/`produção` NOMEADOS no resumo do boot e no pré-voo
+  (`nodeEnvWarning`); `SMTP_HOST` só espaços contava como configurado (código ia a lugar nenhum) → `isMailerConfigured` apara + em dev o
+  código vai ao log também quando o SMTP do dev FALHA (A-RS12); vínculo super `active='N'` contava como Super ativo → A-RS10; CHECK do
+  `kind` sob `unicode_ci` aceitava 'e'/'c' → `COLLATE utf8mb4_bin` no sql/67 e no 01 (prova e sonda conferem 'X' e 'e'). **LOW
+  registrados como limite**: atacante no teto diário provoca até 10 códigos + 24 avisos = 34 e-mails/dia à vítima (antes: 10) —
+  dentro do "≤ 1/h" da D-RS4; alternativa = avisar só na TRANSIÇÃO para o teto (Q-RS8 (c)). INFO: `--user-id` repetido/`1e1` →
+  **corrigido** (argumento repetido recusado; só dígitos). RESISTIU: tempo/corpo/status da 5ª errada iguais aos da errada comum e da conta
+  inexistente (Δ < 300 ms no piso); SMTP lento 1,5 s não segura a resposta; aviso não entra no teto; e-mail GRAVADO (`strase@` → `straße@`);
+  texto E ≡ C sem dígito/link/kind; 2 "5ªs" em paralelo = 1 vaga; E + C na mesma hora = 1; fronteira 59:59/60:00 pelo NOW() do banco;
+  deadlock injetado no INSERT do aviso reexecuta a transação inteira; boot nomeia a tabela/decisão certa por ausência; porta/credencial/
+  remetente nas variantes do `.env`; senha SMTP ausente de todo resumo/erro (inclusive o erro real do `verify`); senha inicial sem viés
+  (χ² em 110 000 símbolos), hash = o que o `login()` compara. Não exercitado: GRANT real sem INSERT (emulado por CHECK), reinício entre
+  COMMIT e SMTP, `verify` contra o SMTP real (feito à parte pelo pré-voo: autenticou), `--vai` (proibido).
+
+- **Depois das correções dos gates**: `tsc --noEmit` limpo; suítes-alvo 86/86 (q-pv38 37 · gate q-pv38 26 · gate d-rs4 23) + mailer 17 +
+  Super 11; provas InnoDB 9/9 e 7/7; **suíte completa da worktree: 132 suítes · 2112 verdes · 31 pulados (ao vivo) · 0 falhas**;
+  nenhum schema descartável sobrando; `setes_central` sem as tabelas do 67 (não aplicado), como antes.
+
+**Limites conhecidos do delta (conhecimento negativo)**: reinício do processo entre o COMMIT da vaga e o SMTP perde o aviso e a hora
+fica tomada (mesmo limite do código); o dono legítimo errando 5× recebe o aviso (texto neutro — fadiga de alarme é o preço da D-RS4);
+34 e-mails/dia no pior caso; a senha do Super impressa no stdout é capturada por transcript do PowerShell/CI — o operador escolhe o
+terminal; `trilha-primeiro-cliente.ts`/`smoke-inter-sandbox.ts` seguem comparando `NODE_ENV === 'production'` estrito (recusam rodar em
+produção — com `Production` rodariam; ferramentas de dev, fora do delta).
+
+#### 13.10.7 Prompt novo — endurecer a autenticação (D-RS5 (a))
+
+`Infra-IA/prompts/prompt_endurecer_autenticacao.md` — **Rodada 0 ORGANIZADA**: inventário conferido no código (300/min por IP no gateway;
+`/auth/login` sem limite por conta, sem contador, sem alarme, sem rastro; senha mínima 5 em MD5 maiúsculo sem sal; JWT 24 h sem refresh e
+sem revogação — a guarda não confere `active`/vínculo, D-UC9 vai conferir; "Usuário inativo" como oráculo; `trust proxy` desligado — D-RS2),
+riscos R1…R6, proposta em 5 ondas (limite por conta no login no molde da recuperação → teto global + alarme → política de senha →
+scrypt com migração transparente do MD5 → revogação por `iat × tb_user.updated_at`), questões **Q-EA1…Q-EA12** com recomendação. Só
+documento; nenhum código.
 
 ## Decisões arquiteturais registradas
 
@@ -1540,6 +1937,9 @@ os privilégios da tela aberta pelo menu) — decidir juntas.
 **Q-PV38 (§13, 2026-10-18)**: ~~EXECUTADA em worktree~~ → **SUPERADA pela D-PV18 (mesma noite)**: os aplicativos não têm recuperação de senha;
 a branch `recuperacao-senha` foi apagada e Q-RS1…Q-RS6 / A-RS1…A-RS4 morreram sem objeto. Da Q-RS5 sobra só a ideia "endurecer o login
 (força bruta na senha)" — tarefa própria se o Valdo quiser (hoje o rate limit por institution/IP é o que há).
+**Rodada 2026-10-20 EXECUTADA (§11.10, 2026-10-21 — D-PV19…D-PV40 nas worktrees `privilegios-crud`, NADA commitado; seed 68 provado em
+descartável e NÃO aplicado; script da D-PV20 gerado e NÃO aplicado)**: aguardam o Valdo **Q-PV55…Q-PV58** (§11.10.5) e a ratificação de
+**A-PV16…A-PV21** (§11.10.4); nenhuma trava a entrega — o roteiro de publicação revisto está no §11.10.7.
 **Q-PV54 (nova, da D-PV18 — aguarda o Valdo)**: sem recuperação, a senha perdida de um usuário é redefinida pelo admin do estabelecimento
 (D-PV12) e a do admin pelo Super (ou por outro admin do mesmo estabelecimento). **E a senha perdida do próprio SUPER?** (a) procedimento
 documentado do operador — UPDATE do hash em `setes_central.tb_user` numa sessão administrativa, registrado com data/motivo como exceção

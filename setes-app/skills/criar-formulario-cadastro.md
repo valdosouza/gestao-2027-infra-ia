@@ -53,7 +53,15 @@
      direito** (padrão Android) — NUNCA botão de texto "Novo" na barra de filtro
    - Campo filtro logo abaixo da AppBar, com sufixo `Icons.search`
    - `ListView.separated` com `Divider`; item = `ListTile` com `CircleAvatar` mostrando
-     o `id` e o nome como título (padrão do widget_customer_list.dart)
+     o `id` e o nome como título (padrão do widget_customer_list.dart) — é a forma do CELULAR.
+     **Onda C da densidade (2026-10-20, `../../prompts/prompt_densidade_layout_web.md` §9; ⚠️ até a
+     publicação só no branch `densidade-c`)**: a fábrica desenha a lista com a peça `SetesDataList`
+     (setes_widgets) — com 840 px ou mais de área disponível (o corte do menu ao lado, D-DL7) as células
+     do `rowBuilder` viram COLUNAS de uma tabela (linha de 36 px); abaixo, o item de duas linhas de sempre.
+     Toda lista declara `columns: [SetesListColumn('rótulo'.tr(), kind: text|number|date|status)]`, UMA
+     por célula e na mesma ordem — sem `columns` a tabela sai sem cabeçalho. As células têm POSIÇÃO FIXA
+     (`cond ? valor : ''`, nunca `if (cond) valor`): a célula vazia some do subtítulo no celular e fica
+     vazia na coluna; com `if` a coluna "anda". O código do `avatarBuilder` vira a 1ª coluna (`Cód.`).
    - Lista vazia → `Center(Text('register.emptyList'.tr()))` — **só quando a carga deu certo e voltou vazia**. D-F206 (Valdo
      2026-10-13, passeio logado da F2b): falha de CARGA (502/504 do proxy, rede) é estado PRÓPRIO do bloc (`loadFailed`) e a tela
      mostra o erro (`register.loadFailed`) com "Tentar novamente" (`register.retry`, recarrega com o filtro/página/critérios atuais) —

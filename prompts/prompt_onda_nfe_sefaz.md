@@ -2425,7 +2425,7 @@ nfe-api para subir.
   ("quando a NF-e chegar (NE-2)") pela Q-NE158; `nfe-api/CLAUDE.md` deixa de dizer "não crie `src/`" (D-NE1); o `emitter.ts:32-33` registra a
   decisão do `model` (Q-NE160).
 
-### 15.8 Rodada 15 — revisão UMA A UMA em curso (Valdo 2026-10-18: "quero revisar as questões da Rodada 15 uma a uma antes de decidir") — ⏯ RETOMAR PELA Q-NE160
+### 15.8 Rodada 15 — revisão UMA A UMA (Valdo 2026-10-18: "quero revisar as questões da Rodada 15 uma a uma antes de decidir") — FECHADA 2026-10-20; ⏯ RETOMAR PELO §15.9 (NE-2 executada, publicação pendente)
 
 | Decisão | O que fixa |
 |---|---|
@@ -2439,8 +2439,7 @@ nfe-api para subir.
 | **D-NE165** (= Q-NE165 (b); Valdo, 2026-10-20: *"(b), siga a recomendação"*) | a NE-2 prova a 001 no MariaDB 10.4 (descartável `fiscal_api_adv_ne2`); a prova em **MySQL 8 vira PRÉ-CONDIÇÃO da F3** para o `fiscal_api` INTEIRO (núcleo 001–005, nfse-api 001–007, nfe-api 001+), contra o motor e a versão que a SaveInCloud disser — item do roteiro da Onda 4/F3 (`prompt_apis_fiscais_isoladas.md`). Corrige o QUANDO da D-NE109 |
 | **D-NE166** (= Q-NE166 (a); Valdo, 2026-10-20: *"(a), siga a recomendação"*) | a NE-2 serve só `GET /v1/health` (sem `authorities` — NE-3) e o emitente (`GET /v1/emitter`, `PUT`/`DELETE /v1/emitter/certificate`, `PUT`/`DELETE /v1/emitter/issuers/55`); as outras 10 rotas ficam no `openapi/nfe-api.v1.yaml` marcadas `x-onda: NE-3 \| NE-5`; teste rota × contrato: servidas = contrato − marcadas (nada servido fora do contrato, nada marcado servido); sem stub 501; borda = a da nfse-api (D-NE9) |
 | **D-NE167** (= Q-NE167 (a); Valdo, 2026-10-20: *"(a), siga a recomendação"*) | a **D-NE82 (c) é REJEITADA** com conhecimento negativo no código: a defesa EM EXECUÇÃO contra um 2º descritor da mesma tabela é o CHECK BINÁRIO da tabela da família no banco (D-F107 — vale para qualquer processo); registro de descritores em memória não cobre o outro serviço. A nfe-api ganha a MESMA cerca por AST da nfse-api (um descritor só, em `nfe/voice-family.ts`); teste que fixa a semântica nos dois serviços |
-| **D-NE168** (= Q-NE168 (a); Valdo, 2026-10-20: *"(a), siga a recomendação"*) | execução em worktrees irmãs `D:\Gestao2027
-e2\{fiscal-api,nfe-api}` (branch `ne2`; `file:../fiscal-api` resolve a irmã); provas no descartável `fiscal_api_adv_ne2` (GRANT `fiscal\_api\_adv%` já existe — D-F53); publicação = núcleo fast-forward + build + push (sem restart: o núcleo só ACRESCENTA — D-NE158) + push do `main` da nfe-api + 001 aplicada no `fiscal_api` do dev pelo `db:migrate` da nfe-api (aditiva) com as sondas do boot conferidas em seguida; a nfe-api não fica no ar (sobe só para o passeio) |
+| **D-NE168** (= Q-NE168 (a); Valdo, 2026-10-20: *"(a), siga a recomendação"*) | execução em worktrees irmãs `D:\Gestao2027\ne2\{fiscal-api,nfe-api}` (branch `ne2`; `file:../fiscal-api` resolve a irmã); provas no descartável `fiscal_api_adv_ne2` (GRANT `fiscal\_api\_adv%` já existe — D-F53); publicação = núcleo fast-forward + build + push (sem restart: o núcleo só ACRESCENTA — D-NE158) + push do `main` da nfe-api + 001 aplicada no `fiscal_api` do dev pelo `db:migrate` da nfe-api (aditiva) com as sondas do boot conferidas em seguida; a nfe-api não fica no ar (sobe só para o passeio) |
 
 **Rodada 15 FECHADA (2026-10-20 — Valdo, "uma pergunta por vez")**: Q-NE160…Q-NE168 → D-NE160…D-NE168 (D-NE163 com a SÉRIE na chave composta da faixa). **Nenhuma questão aberta.** Próximo: executar a NE-2 em `ne2/` na ordem E1 → E2 (DDL do rascunho ajustado às D-NE160/161/163, provado no descartável ANTES de qualquer código que dependa dele) → E3 → E4 → E5 → gates → publicação (D-NE168); depois a Rodada 0 da NE-3 (§15.5).
 
@@ -2450,3 +2449,230 @@ e2\{fiscal-api,nfe-api}` (branch `ne2`; `file:../fiscal-api` resolve a irmã); p
 
 **Depois da Rodada 15**: executar a NE-2 na ordem E1 → E2 (DDL provado no descartável ANTES de qualquer código que dependa dele) → E3 → E4 → E5 →
 gates → publicação (Q-NE168); a Rodada 0 da NE-3 abre depois, com o §15.5 como roteiro.
+
+### 15.9 NE-2 — execução (2026-10-20) — E1 → E5 em worktree, NADA commitado, NADA publicado (a publicação é a D-NE168, só com o "vai")
+
+> Sessão derivada da Rodada 15 (D-NE158…D-NE168 — §15.8). Worktrees irmãs `D:\Gestao2027\ne2\fiscal-api` (branch `ne2` sobre o `main` abce0b8)
+> e `D:\Gestao2027\ne2\nfe-api` (branch `ne2` sobre o `main` a9ef9ac); cópias DESTACADAS só de leitura `ne2\nfse-api` (main 62c5fcf — a prova de
+> regressão do núcleo) e `ne2\setes-api` (main f53a618 — as cercas do núcleo leem o gêmeo por caminho fixo). `node_modules` de cada worktree
+> instalado nela (`npm ci`/`npm install`); a junção `ne2\nfe-api\node_modules\fiscal-api` e a da `ne2\nfse-api` apontam para `ne2\fiscal-api` —
+> NADA aponta para as árvores vivas (D-F133). Provas em banco DESCARTÁVEL `fiscal_api_adv_ne2` (GRANT `fiscal\_api\_adv%` — D-F53), apagado ao final.
+
+#### 15.9.1 O que foi feito, por repositório
+
+**`fiscal-api` (núcleo — só ACRESCENTA; a nfse-api não muda — D-NE168)**
+- `src/voice/families/merchandise.ts` (NOVO): `MERCHANDISE_VOICE_READING` (ramo `merchandise`, view `vw_invoice_merchandise_transmission`, coluna
+  PRÓPRIA só `dh_emission` — D-NE160), `mapMerchandiseTransmissionView` (invariantes do mapa comum D-NE61/D-F136/D-F154 + o da família: linha SEM
+  chave é inconsistente — D-NE7; o registro é o FATO da view, nunca a chave — D-NE56), `isMerchandiseHumanEffectCancel = () => false` com o
+  conhecimento negativo da D-NE159 (110111 sempre do emitente, efeito automático; nada de conjunto vazio "para a F5"). **FORA do catálogo
+  `VOICE_READINGS` e FORA de `fiscal-api/reading`** — só no barrel (D-NE158).
+- `src/numbering/withdrawn-ranges.ts` (NOVO — D-NE161): `withdrawnRangesQuery`/`readWithdrawnRanges` (view `vw_invoice_number_void`, escopo
+  OBRIGATÓRIO institution × modelo (55/65) × série (0–999) × ambiente — D-NE163; mapa estrito: linha de outro eixo, modelo fora, ambiente torto ou
+  faixa invertida falham ALTO), `assertWithdrawnRangesViewReadable` (boot). Fora de `reading` até o 1º leitor (NE-6). Só a VIEW, nunca a tabela.
+- `src/voice/reading.ts`: `voiceView` SAIU de `VoiceFamilyReading` (D-NE160); `src/voice/families/service.ts`: a NFS-e mantém `voiceView` por TIPO
+  PRÓPRIO (`& { readonly voiceView: string }` — a view de vozes dela fica, sem DROP; o `descritor-ddl.test.ts` da nfse-api segue compilando).
+- `src/index.ts` (exports das duas peças), `src/voice/families/index.ts` (comentário: a entrada da `merchandise` é a janela da NE-6 — §15.7),
+  `src/emitter/emitter.ts` (comentário: `model` não entra na projeção até a F5 — D-NE160; a família fora do catálogo conta 0, legítimo),
+  `src/voice/family-reader.ts` (comentário: cada serviço passa a própria leitura; o padrão sem valor fica para a janela da NE-6 — D-NE158).
+- Testes NOVOS: `ne2-merchandise.test.ts` (13 — forma da leitura, interface sem `voiceView` por AST, catálogo intacto, superfície sem a NE-2, emitter
+  conta 0 SEM SQL para o ramo, `assertFamilyViewsReadable([MERCHANDISE_VOICE_READING])`, invariantes do mapa, D-NE159 em 7 formas, o DDL da nfe-api
+  × a leitura), `ne2-numbering.test.ts` (9 — SQL por parâmetro, 12 eixos tortos recusados, mapa estrito, boot, superfície, imports da peça);
+  `adversarial-ne1a2-gate.test.ts` (só o TÍTULO do caso: D-NE82 (c) REJEITADA — D-NE167).
+
+**`nfe-api` (tudo NOVO — a pasta ganha `src/` e `package.json`, D-NE1)**
+- E1 esqueleto (molde nfse-api): `package.json` (deps com versão EXATA — as mesmas resolvidas no lock da nfse-api; `fiscal-api: file:../fiscal-api`),
+  `tsconfig*.json`, `.env.example`, `.gitignore`, `src/{app,server,context,health,cors-origins}.ts`, `src/migrations/index.ts` (núcleo → `nfe-api`),
+  `src/modules/{guards,validate}.ts`, `src/modules/emitter/{emitter.dto,emitter.routes,emitter.service}.ts` (o emitter do núcleo para o ramo
+  `merchandise` — D-NE9; **só o 55** (`SERVED_MODELS`) — SE/65/lixo = 422 `FISCAL_MODEL_NOT_SUPPORTED`; DTO `{ environment }` ESTRITO — corpo com
+  `serie` = 400, a série é do ERP (D-F21/D-NE11); SEM cerca da virada — D-NE10), `scripts/{migrate,mint-dev-token,explain-leituras}.ts`,
+  OpenAPI em `/docs` e `/v1/openapi.yaml`. Porta 3003.
+- E2 `src/migrations/sql/001_nfe_baseline.sql` = rascunho v1.1 + Rodada 15 e nova passada do revisar-ddl: 3 tabelas (`tb_invoice_merchandise_transmission`,
+  `…_transmission_event`, `tb_invoice_number_void`) + 2 views (`vw_invoice_merchandise_transmission` — 4.1; `vw_invoice_number_void` — 4.3 SEM
+  `authority_recorded`, D-NE161); **a view de vozes 4.2 NÃO nasce** (D-NE160); **D-NE163**: colunas GERADAS STORED do Id (`model` binária, `serie`,
+  `number_from`, `number_to`, `withdrawn` = a ÚNICA regra "pendente ou 102/563", `withdrawn_void_id` ENCADEADA dela — MariaDB 10.4 aceita gerada sobre
+  gerada, provado), UNIQUE `uk_invoice_number_void_range (tb_institution_id, model, serie, environment, number_from, number_to, withdrawn)` + UNIQUE da
+  prova `uk_invoice_number_void_withdrawn (environment, withdrawn_void_id)`; 15 CHECKs BINÁRIOS nomeados (códigos em VARCHAR = `CHAR_LENGTH` +
+  lista binária — regra 16; `SUBSTRING(…) COLLATE utf8mb4_bin IN (…)` no modelo/tpEmis da chave). O runner corta em 5 statements; sem `--`
+  nem `;` de fim de linha dentro de COMMENT.
+- E3 `src/nfe/voice-family.ts`: `MERCHANDISE_VOICE_WRITE_KINDS` = A R D P C K F N (sem S — D-NE107; = o CHECK de `kind`, teste compara),
+  `MERCHANDISE_CANCEL_EVENT_CODES` = 110111 (= o CHECK do código da voz C — D-NE106), `MERCHANDISE_VOICE_FAMILY` (`defineVoiceFamily`, label `NF-e`),
+  `assertMerchandiseVoiceDomainsEnforced` (22 sondas em 10 grupos: kind S/a · source X/q · cStat '1000 0'/'ABC'/D sem código · C '110111 '/'101101' ·
+  ambiente X/h · chave com CNPJ minúsculo/tpEmis 2 · autorizador pr/'PR '/AN · digest · recibo · protocolo 16 dígitos) — cada sonda com PK e CHAVE
+  próprias e tudo o mais válido (F2A1-05/F2A1-07); `src/nfe/number-void.ts`: `voidId` (Id de 43 montado por PARTES — a prova achou um Id digitado à
+  mão com 45) + `assertNumberVoidDomainsEnforced` (13 sondas: ambiente · Id 'id'/invertido/modelo 57 · autorizador pr/'PR '/SVC-AN · cStat · protocolo
+  sem resposta/com 256/16 dígitos). O boot roda as duas depois das migrations e ANTES de ouvir.
+- E4 (boot): `assertFamilyViewsReadable(pool, db, [MERCHANDISE_VOICE_READING])` (a PRÓPRIA view — D-NE158) + `assertWithdrawnRangesViewReadable`.
+- E5 `ops/grants.sql`: nada novo para SUBIR (o usuário `fiscal_api` da seção 1 do `nfse-api/ops/grants.sql` cria as tabelas no boot); os GRANTs ao
+  `setes_api` das duas views ficam COMENTADOS para a janela da NE-6 (D-NE158/D-NE161; GRANT mínimo — parecer §15.3-6.3); nota do MySQL 8 (D-NE110/D-NE165).
+- OpenAPI `openapi/nfe-api.v1.yaml` (D-NE166): cabeçalho da NE-2; **12 operações em 11 paths marcadas `x-onda: NE-5`** (o fato 7 do §15.2 dizia
+  "10 rotas" — são 11 paths/12 operações, `/v1/nfe/voids` tem GET e POST); `Health.serverChain`/`Health.authorities` e `EmitterStatus.stateRegistration`
+  marcados `x-onda: NE-3`; a lista de pendentes SEM a voz S (D-NE107 — §15.7).
+- Testes (38): `app.test.ts` (401/403/422/400/413/415/500/404, CORS, health, contrato servido; **cerca rota × contrato com `x-onda`: servidas =
+  contrato − marcadas, nada marcado servido, marcas só NE-3/NE-5, 6 servidas/12 marcadas**; cercas D-F31, D-F10 e D-NE10), `voice-family.test.ts`
+  (lista, descritor, `voidId`, as sondas contra um motor simulado que aplica os CHECKs da 001 — e que falha ALTO sem CHECK, com CHECK `_ci` e com
+  recusa por OUTRO CHECK; ordem do boot), `descritor-ddl.test.ts`, `migration-001.test.ts` (forma, re-executabilidade, 15 CHECKs binários, regra 16,
+  lista de `kind` = constante, 110111, modelos = `modelsOf('merchandise')`, geradas + as duas UNIQUE, views 4.1/4.3, sem 4.2),
+  `voice-kind-fence.ts` + `.test.ts` (D-NE167 — a cerca gêmea da nfse-api: um descritor só, escritor único, descritor nunca como valor solto, D-NE80).
+- `scripts/prove-001-descartavel.ts` (`npm run prove:001` — recusa banco que não seja `fiscal_api_adv*`): a prova da 001 (abaixo).
+- `CLAUDE.md` (estado da NE-2; o "não crie `src/`" saiu — D-NE1/§15.7) e `README.md`.
+
+**Infra-IA**: este §15.9; `prompt_onda_nfe_sefaz-ddl-ne2-rascunho.sql` com cabeçalho "SUPERADO — virou a 001" (história, não editar); ponteiros em
+`nfe-api/INDEX.md` e `fiscal-api/INDEX.md`. INDICE_CENTRAL e o CLAUDE.md da raiz ficam para a sessão que publica.
+
+#### 15.9.2 Provas (ordem executada: E1 → E2 provada → E4/E3 → E5 → testes → gates)
+
+- **001 no descartável** (`npm run db:migrate` da nfe-api com `FISCAL_DB_NAME=fiscal_api_adv_ne2` + `npm run prove:001`, MariaDB 10.4.20): runner
+  aplicou núcleo 001–005 + nfe-api 001 e é idempotente (2ª passada: nada); as 35 sondas do boot passaram (cada CHECK pelo NOME); colunas GERADAS
+  corretas (55 / série 1 / 1..10 / `withdrawn` S / `withdrawn_void_id` = Id); a MESMA faixa em P passa (o ambiente separa — o defeito do rascunho),
+  a REJEITADA (256) passa (história, `withdrawn` NULL), outra SÉRIE passa, a mesma faixa retirada em H com OUTRO ANO no Id é barrada (1062
+  `uk_invoice_number_void_range` — a chave composta sem o ano barra o que a prova só pelo Id não barraria); as duas UNIQUE existem com as colunas
+  decididas; `readWithdrawnRanges` devolve só a pendente do eixo pedido; a view publica `authority_recorded` pelo PROTOCOLO (P sem protocolo = 'N',
+  A com protocolo = 'S') e **o mapa do núcleo recusa a D sem protocolo (D-NE61) — nunca "não registrada" calada**; leitura em lote por pares nota ×
+  vida; **EXPLAIN** das leituras REAIS (SQL capturado das funções do núcleo — por nota, em lote, faixas, e a forma do `countLiveTransmissions`):
+  tudo `ref`/`range` por PRIMARY/`uk_invoice_number_void_range`, a subconsulta "última voz" DEPENDENTE por `ref` na PK (nunca varredura); `SET NAMES
+  utf8mb4 COLLATE` general_ci/unicode_ci/bin lendo as duas views sem 1267; re-execução do arquivo 001 INTEIRO com dado dentro, sem erro e o dado fica
+  (IF NOT EXISTS / OR REPLACE VIEW — D-F123); depois dela o CHECK do `kind` segue recusando S pelo nome. Limite anotado: a leitura das faixas com
+  poucas linhas usa a PK + filesort (o otimizador prefere a PK ao `uk_…_range`) — irrelevante no volume de inutilizações; reavaliar na F3.
+  ⚠️ Conhecimento negativo da prova: o `mysql.exe` do XAMPP conecta em **cp850** — literais com `COLLATE utf8mb4_bin` dão 1253 e Ids digitados à mão
+  erram o comprimento; a prova vale pelo runner/mysql2 (utf8mb4) e por Ids montados por partes (`voidId`). Com `--default-character-set=utf8mb4` o
+  cliente também passa.
+- **Boot da nfe-api contra o descartável** (`tsx src/server.ts`, 75 s): migrations, sondas e conferência das duas views passaram ANTES de ouvir;
+  `GET /v1/health` 200 `{ok, db, masterKey, storage}`; `/v1/openapi.yaml` 200; `/docs` 200; `/v1/emitter` sem token 401; `/v1/nfe/invoices/pending`
+  404 (não servida — sem stub); `PUT /v1/emitter/issuers/55` sem token 401. A nfe-api NÃO ficou no ar (D-NE168).
+- **Suítes (antes dos gates; finais no §15.9.6)**: nfe-api **38/38** (`npm test`, `tsc --noEmit` limpo); núcleo na worktree **1117 passaram, 1 pulado, 2 falhas** — as 2 são a cerca P6 do
+  CNPJ (`adversarial-cnpj-onda0-gate.test.ts`), que carrega o gêmeo `setes-api/src/test-setup/federal-id-fence.ts` por caminho FIXO do workspace e,
+  na cópia destacada `ne2\setes-api` SEM `node_modules`, não roda — ambiental e PRÉ-EXISTENTE (falhava igual na baseline da worktree antes de
+  qualquer mudança desta sessão; fora do delta da NE-2); a publicação roda a suíte na árvore viva, onde o gêmeo tem o que precisa;
+  **nfse-api (cópia do main) contra o núcleo da worktree: 65 suítes, 949 passaram, 185 pulados (ao vivo)** — o núcleo só ACRESCENTA (D-NE168).
+
+#### 15.9.3 Fora da NE-2 (registrado, não executado)
+
+- **D-NE162** — autorizadores: `nfe-api/src/authority/authorizers.ts` (constante DATADA, dois grãos, teste contra os CHECKs de `authorizer` da 001 e de
+  proveniência pelo SHA-256 do JSON do acervo) — **NE-3**. Até lá a lista vive só nos dois CHECKs da 001 (10 UFs + SVAN/SVRS + SVC-AN/SVC-RS na
+  tentativa; sem SVC na inutilização — CONFERENCIAS 23).
+- **D-NE164** — teto de 2 MB do corpo do fisco no `httpsRequest` COMUM (`fiscal-api/src/transport/https-json.ts`), junto do transporte SOAP — **NE-3**;
+  muda a NFS-e também (gates da NE-3 com ela no escopo).
+- **D-NE165** — prova do `fiscal_api` INTEIRO (núcleo 001–005, nfse-api 001–007, nfe-api 001+) no motor/versão da SaveInCloud = **pré-condição da
+  F3** (item a inscrever no roteiro da Onda 4/F3 do `prompt_apis_fiscais_isoladas.md` pela sessão que publica): REGEXP ICU × PCRE, GRANT do `FOR
+  UPDATE`, `ADD CONSTRAINT IF NOT EXISTS` (só MariaDB), coluna gerada ENCADEADA (`withdrawn_void_id` sobre `withdrawn`), `INSERT IGNORE` rebaixando CHECK.
+- **Janela da NE-6** (anotado aqui para a Rodada 0 dela): entrada de `merchandise` em `VOICE_READINGS` + `MERCHANDISE_VOICE_READING` e a peça
+  `numbering/` em `fiscal-api/reading` + GRANT das duas views ao `setes_api` (`nfe-api/ops/grants.sql` §2) + `assertFamilyViewsReadable` SEM valor padrão
+  (cada chamador passa o que confere — nfse-api e setes-api reiniciam de qualquer jeito) + a cerca `ne1a-leitura.test.ts:83` e `KNOWN_FAMILIES` do
+  setes-api + plano de cancelamento da conjugada (D-NE22) + "a nfe-api não monta a reserva sem a família no catálogo" (verificação da NE-5).
+- **nfse-api** (só comentário, sem código): `src/__tests__/adversarial-ne1a2-gate.test.ts:149` ainda diz que a D-NE82 (c) "segue EM PAUTA" — atualizar
+  para "REJEITADA (D-NE167)" na próxima vez que a nfse-api for tocada (nunca reiniciar por um comentário).
+
+#### 15.9.4 Roteiro de PUBLICAÇÃO (D-NE168 — executar SÓ com o "vai" do Valdo; nada disto foi feito)
+
+1. **Commits nas worktrees** (só pelos caminhos da tarefa): `ne2\fiscal-api` (branch `ne2`: os 8 arquivos de src + 3 testes) e `ne2\nfe-api` (branch
+   `ne2`: tudo — `.env` e `storage-ne2/` estão no `.gitignore`; o `package-lock.json` entra); Infra-IA (este prompt, o rascunho do DDL, os 2 INDEX).
+2. **Núcleo**: na árvore viva `D:\Gestao2027\fiscal-api` conferir `git status` LIMPO e `main` = abce0b8 (checklist D-F133); `git merge --ff-only ne2`;
+   `npm run build` (o `dist` — quem lê `fiscal-api/reading` pelo `node_modules` precisa dele; a NE-2 não muda a superfície); `npm test` na viva (o gêmeo do
+   setes-api existe lá); `git push origin main`. **Sem restart da nfse-api** (o núcleo só acrescenta — provado pela suíte dela 949/949 contra o núcleo
+   novo); ela leva o núcleo novo no próximo restart que acontecer por outro motivo.
+3. **nfe-api**: `git -C D:\Gestao2027\nfe-api merge --ff-only ne2` + push `main`; na árvore viva `npm ci` (o `file:../fiscal-api` resolve o núcleo VIVO —
+   correto para o deploy), `.env` a partir do `.env.example` (o MESMO `DB_USER`/`DB_PASSWORD`/`FISCAL_MASTER_KEYS`/`JWT_PUBLIC_KEY_PATH`/`STORAGE_PATH`
+   da nfse-api; `FISCAL_DB_NAME=fiscal_api`); **`npm run db:migrate`** — aplica SÓ `nfe-api/001` no `fiscal_api` do dev (aditiva: 3 tabelas + 2 views;
+   não toca tabela do núcleo nem da NFS-e); subir UMA vez (`npm run dev`) para ver as sondas e a conferência das views passarem e o `GET /v1/health`
+   200 — e **derrubar** (a nfe-api não fica no ar). Conferir no `fiscal_api`: `SELECT * FROM _migrations WHERE project = 'nfe-api'` = 001.
+4. **GRANT ao `setes_api`**: NÃO agora (NE-6). **Catálogo**: NÃO agora (NE-6).
+5. Limpeza: `git worktree remove` das 4 pastas `ne2\*` (as duas cópias destacadas também) e `git branch -d ne2` nos dois repositórios depois do ff;
+   o banco `fiscal_api_adv_ne2` já foi apagado nesta sessão.
+6. Infra-IA: INDICE_CENTRAL 10.35 + CLAUDE.md da raiz (estado da nfe-api: NE-2 EXECUTADA/PUBLICADA; próximo = Rodada 0 da NE-3, §15.5) — pela sessão
+   que publica; memória `nfe-api-ne2`.
+
+#### 15.9.5 Questões novas (numeração permanente) e correções sem decisão
+
+- **Q-NE169** (parecer §15.3-6.1 revisitado na execução + gate socrático L5): a UNIQUE da PROVA `uk_invoice_number_void_withdrawn (environment,
+  withdrawn_void_id)` NÃO tem institution — dentro do mesmo CNPJ é IMPLICADA pela chave da faixa `(institution, model, serie, environment,
+  number_from, number_to, withdrawn)` (a prova mostrou que a chave da faixa é a MAIS estrita: outro ano no Id já é barrado por ela); ela só
+  dispara sozinha quando o MESMO Id é retirado sob DUAS institutions (CNPJ re-implantado como institution nova; teste em H com o CNPJ de um
+  cliente). (a) **manter como grão do FISCO** (uma `ProcInutNFe` por Id por ambiente — identidade nacional, precedente da UNIQUE da `access_key`),
+  com a NE-5 obrigada a traduzir o 1062 DESSA chave em 409 tipado (o valor duplicado é o Id do próprio chamador — não vaza linha alheia) e a frente
+  do grupo de estabelecimentos dizendo se um CNPJ pode viver em duas institutions · (b) tirar (a chave da faixa já cobre o mesmo CNPJ; o 563 do fisco
+  diz "já retirada") · (c) manter e acrescentar institution (vira cópia da chave da faixa — maquete). *Rec.: (a).*
+- **Q-NE170** (gate socrático MEDIUM 2 — D-NE110 × D-NE163): o leitor das faixas EXIGE o AMBIENTE, mas quem cunha o nNF do 55 é o ERP (D-F21),
+  cujo `tb_invoice.number_seq` é por (institution, modelo, série) SEM ambiente — e o ambiente do 55 mora em `tb_establishment_issuer` do `fiscal_api`,
+  que NÃO tem view publicada (`nfe-api/ops/grants.sql` §2 lista só as duas views). De onde o ERP lê o eixo ao cunhar? (a) **view publicada da
+  habilitação por modelo (`environment`, `cutover_at`) no núcleo**, lida pelo setes-api junto da view de faixas na janela da NE-6 (muda o GRANT e a
+  superfície `fiscal-api/reading`) · (b) a nfe-api responde "próximo número livre" e o ERP para de ler faixas · (c) o ERP guarda o ambiente do 55 em
+  configuração própria (2ª fonte — maquete). *Rec.: (a) — decidir ANTES da NE-6.* Cenário: 1º faturamento depois de o admin virar H→P com o ERP
+  lendo o eixo errado = número cunhado dentro de uma faixa retirada em P.
+- **Q-NE171** (gate socrático MEDIUM 1): `deleted` em `tb_invoice_number_void` fica FORA das duas UNIQUE e a view esconde `deleted='S'` — um
+  soft delete numa faixa retirada faria dois leitores do mesmo fato responderem o contrário (o ERP volta a cunhar os números; o próximo pedido da
+  mesma faixa recebe 1062). (a) **`deleted` NUNCA é escrito nesta tabela** (append-only como a voz — cerca por AST + conhecimento negativo; o filtro
+  da view fica só por forma) · (b) `withdrawn` passa a considerar `deleted` (migration que recria a coluna gerada ANTES de qualquer linha — barato
+  agora, caro na NE-5) · (c) deixar como está. *Rec.: (a).*
+- **Q-NE172** (gate adversarial MEDIUM 1 — TRANSVERSAL, pré-existente no núcleo e na nfse-api): o pool do núcleo não fixa `sql_mode`; no modo do dev
+  (não estrito) o motor TRUNCA o valor antes do CHECK e o domínio "fecha o que passa por fora" só vale para o CONTEÚDO, não para o COMPRIMENTO
+  (`access_key` de 45 → 44 aceito; 'HX' → 'H'). (a) **sessão estrita no pool do núcleo (`STRICT_ALL_TABLES`, fixada por conexão como o REPEATABLE READ
+  e o UTC — PADROES §9/§10) + `assertSessionInvariants` conferindo o `sql_mode` + sonda do boot com `access_key` de 45 esperando 1406**, numa janela
+  própria (muda o comportamento da nfse-api no restart — gates dela no escopo; medir os escritores existentes sob o modo estrito antes) · (b) só na
+  F3, junto da prova no MySQL 8 (D-NE165 — o modo padrão do MySQL 8 JÁ é estrito: a lacuna é do MariaDB do dev) · (c) aceitar como limite conhecido
+  (escrita por fora, mesma classe do `INSERT IGNORE`). *Rec.: (a), em janela própria antes da NE-5 (o 1º escritor da família).*
+- Correções sem decisão feitas: `nfe-api.v1.yaml:170` sem S; `families/index.ts:6`; `emitter.ts:32-33`; `nfe-api/CLAUDE.md`; "10 rotas" → 11 paths/12
+  operações; o rascunho do DDL marcado SUPERADO.
+- Gates (socrático + adversarial sobre o delta): **ver §15.9.6**.
+
+#### 15.9.6 Gates da NE-2 (2026-10-21)
+
+**Socrático (`revisar-riscos-sistemicos.md`, agente independente sobre o delta): score 0,76 ✅ — nenhum CRITICAL/HIGH.** Verificou (não acreditou):
+tsc + 38/38 na nfe-api, 98/98 nas suítes do núcleo tocadas, a cópia da nfse-api compilando contra o núcleo novo (o `voiceView` fora do contrato não
+quebra ninguém — o setes-api não o referencia), `prove:001` no descartável; toda leitura escopa pela institution do JWT; a cerca do A1 mora no núcleo
+(tirar o `requireCutover` da borda — D-NE10 — é seguro); o 55 nasce virado; nada do que ficou de fora vazou em código; sonda do boot com FK desligada
+é segura (transação sempre desfeita, sessão restaurada, conexão destruída se falhar); morte no meio da 001 = o próximo boot completa.
+- MEDIUM 1 → **Q-NE171** (`deleted` × UNIQUE da faixa). MEDIUM 2 → **Q-NE170** (o eixo AMBIENTE da cunhagem no ERP). LOW 5 → **Q-NE169** refinada.
+- **Corrigidos na sessão**: L3 — cerca da janela da NE-6 em `ne2-merchandise.test.ts` (quando `VOICE_READINGS` tiver mais de uma família, o 3º parâmetro
+  de `assertFamilyViewsReadable` tem de ter PERDIDO o valor padrão — por AST); L6 — o tipo `VoiceView` SAIU de `fiscal-api/reading` (D-NE160: forma da
+  view de vozes sem produtor nem consumidor no contrato; segue no barrel como tipo da view própria da NFS-e); L7 — `readWithdrawnRanges` ordena por
+  `number_from, number_to` (colunas do índice `uk_invoice_number_void_range`; entre as retiradas do eixo o par é único) — EXPLAIN re-provado no
+  descartável: `range` pelo índice, SEM filesort. L4 (listas de autorizador congeladas na 001 antes do `authorizers.ts`) → teste "UMA fonte" na NE-3
+  (D-NE162). L8 (D-NE166 dizia "10 rotas") → corrigido no texto deste § (11 paths/12 operações).
+- Pontos abertos registrados como pendência explícita: escala do `countLiveTransmissions` com a família no catálogo (avalia `last_kind` linha a linha
+  de todas as tentativas da institution — a mesma forma da NFS-e; medir na F3 com volume, a cerca M5 já roda).
+
+**Adversarial (`testar-adversarial.md`, agente independente, 54 ações — DDL atacado no descartável em 2 rodadas, sondas do boot com pool REAL, borda
+HTTP, cercas, núcleo): score 0,78 ✅, `passou: true` — nenhum CRITICAL/HIGH.** Resistiu (provado): os 15 CHECKs recusam pelo NOME certo todas as
+formas `_ci`/PAD SPACE (inclusive 'svrs', 'AN', tpEmis 4/9, modelo 57, cUF 'AB', '110112', '102 '); NULL explícito em toda anulável; UNIQUEs (H×P
+coexistem; rejeitada não bloqueia; 2ª pendente, rejeitada→102 com pendente viva, 563 em linha nova = 1062; faixas sobrepostas 1..10/5..15 coexistem
+— o 256 é do fisco, by design; chave repetida 1062; dois K com dh NULL passam, dois A com o mesmo dh 1062; FK 1452); geradas (série 000, nNF
+999999999, 65, CNPJ alfanumérico); views (registro só pelo protocolo; última voz ignora `deleted='S'`; tentativa excluída some; faixas nunca mostram
+rejeitada/excluída; latin1/hungarian_ci/bin sem 1267; EXPLAIN por chave); as 35 sondas do boot com pool real: 0 aceitas, cada uma recusada pela
+constraint ESPERADA, 0 linhas sobrando, FK restaurada, nenhuma trava vazada, também sob `general_ci`; runner sem a linha em `_migrations` re-aplica
+sem efeito; borda HTTP (kid/exp/alg none/institution 0 e -1/schema torto/`bearer` minúsculo/token na query → 401; role 'ADMIN' → 403; `55%20`,
+`%2535`, `55%00`, SE, 65 → 422 sem tocar o núcleo; `%35%35` decodifica para 55 e é servido; corpo `[]`/`null`/`123`/`__proto__`/text-plain/utf-16 →
+400; CORS `null` e sufixo recusados; `x-powered-by` ausente; rotas `x-onda` → 404 sem stub); núcleo (mapa recusa linha sem chave e D/A/N/C/K sem
+registro; `readWithdrawnRanges` recusa série '1', ambiente 'h'; nada da NE-2 em `fiscal-api/reading`; `countLiveTransmissions(['merchandise'])` = 0
+sem SQL; o 55 nasce virado). Scripts de reprodução do gate FORA dos repositórios: `D:\Gestao2027\ne2\qa-adv\` (somem com a pasta `ne2`).
+- **MEDIUM 1 (transversal, pré-existente) → Q-NE172**: em modo NÃO estrito (`sql_mode` do dev = `NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION`)
+  o MariaDB TRUNCA antes de avaliar o CHECK — `access_key` de 45 grava os 44 primeiros (warning 1265), `environment` 'HX' vira 'H', `kind` 'AS' vira
+  'A', `void_id` de 45 vira 43 e as geradas saem do truncado — e os CHECKs de nome certo ACEITAM. Vale para o núcleo e a nfse-api também (não é da
+  NE-2); os escritores do código nunca produzem isso — é a classe "escrita POR FORA" (como o `INSERT IGNORE … SELECT`). Decisão do Valdo.
+- **MEDIUM 2 = Q-NE171** (`deleted` × `withdrawn`), agora PROVADO: faixa pendente H 20..30 com `deleted='S'` some da view (o ERP voltaria a cunhar
+  20..30) e segue ocupando `uk_invoice_number_void_range` (novo pedido da mesma faixa = 1062).
+- **MEDIUM 3 — CORRIGIDO na sessão**: a cerca rota × contrato montava `implemented` de uma lista À MÃO (herdada do molde da nfse-api — `app.test.ts:283`
+  de lá) e uma rota registrada direto no `app.ts` escapava de "nada servido fora do contrato" (o `GET /v1/openapi.yaml` já escapava). Agora a cerca
+  ENUMERA o app real (`app._router`, routers recursivos), tolera só as META-rotas NOMEADAS (`GET /v1/openapi.yaml`; `/docs` conferido como único
+  middleware montado) e prova com uma rota intrusa sintética que a vê. ⚠️ A nfse-api tem a mesma lacuna — item para a próxima vez que for tocada.
+- **LOW — CORRIGIDOS na sessão**: (FENCE_BYPASS) a cerca por AST da família agora proíbe código dinâmico (`eval`, `Function`, `new Function`) no escopo,
+  resolve nome MONTADO (`'define' + 'VoiceFamily'`), SQL com a tabela em `${'literal'}`/concatenação/`join`, chave `"lock"`/`['lock']`, `erp` sombreado
+  (declaração local, parâmetro, import de outro módulo) e conta o namespace de `fiscal-api` como módulo do escritor (`Object.values(core)`); `walkTs`
+  vê `.mts`/`.cts` (10 formas que escapavam agora pegas; ⚠️ a cerca gêmea da nfse-api fica para a próxima vez que for tocada — D-NE167 "a MESMA
+  cerca"); (BOOT_BLIND_SPOT) sonda do boot `assertNumberVoidUniqueKeys` — banco nascido do RASCUNHO v1.1 (mesmos nomes de CHECK, UNIQUE da prova SEM o
+  ambiente, sem a chave da faixa) passaria calado pelo `CREATE TABLE IF NOT EXISTS`; agora o boot exige as duas UNIQUE com as colunas da D-NE163
+  (constante `NUMBER_VOID_UNIQUE_KEYS` = o DDL, teste compara; o `prove:001` a usa); (INPUT_LENIENCY) `mapWithdrawnRange` só aceita número ou texto
+  decimal canônico ('1e3', '0x10', ' 5 ', '01' recusados) e `created_at` texto/NULL; (DATA_EXPOSURE) o 422 do modelo ecoa o parâmetro CORTADO (12) e
+  sem caractere de controle (⚠️ a nfse-api ecoa inteiro — item para quando for tocada).
+- **LOW — registrados**: (TENANT_LEAK_RAW_ERROR) a UNIQUE da prova sem institution dá 1062 CRU para outra institution com o mesmo Id (→ Q-NE169: a
+  NE-5 mapeia esse 1062 em 409 tipado sem vazar a linha alheia); (DDL_GAP) o DDL permite 102 SEM protocolo (D-NE40: o protocolo "se vier") e
+  UPDATE de `protocol`/`access_key`/`environment` — write-once/imutabilidade são do ESCRITOR (NE-5), como na nfse-api; (TEST_ENV) P6 do CNPJ = artefato
+  do layout (§15.9.2).
+- Casos NÃO testados (registrados para as ondas donas): MySQL 8 (D-NE165, F3); concorrência real do `id` MAX+1 da faixa e da reserva (escritor da NE-5,
+  PADROES §9 regras 7/12); GRANT das views ao `setes_api` (NE-6); `countLiveTransmissions('all')` com NF-e viva no banco (limite aceito pela D-NE158);
+  comportamento dos escritores existentes do `fiscal_api` sob sessão estrita (Q-NE172); swagger-ui-express em `/docs` sem autenticação (igual à nfse-api);
+  `npm run dev` = `tsx watch` (deploy ao salvar) se a nfe-api ficar no ar fora do passeio (D-NE168: não fica).
+
+**Depois dos gates (números FINAIS)**: nfe-api **41/41** (`tsc` limpo); núcleo na worktree **1118 passaram, 1 pulado, 2 falhas = só a P6 ambiental do CNPJ (§15.9.2)**;
+nfse-api (cópia do main) contra o núcleo FINAL **65 suítes, 949 passaram, 185 pulados (ao vivo)** + `tsc` limpo — o núcleo só acrescenta;
+`prove:001` re-rodado com a sonda nova (EXPLAIN das faixas: `range` pelo `uk_invoice_number_void_range`, sem filesort); banco descartável APAGADO;
+`fiscal_api` real sem nenhuma linha `nfe-api` em `_migrations` (conferido).
