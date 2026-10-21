@@ -1277,3 +1277,104 @@ Notas do parecer (sem ação agora): (d) nenhum ciclo de trava achado entre o at
 conferida — fronteira dos grupos); em escala, os 3 `COUNT(*)` do religar rodam sob a trava da institution (sem índice em `created_at`) e
 podem estourar o WAIT 10 de pedidos/faturamento durante o ato. (g) onda do app: com S viva, o lookup não lista a categoria P gravada no
 serviço do legado — o formulário mostra o rótulo do GET e não manda null.
+
+### Rodada 7 — decisões (2026-10-20, rodada "uma pergunta por vez" com o Valdo)
+
+- **D-PR45** (fecha a **Q-PR52 = (a)**, literal: *"(a), siga a recomendação"* — DESTRAVA a janela) — **o enquadramento fiscal do serviço
+  sai da guarda do sincronizador por ROTA PRÓPRIA**: `PUT /api/services/:id/tax-rule` (vínculo serviço → regra de ISS, `tb_service`) e
+  `PUT /api/services/:id/ibscbs` (classificação IBS/CBS, `tb_service_ibscbs`) NÃO passam pelo `syncWriteGuard` — o legado não produz
+  esses dois fatos, a web é a única escritora deles; o `PUT /api/services/:id` (dados do cadastro) continua guardado. Princípio: o dono
+  do CADASTRO é o legado (chave ativa), o dono do ENQUADRAMENTO FISCAL é a web — cada fato com o seu escritor. Privilégio das duas rotas
+  = ALTERAR em `services` (`privilegeAct`); o app mostra os dois blocos editáveis mesmo em cliente "só consulta" (D-PR32), com o resto do
+  formulário travado. Testes: as duas rotas gravam com chave ativa; o PUT do cadastro segue 409 `SYNC_KEY_ACTIVE`; cerca de que
+  nenhum outro escritor de `tb_service_tax_rule`/`tb_service_ibscbs` nasce fora dessas rotas (varredura).
+- **D-PR46** (fecha a **Q-PR53 = (b)**, DIVERGIU da recomendação (a)) — **onboarding de cliente com legado: aceitar a sobrescrita das
+  categorias padrão pelo bootstrap do legado**, SOB CONDIÇÃO do grupo do sync confirmar que o upsert de `tb_category` pelo
+  `/category/sincronize` regrava `kind` E `posit_level` (senão um grupo do legado ficaria 'S' e sumiria das telas de mercadoria). A
+  condição vira pergunta ao grupo do sync — **Q-SY24** (levar ao `setes-sync/verificacao-comissao-margem-mercadoria.md` na próxima sessão
+  daquele grupo; fronteira dos grupos: esta frente não lê o código do setes-sync). Enquanto a Q-SY24 não volta: a 072 segue criando
+  "Produtos"/"Serviços" em todo cliente novo; nenhum flag "com legado" nasce na institution; o 1º ligar da chave não confere nada. Se a
+  resposta for "não regrava", a Q-PR53 reabre com (a) como saída.
+
+#### Rodada 7 — RE-ELABORAÇÃO do modelo da chave do sincronizador (Valdo, 2026-10-20, na Q-PR54)
+
+Literal do Valdo: *"nao havera ligar e desligar a chave de forma aleatoria. Quando o cliente for cadastrado ja saberei se vira via
+sincronizador ou nao. Se vier pelo sincronizador ele sera usado ate o dia que nao usara mais, nao tem idas e vindas. O sincronizador é
+apenas uma etapa de transicao entre o sistema desktop e web. Ou receber dados do pdv e neste caso o cadastro de produtos sera feito pela
+web, entao a sincronia do pdv quebra a logica do uso da chave bloqueia ou desbloqueia o sincronizador... Vamos re-elaborar"*.
+
+**O que cai**: a premissa "chave ATIVA = legado dono dos cadastros, chave INATIVA = web dona" (D-PR32/D-PR41/D-PR43 e a Rodada 6: 072
+"Serviços" no ato de desligar, religar com 409 `SYNC_KEY_WEB_ROWS`, `assertNoActiveSyncKey`). Ela confunde DUAS coisas: a chave
+(autenticação do sincronizador — a D-SY13 "chave inativa = sincronizador INATIVO" segue como interruptor de emergência) e o DONO dos
+cadastros, que é um fato do ESTABELECIMENTO conhecido no cadastro dele.
+
+**Modelo reelaborado (proposta do condutor — forma final com o guardião antes de qualquer DDL)**:
+1. **Origem dos cadastros** = fato da institution, definido no cadastro: **W** (nativo web), **L** (transição do desktop legado: o legado
+   é o dono de produtos/serviços/categorias/listas de preço, a web só consulta — enquadramento fiscal à parte, D-PR45), **P** (PDV: a WEB
+   é a dona dos cadastros; os PDVs recebem o catálogo e mandam movimento).
+2. A guarda de escrita da web pergunta "quem é o dono?" (W/P = web escreve; L = web só consulta), nunca "a chave está ativa?".
+3. **L → W é um ato ÚNICO e irreversível, "encerrar a transição"** (data gravada; cria as categorias padrão que faltarem; o sincronizador
+   do legado é recusado a partir daí). Não existe religar. P e W não mudam.
+4. O modo PDV (o que o PDV recebe, numeração por terminal, chave por estabelecimento) é da frente `tb_terminal` (Q-TG8/Q-TG12) e do grupo
+   do sync; esta frente fixa só "no modo P a web é dona dos cadastros".
+
+**Efeitos na fila**: Q-PR53 reabre — o fato no cadastro da institution é exatamente a (a) (a D-PR46 fica A REVER após o modelo);
+**Q-PR54, Q-PR55 e Q-PR56 perdem o objeto** (não há religar; o "instante do desligamento" vira a data do ato de encerrar); D-PR43 (interruptor
+da chave) vira o ato de encerrar a transição ou fica só como interruptor de emergência da D-SY13; o código da Rodada 6 na branch
+`merchandise` é retrabalho sobre commit. ⚠️ TRANSVERSAL: produtos, frente `tb_terminal`, grupo do sync (contrato da chave), onboarding.
+- **D-PR47** (fecha a **Q-PR57 = (a)**, literal: *"(a), siga a recomendação"*) — **a ORIGEM DOS CADASTROS é fato da institution**
+  (`tb_institution`, central; nome da coluna com o guardião — proposta `catalog_source` CHAR(1) W/L/P, CHECK binário, NOT NULL, definido no
+  cadastro do cliente pelo Super): **W** nativo web · **L** transição do desktop legado (legado dono de produtos/serviços/categorias/listas
+  de preço; web só consulta, salvo o enquadramento fiscal — D-PR45) · **P** PDV (web dona; PDVs recebem o catálogo e mandam movimento).
+  Imutável, exceto **L → W pelo ato "encerrar a transição"** (ato do Super, uma vez, irreversível; grava `legacy_ended_at`; cria as
+  categorias padrão que faltarem; o sincronizador do legado passa a ser recusado com código próprio). A chave do sincronizador só é
+  gerada para L e P e NÃO carrega modo. A guarda da web (`syncWriteGuard` → renomear para `catalogOwnerGuard`) lê este fato, nunca a
+  chave; a migration 072 cria "Produtos"/"Serviços" só para W e P (a D-PR46 fica SUPERADA: a Q-PR53 se resolve pelo fato — a Q-SY24 ao
+  grupo do sync perde a urgência, fica como conferência). Antes do DDL: parecer do guardião (`setes-conceito`) sobre a forma + `PADROES_BANCO`
+  + `revisar-ddl` + prova em descartável; a coluna nasce com backfill (dev: `setes_setes` = L enquanto a chave estiver ativa; demais = W).
+- **D-PR48** (fecha a **Q-PR58 = (a)**, literal: *"(a), siga a recomendação"*) — **dois atos distintos**: (1) o interruptor da chave
+  (`PUT /api/institutions/:id/sync-api-key/active`, D-PR43) fica SÓ como PAUSA de emergência, reversível (D-SY13: sincronizador INATIVO
+  até reativar) — não muda dono, não cria categoria, não confere linhas (o 409 `SYNC_KEY_WEB_ROWS` e a "Serviços" do ato de desligar
+  SAEM do código da Rodada 6); (2) **"encerrar a transição"** = ato NOVO do Super, `POST /api/institutions/:id/end-legacy-transition`,
+  só para `catalog_source = 'L'`, irreversível: confirma com motivo, grava `legacy_ended_at`, muda L → W, cria as categorias padrão que
+  faltarem (a 072 vira peça chamada aqui e no onboarding W/P), inativa a chave em definitivo (chave de L encerrado nunca reativa — 403
+  `SYNC_TRANSITION_ENDED` no sincronizador, código novo a combinar com o grupo do sync). Privilégio: ato do Super (tela Institutions);
+  trilha no log com autor. A branch `merchandise` refaz a Rodada 6 sobre isto (retrabalho sobre commit).
+- **D-PR49** (Valdo, 2026-10-20 — refina D-PR47/D-PR48; literal: *"1 caminho - produto vem do desktop · 2 caminho - produto vem do
+  desktop, servidor desktop é desativado e ficam somente os pdv · 3 caminho - produto vem da web abastece pdv que sincronizam somente
+  vendas · 4 caminho - só temos web sem desktop"*) — **os QUATRO caminhos do cliente** sobre os três modos da D-PR47: caminho 1 = **L**
+  (desktop dono dos cadastros); caminho 4 = **W**; caminho 3 = **P** (web dona; os PDVs recebem o catálogo da web e sincronizam SÓ
+  vendas/movimento); **caminho 2 = a transição L → P**: o servidor desktop é desativado, os PDVs ficam, e a partir daí a WEB é a dona dos
+  cadastros e abastece os PDVs. Logo o ato "encerrar a transição" (D-PR48) tem DESTINO: **L → W** (cliente sem PDV) ou **L → P** (cliente
+  com PDV) — o Super escolhe o destino no ato (a frente `tb_terminal` acrescenta depois a conferência "P exige terminal kind P
+  registrado"); nos dois casos a chave do LEGADO (servidor desktop) é encerrada em definitivo; no destino P, os PDVs seguem com a
+  sincronia de movimento (chave por estabelecimento, D-TM) e passam a RECEBER o catálogo da web — a direção web → Firebird (D16 do sync,
+  fase própria) e a projeção do que o PDV recebe (Q-TG8) são do grupo do sync + frente `tb_terminal`, não desta. P e W não mudam de modo.
+- **D-PR50** (fecha a **Q-PR50 = (a)**, literal: *"(a), siga a recomendação"*) — **aceitar e registrar**: `tb_product` ids 16–79 e
+  `tb_price_list` 3–4 do `setes_setes` nasceram na web no espaço do legado (ensaios; nada em produção); se o gerador do legado alcançar
+  esses ids antes de a Setes encerrar a transição (D-PR48), o envio sobrescreve sem aviso — limite conhecido, anotado no roteiro de
+  implantação da Setes como "encerrar a transição antes de o GN_PRODUTO passar de 15". A guarda da D-PR47 impede linhas NOVAS em L.
+- **D-PR51** (fecha a **Q-PR51 = (a)**, literal: *"(a), siga a recomendação"*) — **a guarda do dono dos cadastros (`catalogOwnerGuard`,
+  D-PR47) entra também em `financial-plans` e `bank-accounts`** (cadastros que o legado envia no caminho 1 e que a web cunha por MAX+1 no
+  mesmo espaço de id): em `catalog_source = 'L'` a web só consulta nos dois; a lista `SYNC_FED_TABLES` (D-PR41) passa a ter 6 tabelas, e a
+  cerca da skill `novo-modulo` confere que todo módulo cujo cadastro o legado envia monta a guarda.
+- **D-PR52** (Valdo, 2026-10-20, literal: *"unidade/medida/embalagem/categorias/produtos/servicos/tabela de preco/preco, Lista de
+  Estoque, saldo de estoque....sao os cadastros de base"*) — **definição do CATÁLOGO DE BASE** que o dono dos cadastros (D-PR47) escreve e a
+  web só consulta no modo L: **unidade de venda** (`tb_merchandise_trade_unit`), **medida** (`tb_measure` + vínculo da institution),
+  **embalagem** (`tb_package` + vínculo), **categorias**, **produtos**, **serviços** (cadastro — o enquadramento fiscal fica com a web,
+  D-PR45), **tabela de preço** (`tb_price_list`), **preço** (`tb_price`), **lista de estoque** e **saldo de estoque**. A lista
+  `SYNC_FED_TABLES` da guarda (`catalogOwnerGuard`) passa a ser ESTA, mais plano de contas e contas bancárias (D-PR51 — cadastros que o
+  legado também envia, fora do catálogo de base). Medida e embalagem são catálogos CENTRAIS (D5 do sync): em L a web não cria nem vincula
+  medida/embalagem para a institution (o sincronizador traz — D-SY10); nos modos W/P cria normalmente (D-PR28). Estoque: em L o saldo vem
+  do legado (`/stock-balance`); em P o movimento dos PDVs alimenta o saldo que a web mantém; em W a web é a única escritora.
+- **D-PR42 CONFIRMADA** (Valdo, 2026-10-20: *"confirmo"*) — `assertBaseUnitFree`: trocar a unidade-base = 409 `TRADE_UNIT_BASE_LOCKED`
+  também com preço vivo ou item de pedido ABERTO na unidade (além do movimento faturado).
+
+**Rodada 7 FECHADA (2026-10-20)**: Q-PR52 → D-PR45 (DESTRAVA a janela) · Q-PR53 → D-PR46 (SUPERADA pela D-PR47) · re-elaboração do modelo
+da chave → D-PR47 (origem dos cadastros W/L/P na institution) · D-PR48 (pausa reversível × encerrar a transição) · D-PR49 (4 caminhos; L → W
+ou L → P) · Q-PR50 → D-PR50 · Q-PR51 → D-PR51 · D-PR52 (catálogo de base) · D-PR42 confirmada · **Q-PR54/Q-PR55/Q-PR56 SEM OBJETO** (não há
+religar). Pendente ao grupo do sync: Q-SY24 (upsert de categoria regrava `kind`/`posit_level`?) — conferência, não trava; o código novo
+de `SYNC_TRANSITION_ENDED` e a chave por estabelecimento dos PDVs (destino P) são contrato com o grupo do sync. ⚠️ Reconciliar com a frente
+do terminal (Q-TG3/Q-TG4: o guardião propôs o "ponteiro na linha do grupo" para o mesmo fato — decidir UM lugar quando o bloco do terminal
+for revisto). Próximo número: **D-PR53**. Execução: a branch `merchandise` refaz a Rodada 6 sobre D-PR47/D-PR48 (retrabalho sobre commit),
+rebase sobre o `main` pós-privilégios, DDL da coluna com o guardião; depois a janela (§9) e a onda 1 do app.

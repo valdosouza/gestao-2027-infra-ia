@@ -17,7 +17,7 @@ repositórios e worktrees (2026-10-18 ~16:30), os pontos de retomada (⏯) de ca
 | **Ambiente** | ✅ FEITO 2026-10-18 (noite): setes-api :3000 · nfse-api :3002 · app :5051 no ar, em abas do Terminal (health 200 · 200 · página 200); boot do setes-api sem migration pendente, 9 gatilhos da F2a conferidos | — | — |
 | **Higiene** | ✅ FEITO em parte 2026-10-18: `nfse-api/package.json` revertido; 12 worktrees ♻ removidas com as branches (pastas `ib3/`, `ne1b/`, `shell/` apagadas); dartvm da :5000 parado; pacote Firebird apagado da Infra-IA (era cópia, hash a hash, do kit `C:\Temp\Firebird-2.5-e-5.0`, que ficou) | — | — |
 | **Sync (D-SY10/11/13, patch 11)** | ✅ COMMITADO 2026-10-18 (noite), só os caminhos do §10.7: setes-sync **edbaad4** · sincronizador **b6c6ebe** (sem push) | A-SY1 + Q-SY15…Q-SY23 → implantação (Fase 4) | decisões; build oficial do patch 11 (Valdo) |
-| **Recuperação de senha (Q-PV38)** | branch `recuperacao-senha` no GitHub (api d19de9d · sql e1aa574); sql/67 NÃO aplicado | A-RS1…A-RS4 · Q-RS1…Q-RS6 → publicar §13.8 | decisões; corrige CRITICAL anterior (tomada de conta pela colação) |
+| **Recuperação de senha** | ❌ **REMOVIDA — D-PV18 (Valdo, 18/10 noite): "os aplicativos não precisam de recuperação de senha"**. Branch `recuperacao-senha` APAGADA (local + GitHub); o fluxo que EXISTIA no `main` sai pela branch `sem-recuperacao-senha` (worktrees `sem-recuperacao/{setes-api,setes-app}`): ✅ API **fbf01a3** (tsc limpo · auth 26/26 com a cerca) · app **ad50385** (analyze limpo · core 81/81 · web 634 verdes/27 skip) — commitados na branch, sem merge | merge **API + app JUNTOS** com o "vai" (fecha o CRITICAL da colação por construção: sem fluxo, sem porta) | "vai"; Q-PV54 (senha perdida do Super) e Q-UC25 (senha do convidado) abertas, não travam |
 | **Grupo — D-GE4 leitores** | branch `grupo-leitores` ff2795f **no GitHub** (push 2026-10-18 noite), sem merge; gates 0,78/0,84 | "vai" → merge na árvore viva (sem DDL) | nenhum |
 | **Privilégios — onda D-PV2** | branch `privilegios-crud` no GitHub (api 50b928f · app 5a06d73 · nfse b62d55b); seed 65 no `main` do sql, NÃO aplicado | 3a (D-PV17) · 3b (D-UC1…D-UC5) · roteiro §11.8 · fusão com a cerca e com `grupo-leitores` | lista de telas do contrato da Setes (D-PV10) + decisão do 3b |
 | **Privilégios — cerca D-PV9** | ✅ COMMITADO 2026-10-18 (noite) na branch `privilegios-catalogo`: setes-api **8b1fe27** · setes-app **53a1497** (sem push/merge) | A-PV12 · A-PV14 · Q-PV19 · Q-PV50…Q-PV53 → publicação §12.7 | decisões (nenhuma trava a entrega) |
@@ -53,7 +53,7 @@ repositórios e worktrees (2026-10-18 ~16:30), os pontos de retomada (⏯) de ca
 | 15:18 | 09 - Cerca D-PV9 | privilégios | worktrees `privilegios-catalogo` | ❌ 19 arquivos | `prompt_privilegios_interfaces.md` §12.9 |
 | 15:19 | 08 - Onda D-PV2 | privilégios | worktrees `privilegios` | ✅ branch no GitHub | §11.8.1 |
 | 15:19 | 07 - Privilégios devidos das 31 telas | privilégios R0–R2 | sql/64 APLICADO; sql 3672ee2 | ✅ | — (fechada) |
-| 16:13 | 10 - Força bruta no /auth/change-password (Q-PV38) | recuperação de senha | worktrees `recuperacao-senha` | ✅ branch no GitHub | §13.9 |
+| 16:13 | 10 - Força bruta no /auth/change-password (Q-PV38) | recuperação de senha | ~~worktrees `recuperacao-senha`~~ → **MORTA pela D-PV18** (noite de 18/10): branch apagada; o fluxo sai do `main` | ❌ apagada | §13 do prompt de privilégios (nota SUPERADA) |
 | (17/10 16:01) | Serviços de API e setes-app | ambiente | subiu 3000/3002/5051 — HOJE todos fora | — | skill `dev-server-orchestrator` |
 | (17/10) | D-PR13 (NCM 8 dígitos) | produtos | worktrees `taxrules-ncm` | ❌ 10 arquivos | `prompt_modulo_products.md` (D-PR13) |
 
@@ -71,7 +71,9 @@ Legenda: ✅ = igual ao GitHub · ⚠️ = commit só local · ❌ = alteração
 | `grupo-leitores/setes-api` | `grupo-leitores` ff2795f | +1 | ⚠️ sem upstream | push de salvaguarda; merge com "vai" |
 | `privilegios/setes-api` | `privilegios-crud` 50b928f | +1 | ✅ no GitHub | 3a/3b; fusão; merge na janela |
 | `privilegios-catalogo/setes-api` | `privilegios-catalogo` @f53a618 | 0 | ❌ 18 arq (9 M + 9 novos) | commit só dos caminhos do §12.9 |
-| `recuperacao-senha/setes-api` | `recuperacao-senha` d19de9d | +1 | ✅ no GitHub | sql/67 → merge |
+| ~~`recuperacao-senha/setes-api`~~ | ~~d19de9d~~ | — | ❌ APAGADA (D-PV18, 18/10 noite — local e GitHub) | — |
+| `sem-recuperacao/setes-api` (NOVA, D-PV18) | `sem-recuperacao-senha` **fbf01a3** | +1 | ✅ commit (7 arquivos; tsc limpo, auth 26/26 + cerca), sem push | merge API + app JUNTOS com o "vai" |
+| `sem-recuperacao/setes-app` (NOVA, D-PV18) | `sem-recuperacao-senha` **ad50385** | +1 | ✅ commit (23 arquivos: 4 apagados, 18 chaves i18n, 7 testes ajustados, cerca Dart; analyze limpo, core 81/81, web 634/27 skip), sem push | idem |
 | `merchandise/setes-api` | `merchandise` @f53a618 | 0 | ❌ 66 arq (31 M + 35 novos) | commit de salvaguarda; Rodada 7 |
 | `taxrules-ncm/setes-api` | `taxrules-ncm` @f53a618 | 0 | ❌ 4 arq | commit; merge junto da janela de produtos |
 | `cnpj/setes-api` | `cnpj` dcf4e1e | +2 (ff) | ⚠️ sem upstream | push de salvaguarda |
@@ -83,7 +85,7 @@ Legenda: ✅ = igual ao GitHub · ⚠️ = commit só local · ❌ = alteração
 | `cnpj/setes-app` | `cnpj` db92f38 | +2 / main+3 | ⚠️ DIVERGIU | push; rebase na janela |
 | `densidade/` · `shell/` · `setes-app-f2b` · `ib3/setes-app` | densidade · shell · f2b · ib3 | 0 à frente | ♻ | parar o dartvm :5000 (PID 18532) e remover |
 | `sql` | `main` 9f4fcf3 | — | ✅ (64 APLICADO · 65 NÃO aplicado) | — |
-| `recuperacao-senha/sql` | `recuperacao-senha` e1aa574 | +1 / main+1 | ✅ no GitHub | merge trivial (o 65 chegou depois); sql/67 NÃO aplicado |
+| ~~`recuperacao-senha/sql`~~ | ~~e1aa574~~ | — | ❌ APAGADA (D-PV18) — o número de seed **67 ficou livre** | — |
 | `merchandise/sql` | `merchandise` @7cdce7e | 0 / main+2 | ❌ `03_schema_cliente_ddl.sql` + `66_merchandise_interface_seed.sql` | commit; rebase (64/65 chegaram depois) |
 | `fiscal-api` (núcleo) | `main` abce0b8 | — | ✅ limpo | — |
 | `cnpj/fiscal-api` | `cnpj` 5cb70a2 | +3 / **main+17** | ⚠️ DIVERGIU com a NE-1b | push; **rebase obrigatório** antes da janela |
@@ -103,8 +105,8 @@ Legenda: ✅ = igual ao GitHub · ⚠️ = commit só local · ❌ = alteração
 `privilegios\fiscal-api` · `grupo-leitores\{fiscal-api,nfse-api}` · `taxrules-ncm\{fiscal-api,nfse-api}`. Dentro das worktrees do
 setes-api, o `.env` é link físico do `.env` vivo (gitignored).
 
-**Banco (dev = "produção" da Setes)**: sql/64 APLICADO (157 pares) · sql/65 NÃO aplicado (antes do app da D-PV2) · sql/67 NÃO aplicado
-(ANTES e DEPOIS do merge da `recuperacao-senha`; o boot não sobe sem a tabela) · 071/072 + seed 66 NÃO aplicados (rodam no boot da
+**Banco (dev = "produção" da Setes)**: sql/64 APLICADO (157 pares) · sql/65 NÃO aplicado (antes do app da D-PV2) · sql/67 MORREU com a branch
+(D-PV18 — o número 67 fica livre; a frente `tb_terminal` passa a usar 67) · 071/072 + seed 66 NÃO aplicados (rodam no boot da
 árvore viva no merge do `merchandise`) · CHECK do CNPJ aguarda o grupo do sync.
 
 ---
@@ -122,8 +124,9 @@ Em ordem de impacto (o que destrava mais primeiro). Recomendações já estão e
    ratificar A-PV5…A-PV11 · Q-PV10…Q-PV15, Q-PV21…Q-PV36 (nenhuma trava).
 3. **Privilégios — cerca D-PV9** (§12.9): ratificar A-PV12 e A-PV14 · confirmar Q-PV19 (resposta veio repetida) · Q-PV50…Q-PV53 (Q-PV51 é DDL →
    guardião + PADROES + prova em descartável).
-4. **Recuperação de senha** (§13.6/§13.9): ratificar A-RS1…A-RS4 · Q-RS1 (N = 5, tetos, piso — reservada) · Q-RS2 (`trust proxy` agora ×
-   Onda 4) · Q-RS3 · Q-RS4 · Q-RS5 (endurecer o login em tarefa própria) · Q-RS6.
+4. ~~Recuperação de senha~~ → **SEM OBJETO (D-PV18, 18/10 noite)**: Q-RS1…Q-RS6/A-RS1…A-RS4 morreram. No lugar: **Q-PV54** (senha perdida
+   do SUPER — Rec. procedimento documentado do operador) e **Q-UC25** na frente do convidado (quem define/troca a senha do titular — Rec.: o
+   titular logado troca a própria; o admin só define a inicial). Nenhuma trava a publicação.
 5. **Grupo do sync** (§10.6/§10.7): "commita" · A-SY1 · Q-SY15…Q-SY23 → viram rodada executável; implantação (build oficial do patch 11 é
    do Valdo, no Delphi).
 6. **Grupo de estabelecimentos**: só o "vai" da D-GE4 (nenhuma questão aberta); depois abrir a onda 0.
@@ -214,11 +217,27 @@ Depois da Fase 1 todo repositório fica com `git status` limpo (fora `.dart_tool
 
 O `setes-api/main` é o ponto de encontro de 6 branches. Ordem pelo tamanho do conflito e pela urgência:
 
-1. **Recuperação de senha** (`recuperacao-senha`) — PRIMEIRO: corrige um CRITICAL anterior (o código ia ao texto da requisição; a colação
-   `general_ci` iguala `gmaíl.com` a `gmail.com` → tomada de conta, inclusive do super). Não conflita com `privilegios-crud` (não toca `auth.*`,
-   `rate-limit.middleware.ts`, `product-token.ts`). Roteiro §13.8: decisões → **sql/67 em `setes_central`** → merge api + sql → **sql/67 de
-   novo** → conferir no boot `Pedido de troca de senha (script 67): ok` → passeio (pedir código, errar 5, 6ª recusada, novo funciona, e-mail
-   inexistente responde igual). App não muda; `errors:gen` não precisa. Rodar a suíte inteira com a máquina livre (testes de tempo).
+1. ~~Recuperação de senha (`recuperacao-senha`)~~ → **Remoção da recuperação de senha** (`sem-recuperacao-senha`, **D-PV18**) — PRIMEIRO:
+   tira do `main` o fluxo inteiro e, com ele, o CRITICAL anterior (sem porta, sem tomada de conta pela colação). Não conflita com
+   `privilegios-crud`: na API toca só `auth.{routes,service,repository}.ts`, `mailer.ts` (comentário), `.env.example`,
+   `pre-deploy-tz-check.ts` + a cerca nova; no app só `packages/core/src/auth`, `api_client.dart`/`product_token.dart` (comentário e
+   `_publicAuthPaths`), i18n `auth.*` e testes. Sem DDL, sem `errors:gen`. Roteiro: "vai" → merge ff da API na árvore viva (`tsx watch`
+   recarrega) **e do app**, juntos (o app antigo mostraria "Esqueci minha senha" chamando rota que já não existe) → `flutter run` :5051
+   reiniciado → tirar `APP_CHANGE_PASSWORD_URL` do `.env` vivo (gitignored; a var morta é inofensiva) → passeio: login OK, tela de login sem
+   o link, `POST /auth/recovery-password` e `/auth/change-password` = 404.
+   **Execução 2026-10-18 (noite)**: API **fbf01a3** (tsc limpo; `auth-login` + `auth.middleware` + cerca `no-password-recovery-fence` =
+   26/26); app **ad50385** por agente na worktree irmã, conferido no disco e no diff (4 arquivos apagados; bloc sem os 2 eventos, 2 estados,
+   usecases e `_recoveryEmail`; `_publicAuthPaths` = login + seleção; link "Esqueci minha senha" fora com o `Row`/`Spacer` que só existiam
+   para ele; **18 chaves `auth.*`** sem consumidor removidas em pt/en — inclusive `email`/`emailHint`, que só as telas apagadas usavam; 7
+   testes ajustados; cerca Dart provada mordendo). `flutter analyze` limpo nos dois pacotes; `flutter test` core 81/81 · web 634 verdes /
+   27 skip pré-existentes / 0 vermelho. O conhecimento negativo **D-F218** (troca de senha não idempotente) perdeu o objeto. **Gate do
+   delta do app**: revisão do diff + suíte completa; sem HIGH; ponto aberto único = o comentário da cerca das rotas no `le gate` cita as
+   rotas antigas (pasta `test`, fora da varredura — aceito). **Gate do delta da API (socrático 0,80 · adversarial 0,84, sem HIGH)** — pontos abertos:
+   (1) senha perdida do SUPER não tem mais saída no produto → **Q-PV54** (Rec.: procedimento documentado do operador, exceção explícita);
+   (2) publicar API e app JUNTOS (o app velho na :5051 chamaria 404 — UX, não segurança); (3) `.env` vivo com a var morta; (4) a coluna
+   `activation_key` fica sem escritor (dado morto, sem efeito; DROP = decisão de DDL à parte). Provado: 404 nas 2 rotas (jest, roteador
+   real), o service exporta só login/selectInstitution/switchInstitution, varredura de `src/`, `scripts/` e `.env.example` sem token do
+   fluxo. Analisado: gateway sem lista de rotas públicas (nada a tirar), rate limit indiferente, nfse-api/fiscal-api não conhecem o fluxo.
 2. **Grupo — D-GE4** (`grupo-leitores`): "vai" → merge ff na árvore viva (sem DDL; gates 0,78/0,84) → push. Vai ANTES da D-PV2 porque a
    D-PV11 reusou a mesma linha do `admin.repository.ts` (na fusão, "ficar com a peça" `@shared/institution-interfaces`).
 3. **Bloco Privilégios** (`privilegios-crud` + `privilegios-catalogo`), uma janela só — roteiro §11.8 (itens 1–7) + §12.7:
@@ -291,9 +310,27 @@ O `setes-api/main` é o ponto de encontro de 6 branches. Ordem pelo tamanho do c
 - Sync: "Retomar o grupo do sync pelo §10.7 do `setes-sync/verificacao-comissao-margem-mercadoria.md`" (+ "commita").
 - Cerca: "Retome a cerca da D-PV9 pelo §12.9 do `prompts/prompt_privilegios_interfaces.md`" (com as respostas A-PV12, A-PV14, Q-PV19, Q-PV50…53).
 - Onda D-PV2: "Retome a onda da D-PV2 pelo §11.8.1 do `prompt_privilegios_interfaces.md`" (3a/3b + lista de telas da Setes).
-- Recuperação de senha: "Retomar a Q-PV38 (§13.9 do `prompt_privilegios_interfaces.md`)" (A-RS1…4, Q-RS1…6).
+- ~~Recuperação de senha~~ → Remoção (D-PV18): branch `sem-recuperacao-senha`; o que fica do assunto está na nota SUPERADA do §13 do
+  `prompt_privilegios_interfaces.md`; decisões pendentes Q-PV54 (lá) e Q-UC25 (`prompt_frente_usuario_convidado.md` §11).
 - Grupo: "Retome a frente do grupo de estabelecimentos pelo `prompt_frente_grupo_estabelecimentos.md`" (§10: "vai" da D-GE4 + onda 0).
 - Produtos: "Retome a frente de produtos pelo §9 do `prompt_modulo_products.md`" (Rodada 7).
 - nfe-api: "Retome a NE-2 pelo §15.8 do `prompt_onda_nfe_sefaz.md`, pela Q-NE160".
 - Convidado: §11 do `prompt_frente_usuario_convidado.md`. Terminal: §8 do `prompt_frente_terminal.md` + §9 do `prompt_frente_terminal_grupo_pdv.md`.
 - CNPJ: §9 do `prompt_frente_cnpj_alfanumerico.md`. Densidade: §6 do `prompt_densidade_layout_web.md`. IBS/CBS: §13.8 do `prompt_fase_ibs_cbs.md`.
+
+## 7. Rodada de decisões 2026-10-20 — o que mudou neste plano
+
+- **Recuperação de senha**: a D-PV18 foi REVOGADA (D-PV47). A branch `recuperacao-senha` (api d19de9d · sql e1aa574) NUNCA tinha sido
+  apagada de fato e volta a ser o item 1 da Fase 2 (roteiro §13.8 do prompt de privilégios: sql/67 ANTES e DEPOIS do merge; + SMTP real no
+  `.env` — D-RS4/D-RS5). A branch `sem-recuperacao-senha` (api fbf01a3 · app ad50385) é DESCARTADA: remover as worktrees
+  `sem-recuperacao/{setes-api,setes-app}` e as branches locais (ato operacional, com "vai").
+- **Bloco privilégios** cresceu: antes da fusão/janela a branch `privilegios-crud` executa D-PV19…D-PV39 (3b, CONFIGURAR, CONSULTAR,
+  rotas fora da guarda, cache do veredito, papel da própria empresa, grava por marca…) com gates; seed **68** (CONFIGURAR/CONSULTAR);
+  D-PV33 (trilha `_event`) e D-PV43 (UNIQUE da `i18n_key`) são entregas de DDL DEPOIS da janela; D-PV46 (script do Super) entrega pequena.
+- **Produtos**: a Rodada 6 da branch `merchandise` é REFEITA sobre D-PR47/D-PR48/D-PR49/D-PR52 (coluna `catalog_source` com o guardião;
+  `catalogOwnerGuard`; ato "encerrar a transição"; sem religar); Q-PR52 destravada (D-PR45). Q-SY24 ao grupo do sync (conferência).
+- **Novas ondas de código na fila** (cada uma em sessão própria, depois dos merges acima): terminal onda 0 (D-TM8…D-TM22; literais só após
+  `privilegios-crud` + `merchandise` no `main`), convidado onda 0 (D-UC6…D-UC12; mesmo `users.service.ts`), prompt de endurecer a
+  autenticação (D-RS5), regra de tributação por cliente (D-PV30), NE-2 em `ne2/` (D-NE160…D-NE168).
+- **Ordem de merge revista**: `recuperacao-senha` → `grupo-leitores` → bloco privilégios → onda 0 do grupo → produtos + `taxrules-ncm` →
+  terminal onda 0 → convidado onda 0. Q-IB1 em aberto (30/10).

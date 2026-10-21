@@ -63,7 +63,8 @@ própria.
 - Collation: `tb_order` (baseline) `utf8mb4_general_ci`; tabelas de migration nova `utf8mb4_unicode_ci`. A `tb_terminal` não faz JOIN por
   VARCHAR (o JOIN é por `int`) — nasce `unicode_ci` (PADROES §5).
 - Numeração livre (conferir de novo ao executar — há sessões paralelas): migrations do `main` vão até **070**; a worktree `merchandise` usa
-  **071** e **072** → esta frente = **073**. Seeds: 64/65 no `main`, 66 (`merchandise`), 67 (`recuperacao-senha`) → esta frente = **68**.
+  **071** e **072** → esta frente = **073**. Seeds: 64/65 no `main`, 66 (`merchandise`) → esta frente = **67** (o 67 da `recuperacao-senha`
+  morreu com a D-PV18, 2026-10-18 — a branch foi apagada; reconferir ao executar).
 
 ### 2.2 setes-api (`main` f53a618)
 
@@ -452,11 +453,11 @@ merge delas (condição que vira item do gate da onda 0) **(Recomendado — guar
 contagem — só pode diminuir) e cada arquivo é convertido quando for tocado; as leituras da Q-TM4 já nascem pela peça · (c) nada.
 
 **Assunções a ratificar (seguem se o Valdo não divergir)**:
-- **A-TM1** — o setes-sync NÃO guarda o terminal em cache (uma leitura por PK por requisição): terminal excluído ou vínculo novo valem na hora.
-- **A-TM2** — descrição VIVA repetida no mesmo estabelecimento = 409 (a lista do instalador não pode ter dois "Caixa 1"); a linha 0 nasce "Web".
-- **A-TM3** — o `kind` só muda enquanto o terminal NÃO tem vínculo (depois, o perfil já foi semeado na base); errou = terminal novo.
-- **A-TM4** — o número do terminal é cunhado pela web por MAX+1 (sem padrão externo — código só leitura na tela), contando os excluídos.
-- **A-TM5** — o `X-Sync-Base` e a linha do uuid dentro da base são nomes de trabalho; a onda 2/3 fixa os nomes (o da tabela Firebird segue o
+- **A-TM1 — RATIFICADA (Valdo, 2026-10-20)** — o setes-sync NÃO guarda o terminal em cache (uma leitura por PK por requisição): terminal excluído ou vínculo novo valem na hora.
+- **A-TM2 — RATIFICADA SEM a linha 0 (Valdo, 2026-10-20; D-TM16: o 0 é constante sem linha)** — descrição VIVA repetida no mesmo estabelecimento = 409 (a lista do instalador não pode ter dois "Caixa 1"); a linha 0 nasce "Web".
+- **A-TM3 — RATIFICADA (Valdo, 2026-10-20)** — o `kind` só muda enquanto o terminal NÃO tem vínculo (depois, o perfil já foi semeado na base); errou = terminal novo.
+- **A-TM4 — RATIFICADA (Valdo, 2026-10-20)** — o número do terminal é cunhado pela web por MAX+1 (sem padrão externo — código só leitura na tela), contando os excluídos.
+- **A-TM5 — RATIFICADA (Valdo, 2026-10-20)** — o `X-Sync-Base` e a linha do uuid dentro da base são nomes de trabalho; a onda 2/3 fixa os nomes (o da tabela Firebird segue o
   bootstrap: `TB_*` com DDL válida no FB 2.5 e no 5.0).
 
 ---
@@ -486,3 +487,104 @@ contagem — só pode diminuir) e cada arquivo é convertido quando for tocado; 
 > e executar a onda da vez (§5) numa sessão do GRUPO certo (0/1 = setes-api/app; 2/3 = grupo do sync), com os gates do CLAUDE.md item 7.
 > Antes da onda 0: reconferir os números 073/68 e se a D-PV2 (`gatedModule`) e a cerca D-PV9 já estão no `main`. Antes da onda 2: o patch
 > 11/D-SY13 commitado. Nada de DDL no dev sem prova em schema descartável.
+
+## 9. Rodada 1 — decisões (Valdo, 2026-10-20, rodada "uma pergunta por vez"; reconcilia Q-TM1…Q-TM7/A-TM1…A-TM5 com Q-TG1…Q-TG14 do debate)
+
+> Contexto que chegou ANTES deste bloco, no mesmo dia (frente de produtos, Rodada 7): **D-PR47** a origem dos cadastros é fato da
+> institution (W nativo · L desktop dono · P PDV, web dona); **D-PR48** pausa da chave ≠ "encerrar a transição" (ato único, irreversível);
+> **D-PR49** quatro caminhos — L → W ou L → P; **D-PR52** catálogo de base. As Q-TG3/Q-TG4/Q-TG5 do debate tratam do MESMO fato e são
+> reconciliadas aqui.
+
+- **D-TM8** (fecha **Q-TG1 = (a)** e **Q-TG2 = (a)**, literal: *"(a), siga a recomendação"*) — **o terminal é do ESTABELECIMENTO**
+  (`tb_terminal.tb_institution_id` = a institution que opera; um servidor que atende N estabelecimentos = N registros) **e a numeração é por
+  estabelecimento**: cada um tem o seu 0 (web) e os seus 1..N; dois estabelecimentos do grupo podem ter "terminal 1" — a PK das 55 tabelas
+  `(…, tb_institution_id, terminal)` já separa. Vale a D-SY14 ("cada terminal tem o seu pedido nº 1").
+- **D-TM9** (fecha **Q-TM1 = (a)**, literal: *"(a), siga a recomendação"*) — **coluna `kind` na `tb_terminal`**: W (só o 0), L (servidor
+  local do desktop), P (PDV); escolhido por quem registra, herdado pela base no vínculo; o perfil do sincronizador (o que envia) é
+  semeado DEPOIS do vínculo lendo o `kind` — os 4 pontos do `un_dm.pas` que deduzem "sou PDV" pelo número mudam junto (T8). **Coerência com
+  a D-PR47** conferida no registro: institution L admite UM terminal L (o servidor do desktop) + N terminais P; institution P só terminais
+  P; institution W não registra terminal ≥ 1 (409 `TERMINAL_KIND_NOT_ALLOWED`). O ato "encerrar a transição" (D-PR48) inativa o terminal L.
+- **D-TM10** (fecha **Q-TG3 = (a) reconciliada**, **Q-TG4 = (a)** e **Q-TG5 = (a)**, literal: *"(a), siga a recomendação"*) — **UM fato,
+  um lugar**: a origem dos cadastros (`catalog_source` W/L/P, D-PR47) gravada na linha da FUNDADORA é o fato do GRUPO (D-GE1: fundadora em
+  linha única); as filiais leem pelo `groupInstitutionId` (`@shared/group`). O "ponteiro para quem escreve" é DERIVADO: o único terminal
+  `kind = 'L'` ativo do grupo (D-TM9) — UNIQUE por construção (coluna gerada `CASE WHEN kind='L' AND active='S' THEN group_id END` + UNIQUE,
+  forma com o guardião; PADROES §9 regra 10). Consequências: (1) a guarda `catalogOwnerGuard` resolve o grupo e lê o fato dele; cadastros
+  do ESTABELECIMENTO (regra tributária, formas, FCP, configs — D-GE) não passam por ela; (2) o setes-sync aceita CADASTRO só do terminal L
+  do grupo (os demais terminais só mandam movimento) — com `catalog_source ≠ 'L'`, todo cadastro é recusado (409, simétrico); (3) a chave
+  volta a significar só AUTENTICAÇÃO (a pausa da D-PR48 item 1 segue como interruptor de emergência); (4) a saída do sistema antigo é o ato
+  "encerrar a transição" (D-PR48/D-PR49), que inativa o terminal L; desativar o terminal L sem o ato = recusado. Hoje é neutro (grupo =
+  institution); a onda 1 do grupo não muda o lugar do fato. O ponteiro explícito do parecer (Q-TG3 (b)) NÃO nasce.
+- **D-TM11** (fecha **Q-TM2 = (a)** e **Q-TG7 = (b) ≡ Q-TM2 (a)**, literal: *"(a), siga a recomendação"*) — **PAREAMENTO**: o bootstrap da
+  base Firebird gera um uuid guardado DENTRO da base (tabela `TB_*` do bootstrap, DDL válida no FB 2.5 e 5.0); o instalador escolhe um
+  terminal LIVRE da lista registrada na web (lista servida pelo setes-sync) e vincula UMA vez — `tb_terminal_holder` (uuid × terminal),
+  escrito SÓ pelo setes-sync; a base nunca envia o número: manda o uuid (header de trabalho `X-Sync-Base`, A-TM5) e o setes-sync DEDUZ
+  `(institution, terminal)`; uma base, um terminal, pela vida toda — 409 nos dois sentidos (base já vinculada, terminal já tomado); uuid
+  de outro estabelecimento = recusa. O número e o `kind` chegam à base NO vínculo (D-TM3 "distribuído" = a base recebe, não envia). Sem
+  digitação, sem cópia de `CONFIG.INI`. Limite conhecido: base clonada (Q-TM6).
+- **D-TM12** (fecha **Q-TM3 = (a)**, literal: *"(a), siga a recomendação"*) — **a recusa vale para TODA requisição da instalação** (cadastros
+  inclusive), num ponto ÚNICO do setes-sync logo depois do guard da chave: 403 `SYNC_TERMINAL_UNREGISTERED` (header `X-Sync-Base` ausente,
+  uuid sem vínculo, vínculo com terminal inativo/excluído, identidade de outro estabelecimento — mesma recusa). No sincronizador, o MESMO
+  efeito da D-SY13: o ciclo para sem marcar o `SRC_LOG`, a sincronia fica INATIVA, e "Ativar sincronia" confere chave E terminal (mensagem
+  "Terminal não registrado, verifique" — D-TM4). Nada estaciona na fila do cliente.
+- **D-TM13** (fecha **Q-TM4 = (a)**, literal: *"(a), siga a recomendação"*) — **listas, detalhes e ações da web operam SÓ o terminal 0**
+  (`WEB_TERMINAL`): as 10 leituras do §2.2 (`orders`, `service-orders`, `order-returns`, `settlements`, `bank-slips`…) ganham `terminal = 0`
+  na query base e nos detalhes por id; o MAX+1 da web conta dentro do 0 (D-TM1). O movimento sincronizado (terminais ≥ 1) SAI das telas
+  operacionais até a **frente própria "consulta do movimento sincronizado"** (identidade id + terminal, somente leitura, com o seu desenho
+  de tela). Fecha o risco de ação no pedido errado (Q-SY14 do grupo do sync: a colisão de número deixa de alcançar a tela da web).
+- **D-TM14** (fecha **Q-TM5 = (a)**, literal: *"(a), siga a recomendação"*) — **o ADMIN do estabelecimento registra o terminal** (e quem ele
+  delegar pelos privilégios), na tela `terminals` do grupo Sistema, vizinha de Meu Estabelecimento, ESTRUTURAL para todos (entra na lista
+  das estruturais da D-PV35 e no `grantStructuralInterfaces`; contrato da Setes pela D-PV20); catálogo da tela = VISUALIZAR, INSERIR,
+  ALTERAR, EXCLUIR (D-PV1 — par novo entra na cerca E no seed antes do app, D-PV9). Sem a chave do sincronizador (só o Super emite),
+  registrar não abre nada; o Super passa sempre (A-PV1). Coerência com a D-TM9 conferida no registro (kind × `catalog_source`).
+- **D-TM15** (fecha **Q-TM6 = (a)**, literal: *"(a), siga a recomendação"*) — **base clonada = limite conhecido**, tratado pelo roteiro de
+  implantação (`Sincronizador/roteiro-implantacao-cliente.md`): clonar só ANTES do 1º start do sincronizador; nunca clonar base já
+  vinculada; clonou depois do vínculo = terminal NOVO (o instalador zera o uuid na base — ação do bootstrap "desparear", só local — e pareia
+  de novo). Sem detecção de regressão nesta frente (Q-TM6 (b) não nasce); conhecimento negativo no §7.
+- **D-TM16** (fecha **Q-TM7 = (a)** e **Q-TG9 = (a)**, literal: *"(a), siga a recomendação"*) — **o terminal 0 é CONSTANTE sem linha**
+  (`tb_terminal` registra só instalações, `id ≥ 1`); a constante `WEB_TERMINAL` e o rótulo ("Internet") vivem na peça `@shared/terminal`
+  (hoje espalhados: `cashier.repository.ts:18`, `fiscal-api/src/ref/invoice-ref.ts:27`, 154 literais — T3); o setes-sync recusa o 0 sempre.
+  **Os ~200 literais `terminal = 0` do setes-api são TODOS trocados pela peça na onda 0**, com a cerca "zero literal fora da peça" (espelho
+  da D-NE12) nascendo em ZERO; como os ~25 arquivos são tocados pelas branches `privilegios-crud` e `merchandise`, a troca executa DEPOIS
+  do merge delas — condição que é item do gate da onda 0. Consequência: app de venda que cria pedido OFFLINE com id local = INSTALAÇÃO
+  (terminal ≥ 1, como o PDV); app ONLINE pelo setes-api = web (0). A linha 0 "Web" do rascunho do DDL (A-TM2) NÃO nasce — ajustar o
+  `…-ddl-rascunho.sql` e a A-TM2.
+- **D-TM17** (fecha **Q-TG6 = (a)**, literal: *"(a), siga a recomendação"*) — **um grupo tem no máximo UMA fonte de cadastros** (consequência
+  da D-TM10): o ato "estabelecimento entra no grupo" (D-GE14, frente do grupo) recusa o entrante com desktop vivo em OUTRO Firebird
+  enquanto o grupo tiver `catalog_source = 'L'`; ele entra quando o desktop dele morrer, com os produtos IMPORTADOS como cadastro novo da
+  web (ato próprio de importação, nunca upsert por `PRO_CODIGO`). Firebird MULTI-estabelecimento = a mesma fonte (um terminal L, N
+  estabelecimentos — D-TM8), no limite da D-SY7 até um cliente real pedir. Vai para a frente do grupo (onda do onboarding da filial).
+- **D-TM18** (fecha **Q-TG8 = (a)**, literal: *"(a), siga a recomendação"*) — **o PDV recebe uma PROJEÇÃO derivada**, composta no setes-sync
+  (direção web → Firebird, D16 do sync): catálogo de base do GRUPO (D-PR52) × vínculos da filial (tabelas de preço — D-PR23; formas — D-GE7;
+  `tb_institution_has_service`) + operação da filial (regras/MVA/FCP — D-GE8; operadores com privilégio nela — D-GE3; o registro do próprio
+  terminal) + papéis do grupo; cursor NO PDV; exclusão desce como `deleted='S'` (D-PR37). Nenhuma tabela "catálogo do PDV". Tamanho/ritmo da
+  carga = detalhe da D16 (grupo do sync).
+- **D-TM19** (fecha **Q-TG10 = (a)**, literal: *"(a), siga a recomendação"*) — **o PDV recebe os OPERADORES com privilégio no
+  estabelecimento (D-GE3) e uma credencial PRÓPRIA do PDV — PIN de operador mantido na web** (fato do vínculo usuário × estabelecimento;
+  forma com o guardião — hash do PIN, nunca em claro; o PIN desce na projeção da D-TM18 só como hash); **nunca a senha da web num banco
+  local**. O PDV não cadastra operador (sem 2º escritor do usuário). Vai para a frente do convidado/usuários (cadastro do PIN na tela de
+  usuários, por estabelecimento) e para o grupo do sync (direção inversa).
+- **D-TM20** (fecha **Q-TG11 = (a)**, literal: *"(a), siga a recomendação"*) — **o cliente criado no PDV sobe pelo DOCUMENTO** (entidade
+  única da Fase 3, D3; papel do GRUPO — D-GE9); sem documento = UUID (D4 do sync) devolvido pela web ao PDV (que hoje não replica
+  `EXTERNALCODE` — pendência registrada da retaguarda); e **desce como papel do grupo a todos os PDVs do grupo** pela projeção da D-TM18.
+  O tamanho da carga inicial é detalhe da D16 (grupo do sync). Entidade existente não é reescrita pelo PDV (regra "entity existente é
+  imutável no sync").
+- **D-TM21** (fecha **Q-TG13 pelo DADO** e **Q-TG12**, literal: *"pipoteca esta correto como descreveu. clientes podem vir de qualquer
+  diferenca dentro do plano que ja existe hoje cpf/cnpj e sem doc....nao ha clientes com filiais atualmente"*) — **dados**: a Pipoteca é UM
+  estabelecimento (1 servidor + 7 PDVs) = cliente-piloto da direção inversa; **não há cliente com filiais hoje**; o plano de identificação
+  (CPF/CNPJ/sem documento) já cobre todo cliente. **Ordem das frentes decidida pelo dado** (= Q-TG12 (b), aceitável sem filiais, com a
+  mitigação que o (a) pedia): (1) `tb_terminal` — escopo, identidade/pareamento, recusa do 0, `kind`, peça `@shared/terminal` + os 4 pontos
+  do `un_dm.pas` com o perfil distribuído; o fato do grupo (D-TM10) já na linha da fundadora, neutro → (2) **direção inversa do PDV (D16)
+  na Pipoteca**, nascendo pelo fato e pela chave do GRUPO (`groupInstitutionId` — hoje = institution) para não refazer a leitura depois,
+  com a projeção da D-TM18 → (3) grupo ondas 0/1 quando o 1º cliente com filiais aparecer (a D-TM17 entra no onboarding da filial) → (4)
+  grupo ondas 2/3. Cada passo neutro para o anterior. Vai para o §9 do debate e para a frente do grupo (ordem revista).
+- **D-TM22** (fecha **Q-TG14 = (a)**, literal: *"(a), siga a recomendação"*) — **DROP de `tb_devices`** na migration da frente `tb_terminal`
+  (DDL só com o "vai"; registrado com motivo — PADROES §3.1: o DROP vem do TESTE DO CONCEITO do guardião — identidade → uuid do terminal
+  (D-TM11), série → `tb_nfe_series`, validade → licença — não da falta de consumidor). App de venda offline = INSTALAÇÃO (terminal ≥ 1,
+  D-TM16), não "dispositivo". Baseline `sql/03` ajustado no mesmo commit.
+
+**Rodada 1 FECHADA (2026-10-20)**: D-TM8…D-TM22 + A-TM1…A-TM5 ratificadas (A-TM2 sem a linha 0). Reconciliação com o debate: Q-TG1/2 →
+D-TM8 · Q-TG3/4/5 → D-TM10 (com D-PR47/D-PR48/D-PR49 de produtos) · Q-TG6 → D-TM17 · Q-TG7 → D-TM11 · Q-TG8 → D-TM18 · Q-TG9 → D-TM16 ·
+Q-TG10 → D-TM19 · Q-TG11 → D-TM20 · Q-TG12/13 → D-TM21 · Q-TG14 → D-TM22. **Nenhuma questão aberta.** Próximo: ajustar o
+`…-ddl-rascunho.sql` (kind; sem linha 0; UNIQUE do terminal L por grupo; `tb_terminal_holder`; DROP `tb_devices`) → guardião + `revisar-ddl`
+→ prova em descartável → onda 0 (setes-api/app) DEPOIS do merge de `privilegios-crud` e `merchandise` (D-TM16) → ondas 2/3 no grupo do sync
+(patch 12) → direção inversa na Pipoteca (D-TM21). Seed/migration: número a conferir na hora (69 reservado — D-PV47). Próximo número: **D-TM23**.

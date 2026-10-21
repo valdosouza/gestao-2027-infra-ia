@@ -472,19 +472,19 @@ da virada (`requireCutover`) NÃO é licença: segue barrando o super.
 
 ### 11.3 Assunções executadas (A-PVn — ratificar)
 
-- **A-PV5** — as leituras cruzadas viram lista de apoio do PRÓPRIO módulo (regra vigente "módulo só fala com o seu /api"), reproduzindo o
+- **A-PV5 — RATIFICADA (Valdo, 2026-10-20: "ratifico")** — as leituras cruzadas viram lista de apoio do PRÓPRIO módulo (regra vigente "módulo só fala com o seu /api"), reproduzindo o
   conjunto de hoje; a escrita cruzada "Devolver" fica como está (abrir devolução = INSERIR em `order-returns` — o sentido certo).
-- **A-PV6** — `PUT /interface-configs/key/:moduleKey/:name` (o override PESSOAL do itens/página que TODA lista grava) aberto como a leitura
+- **A-PV6 — RATIFICADA (Valdo, 2026-10-20; com a D-PV25 a porta do valor `'I'` é o veredito CONFIGURAR da tela alvo)** — `PUT /interface-configs/key/:moduleKey/:name` (o override PESSOAL do itens/página que TODA lista grava) aberto como a leitura
   por chave — e por ser aberto, **só `target: 'U'`**: o valor da institution (`'I'`) tem UMA porta, a do painel guardado (`PUT
   /:id/:name`); pela chave responde 403 `CONFIG_INSTITUTION_VIA_PANEL` (achado do gate socrático: eram duas portas para o mesmo ato, e a
   aberta era a mais fraca). O app só grava `'U'` pela chave.
-- **A-PV7** — falar com o BANCO = TRANSMITIR (registrar — D-PV7 — e também consultar, simular no sandbox e reaplicar a voz dele), simétrico
+- **A-PV7 — RATIFICADA COM EMENDA (Valdo, 2026-10-20: "transmitir e consultar sao dois verbos independentes" → D-PV40: nasce CONSULTAR; o reaplicar saiu pela D-PV27)** — falar com o BANCO = TRANSMITIR (registrar — D-PV7 — e também consultar, simular no sandbox e reaplicar a voz dele), simétrico
   ao fisco, onde consultar também é TRANSMITIR (`nfse-api` `refresh`/rodízio).
-- **A-PV8** — o privilégio da "Configurações Gerais" vale no painel de configs filtrado nela (vitrine + o `:id` dela); outra tela, só o do
+- **A-PV8 — SUPERADA pela D-PV25 (Valdo, 2026-10-20: "confirmo" — CONFIGURAR em `general-configs` para a geral, CONFIGURAR na tela X para as demais; sem exceção)** — o privilégio da "Configurações Gerais" vale no painel de configs filtrado nela (vitrine + o `:id` dela); outra tela, só o do
   painel (`interface-configs`).
-- **A-PV9** — canal API da conta bancária: toda escrita = ALTERAR (o inventário do §3 já dizia "canal = A").
-- **A-PV10** — D-PV5 vale para qualquer usuário-alvo (o cadastro nunca oferece users/establishment; admin não precisa — passa o privilégio).
-- **A-PV11** — A-PV1 alcança também as LEITURAS fiscais da nfse-api (`requireBranchInterface`, `requireAnyInterface`, `visibleInterfaces`) —
+- **A-PV9 — RATIFICADA (Valdo, 2026-10-20; "Testar conexão" fica em ALTERAR — a finalidade é configurar o canal, não consultar documento; não é CONSULTAR da D-PV40)** — canal API da conta bancária: toda escrita = ALTERAR (o inventário do §3 já dizia "canal = A").
+- **A-PV10 — RATIFICADA (Valdo, 2026-10-20)** — D-PV5 vale para qualquer usuário-alvo (o cadastro nunca oferece users/establishment; admin não precisa — passa o privilégio).
+- **A-PV11 — RATIFICADA (Valdo, 2026-10-20)** — A-PV1 alcança também as LEITURAS fiscais da nfse-api (`requireBranchInterface`, `requireAnyInterface`, `visibleInterfaces`) —
   "todas as verificações"; a cerca da virada não é licença.
 
 ### 11.4 Questões — Rodada 3 (aguardam o Valdo; nenhuma trava o que foi feito, a Q-PV11 trava a PUBLICAÇÃO)
@@ -864,7 +864,7 @@ O seed 64 já estava aplicado (§10). Reconstruído o catálogo de ANTES pelo ME
 
 ### 12.4 Assunção executada (ratificar)
 
-- **A-PV12** — `order-returns × CANCELAR` e `× TRANSMITIR` são consumidos só pela guarda do RAMO (`/billing/cancel…` e a nfse-api
+- **A-PV12 — RATIFICADA (Valdo, 2026-10-20; `order-returns × CONSULTAR` entra na mesma marca `absentBy` pelo mesmo motivo — D-PV40)** — `order-returns × CANCELAR` e `× TRANSMITIR` são consumidos só pela guarda do RAMO (`/billing/cancel…` e a nfse-api
   resolvem a interface pela `vw_order_interface`) e ficam AUSENTES do catálogo por decisão (`absentBy`): cancelar devolução é a Onda 2 do
   cancelamento (`invoice-cancel.ts:163` responde 409) e devolução é NF-e (a nfse-api não emite por ela). A tela não tem o botão. A marca
   deixa de valer se um botão consumir o par.
@@ -880,7 +880,7 @@ O seed 64 já estava aplicado (§10). Reconstruído o catálogo de ANTES pelo ME
   confirmação; (c) limite conhecido. **Rec.: (a)**.
 - **Q-PV18 — publicação bloqueante** [→ **D-PV16 = (a), EXECUTADA** (§12.8)]: (a) **o roteiro de publicação (deploy do setes-api/app e aplicação de seed de privilégios) roda
   `scripts/check-privilege-catalog.ts` e para com exit 1** — a D-PV9 só proíbe o BOOT de recusar subir; (b) só documentado. **Rec.: (a)**.
-- **Q-PV19 — o teste ao vivo na suíte padrão** [⏳ resposta a confirmar — veio um 2º "Q-PV17 - a" no lugar dela]: (a) **obrigatório, como está** — a suíte do setes-api já exige o banco em dezenas de
+- **Q-PV19 — o teste ao vivo na suíte padrão** [→ **D-PV41 = (a)**, confirmada pelo Valdo em 2026-10-20: *"(a), siga a recomendação"* — obrigatório na suíte, sem código novo]: (a) **obrigatório, como está** — a suíte do setes-api já exige o banco em dezenas de
   suítes, e o banco do dev é o de produção (vermelho = o seed não foi ao banco ANTES do código); na Onda 4 (bancos separados) ele prova só
   o catálogo do dev e o roteiro (Q-PV18) cobre a produção; (b) opt-in no molde do `F2A_ADV_LIVE`. **Rec.: (a)**.
 - **Q-PV20 — a interface de um botão no app** [→ **D-PV17 = (a)**, na entrega da Q-PV13]: hoje é a do ÚLTIMO item clicado no menu (`CurrentInterface`), não a do módulo da tela:
@@ -1008,7 +1008,7 @@ O seed 64 já estava aplicado (§10). Reconstruído o catálogo de ANTES pelo ME
    - **Q-PV19** (§12.5): a resposta veio repetida como "Q-PV17 - a". Com (a), o teste ao vivo fica obrigatório na suíte e não há código
      novo. Com (b), o `privilege-catalog-live.test.ts` vira opt-in no molde do `F2A_ADV_LIVE`
      (`adversarial-f2a-a2-gate.test.ts:397`), e o roteiro da publicação (D-PV16) passa a ser o único a conferir o banco antes do deploy.
-   - **Q-PV50…Q-PV53** (§12.8). A (a) da Q-PV50 e a (a) da Q-PV51 são entregas próprias. A Q-PV51 é DDL: guardião, depois
+   - ~~**Q-PV50…Q-PV53** (§12.8)~~ → **DECIDIDAS 2026-10-20: D-PV42 (Q-PV50 a + chave técnica em inglês), D-PV43 (Q-PV51 a — UNIQUE, entrega própria), D-PV44 (Q-PV52 a), D-PV45 (Q-PV53 b)**; A-PV12/A-PV14 ratificadas; Q-PV19 = D-PV41. A (a) da Q-PV50 e a (a) da Q-PV51 são entregas próprias. A Q-PV51 é DDL: guardião, depois
      `PADROES_BANCO` + `revisar-ddl`, prova em schema descartável.
 2. **Numeração**: a sessão da D-PV2 usa D-PV18+, A-PV15+, Q-PV40–49 e Q-PV54+. Antes de numerar algo novo da cerca, conferir o maior
    número no prompt e combinar com ela.
@@ -1032,6 +1032,16 @@ O seed 64 já estava aplicado (§10). Reconstruído o catálogo de ANTES pelo ME
 > banco só em sessão READ ONLY; não ler setes-sync nem sincronizador."
 
 ## 13. Q-PV38 / D-PV13 — força bruta no código do `/auth/change-password` (2026-10-18, sessão própria, em WORKTREE — NADA commitado)
+
+> ✅ **SEÇÃO VOLTA A VALER — a D-PV18 foi REVOGADA pela D-PV47 (Valdo, 2026-10-20: a recuperação volta, reforçada contra força bruta na porta pública); a branch `recuperacao-senha` existe (não foi apagada de fato) e as Q-RS/A-RS voltam à fila.** Nota histórica abaixo:
+> ⚠️ ~~**SEÇÃO SUPERADA pela D-PV18**~~ (Valdo, 2026-10-18, noite: "estes aplicativos não precisam de recuperação de senha — remova tudo em
+> relação a recuperação de senha")**. A branch `recuperacao-senha` (setes-api d19de9d · sql e1aa574) foi APAGADA — local e GitHub; os
+> hashes ficam aqui como história (reflog, ~90 dias). O fluxo `/auth/recovery-password` + `/auth/change-password` e a tela "Esqueci minha
+> senha" do app saem do `main` pela branch `sem-recuperacao-senha` (worktrees `D:\Gestao2027\sem-recuperacao\{setes-api,setes-app}`;
+> merge API + app JUNTOS, só com o "vai"). Q-RS1…Q-RS6 e A-RS1…A-RS4 MORREM sem resposta. O que FICA desta seção é conhecimento:
+> (1) a colação `utf8mb4_general_ci` iguala `gmaíl.com`/`gmaıl.com` a `gmail.com` — qualquer porta futura que mande um segredo ao e-mail
+> vindo da REQUISIÇÃO repete o CRITICAL (mandar sempre ao e-mail GRAVADO); (2) a regra 13 do `PADROES_BANCO.md` §9 (leitura consistente
+> dos filhos depois da trava do pai) continua válida como padrão — o caso que a provou deixou de existir.
 
 **Onde**: `D:\Gestao2027\recuperacao-senha\{setes-api,sql}` (branch `recuperacao-senha`; base setes-api `main` f53a618, sql `main` 3672ee2);
 junções `recuperacao-senha\{fiscal-api,nfse-api}` e `node_modules`. Mudam o setes-api e o repo `sql`; o setes-app NÃO muda (rotas,
@@ -1127,36 +1137,43 @@ tempo e a A-PV14 já foi usada pela cerca da D-PV9): questões **Q-RS1…Q-RS6**
 
 ### 13.5 Assunções executadas (A-RSn — ratificar)
 
-- **A-RS1** — o modelo do guardião: `tb_user_password_reset` com PK por usuário, só `used_at` como fato, estado derivado; nome pela
+- **A-RS1 — RATIFICADA (Valdo, 2026-10-20)** — o modelo do guardião: `tb_user_password_reset` com PK por usuário, só `used_at` como fato, estado derivado; nome pela
   CONSEQUÊNCIA (reset), não pela origem (recovery); `activation_key` sem consumidor, LIMPA e sem DROP (o grupo do sync não a toca — Q4 do
   `setes-sync/prompt_indexacao_usuario_firebird.md`).
-- **A-RS2** — o código guardado como HMAC com segredo DERIVADO (HKDF) da chave de assinatura JWT; a rotação do `JWT_KID` mata os códigos
+- **A-RS2 — RATIFICADA (Valdo, 2026-10-20)** — o código guardado como HMAC com segredo DERIVADO (HKDF) da chave de assinatura JWT; a rotação do `JWT_KID` mata os códigos
   abertos (≤ 15 min) — limite aceito (PADROES §7).
-- **A-RS3** — neutralidade completa: conta inativa recusa com a mesma 401; falha depois de achar a conta responde como "não existe" (com
+- **A-RS3 — RATIFICADA (Valdo, 2026-10-20)** — neutralidade completa: conta inativa recusa com a mesma 401; falha depois de achar a conta responde como "não existe" (com
   alarme); o recovery responde antes da emissão; piso de 400 ms no tempo das duas rotas.
-- **A-RS4** — limite por e-mail em memória (chave canônica com hash) como 2ª camada, além do durável por conta.
+- **A-RS4 — RATIFICADA (Valdo, 2026-10-20)** — limite por e-mail em memória (chave canônica com hash) como 2ª camada, além do durável por conta.
 
 ### 13.6 Questões (aguardam o Valdo — nenhuma trava a entrega)
 
-- **Q-RS1 — os valores** (o N é decisão reservada do Valdo): N = 5 tentativas erradas por código; prazo 15 min (o atual); teto de 3 códigos
+> **2026-10-20 — RODADA FECHADA** (depois da D-PV47 devolver a seção à vida): A-RS1…A-RS4 RATIFICADAS; Q-RS1 → D-RS1 (valores mantidos) ·
+> Q-RS2 → D-RS2 (proxy na Onda 4) · Q-RS3 → D-RS3 (segredo derivado do JWT) · Q-RS4 → D-RS4 (aviso por e-mail ao dono, SMTP real já) ·
+> Q-RS5 → D-RS5 (prompt próprio de endurecer a autenticação; SMTP obrigatório em produção) · Q-RS6 → D-RS6 (medir na Onda 4). **Nenhuma
+> questão aberta.** A publicação segue o §13.8, PRIMEIRA da ordem de merge do setes-api (sql/67 antes e depois), acrescida de: SMTP real
+> no `.env` (D-RS4/D-RS5) e a mesma peça do código confirmando a troca do titular logado (D-UC7/D-UC8 — "minha senha" entra na onda 0 do
+> convidado, não nesta janela).
+
+- **Q-RS1 — os valores** [→ **D-RS1 (Valdo, 2026-10-20: "mantenho os valores")**: N = 5 · 15 min · 3/h e 10/24 h por conta · memória 5/15 min · piso 400 ms — como executado] (o N é decisão reservada do Valdo): N = 5 tentativas erradas por código; prazo 15 min (o atual); teto de 3 códigos
   por hora e 10 por 24 h por conta; memória 5/15 min no recovery e 10/15 min no change; piso de resposta 400 ms. Sob ataque contínuo: no
   máximo 50 palpites/dia por conta (~0,0056 %/dia, ~2 %/ano), cada código é um e-mail para a vítima; o preço é segurar o "esqueci a senha" da
   vítima por até 1 h (o login com a senha segue). **Rec.: manter.**
-- **Q-RS2 — `app.set('trust proxy', …)` agora ou na Onda 4?** Hoje o setes-api roda SEM proxy na máquina do Valdo: ligar agora deixaria
+- **Q-RS2 — `app.set('trust proxy', …)` agora ou na Onda 4?** [→ **D-RS2 (Valdo, 2026-10-20) = Onda 4**, com o número exato de saltos, nunca `true`; item do roteiro de deploy junto da Q-I6] Hoje o setes-api roda SEM proxy na máquina do Valdo: ligar agora deixaria
   qualquer um forjar o IP pelo `X-Forwarded-For` e fugir do limite por IP. **Rec.: Onda 4** (deploy SaveInCloud, junto da Q-I6), com o
   número EXATO de saltos/IP do proxy, nunca `true`; até lá segura o limite por conta (durável), que não depende do IP.
-- **Q-RS3 — segredo do HMAC**: (a) derivado da chave JWT (como está); (b) segredo dedicado `PASSWORD_RESET_KEY_PATH`, boot recusa sem ele.
+- **Q-RS3 — segredo do HMAC** [→ **D-RS3 (Valdo, 2026-10-20) = (a)**, derivado da chave JWT, como está]: (a) derivado da chave JWT (como está); (b) segredo dedicado `PASSWORD_RESET_KEY_PATH`, boot recusa sem ele.
   **Rec.: (a)** — mesma guarda, nada a provisionar; trocar para (b) depois não muda o schema (só mata os códigos abertos na troca).
-- **Q-RS4 — bloqueio da recuperação por terceiro** (quem sabe o e-mail da vítima queima cada código com 5 erradas e esgota o teto calado —
+- **Q-RS4 — bloqueio da recuperação por terceiro** [→ **D-RS4 (Valdo, 2026-10-20) = (b), literal "b(vamos configurar)"**: e-mail de aviso ao DONO da conta quando um código esgota por erradas ou o teto por conta é atingido ("se não foi você, ignore; o login com a senha segue"), no máximo UM aviso por hora por conta (o aviso não entra no teto de códigos nem vira vetor de spam), enviado pela peça `@shared/mailer` com SMTP REAL configurado — o SMTP de produção entra nesta entrega (ver Q-RS5); a saída pelo admin não existe mais (D-UC8) e o script do operador (D-PV46) é só do Super] (quem sabe o e-mail da vítima queima cada código com 5 erradas e esgota o teto calado —
   até 24 h sem autoatendimento, recebendo os e-mails): (a) limite conhecido — a saída é o admin trocar a senha (D-PV12); (b) avisar o dono/o
   admin quando um código esgotar ou o teto for atingido; (c) o teto não contar emissão cujo código foi queimado por erradas. **Rec.: (a)**
   agora; (b) quando houver canal de aviso.
-- **Q-RS5 — endurecer o resto da autenticação em tarefa própria?** O `/auth/login` não tem limite por conta (só o de 300/min por IP) e a
+- **Q-RS5 — endurecer o resto da autenticação em tarefa própria?** [→ **D-RS5 (Valdo, 2026-10-20) = (a)**: prompt próprio `prompts/prompt_endurecer_autenticacao.md` (a abrir): limite por conta no `/auth/login`, teto global + alarme de erradas, política de senha (mínimo e composição), SMTP obrigatório em produção (boot recusa subir sem SMTP quando `NODE_ENV=production`); o SMTP em si é configurado JÁ, junto da D-RS4 — o `.env` do dev ganha o SMTP real da Setes (segredo fora do git) e o código deixa de ir ao log] O `/auth/login` não tem limite por conta (só o de 300/min por IP) e a
   senha mínima é 5 — é hoje a porta mais fraca (o ataque espalhado por muitas contas também não tem teto global nem alarme de erradas); e,
   sem SMTP configurado, o código vai ao LOG em claro (modo dev — o boot de produção deveria recusar subir sem SMTP?). (a) sim, prompt
   próprio (limite por conta no login + teto global/alarme + política de senha + SMTP obrigatório em produção); (b) não agora. **Rec.: (a).**
 
-- **Q-RS6 — a fila PROVOCADA contra o piso** (gate do delta): (a) limite conhecido — medir o tempo REAL da transação do consume no
+- **Q-RS6 — a fila PROVOCADA contra o piso** [→ **D-RS6 (Valdo, 2026-10-20) = (a)**: limite conhecido; medir o tempo real da transação do consume no banco da Onda 4 (item do roteiro de deploy); (b) se passar do limiar de ~27 ms no p99] (gate do delta): (a) limite conhecido — medir o tempo REAL da transação do consume no
   banco da Onda 4 (local: alguns ms, abaixo do limiar de ~27 ms); (b) subir o piso acima de N × t_tx no p99; (c) serializar também a
   conta inexistente por balde (trava em memória por e-mail canônico), para as duas filas ficarem iguais. **Rec.: (a)** agora, com a
   medição como item da Onda 4; (b) se a medição passar do limiar.
@@ -1296,7 +1313,211 @@ tempo e a A-PV14 já foi usada pela cerca da D-PV9): questões **Q-RS1…Q-RS6**
   `build-web.ps1` + roteiro do seed (§12.8).
 - **D-PV17** (Q-PV20 = (a)) — no app, a interface de um botão é a do MÓDULO da tela; navegar entre módulos troca o `CurrentInterface`
   pelo item do menu da tela de destino (sem o item no menu, `can` = falso). Entra na entrega da Q-PV13 (D-PV2).
-- **A-PV14** (assunção da execução da D-PV15, a ratificar) — a guarda vale também para o super: ela protege o DADO do catálogo, não a
+- **D-PV18** (Valdo, 2026-10-18, noite — literal: *"este aplicativos nao precisam de recuperacao de senha remova tudo em relacao a
+  recuperacao de senha"*) — **os aplicativos NÃO têm recuperação de senha.** Saem do `main`: as rotas públicas `POST /auth/recovery-password`
+  e `POST /auth/change-password` (service + repository: os três acessos a `tb_user.activation_key`), o fluxo "Esqueci minha senha" /
+  alteração por código do setes-app (`packages/core/src/auth`: 2 páginas, 2 usecases, eventos/estado do bloc, datasource/repositório, link
+  do login, as duas rotas em `_publicAuthPaths`, 16 chaves i18n do bloco `auth`), a variável `APP_CHANGE_PASSWORD_URL` e o item "chave de
+  recuperação" do `pre-deploy-tz-check.ts`. FICAM: a coluna `tb_user.activation_key` no DDL (sem escritor — DROP é decisão de DDL à parte)
+  e a peça `@shared/mailer` (sem consumidor; consumidor previsto = e-mail de convite do usuário convidado, D-UC4). A senha de um usuário é
+  definida e trocada SÓ pelo administrador no cadastro de usuários (D-PV12 segue valendo). **Supera a D-PV13** (Q-PV38 — a branch
+  `recuperacao-senha` foi apagada; Q-RS1…Q-RS6/A-RS1…A-RS4 sem objeto) e, por construção, fecha o CRITICAL que ela corrigia (sem fluxo, sem
+  porta). Efeito colateral: a **A-UC2** da frente do usuário convidado perde o objeto → **Q-UC25** lá. Abre a **Q-PV54** (senha perdida do
+  Super). Cercas: `setes-api/src/__tests__/no-password-recovery-fence.test.ts` (varre `src/`, `scripts/`, `.env.example`; 404 nas rotas;
+  o service exporta só login/selectInstitution/switchInstitution) e `setes-app/packages/core/test/no_password_recovery_fence_test.dart`.
+  Executada na branch `sem-recuperacao-senha` (worktrees `D:\Gestao2027\sem-recuperacao\{setes-api,setes-app}`): commits api **fbf01a3**
+  (tsc limpo; auth + cerca 26/26; gate do delta 0,80/0,84, sem HIGH) · app **ad50385** (analyze limpo; core 81/81; web 634 verdes/27 skip;
+  18 chaves `auth.*` fora; D-F218 sem objeto) — sem push nem merge. Publicar = "vai", **API e app JUNTOS** (o app antigo chamaria rota que
+  não existe), sem DDL e sem `errors:gen`; tirar `APP_CHANGE_PASSWORD_URL` do `.env` vivo.
+- **D-PV19** (Valdo, 2026-10-20 — rodada "uma pergunta por vez", item 3b do §11.8.1: *"(a), siga a recomendação"*) — **o 3b executa JÁ
+  na branch `privilegios-crud`**, limitado ao que D-UC1…D-UC5 já fixam: a exclusão de usuário (`removeUser`) sai, o e-mail de login
+  fica imutável, "ativo" passa a ser o vínculo `tb_institution_has_user.active` do próprio estabelecimento, e a **A-PV13 morre** (o
+  dono da credencial é o titular — D-UC3). O convite interceptado (D-UC4) e o aceite ficam para a onda 0 da frente do usuário
+  convidado, que nasce depois da fusão desta branch. Cada item com testes e os dois gates do delta, antes do roteiro do §11.8.
+- **D-PV20** (Valdo, 2026-10-20 — lista de telas do contrato da Setes, implantação da D-PV10 item (2): *"(a), siga a recomendação"*) —
+  **o contrato da Setes recebe, antes do merge, TUDO o que as flags liberam hoje** (os 26 módulos que o atalho da institution 1 dava),
+  incluindo as estruturais `users`, `modules`, `interface-configs` e `general-configs`: o contrato passa a dizer exatamente o que o
+  atalho dizia e os dois admins não perdem tela nem engrenagem no dia do merge. O que a Setes não deva ter, o Super tira depois pela
+  tela "Interfaces dos clientes" (D-PV11). Implantação: a lista sai de `tb_feature_flag` da Setes × catálogo vendável (grupo Super fora),
+  conferida contra as 14 já contratadas, e entra em `tb_institution_has_interface` do `setes_setes` ANTES do seed 65 e do app (§11.8 item 1).
+- **D-PV21** (Valdo, 2026-10-20 — fecha a **Q-PV10 = (b)**: *"(b), siga a recomendação"*) — **todo ato sobre o documento ABERTO é
+  ALTERAR** (itens, negociação, cheques da negociação): INSERIR = abrir o documento (pedido, OS, devolução), EXCLUIR = apagar o
+  documento aberto. Quem lança pedido precisa de I + A; quem só pode tirar item NÃO pode apagar o pedido. Mesmo princípio da D-PV8 (um
+  verbo, um sentido, sobre o DOCUMENTO). Na branch `privilegios-crud`: as rotas de item/negociação de `orders`, `service-orders` e
+  `order-returns` passam de I/A/E por verbo HTTP para `privilegeAct('ALTERAR')`; o app ganha a mesma leitura no gate dos botões de item.
+- **D-PV22** (Valdo, 2026-10-20 — fecha a **Q-PV12 = (a)**: *"(a), siga a recomendação"*) — **a interface 'R' (aba de papel, ex.:
+  `partnerships` em Clientes) tem licença PRÓPRIA**, vendida no contrato junto da tela-mãe (implantação + aba Interfaces do Super);
+  sem contrato a aba não aparece. É a D-GE19 ao pé da letra. Implantação: `partnerships` entra na lista da Setes pela D-PV20 se a
+  flag dela estiver ligada; o onboarding de cliente novo NÃO a dá por padrão (não é estrutural).
+- **D-PV23** (Valdo, 2026-10-20 — fecha a **Q-PV14 = (a)**: *"(a), siga a recomendação"*) — **as três portas de escrita fora da guarda
+  fecham pelo caminho que já existe**: (1) `state-tax-rates` (MVA/FCP por UF × NCM) sob `adminGuard` até a tela nascer; (2) `GET/PUT
+  /api/entities/:id/tax` RETIRADAS — a tributação se grava na transação do PAPEL (aba Tributação) e a do emitente pelo Meu
+  Estabelecimento (mesma resposta da Q-PV25); (3) `POST /api/billing/validate` sob FATURAR pela interface do RAMO, com o mesmo
+  resolvedor do `/invoice` (`billing.interface-resolver`). Sem interface nova no catálogo. Na branch `privilegios-crud`, com teste de
+  cada porta (403/404) e a sonda do adversarial que achou o `entities/:id/tax` virando cerca.
+- **D-PV24** (Valdo, 2026-10-20 — fecha a **Q-PV15 = (b)**, DIVERGIU da recomendação (a)) — **o Super escapa TAMBÉM das conferências
+  de licença que não são guarda**: `isInterfaceAcquired` do painel de campos/configs (o Super grava config/campo de tela que a
+  institution não contratou) e a elegibilidade do menu da tela Módulos (para o Super, o catálogo inteiro de kind 'T' é elegível em
+  qualquer cliente). A A-PV1 vale literalmente: "o super escapa de TODAS as verificações". Consequências registradas: (1) config gravada
+  pelo Super em tela não contratada fica latente e passa a valer no dia em que a tela for contratada — limite conhecido, anotado na
+  peça `@shared/interface-config`; (2) a **Q-PV36** perde metade do objeto (o `page_size` do próprio Super persiste); sobra só o caso do
+  usuário LIBERADO da Setes (não super) na tela delegada — decidir lá. Execução: o bypass entra na mesma peça que já lê `isSuper` para a
+  guarda (uma regra, um lugar), com teste que fixa a semântica nos dois pontos.
+- **D-PV25** (Valdo, 2026-10-20 — fecha a **Q-PV21 por opção PRÓPRIA**, literal: *"melhor seria se existir um PRIVILEGIO/verbo
+  CONFIGURAR, desta maneira podemos entregar de forma individualizada e configuravel para cada usuario"*) — **nasce o privilégio
+  CONFIGURAR (id 11, próximo livre depois de CATALOGAR = 10 da branch `merchandise`)**: "pode ajustar o comportamento desta tela" —
+  gravar o valor da INSTITUTION (`'I'`) de uma config e o `required`/`caption`/`mask` de um campo da tela X exige **CONFIGURAR em X**,
+  por QUALQUER caminho (engrenagem da tela X → painel, ou painel solto no menu Sistema com X selecionada). Regras: (1) uma regra, um
+  lugar — o service dos painéis (`interface-configs`, `interface-fields`) resolve o veredito pela interface ALVO, não pela do painel;
+  o VISUALIZAR do painel só deixa navegar; (2) "Configurações Gerais" = CONFIGURAR em `general-configs` (substitui a exceção da A-PV8);
+  (3) o override PESSOAL `'U'` (itens por página etc.) segue aberto a qualquer usuário (A-PV6) — CONFIGURAR é sobre o dado da
+  institution; (4) admin passa sempre (D32) e o Super escapa (A-PV1/D-PV24); (5) catálogo: o par (interface × CONFIGURAR) existe para
+  TODA interface que tem config ou campo no catálogo (`tb_interface_has_config`/`tb_interface_has_field`) — derivado do catálogo no seed
+  (número a conferir na hora: 66 = merchandise, 67 = reservado ao terminal → **68**), e o ALTERAR dos painéis perde o consumidor (sai dos
+  pares deles — regra C1 da D-PV9: par sem consumidor é defeito); (6) app: a engrenagem só aparece com `can('CONFIGURAR')` da
+  `CurrentInterface` (C1: botão vem do catálogo) e o cadastro de usuário oferece CONFIGURAR por tela como qualquer outro verbo; (7) cerca
+  da D-PV9: o par novo entra em `CONSUMED_PRIVILEGES` E no seed ANTES do app. **Absorve a Q-PV27** (o valor `'I'` é de quem tem
+  CONFIGURAR na tela, regular incluído — a decisão 4 do Framework de Configurações passa a dizer isso; confirmação no item seguinte).
+- **D-PV26** (Valdo, 2026-10-20 — fecha a **Q-PV27 = (a)**, absorvida pela D-PV25: *"(a), siga a recomendação"*) — **o valor da
+  INSTITUTION (`'I'`) de uma config da tela X é gravado por quem tem CONFIGURAR em X, regular incluído**; a decisão 4 do Framework de
+  Configurações (`prompt_framework_configuracoes_sistema.md`) passa a dizer isso (anotar lá como superada em parte: "só o admin" →
+  "quem tem CONFIGURAR"; admin segue passando). O ALTERAR dos painéis `interface-configs`/`interface-fields` sai do catálogo deles (sem
+  consumidor — C1); `interface-configs.service.ts:99` troca a conferência `isAdmin` pelo veredito CONFIGURAR da interface alvo.
+- **D-PV27** (Valdo, 2026-10-20 — fecha a **Q-PV22 = (b)** pelo princípio que ele enunciou, literal: *"o privilegio TRANSMITIR precisa
+  existir, por que inserir e alterar boleto, nao pode presumir a transmissao como privilegio"*) — **PRINCÍPIO: o privilégio nomeia a
+  FINALIDADE do ato do usuário, nunca o transporte, e nenhum verbo presume outro** — nos dois sentidos: INSERIR/ALTERAR o boleto não
+  presumem TRANSMITIR (falar com o banco é ato próprio: registrar, consultar, simular), e TRANSMITIR não presume o EFEITO. Conferido no
+  código da branch (`bank-slips.routes.ts`): emitir = I · liquidar = A · cancelar/estornar = CANCELAR · registrar/consultar/simular =
+  TRANSMITIR · PDF = IMPRIMIR (buscado no banco, mas a finalidade é o documento) — a regra do Valdo JÁ está satisfeita. Pelo mesmo
+  princípio, **`POST /bank-slips/:id/reapply` passa de TRANSMITIR para o privilégio do EFEITO reaplicado**: ALTERAR quando reaplica a
+  liquidação (L), CANCELAR quando reaplica o cancelamento (C) — decidido pela voz do evento, no handler, antes de executar. É o mesmo
+  desenho que a nfse-api já tem: `reconfirm` fala com o fisco mas exige CANCELAR, porque a finalidade é cancelar. A A-PV7 fica
+  ("consultar = TRANSMITIR": a finalidade da consulta É perguntar ao terceiro) menos o "reaplicar". Não abre questão nova; atos do
+  sistema (emissão automática source 'A', webhook) seguem sem privilégio de usuário.
+- **D-PV28** (Valdo, 2026-10-20 — fecha a **Q-PV23 = (a)**: *"(a), siga a recomendação"*) — **a onda publica em JANELA ÚNICA**: merge da
+  API na árvore viva + recarga do app publicado na :5051 em seguida + conferência logo depois (roteiro do §11.8); sem modo "registra e
+  deixa passar". Pré-condições da janela: D-PV20 aplicada (contrato da Setes completo), seed 65 e o seed do CONFIGURAR (D-PV25)
+  aplicados ANTES do app, `errors:gen`, nfse-api reiniciada à mão (A-PV1). Vale enquanto não houver usuário regular vivo e a produção
+  for uma máquina só; na Onda 4 (SaveInCloud) a janela ganha roteiro próprio.
+- **D-PV29** (Valdo, 2026-10-20 — fecha a **Q-PV24 = (b)**, DIVERGIU da recomendação (a): *"b (… cache dos privilegios para evitar round
+  trip)"*) — **cache em memória do VEREDITO** (licença + privilégio) por (institution, usuário, interface), TTL curto no molde do
+  `flag.service` (60 s), **invalidado ao salvar privilégio (`tb_user_has_privilege`), contrato (`tb_institution_has_interface`) ou
+  vínculo de usuário** no mesmo processo — revogação imediata enquanto houver um processo só. Limite conhecido registrado para a Onda 4
+  (vários processos Node): revogação feita num processo vale nos outros só na expiração do TTL — por isso o TTL é curto e não há
+  cache do veredito do SUPER (ele não consulta). A institution entra na chave do cache desde já (a D-GE3 só troca o que o veredito lê).
+  Mesma peça única `privilegeVerdict`; teste que prova a invalidação e a expiração; a cerca M5 mede o antes × depois.
+- **D-PV30** (Valdo, 2026-10-20 — fecha a **Q-PV25 = (a)** pelo MODELO que ele enunciou, literal: *"temos tres vias para a tributacao,
+  tributacao geral pelo Menu, tributacao por produto via mercadoria especifica para o registro atual, e tributacao por cliente
+  funcionando com mesmo mecanismo da mercadoria"*) — **a REGRA de tributação tem três vias, todas pelo cadastro de origem**: (1) geral,
+  pela tela Regras de tributação (seletor coringa); (2) por PRODUTO, criada a partir do cadastro da mercadoria (painel de vínculos da
+  onda 1 — `merchandise`, `selector.productId`); (3) por CLIENTE, criada a partir do cadastro do cliente com o MESMO mecanismo
+  (`selector.entityId`). Na tela da regra os dois campos do seletor seguem somente leitura (D38 do faturamento). **Fato conferido no
+  código (2026-10-20): a via (3) ainda NÃO existe** — nenhuma ação do cadastro de clientes cria a regra do cliente (a D38 a deixou como
+  "candidata"); hoje uma regra com `entityId` não tem porta de criação. Vira entrega própria "regra de tributação por cliente, a partir
+  do cadastro" (irmã do painel de vínculos da mercadoria; registrar no `prompt_modulo_products.md` §10 como item da onda 1 do app ou
+  onda seguinte — numerar lá). **A rota avulsa `GET/PUT /api/entities/:id/tax` não é nenhuma das três vias**: ela grava
+  `tb_entity_tax`, os FATOS fiscais da relação (consumidor, regime, Simples, CNAE, `ind_ie_dest`, ISS retido…), que já se editam na aba
+  Tributação do PAPEL (cliente/transportadora/fornecedor, na transação dele) e, para o emitente, no Meu Estabelecimento com as
+  validações. **As duas rotas saem** (= D-PV23 item 2); sem consumidor no app.
+- **D-PV31** (Valdo, 2026-10-20 — fecha a **Q-PV26 = (a)**: *"(a), siga a recomendação"*) — **`PUT /api/core/theme` passa a exigir
+  admin** (marca da empresa; o super escapa — A-PV1); **`GET /interface-configs/key/:k` fica ABERTA** a qualquer autenticado da
+  institution (a tela precisa da config para se montar; config de comportamento não é segredo). Nota para depois: se o tema ganhar
+  tela própria, o verbo natural é CONFIGURAR em `establishment` (D-PV25) — hoje admin basta.
+- **D-PV32** (Valdo, 2026-10-20 — fecha a **Q-PV28 = (b)**, DIVERGIU da recomendação (a)) — **o papel PODE ter a entity do próprio
+  estabelecimento** (cliente interno para OS, fornecedor de si mesma etc.), **mas a cadeia (razão social, IE/IM, endereços, contatos) e
+  a aba Tributação ficam SOMENTE LEITURA quando a entity é a institution** — o emitente só se edita pelo Meu Estabelecimento, com as
+  validações dele. Execução na branch `privilegios-crud`: (1) o 409 interino `ROLE_IS_OWN_ESTABLISHMENT` da CRIAÇÃO sai; a peça
+  `@shared/entity/own-establishment.ts` vira predicado `isOwnEstablishment(entityId, institution)`; (2) a API é quem garante: nos
+  services de customers/providers/carriers/collaborators, PUT que altere a cadeia ou `tb_entity_tax` de entity = institution → 409
+  `OWN_ESTABLISHMENT_READ_ONLY` (código novo no catálogo), campos PRÓPRIOS do papel (carteira, vendedor, limite…) seguem editáveis;
+  (3) o GET do papel devolve `ownEstablishment: true` e o app congela a cadeia e a aba Tributação com a frase "edite pelo Meu
+  Estabelecimento" (UX; a regra é da API); (4) o papel vindo do sincronizador com a própria empresa deixa de ser limite interino — passa
+  a ser editável nos campos do papel; (5) a sonda do adversarial (admin reescrevendo o emitente pelo papel) vira cerca permanente; (6) a
+  (c) — tributação do EMITENTE separada da RELAÇÃO em peça datada — fica para a D-IB7, sem prazo.
+- **D-PV33** (Valdo, 2026-10-20 — fecha a **Q-PV30 = (a)**: *"(a), siga a recomendação"*) — **trilha do vínculo de telas e da delegação
+  em tabela de eventos append-only** (quem, estabelecimento alvo, interface, concedeu/revogou, quando; no molde dos `_event` do
+  produto; tabela do GRUPO ou do estabelecimento conforme PADROES §12 — o vínculo é do estabelecimento hoje, do grupo na onda 1 do
+  grupo/D-GE22, decidir a forma com o guardião). Escrita pelas DUAS portas (aba do Super e tela delegada "Interfaces dos clientes") e
+  pela concessão do privilégio delegado (D-PV11). **Entrega própria DEPOIS da janela** (não trava a publicação; o log segue até lá):
+  guardião → `PADROES_BANCO` + `revisar-ddl` → prova em schema descartável → migration numerada na hora.
+- **D-PV34** (Valdo, 2026-10-20 — fecha a **Q-PV31 = (a)**: *"(a), siga a recomendação"*) — **a aba de interfaces do cliente grava a
+  DIFERENÇA por marca**: cada clique concede ou revoga UM id (`POST`/`DELETE` do vínculo, ou `PUT` com `{interfaceId, linked}`), nunca a
+  lista inteira; a API é idempotente por marca (conceder o já concedido = 200 sem evento). Casa com a D-PV33 (um evento por marca, com
+  autor). Vale para as DUAS portas (aba do Super e tela delegada). Entra na onda `privilegios-crud` junto da tela
+  `institution-interfaces` (D-PV11); o app reflete o estado devolvido pela API após cada marca.
+- **D-PV35** (Valdo, 2026-10-20 — fecha a **Q-PV32 = (a)**: *"(a), siga a recomendação"*) — **a porta delegada só vincula interfaces
+  VENDÁVEIS** (kind 'T'/'R' fora do grupo Super) **e não revoga as ESTRUTURAIS** (`users`, `modules`, `interface-configs`,
+  `establishment` — as do `grantStructuralInterfaces`, mais `general-configs` se o onboarding a der): marca de estrutural pela porta
+  delegada = 409 `INTERFACE_STRUCTURAL_LOCKED`; tela do grupo Super não aparece na lista dela. A aba do Super segue com o catálogo
+  inteiro. A lista "estruturais" é UMA constante na peça `@shared/institution-interfaces`, consumida pelo onboarding e pela guarda.
+- **D-PV36** (Valdo, 2026-10-20 — fecha a **Q-PV33 = (a)**: *"(a), siga a recomendação"*) — **a flag técnica (`tb_feature_flag`) MORRE
+  para os módulos que passam pela guarda por roteador**: o vínculo `tb_institution_has_interface` é a ÚNICA licença (D-F37/D-PV2);
+  `isModuleEnabled` deixa de ser consultado nesses módulos (o middleware de flag só vale para o que não tem tela: rotas de sistema,
+  webhooks, sync). Execução por etapas: (1) na onda `privilegios-crud`, os módulos sob `gatedModule` ignoram a flag; (2) cerca que
+  acusa flag viva sem consumidor; (3) o DROP das linhas/da tabela é DDL à parte (não nesta janela). O onboarding (`insertDefaultFlags`)
+  para de criar flag para módulo guardado. Liga à D-GE22 item 3 (contrato de telas é do grupo).
+- **D-PV37** (Valdo, 2026-10-20 — fecha a **Q-PV34 = (b)**: *"(b), siga a recomendação"*) — **o literal `id 1` ("a própria Setes") fica
+  até a onda 1 do grupo**; os 5 lugares ganham a MESMA constante nomeada (`SETES_INSTITUTION_ID`) na peça `@shared/institution-interfaces`
+  para a troca ser um ato só, e o roteiro da onda 1 do grupo (`prompt_frente_grupo_estabelecimentos.md`) recebe a nota: "trocar a
+  constante pelo predicado do grupo/schema (linha do grupo, D-GE1)". Anotar lá ao fechar esta rodada.
+- **D-PV38** (Valdo, 2026-10-20 — fecha a **Q-PV35 = (a)**: *"(a), siga a recomendação"*) — **a porta delegada NÃO lê o vínculo da própria
+  Setes**: `GET /api/institution-interfaces/:id` com `:id` = `SETES_INSTITUTION_ID` pelo usuário liberado (não super) = 403, o mesmo
+  veredito do salvar (D-PV11 item c); a lista já a esconde. Um predicado só (`isOwnVendorInstitution`) nas três portas (lista, leitura,
+  escrita), com teste.
+- **D-PV39** (Valdo, 2026-10-20 — fecha a **Q-PV36 = (a)**: *"(a), siga a recomendação"*) — **tela do Super DELEGÁVEL conta como
+  adquirida pela Setes para as configs dela**: o predicado "adquirida" (`isInterfaceAcquired`) ganha a cláusula "ou interface delegável
+  (D-PV11 item d) e a institution é a Setes" — vale para o override pessoal `'U'` do usuário liberado (itens por página) e para o valor
+  `'I'` por quem tiver CONFIGURAR nela (D-PV25). Metade da questão já tinha caído pela D-PV24 (o Super escapa).
+- **D-PV40** (Valdo, 2026-10-20 — ao ratificar a A-PV7, literal: *"considere que transmitir e consultar sao dois verbos
+  independentes"*) — **nasce o privilégio CONSULTAR (id 12)**: perguntar ao terceiro (banco ou fisco) a situação de um documento, sem
+  mudar estado nele. **TRANSMITIR** fica para o que MUDA estado no terceiro: registrar o boleto, transmitir a nota, simular o pagamento
+  no sandbox (`pay-sandbox` grava no banco de testes). Mapa dos atos: boleto — `POST /bank-slips/refresh` e `/:id/refresh` = CONSULTAR,
+  `/:id/register` e `/:id/pay-sandbox` = TRANSMITIR, PDF = IMPRIMIR, reaplicar = efeito (D-PV27); fisco (nfse-api) — `transmit` =
+  TRANSMITIR, `refresh` = CONSULTAR, `reconfirm`/`cancel` = CANCELAR (finalidade); o lote do app = o verbo de cada item. O RODÍZIO e a
+  passada de pendentes são atos do SISTEMA: a filtragem por ramo contratado (D-F46/D-F47, `passScope`) passa a conferir o par
+  (interface do ramo × CONSULTAR) no catálogo, não TRANSMITIR. Catálogo: pares CONSULTAR para `bank-slips` e para as interfaces dos
+  ramos (`orders`, `service-orders`, `order-returns`) no mesmo seed do CONFIGURAR (D-PV25 — número a conferir, 68); cerca da D-PV9:
+  entra em `CONSUMED_PRIVILEGES` E no seed antes do app; app: botões "Consultar"/"Atualizar no banco/fisco" gated por
+  `can('CONSULTAR')`. Princípio da D-PV27 mantido: o verbo nomeia a finalidade do ato.
+- **D-PV41** (Valdo, 2026-10-20 — fecha a **Q-PV19 = (a)**, a resposta que tinha vindo repetida) — **o teste ao vivo do catálogo
+  (`privilege-catalog-live.test.ts`) fica OBRIGATÓRIO na suíte padrão do setes-api**: vermelho = o seed não foi ao banco antes do código.
+  Na Onda 4 (bancos separados) ele prova só o dev; a produção é coberta pelo roteiro de publicação (D-PV16). Sem código novo.
+- **D-PV42** (Valdo, 2026-10-20 — fecha a **Q-PV50 = (a)** com REGRA a mais, literal: *"Mas o padrao e manter em ingles e renomear
+  customers para cliente nao pode"*) — (1) **a guarda de chave congela TODA chave que o código usa para abrir ou montar uma tela**: a
+  lista de rotas do app (`interfaceRoutes`, conferida pela cerca), as chaves com configs/campos no catálogo e `general-configs` — não só
+  as dos pares de privilégio; (2) **a `i18n_key` é identificador TÉCNICO, em inglês, no formato da rota (`^[a-z][a-z0-9-]*$`, espelho
+  de `/home/<chave>`), e NÃO se renomeia**: a tela Interfaces valida o formato na criação e recusa (409) a troca da chave de uma
+  interface já existente — renomear não é ato do produto; o nome que o usuário vê é tradução (i18n do app, D-BA29: nome traduzido no
+  banco = item próprio). Mudar uma chave, se um dia for preciso, é código + seed coordenados, nunca pela tela.
+- **D-PV43** (Valdo, 2026-10-20 — fecha a **Q-PV51 = (a)**: *"(a), siga a recomendação"*) — **`tb_interface.i18n_key` única no BANCO
+  entre as vivas**: coluna gerada STORED `i18n_key_live = CASE WHEN deleted='N' THEN i18n_key END` + UNIQUE sobre ela (NULL das
+  excluídas não colide), no `setes_central`. Entrega própria de DDL, DEPOIS da janela: guardião (forma) → `PADROES_BANCO` §9 regra 10 +
+  `revisar-ddl` → prova em schema descartável (inclusive o replay idempotente e a sonda do CHECK/UNIQUE pelo NOME no boot) → migration
+  numerada na hora. Fecha a corrida do service e cobre o seed; a conferência no service fica como mensagem amigável (409 antes do erro
+  de UNIQUE).
+- **D-PV44** (Valdo, 2026-10-20 — fecha a **Q-PV52 = (a)**: *"(a), siga a recomendação"*) — **`-CatalogEnvFile` do `build-web.ps1` fica
+  opcional enquanto o destino é o dev** (padrão = `.env` do setes-api irmão, com aviso); **obrigatório na publicação para OUTRO
+  ambiente** — item do roteiro de deploy da Onda 4 (SaveInCloud): o roteiro passa o `.env` do destino e o script recusa publicar sem
+  ele quando `-Target` ≠ dev. Anotar no prompt da Onda 4 quando ela abrir.
+- **D-PV45** (Valdo, 2026-10-20 — fecha a **Q-PV53 = (b)**: *"(b), siga a recomendação"*) — **limite conhecido**: o conserto de duplicata
+  da tela Interfaces não varre os contratos dos clientes; duplicata de chave não existe hoje (conferido), a criação está barrada e o
+  UNIQUE da D-PV43 a elimina por construção — quando a D-PV43 entrar, o conserto perde o objeto e SAI do código (anotar na entrega
+  do UNIQUE). Conhecimento negativo no comentário da peça até lá.
+- **D-PV46** (Valdo, 2026-10-20 — fecha a **Q-PV54 = (a)**: *"(a), siga a recomendação"*) — **senha perdida do SUPER = procedimento do
+  OPERADOR, exceção explícita e documentada**: script `setes-api/scripts/reset-super-password.ts` (roda no servidor, com o `.env` do
+  destino; só para `tb_user.kind = 'super'`; gera senha inicial aleatória, grava com o MESMO hash do login, imprime uma vez, registra
+  quem rodou e quando no log e em `updated_by`); nenhuma porta HTTP; descrito no roteiro de operação da Infra-IA (nasce com a Onda 4 —
+  até lá, nota no `setes-api/CLAUDE.md`). Complemento quando houver dois Supers: um define a senha do outro pela tela de Usuários do
+  Super (a D-PV12 só proíbe o ADMIN). Entrega própria, pequena, fora da janela de privilégios.
+- **D-PV47** (Valdo, 2026-10-20 — na Q-UC26 da frente do convidado, literal: *"b...reforce com o codigo para dificultar a forca bruta
+  na porta publica"*) — **REVOGA a D-PV18**: os aplicativos TÊM recuperação de senha, com a porta pública "Esqueci minha senha"
+  reforçada contra força bruta = a entrega endurecida da **D-PV13/Q-PV38 (§13 deste prompt, que VOLTA A VALER)** — branch
+  `recuperacao-senha` (setes-api d19de9d · sql e1aa574; sql/67 `tb_user_password_reset`), que NÃO tinha sido apagada de fato (conferido
+  em 2026-10-20: worktrees `recuperacao-senha/{setes-api,sql}` e `origin/recuperacao-senha` existem). A branch `sem-recuperacao-senha`
+  (api fbf01a3 · app ad50385) é DESCARTADA sem merge. Ficam de pé desta rodada: D-UC6 (a senha é do titular; o admin não troca a
+  definitiva) e D-PV46 (script do operador para o Super — vale ainda como saída sem e-mail). Voltam à fila: **Q-RS1…Q-RS6 e
+  A-RS1…A-RS4** (§13.6/§13.9). Numeração de seeds: 67 = recuperação; 68 = CONFIGURAR/CONSULTAR (D-PV25/D-PV40); 69 = terminal.
+- **A-PV14 — RATIFICADA (Valdo, 2026-10-20; integridade do catálogo, não acesso — convive com a D-PV24)** — a guarda vale também para o super: ela protege o DADO do catálogo, não a
   permissão de quem edita.
 - ⏳ **Q-PV19** — a resposta veio repetida como "Q-PV17 - a"; a confirmar. **A-PV12** — o Valdo pediu para relembrar; a ratificar.
 - Gates do delta (§12.8): socrático 0,76 · adversarial 0,72 → re-prova 0,80 (sem HIGH), achados corrigidos; **Q-PV50…Q-PV53** abertas.
@@ -1316,7 +1537,11 @@ os privilégios da tela aberta pelo menu) — decidir juntas.
 (conta com vínculo com outro estabelecimento segue só do Super) aguarda a **Q-PV39** (abrir a frente do usuário convidado — Rec. (a)). Publicar = "vai" com a lista de telas do contrato da Setes (implantação da D-PV10)
 + seed 65 antes do app.
 
-**Q-PV38 (§13, 2026-10-18)**: EXECUTADA em worktree. Aguardam o Valdo: ratificar **A-RS1…A-RS4**; **Q-RS1** (valores: N = 5, tetos, piso — o N
-é decisão reservada), **Q-RS2** (`trust proxy` agora × Onda 4 — Rec. Onda 4), **Q-RS3** (segredo do HMAC), **Q-RS4** (bloqueio da recuperação
-por terceiro), **Q-RS5** (tarefa própria para endurecer o login e o resto da autenticação — Rec. (a)), **Q-RS6** (fila provocada × piso).
-Publicar = "vai": sql/67 ANTES do merge e de novo DEPOIS (§13.8).
+**Q-PV38 (§13, 2026-10-18)**: ~~EXECUTADA em worktree~~ → **SUPERADA pela D-PV18 (mesma noite)**: os aplicativos não têm recuperação de senha;
+a branch `recuperacao-senha` foi apagada e Q-RS1…Q-RS6 / A-RS1…A-RS4 morreram sem objeto. Da Q-RS5 sobra só a ideia "endurecer o login
+(força bruta na senha)" — tarefa própria se o Valdo quiser (hoje o rate limit por institution/IP é o que há).
+**Q-PV54 (nova, da D-PV18 — aguarda o Valdo)**: sem recuperação, a senha perdida de um usuário é redefinida pelo admin do estabelecimento
+(D-PV12) e a do admin pelo Super (ou por outro admin do mesmo estabelecimento). **E a senha perdida do próprio SUPER?** (a) procedimento
+documentado do operador — UPDATE do hash em `setes_central.tb_user` numa sessão administrativa, registrado com data/motivo como exceção
+explícita (PADROES §3.1) **(Recomendado)** · (b) um 2º usuário super de reserva, com senha guardada fora do sistema · (c) nada (aceitar o
+risco). Nenhuma trava a publicação da `sem-recuperacao-senha`.
