@@ -1,5 +1,11 @@
 # ⚙️ Engine Kit — Legacy Modernization Engine (Portability Kit)
 
+> **SUPERSEDED (2026-10-21)** — this copy was consolidated into the canonical engine-kit
+> repository (local: `C:\RAG\engine-kit-canonical`, v0.7.0, with this folder's git history
+> imported; decisions EK#1–EK#9 in its `DECISIONS.md`). **Do not edit this copy**: it stays
+> as history. Method improvements found in this case go to the canonical repository,
+> distilled. Per-file destinations: `docs/history/consolidation-0.7.0-manifest.csv` there.
+
 **Version**: 0.4 (2026-09-04) — first feedback loop from a large legacy case folded into the skills
 **Scope**: method
 **Origin**: `Infra-IA/prompts/rascunho_engine_modernizacao.md` (product journal) — this kit is the materialization of the `mixed`/`method` queue from the 2026-07-19 scope census
