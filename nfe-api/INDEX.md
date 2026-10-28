@@ -1,5 +1,7 @@
 # nfe-api — Índice (espelho de conhecimento)
 
+**⏯ 2026-10-20: NE-2 EXECUTADA em worktree (`D:\Gestao2027\ne2\{fiscal-api,nfe-api}`, branch `ne2` — `../prompts/prompt_onda_nfe_sefaz.md` §15.9 = ponto de retomada; NADA commitado nem publicado — a publicação é a D-NE168, só com o "vai").** Rodada 15 FECHADA (D-NE158…D-NE168, §15.8). A pasta `nfe-api` ganhou código: esqueleto no molde da nfse-api (só `GET /v1/health` + emitente do 55 — D-NE166; as outras 12 operações do OpenAPI marcadas `x-onda`), migration 001 da família (3 tabelas + 2 views; D-NE163: UNIQUE da faixa retirada com SÉRIE e AMBIENTE — provada em banco descartável), descritor da voz A/R/D/P/C/K/F/N + sondas do boot + cerca por AST "um descritor só" (D-NE167); no núcleo, a leitura publicada `merchandise` FORA do catálogo (D-NE158), `humanEffectCancel = () => false` (D-NE159) e a peça `numbering/` das faixas retiradas (D-NE161). Testes: nfe-api 38 · núcleo 1117 · nfse-api contra o núcleo novo 949 (só acrescenta). Próximo: publicação (D-NE168) → Rodada 0 da NE-3 (§15.5).
+
 **⏯ 2026-10-18 (noite): NE-2 Rodada 0 ORGANIZADA (`../prompts/prompt_onda_nfe_sefaz.md` §15 = ponto de retomada).** Escopo E1–E6 (esqueleto no
 molde da nfse-api, migration 001 da família provada em banco descartável, descritor de escrita + sondas, leitura publicada no núcleo, GRANT); a NE-3
 entra só como vista (§15.5). Parecer do guardião integrado (§15.3): a família entra no catálogo `VOICE_READINGS` com o 1º leitor (NE-6), não na

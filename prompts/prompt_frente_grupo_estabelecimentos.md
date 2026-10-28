@@ -248,6 +248,10 @@ pelos usuários da fundadora · (c) tudo por qualquer admin de qualquer estabele
 
 ## 12. D-GE4 EXECUTADA — leitores latentes corrigidos sem DDL (2026-10-18, worktree; commit LOCAL ff2795f na branch `grupo-leitores` (2026-10-18, "vai" do Valdo), sem push e sem merge)
 
+> **2026-10-18 (noite) — Fase 1 do plano de retomada (`prompts/plano_retomada_2026-10-18.md`)**: a branch `grupo-leitores` (ff2795f) foi
+> EMPURRADA ao GitHub (`origin/grupo-leitores`, só a branch) a pedido do Valdo. Segue SEM merge no `main`; publicar continua sendo o "vai"
+> (Fase 2, 2º passo — antes do bloco de privilégios, por causa do `admin.repository.ts`).
+
 Tarefa própria pedida pela D-GE4. Worktree `D:\Gestao2027\grupo-leitores\setes-api` (branch `grupo-leitores`, base f53a618; junções
 só-leitura `grupo-leitores\{fiscal-api,nfse-api}` e `node_modules` → árvore viva). Zero DDL, zero seed. **Neutro com 1 institution por
 schema**: a institution que o código passa a exigir é a única que o schema tem (o gate socrático conferiu no dev, só leitura: 0 linhas de
@@ -430,3 +434,17 @@ tabelas do grupo + vínculo da filial) · D-PR24 (onda 1 de produtos com 4 regra
   privilégio em QUALQUER estabelecimento do grupo (como no legado — o dado é do grupo); a estrutura de MENU (D-GE5): só o admin do grupo
   (D-GE15, derivado).
 - **Questões pendentes da frente: NENHUMA.** Próximo = onda 0 (§5, §10).
+
+## Nota da frente do terminal — onda 0 preparada (2026-10-21; `prompt_frente_terminal.md` §10)
+
+- `tb_terminal` nasceu do ESTABELECIMENTO (§12 — D-TM8) com o UNIQUE "um servidor local ATIVO" por `tb_institution_id` (coluna gerada
+  `live_local_server`). O grupo HOJE = institution (neutro). **Q-TM9** (rec. do guardião): manter o UNIQUE por estabelecimento e conferir
+  "uma fonte de cadastros por grupo" no PAREAMENTO (uuid do L) na onda 0/1 daqui — D-TM8 (servidor que atende N estabelecimentos = N
+  registros) × D-TM17 (um Firebird, N estabelecimentos = a mesma fonte) dariam N linhas L vivas no grupo, que um UNIQUE pela chave do
+  grupo recusaria. Nada muda no DDL de agora.
+- Não existe mais a linha 0 "Web" (D-TM16): o `createInstitution` NÃO cria terminal — nada a repetir no 2º ato da D-GE14. O que o ato
+  "estabelecimento entra no grupo" PRECISA repetir é o contrato das telas ESTRUTURAIS (`grantStructuralInterfaces` —
+  `STRUCTURAL_INTERFACE_KEYS` agora inclui `terminals`) e a flag `terminals` (como as demais flags do onboarding).
+- A leitura da origem dos cadastros (`sourceKindOfInstitution` da peça `@shared/terminal`, interina até a 072 da `merchandise`) resolve
+  HOJE a própria institution; quando `@shared/group` nascer, o leitor único (`sourceKindOf` de `@shared/catalog-owner`) resolve a
+  FUNDADORA pelo `groupInstitutionId` (D-TM10) — a cerca 5 de `terminal-fence.test.ts` cobra a delegação no merge.

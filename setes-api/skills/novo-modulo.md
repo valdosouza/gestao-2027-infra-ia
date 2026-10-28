@@ -51,24 +51,29 @@ cadastro de cliente futuro usa o guard próprio dele, na mesma posição.
 router.use('/<plural>', superGuard, <plural>Routes)   // → /api/<plural>
 ```
 
-### Cadastro que o LEGADO alimenta → `syncWriteGuard` (D-PR41 revista, Rodada 6 de produtos — 2026-10-18)
+### Cadastro que o LEGADO alimenta → `catalogOwnerGuard` (D-PR41 revista + D-PR47/D-PR51, Rodada 7 de produtos — 2026-10-20)
 
 Se a tabela do cadastro é **ID LOCAL no `Infra-IA/setes-sync/MAPA_INDEXACAO.md`** (o legado manda o id DELE — ex.: `tb_product.id` =
-`PRO_CODIGO`, upsert pela PK no setes-sync) e a web cunha id por MAX+1 nela, o módulo **monta com `syncWriteGuard`**: estabelecimento
-com chave do sincronizador ATIVA só CONSULTA na web (escrita = 409 `SYNC_MANAGED_CATALOG`); sem a guarda o id da web cai no espaço do
-gerador do legado e o próximo envio SOBRESCREVE a linha sem aviso. É um MÉTODO aplicado caso a caso (Valdo), não um bloqueio geral.
+`PRO_CODIGO`, upsert pela PK no setes-sync) e a web cunha id por MAX+1 nela, o módulo **monta com `catalogOwnerGuard`**
+(`src/gateway/catalog-owner.guard.ts`): a guarda pergunta "quem é o DONO do catálogo?" lendo o FATO `tb_institution.source_kind`
+(peça `@shared/catalog-owner` — D-PR47: W nativo web · L transição do desktop legado · P PDV), **nunca a chave do sincronizador** (ela é
+só autenticação; a pausa é interruptor de emergência — D-PR48). Em L a web só CONSULTA (escrita = 409 `CATALOG_LEGACY_OWNED`); em W/P
+escreve. Sem a guarda o id da web cai no espaço do gerador do legado e o próximo envio SOBRESCREVE a linha sem aviso. É um MÉTODO
+aplicado caso a caso (Valdo), não um bloqueio geral.
 
 ```ts
-router.use('/<plural>', syncWriteGuard, <plural>Routes)   // hoje: merchandise, services, price-lists, categories
+router.use('/<plural>', catalogOwnerGuard, <plural>Routes)   // hoje: merchandise, services, price-lists, categories, financial-plans, bank-accounts
 ```
 
-E na MESMA entrega: (1) a tabela entra em `SYNC_FED_TABLES` (`@shared/sync-key`) — é por ela que religar a chave
-(`PUT /api/institutions/:id/sync-api-key/active` 'S') recusa com 409 `SYNC_KEY_WEB_ROWS` quando a web criou linha no período desligado
-(Q-PR47); (2) o Swagger das rotas de escrita documenta o 409 `SYNC_MANAGED_CATALOG`; (3) teste da guarda pelo app real (molde
-`src/__tests__/adversarial-merchandise-r3-guard.test.ts`); (4) o INSERT que cunha o id trava a institution (PADROES §9 regra 7) e logo
-depois chama `assertNoActiveSyncKey(conn, institutionId)` — a guarda lê a chave FORA da transação, e o ato de religar segura a mesma
-trava (sem a reconferência, quem passou pela guarda e esperou o religar insere com a chave já ativa). Pedido (`tb_order`) NÃO entra: a
-origem é separada pelo `terminal` (Valdo, Rodada 6 — conferir a Q-SY14 do grupo do sync antes de contar com isso).
+E na MESMA entrega: (1) a tabela entra em `LEGACY_OWNED_TABLES` (`@shared/catalog-owner` — o catálogo de base da D-PR52 + plano de
+contas e contas bancárias da D-PR51) e o módulo em `LEGACY_OWNED_MODULES` — a cerca de montagem (`catalog-owner-guard.test.ts`) e a
+cerca por varredura (`adversarial-r7-gate.test.ts`: só os módulos guardados e as peças deles escrevem nessas tabelas) conferem as duas;
+(2) o Swagger das rotas de escrita documenta o 409 `CATALOG_LEGACY_OWNED`; (3) teste da guarda pelo app real (molde
+`src/__tests__/adversarial-merchandise-r3-guard.test.ts`). **Não há reconferência dentro da transação** (a `assertNoActiveSyncKey` da
+Rodada 6 morreu): o fato é MONOTÔNICO — L → W/P pelo ato "encerrar a transição" (`POST /api/institutions/:id/end-legacy-transition`),
+nunca de volta — logo quem passou pela guarda nunca é alcançado por um fechamento. **O que o legado NÃO produz fica FORA da guarda**, em
+rota própria montada ANTES do módulo guardado (D-PR45: `services.fiscal.routes.ts` — regra de ISS e presunção IBS/CBS do serviço; cada
+fato com o seu escritor). Pedido (`tb_order`) NÃO entra: a origem é separada pelo `terminal` (Valdo, Rodada 6 — Q-SY14/D-TM13).
 
 ## Passo 4 — Regras que NUNCA quebram
 
@@ -163,7 +168,7 @@ rotas documentadas ficaram invisíveis no /docs). Doc `@swagger` SEMPRE no
 - [ ] Swagger em todas as rotas (tag = módulo; security BearerAuth; responses
       200/201/400/401/403/500) e rotas VISÍVEIS em /docs; montado em /api/<plural> com o guard certo
 - [ ] tsc limpo + smoke; módulo gêmeo no app criado/atualizado
-- [ ] Tabela ID LOCAL do MAPA_INDEXACAO (o legado alimenta)? → `syncWriteGuard` + `SYNC_FED_TABLES` + 409 no Swagger (Passo 3)
+- [ ] Tabela ID LOCAL do MAPA_INDEXACAO (o legado alimenta)? → `catalogOwnerGuard` + `LEGACY_OWNED_TABLES`/`LEGACY_OWNED_MODULES` + 409 `CATALOG_LEGACY_OWNED` no Swagger (Passo 3)
 - [ ] Interface + privilégios no seed (seção abaixo) — aplicado ANTES do app
 
 ## Interface e privilégios (OBRIGATÓRIO em toda tela nova — D-GE19 + D-PV1…D-PV9, 2026-10-18)

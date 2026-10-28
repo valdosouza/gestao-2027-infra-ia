@@ -302,4 +302,4 @@ Antes: confira se Infra-IA/prompts/prompt_frente_terminal.md (Frente tb_terminal
 
 ## Decisões arquiteturais registradas
 
-*(nenhuma — Rodada 0)*
+*As decisões da Rodada 1 (2026-10-20) estão numeradas como **D-TM8…** no §9 de `prompt_frente_terminal.md` (uma fila só, reconciliada): Q-TG1/Q-TG2 → D-TM8 · Q-TG3/4/5 → D-TM10 · Q-TG6 → D-TM17 · Q-TG7 → D-TM11 · Q-TG8 → D-TM18 · Q-TG9 → D-TM16 · Q-TG10 → D-TM19 · Q-TG11 → D-TM20 · Q-TG12/13 → D-TM21 (ordem pelo dado: sem filiais hoje; Pipoteca = piloto da direção inversa) · Q-TG14 → D-TM22. **Rodada 1 FECHADA 2026-10-20 — nenhuma questão aberta nesta frente de debate.***

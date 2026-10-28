@@ -55,7 +55,13 @@ Onda 4 do Módulo Software House, 2026-07-19).
    execução de ação (saving) e one-shots de sucesso/erro — a mensagem dos
    409 de negócio vai para a SnackBar como veio da API.
 2. **Lista com ABAS por status** (Abertas × Faturadas) consultando a API
-   com `?status=`; FAB = ação de abertura; AppBar = ações de rotina.
+   com `?status=`; FAB = ação de abertura; AppBar = ações de rotina. A lista em si é a peça
+   `SetesDataList` (setes_widgets — onda C da densidade, 2026-10-20, `prompts/prompt_densidade_layout_web.md` §9;
+   ⚠️ até a publicação só no branch `densidade-c`): tabela com cabeçalho e linha de 36 px a partir de 840 px de
+   área disponível, item de duas linhas abaixo; `columns` com o tipo de cada célula (número à direita, data no
+   centro), `codeOf` = o número do documento, `onToggle`/`isSelected` = a caixa de seleção do lote,
+   `trailingOf` = selo de situação, `subtitleOf` = a frase do celular quando as células cruas da tabela não
+   servem de subtítulo. Molde: lista de OS (`service_orders`).
 3. **Dialog de rotina**: pede a competência, executa e apresenta o
    RELATÓRIO retornado (não só "ok").
 4. **Detalhe dirigido pelo estado**: aberto = sub-lista editável por

@@ -528,6 +528,18 @@ não sabe se é a 1ª ativação.
 
 ## 11. Retomada
 
+> **2026-10-18 (noite) — D-PV18 (`prompt_privilegios_interfaces.md`): os aplicativos NÃO têm recuperação de senha.** Efeitos aqui: a
+> **A-UC2 perde o objeto** ("senha só pela recuperação" não existe mais — nem o `/auth/change-password` citado no cabeçalho); a tarefa da
+> D-PV13 (`recuperacao-senha`) foi apagada; e nasce a **Q-UC25 — com o convite interceptado (D-UC4), quem define e quem troca a senha do
+> TITULAR?** (a) o admin do estabelecimento que CRIOU a credencial define a inicial e qualquer admin de estabelecimento onde o titular tem
+> vínculo pode trocá-la (= D-PV12 estendida; **reabre o HIGH 2** — o admin do cliente 2 troca a senha e entra no cliente 1 como a pessoa) ·
+> (b) só o admin do estabelecimento de ORIGEM da credencial troca a senha (dono = quem criou — diverge da D-UC3, "o dono é o titular") ·
+> (c) o **titular, logado, troca a própria senha** (tela "minha senha" com a senha ATUAL — não é recuperação) e o admin só define a INICIAL
+> na criação da credencial (e a comunica fora do sistema); senha esquecida = o admin de qualquer vínculo define uma nova e o titular troca
+> no 1º acesso **(Recomendado — mantém D-UC3 e fecha o HIGH 2 pelo mesmo caminho do convite: trocar a senha de credencial com N vínculos
+> avisa o titular por e-mail e derruba as sessões)**. Decidir ANTES da onda 0 desta frente. O e-mail de aviso usa a peça `@shared/mailer`,
+> que ficou sem consumidor com a D-PV18.
+
 **Onde paramos (2026-10-18, fim da sessão)**: Rodada 0 organizada + duas respostas do Valdo → **D-UC1…D-UC5** (credencial nunca excluída
 nem com e-mail alterado — só se inativa; inativar = `active='N'` do vínculo do próprio estabelecimento; o dono do login é o dono do
 e-mail; o convite é a CRIAÇÃO interceptada — vínculo inativo + e-mail, o aceite ativa; o perfil é de cada estabelecimento). A análise do
@@ -588,6 +600,71 @@ Herdadas e válidas sem decisão nova: decisões 9, 10, 14, 19 e 23 da Fase 2 ·
   + *"O dono do perfil deste usuário é o institution que deseja usá-lo"*): o PERFIL é de cada estabelecimento — quem cria escolhe o perfil
   (`user` ou `admin`; `super` nunca, decisão 14); o estabelecimento que intercepta define o perfil da pessoa ali; nada passa sozinho de um
   estabelecimento para outro, nem o aceite muda o perfil. O que "como bem quiser" permite no vínculo interceptado = **A-UC3**.
+- **D-UC6** (Valdo, 2026-10-20 — rodada "uma pergunta por vez"; fecha a **Q-UC25 = (c)**, literal: *"(c), siga a recomendação"*) — **a
+  senha é do TITULAR**: (1) o titular, LOGADO, troca a própria senha numa tela "minha senha" que exige a senha atual (não é recuperação);
+  (2) o admin só define a senha INICIAL ao criar a credencial e a comunica fora do sistema; (3) senha esquecida = o admin de QUALQUER
+  estabelecimento onde a pessoa tem vínculo define uma senha provisória, e o titular é obrigado a trocá-la no 1º acesso; (4) definir
+  senha provisória em credencial com MAIS DE UM vínculo avisa o titular por e-mail (peça `@shared/mailer`) e derruba as sessões vivas
+  (fecha o HIGH 2 pelo mesmo caminho do convite). A D-PV12 fica SUPERADA por inteiro (o admin gere vínculo, perfil e a provisória; nunca
+  a senha definitiva). Pedido do Valdo na mesma resposta — *"pode ser usada a recuperacao de senha com o envio de codigo para o email e
+  usado para confirmar a troca, processo que ja existe"* — vira a **Q-UC26** (revê a D-PV18 em parte): ver abaixo.
+- **Q-UC26 — código por e-mail como CONFIRMAÇÃO da troca de senha (revisão parcial da D-PV18)?** Fato: o processo existe no `main`
+  (fluxo antigo, com o CRITICAL da colação) e, endurecido, na branch `recuperacao-senha` (`tb_user_password_reset`, 5 erros esgotam,
+  HMAC — a branch NÃO foi apagada de fato, conferido em 2026-10-20); a D-PV18 mandou removê-lo e a remoção está na branch
+  `sem-recuperacao-senha`, sem merge. (a) **o código por e-mail volta SÓ como confirmação de ato de usuário LOGADO** — trocar a própria
+  senha (item 1 da D-UC6) e a troca obrigatória da provisória no 1º acesso (item 3): rota autenticada, código com os limites da branch
+  endurecida (reaproveitar a peça e a tabela, nunca o fluxo antigo), SEM a porta pública "Esqueci minha senha" (é ela que a D-PV18
+  mata e a `sem-recuperacao-senha` segue valendo) **(Rec.)** · (b) voltar a recuperação completa, inclusive a porta pública (revoga a
+  D-PV18 e a branch `sem-recuperacao-senha`) · (c) sem código: a senha atual (ou a provisória) é a única confirmação, como a D-UC6 já diz.
+- **D-UC7** (Valdo, 2026-10-20 — fecha a **Q-UC26 = (b)**, literal: *"b...reforce com o codigo para dificultar a forca bruta na porta
+  publica"*) — **a recuperação de senha VOLTA por inteiro, inclusive a porta pública "Esqueci minha senha", reforçada contra força
+  bruta** — ou seja, a versão ENDURECIDA que já existe na branch `recuperacao-senha` (D-PV13/Q-PV38: `tb_user_password_reset` — sql/67 —,
+  5 erradas esgotam o código, teto por conta + limite por e-mail, resposta neutra em corpo/status/tempo, código só como HMAC, o CRITICAL
+  da colação corrigido). **Revoga a D-PV18** (registrada como D-PV47 no prompt de privilégios); a branch `sem-recuperacao-senha` (api
+  fbf01a3 · app ad50385) é DESCARTADA (apagar worktrees e branches = ato operacional, no fim da fila); a ordem de merge do setes-api volta
+  à original do plano (`recuperacao-senha` primeiro, sql/67 antes e depois do merge). A MESMA peça de código por e-mail também confirma
+  a troca pelo titular LOGADO (item 1 da D-UC6 — pedido do Valdo na Q-UC25). Numeração: 67 volta a ser da recuperação; o seed do
+  CONFIGURAR/CONSULTAR (D-PV25/D-PV40) = 68; `tb_terminal` = 69 (conferir na hora). As Q-RS1…Q-RS6 e A-RS1…A-RS4 voltam à fila.
+- **Q-UC27 — com a recuperação de volta, o admin ainda define senha (provisória) ou a credencial nasce SEM senha?** A D-UC6 (itens 2–3)
+  foi decidida sob "não existe recuperação". (a) **A-UC2 original: a credencial nasce sem senha e a pessoa define a dela pela
+  recuperação (o admin nunca conhece senha alguma; senha esquecida = a própria recuperação; o e-mail é a prova de posse — D-UC3; o
+  HIGH 2 fecha por construção) (Rec.)** · (b) manter a D-UC6: o admin define a inicial/provisória e a pessoa troca no 1º acesso, com o
+  aviso por e-mail quando há mais de um vínculo · (c) os dois: a recuperação é o caminho normal e a provisória fica como exceção do admin.
+- **D-UC8** (Valdo, 2026-10-20 — fecha a **Q-UC27**, literal: *"Admin define uma senha o usuario pode troca-la quando quiser e quando
+  ele esquecer usar o esqueci minha senha"*) — **três caminhos, um dono**: (1) o admin define a senha INICIAL uma vez, na CRIAÇÃO da
+  credencial (só o estabelecimento que cria — quem intercepta, D-UC4, não define senha: a credencial já existe); (2) o titular, logado,
+  troca a própria senha quando quiser ("minha senha": senha atual + código por e-mail, D-UC7); (3) esqueceu = "Esqueci minha senha"
+  (recuperação endurecida, D-UC7). **O admin NÃO troca senha de usuário existente** — o botão "trocar senha" do cadastro de usuários
+  sai (a D-PV12 fica SUPERADA por inteiro: o admin gere vínculo, perfil e a inicial na criação); a "provisória" dos itens 3–4 da D-UC6
+  MORRE (senha esquecida é a recuperação; o aviso + derrubar sessões perdem o objeto). Sem troca obrigatória no 1º acesso (não pedida).
+  Super: a inicial de outro Super é definida pelo Super que o cria; esquecida = recuperação; sem e-mail = D-PV46 (script do operador).
+- **D-UC9** (Valdo, 2026-10-20 — fecha a **Q-UC11 = (a)**: *"(a), siga a recomendação"*) — **a inativação do vínculo vale NA HORA**: a
+  guarda que lê o privilégio a cada requisição (`privilegeVerdict`, com o cache da D-PV29 — o vínculo entra na mesma chave e a
+  invalidação ao salvar o vínculo já está decidida) confere também `tb_institution_has_user.active = 'S'` e `tb_user.deleted = 'N'`,
+  no setes-api E nas guardas da nfse-api (mesmo token — D-F4; nfse-api lê pela view/peça do ERP, só leitura). Vínculo inativo = 401
+  `SESSION_REVOKED` (o app volta ao login/seleção). **Fecha a Q-R5.6** (JWT de usuário soft-deletado) pela mesma conferência. Entra na
+  onda 0 desta frente, junto da fusão com `privilegios-crud`.
+- **D-UC10** (Valdo, 2026-10-20 — fecha a **Q-UC23 = (a)**: *"(a), siga a recomendação"*) — **o fato "aguardando aceite" mora no
+  VÍNCULO** (`tb_institution_has_user`): `tb_user_inviter_id` + `invited_at` gravados no ato do admin que intercepta, `accepted_at`
+  gravado UMA vez no aceite; `active='N'` + `accepted_at` NULL = aguardando aceite (a tela distingue de "inativado"); na criação (1º
+  estabelecimento) o vínculo nasce ativo e aceito (`accepted_at` = agora, `inviter` = quem criou). Nenhum leitor muda (todos exigem
+  `active='S'`). Antes do DDL: parecer do guardião (forma — colunas no vínculo × tabela própria, já decidido pelo Valdo) +
+  `PADROES_BANCO` + `revisar-ddl`; prova em schema descartável; migration numerada na hora (tabela do estabelecimento — PADROES §12).
+- **D-UC11** (Valdo, 2026-10-20 — fecha a **Q-UC24 = (a)**: *"(a), siga a recomendação"*) — **o titular aceita DENTRO do app, depois do
+  login**: a seleção de empresa lista também os vínculos "aguardando aceite" (D-UC10) com a ação Aceitar/Recusar, ANTES do 403 de zero
+  vínculos (U17); aceitar = `accepted_at` + `active='S'` (rota autenticada `POST /auth/institutions/:id/accept`); recusar = o vínculo
+  fica inativo e nunca aceito. O e-mail (peça `@shared/mailer`, 1º consumidor) só avisa e leva ao app — sem token, sem porta pública
+  nova. App: a tela de seleção (`packages/core/src/auth`) ganha a seção "Convites". **→ REVISTA pela D-UC12 (mesmo dia): não há ação
+  Aceitar/Recusar — o LOGIN do titular é o aceite; a seção "Convites" não nasce.**
+- **D-UC12** (Valdo, 2026-10-20 — na A-UC4, literal: *"O admin do cliente 2 tera o mesmo email entao ele ja sabe, nao mostra criado e
+  sim utilizando cadastro ja existente, permitir que ele continue com a definicao de perfil e acesso e ao final enviar o email, se o
+  usuario logar ja sera o aceite"*) — **o convite interceptado é um fluxo CONTÍNUO do cadastro**: (1) ao sair do campo e-mail (ou no
+  salvar), a tela informa "utilizando cadastro já existente" — o admin digitou o e-mail, logo já o conhece; NÃO revela onde a pessoa
+  tem vínculo; (2) o admin segue no MESMO formulário definindo perfil (`user` — A-UC3) e privilégios; (3) ao salvar nasce o vínculo
+  "aguardando aceite" (D-UC10) e o e-mail de aviso é enviado no FIM; (4) **o aceite é o próprio LOGIN do titular**: no próximo login da
+  credencial, todo vínculo aguardando vira ativo (`accepted_at` = agora) — sem botão Aceitar/Recusar, sem seção "Convites" (revê a
+  D-UC11 nesse ponto; a rota de aceite explícito não nasce). Quem não quer o vínculo pede ao admin do cliente 2 para inativá-lo (D-UC2).
+  A D-UC10 segue valendo (o estado "aguardando" existe entre o salvar e o login).
 - **Efeito sobre a D-PV12 (ratificada)** — anotar no `prompt_privilegios_interfaces.md` quando o Valdo autorizar a edição daquele prompt:
   das quatro coisas que ela dava ao admin (senha, e-mail, ativo, exclusão), o e-mail e a exclusão deixam de existir (D-UC1), o "ativo" vai
   para o vínculo (D-UC2) e a senha segue a A-UC2 — confirmada a A-UC2, a D-PV12 fica toda SUPERADA (o admin gere o vínculo e o perfil; a
@@ -606,28 +683,39 @@ Herdadas e válidas sem decisão nova: decisões 9, 10, 14, 19 e 23 da Fase 2 ·
   define a dela pela recuperação; o botão do admin, se ficar, só dispara o código ao e-mail do titular. ⚠️ A outra leitura — "o admin
   continua trocando a senha, à parte" — reabre o HIGH 2 com vínculo em vários estabelecimentos: o admin do cliente 2 define a senha e
   entra no cliente 1 como a pessoa. **Confirmar.** (Fecha as Q-UC18 e Q-UC20.)
-- **A-UC3 — no vínculo interceptado o perfil é `user`; "como bem quiser" são os PRIVILÉGIOS** (leitura de *"Nada sobe para admin"* +
+  → **SEM OBJETO desde a D-PV18 (2026-10-18, noite): não existe sistema de recuperação de senha.** A pergunta voltou aberta como **Q-UC25**
+  (§11), com recomendação (c): o titular logado troca a própria senha; o admin só define a inicial.
+- **A-UC3 — CONFIRMADA (Valdo, 2026-10-20: "confirmo")** — no vínculo interceptado o perfil é `user`; "como bem quiser" são os PRIVILÉGIOS (leitura de *"Nada sobe para admin"* +
   *"determina o perfil deste usuário neste novo institution como bem quiser"*): só o estabelecimento que CRIA escolhe `admin`; quem
   intercepta vincula como `user` e concede os privilégios que quiser (o "relatório de estoque" do cenário). ⚠️ A outra leitura — quem
   intercepta também pode dar `admin` — faz a pessoa administrar os usuários e as telas do perfil admin do cliente 2. **Confirmar.**
-- **A-UC4** (da Q-UC10) — o fluxo revela ao admin que o e-mail já é login EM ALGUM LUGAR (o resultado é "aguardando aceite", não "criado");
+- **A-UC4 — RATIFICADA COM EMENDA (Valdo, 2026-10-20 → D-UC12: a tela diz "utilizando cadastro já existente", o admin segue definindo perfil e acesso, o e-mail vai no fim, e o LOGIN do titular é o aceite)** — o fluxo revela ao admin que o e-mail já é login EM ALGUM LUGAR (o resultado é "aguardando aceite", não "criado");
   nunca ONDE nem o NOME: antes do aceite a lista do cliente 2 mostra só o e-mail e o estado.
-- **A-UC5** (da Q-UC19) — ninguém inativa a credencial inteira pela tela: o cadastro deixa de gravar `tb_user.active`; conta comprometida
+- **A-UC5 — RATIFICADA (Valdo, 2026-10-20, literal: "vai precisar usar tb_institution_has_user.active....assim cada institution cuida do seu" — o cadastro grava SÓ o `active` do vínculo; `tb_user.active` deixa de ter escritor na tela)** — ninguém inativa a credencial inteira pela tela: o cadastro deixa de gravar `tb_user.active`; conta comprometida
   = o Super inativa os vínculos (U9).
-- **A-UC6** (da Q-UC16) — o onboarding de cliente novo segue a D-UC4: e-mail do 1º admin que já é login vira vínculo `admin` INATIVO
+- **A-UC6 — RATIFICADA (Valdo, 2026-10-20; o aceite é o login do titular — D-UC12)** (da Q-UC16) — o onboarding de cliente novo segue a D-UC4: e-mail do 1º admin que já é login vira vínculo `admin` INATIVO
   aguardando o aceite (a decisão 23 segue: o cliente nasce com o seu admin); o 409 do onboarding deixa de existir.
-- **A-UC7** (da Q-UC21) — o nome é da pessoa (da credencial), não do perfil: quem intercepta NÃO altera o nome (o que o admin digitou é
+- **A-UC7 — RATIFICADA (Valdo, 2026-10-20)** (da Q-UC21) — o nome é da pessoa (da credencial), não do perfil: quem intercepta NÃO altera o nome (o que o admin digitou é
   descartado — a credencial já tem nome); quem criou corrige o nome enquanto a credencial não tiver vínculo ATIVO com outro estabelecimento;
   depois, só o Super.
-- **A-UC8** (reativar) — o aceite é a 1ª ativação de um vínculo interceptado; depois dele, o admin daquele estabelecimento inativa e reativa
+- **A-UC8 — RATIFICADA (Valdo, 2026-10-20; "aceite" = o login do titular, D-UC12)** (reativar) — o aceite é a 1ª ativação de um vínculo interceptado; depois dele, o admin daquele estabelecimento inativa e reativa
   o PRÓPRIO vínculo direto (D-UC2), sem novo aceite (o consentimento com aquele estabelecimento já foi dado). Vínculo nunca aceito só ativa
   pelo aceite.
 
 ## Questões pendentes
 
+> **2026-10-20 — RODADA FECHADA (Valdo, "uma pergunta por vez")**: Q-UC25 → D-UC6 · Q-UC26 → D-UC7 (a recuperação VOLTA; revoga a
+> D-PV18) · Q-UC27 → D-UC8 · Q-UC11 → D-UC9 · Q-UC23 → D-UC10 · Q-UC24 → D-UC11 (revista pela D-UC12) · A-UC3…A-UC8 ratificadas (A-UC4
+> com emenda = D-UC12). **NENHUMA questão aberta.** Próximo: guardião + `revisar-ddl` da D-UC10 (colunas do vínculo), DDL em
+> descartável, onda 0 depois da fusão da `privilegios-crud` (mesmo `users.service.ts`), coordenada com a branch `recuperacao-senha`
+> (D-UC7 reaproveita a peça do código por e-mail). Próximo número: **D-UC13**.
+
+
 Depois da 2ª resposta do Valdo (análise no §7.2):
-- **Confirmar primeiro: A-UC2** (a senha é só do titular pela recuperação — o admin não define senha) e **A-UC3** (no vínculo interceptado o
-  perfil é `user`; o estabelecimento escolhe os privilégios) — as duas têm uma leitura alternativa que reabre risco.
+- ~~Confirmar primeiro: A-UC2~~ → **A-UC2 SEM OBJETO (D-PV18, 2026-10-18: os apps não têm recuperação de senha)**; no lugar, decidir a
+  **Q-UC25** (quem define/troca a senha do titular — Rec. (c): o titular logado troca a própria, o admin só define a inicial; §11).
+- **Confirmar: A-UC3** (no vínculo interceptado o perfil é `user`; o estabelecimento escolhe os privilégios) — tem leitura alternativa que
+  reabre risco.
 - **Abertas e necessárias: Q-UC11** (inativar vale na hora), **Q-UC23** (onde fica "aguardando aceite" — Rec.: colunas no vínculo) e
   **Q-UC24** (onde o titular aceita — Rec.: no app, depois do login).
 - **Ratificar**: A-UC4…A-UC8.

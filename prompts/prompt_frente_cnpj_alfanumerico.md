@@ -674,6 +674,12 @@ Fatos/limites registrados:
 
 ## 9. ⏯ PROMPT DE RETOMADA (colar numa sessão nova)
 
+> **2026-10-18 (noite) — Fase 1 do plano de retomada (`prompts/plano_retomada_2026-10-18.md`)**: as pontas LOCAIS da branch `cnpj` foram
+> EMPURRADAS ao GitHub nos 4 repositórios (`origin/cnpj`: núcleo 5cb70a2 · nfse-api 1d09e83 · setes-api dcf4e1e · setes-app db92f38), só a
+> branch, sem merge. ⚠️ Conferido no mesmo dia: o núcleo **DIVERGIU** do `main` (a NE-1b somou 17 commits — já NÃO é fast-forward) e o app
+> também (densidade/shell, 3 commits) → **rebase obrigatório** antes da janela; nfse-api e setes-api seguem fast-forward. O "sem push" abaixo
+> está SUPERADO; o resto (janela só com o retorno do grupo do sync + "vai") segue valendo.
+
 ```
 Retome a frente de PRODUTO "CNPJ alfanumérico" (Gestão 2027): D:\Gestao2027\Infra-IA\prompts\prompt_frente_cnpj_alfanumerico.md
 (TRANSVERSAL — cadastros, NFS-e, boleto, certificado; a nfe-api não tem emissão ainda e volta DEPOIS desta frente, na NE-1b).

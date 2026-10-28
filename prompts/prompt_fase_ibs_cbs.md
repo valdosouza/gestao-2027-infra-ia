@@ -270,7 +270,7 @@ Notas de ajuste (finNFSe 1/2 — Q-RTC6; finNFe 5/6 — D-NE47) · compra govern
 
 **A. Prazo externo e negócio**
 
-- **Q-IB1 Regime de IBS/CBS da Setes em 2027 — PRAZO 30/10/2026.** (a) não optar: IBS/CBS no DAS (`regApIBSCBSSN` 1) · (b) regime regular
+- **Q-IB1 Regime de IBS/CBS da Setes em 2027 — PRAZO 30/10/2026.** ⏳ *(2026-10-20, rodada "uma pergunta por vez": o Valdo pediu registrar EM ABERTO — decisão com o contador até 30/10; para o sistema, (a) = caminho mais curto, (b)/(c) antecipam a porta de cálculo para dezembro.)* (a) não optar: IBS/CBS no DAS (`regApIBSCBSSN` 1) · (b) regime regular
   de ambos (3) · (c) só CBS regular (2). *(Decisão de NEGÓCIO, com o contador — o tomador PJ que compra de optante no DAS credita só "o
   equivalente ao devido" (LC 214 art. 47 § 9º). Para o SISTEMA, (a) é o caminho mais curto: classificação + voz, título sem mudança se
   `vTotNF = vLiq` (Q-IB12); (b)/(c) antecipam a porta de cálculo (Q-IB11) para dezembro. O modelo datado (Q-IB7) atende qualquer resposta.)*

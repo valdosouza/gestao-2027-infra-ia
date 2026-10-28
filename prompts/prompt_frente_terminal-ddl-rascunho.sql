@@ -1,4 +1,11 @@
 -- =====================================================================
+-- ⚠️ SUPERADO (2026-10-21, onda 0 — §10 do prompt): a forma DEFINITIVA é a migration
+--   `setes-api/src/migrations/sql/074_terminal.sql` (worktree `D:\Gestao2027\terminal\setes-api`, branch `terminal`) e o
+--   espelho `sql/03_schema_cliente_ddl.sql` — SEM a linha 0 e sem kind 'W' (D-TM16), com `active`, marcadores gerados
+--   `live_marker`/`live_local_server` (molde da 071) e UNIQUE `uq_terminal_live_description`/`uq_terminal_local_server`
+--   (A-TM2/D-TM10), `tb_terminal_holder`, índice `idx_order_terminal_counter` em tb_order e DROP guardado de tb_devices
+--   (D-TM22). Este arquivo fica como HISTÓRIA da Rodada 0 (não apagar — regra dos docs superados).
+-- =====================================================================
 -- RASCUNHO v2 — NÃO APLICADO (frente tb_terminal, Rodada 0 de 2026-10-18)
 -- Escopo: setes
 -- Prompt: Infra-IA/prompts/prompt_frente_terminal.md (§4.1) — D-TM1…D-TM7 + parecer do guardião (§3)
