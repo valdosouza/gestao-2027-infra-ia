@@ -1,14 +1,15 @@
 ---
 name: git-security
-description: Use before every git push, before committing any sensitive file, when configuring a new repository, or when adding a .env file for the first time, to ensure no secret/credential is sent to GitHub.
+description: Use before every git push, before committing any sensitive file, when configuring a new repository, or when adding a .env file for the first time, to ensure no secret/credential is sent to the remote.
 ---
 
 # Skill: Git Security — Verify Before Committing
 
-**Goal**: Ensure no sensitive data is sent to GitHub  
+**Goal**: Ensure no sensitive data is sent to the remote  
 **Time**: ~2 minutes  
 **Critical**: Run BEFORE every push
 **Scope**: method
+**Maturity**: operating
 
 ---
 
@@ -318,7 +319,7 @@ Before Commit:
 □ Ran pre-push-check.sh?
 
 After Push:
-□ Checked on GitHub that no .env appears?
+□ Checked on the remote that no .env appears?
 ```
 
 ---

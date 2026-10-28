@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acme Orders - runner example</title>
+<link rel="icon" href="data:,">
+<style>
+  :root { color-scheme: light dark; --fg: #1d1d1f; --bg: #ffffff; --muted: #5f6368; --line: #d0d4d9; --ok: #1e7b34; --bad: #b3261e; }
+  @media (prefers-color-scheme: dark) { :root { --fg: #e8eaed; --bg: #1f2124; --muted: #9aa0a6; --line: #3c4043; --ok: #81c995; --bad: #f28b82; } }
+  body { margin: 0; padding: 16px; font: 15px/1.4 system-ui, sans-serif; color: var(--fg); background: var(--bg); }
+  main { max-width: 640px; margin: 0 auto; }
+  form { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; margin: 16px 0; }
+  label { display: flex; flex-direction: column; font-size: 13px; color: var(--muted); }
+  input { font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--fg); }
+  button { font: inherit; padding: 4px 10px; cursor: pointer; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 6px; border-bottom: 1px solid var(--line); }
+  #status { min-height: 1.4em; }
+  #status.ok { color: var(--ok); }
+  #status.bad { color: var(--bad); }
+</style>
+</head>
+<body>
+<main id="app">
+  <h1>Acme Orders</h1>
+  <p>A tiny static page for the browser runner's example spec. Order lines are kept in this
+  browser's local storage, so a reload reads back what was stored - not what was typed.</p>
+
+  <form id="line-form" aria-label="New order line" novalidate>
+    <label>Item <input id="item" name="item" autocomplete="off" required></label>
+    <label>Quantity <input id="qty" name="qty" autocomplete="off" inputmode="numeric" required></label>
+    <button type="submit">Add line</button>
+  </form>
+  <p id="status" role="status" aria-live="polite"></p>
+
+  <table aria-label="Order lines">
+    <thead><tr><th scope="col">Item</th><th scope="col">Quantity</th><th scope="col">Action</th></tr></thead>
+    <tbody id="lines"></tbody>
+    <tfoot><tr><th scope="row">Total quantity</th><td data-testid="total">0</td><td></td></tr></tfoot>
+  </table>
+</main>
+<script>
+(function () {
+  'use strict';
+  var KEY = 'acme-orders-example-lines';
+  function load() { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } }
+  function save(lines) { localStorage.setItem(KEY, JSON.stringify(lines)); }
+  function say(text, ok) { var s = document.getElementById('status'); s.textContent = text; s.className = ok ? 'ok' : 'bad'; }
+
+  // The behaviour under test: a quantity is stored as a whole number ("007" -> 7, " 12 " -> 12);
+  // anything else ("1.5", "abc", "") is refused with a message and nothing is stored.
+  function parseQuantity(raw) {
+    var t = String(raw).trim();
+    if (!/^[0-9]+$/.test(t)) return null;
+    var n = parseInt(t, 10);
+    return n > 0 ? n : null;
+  }
+
+  function render() {
+    var lines = load(), body = document.getElementById('lines'), total = 0;
+    body.textContent = '';
+    lines.forEach(function (line, i) {
+      var tr = document.createElement('tr');
+      var tdItem = document.createElement('td'); tdItem.textContent = line.item;
+      var tdQty = document.createElement('td'); tdQty.textContent = String(line.qty); tdQty.setAttribute('data-testid', 'qty-' + line.item);
+      var tdAct = document.createElement('td');
+      var del = document.createElement('button');
+      del.type = 'button'; del.textContent = 'Delete'; del.setAttribute('aria-label', 'Delete line ' + line.item);
+      del.addEventListener('click', function () {
+        var all = load(); all.splice(i, 1); save(all); render(); say('Line deleted', true);
+      });
+      tdAct.appendChild(del);
+      tr.appendChild(tdItem); tr.appendChild(tdQty); tr.appendChild(tdAct);
+      body.appendChild(tr);
+      total += line.qty;
+    });
+    document.querySelector('[data-testid="total"]').textContent = String(total);
+  }
+
+  document.getElementById('line-form').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var item = document.getElementById('item').value.trim();
+    var qty = parseQuantity(document.getElementById('qty').value);
+    if (!item) { say('Item is required', false); return; }
+    if (qty === null) { say('Quantity must be a whole number', false); return; }
+    var lines = load(); lines.push({ item: item, qty: qty }); save(lines);
+    document.getElementById('item').value = ''; document.getElementById('qty').value = '';
+    render(); say('Line added', true);
+  });
+
+  render();
+  // The login-ready selector of the example: the app marks itself ready once it has
+  // rendered. In a real application this is an element that exists only after login.
+  document.getElementById('app').setAttribute('data-ready', 'true');
+})();
+</script>
+</body>
+</html>

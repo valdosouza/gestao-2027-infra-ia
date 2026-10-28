@@ -1,0 +1,55 @@
+source_copy,source_path,dest_path,action,status,note
+A,C:\RAG\engine-kit\README.md,CHANGELOG.md,merge-history,done,PT lineage rows 0.3-0.6 (proposal / runtime reference / memory skill / memory index) enter the CHANGELOG next to the EN lineage
+A,C:\RAG\engine-kit\INSTALACAO.md,INSTALLATION.md,already-carried,verified,Identical to the PT history of B (51bbdb9); B holds the evolved EN version
+A,C:\RAG\engine-kit\ESTRUTURA_BASE_CONHECIMENTO.md,docs/KNOWLEDGE-BASE-STRUCTURE.md,already-carried,verified,Identical to the PT history of B; B holds the EN version
+A,C:\RAG\engine-kit\PROPOSTA_UNIFICACAO.md,docs/ARCHITECTURE.md,translate-neutralize,done,Only in A; 3-layer architecture (method / runtime / case); strip case paths and reference-case decision numbers
+A,C:\RAG\engine-kit\skills\avaliar-repositorio-legado.md,skills/assess-legacy-repo/SKILL.md,already-carried,verified,B is more evolved (14 lessons + legacy-analyst)
+A,C:\RAG\engine-kit\skills\censo-de-escopo.md,skills/scope-census/SKILL.md,already-carried,verified,B is the EN translation
+A,C:\RAG\engine-kit\skills\engenharia-de-memoria.md,skills/memory-engineering/SKILL.md,translate-neutralize,done,Only in A; 5 memory classes / episodic schema with claims / before-after loops / pipeline gate; fused with consolidation and cards in wave 3
+A,C:\RAG\engine-kit\skills\guardiao-conceitual.md,skills/conceptual-guardian/SKILL.md,already-carried,verified,B is the EN translation
+A,C:\RAG\engine-kit\skills\reter-conhecimento.md,skills/retain-knowledge/SKILL.md,already-carried,verified,B is the EN translation
+A,C:\RAG\engine-kit\skills\rodadas-de-decisao.md,skills/decision-rounds/SKILL.md,already-carried,verified,Identical to the PT history of B; B adds step 0 of Round 0
+A,C:\RAG\engine-kit\seguranca-git\README.md,skills/git-security/references/README.md,already-carried,verified,EN translation in B
+A,C:\RAG\engine-kit\seguranca-git\GITIGNORE_TEMPLATES.md,skills/git-security/references/GITIGNORE_TEMPLATES.md,already-carried,verified,EN translation in B
+A,C:\RAG\engine-kit\seguranca-git\GUIA_VERSIONAMENTO.md,skills/git-security/references/VERSIONING_GUIDE.md,already-carried,verified,EN translation in B
+A,C:\RAG\engine-kit\seguranca-git\RESUMO_SEGURANCA.md,skills/git-security/references/SECURITY_SUMMARY.md,already-carried,verified,EN translation in B
+A,C:\RAG\engine-kit\seguranca-git\SEGURANCA_GIT.md,skills/git-security/references/GIT_SECURITY.md,already-carried,verified,EN translation in B
+A,C:\RAG\engine-kit\seguranca-git\SETUP_GITHUB_INICIAL.md,skills/git-security/references/GITHUB_INITIAL_SETUP.md,already-carried,verified,EN translation in B
+A,C:\RAG\engine-kit\seguranca-git\SETUP_PROTECAO_SECRETS.md,skills/git-security/references/SECRETS_PROTECTION_SETUP.md,translate-neutralize,done,Lost in the EN conversion (blocked by a *secret* ignore rule); references/README.md already links it; neutralize the app-stack specifics
+A,C:\RAG\engine-kit\seguranca-git\skills\git-commit-push.md,skills/git-commit-push/SKILL.md,already-carried,verified,EN plugin skill in B
+A,C:\RAG\engine-kit\seguranca-git\skills\git-push.md,skills/git-push/SKILL.md,already-carried,verified,EN plugin skill in B
+A,C:\RAG\engine-kit\seguranca-git\skills\git-seguranca.md,skills/git-security/SKILL.md,already-carried,verified,EN plugin skill in B
+A,C:\RAG\engine-kit\seguranca-git\skills\git-setup.md,skills/git-setup/SKILL.md,already-carried,verified,EN plugin skill in B
+B,.claude-plugin/plugin.json,.claude-plugin/plugin.json,edit,done,Version 0.3.0 -> 0.7.0 (single source checked by kit-lint)
+B,README.md,README.md,edit-neutralize,done,Version 0.7.0 / canonical home / runtime / maturity column / leaks at lines 5 and 96
+B,INSTALLATION.md,INSTALLATION.md,edit-neutralize,done,Leaks at lines 4 / 59 / 96; the two tracks come in wave 4
+B,agents/legacy-analyst.md,agents/legacy-analyst.md,edit,done,Add Scope and Maturity lines
+B,docs/KNOWLEDGE-BASE-STRUCTURE.md,docs/KNOWLEDGE-BASE-STRUCTURE.md,keep,done,Rewritten against the runtime templates in wave 1
+B,skills/assess-legacy-repo/SKILL.md,skills/assess-legacy-repo/SKILL.md,edit-neutralize,done,Leaks at lines 15 and 135
+B,skills/conceptual-guardian/SKILL.md,skills/conceptual-guardian/SKILL.md,keep,done,Fused with the evolved copies in wave 4
+B,skills/decision-rounds/SKILL.md,skills/decision-rounds/SKILL.md,edit-neutralize,done,Leak at line 17
+B,skills/git-commit-push/SKILL.md,skills/git-commit-push/SKILL.md,keep,done,
+B,skills/git-push/SKILL.md,skills/git-push/SKILL.md,keep,done,
+B,skills/git-security/SKILL.md,skills/git-security/SKILL.md,edit-neutralize,done,Case stack hints
+B,skills/git-security/references/*.md,skills/git-security/references/*.md,edit-neutralize,done,Case stack and multi-repo layout leftovers
+B,skills/git-setup/SKILL.md,skills/git-setup/SKILL.md,edit-neutralize,done,Case stack hints
+B,skills/retain-knowledge/SKILL.md,skills/retain-knowledge/SKILL.md,keep,done,Fused with the evolved retention chain in wave 3
+B,skills/scope-census/SKILL.md,skills/scope-census/SKILL.md,keep,done,Fused with the placement rule in wave 1
+C,C:\RAG\engine-runtime\README.md,runtime/README.md,translate-neutralize,done,Runtime now lives inside the kit (D-EK3); drop the sibling-repo home and the reference-case numbers
+C,C:\RAG\engine-runtime\agents\feedback-analyst.md,agents/feedback-analyst.md,translate-neutralize,done,Maturity design (never produced a report in any case); rewritten to read claims front matter in wave 3
+C,C:\RAG\engine-runtime\templates\AGENTS.template.md,templates/AGENTS.template.md,translate-neutralize,done,
+C,C:\RAG\engine-runtime\templates\REGISTRY_GRAPHS.template.md,templates/REGISTRY_GRAPHS.template.md,translate-neutralize,done,Generalize the core/custom/merged layering to optional graph layers
+C,C:\RAG\engine-runtime\templates\REGISTRY_SUBJECTS.template.md,templates/REGISTRY_SUBJECTS.template.md,translate-neutralize,done,
+C,C:\RAG\engine-runtime\templates\SUBJECT_INDEX.template.md,templates/SUBJECT_INDEX.template.md,translate-neutralize,done,Generalize the settings sources
+C,C:\RAG\engine-runtime\tools\validate-registry.ps1,runtime/validate-registry.ps1,upgrade-neutralize,done,Newer W logic + C parameters (-ExcludePattern / mandatory root) + Scope/Escopo aliases
+C,C:\RAG\engine-runtime\tools\memory_index.py,runtime/memory_index.py,upgrade-neutralize,done,Newer W logic (cards / project dimension); no machine paths; KNOWNLEDGE typo fixed
+C,C:\RAG\engine-runtime\tools\build-memory-index.ps1,runtime/build-memory-index.ps1,translate-neutralize,done,No-Python fallback; machine paths and example names removed
+C,C:\RAG\engine-runtime\tools\sync-skills.ps1,runtime/sync-skills.ps1,upgrade-neutralize,done,W mechanism (junctions) + C precedence model; no hard-coded roots
+W,<case-W>\AI\Tools\Validation\validate-registry.ps1,runtime/validate-registry.ps1,upstream-source,done,Newer descendant of C (read-only source)
+W,<case-W>\AI\Tools\Memory\memory_index.py,runtime/memory_index.py,upstream-source,done,Newer descendant of C (read-only source)
+W,<case-W>\AI\Tools\Editors\sync-skills.ps1,runtime/sync-skills.ps1,upstream-source,done,Newer mechanism (read-only source)
+NEW,,CHANGELOG.md,create,done,Both lineages (PT 0.3-0.6 and EN 0.3-0.4) + 0.7.0
+NEW,,runtime/kit_lint.py,create,done,Version / leak deny-lists / links / Scope / skill size and maturity
+NEW,,docs/MATURITY.md,create,done,proven / operating / candidate / design
+NEW,,.claude-plugin/marketplace.json,create,done,Makes the repo installable as a plugin marketplace
+NEW,,.gitignore,create,done,Never blocks the kit's own docs (lesson of the *secret* rule)

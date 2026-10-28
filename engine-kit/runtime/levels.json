@@ -1,0 +1,87 @@
+{
+  "note": "Generated from docs/ADOPTION-LEVELS.md by: python runtime/levels.py --write. Do not edit by hand: the page is the source of record and kit_lint fails on drift. tracks: the skills and agents of a level that serve one track only (the Track column); a piece not listed there serves both tracks.",
+  "source": "docs/ADOPTION-LEVELS.md",
+  "levels": [
+    {
+      "level": 1,
+      "name": "Essential",
+      "skills": [
+        "assess-legacy-repo",
+        "conceptual-guardian",
+        "decision-rounds",
+        "frame-greenfield",
+        "front-protocol",
+        "git-commit-push",
+        "git-push",
+        "git-security",
+        "git-setup",
+        "kb-setup",
+        "retain-knowledge",
+        "scope-census"
+      ],
+      "agents": [
+        "legacy-analyst"
+      ],
+      "tracks": {
+        "assess-legacy-repo": {
+          "track": "legacy"
+        },
+        "frame-greenfield": {
+          "track": "greenfield"
+        },
+        "legacy-analyst": {
+          "track": "legacy"
+        }
+      }
+    },
+    {
+      "level": 2,
+      "name": "Governed",
+      "skills": [
+        "browser-verification",
+        "change-gate",
+        "close-and-retain",
+        "delivery-gates",
+        "disposable-proof",
+        "memory-engineering",
+        "migration-direction",
+        "mold-factory",
+        "official-source-archive",
+        "result-review",
+        "review-pack",
+        "test-gate"
+      ],
+      "agents": [
+        "build-analyst",
+        "docs-writer",
+        "pipeline-builder",
+        "settings-mapper"
+      ],
+      "tracks": {
+        "migration-direction": {
+          "track": "legacy"
+        }
+      }
+    },
+    {
+      "level": 3,
+      "name": "Scale",
+      "skills": [
+        "abstraction-ladder",
+        "archive-card",
+        "backport",
+        "evaluate-harness",
+        "fences",
+        "weekly-report"
+      ],
+      "agents": [
+        "ecosystem-curator",
+        "env-setup",
+        "feedback-analyst",
+        "folder-importer",
+        "version-diff"
+      ],
+      "tracks": {}
+    }
+  ]
+}

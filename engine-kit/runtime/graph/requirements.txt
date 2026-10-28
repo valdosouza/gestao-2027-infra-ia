@@ -1,0 +1,8 @@
+# Pinned external code-graph tool for engine-kit runtime/graph (technique T90, tool pinning).
+# Exact pins only: install-graph-tool.ps1 refuses a range, a wildcard, a bare name or "latest".
+# The FIRST requirement is the graph tool; its CLI must report this version after the install.
+# Raising the pin is a decision recorded in the case, followed by a rebuild of every
+# registered graph by the designated builder, so the change is visible in the registry.
+# The package on PyPI is "graphifyy" (two y's); the CLI it installs is "graphify".
+# Language extras go through install-graph-tool.ps1 -Extras <name>, never into this line.
+graphifyy==0.9.15

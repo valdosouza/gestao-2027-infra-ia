@@ -1,0 +1,208 @@
+{
+ "pack_id": "engine-kit-mapa",
+ "pack_title": "Engine kit - como o trabalho flui",
+ "intro": "Da escolha da trilha ao fechamento: em cada passo, o que acontece e quais skills e agentes usar. A caixa \"Mudar o código\" abre o ciclo da mudança. Fonte: manifest.json; o HTML é gerado pelo próprio kit (runtime/ladder).",
+ "audiences": [
+  {
+   "id": "visao-geral",
+   "label": "Visão geral - o que acontece em cada passo"
+  },
+  {
+   "id": "como-usar",
+   "label": "Uso - quais skills e agentes, o que entra e o que sai"
+  }
+ ],
+ "nodes": [
+  {
+   "id": "escolher",
+   "label": "Escolher trilha, perfil e nível",
+   "sublabel": "antes de instalar",
+   "row": 0,
+   "edges_to": [
+    "dia1"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Três escolhas antes de tudo. **Trilha**: legado (um sistema que já existe) ou do zero (um rascunho de produto novo). **Perfil**: solo ou equipe - muda onde ficam os arquivos gerados. **Nível de adoção**: 1 Essencial, 2 Governado, 3 Escala. Começa-se no 1 e sobe-se quando o trabalho pede: o portão de código, por exemplo, é do nível 2."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Ler**: [`INSTALLATION.md`](../../engine-kit/INSTALLATION.md), seção \"Choose first\"; [`ADOPTION-LEVELS.md`](../../engine-kit/docs/ADOPTION-LEVELS.md); os perfis [`legacy`](../../engine-kit/profiles/legacy.md), [`greenfield`](../../engine-kit/profiles/greenfield.md), [`solo`](../../engine-kit/profiles/solo.md) e [`team`](../../engine-kit/profiles/team.md).\n\n**Ferramenta**: `runtime/sync-skills.ps1 -Level <n> -Track <legacy|greenfield>` instala só as peças do nível e da trilha; `-Borrow` empresta uma peça de nível acima.\n\n**Sai daqui**: a linha de adoção (nível, trilha, peças emprestadas), que o Dia 1 grava no `AGENTS.md` do caso."
+    }
+   }
+  },
+  {
+   "id": "dia1",
+   "label": "Dia 1: montar a base",
+   "sublabel": "kb-setup · scope-census · git-setup",
+   "row": 1,
+   "edges_to": [
+    "legado",
+    "zero"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Cria a base de conhecimento do caso **sem tocar no código**: a pasta da base, os registros (projetos, decisões, pessoas), as regras na raiz (`AGENTS.md`) com adaptadores finos para cada ferramenta de IA, a ligação com as ferramentas que já existem e o censo dos documentos antigos - cada um ganha uma linha `Scope` (method, case ou mixed)."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar**:\n\n- [`kb-setup`](../../engine-kit/skills/kb-setup/SKILL.md) - a estrutura, os registros, o `AGENTS.md`, onde cada arquivo mora;\n- [`scope-census`](../../engine-kit/skills/scope-census/SKILL.md) - o censo dos documentos que já existem;\n- [`git-setup`](../../engine-kit/skills/git-setup/SKILL.md) e [`git-security`](../../engine-kit/skills/git-security/SKILL.md) - a base em git, sem segredo nenhum;\n- [`env-setup` (agente)](../../engine-kit/agents/env-setup.md) e [`folder-importer` (agente)](../../engine-kit/agents/folder-importer.md) - preparar a máquina de alguém, trazer pastas antigas (nível 3).\n\n**Passos**: `INSTALLATION.md`, Day 1, steps 1 a 7. **Modelos**: [`AGENTS`](../../engine-kit/templates/AGENTS.template.md), [`REGISTRY_PROJECTS`](../../engine-kit/templates/REGISTRY_PROJECTS.template.md), [`DECISIONS`](../../engine-kit/templates/DECISIONS.template.md).\n\n**Atenção**: as escolhas do Dia 1 são suposições até a primeira rodada do dono ratificar."
+    }
+   }
+  },
+  {
+   "id": "legado",
+   "label": "Legado: avaliar",
+   "sublabel": "assess-legacy-repo · legacy-analyst",
+   "row": 2,
+   "edges_to": [
+    "decidir"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Mede o repositório, escolhe uma **unidade piloto** e fotografa o que o código faz hoje - arquivo e linha, sem melhorar nada. Tudo o que documentos, donos ou agentes afirmam vira **hipótese**, até o código, uma leitura da instalação ou uma execução confirmar."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar**:\n\n- [`assess-legacy-repo`](../../engine-kit/skills/assess-legacy-repo/SKILL.md) - a ordem de leitura (a partida e os scripts do banco primeiro), a fotografia do piloto, o registro de hipóteses;\n- [`legacy-analyst` (agente)](../../engine-kit/agents/legacy-analyst.md) - a leitura fiel; validar uma hipótese (`H-00N`);\n- [`disposable-proof`](../../engine-kit/skills/disposable-proof/SKILL.md) - qualquer execução numa cópia descartável, nunca na produção.\n\n**Passos**: `INSTALLATION.md`, L1 (tamanho), L2 (unidades e piloto), L3 (avaliar o piloto). **Modelo**: [`HYPOTHESES`](../../engine-kit/templates/HYPOTHESES.template.md).\n\n**Sai daqui**: a análise do piloto e o registro de hipóteses, que a rodada seguinte usa como evidência."
+    }
+   }
+  },
+  {
+   "id": "zero",
+   "label": "Do zero: enquadrar o rascunho",
+   "sublabel": "frame-greenfield · front-protocol",
+   "row": 2,
+   "edges_to": [
+    "decidir"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "O rascunho do dono vira um **prompt fechado**: o rascunho é congelado como fonte, cada linha ganha destino (fato, pergunta, fora do escopo) e as dúvidas viram perguntas numeradas. Com as respostas, os requisitos: funcionais, regras de negócio, critérios de aceite e cenários de teste."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar**:\n\n- [`frame-greenfield`](../../engine-kit/skills/frame-greenfield/SKILL.md) - inventário do rascunho, Rodada 0, requisitos;\n- [`front-protocol`](../../engine-kit/skills/front-protocol/SKILL.md) - o prompt vivo da frente (limite de 60 KB, salvar e retomar).\n\n**Passos**: `INSTALLATION.md`, G1 (enquadrar) e G2 (fechar a Rodada 0). **Modelos**: [`FRONT_PROMPT`](../../engine-kit/templates/FRONT_PROMPT.template.md), [`REQUIREMENTS`](../../engine-kit/templates/REQUIREMENTS.template.md).\n\n**Sai daqui**: o prompt fechado e os requisitos. A rodada que fecha o prompt já leva a subida ao nível 2 e o plano da primeira onda, com o \"vai\" pedido numa linha própria."
+    }
+   }
+  },
+  {
+   "id": "decidir",
+   "label": "Conceituar e decidir",
+   "sublabel": "conceptual-guardian · decision-rounds",
+   "row": 3,
+   "edges_to": [
+    "mapear"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Antes de criar qualquer objeto de domínio (tabela, módulo, conceito), o **guardião conceitual** dá parecer: peça de lego, não maquete; palavras já ocupadas. As escolhas que são do dono viram **rodadas** de perguntas numeradas, cada uma com uma recomendação. O dono responde, e cada resposta vira decisão numerada e permanente. A IA organiza e recomenda; **quem decide é o dono**."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar**:\n\n- [`conceptual-guardian`](../../engine-kit/skills/conceptual-guardian/SKILL.md) - o parecer antes de modelar; a lista de palavras ocupadas;\n- [`decision-rounds`](../../engine-kit/skills/decision-rounds/SKILL.md) - as rodadas, o registro das decisões (`<CHAVE>#N`), as suposições;\n- [`front-protocol`](../../engine-kit/skills/front-protocol/SKILL.md) - uma frente, um prompt;\n- [`migration-direction`](../../engine-kit/skills/migration-direction/SKILL.md) (legado que migra dados) e [`official-source-archive`](../../engine-kit/skills/official-source-archive/SKILL.md) (lei ou norma externa), quando for o caso.\n\n**Três regras que mais pesam**:\n\n1. \"Siga as recomendações\" decide as perguntas, mas **não é \"vai\"**.\n2. O \"vai\" é uma frase própria que nomeia o artefato (\"Vai no plano W1\").\n3. A **palavra de liberação** (\"liberado\") só vale dita para uma lista preparada; defini-la não libera nada.\n\n**Modelo**: [`OCCUPIED_WORDS`](../../engine-kit/templates/OCCUPIED_WORDS.template.md)."
+    }
+   }
+  },
+  {
+   "id": "mapear",
+   "label": "Mapear o processo",
+   "sublabel": "pipeline-builder · settings-mapper",
+   "row": 4,
+   "edges_to": [
+    "mudar"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "**Nenhuma correção é desenhada sobre um processo que ninguém mapeou.** Antes de mudar, o processo tocado é documentado passo a passo, com as configurações que mudam o caminho dele. Também é aqui que se lembra o que a área já sabe (a memória das sessões anteriores)."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar** (nível 2):\n\n- [`pipeline-builder` (agente)](../../engine-kit/agents/pipeline-builder.md) - um mapa por área e condição em `PIPELINES/`;\n- [`settings-mapper` (agente)](../../engine-kit/agents/settings-mapper.md) - o registro das configurações que mudam o processo;\n- [`memory-engineering`](../../engine-kit/skills/memory-engineering/SKILL.md) - lembrar antes, o log da sessão depois;\n- [`docs-writer` (agente)](../../engine-kit/agents/docs-writer.md) - documentos derivados do código;\n- [`version-diff` (agente)](../../engine-kit/agents/version-diff.md) - a mesma unidade em outras linhas de versão (nível 3).\n\n**Modelos**: [`PIPELINE`](../../engine-kit/templates/PIPELINE.template.md), [`SETTINGS_REGISTRY`](../../engine-kit/templates/SETTINGS_REGISTRY.template.md).\n\n**Do zero**: na primeira onda não há processo para mapear; o desenho do prompt fechado e os requisitos fazem as vezes do mapa."
+    }
+   }
+  },
+  {
+   "id": "mudar",
+   "label": "Mudar o código",
+   "sublabel": "change-gate · test-gate",
+   "row": 5,
+   "edges_to": [
+    "provar"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Toda mudança passa pelo mesmo portão: um **plano** (ou especificação, ou teste vermelho) com o plano de testes, uma **parada literal** para o \"vai\" do dono e depois uma **passada única**, cada arquivo escrito uma vez. Clique na caixa para ver os passos.",
+     "drills_into": "ciclo-da-mudanca/index.html"
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "Ver o subfluxo **ciclo da mudança**: [`change-gate`](../../engine-kit/skills/change-gate/SKILL.md) e [`test-gate`](../../engine-kit/skills/test-gate/SKILL.md).",
+     "drills_into": "ciclo-da-mudanca/index.html"
+    }
+   }
+  },
+  {
+   "id": "provar",
+   "label": "Provar e entregar",
+   "sublabel": "build · suíte · portões G1-G4",
+   "row": 6,
+   "edges_to": [
+    "fechar"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Com o código escrito: o **build** e seus avisos, a **suíte** contra a linha de base (falha nova separada da que já existia), o **navegador** para o que o usuário vê e os **portões de entrega**: revisão socrática, ataque adversarial, cada achado vira um teste permanente e, por último, o **percurso do dono** na aplicação real."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar** (nível 2):\n\n- [`build-analyst` (agente)](../../engine-kit/agents/build-analyst.md) - o build registrado e os avisos de risco;\n- [`test-gate`](../../engine-kit/skills/test-gate/SKILL.md) - a suíte, a evidência, novo × pré-existente;\n- [`browser-verification`](../../engine-kit/skills/browser-verification/SKILL.md) - os casos de navegador do plano de testes;\n- [`delivery-gates`](../../engine-kit/skills/delivery-gates/SKILL.md) - G1 socrático (nota >= 0,70), G2 adversarial (>= 0,70 e nada HIGH), G3 sondas permanentes, G4 percurso do dono;\n- [`result-review`](../../engine-kit/skills/result-review/SKILL.md) - revisão do resultado por uma segunda pessoa;\n- [`disposable-proof`](../../engine-kit/skills/disposable-proof/SKILL.md) - semente, migração ou ato sem volta, primeiro numa cópia.\n\n**Para quando**: o G4 só o dono faz. Enquanto ele espera, o fechamento fica em rascunho."
+    }
+   }
+  },
+  {
+   "id": "fechar",
+   "label": "Fechar e reter",
+   "sublabel": "close-and-retain · retain-knowledge",
+   "row": 7,
+   "edges_to": [
+    "escala"
+   ],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Um só fechador escreve o **registro de fechamento** e o texto do rastreador, prepara os commits (correção primeiro, testes depois) e roda o script de fechamento. O que se aprendeu vai para o lugar certo **na mesma tarefa**: decisão, regra, card, log da sessão. Os commits só saem com a palavra de liberação dita pelo dono para a lista. Depois, a próxima frente volta a \"Conceituar e decidir\"."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar**:\n\n- [`close-and-retain`](../../engine-kit/skills/close-and-retain/SKILL.md) - `CLOSE.md`, commits preparados, a lista de liberação;\n- [`retain-knowledge`](../../engine-kit/skills/retain-knowledge/SKILL.md) - para onde vai cada coisa aprendida (nível 1);\n- [`archive-card`](../../engine-kit/skills/archive-card/SKILL.md) - uma regra reutilizável por arquivo (nível 3);\n- [`git-commit-push`](../../engine-kit/skills/git-commit-push/SKILL.md) e [`git-push`](../../engine-kit/skills/git-push/SKILL.md) - só depois da palavra.\n\n**Ferramenta**: `runtime/close/close.py --root <base> --level <n>`.\n\n**Modelos**: [`CLOSE`](../../engine-kit/templates/CLOSE.template.md), [`WORKLOG`](../../engine-kit/templates/WORKLOG.template.md). **Lições de método**: vão para o `JOURNAL-for-kit.md` do caso; quem cuida do kit as puxa para o [`JOURNAL.md`](../../engine-kit/JOURNAL.md) do kit."
+    }
+   }
+  },
+  {
+   "id": "escala",
+   "label": "Aprender e escalar",
+   "sublabel": "nível 3",
+   "row": 8,
+   "edges_to": [],
+   "audience": {
+    "visao-geral": {
+     "status": "available",
+     "body": "Quando a base cresce: o **mapa navegável** da base (este mapa foi gerado com ele), o laço de autoaperfeiçoamento dos agentes, a avaliação de mudanças no harness por dados, relatórios semanais, cercas em invariantes e backport entre linhas de versão."
+    },
+    "como-usar": {
+     "status": "available",
+     "body": "**Usar** (nível 3):\n\n- [`abstraction-ladder`](../../engine-kit/skills/abstraction-ladder/SKILL.md) e [`ecosystem-curator` (agente)](../../engine-kit/agents/ecosystem-curator.md) - o mapa navegável (`runtime/ladder/`);\n- [`feedback-analyst` (agente)](../../engine-kit/agents/feedback-analyst.md) - o que os agentes erram, lido nos logs;\n- [`evaluate-harness`](../../engine-kit/skills/evaluate-harness/SKILL.md) - promover ou recusar mudança de skill, agente ou hook por dados;\n- [`weekly-report`](../../engine-kit/skills/weekly-report/SKILL.md) - a semana de uma pessoa, a partir dos commits;\n- [`fences`](../../engine-kit/skills/fences/SKILL.md), [`backport`](../../engine-kit/skills/backport/SKILL.md), [`mold-factory`](../../engine-kit/skills/mold-factory/SKILL.md) (nível 2: famílias de peças parecidas a partir de dois moldes).\n\n**Ainda falta**: testes automáticos para `runtime/ladder/` (as outras ferramentas têm)."
+    }
+   }
+  }
+ ]
+}

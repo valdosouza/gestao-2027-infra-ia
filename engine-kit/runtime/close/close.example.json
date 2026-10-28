@@ -1,0 +1,93 @@
+{
+  "_comment": "Configuration of runtime/close/close.py (contract: runtime/close/README.md). Save it as <kb-root>/.engine-kit/close.json and version it with the knowledge base. Fictional example: the Acme Orders knowledge base, its application and test-suite working copies beside it, a retired file share (drive letter and UNC name), a retired tool folder and a retired wiki. Keys starting with _ are notes. Every key is optional: a missing key keeps its default.",
+  "version": 1,
+  "mode": "warn",
+  "decision": "",
+  "_mode": "warn (EK#6) until a numbered project decision turns the door blocking: then \"mode\": \"strict\" and \"decision\": \"WS#12\"",
+  "level": 3,
+  "_level": "the case's adoption level (docs/ADOPTION-LEVELS.md): 1, 2 or 3, default 3 (this base, which keeps a memory index). At 2 the memory index and validate-registry.ps1 are left out and the checklist's level-3 item (card decision) is not printed; at 1 the test gate too, and the unversioned files are one note (they wait for the owner's release word). --level wins. Not checks.<name>.level, which is the level of a finding.",
+  "vcs": "auto",
+  "svnClientIgnored": false,
+  "_svnClientIgnored": "svn only (EK#17): true lists, as unversioned, the files that only the svn client's global-ignores hides, so the scope and unversioned checks see them; the repository's svn:ignore / svn:global-ignores still apply. A workingCopies entry may set its own \"svnClientIgnored\".",
+  "caseValues": ["acme"],
+  "projects": "_REGISTRY/PROJECTS.md",
+  "workingCopies": [
+    { "path": ".", "label": "knowledge base" },
+    { "path": "../orders-app", "label": "application" },
+    { "path": "../orders-tests", "label": "test suite", "vcs": "svn" }
+  ],
+  "checks": {
+    "registries": {
+      "level": "fix",
+      "validateRegistry": true,
+      "scopeAll": false,
+      "args": ["-SubjectFolder", "SUBJECT"],
+      "projectsCheck": true
+    },
+    "scope": {
+      "level": "fix",
+      "head": 50,
+      "exclude": ["**/*.template.md", "**/attachments/**", "**/node_modules/**", "**/graphs/**"],
+      "_frozen": "frozen sources: never edited, never marked (skills/scope-census). The list replaces the default (the two frozen-draft names): keep them when adding the case's own - here the owner's written answers, kept as received, and an archive of official sources. The owner's original of a frozen draft needs no entry while it is byte-identical to its copy.",
+      "frozen": ["**/prompt_*-draft.md", "**/prompt_*-draft-*.md", "owner-answers/**", "projects/orders/SOURCES/**"]
+    },
+    "test-gate": {
+      "level": "warn",
+      "tickets": "**/TICKETS/*",
+      "closingRecord": "CLOSE.md",
+      "evidence": ["TESTS/SUITE_*.md"],
+      "exemptIn": ["PLAN.md", "SPEC.md", "TESTS/TEST_PLAN.md"],
+      "indexFiles": ["projects/orders/TESTSUITE/INDEX.md"]
+    },
+    "retired": {
+      "level": "fix",
+      "_locations": "write each location once; its other spellings (forward slashes, escaped backslashes, /r/..., file URLs) are derived. A drive letter and a UNC name of the same share are two spellings: list both.",
+      "locations": [
+        {
+          "spellings": ["R:\\old-share\\kb", "\\\\files01\\old-share\\kb"],
+          "why": "the old knowledge share, frozen on 2026-03-01",
+          "instead": "the knowledge-base working copy"
+        },
+        { "spellings": ["D:\\tools\\old-engine"], "instead": "the installed kit" },
+        "https://wiki.acme.invalid/orders"
+      ],
+      "patterns": [
+        { "regex": "\\bold-build-host\\b", "instead": "the build registry (runtime/build)" }
+      ],
+      "caseSensitive": false,
+      "allowLine": "(?i)\\b(retired|superseded|frozen|formerly|archived)\\b",
+      "supersededHead": 10,
+      "normative": {
+        "include": ["AGENTS.md", "CLAUDE.md", ".cursorrules", "README.md", "**/INDEX.md", "**/_REGISTRY/*.md",
+                    "**/REGISTRY_*.md", "**/skills/**", "**/agents/**", "**/.claude/**", "**/.engine-kit/**",
+                    "onboarding/*.md"],
+        "exclude": ["**/node_modules/**", "**/_ARCHIVE/**", "**/HISTORY/**", "**/DECISIONS-INDEX.md",
+                    "**/LEDGER.md", "**/LEDGER-ALL.md"]
+      }
+    },
+    "decisions": { "level": "fix" },
+    "ledger": { "level": "fix" },
+    "memory": {
+      "level": "fix",
+      "_db": "solo profile: the runtime area, outside the versioned base (EK#5) - a folder beside the base, as here, or a folder inside it that version control ignores, e.g. \".runtime/memory-index.db\" (EK#27; then no checks.unversioned.ignore entry is needed)",
+      "db": "../kb-runtime/memory-index.db"
+    },
+    "unversioned": {
+      "level": "warn",
+      "ignore": ["**/*.log", "**/~$*"],
+      "testPaths": ["^tests/", "(^|/)test_[^/]+\\.py$"],
+      "maxListed": 40
+    }
+  },
+  "_checklist": "an item is a text (every level) or {\"text\": ..., \"level\": n} (printed from level n on)",
+  "checklist": [
+    "New knowledge classified and placed (retain-knowledge)",
+    { "level": 2, "text": "Episodic log written, claims with evidence (revision, work item, card id)" },
+    { "level": 3, "text": "Card decision stated for every fact >= 0.8: new card / strengthened card / no card (why)" },
+    "Owning index or registry row updated; root rules only if the workspace state changed",
+    "Nothing obsolete left without a SUPERSEDED mark",
+    { "level": 2, "text": "Closing record written in TICKETS/<ID>/CLOSE.md; the tracker fields are the developer's to paste" },
+    { "level": 2, "text": "Every new file under version control; fix and tests prepared as two commits, the fix first" },
+    "Commit, push and tracker state are the human's, after the release word"
+  ]
+}

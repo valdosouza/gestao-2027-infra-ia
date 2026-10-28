@@ -1,0 +1,81 @@
+{
+  "work_item": "ORD-42",
+  "title": "Acme Orders - a quantity is stored as a whole number",
+  "base": "{BASE_URL}",
+  "ready": "#app[data-ready='true']",
+  "data": { "item": "Widget", "refused": "Gadget" },
+  "ignoreHosts": [],
+  "cases": [
+    {
+      "id": "TC-1",
+      "kind": "fix",
+      "title": "A quantity typed with leading zeros is stored as a whole number",
+      "steps": [
+        { "navigate": "index.html" },
+        { "fill": { "label": "Item", "value": "{item}" } },
+        { "fill": { "label": "Quantity", "value": "007" } },
+        { "click": { "role": "button", "name": "Add line" } },
+        { "expect_text": { "role": "status", "equals": "Line added" } },
+        { "navigate": "index.html", "note": "reload: the value is read back from where it is stored" },
+        { "expect_text": { "testid": "qty-{item}", "equals": "7" } },
+        { "expect_no_console_errors": true },
+        { "expect_no_failed_requests": true }
+      ],
+      "cleanup": [
+        { "navigate": "index.html" },
+        { "click": { "role": "button", "name": "Delete line {item}" }, "optional": true }
+      ]
+    },
+    {
+      "id": "TC-2",
+      "kind": "fix",
+      "title": "A quantity that is not a whole number is refused and nothing is stored",
+      "steps": [
+        { "navigate": "index.html" },
+        { "fill": { "label": "Item", "value": "{refused}" } },
+        { "fill": { "label": "Quantity", "value": "1.5" } },
+        { "click": { "role": "button", "name": "Add line" } },
+        { "expect_text": { "role": "status", "equals": "Quantity must be a whole number" } },
+        { "navigate": "index.html" },
+        { "expect_count": { "testid": "qty-{refused}", "equals": 0 } },
+        { "expect_no_console_errors": true }
+      ],
+      "cleanup": [
+        { "navigate": "index.html" },
+        { "click": { "role": "button", "name": "Delete line {refused}" }, "optional": true }
+      ]
+    },
+    {
+      "id": "TC-3",
+      "kind": "regression-control",
+      "title": "Regression control - the total still sums the stored lines",
+      "steps": [
+        { "navigate": "index.html" },
+        { "fill": { "label": "Item", "value": "Bolt" } },
+        { "fill": { "label": "Quantity", "value": "2" } },
+        { "click": { "role": "button", "name": "Add line" } },
+        { "fill": { "label": "Item", "value": "Nut" } },
+        { "fill": { "label": "Quantity", "value": "3" } },
+        { "click": { "role": "button", "name": "Add line" } },
+        { "navigate": "index.html" },
+        { "expect_text": { "testid": "total", "equals": "5" } },
+        { "expect_count": { "role": "button", "name": "Delete line", "equals": 2 } }
+      ],
+      "cleanup": [
+        { "navigate": "index.html" },
+        { "click": { "role": "button", "name": "Delete line Bolt" }, "optional": true },
+        { "click": { "role": "button", "name": "Delete line Nut" }, "optional": true }
+      ]
+    },
+    {
+      "id": "TC-4",
+      "kind": "fix",
+      "mode": "manual",
+      "title": "The order prints on one page",
+      "instructions": [
+        "Add three lines, open the browser's print preview.",
+        "Expected: one page, the table and the total visible, no cut column."
+      ]
+    }
+  ]
+}

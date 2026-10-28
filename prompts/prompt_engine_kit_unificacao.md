@@ -2,7 +2,7 @@
 
 **Escopo**: misto (o plano, o mapa de técnicas e as regras de destilação são método; as evidências citadas por caminho são dos dois casos)
 **Origem**: pedido do Valdo em 2026-10-20: "utilizar tudo que aprendemos no C:\Vault e no gestao-2027-infra-ia, pegar as melhores técnicas, fazer um merge de tudo e atualizar o engine-kit com as técnicas genéricas para serem aplicadas em outro projeto, seja um legado ou um projeto do zero".
-**Aberto em**: 2026-10-20. **Estado**: Rodada 0 DECIDIDA em 2026-10-21 (D-EK1…D-EK9 = todas as Rec., §14). Fase 1 CONCLUÍDA LOCALMENTE (§15; kit canônico `C:\RAG\engine-kit-canonical` 0.7.0, lint 0/0, plugin validado e instalado). O push para o GitHub aguarda o "vai". Mapa ampliado para T01–T96: bloco M9 dos agentes de construção (D-EK10) e auditoria de `C:\Vault\AI` e das tools (§16). **⏯ Retomar pelo §13.**
+**Aberto em**: 2026-10-20. **Casa do kit desde 2026-10-28**: `engine-kit/` deste repo (D-EK32, revê a D-EK1). **Estado**: Rodada 0 DECIDIDA em 2026-10-21 (D-EK1…D-EK9 = todas as Rec., §14). Fase 1 CONCLUÍDA LOCALMENTE (§15; kit canônico `C:\RAG\engine-kit-canonical` 0.7.0, lint 0/0, plugin validado e instalado). O push para o GitHub aguarda o "vai". Mapa ampliado para T01–T96: bloco M9 dos agentes de construção (D-EK10) e auditoria de `C:\Vault\AI` e das tools (§16). **⏯ Retomar pelo §13.**
 **Regra dos dois grupos**: o Vault (caso Softworks) foi só LIDO. Toda mudança nele acontece em sessão própria, sob a governança dele (decisões `VAULT#N`, SVN). Nada de conteúdo de caso entra no kit: só o método destilado.
 **Base do inventário**: este repo em `f4b1ada`; `C:\Vault` no estado de 2026-10-20; `C:\RAG\engine-kit` e `C:\RAG\engine-runtime` (sem git, última mudança em 2026-08-21).
 
@@ -394,6 +394,8 @@ Ele roda antes de cada commit do kit e é a condição de saída de todas as fas
 - **A-EK2**: nada em A, B ou C é apagado; ganha SUPERSEDED com ponteiro (T06, T61).
 - **A-EK3**: o Vault é lido, nunca escrito por esta frente. A Fase 4b acontece em sessão aberta lá.
 - **A-EK4**: nenhum commit, push ou criação de repo remoto sem o "vai".
+- **A-EK5 a A-EK8**: ratificadas em 2026-10-22 como D-EK13, D-EK16, D-EK19 e D-EK20 (§14).
+- **A-EK9**: ratificada em 2026-10-28 como D-EK31 (§14).
 
 ## 10. Entregáveis (só depois do "vai")
 
@@ -420,46 +422,41 @@ Ele roda antes de cada commit do kit e é a condição de saída de todas as fas
 
 ## 13. ⏯ Retomar daqui
 
-- **Estado (2026-10-21)**: Rodada 0 decidida (§14). Fase 1 CONCLUÍDA LOCALMENTE (§15): kit canônico em `C:\RAG\engine-kit-canonical`, commit `7f0b259` sobre o histórico importado, `kit-lint` 0 erros e 0 avisos, plugin validado e instalado num projeto vazio.
-- **Pendente do Valdo**:
-  1. O "vai" para criar o repositório PRIVADO no GitHub (Rec. `valdosouza/engine-kit`) e fazer o push. O `gh` não está instalado nesta máquina: criar pela web e informar a URL, ou instalar o `gh`.
+- **Estado (2026-10-28)**: o kit fica em `engine-kit/` deste repo (v0.7.0; D-EK32, decidida pelo Valdo em 2026-10-28). A pasta foi substituída pela exportação do commit `7fdf06a` e enviada ao GitHub na `main` em 2026-10-28 (o repo é público), junto com o mapa `engine-kit-mapa/` e estes documentos; a auditoria de higiene tirou do kit o manifesto da consolidação e o apelido `VAULT_ROOT` (anexo §29). As deny-lists ficam fora do repo, em `C:\RAG\case-denylists\`.
+  - O repositório antigo `C:\RAG\engine-kit-canonical` virou histórico: README marcado SUPERSEDED (`7c54e51`), nada mais se edita lá. A `main` dele parou em `55a271e`; o branch `wave3-retain` guarda os commits, só locais, de cada etapa de teste: `f7078de` (`exit-test-3a-stage2`), `dc9800a` (`exit-test-stage3`), `7cc659f` (`exit-test-stage4`), `431d11a` (`exit-test-stage5`), `9d3d6f0` (`exit-test-stage6`), `dd0b9ee` (`exit-test-stage7`) e `c3401de` (`exit-test-stage8`). Nada foi enviado. Com a D-EK32, o fechamento da frente vira o commit deste repo (o merge no repositório antigo deixa de ser necessário).
+  - Registro: 96 de 96 técnicas no kit.
+- **Histórico** (o detalhe está no anexo `-execucao.md`):
+  - Fase 1: §15.
+  - Onda 1: §17-§18, kit `5c91565`.
+  - Onda 2: §19-§20, kit `55a271e`.
+  - Ondas 3 e 4: §21-§22, `f7078de`.
+  - Fase 3: §23-§27. Mudança de casa: §28. Higiene e envio: §29.
+  - Decisões: D-EK1 a D-EK32, com o espelho no §14 e a casa no `DECISIONS.md` do kit.
+- **Pendente do Valdo, fora dos testes**:
+  1. O "vai" para criar o repositório privado no GitHub (Rec. `valdosouza/engine-kit`) e fazer o push. Não há `gh` nesta máquina.
   2. C1: girar ou restringir as chaves.
-  3. O "vai" para commitar NESTE repo os arquivos da frente (prompt, deny-list, INDICE, diário, ponteiros e o SUPERSEDED do `engine-kit/`).
-- **Mapa ampliado no mesmo dia**: o bloco M9 (T64–T73, D-EK10 = EK#10, kit `3f362f0`) e a auditoria do §16 (T74–T96, a lista de tools a portar e os defeitos V1–V7 do Vault).
-- **Onda 1, parte das tools: FEITA em 2026-10-21** (kit `267883b`, §17). Cinco grupos em `runtime/`: `registry/`, `guards/` + `hooks/`, `adapters/`, `graph/`, `ladder/`. Também a skill `abstraction-ladder`, o agente `ecosystem-curator` e 4 templates. O lint dá 0/0, o plugin está validado e foi instalado de verdade com os 2 hooks.
-- **Registro de cobertura (kit `f8265d9`)**: o CSV de T01–T96, o `coverage.py` e o check 7 do `kit-lint`. Ponto de partida: 24 técnicas no kit, 14 parciais, 58 planejadas (25% feito, 40% iniciado). O critério de sucesso 3 passou a ser checado por máquina. Uma onda fecha quando as linhas dela entram; a 1.0 exige todas as técnicas `core`.
-- **ONDA 1 FECHADA em 2026-10-21** (kit `5c91565`; anexo `-execucao.md` §18). As 14 técnicas pendentes entraram no kit e o registro não tem mais nenhuma linha da Onda 1: 38 técnicas no kit, 9 parciais e 49 planejadas (40% feito, 49% iniciado).
-  - Novas skills `kb-setup` e `review-pack`; `decision-rounds` com `KEY#N`, alias, premissas, palavra de liberação e regras "Stay".
-  - Novo agente `env-setup`; bloco de governança padrão em todos os agentes.
-  - Novos `runtime/install-journal/` e template de relatório de dados sensíveis.
-  - EK#11 e EK#12 implementadas.
-- **Resíduos ainda abertos do §15.4**: os exemplos multi-repo do git-security (polimento do T52); o `INSTALLATION.md` com duas trilhas (Onda 4); o `feedback-analyst` lendo claims (Onda 3); `skills-genericas/` daqui apontando para o kit (Fase 4a).
-- **Número a vigiar**: o custo fixo do plugin subiu para ~1.826 tokens por sessão (13 skills e 4 agentes). Os níveis de adoção (§5.3) e descrições de skill mais curtas são o remédio.
-- **ONDA 2, PARTE 1 FEITA e SESSÃO SALVA em 2026-10-21** (kit `b9b9960`; anexo `-execucao.md` §19). 20 das 30 técnicas entraram, em `front-protocol`, `change-gate`, `test-gate`, `delivery-gates`, `fences`, `disposable-proof` e 7 templates. Registro: 58 técnicas no kit, 8 parciais, 30 planejadas (60% feito, 69% iniciado). Lint 0/0; plugin validado e instalado (19 skills, ~2.297 tokens fixos).
-- **Interrompido ao salvar** (o Valdo pediu para salvar e abrir outra sessão). O parcial está no branch `wip/wave2-remaining` (`f86c8fe`):
-  - C2, `runtime/testing` (T75 + a ferramenta do baseline), que parou no módulo de baseline;
-  - E, `result-review` e `browser-verification` + `runtime/browser` (T41, T42, T43, T80), que parou antes dos docs;
-  - F, `runtime/build` (T70; o runner já passava 37/37), `docs-writer` (T69, T93), `mold-factory` (T73) e `backport` (T79). Os dois agentes e as duas skills deste grupo ainda não tinham sido escritos.
-- **Próximo passo (nova sessão)**:
-  1. `git -C C:\RAG\engine-kit-canonical checkout wip/wave2-remaining`, completar C2, E e F a partir do que já existe;
-  2. registrar no `docs/techniques.csv`, rodar `python runtime/coverage.py` e o `kit_lint`, e fazer merge na `main`;
-  3. trocar por links as menções em texto puro entre as skills da Onda 2;
-  4. Onda 3.
-- **Para o Valdo decidir** (vieram dos agentes da Onda 2):
-  - as faixas de nota do gate socrático (0,85 / 0,75 / 0,70; só o 0,70 veio de um caso);
-  - se o commit de checkpoint exige a palavra de liberação (virar decisão EK em vez de regra de caso);
-  - a leitura da EK#6 no `test-gate` (as portas só avisam, mas o agente nunca segue com um teste que ele mesmo quebrou);
-  - a redação das frases literais do Code Gate.
-- **Custo fixo do plugin**: ~2.297 tokens por sessão. Vigiar: níveis de adoção, descrições curtas.
-- **Defeitos V1–V7**: corrigidos no Vault em 2026-10-21, a pedido do Valdo ("Do this task here"), sob a governança de lá. São 34 itens na changelist SVN `VAULT-AI-FIXES`, com 6 commits preparados e não executados. Pendências:
-  - V6 ficou parcial: os pins do `opencode.json` dependem das versões do dono do arquivo, e o `mcp<1.0` do WSL precisa de um teste em WSL.
-  - O patch do `close-task.ps1` (V3b) só entra depois do commit da `VAULT85`.
-  - A revisão da VAULT#6 (o runtime agora mora dentro do kit) aguarda o dono, como VAULT#86.
-  - Achado novo: o `Build Status` dos `GRAPHS.md` está defasado, porque o job noturno nunca o carimba. Ficou sinalizado nos registros; a decisão é do dono.
-  - **V8** (achado ao portar a escada): o `ecosystem\index\manifest.json` do Vault gera 4 páginas iguais às do spec do modo B e promete 16 folhas que não existem. Rodar o gerador nele sobrescreveria o mapa aprovado. Proposta: aposentar esse manifesto (SUPERSEDED). A correção fica no Vault.
-- **Questões da Onda 1**: Q-EK10 e Q-EK11 foram respondidas (D-EK11 e D-EK12, §14).
-- **Próximos ids livres**: Q-EK12, D-EK13, A-EK5, C7, T97, V9.
-- **Prompt curto para colar**: "Retomar `prompts/prompt_engine_kit_unificacao.md` pelo §13: no kit `C:\RAG\engine-kit-canonical`, completar a Onda 2 a partir do branch `wip/wave2-remaining` (grupos C2, E e F; T41, T42, T43, T69, T70, T73, T75, T79, T80, T93), registrar no `docs/techniques.csv`, deixar o `kit_lint` verde e fazer merge na `main`."
+  3. O "vai" para commitar neste repo os documentos da frente (prompt, anexos, deny-list, INDICE, diário, ponteiros).
+  4. Os 4 pontos antigos da Onda 2: as faixas do gate socrático (0,85 / 0,75 / 0,70); o commit de checkpoint × a palavra de liberação; a leitura da EK#6 no `test-gate`; as frases literais do Code Gate.
+- **Fase 3, testes de saída** (`C:\RAG\exit-tests\`; cada etapa roda num subagente restrito ao kit, numa tag fixa; o log dela gera correções no kit e linhas no `JOURNAL`):
+  - **3a, do zero** (biblioteca fictícia, `3a-greenfield`; o código na pasta irmã `3a-greenfield-app`, WS#13): etapas 1 a 5.
+    - Resultado: do rascunho de 22 linhas a uma onda entregue e ainda não percorrida - três rodadas (41 decisões), o prompt fechado com requisitos, um "vai", passada única, o portão de testes e três deltas com portões; 139 testes, 5 falhas esperadas.
+    - **Devido**: o percurso da dona (Valdo, 2026-10-28: "Ficam devidos"); a Rodada 3 (Q-BIB28-32) com a revisão 1 do plano e o seu "vai"; Q-WS6; "liberado", só depois do percurso; as execuções que esta máquina não faz (7-Zip, pendrive, computador do balcão, navegador).
+  - **3b, legado** (`spring-framework-petclinic` só lido, `3b-legacy`): etapas 1 a 4.
+    - Resultado: do pedido do dono a uma primeira mudança aprovada e preparada (dois patches e o roteiro em `TICKETS/LEGADO-W1/PATCH/`, conferidos numa cópia), ainda não ensaiada; achados por etapa 22 -> 14 -> 14 -> 9, nenhum bloqueante.
+    - **Devido**: o ensaio por uma pessoa ainda sem nome (Valdo, 2026-10-28: "Ficam devidos"); Q-LEGADO8, Q-WS6, Q-WS7, R-LEGADO12, R-LEGADO13 e quem aplica; "liberado".
+  - A mensagem "Ficam devidos" veio sem o resto do texto do botão: as rodadas abertas continuam perguntas (nada foi lido além das duas palavras).
+  - Correções: 29 achados em `dd0b9ee` e 19 em `c3401de`; os achados antigos foram todos confirmados nas etapas seguintes (13 de 13 no 3a, 16 de 16 no 3b). O `JOURNAL` do kit tem as 33 lições dos dois outboxes, cada uma com o lugar onde assentou (2 seguem `open`).
+  - Fixtures do condutor: as respostas literais e os fatos inventados ficam em `resposta-do-dono-*.md` de cada teste.
+- **Q-EK28 a Q-EK30 respondidas em 2026-10-28**: viraram D-EK29 a D-EK31 (EK#29 a EK#31), todas na Rec. (§14); kit `9d3d6f0`, tag `exit-test-stage6`.
+- **Custo fixo do plugin**: ~3.780 tokens por sessão (30 skills, 10 agentes). O lint imprime o custo e as descrições fora do padrão (15; D-EK18).
+- **Vault (Fase 4b)**: V1-V7 corrigidos em 2026-10-21; são 34 itens na changelist SVN `VAULT-AI-FIXES`, com commits preparados e não executados. Continuam abertos:
+  - V6 parcial (pins do `opencode.json`; teste em WSL);
+  - V3b depois da `VAULT85`;
+  - a VAULT#86 (revisão da VAULT#6);
+  - o `Build Status` dos `GRAPHS.md`;
+  - V8: aposentar o `ecosystem\index\manifest.json`.
+- **Próximos ids livres**: Q-EK31, D-EK33, A-EK10, C7, T97, V9.
+- **Prompt curto para colar**: "Retomar `prompts/prompt_engine_kit_unificacao.md` pelo §13: Fase 3 no ponto mais longe (kit em `engine-kit/` deste repo, D-EK32; histórico das etapas no repositório antigo `C:\RAG\engine-kit-canonical`). Seguir o 3a e o 3b até a próxima parada do dono, só com o kit e numa versão fixa; achados corrigidos no kit e no `JOURNAL.md`; commit e merge finais só quando o Valdo encerrar a frente."
 
 ## 14. Decisões registradas
 
@@ -489,6 +486,61 @@ As premissas A-EK1…A-EK4 seguem valendo.
 - **Pedido seguinte, na mesma sessão**: "verifique o que podemos melhorar com C:\vault\AI e as tools do vault". Virou uma auditoria arquivo a arquivo (§16).
 - **D-EK11 = Q-EK10 (a)** e **D-EK12 = Q-EK11 (b)**. Valdo, literal: "Feche a Onda 1: trate as 14 técnicas pendentes dela (…), seguindo as Rec. de Q-EK10 e Q-EK11." O merge de MCP mantém do local só os segredos. Em modo equipe, o build commita o registro que carimbou, e só quando ele estava limpo. Casa: EK#11 e EK#12 no `DECISIONS.md` do kit.
 
+### Questões das Ondas 2 a 4 (2026-10-22)
+
+Valdo, literal: "Siga as recomendações de Q-EK12 a Q-EK20: registre como decisões (D-EK13 em diante, EK#13 em diante no DECISIONS.md do kit) e depois comece a Fase 3 (testes de saída), ainda sem commit nem merge." Casa: EK#13 a EK#21 no `DECISIONS.md` do kit.
+
+| D | = | Resumo |
+|---|---|---|
+| D-EK13 | Q-EK12 (a) | Um aviso arriscado novo do compilador devolve a mudança, salvo aceite do dono como decisão numerada |
+| D-EK14 | Q-EK13 (a) | A porta `precommit` do `runtime/testing` entra nos hooks do plugin, com descoberta opt-in e só de aviso |
+| D-EK15 | Q-EK14 (a) | Nenhum agente `browser-tester` até um segundo caso pedir |
+| D-EK16 | Q-EK15 (a) | Id de card `K-YYYYMMDD-HHMM` |
+| D-EK17 | Q-EK16 (a) | O `svn status` pode ignorar o `global-ignores` do cliente, opt-in e desligado por padrão |
+| D-EK18 | Q-EK17 (a) | Descrições reescritas quando o arquivo for tocado; o lint conta as que faltam e vira erro no zero |
+| D-EK19 | Q-EK18 (a) | A análise transversal mora em `PIPELINES/TRANSVERSAL.md` |
+| D-EK20 | Q-EK19 (a) | A sonda de dados roda sem prova configurada, avisa e marca NOT PROVEN; `require_proof` liga a exigência |
+| D-EK21 | Q-EK20 (a)+(c) | Um plugin + a linha "Adoption" do caso + lista por nível no `sync-skills.ps1`; dois plugins ficam prontos para virar decisão |
+
+### Questões dos testes de saída (2026-10-27)
+
+Valdo, literal: "Siga as recomendações da Rodada 0 do teste 3a (Q-WS1, Q-WS2 e Q-BIB1 a Q-BIB14) e de Q-EK21 a Q-EK23. Para os fatos R1 a R6, invente valores plausíveis e marque-os como fixture do teste. Depois continue o 3a até a entrega e comece o 3b." Casa: EK#22 a EK#24 no `DECISIONS.md` do kit.
+
+| D | = | Resumo |
+|---|---|---|
+| D-EK22 | Q-EK21 (a) | O 3b roda no `spring-framework-petclinic`: clone raso, só leitura, nunca compilado |
+| D-EK23 | Q-EK22 (a) | `conceptual-guardian`, `FRONT_PROMPT` e `OCCUPIED_WORDS` entram no nível 1 como peças situacionais da entrada greenfield |
+| D-EK24 | Q-EK23 (a) | Cada etapa de teste roda numa versão fixa: commit local + tag local no branch de trabalho; sem merge na `main` e sem push até o fim da frente |
+
+### Questões das etapas 3a-2 e 3b-1 (2026-10-27)
+
+Valdo, literal, como chegou (a mensagem veio cortada depois da última palavra): "Siga as recomendações da Rodada 1 do 3a (Q-WS3, Q-WS4, Q-BIB15 a Q-BIB24), da Rodada 0 do 3b (Q-WS1 a Q-WS4, Q-LEGADO1 a Q-LEGADO6) e de Q-EK24 a Q-EK27. Para os fatos pedidos (R-WS1, R-BIB7, R-LEGADO1 a R-LEGADO8), invente valores plausíveis marcados como fixture. A palavra de liberação é "liberado". Casa: EK#25 a EK#28 no `DECISIONS.md` do kit.
+
+| D | = | Resumo |
+|---|---|---|
+| D-EK25 | Q-EK24 (a) | Revê a D-EK23: guardião inteiro, `FRONT_PROMPT` e `OCCUPIED_WORDS` no nível 1 nas duas trilhas; a Rodada 0 do legado usa o `FRONT_PROMPT` |
+| D-EK26 | Q-EK25 (a) | A rodada que fecha o prompt leva a subida ao nível 2 e o plano da primeira onda, com o "vai" pedido ali |
+| D-EK27 | Q-EK26 (a) | Solo: a área de runtime pode ser uma pasta ignorada pelo VCS dentro da base |
+| D-EK28 | Q-EK27 (a) | Teste-primeiro de unidade nova: o stub faz parte do artefato vermelho mostrado no gate |
+
+### Questões das etapas 3a-3 e 3b-2 (2026-10-28)
+
+Valdo, literal: "Siga as Rec. da Rodada 2 do 3a, do 3b (Q-LEGADO7, Q-WS5, padrões) e de Q-EK28 a Q-EK30; fatos R-BIB8 e R-LEGADO9-11 como fixture. Vai no plano W1 do 3a. Vai no vermelho W1.1 do 3a. Vai no plano LEGADO-W1 do 3b." Casa: EK#29 a EK#31 no `DECISIONS.md` do kit.
+
+| D | = | Resumo |
+|---|---|---|
+| D-EK29 | Q-EK28 (a) | Uma árvore de código pode ficar numa pasta dentro da base quando é repositório próprio e o VCS da base a ignora; o registro de projetos a nomeia e as verificações que percorrem a pasta a excluem; fora da base continua o padrão |
+| D-EK30 | Q-EK29 (a) | Um "vai" por onda: o plano pode levar passos teste-primeiro, com os vermelhos provados e mostrados junto, cobertos pelo mesmo "vai" |
+| D-EK31 | Q-EK30 (a) | Ratifica a A-EK9: o `settings-mapper` varre com padrões "propostos" enquanto a confirmação vai na rodada que fecha |
+
+### A casa do kit (2026-10-28)
+
+Valdo, literal: "tudo deve ficar em C:\temp\gestao-2027-infra-ia\engine-kit, se caso for substituindo o que tiver dentro dela, para que o kit seja atualizado com o melhor dos dois mundos". Casa: EK#32 no `DECISIONS.md` do kit (a frase vai lá com o caminho omitido, porque um caminho de caso não entra no kit).
+
+| D | = | Resumo |
+|---|---|---|
+| D-EK32 | decisão direta do Valdo (revê a D-EK1) | O kit mora em `engine-kit/` deste repo, substituindo a cópia antiga; o repositório `C:\RAG\engine-kit-canonical` fica como histórico (SUPERSEDED). Continua valendo: nenhum conteúdo de caso no kit (lint com as deny-lists antes de cada commit) |
+
 ## 15. Fase 1 — execução (2026-10-21)
 
 Movida para o anexo `prompts/prompt_engine_kit_unificacao-execucao.md` (§15). Em resumo: o repositório canônico foi criado a partir do histórico do `engine-kit/`, A e C foram fundidos, o manifesto ficou 100% mapeado, o `kit-lint` e o plugin foram validados e instalados, e as cópias antigas foram marcadas SUPERSEDED.
@@ -505,4 +557,4 @@ Pedido do Valdo: "verifique o que podemos melhorar com C:\vault\AI e as tools do
 
 ## 17. Ondas executadas
 
-Os logs ficam no anexo `prompts/prompt_engine_kit_unificacao-execucao.md`: §17 tools da Onda 1 (kit `267883b`) e §18 fechamento da Onda 1 (kit `5c91565`).
+Os logs ficam no anexo `prompts/prompt_engine_kit_unificacao-execucao.md`: §17 tools da Onda 1 (kit `267883b`), §18 fechamento da Onda 1 (kit `5c91565`), §19 Onda 2 parte 1 (kit `b9b9960`), §20 fechamento da Onda 2 (kit `55a271e`), §21 Onda 3, §22 Onda 4, §23 e §24 Fase 3 (branch `wave3-retain`, tags `exit-test-3a-stage2` e `exit-test-stage3`).

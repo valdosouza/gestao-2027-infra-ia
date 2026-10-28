@@ -25,12 +25,11 @@ Thumbs.db
 
 ---
 
-## Delphi (<legacy-project>, <learning-project>)
+## A compiled desktop stack (<legacy-project>, <learning-project>)
 
 ```
-__history/
-__recovery/
-*.dcu
+*.obj
+*.o
 Win32/
 Win64/
 .idea/

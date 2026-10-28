@@ -1,0 +1,9 @@
+{
+  "_comment": "Optional server-specific rules for merge-mcp-config.js (--rules). They hold what used to be hard-coded branches of the merge: (1) argsWhenEnvSet - when the named env value of a server is set to a real value (not <CONFIGURE>), make sure its args carry the given sequence (e.g. a tracker server that needs an explicit token-auth flag once a token exists); (2) retiredServers - a local server that a decision retired is removed from the client config, with the reason printed. Rename the example servers; cite the decision that retired a server in its reason.",
+  "argsWhenEnvSet": [
+    { "server": "tracker", "env": "TRACKER_TOKEN", "args": ["--authentication", "token"] }
+  ],
+  "retiredServers": [
+    { "server": "tracker-legacy", "reason": "replaced by the 'tracker' server (decision KEY#N)" }
+  ]
+}

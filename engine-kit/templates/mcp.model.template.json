@@ -1,0 +1,20 @@
+{
+  "_comment": "MCP model - the canonical, secret-free, VERSIONED server list of a case (technique T56). Copy it into the knowledge base, one profile per OS when commands or paths differ (e.g. mcp.windows.json, mcp.posix.json), and activate it per machine with runtime/adapters/setup-editor.ps1 (or merge-mcp-config.js). Placeholders: {KB_ROOT} and any {NAME} are resolved at activation from --var or the environment; <CONFIGURE> marks a secret that is never committed - it is filled locally, or becomes a ${input:...} prompt in VS Code. Pin package versions in your copy. The resolved activation file is machine-local and never versioned. Only the mcpServers object is read; this _comment key is ignored.",
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "{KB_ROOT}"]
+    },
+    "git": {
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "{KB_ROOT}"]
+    },
+    "tracker": {
+      "command": "npx",
+      "args": ["-y", "<tracker-mcp-package>", "--organization", "{TRACKER_ORG}"],
+      "env": {
+        "TRACKER_TOKEN": "<CONFIGURE>"
+      }
+    }
+  }
+}

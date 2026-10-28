@@ -1,0 +1,17 @@
+{
+    "name": "engine-kit",
+    "owner": {
+        "name": "Valdo Souza"
+    },
+    "metadata": {
+        "description": "The engine-kit: a portable, case-neutral method kit for AI-assisted legacy modernization and greenfield projects."
+    },
+    "plugins": [
+        {
+            "name": "engine-kit",
+            "source": "./",
+            "description": "Portable, case-neutral method for AI-assisted software work: legacy assessment, conceptual distillation, numbered decision rounds owned by the business owner, knowledge retention and memory engineering, scope census governance, git security hygiene, and the runtime that checks it.",
+            "version": "0.7.0"
+        }
+    ]
+}

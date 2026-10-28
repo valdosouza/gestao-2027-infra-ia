@@ -114,6 +114,8 @@ mais do que a estimativa inicial de 20–30%. A fila de destilação futura é a
 
 ## 5. Diário de insights (append-only — uma linha por insight, qualquer sessão)
 
+> **SUPERSEDED (2026-10-21)**: o diário de MÉTODO agora é o `JOURNAL.md` do kit (desde 2026-10-28, D-EK32: `engine-kit/JOURNAL.md` deste repo; antes, `C:\RAG\engine-kit-canonical\JOURNAL.md`; resolução X8 do `prompt_engine_kit_unificacao.md`). As linhas abaixo foram destiladas lá, em inglês e sem conteúdo de caso; lição nova de método vai direto para lá em até 1 sessão. Esta seção fica como histórico.
+
 | Data | Insight | Origem |
 |---|---|---|
 | 2026-07-19 | Financeiro imutável + multi-tenant + tb_crashlytics são decisões de negócio que já servem de substrato de ML/telemetria | conversa estratégica |

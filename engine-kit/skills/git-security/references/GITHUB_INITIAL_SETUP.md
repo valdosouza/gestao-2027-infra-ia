@@ -38,7 +38,7 @@ Initialize repository: ☐ Add a README file
 
 ```
 Repository name: <api-repo>
-Description: Node.js + TypeScript API for multi-tenant ERP
+Description: <one-line description of the project>
 Visibility: ☐ Public  ☑ Private
 Initialize repository: ☐ Everything blank
 

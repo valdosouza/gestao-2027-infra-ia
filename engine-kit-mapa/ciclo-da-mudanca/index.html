@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Engine kit - ciclo da mudança</title>
+<style>
+:root{--ink:#1f2328;--muted:#57606f;--line:#d8dee4;--bg:#ffffff;--soft:#f6f8fa;--accent:#0969da;}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+nav{width:250px;flex:none;background:var(--soft);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+nav:empty{display:none}
+nav h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:16px 0 4px}
+nav a{display:block;padding:3px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:13.5px}
+nav a:hover{background:#eaeef2}nav a.current{background:#ddf;color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;max-width:1320px;padding:28px 40px 60px}
+h1{font-size:24px;border-bottom:1px solid var(--line);padding-bottom:8px}
+svg{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fcfdfe}
+svg a{cursor:pointer}svg a:hover rect{stroke:var(--accent);stroke-width:2.5}
+rect.box{fill:#fff;stroke:#8b949e;stroke-width:1.4}
+rect.actor{fill:#f0f4ff;stroke:#6e7fbd}rect.band{fill:#fbf7ff;stroke:#a884d8}
+rect.core{fill:#fff4e5;stroke:#c07a12;stroke-width:2}rect.support{fill:#f6f8fa;stroke:#8b949e;stroke-dasharray:5 3}
+text{font:13px "Segoe UI",system-ui,sans-serif;fill:#1f2328}
+table{border-collapse:collapse;margin:12px 0;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft)}code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--soft);padding:10px 14px;border-radius:8px;overflow-x:auto}pre code{background:none;padding:0}
+blockquote{border-left:4px solid #d4a72c;background:#fff8c5;margin:12px 0;padding:8px 14px;border-radius:0 8px 8px 0}
+.srcline{color:var(--muted);font-size:12.5px;margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:760px){body{display:block}nav{width:auto;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px 16px 40px}}
+
+/* parent pack stylesheet (reused, never hand-copied) */
+
+:root{--ink:#1f2328;--muted:#57606f;--line:#d8dee4;--bg:#ffffff;--soft:#f6f8fa;--accent:#0969da;}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+nav{width:250px;flex:none;background:var(--soft);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+nav:empty{display:none}
+nav h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:16px 0 4px}
+nav a{display:block;padding:3px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:13.5px}
+nav a:hover{background:#eaeef2}nav a.current{background:#ddf;color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;max-width:1320px;padding:28px 40px 60px}
+h1{font-size:24px;border-bottom:1px solid var(--line);padding-bottom:8px}
+svg{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fcfdfe}
+svg a{cursor:pointer}svg a:hover rect{stroke:var(--accent);stroke-width:2.5}
+rect.box{fill:#fff;stroke:#8b949e;stroke-width:1.4}
+rect.actor{fill:#f0f4ff;stroke:#6e7fbd}rect.band{fill:#fbf7ff;stroke:#a884d8}
+rect.core{fill:#fff4e5;stroke:#c07a12;stroke-width:2}rect.support{fill:#f6f8fa;stroke:#8b949e;stroke-dasharray:5 3}
+text{font:13px "Segoe UI",system-ui,sans-serif;fill:#1f2328}
+table{border-collapse:collapse;margin:12px 0;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft)}code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--soft);padding:10px 14px;border-radius:8px;overflow-x:auto}pre code{background:none;padding:0}
+blockquote{border-left:4px solid #d4a72c;background:#fff8c5;margin:12px 0;padding:8px 14px;border-radius:0 8px 8px 0}
+.srcline{color:var(--muted);font-size:12.5px;margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:760px){body{display:block}nav{width:auto;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px 16px 40px}}
+
+svg.ladder{display:block;max-width:100%;height:auto}
+
+svg.ladder{display:block;max-width:100%;height:auto}</style></head><body>
+<nav><h2>Ciclo da mudança</h2><a href="index.html" class="current">Fluxo</a><a href="entrada.html">0. Entrada</a><a href="lembrar.html">1. Lembrar e linha de base</a><a href="processo.html">2. Portão do processo</a><a href="artefato.html">3. O artefato</a><a href="vai.html">4. PARE: o &quot;vai&quot;</a><a href="passada.html">5. Passada única</a><a href="build.html">Build</a><a href="suite.html">Suíte</a><a href="navegador.html">Navegador</a><a href="portoes.html">Portões G1-G4</a><a href="revisao.html">Revisão do resultado</a><a href="fechamento.html">Fechamento</a><h2>Engine kit</h2><a href="../como-usar/index.html">O mapa do kit</a></nav>
+<main>
+<p class="ladder-back" style="margin:0 0 18px"><a href="../como-usar/index.html" style="display:inline-flex;align-items:center;gap:6px;font-weight:600;color:#0969da;text-decoration:none;font-size:14px">&larr; Back to o mapa do kit</a></p><h1>Ciclo da mudança</h1><p>Como uma mudança de código atravessa o kit, do pedido ao fechamento. Os passos 0 a 5 são da skill change-gate; os seguintes são as passagens adiante, nesta ordem. Clique numa caixa.</p><svg class="ladder" viewBox="0 0 968 312" width="968" height="312" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<line class="flow" x1="224" y1="54" x2="264" y2="54" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="464" y1="54" x2="504" y2="54" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="704" y1="54" x2="744" y2="54" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="844" y1="96" x2="844" y2="140" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="744" y1="170" x2="704" y2="170" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="504" y1="170" x2="464" y2="170" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="264" y1="170" x2="224" y2="170" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="124" y1="200" x2="124" y2="228" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="224" y1="258" x2="264" y2="258" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="464" y1="258" x2="504" y2="258" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="704" y1="258" x2="744" y2="258" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<a href="entrada.html"><title>0. Entrada - available</title><rect class="box" x="24" y="24" width="200" height="60" rx="8"/><text x="124" y="48" text-anchor="middle" class="title" style="font-weight:600">0. Entrada</text><text x="124" y="70" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">pedido, dossiê ou onda</text><circle cx="212" cy="36" r="6" fill="#1a7f37"/></a>
+<a href="lembrar.html"><title>1. Lembrar e linha de base - available</title><rect class="box" x="264" y="24" width="200" height="88" rx="8"/><text x="364" y="48" text-anchor="middle" class="title" style="font-weight:600">1. Lembrar e linha de</text><text x="364" y="64" text-anchor="middle" class="title" style="font-weight:600">base</text><text x="364" y="86" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">memória da área, cópias de</text><text x="364" y="100" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">trabalho</text><circle cx="452" cy="36" r="6" fill="#1a7f37"/></a>
+<a href="processo.html"><title>2. Portão do processo - available</title><rect class="box" x="504" y="24" width="200" height="60" rx="8"/><text x="604" y="48" text-anchor="middle" class="title" style="font-weight:600">2. Portão do processo</text><text x="604" y="70" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">o processo está mapeado?</text><circle cx="692" cy="36" r="6" fill="#1a7f37"/></a>
+<a href="artefato.html"><title>3. O artefato - available</title><rect class="box" x="744" y="24" width="200" height="72" rx="8"/><text x="844" y="48" text-anchor="middle" class="title" style="font-weight:600">3. O artefato</text><text x="844" y="70" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">plano, spec ou teste</text><text x="844" y="84" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">vermelho</text><circle cx="932" cy="36" r="6" fill="#1a7f37"/></a>
+<a href="vai.html"><title>4. PARE: o &quot;vai&quot; - available</title><rect class="box" x="744" y="140" width="200" height="60" rx="8"/><text x="844" y="164" text-anchor="middle" class="title" style="font-weight:600">4. PARE: o &quot;vai&quot;</text><text x="844" y="186" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">o dono aprova; WORKLOG</text><circle cx="932" cy="152" r="6" fill="#1a7f37"/></a>
+<a href="passada.html"><title>5. Passada única - available</title><rect class="box" x="504" y="140" width="200" height="60" rx="8"/><text x="604" y="164" text-anchor="middle" class="title" style="font-weight:600">5. Passada única</text><text x="604" y="186" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">cada arquivo uma vez</text><circle cx="692" cy="152" r="6" fill="#1a7f37"/></a>
+<a href="build.html"><title>Build - available</title><rect class="box" x="264" y="140" width="200" height="60" rx="8"/><text x="364" y="164" text-anchor="middle" class="title" style="font-weight:600">Build</text><text x="364" y="186" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">build-analyst</text><circle cx="452" cy="152" r="6" fill="#1a7f37"/></a>
+<a href="suite.html"><title>Suíte - available</title><rect class="box" x="24" y="140" width="200" height="60" rx="8"/><text x="124" y="164" text-anchor="middle" class="title" style="font-weight:600">Suíte</text><text x="124" y="186" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">test-gate</text><circle cx="212" cy="152" r="6" fill="#1a7f37"/></a>
+<a href="navegador.html"><title>Navegador - available</title><rect class="box" x="24" y="228" width="200" height="60" rx="8"/><text x="124" y="252" text-anchor="middle" class="title" style="font-weight:600">Navegador</text><text x="124" y="274" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">browser-verification</text><circle cx="212" cy="240" r="6" fill="#1a7f37"/></a>
+<a href="portoes.html"><title>Portões G1-G4 - available</title><rect class="box" x="264" y="228" width="200" height="60" rx="8"/><text x="364" y="252" text-anchor="middle" class="title" style="font-weight:600">Portões G1-G4</text><text x="364" y="274" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">delivery-gates</text><circle cx="452" cy="240" r="6" fill="#1a7f37"/></a>
+<a href="revisao.html"><title>Revisão do resultado - available</title><rect class="box" x="504" y="228" width="200" height="60" rx="8"/><text x="604" y="252" text-anchor="middle" class="title" style="font-weight:600">Revisão do resultado</text><text x="604" y="274" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">result-review</text><circle cx="692" cy="240" r="6" fill="#1a7f37"/></a>
+<a href="fechamento.html"><title>Fechamento - available</title><rect class="box" x="744" y="228" width="200" height="60" rx="8"/><text x="844" y="252" text-anchor="middle" class="title" style="font-weight:600">Fechamento</text><text x="844" y="274" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">close-and-retain</text><circle cx="932" cy="240" r="6" fill="#1a7f37"/></a>
+</svg><div class="ladder-legend" style="display:flex;gap:6px 18px;flex-wrap:wrap;margin:14px 0 6px;font-size:13px;color:#57606f"><span title="Operating or validated reality: the content passed its per-node validation round. A box only turns green through that sign-off, never silently." style="cursor:help;white-space:nowrap"><span style="color:#1a7f37;margin-right:5px">&#9679;</span>available</span>
+<span title="Real content, validation pending - or partly still design; the page&#x27;s pending notes say exactly which part." style="cursor:help;white-space:nowrap"><span style="color:#d4a72c;margin-right:5px">&#9679;</span>draft</span>
+<span title="Designed, not built yet: the box exists in the plan, its content does not." style="cursor:help;white-space:nowrap"><span style="color:#e16f24;margin-right:5px">&#9679;</span>pending</span>
+<span title="Documented outside this pack (a wiki, another tool): cited, not rewritten; depth deferred." style="cursor:help;white-space:nowrap"><span style="color:#0969da;margin-right:5px">&#9679;</span>pointer</span>
+<span title="The content lives at another box or page; this one forwards the reader there." style="cursor:help;white-space:nowrap"><span style="color:#6e7fbd;margin-right:5px">&#9679;</span>redirect</span>
+<span title="The source exists only as a PDF: linked with its location, not reproduced." style="cursor:help;white-space:nowrap"><span style="color:#8250df;margin-right:5px">&#9679;</span>pdf</span>
+<span title="Consciously postponed or out of scope for this tier: a placeholder by design." style="cursor:help;white-space:nowrap"><span style="color:#57606f;margin-right:5px">&#9679;</span>deferred</span>
+<span title="The gap to fill: known and tracked, not documented yet." style="cursor:help;white-space:nowrap"><span style="color:#cf222e;margin-right:5px">&#9679;</span>missing</span>
+<span title="Was valid, but its source changed since the last validation: revalidate before trusting it." style="cursor:help;white-space:nowrap"><span style="color:#bf3989;margin-right:5px">&#9679;</span>stale</span></div>
+<p class="srcline">Generated by the abstraction ladder (mode B, blank canvas) from <code>extend-spec.json</code> - the spec is the source of record. Do not hand-edit.</p>
+</main></body></html>

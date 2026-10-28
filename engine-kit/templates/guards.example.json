@@ -1,0 +1,33 @@
+{
+  "_comment": "Copy to <repo-root>/.engine-kit/guards.json to turn the engine-kit guards (and, with commitDoor, the commit door of the testing tools) on for this project. No file = the plugin hooks do nothing here. Keys starting with '_' are notes and are ignored. Contract: runtime/guards/README.md in the kit.",
+
+  "commitGate": "warn",
+  "_commitGate": "warn (default): at git/svn commit time the findings reach the user (systemMessage) and the agent (context) and the commit goes ahead. ask: the harness asks the user to confirm the commit. The guards never deny (EK#6); choosing ask is a project decision - record it in the project's decision register.",
+
+  "encoding": {
+    "enabled": true,
+    "extensions": [".css", ".js", ".htm", ".html", ".json"],
+    "_extensions": "File types the encoding guard checks (case-insensitive). Leave out types that are legitimately ANSI or binary.",
+    "policy": "ascii",
+    "_policy": "ascii: only U+0000-U+007F plus the 'allow' list is accepted in these files. utf8: any character is accepted; only invalid UTF-8 and charset-only changes are reported.",
+    "allow": [],
+    "_allow": "Extra code points accepted under policy ascii, e.g. [\"U+00A0\", \"U+00C0-U+00FF\"] for a codebase with accented UI text.",
+    "maxFindings": 12,
+    "_maxFindings": "Lines listed per file before '... more lines'."
+  },
+
+  "revert": {
+    "enabled": true,
+    "recentDays": 60,
+    "_recentDays": "Blame window: a removed line whose origin revision is younger than this many days is reported.",
+    "ticketRegex": "",
+    "_ticketRegex": "Optional .NET regex run on the origin revision's commit message; the first capture group (or the whole match) is printed as the ticket. Examples: \"#(\\\\d+)\", \"\\\\b([A-Z]+-\\\\d+)\\\\b\". Empty = no ticket lookup (one less VCS call per revision)."
+  },
+
+  "commitDoor": {
+    "enabled": false,
+    "_enabled": "true = at git/svn commit time the hook also runs the commit door of the testing tools (runtime/testing/suite.py precommit, EK#14) and adds its warnings to the answer: fix and tests in one commit, a fix without tests, a fixture without its index row, a test that reads a machine path. Shipped false: turn it on once the testing config exists. Always warn-only from the hook, even when the testing config says gate.mode block, and never runs the suite there; commitGate does not apply to it. No Python 3.8+ on the machine = one 'not run here' line.",
+    "config": ".engine-kit/testing.json",
+    "_config": "The suite's testing config (contract: runtime/testing/README.md), relative to the project root (the folder that holds .engine-kit/) or absolute; default .engine-kit/testing.json. Its own relative paths are relative to that file: from .engine-kit/, workingCopy is \"..\"."
+  }
+}

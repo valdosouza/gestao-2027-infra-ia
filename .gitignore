@@ -177,3 +177,14 @@ Thumbs.db
 # pelo nome exato; NAO liberar pastas inteiras.
 # ============================================================================
 !SETUP_PROTECAO_SECRETS.md
+
+# EXCECOES (2026-10-28, EK#32 do engine-kit): arquivos do kit capturados pelos
+# padroes largos acima (*auth*, *secret*, **/build/) - sao metodo, nao segredos
+# nem saida de build. Excecao cirurgica pelo caminho exato.
+!engine-kit/docs/AUTHORING.md
+!engine-kit/runtime/build/
+!engine-kit/runtime/ladder/extend_handauthored.py
+!engine-kit/skills/git-security/references/SECRETS_PROTECTION_SETUP.md
+
+# deny-lists de casos ficam fora do repo (o repo e publico) - 2026-10-28
+prompts/*-denylist.txt
