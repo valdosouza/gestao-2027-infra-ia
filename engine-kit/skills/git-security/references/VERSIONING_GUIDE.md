@@ -28,7 +28,7 @@ GitHub: github.com/<github-account>/
 │   ├── tsconfig.json
 │   └── .gitignore
 │
-├── <legacy-repo>                 (Legacy Delphi)
+├── <legacy-repo>                 (legacy, compiled desktop stack)
 │   ├── source/
 │   ├── exe/
 │   ├── lib/
@@ -280,15 +280,13 @@ coverage/
 .nyc_output/
 ```
 
-### <legacy-project> (Delphi)
+### <legacy-project> (a compiled desktop stack)
 ```
-# Delphi
-*.dcu
+# Compiler output
+*.obj
 *.o
 *.a
 *.so
-__history/
-__recovery/
 *.local
 
 # Build

@@ -1,0 +1,41 @@
+{
+  "_comment": "Example configuration of runtime/migration on a fictional base: the notes folder of a small order-handling product ('old-notes') moves into a team knowledge base ('kb'). Keys starting with '_' are notes. Every value here is case data: a real case keeps its own file next to its manifest, outside the kit.",
+  "name": "old-notes",
+  "source_name": "old-notes",
+  "scope_value": "case",
+  "columns": {"source": "source", "target": "target", "batch": "batch", "kind": "kind", "note": "note"},
+  "batch_order": ["ORDERS", "BILLING", "GENERAL"],
+  "markdown_extensions": [".md", ".markdown"],
+  "scope_line": "case",
+  "provenance": {
+    "origin": "\"{source_name}:{source}\"",
+    "migrated": "{date}",
+    "author": "dev-p",
+    "_author": "who wrote the knowledge (not who changed the code); omit the key when the old store has many authors"
+  },
+  "kinds": {
+    "doc": {},
+    "log": {"front_matter": {"consolidated": "false"}},
+    "card": {"front_matter": {"kind": "card"}},
+    "attachment": {"transform": "copy"}
+  },
+  "merge_keys": ["vcs_*"],
+  "rewrites": [
+    {"find": "(?i)D:[\\\\/]+old-notes[\\\\/]+", "replace": "old-notes:", "regex": true,
+     "_why": "the old store's machine root becomes a retired-reference marker; a rewrite changes addresses only, never meaning"}
+  ],
+  "leftovers": ["re:(?i)D:[\\\\/]+old-notes"],
+  "dedupe_identical": false,
+  "spot_check": 20,
+  "retirement": {
+    "freeze_date": "2026-03-31",
+    "map": [
+      {"from": "notes/orders/", "to": "projects/shop/SUBJECT/ORDERS/MEMORY/"},
+      {"from": "notes/billing/", "to": "projects/shop/SUBJECT/BILLING/MEMORY/"},
+      {"from": "scratch/", "to": null},
+      {"from": "", "to": "projects/shop/HISTORY/"}
+    ],
+    "exclude_dirs": [".git", ".svn", ".hg", ".obsidian", ".trash", "node_modules", "__pycache__"],
+    "exclude_files": ["Thumbs.db", "desktop.ini", ".DS_Store"]
+  }
+}

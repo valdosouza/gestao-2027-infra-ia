@@ -1,0 +1,26 @@
+# engine-kit — what never enters the kit repository.
+# Do NOT add broad patterns such as *secret* or *credential* here: the kit has
+# documents ABOUT secrets (skills/git-security/references/SECRETS_PROTECTION_SETUP.md)
+# and a broad pattern silently drops them (it already happened once).
+
+# Python
+__pycache__/
+*.pyc
+
+# Derived indexes and scratch output of the runtime scripts
+*.db
+*.sqlite
+*.sqlite3
+memory-index.json
+.kit-lint/
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

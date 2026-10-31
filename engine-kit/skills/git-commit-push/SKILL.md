@@ -5,10 +5,11 @@ description: Use for daily versioning after finishing a feature, fixing a bug, u
 
 # Skill: Git Commit & Push — Daily Versioning
 
-**Goal**: Make professional commits and publish to GitHub  
+**Goal**: Make professional commits and publish them to the remote  
 **Time**: ~5-10 minutes  
 **Frequency**: Daily (or per feature)
 **Scope**: method
+**Maturity**: operating
 
 ---
 
@@ -45,8 +46,9 @@ Untracked files:
 ### Step 2: Staging (Choose Files)
 
 ```bash
-# Option A: All files
-git add .
+# Option A: the files of this change, by path (never "git add ." - it sweeps
+# unrelated files and secrets into the commit)
+git add src/app.ts tests/app.test.ts
 
 # Option B: Specific file
 git add src/app.ts
@@ -114,7 +116,7 @@ git commit -m "docs: update API endpoints README"
 git commit -m "refactor(service): simplify user service logic"
 ```
 
-### Step 5: Push to GitHub
+### Step 5: Push to the remote
 
 ```bash
 # First time on a branch
@@ -131,7 +133,7 @@ git push
 ```bash
 # To do everything at once
 cd <workspace-root>\<api-project> && \
-git add . && \
+git add <the paths of this change> && \
 git commit -m "feat(core): implement authentication" && \
 git push
 ```
@@ -171,7 +173,7 @@ git push
 
 ### End of Day (Multiple Changes)
 ```bash
-git add .
+git add <the paths of this change>   # by path - never "git add ." (it sweeps unrelated files and secrets)
 git commit -m "chore: daily updates
 
 - Updated dependencies
@@ -225,7 +227,7 @@ git log --oneline --grep="auth"
 ### Undo the last commit (file still exists)
 ```bash
 git reset --soft HEAD~1
-git add .
+git add <the paths of this change>   # by path - never "git add ." (it sweeps unrelated files and secrets)
 git commit -m "feat: correct message"
 git push -f origin main
 # ⚠️ Force push (dangerous when collaborating)
@@ -287,7 +289,7 @@ Closes #15"
 # 6. Push
 git push
 
-# 7. Verify on GitHub
+# 7. Verify on the remote
 # → github.com/<github-account>/<api-repo>/commits/main
 ```
 

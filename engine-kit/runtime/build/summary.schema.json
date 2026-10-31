@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "engine-kit/runtime/build/summary.schema.json",
+  "title": "Build summary",
+  "description": "What runtime/build/build.ps1 writes after one registered build: every parsed diagnostic with its code and file:line, the risky ones flagged, and the verdict. Read by the build-analyst agent. Schema version 1.",
+  "type": "object",
+  "required": ["schema", "line", "project", "executed", "seconds", "command", "arguments", "workdir", "overlay", "searchPath", "skippedDirs", "responseFile", "silencers", "projectsFile", "envFile", "log", "exitCode", "verdict", "verdictReasons", "counts", "byCode", "items", "unparsedSuspect", "riskyCodes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": 1 },
+    "line": { "type": "string", "description": "The registered line (a maintained version line, or 'main')" },
+    "project": { "type": "string", "description": "The registered build id" },
+    "description": { "type": "string" },
+    "executed": { "type": "string", "description": "Local time with offset, ISO 8601" },
+    "seconds": { "type": "number", "minimum": 0 },
+    "command": { "type": "string" },
+    "arguments": { "type": "array", "items": { "type": "string" } },
+    "workdir": { "type": "string", "description": "The tool runs with this folder as its working directory" },
+    "overlay": { "type": "string", "description": "Overlay folder put first on the search path; empty when none" },
+    "searchPath": { "type": "array", "items": { "type": "string" }, "description": "Folders found, in order (overlay first)" },
+    "skippedDirs": { "type": "array", "items": { "type": "string" }, "description": "Registered folders missing on this machine: skipped, not fatal" },
+    "responseFile": { "type": "string", "description": "Generated response file; empty when the build has none" },
+    "silencers": { "type": "array", "items": { "type": "string" }, "description": "Arguments matching a silencer pattern: a silenced diagnostic is a finding, never a fix" },
+    "projectsFile": { "type": "string" },
+    "envFile": { "type": "string" },
+    "log": { "type": "string", "description": "The tool's full output (stdout, then stderr)" },
+    "exitCode": { "type": "integer", "description": "The tool's own exit code" },
+    "verdict": { "enum": ["CLEAN", "SUFFICIENT", "BROKEN"], "description": "CLEAN: compiled with no warning, no risky item, nothing silenced, nothing unparsed. SUFFICIENT: compiled with latent defects to audit. BROKEN: non-zero exit or an error" },
+    "verdictReasons": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "counts": {
+      "type": "object",
+      "required": ["errors", "warnings", "hints", "info", "risky", "unparsedSuspect"],
+      "additionalProperties": false,
+      "properties": {
+        "errors": { "type": "integer", "minimum": 0 },
+        "warnings": { "type": "integer", "minimum": 0 },
+        "hints": { "type": "integer", "minimum": 0 },
+        "info": { "type": "integer", "minimum": 0 },
+        "risky": { "type": "integer", "minimum": 0 },
+        "unparsedSuspect": { "type": "integer", "minimum": 0, "description": "Lines that look like diagnostics but no parser matched: a gap in the parsers, never ignored" }
+      }
+    },
+    "byCode": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["code", "kind", "count", "risky"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string", "description": "'(none)' for diagnostics without a code" },
+          "kind": { "$ref": "#/definitions/kind" },
+          "count": { "type": "integer", "minimum": 1 },
+          "risky": { "type": "boolean" }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "code", "file", "name", "line", "column", "location", "message", "risky", "riskReason", "parser"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": { "$ref": "#/definitions/kind" },
+          "code": { "type": "string" },
+          "file": { "type": "string", "description": "As the tool printed it; empty for link-stage messages" },
+          "name": { "type": "string", "description": "File name without folders" },
+          "line": { "type": ["integer", "null"] },
+          "column": { "type": ["integer", "null"] },
+          "location": { "type": "string", "description": "file:line (or file, or empty)" },
+          "message": { "type": "string" },
+          "risky": { "type": "boolean" },
+          "riskReason": { "type": "string", "description": "From riskyCodes, or the error rule; empty when not risky" },
+          "parser": { "type": "string", "description": "Name of the parser that matched the line" }
+        }
+      }
+    },
+    "unparsedSuspect": { "type": "array", "items": { "type": "string" }, "maxItems": 20, "description": "The first 20 unparsed lines that look like diagnostics" },
+    "riskyCodes": { "type": "object", "additionalProperties": { "type": "string" }, "description": "The risky set used for this run (global plus the build's own): code -> why it matters" }
+  },
+  "definitions": {
+    "kind": { "enum": ["error", "warning", "hint", "info"] }
+  }
+}

@@ -1,6 +1,6 @@
 ---
 name: git-push
-description: Use whenever you finish a piece of work and need a minimal, safe commit-and-push flow to GitHub.
+description: Use whenever you finish a piece of work and need a minimal, safe commit-and-push flow to the remote.
 ---
 
 # Skill: Git Push — Safe and Simple Delivery
@@ -9,6 +9,7 @@ description: Use whenever you finish a piece of work and need a minimal, safe co
 **Time**: 2 minutes  
 **Frequency**: Whenever you finish work
 **Scope**: method
+**Maturity**: operating
 
 ---
 
@@ -22,7 +23,7 @@ git status
 
 ### 2. Add and Commit
 ```bash
-git add .
+git add <the paths of this change>   # by path - never "git add ." (it sweeps unrelated files and secrets)
 git commit -m "[Your message here]"
 ```
 
@@ -32,7 +33,7 @@ git commit -m "[Your message here]"
 - `fix: [description]` — Bug fix
 - `chore: [description]` — Maintenance
 
-### 3. Push to GitHub
+### 3. Push to the remote
 ```bash
 git push
 ```
@@ -71,13 +72,13 @@ cd <workspace-root>\<api-project>
 git status
 
 # Add and commit
-git add .
+git add <the paths of this change>   # by path - never "git add ." (it sweeps unrelated files and secrets)
 git commit -m "feat: add JWT authentication middleware"
 
 # Push
 git push
 
-# ✅ Done! Code is on GitHub
+# ✅ Done! Code is on the remote
 ```
 
 ---

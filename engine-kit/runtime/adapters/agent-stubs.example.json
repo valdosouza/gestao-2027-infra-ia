@@ -1,0 +1,33 @@
+{
+  "_comment": "Optional data file for gen-agent-stubs.py (--config). Every case-specific default lives here, never in the script: folder layout, the memory server whose tools every persona must keep (T91), MCP servers granted to every persona, per-agent defaults and extra tools, extra stub rules. Copy it into the case, rename the example agents and servers, delete what you do not need. Tool words: read, search, edit, terminal, task, browser, web, todo, memory.",
+  "agents_dir": "agents",
+  "rules_file": "AGENTS.md",
+  "claude_out": ".claude/agents",
+  "copilot_out": ".github/agents",
+  "always": ["read", "search", "memory"],
+  "memory": {
+    "server": "memory",
+    "tools": ["memory_search", "memory_store", "memory_retrieve", "memory_list", "memory_stats"]
+  },
+  "servers": ["vcs"],
+  "vocabulary": {
+    "claude": { "todo": ["TodoWrite"] },
+    "copilot": {}
+  },
+  "stub_rules": [
+    "Knowledge-base artifacts are written in the language the rules file names."
+  ],
+  "agents": {
+    "docs-writer": {
+      "name": "Docs Writer",
+      "argument-hint": "Which module or endpoint should be documented, and for which version?",
+      "tools": "[read, search, edit, todo]"
+    },
+    "web-tester": { "extra": ["browser", "terminal"] },
+    "env-setup": {
+      "extra": ["terminal", "web"],
+      "raw": { "copilot": ["vscode/extensions", "vscode/installExtension"] }
+    },
+    "release-notes": { "extra": ["terminal"], "servers": ["tracker"] }
+  }
+}

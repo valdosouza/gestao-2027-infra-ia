@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Engine kit - como o trabalho flui - Visão geral - o que acontece em cada passo</title>
+<style>
+:root{--ink:#1f2328;--muted:#57606f;--line:#d8dee4;--bg:#ffffff;--soft:#f6f8fa;--accent:#0969da;}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+nav{width:250px;flex:none;background:var(--soft);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+nav:empty{display:none}
+nav h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:16px 0 4px}
+nav a{display:block;padding:3px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:13.5px}
+nav a:hover{background:#eaeef2}nav a.current{background:#ddf;color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;max-width:1320px;padding:28px 40px 60px}
+h1{font-size:24px;border-bottom:1px solid var(--line);padding-bottom:8px}
+svg{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fcfdfe}
+svg a{cursor:pointer}svg a:hover rect{stroke:var(--accent);stroke-width:2.5}
+rect.box{fill:#fff;stroke:#8b949e;stroke-width:1.4}
+rect.actor{fill:#f0f4ff;stroke:#6e7fbd}rect.band{fill:#fbf7ff;stroke:#a884d8}
+rect.core{fill:#fff4e5;stroke:#c07a12;stroke-width:2}rect.support{fill:#f6f8fa;stroke:#8b949e;stroke-dasharray:5 3}
+text{font:13px "Segoe UI",system-ui,sans-serif;fill:#1f2328}
+table{border-collapse:collapse;margin:12px 0;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft)}code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--soft);padding:10px 14px;border-radius:8px;overflow-x:auto}pre code{background:none;padding:0}
+blockquote{border-left:4px solid #d4a72c;background:#fff8c5;margin:12px 0;padding:8px 14px;border-radius:0 8px 8px 0}
+.srcline{color:var(--muted);font-size:12.5px;margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:760px){body{display:block}nav{width:auto;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px 16px 40px}}
+
+svg.ladder{display:block;max-width:100%;height:auto}</style></head><body>
+<nav><h2>Engine kit - como o trabalho flui</h2><a href="../index.html">All tiers</a><a href="../coverage.html">Coverage matrix</a><h2>Tiers</h2><a href="../visao-geral/index.html" class="current">Visão geral - o que acontece em cada passo</a><a href="../como-usar/index.html">Uso - quais skills e agentes, o que entra e o que sai</a><h2>Boxes</h2><a href="index.html" class="current">Flowchart</a><a href="escolher.html">Escolher trilha, perfil e nível</a><a href="dia1.html">Dia 1: montar a base</a><a href="legado.html">Legado: avaliar</a><a href="zero.html">Do zero: enquadrar o rascunho</a><a href="decidir.html">Conceituar e decidir</a><a href="mapear.html">Mapear o processo</a><a href="mudar.html">Mudar o código</a><a href="provar.html">Provar e entregar</a><a href="fechar.html">Fechar e reter</a><a href="escala.html">Aprender e escalar</a></nav>
+<main>
+<p class="ladder-back" style="margin:0 0 18px"><a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;font-weight:600;color:#0969da;text-decoration:none;font-size:14px">&larr; Back to the tier picker of Engine kit - como o trabalho flui</a></p><h1>Engine kit - como o trabalho flui - Visão geral - o que acontece em cada passo</h1><svg class="ladder" viewBox="0 0 488 910" width="488" height="910" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b949e"/></marker></defs>
+<line class="flow" x1="244" y1="98" x2="244" y2="126" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="244" y1="198" x2="124" y2="226" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="244" y1="198" x2="364" y2="226" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="124" y1="298" x2="244" y2="342" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="364" y1="314" x2="244" y2="342" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="244" y1="414" x2="244" y2="442" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="244" y1="514" x2="244" y2="542" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="244" y1="600" x2="244" y2="628" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="244" y1="700" x2="244" y2="728" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<line class="flow" x1="244" y1="800" x2="244" y2="828" stroke="#8b949e" stroke-width="1.5" marker-end="url(#ar)"/>
+<a href="escolher.html"><title>Escolher trilha, perfil e nível - available</title><rect class="box" x="144" y="24" width="200" height="74" rx="8"/><text x="244" y="48" text-anchor="middle" class="title" style="font-weight:600">Escolher trilha, perfil</text><text x="244" y="64" text-anchor="middle" class="title" style="font-weight:600">e nível</text><text x="244" y="86" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">antes de instalar</text><circle cx="332" cy="36" r="6" fill="#1a7f37"/></a>
+<a href="dia1.html"><title>Dia 1: montar a base - available</title><rect class="box" x="144" y="126" width="200" height="72" rx="8"/><text x="244" y="150" text-anchor="middle" class="title" style="font-weight:600">Dia 1: montar a base</text><text x="244" y="172" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">kb-setup · scope-census ·</text><text x="244" y="186" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">git-setup</text><circle cx="332" cy="138" r="6" fill="#1a7f37"/></a>
+<a href="legado.html"><title>Legado: avaliar - available</title><rect class="box" x="24" y="226" width="200" height="72" rx="8"/><text x="124" y="250" text-anchor="middle" class="title" style="font-weight:600">Legado: avaliar</text><text x="124" y="272" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">assess-legacy-repo ·</text><text x="124" y="286" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">legacy-analyst</text><circle cx="212" cy="238" r="6" fill="#1a7f37"/></a>
+<a href="zero.html"><title>Do zero: enquadrar o rascunho - available</title><rect class="box" x="264" y="226" width="200" height="88" rx="8"/><text x="364" y="250" text-anchor="middle" class="title" style="font-weight:600">Do zero: enquadrar o</text><text x="364" y="266" text-anchor="middle" class="title" style="font-weight:600">rascunho</text><text x="364" y="288" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">frame-greenfield · front-</text><text x="364" y="302" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">protocol</text><circle cx="452" cy="238" r="6" fill="#1a7f37"/></a>
+<a href="decidir.html"><title>Conceituar e decidir - available</title><rect class="box" x="144" y="342" width="200" height="72" rx="8"/><text x="244" y="366" text-anchor="middle" class="title" style="font-weight:600">Conceituar e decidir</text><text x="244" y="388" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">conceptual-guardian ·</text><text x="244" y="402" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">decision-rounds</text><circle cx="332" cy="354" r="6" fill="#1a7f37"/></a>
+<a href="mapear.html"><title>Mapear o processo - available</title><rect class="box" x="144" y="442" width="200" height="72" rx="8"/><text x="244" y="466" text-anchor="middle" class="title" style="font-weight:600">Mapear o processo</text><text x="244" y="488" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">pipeline-builder ·</text><text x="244" y="502" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">settings-mapper</text><circle cx="332" cy="454" r="6" fill="#1a7f37"/></a>
+<a href="../ciclo-da-mudanca/index.html"><title>Mudar o código - available</title><rect class="box" x="144" y="542" width="200" height="58" rx="8"/><text x="244" y="566" text-anchor="middle" class="title" style="font-weight:600">Mudar o código</text><text x="244" y="588" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">change-gate · test-gate</text><circle cx="332" cy="554" r="6" fill="#1a7f37"/></a>
+<a href="provar.html"><title>Provar e entregar - available</title><rect class="box" x="144" y="628" width="200" height="72" rx="8"/><text x="244" y="652" text-anchor="middle" class="title" style="font-weight:600">Provar e entregar</text><text x="244" y="674" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">build · suíte · portões</text><text x="244" y="688" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">G1-G4</text><circle cx="332" cy="640" r="6" fill="#1a7f37"/></a>
+<a href="fechar.html"><title>Fechar e reter - available</title><rect class="box" x="144" y="728" width="200" height="72" rx="8"/><text x="244" y="752" text-anchor="middle" class="title" style="font-weight:600">Fechar e reter</text><text x="244" y="774" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">close-and-retain · retain-</text><text x="244" y="788" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">knowledge</text><circle cx="332" cy="740" r="6" fill="#1a7f37"/></a>
+<a href="escala.html"><title>Aprender e escalar - available</title><rect class="box" x="144" y="828" width="200" height="58" rx="8"/><text x="244" y="852" text-anchor="middle" class="title" style="font-weight:600">Aprender e escalar</text><text x="244" y="874" text-anchor="middle" class="small" style="font-size:11px;fill:#57606f">nível 3</text><circle cx="332" cy="840" r="6" fill="#1a7f37"/></a>
+</svg><div class="ladder-legend" style="display:flex;gap:6px 18px;flex-wrap:wrap;margin:14px 0 6px;font-size:13px;color:#57606f"><span title="Operating or validated reality: the content passed its per-node validation round. A box only turns green through that sign-off, never silently." style="cursor:help;white-space:nowrap"><span style="color:#1a7f37;margin-right:5px">&#9679;</span>available</span>
+<span title="Real content, validation pending - or partly still design; the page&#x27;s pending notes say exactly which part." style="cursor:help;white-space:nowrap"><span style="color:#d4a72c;margin-right:5px">&#9679;</span>draft</span>
+<span title="Designed, not built yet: the box exists in the plan, its content does not." style="cursor:help;white-space:nowrap"><span style="color:#e16f24;margin-right:5px">&#9679;</span>pending</span>
+<span title="Documented outside this pack (a wiki, another tool): cited, not rewritten; depth deferred." style="cursor:help;white-space:nowrap"><span style="color:#0969da;margin-right:5px">&#9679;</span>pointer</span>
+<span title="The content lives at another box or page; this one forwards the reader there." style="cursor:help;white-space:nowrap"><span style="color:#6e7fbd;margin-right:5px">&#9679;</span>redirect</span>
+<span title="The source exists only as a PDF: linked with its location, not reproduced." style="cursor:help;white-space:nowrap"><span style="color:#8250df;margin-right:5px">&#9679;</span>pdf</span>
+<span title="Consciously postponed or out of scope for this tier: a placeholder by design." style="cursor:help;white-space:nowrap"><span style="color:#57606f;margin-right:5px">&#9679;</span>deferred</span>
+<span title="The gap to fill: known and tracked, not documented yet." style="cursor:help;white-space:nowrap"><span style="color:#cf222e;margin-right:5px">&#9679;</span>missing</span>
+<span title="Was valid, but its source changed since the last validation: revalidate before trusting it." style="cursor:help;white-space:nowrap"><span style="color:#bf3989;margin-right:5px">&#9679;</span>stale</span></div>
+<p class="srcline">Generated by the abstraction ladder (mode A) from <code>manifest.json</code> - the manifest is the source of record; this page is build output. Do not hand-edit.</p>
+</main></body></html>

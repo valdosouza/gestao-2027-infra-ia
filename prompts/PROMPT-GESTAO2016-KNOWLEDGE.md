@@ -2,6 +2,7 @@
 
 **Status**: em otimização (v1.3) · **Origem**: D:\Download (Valdo, 2026-09-02) · **Escopo**: misto
 **Referências**: `D:\Gestao2016\Infra-IA\Gestao\BRIEFING.md`, `STATUS.md`, `LEARNINGS.md`, `engine-kit/`
+**Desde 2026-10-21**: o `engine-kit/` daqui é cópia SUPERSEDED. Lição de MÉTODO "candidata ao kit" vai, destilada, para o kit canônico (`C:\RAG\engine-kit-canonical`, EK#1), nunca para a cópia daqui (`prompts/prompt_engine_kit_unificacao.md`).
 
 > Changelog
 > - 2026-09-04 v1.3 — REGRAS DE OPERAÇÃO ganham 4 regras nascidas nas sessões 2–3 (perguntas ao autor:

@@ -5,6 +5,10 @@
 
 Reference docs in this folder: [GIT_SECURITY.md](GIT_SECURITY.md), [VERSIONING_GUIDE.md](VERSIONING_GUIDE.md), [SECURITY_SUMMARY.md](SECURITY_SUMMARY.md), [GITIGNORE_TEMPLATES.md](GITIGNORE_TEMPLATES.md), [GITHUB_INITIAL_SETUP.md](GITHUB_INITIAL_SETUP.md), [SECRETS_PROTECTION_SETUP.md](SECRETS_PROTECTION_SETUP.md).
 
+When a scan finds secrets or personal data, record them with the
+[sensitive data report template](../../../templates/SENSITIVE_DATA_REPORT.template.md):
+type, location, line, risk and the action plan (rotate first) - **never the secret value**.
+
 ---
 
 ## 📋 Basic Flow (3 Lines)

@@ -1,0 +1,15 @@
+{
+  "name": "engine-kit-browser-runner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Headless engine of the engine-kit browser-verification skill: runs one engine-agnostic spec with Playwright and records PASS / FAIL / BLOCKED / MANUAL with literal read-back values. Login is a human step; the runner never handles credentials.",
+  "bin": { "engine-kit-browser-run": "run.mjs" },
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "check": "node --check run.mjs",
+    "example:dry-run": "node run.mjs --spec example/acme-orders.spec.json --dry-run"
+  },
+  "peerDependencies": { "playwright": ">=1.40.0" },
+  "peerDependenciesMeta": { "playwright": { "optional": true } }
+}

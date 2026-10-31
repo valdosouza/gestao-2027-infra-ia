@@ -182,11 +182,10 @@ Package.json:
 ✅ "pre-push": "bash scripts/pre-push-check.sh"
 ```
 
-### <legacy-project> (Delphi)
+### <legacy-project> (a compiled desktop stack)
 ```
 .gitignore:
-✅ __history/, __recovery/
-✅ *.dcu, Win32/, Win64/
+✅ *.obj, *.o, Win32/, Win64/
 ✅ *.ini, credentials.*
 ✅ .idea/, *.log
 

@@ -1,8 +1,8 @@
 {
     "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
     "name": "engine-kit",
-    "version": "0.3.0",
-    "description": "Legacy Modernization Engine — a portable, case-neutral method for modernizing legacy systems: faithful legacy assessment, conceptual distillation (lego pieces, not scale models), numbered decision rounds owned by the business owner, continuous knowledge retention, scope census governance, and git security hygiene.",
+    "version": "0.7.0",
+    "description": "Engine Kit — a portable, case-neutral method for AI-assisted software work (legacy modernization today, greenfield in progress): faithful legacy assessment, conceptual distillation (lego pieces, not scale models), numbered decision rounds owned by the business owner, knowledge retention and memory engineering, scope census governance, git security hygiene, and the runtime that lints the kit and validates a case's knowledge base.",
     "author": {
         "name": "Valdo Souza"
     },

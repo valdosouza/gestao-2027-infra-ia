@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Navegador</title>
+<style>
+:root{--ink:#1f2328;--muted:#57606f;--line:#d8dee4;--bg:#ffffff;--soft:#f6f8fa;--accent:#0969da;}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+nav{width:250px;flex:none;background:var(--soft);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+nav:empty{display:none}
+nav h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:16px 0 4px}
+nav a{display:block;padding:3px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:13.5px}
+nav a:hover{background:#eaeef2}nav a.current{background:#ddf;color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;max-width:1320px;padding:28px 40px 60px}
+h1{font-size:24px;border-bottom:1px solid var(--line);padding-bottom:8px}
+svg{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fcfdfe}
+svg a{cursor:pointer}svg a:hover rect{stroke:var(--accent);stroke-width:2.5}
+rect.box{fill:#fff;stroke:#8b949e;stroke-width:1.4}
+rect.actor{fill:#f0f4ff;stroke:#6e7fbd}rect.band{fill:#fbf7ff;stroke:#a884d8}
+rect.core{fill:#fff4e5;stroke:#c07a12;stroke-width:2}rect.support{fill:#f6f8fa;stroke:#8b949e;stroke-dasharray:5 3}
+text{font:13px "Segoe UI",system-ui,sans-serif;fill:#1f2328}
+table{border-collapse:collapse;margin:12px 0;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft)}code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--soft);padding:10px 14px;border-radius:8px;overflow-x:auto}pre code{background:none;padding:0}
+blockquote{border-left:4px solid #d4a72c;background:#fff8c5;margin:12px 0;padding:8px 14px;border-radius:0 8px 8px 0}
+.srcline{color:var(--muted);font-size:12.5px;margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:760px){body{display:block}nav{width:auto;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px 16px 40px}}
+
+/* parent pack stylesheet (reused, never hand-copied) */
+
+:root{--ink:#1f2328;--muted:#57606f;--line:#d8dee4;--bg:#ffffff;--soft:#f6f8fa;--accent:#0969da;}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+nav{width:250px;flex:none;background:var(--soft);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;overflow-y:auto}
+nav:empty{display:none}
+nav h2{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:16px 0 4px}
+nav a{display:block;padding:3px 8px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:13.5px}
+nav a:hover{background:#eaeef2}nav a.current{background:#ddf;color:var(--accent);font-weight:600}
+main{flex:1;min-width:0;max-width:1320px;padding:28px 40px 60px}
+h1{font-size:24px;border-bottom:1px solid var(--line);padding-bottom:8px}
+svg{display:block;max-width:100%;height:auto;border:1px solid var(--line);border-radius:10px;background:#fcfdfe}
+svg a{cursor:pointer}svg a:hover rect{stroke:var(--accent);stroke-width:2.5}
+rect.box{fill:#fff;stroke:#8b949e;stroke-width:1.4}
+rect.actor{fill:#f0f4ff;stroke:#6e7fbd}rect.band{fill:#fbf7ff;stroke:#a884d8}
+rect.core{fill:#fff4e5;stroke:#c07a12;stroke-width:2}rect.support{fill:#f6f8fa;stroke:#8b949e;stroke-dasharray:5 3}
+text{font:13px "Segoe UI",system-ui,sans-serif;fill:#1f2328}
+table{border-collapse:collapse;margin:12px 0;width:100%;font-size:14px}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--soft)}code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--soft);padding:10px 14px;border-radius:8px;overflow-x:auto}pre code{background:none;padding:0}
+blockquote{border-left:4px solid #d4a72c;background:#fff8c5;margin:12px 0;padding:8px 14px;border-radius:0 8px 8px 0}
+.srcline{color:var(--muted);font-size:12.5px;margin-top:40px;border-top:1px solid var(--line);padding-top:8px}
+@media (max-width:760px){body{display:block}nav{width:auto;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px 16px 40px}}
+
+svg.ladder{display:block;max-width:100%;height:auto}
+
+svg.ladder{display:block;max-width:100%;height:auto}</style></head><body>
+<nav><h2>Ciclo da mudança</h2><a href="index.html">Fluxo</a><a href="entrada.html">0. Entrada</a><a href="lembrar.html">1. Lembrar e linha de base</a><a href="processo.html">2. Portão do processo</a><a href="artefato.html">3. O artefato</a><a href="vai.html">4. PARE: o &quot;vai&quot;</a><a href="passada.html">5. Passada única</a><a href="build.html">Build</a><a href="suite.html">Suíte</a><a href="navegador.html">Navegador</a><a href="portoes.html">Portões G1-G4</a><a href="revisao.html">Revisão do resultado</a><a href="fechamento.html">Fechamento</a><h2>Engine kit</h2><a href="../como-usar/index.html">O mapa do kit</a></nav>
+<main>
+<p class="ladder-back" style="margin:0 0 18px"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;font-weight:600;color:#0969da;text-decoration:none;font-size:14px">&larr; Back to o ciclo da mudança</a></p><h1>Navegador</h1><div class="badges" style="margin:0 0 18px;display:flex;gap:8px;flex-wrap:wrap"><span class="badge" title="Operating or validated reality: the content passed its per-node validation round. A box only turns green through that sign-off, never silently." style="display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;background:#1a7f37;color:#ffffff">available</span></div>
+<p>Para o que o usuário vê: os casos de navegador do plano de testes, num navegador real, com leitura literal do que apareceu. Sem servidor possível aqui: <code>Browser cases: none - &lt;motivo&gt;</code>, e o que o usuário vê espera o percurso do dono (G4).</p>
+<p>Skill: <a href="../../engine-kit/skills/browser-verification/SKILL.md"><code>browser-verification</code></a>.</p>
+<p class="srcline">Generated by the abstraction ladder (mode B) from <code>extend-spec.json</code>. Do not hand-edit.</p>
+</main></body></html>

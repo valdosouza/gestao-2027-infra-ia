@@ -1,0 +1,5 @@
+# The runner never writes here (outputs go outside the kit); these guard a manual install.
+node_modules/
+package-lock.json
+evidence/
+*.state.json

@@ -1,0 +1,259 @@
+{
+ "output_html": "index.html",
+ "title": "Engine kit - ciclo da mudança",
+ "h1": "Ciclo da mudança",
+ "intro": "Como uma mudança de código atravessa o kit, do pedido ao fechamento. Os passos 0 a 5 são da skill change-gate; os seguintes são as passagens adiante, nesta ordem. Clique numa caixa.",
+ "css_from": "../como-usar/index.html",
+ "back_link": {
+  "href": "../como-usar/index.html",
+  "label": "o mapa do kit"
+ },
+ "nav_html": "<nav><h2>Ciclo da mudança</h2><a href=\"index.html\" class=\"current\">Fluxo</a><a href=\"entrada.html\">0. Entrada</a><a href=\"lembrar.html\">1. Lembrar e linha de base</a><a href=\"processo.html\">2. Portão do processo</a><a href=\"artefato.html\">3. O artefato</a><a href=\"vai.html\">4. PARE: o &quot;vai&quot;</a><a href=\"passada.html\">5. Passada única</a><a href=\"build.html\">Build</a><a href=\"suite.html\">Suíte</a><a href=\"navegador.html\">Navegador</a><a href=\"portoes.html\">Portões G1-G4</a><a href=\"revisao.html\">Revisão do resultado</a><a href=\"fechamento.html\">Fechamento</a><h2>Engine kit</h2><a href=\"../como-usar/index.html\">O mapa do kit</a></nav>",
+ "new_boxes": [
+  {
+   "id": "entrada",
+   "label": "0. Entrada",
+   "sublabel": "pedido, dossiê ou onda",
+   "x": 24,
+   "row": 0,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "entrada.html",
+   "edges_to": [
+    "lembrar"
+   ]
+  },
+  {
+   "id": "lembrar",
+   "label": "1. Lembrar e linha de base",
+   "sublabel": "memória da área, cópias de trabalho",
+   "x": 264,
+   "row": 0,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "lembrar.html",
+   "edges_to": [
+    "processo"
+   ]
+  },
+  {
+   "id": "processo",
+   "label": "2. Portão do processo",
+   "sublabel": "o processo está mapeado?",
+   "x": 504,
+   "row": 0,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "processo.html",
+   "edges_to": [
+    "artefato"
+   ]
+  },
+  {
+   "id": "artefato",
+   "label": "3. O artefato",
+   "sublabel": "plano, spec ou teste vermelho",
+   "x": 744,
+   "row": 0,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "artefato.html",
+   "edges_to": [
+    "vai"
+   ]
+  },
+  {
+   "id": "vai",
+   "label": "4. PARE: o \"vai\"",
+   "sublabel": "o dono aprova; WORKLOG",
+   "x": 744,
+   "row": 1,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "vai.html",
+   "edges_to": [
+    "passada"
+   ]
+  },
+  {
+   "id": "passada",
+   "label": "5. Passada única",
+   "sublabel": "cada arquivo uma vez",
+   "x": 504,
+   "row": 1,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "passada.html",
+   "edges_to": [
+    "build"
+   ]
+  },
+  {
+   "id": "build",
+   "label": "Build",
+   "sublabel": "build-analyst",
+   "x": 264,
+   "row": 1,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "build.html",
+   "edges_to": [
+    "suite"
+   ]
+  },
+  {
+   "id": "suite",
+   "label": "Suíte",
+   "sublabel": "test-gate",
+   "x": 24,
+   "row": 1,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "suite.html",
+   "edges_to": [
+    "navegador"
+   ]
+  },
+  {
+   "id": "navegador",
+   "label": "Navegador",
+   "sublabel": "browser-verification",
+   "x": 24,
+   "row": 2,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "navegador.html",
+   "edges_to": [
+    "portoes"
+   ]
+  },
+  {
+   "id": "portoes",
+   "label": "Portões G1-G4",
+   "sublabel": "delivery-gates",
+   "x": 264,
+   "row": 2,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "portoes.html",
+   "edges_to": [
+    "revisao"
+   ]
+  },
+  {
+   "id": "revisao",
+   "label": "Revisão do resultado",
+   "sublabel": "result-review",
+   "x": 504,
+   "row": 2,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "revisao.html",
+   "edges_to": [
+    "fechamento"
+   ]
+  },
+  {
+   "id": "fechamento",
+   "label": "Fechamento",
+   "sublabel": "close-and-retain",
+   "x": 744,
+   "row": 2,
+   "width": 200,
+   "height": 60,
+   "status": "available",
+   "href": "fechamento.html",
+   "edges_to": []
+  }
+ ],
+ "leaf_back_link": {
+  "href": "index.html",
+  "label": "o ciclo da mudança"
+ },
+ "leaf_nav_html": "<nav><h2>Ciclo da mudança</h2><a href=\"index.html\">Fluxo</a><a href=\"entrada.html\">0. Entrada</a><a href=\"lembrar.html\">1. Lembrar e linha de base</a><a href=\"processo.html\">2. Portão do processo</a><a href=\"artefato.html\">3. O artefato</a><a href=\"vai.html\">4. PARE: o &quot;vai&quot;</a><a href=\"passada.html\">5. Passada única</a><a href=\"build.html\">Build</a><a href=\"suite.html\">Suíte</a><a href=\"navegador.html\">Navegador</a><a href=\"portoes.html\">Portões G1-G4</a><a href=\"revisao.html\">Revisão do resultado</a><a href=\"fechamento.html\">Fechamento</a><h2>Engine kit</h2><a href=\"../como-usar/index.html\">O mapa do kit</a></nav>",
+ "leaf_pages": [
+  {
+   "output_html": "entrada.html",
+   "title": "0. Entrada",
+   "status": "available",
+   "body_md": "# 0. Entrada\n\nO que vai mudar e por quê: o item de trabalho e o dossiê dele. Sem rastreador (uma frente do zero, o piloto de um legado), a onda faz as vezes do item: `<NS>-W1`, e a pasta `TICKETS/<NS>-W1/`.\n\nSkill: [`change-gate`](../../engine-kit/skills/change-gate/SKILL.md), passo 0; [`review-pack`](../../engine-kit/skills/review-pack/SKILL.md) quando há reunião de revisão."
+  },
+  {
+   "output_html": "lembrar.html",
+   "title": "1. Lembrar e linha de base",
+   "status": "available",
+   "body_md": "# 1. Lembrar e linha de base\n\nLer o que a área já sabe (cards, logs das sessões) e anotar o estado de cada cópia de trabalho: limpa, ou cada modificação local como risco. Conferir as regras da área que a mudança toca.\n\nSkills: [`memory-engineering`](../../engine-kit/skills/memory-engineering/SKILL.md), [`change-gate`](../../engine-kit/skills/change-gate/SKILL.md) passos 1 e 1b."
+  },
+  {
+   "output_html": "processo.html",
+   "title": "2. Portão do processo",
+   "status": "available",
+   "body_md": "# 2. Portão do processo\n\nSe o processo que a mudança toca não está em `PIPELINES/`, o desenho espera e o mapa vem primeiro. Prosa numa análise não é mapa.\n\nAgentes: [`pipeline-builder` (agente)](../../engine-kit/agents/pipeline-builder.md), [`settings-mapper` (agente)](../../engine-kit/agents/settings-mapper.md)."
+  },
+  {
+   "output_html": "artefato.html",
+   "title": "3. O artefato",
+   "status": "available",
+   "body_md": "# 3. O artefato do portão\n\nTrês modos: **plano** (`PLAN.md`), **especificação** (`SPEC.md`) ou **teste primeiro** (o teste falhando e, para unidade nova, o esboço). Todo artefato tem o **plano de testes** (ou uma linha `exempt:` com o motivo), os riscos e a linha anti-remendo. Um plano pode levar passos teste-primeiro: um só \"vai\" cobre o plano e os vermelhos dele.\n\nObjeto de domínio novo: antes, o [`conceptual-guardian`](../../engine-kit/skills/conceptual-guardian/SKILL.md). Escolha que é do dono: uma pergunta numerada, nunca decidida dentro do plano.\n\nSkills: [`change-gate`](../../engine-kit/skills/change-gate/SKILL.md) passo 3, [`test-gate`](../../engine-kit/skills/test-gate/SKILL.md). Modelos: [`PLAN`](../../engine-kit/templates/PLAN.template.md), [`SPEC`](../../engine-kit/templates/SPEC.template.md)."
+  },
+  {
+   "output_html": "vai.html",
+   "title": "4. PARE: o \"vai\"",
+   "status": "available",
+   "body_md": "# 4. PARE: o \"vai\"\n\nO agente mostra o artefato, imprime a frase do portão **literalmente** e para. Nenhum arquivo do código é tocado antes do \"vai\" (salvo o teste vermelho e o esboço). O \"vai\" é uma frase própria do dono que nomeia o artefato, gravada no `WORKLOG.md` com data e palavras exatas. **\"Vai\" não é liberação**: commit, push e deploy esperam a palavra.\n\nSkill: [`change-gate`](../../engine-kit/skills/change-gate/SKILL.md) passo 4. Modelo: [`WORKLOG`](../../engine-kit/templates/WORKLOG.template.md)."
+  },
+  {
+   "output_html": "passada.html",
+   "title": "5. Passada única",
+   "status": "available",
+   "body_md": "# 5. Passada única\n\nCada arquivo é escrito por inteiro, uma vez, e nada além do aprovado. Se o plano se mostra errado, para e revisa (novo portão). Quando o código não pode ser escrito ou rodado aqui (somente leitura, sem ambiente), a mudança vira **dois patches preparados** em `TICKETS/<ID>/PATCH/` (teste primeiro, correção depois) para uma pessoa aplicar numa instância descartável.\n\nSkill: [`change-gate`](../../engine-kit/skills/change-gate/SKILL.md) passo 5; [`prepare-only`](../../engine-kit/skills/change-gate/references/prepare-only.md)."
+  },
+  {
+   "output_html": "build.html",
+   "title": "Build",
+   "status": "available",
+   "body_md": "# Build\n\nO build registrado como dado e a auditoria dos avisos de risco. Quebrou, ou apareceu aviso de risco novo: volta para o passo 5.\n\nAgente: [`build-analyst` (agente)](../../engine-kit/agents/build-analyst.md)."
+  },
+  {
+   "output_html": "suite.html",
+   "title": "Suíte",
+   "status": "available",
+   "body_md": "# Suíte\n\nA suíte inteira contra a linha de base daquela máquina: cada falha é **nova** ou **pré-existente**. Falha nova volta para o passo 5. A evidência fica em `TESTS/`, com os números conferidos (logs em `.txt`).\n\nSkill: [`test-gate`](../../engine-kit/skills/test-gate/SKILL.md). Modelo: [`TEST_EVIDENCE`](../../engine-kit/templates/TEST_EVIDENCE.template.md)."
+  },
+  {
+   "output_html": "navegador.html",
+   "title": "Navegador",
+   "status": "available",
+   "body_md": "# Navegador\n\nPara o que o usuário vê: os casos de navegador do plano de testes, num navegador real, com leitura literal do que apareceu. Sem servidor possível aqui: `Browser cases: none - <motivo>`, e o que o usuário vê espera o percurso do dono (G4).\n\nSkill: [`browser-verification`](../../engine-kit/skills/browser-verification/SKILL.md)."
+  },
+  {
+   "output_html": "portoes.html",
+   "title": "Portões G1-G4",
+   "status": "available",
+   "body_md": "# Portões de entrega\n\n- **G1** revisão socrática (nota >= 0,70);\n- **G2** ataque adversarial (>= 0,70 e nada HIGH ou CRITICAL);\n- **G3** cada achado vira uma sonda permanente na suíte;\n- **G4** o dono percorre a aplicação real.\n\nUma correção depois é um delta: os portões rodam de novo sobre ele. Perguntas que os portões levantam viram uma rodada que já leva a revisão do plano.\n\nSkill: [`delivery-gates`](../../engine-kit/skills/delivery-gates/SKILL.md)."
+  },
+  {
+   "output_html": "revisao.html",
+   "title": "Revisão do resultado",
+   "status": "available",
+   "body_md": "# Revisão do resultado\n\nUma revisão do resultado inteiro (nunca de uma revisão de commit sozinha), por uma segunda pessoa quando há.\n\nSkill: [`result-review`](../../engine-kit/skills/result-review/SKILL.md)."
+  },
+  {
+   "output_html": "fechamento.html",
+   "title": "Fechamento",
+   "status": "available",
+   "body_md": "# Fechamento\n\n`CLOSE.md` e o texto do rastreador, os commits preparados (correção primeiro), a cadeia de retenção e o script de fechamento. Os commits são do humano, depois da **palavra de liberação** dita para a lista.\n\nSkill: [`close-and-retain`](../../engine-kit/skills/close-and-retain/SKILL.md). Modelo: [`CLOSE`](../../engine-kit/templates/CLOSE.template.md)."
+  }
+ ]
+}

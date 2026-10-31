@@ -1,0 +1,70 @@
+{
+  "_comment": "Builds registered as data for runtime/build/build.ps1 (format: runtime/build/README.md). The case versions its copy next to its knowledge base; machine paths never appear here - they are {variables} filled from the per-machine env file (build.env.json). Fictional example: the Acme Orders product, two maintained lines, a command-line compiler called acme-cc.",
+  "schema": 1,
+  "parsers": {
+    "paren": {
+      "_comment": "src\\Totals.src(42) Warning: W101 Return value of 'Total' might be undefined",
+      "regex": "^(?<file>[^(\\r\\n]+)\\((?<line>\\d+)(?:,(?<column>\\d+))?\\)\\s+(?<kind>Warning|Hint|Error|Fatal):\\s+(?<code>[A-Z]\\d{3,4})?\\s*(?<message>.*)$"
+    },
+    "bracket": {
+      "_comment": "[acme-cc Warning] src\\Totals.src(42): W101 Return value of 'Total' might be undefined",
+      "regex": "^\\[\\S+ (?<kind>Warning|Hint|Error|Fatal)\\]\\s+(?<file>[^(]+)\\((?<line>\\d+)\\):\\s+(?<code>[A-Z]\\d{3,4})?\\s*(?<message>.*)$"
+    },
+    "bare": {
+      "_comment": "Fatal: F900 Internal error in the linker (no file: link-stage messages)",
+      "regex": "^(?<kind>Warning|Hint|Error|Fatal):\\s+(?<code>[A-Z]\\d{3,4})?\\s*(?<message>.*)$"
+    }
+  },
+  "kindMap": { "fatal": "error" },
+  "riskyCodes": {
+    "W101": "return value might be undefined: a garbage result on some path",
+    "W102": "variable might not have been initialized: non-deterministic reads, crashes on references",
+    "H201": "value assigned but never used: dead code or a forgotten assignment",
+    "W105": "symbol is deprecated: API drift, breaks on the next toolchain",
+    "W107": "implicit lossy text conversion: data loss on non-ASCII input"
+  },
+  "silencerPatterns": ["^-W-", "^--no-warn", "^/nowarn", "(?i)warnings\\s*off"],
+  "lines": {
+    "2.1": {
+      "_comment": "Maintenance line: older toolchain.",
+      "variables": { "toolchain": "{toolchainRoot}\\v5", "tree": "{codeRoot}\\release-2.1" },
+      "projects": {
+        "orders-service": {
+          "description": "Acme Orders back-end service",
+          "workdir": "{tree}\\service",
+          "command": "{toolchain}\\bin\\acme-cc.exe",
+          "args": ["--all-warnings", "@{responseFile}", "OrdersService.main"],
+          "requires": ["{toolchain}\\bin\\acme-cc.exe", "{tree}\\service\\OrdersService.main"],
+          "searchPath": { "separator": ";", "quote": true, "dirs": ["{tree}\\shared", "{tree}\\service", "{libRoot}\\reporting", "{toolchain}\\lib"] },
+          "responseFile": ["-I{searchPath}", "-U{searchPath}", "--out={out}\\bin", "--obj={out}\\obj"],
+          "parsers": ["paren", "bracket", "bare"],
+          "overlaySupported": true
+        }
+      }
+    },
+    "main": {
+      "variables": { "toolchain": "{toolchainRoot}\\v7", "tree": "{codeRoot}\\main" },
+      "projects": {
+        "orders-service": {
+          "description": "Acme Orders back-end service",
+          "workdir": "{tree}\\service",
+          "command": "{toolchain}\\bin\\acme-cc.exe",
+          "args": ["--all-warnings", "-I{searchPath}", "--out={out}\\bin", "OrdersService.main"],
+          "requires": ["{toolchain}\\bin\\acme-cc.exe"],
+          "searchPath": { "dirs": ["{tree}\\shared", "{tree}\\service"] },
+          "parsers": ["paren", "bare"],
+          "riskyCodes": { "W110": "unsafe pointer cast: new in this toolchain" },
+          "overlaySupported": true
+        },
+        "orders-admin": {
+          "description": "Acme Orders desktop administration tool",
+          "workdir": "{tree}\\admin",
+          "command": "{toolchain}\\bin\\acme-cc.exe",
+          "args": ["--all-warnings", "--out={out}\\bin", "OrdersAdmin.main"],
+          "parsers": ["paren"],
+          "outputEncoding": "850"
+        }
+      }
+    }
+  }
+}

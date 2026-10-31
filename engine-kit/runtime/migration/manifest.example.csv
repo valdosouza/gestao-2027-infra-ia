@@ -1,0 +1,7 @@
+source,target,batch,kind,note
+README.md,projects/shop/HISTORY/old-notes-readme.md,GENERAL,doc,the old store's front page; kept as history
+notes/orders/checkout-flow.md,projects/shop/SUBJECT/ORDERS/MEMORY/2026-03-02-checkout-flow.md,ORDERS,log,ticket-less analysis: an episodic log
+notes/orders/refund-rule.md,projects/shop/SUBJECT/ORDERS/KNOWLEDGE/refund-rule.md,ORDERS,card,one rule per file; the card keeps its name
+notes/orders/invoice-sample.pdf,projects/shop/SUBJECT/ORDERS/TICKETS/ORD-17/attachments/invoice-sample.pdf,ORDERS,attachment,bytes as they are
+notes/billing/tax-rounding.md,projects/shop/SUBJECT/BILLING/KNOWLEDGE/tax-rounding.md,BILLING,card,already in the target: a collision
+notes/billing/open-questions.md,,BILLING,log,owner: billing or orders? (a decision round; the dry run lists it)

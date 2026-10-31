@@ -1,0 +1,66 @@
+{
+  "_comment": "Configuration of runtime/testing/suite.py (contract: runtime/testing/README.md). One file per suite and line; the case versions it next to its suite. Fictional example: the Acme Orders product, line 2.1, a back-end part and a front-end part. Per-machine values (me, machine, stateDir, watch.drafting) go in <stateDir>/local.json or on the command line, never here.",
+  "version": 1,
+  "line": "2.1",
+  "workingCopy": "..",
+  "vcs": "auto",
+  "suite": {
+    "name": "orders",
+    "_comment": "marker: a file whose presence proves the suite is in this working copy (the stale check asks the head of the line when it is not). Results and logs go to a folder the VCS ignores: an untracked file makes the copy dirty and the baseline is refused.",
+    "marker": "tests/conftest.py",
+    "headRef": "origin/release-2.1",
+    "busyWaitSec": 300,
+    "timeoutSec": 1800,
+    "parts": [
+      {
+        "name": "back",
+        "command": ["python", "-m", "pytest", "tests/back", "-q", "-p", "no:cacheprovider", "--junitxml=build/test-results/back.xml"],
+        "requires": ["python"],
+        "results": { "format": "junit", "path": "build/test-results/back.xml" }
+      },
+      {
+        "name": "front",
+        "command": ["node", "--test", "--test-reporter=junit", "--test-reporter-destination=build/test-results/front.xml", "tests/front/"],
+        "requires": ["node"],
+        "results": { "format": "junit", "path": "build/test-results/front.xml" }
+      }
+    ]
+  },
+  "paths": {
+    "_comment": "Regular expressions over paths relative to the working copy, forward slashes. A test path wins over an untestable one.",
+    "tests": ["^tests/"],
+    "untestable": ["(?i)\\.(md|txt|png|svg)$", "^docs/", "^build/"],
+    "fixtures": ["^tests/back/test_[^/]+\\.py$", "^tests/front/[^/]+\\.test\\.js$"]
+  },
+  "index": { "file": "tests/INDEX.md" },
+  "baseline": { "ignoreUnversioned": false },
+  "gate": {
+    "_comment": "warn until a numbered project decision turns the door blocking (EK#6)",
+    "mode": "warn"
+  },
+  "watch": {
+    "ref": "origin/release-2.1",
+    "fetchRemote": "origin",
+    "graceWorkingDays": 1,
+    "weekendDays": [5, 6],
+    "drafting": false,
+    "maxDiffLines": 3000,
+    "retryMinutes": 30,
+    "blockedRetryMinutes": 60,
+    "staleClaimDays": 7,
+    "suiteDocs": ["tests/README.md", "tests/INDEX.md"]
+  },
+  "claim": {
+    "git": { "remote": "origin", "branch": "test-claims" },
+    "svn": { "url": "^/claims/orders-2.1" }
+  },
+  "agent": {
+    "_comment": "The proposal agent, headless. Placeholders: {prompt} {proposal} {bundle} {rev} {agent_settings}. Its working folder is the proposal folder; the brief arrives on stdin here. Check the flags against your agent's version.",
+    "command": ["claude", "-p", "--output-format", "text", "--permission-mode", "acceptEdits", "--tools", "Read,Grep,Glob,Edit,Write", "--strict-mcp-config", "--settings", "{agent_settings}"],
+    "stdin": true,
+    "timeoutSec": 2400
+  },
+  "proposal": {
+    "draftPattern": "^[A-Za-z0-9_.-]+\\.draft\\.(py|js)$"
+  }
+}

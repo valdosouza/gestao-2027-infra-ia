@@ -1,0 +1,52 @@
+{
+  "_comment": "Configuration of runtime/data-probe/data_probe.py (contract: runtime/data-probe/README.md). A case file: keep it outside the kit, beside the case's notes. Fictional example: the ACME orders system - a local copy, a read replica reached through the engine's own client, and a disposable scratch copy. Keys starting with _ are notes. NO SECRET EVER GOES HERE: a password comes from an environment variable named in connect_env, or the login uses integrated authentication.",
+  "max_rows": 200,
+  "require_proof": false,
+  "_require_proof": "true makes a target without read_only_proof a configuration error (the sqlite adapter has a built-in proof)",
+  "targets": {
+    "orders-copy": {
+      "_comment": "A copy of the orders database file, opened read-only by URI; the adapter's own test write proves it.",
+      "adapter": "sqlite",
+      "database": "<path to a copy of the orders database file>"
+    },
+    "orders-replica": {
+      "_comment": "The engine's own command-line client. The SQL goes on its standard input; the client inherits this process's environment, so its credential variable or integrated authentication works and nothing secret is on its command line.",
+      "adapter": "cli",
+      "command": ["<the engine's client>", "<its option naming the server>", "<the replica host>", "<its option for integrated authentication>", "<its option for comma-separated output>"],
+      "input": "stdin",
+      "output": "csv",
+      "session_prelude": "<the engine's statement that makes this session read-only>",
+      "read_only_proof": {
+        "statement": "UPDATE orders SET status = status WHERE 1 = 0",
+        "expect_error": "(?i)read[-_ ]?only"
+      },
+      "lexical": {
+        "_comment": "Declare what the engine does; an option left out is checked both ways (more refusals, never fewer).",
+        "nested_block_comments": true,
+        "backslash_escapes": false,
+        "hash_comments": false,
+        "bracket_identifiers": false
+      },
+      "allow_leading": [],
+      "timeout_seconds": 120
+    },
+    "orders-dbapi": {
+      "_comment": "A DB-API 2.0 module the case installed (the kit installs none). connect holds no secret; connect_env names the variable that does.",
+      "adapter": "dbapi",
+      "module": "<the DB-API module>",
+      "connect": { "host": "<the replica host>", "database": "orders", "user": "<a read-only login>" },
+      "connect_env": { "password": "ACME_ORDERS_PROBE_PASSWORD" },
+      "session_prelude": "<the engine's statement that makes this session read-only>",
+      "read_only_proof": {
+        "statement": "UPDATE orders SET status = status WHERE 1 = 0",
+        "expect_error": "(?i)read[-_ ]?only"
+      }
+    },
+    "orders-scratch": {
+      "_comment": "A disposable copy: the only kind of target --allow-write accepts.",
+      "adapter": "sqlite",
+      "database": "<path to a disposable scratch copy>",
+      "disposable": true
+    }
+  }
+}

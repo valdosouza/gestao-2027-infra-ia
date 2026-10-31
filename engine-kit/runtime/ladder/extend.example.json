@@ -1,0 +1,71 @@
+{
+  "_comment": "Mode B spec, blank-canvas shape: the drill-down of the Fulfilment box of manifest.example.json. Copy it to <pack>/fulfilment-flow/extend-spec.json (a spec lives next to its output) and run extend_handauthored.py on it. Input paths resolve against the spec's folder, output paths against --out-root (default: the spec's folder). The other shape - extending an approved hand-authored page - is documented under _extend_shape_example.",
+
+  "output_html": "index.html",
+  "title": "Acme Orders - fulfilment flow",
+  "h1": "Fulfilment flow",
+  "intro": "How a priced, in-stock order becomes a delivered parcel. Click a box for its page.",
+  "css_from": "../technical-build/index.html",
+  "back_link": { "href": "../technical-build/index.html", "label": "the Acme Orders map (technical depth)" },
+  "nav_html": "<nav><h2>Fulfilment</h2><a href=\"index.html\" class=\"current\">Flow</a><h2>Acme Orders</h2><a href=\"../technical-build/index.html\">Solution map</a></nav>",
+
+  "new_boxes": [
+    { "id": "pick", "label": "Pick", "sublabel": "the warehouse picks the order lines", "x": 24, "row": 0, "width": 200, "height": 60, "status": "available", "href": "pick.html", "edges_to": ["pack"] },
+    { "id": "pack", "label": "Pack", "sublabel": "box size chosen by volume", "x": 264, "row": 0, "width": 200, "height": 60, "status": "draft", "href": "pack.html", "edges_to": ["label"] },
+    { "id": "label", "label": "Label", "sublabel": "carrier label and tracking number", "x": 504, "row": 0, "width": 200, "height": 60, "status": "pointer", "href": "label.html", "edges_to": ["ship"] },
+    { "id": "ship", "label": "Ship", "sublabel": "hand-over to the carrier", "x": 504, "row": 1, "width": 200, "height": 60, "css_class": "box core", "status": "draft", "href": "ship.html", "edges_to": ["track"] },
+    { "id": "track", "label": "Track", "sublabel": "carrier events back into the order", "x": 264, "row": 1, "width": 200, "height": 60, "status": "stale", "href": "track.html", "edges_to": ["returns"] },
+    { "id": "returns", "label": "Returns", "sublabel": "not documented yet", "x": 24, "row": 1, "width": 200, "height": 60, "css_class": "box support", "status": "missing", "href": "returns.html" }
+  ],
+
+  "leaf_back_link": { "href": "index.html", "label": "the fulfilment flow" },
+  "leaf_nav_html": "<nav><h2>Fulfilment</h2><a href=\"index.html\">Flow</a><a href=\"pick.html\">Pick</a><a href=\"pack.html\">Pack</a><a href=\"label.html\">Label</a><a href=\"ship.html\">Ship</a><a href=\"track.html\">Track</a><a href=\"returns.html\">Returns</a></nav>",
+  "leaf_pages": [
+    { "output_html": "pick.html", "title": "Pick", "status": "available", "source_md": "../sources/fulfilment-pick.md" },
+    { "output_html": "pack.html", "title": "Pack", "status": "draft", "pending": ["packaging rules for fragile goods"],
+      "body_md": "# Pack\n\nThe packing station chooses the smallest box that fits the picked volume." },
+    { "output_html": "label.html", "title": "Label", "status": "pointer",
+      "body_md": "# Label\n\nCarrier label formats are documented by each carrier - cited, not rewritten." },
+    { "output_html": "ship.html", "title": "Ship", "status": "draft", "pending": ["cut-off times per carrier"],
+      "body_md": "# Ship\n\nParcels are handed over at the daily carrier collection." },
+    { "output_html": "track.html", "title": "Track", "status": "stale", "pending": ["the carrier changed its event codes - revalidate"],
+      "body_md": "# Track\n\nCarrier events update the order status until delivery." },
+    { "output_html": "returns.html", "title": "Returns", "status": "missing", "placeholder_kind": "not_available" }
+  ],
+
+  "_extend_shape_example": {
+    "source_html": "approved-map.html",
+    "output_html": "map/index.html",
+    "viewbox_grow_height": 90,
+    "css_insert_after_marker": "rect.box{fill:#fff;stroke:#8b949e}",
+    "css_addition": "rect.new{fill:#f5f0ff;stroke:#8250df;stroke-width:2;stroke-dasharray:6 3}",
+    "new_boxes": [
+      { "id": "returns", "label": "Returns", "sublabel": "added after the map was approved", "x": 460, "y": 590, "width": 240, "height": 60, "css_class": "box new", "status": "draft", "href": "returns.html" }
+    ],
+    "caption": { "x": 580, "y": 672, "text": "Every box is documented from its source of record." },
+    "text_replacements": [ { "old": "<title>Acme Orders</title>", "new": "<title>Acme Orders - extended map</title>" } ],
+    "root": true,
+    "leaf_back_link": { "href": "index.html", "label": "the map" },
+    "leaf_pages": [
+      { "output_html": "map/returns.html", "title": "Returns", "status": "draft", "source_md": "sources/returns.md", "pending": ["refund rules"] }
+    ]
+  },
+
+  "_field_notes": {
+    "output_html": "the diagram page this spec writes",
+    "source_html": "extend shape only: the approved hand-authored page - read, never modified (hash-checked); the output may not overwrite it",
+    "new_boxes[]": "id, label, href required; sublabel, css_class (default box), status (fixed vocabulary; status_color hex is a parity override only), edges_to. width/height are MINIMUMS: the text wraps and the box grows",
+    "new_boxes[].row": "blank canvas: preferred - each row's height is its tallest box, rows never overlap, the canvas auto-sizes; never mix row and y in one spec",
+    "new_boxes[].x": "manual horizontal placement (branching is your call); a growing box keeps its centre. A snake: row 0 left to right, row 1 right to left, the row change a vertical edge between two boxes with the same x",
+    "new_boxes[].y": "extend shape: explicit y (you place into someone else's artwork); only the height grows there",
+    "viewbox": "OPTIONAL [w, h] floor for the auto-sized blank canvas",
+    "viewbox_grow_height": "extend shape: extra height added to the approved page's viewBox",
+    "css_from": "blank canvas: the parent's .css or .html whose stylesheet is reused (never hand-copied)",
+    "build_py": "OPTIONAL parent build script exposing CSS, md_to_html(md), nav_html(current); then a leaf may set nav_current and the spec nav_postprocess [[old, new], ...]",
+    "css_addition / css_insert_after_marker": "extra CSS; extend shape inserts it after the marker (else before </style>)",
+    "caption / text_replacements": "extend shape: a caption under the new boxes; [{old, new}] replacements, warned when not found",
+    "back_link / leaf_back_link / leaf_pages[].back_link": "{href, label}: every page below the top has a visible way back; only the true root sets \"root\": true",
+    "legend": "default true: the shared status legend (one definition, ladder_common.py); an extended page's own <div class=\"legend\"> is swapped for it",
+    "leaf_pages[]": "output_html, title, status, pending, source_md (preferred: rendered from the raw source, never copied) or body_md, md_replace [[old, new]] to re-base links, placeholder_kind when there is no content, nav_html or leaf_nav_html, srcline"
+  }
+}

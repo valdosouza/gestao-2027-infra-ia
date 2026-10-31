@@ -1,0 +1,7 @@
+# One line ending everywhere: LF in the repository and in every checkout.
+# The hook prefilter (runtime/guards/launch.sh) breaks with CRLF, and Windows
+# PowerShell 5.1 reads LF scripts fine.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary

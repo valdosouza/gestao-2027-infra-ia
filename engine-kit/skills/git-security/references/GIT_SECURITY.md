@@ -108,7 +108,7 @@ test-results/
 *.so
 ```
 
-### <legacy-project> (Delphi)
+### <legacy-project> (a compiled desktop stack)
 
 ```
 # ===== CRITICAL: Sensitive Data =====
@@ -118,9 +118,8 @@ credentials.*
 secrets/
 
 # ===== Build Output =====
-__history/
-__recovery/
-*.dcu
+*.obj
+*.o
 *.o
 *.a
 Win32/

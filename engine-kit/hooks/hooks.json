@@ -1,0 +1,57 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/runtime/guards/launch.sh\" post",
+            "timeout": 60,
+            "statusMessage": "engine-kit guards: checking the edited file"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(* commit*)",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/runtime/guards/launch.sh\" commit bash",
+            "timeout": 180,
+            "statusMessage": "engine-kit guards: checking the files of the commit"
+          },
+          {
+            "type": "command",
+            "if": "Bash(* ci*)",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/runtime/guards/launch.sh\" ci bash",
+            "timeout": 180,
+            "statusMessage": "engine-kit guards: checking the files of the commit"
+          }
+        ]
+      },
+      {
+        "matcher": "PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "PowerShell(* commit*)",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/runtime/guards/launch.sh\" commit powershell",
+            "timeout": 180,
+            "statusMessage": "engine-kit guards: checking the files of the commit"
+          },
+          {
+            "type": "command",
+            "if": "PowerShell(* ci*)",
+            "command": "sh \"${CLAUDE_PLUGIN_ROOT}/runtime/guards/launch.sh\" ci powershell",
+            "timeout": 180,
+            "statusMessage": "engine-kit guards: checking the files of the commit"
+          }
+        ]
+      }
+    ]
+  }
+}

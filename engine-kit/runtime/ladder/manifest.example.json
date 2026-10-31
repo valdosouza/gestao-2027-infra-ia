@@ -1,0 +1,99 @@
+{
+  "pack_id": "acme-orders-map",
+  "pack_title": "Acme Orders - solution map",
+  "intro": "How an order moves through the (fictional) Acme Orders product, at six depths.",
+  "audiences": [
+    { "id": "technical-build", "label": "Technical / build depth", "example_role": "a developer" },
+    { "id": "verification", "label": "Verification depth", "example_role": "a tester" },
+    { "id": "internal-operational-usage", "label": "Internal operational-usage depth", "example_role": "a support analyst" },
+    { "id": "external-operational-usage", "label": "External operational-usage depth", "example_role": "an end user" },
+    { "id": "oversight", "label": "Oversight depth", "example_role": "an auditor" },
+    { "id": "executive-summary", "label": "Executive-summary depth", "example_role": "a sponsor" }
+  ],
+  "nodes": [
+    {
+      "id": "order-intake",
+      "label": "Order intake",
+      "sublabel": "web shop, phone, partner feed",
+      "row": 0,
+      "edges_to": ["pricing", "stock-check"],
+      "audience": {
+        "technical-build": { "status": "available", "source_md": "sources/order-intake.md" },
+        "verification": { "status": "draft", "body": "Test oracle: every channel produces the same order record; duplicates are rejected by the order key.", "pending": ["partner-feed cases"] },
+        "executive-summary": { "status": "available", "body": "Orders arrive from three channels and become one record. **Why it matters**: one place to measure demand." }
+      }
+    },
+    {
+      "id": "pricing",
+      "label": "Pricing",
+      "row": 1,
+      "edges_to": ["fulfilment"],
+      "audience": {
+        "technical-build": { "status": "draft", "source_md": "sources/pricing.md", "pending": ["discount stacking rules"] },
+        "internal-operational-usage": { "status": "pointer", "body": "Price lists are maintained in the pricing team's wiki - cited here, not rewritten." },
+        "oversight": { "status": "deferred", "placeholder_kind": "confidential" }
+      }
+    },
+    {
+      "id": "stock-check",
+      "label": "Stock check",
+      "row": 1,
+      "edges_to": ["fulfilment"],
+      "audience": {
+        "technical-build": { "status": "stale", "source_md": "sources/stock-check.md", "pending": ["reservation rules changed in the last release - revalidate"] }
+      }
+    },
+    {
+      "id": "fulfilment",
+      "label": "Fulfilment",
+      "sublabel": "pick, pack, ship",
+      "row": 2,
+      "edges_to": ["invoicing"],
+      "audience": {
+        "technical-build": { "status": "draft", "drills_into": "fulfilment-flow/index.html", "body": "Fulfilment has several distinct steps, so its box opens a diagram (the fulfilment flow), not this page." },
+        "executive-summary": { "status": "available", "body": "Paid orders leave the warehouse within one working day." }
+      }
+    },
+    {
+      "id": "invoicing",
+      "label": "Invoicing",
+      "row": 2,
+      "edges_to": ["reporting"],
+      "audience": {
+        "technical-build": { "status": "pdf", "body": "The invoice layout exists only as a PDF in the finance share - linked, not reproduced." },
+        "executive-summary": { "status": "redirect", "body": "Covered by the Order intake summary: invoicing follows every accepted order." }
+      }
+    },
+    {
+      "id": "reporting",
+      "label": "Reporting",
+      "row": 3,
+      "audience": {
+        "technical-build": { "status": "missing", "placeholder_kind": "not_available" },
+        "executive-summary": { "status": "pending", "placeholder_kind": "diagram_only" }
+      }
+    }
+  ],
+  "_schema_notes": {
+    "pack_id": "slug for the pack; not used in file paths",
+    "pack_title": "shown on every page",
+    "intro": "OPTIONAL one paragraph on the tier picker",
+    "out_dir": "OPTIONAL output folder relative to this manifest (default: the manifest's own folder); tree_index.py reads it too, so prefer it over --out",
+    "back_link": "OPTIONAL {href, label} relative to the output folder - set it when this pack is itself a drill-down of a parent abstraction",
+    "audiences[].id": "lower-kebab-case; becomes the tier's output folder",
+    "audiences[].label": "depth or purpose of the tier - never a job title or a client",
+    "audiences[].example_role": "OPTIONAL illustration only ('for example: a tester'), never the tier's identity",
+    "audiences[].intro": "OPTIONAL one paragraph above that tier's flowchart",
+    "nodes[].id": "lower-kebab-case, stable: renaming it breaks every link into its pages",
+    "nodes[].label / sublabel": "box text; the box grows to fit it - there are no pixel fields",
+    "nodes[].row": "0-based level, top to bottom; boxes of a row are laid out left to right in list order and centred. Put non-branching steps side by side on one row; give a row of its own only to a fan-out/fan-in point",
+    "nodes[].edges_to": "ids this box flows into; same-row targets get a horizontal connector",
+    "nodes[].audience.<tier>.status": "available | draft | pending | pointer | redirect | pdf | deferred | missing | stale - the fixed vocabulary; anything else is an error",
+    "nodes[].audience.<tier>.source_md": "path (relative to this manifest) of the raw, validated source of record - preferred over body; rendered, never copied",
+    "nodes[].audience.<tier>.body": "short markdown for a tier that needs another depth than the raw source; ignored when source_md is set",
+    "nodes[].audience.<tier>.placeholder_kind": "not_available | confidential | diagram_only - used when there is neither source_md nor body",
+    "nodes[].audience.<tier>.pending": "OPTIONAL list: what exactly is still missing (shown as badges); empty it when nothing is",
+    "nodes[].audience.<tier>.drills_into": "OPTIONAL path (relative to the output folder) of a child diagram: the box opens it instead of the leaf page (diagram before prose)",
+    "a tier missing from a node's audience map": "still rendered: status missing + placeholder not_available - there is no escape hatch"
+  }
+}
