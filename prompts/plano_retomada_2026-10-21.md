@@ -351,6 +351,6 @@ com as decisões de 27/10 ainda SEM commit.
 - **Execuções que nasceram em 31/10 (cada uma com "vai", em worktree)**: D-RS7+D-RS13 (script do Super — junto, reescrever "Senha perdida do
   SUPER" do `setes-api/CLAUDE.md`, D-RS16) · D-IB99 (regime de IBS/CBS, antes de 01/01/2027) · D-PR53 (colunas do ato, na `merchandise`) ·
   D-AU1…D-AU12 (costura A1 no passo 4 — com D-EA7 revogação e D-EA12 `Auth OK` — + GRANT da nfse-api) · endurecer Ondas 1+2 → 3 → 4
-  (D-EA1…D-EA6, D-EA9, D-EA11; ordem D-EA10; todas antes da A2). **Sem commit na Infra-IA**: as decisões de 31/10 depois da D-AU12
-  (D-PR53…D-PR56, D-NE169…D-NE172, D-TM23…D-TM29, A-TM7…A-TM9, D-RS7…D-RS18, D-EA1…D-EA12) + INDICE 10.52/10.53 — commitar só com
-  "commita" (repositório PÚBLICO; `git add` só dos arquivos da rodada).
+  (D-EA1…D-EA6, D-EA9, D-EA11; ordem D-EA10; todas antes da A2). **Infra-IA COMMITADA (Valdo, 2026-10-31: pull antes do commit)**:
+  as decisões de 31/10 depois da D-AU12 (D-PR53…D-PR56, D-NE169…D-NE172, D-TM23…D-TM29, A-TM7…A-TM9, D-RS7…D-RS18, D-EA1…D-EA12) +
+  INDICE 10.50…10.53 no commit **23068ef** (pull = já atualizado; só os 11 arquivos da rodada). Push: só com o pedido do Valdo.
