@@ -1822,6 +1822,8 @@ documento; nenhum código.
   vínculo de usuário** no mesmo processo — revogação imediata enquanto houver um processo só. Limite conhecido registrado para a Onda 4
   (vários processos Node): revogação feita num processo vale nos outros só na expiração do TTL — por isso o TTL é curto e não há
   cache do veredito do SUPER (ele não consulta). A institution entra na chave do cache desde já (a D-GE3 só troca o que o veredito lê).
+  ⚠️ **REVISTA pela D-AU8 (2026-10-31, `prompt_frente_auth_api.md`)**: a partir da costura A1, sem cache do veredito — leitura viva da
+  view `vw_user_access` a cada requisição (revogação na hora com N processos).
   Mesma peça única `privilegeVerdict`; teste que prova a invalidação e a expiração; a cerca M5 mede o antes × depois.
 - **D-PV30** (Valdo, 2026-10-20 — fecha a **Q-PV25 = (a)** pelo MODELO que ele enunciou, literal: *"temos tres vias para a tributacao,
   tributacao geral pelo Menu, tributacao por produto via mercadoria especifica para o registro atual, e tributacao por cliente
@@ -2014,7 +2016,8 @@ documento; nenhum código.
   privilégio); (iii) o boot só ALARMA (`[ALARME D-PV9]`), não recusa subir; (iv) a cerca cobra "todo par operado está registrado", mas
   não o inverso — par registrado que nenhum código opera passa (Q-PV60); (v) o núcleo ainda cita o privilégio pelo número (Q-PV59). A
   FORMA do gate fecha em questões, uma por vez: Q-PV60 → Q-PV61 (boot) → Q-PV59.
-- ⏸ **A-PV24 — EM SUSPENSO (2026-10-31)**: perguntado da A-PV24, o Valdo abriu a **frente auth-api** (literal: *"vamos criar uma
+- ✅ **A-PV24 — ABSORVIDA pela D-AU1 (2026-10-31)**: a casa da regra é a auth-api (dona do registro interface × verbo); a forma do texto
+  (skill de sistema citada pelas APIs) fica para a execução. Histórico: ⏸ **EM SUSPENSO (2026-10-31)**: perguntado da A-PV24, o Valdo abriu a **frente auth-api** (literal: *"vamos criar uma
   frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
   setes-api, nfe-api ou nfse-api ou outra api"*) — a casa da regra (e talvez a D-PV49 "o catálogo mora no setes-api") passa a depender
   dela: `Infra-IA/prompts/prompt_frente_auth_api.md`. — o texto canônico da regra ganha casa do SISTEMA, não de uma API: skill

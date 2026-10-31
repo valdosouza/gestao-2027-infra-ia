@@ -26,7 +26,7 @@ os dois vão para `HISTORICO/`.
 | **Grupo — onda 0** | só decisões (D-GE3, D-GE20) | sessão própria DEPOIS do bloco privilégios | ordem |
 | **CNPJ alfanumérico** | branch `cnpj` nos 4 repos (GitHub), onda 1 + R3–R5 | rebase + janela | grupo do sync (CHECK) |
 | **IBS/CBS** | IB-4 pendente (fisco de H); D-IB99 (2026-10-31) — regime vira configuração por estabelecimento | prova em H; **configuração do regime no ar antes de 01/01/2027** (sessão própria, §14 do prompt) | IB-4 externo |
-| **auth-api** (2026-10-31) | Rodada 0 ORGANIZADA (`prompt_frente_auth_api.md` — inventário + guardião) | Q-AU1…Q-AU12, uma por vez | Q-AU6 (ordem × merges) |
+| **auth-api** (2026-10-31) | Rodada 1 FECHADA (`prompt_frente_auth_api.md` — D-AU1…D-AU12) | costura A1 no passo 4 + GRANT da nfse-api na mesma janela → ondas 0 → Q-EA9 → A2 → A3 antes da Onda 4 | ordem dos merges |
 | **Endurecer autenticação** | prompt NOVO `prompt_endurecer_autenticacao.md` (Rodada 0 organizada, Q-EA1…Q-EA12) | decisões → onda própria | 12 itens do §3 |
 
 ---
@@ -79,7 +79,8 @@ descartável sobrou (conferido); existe um banco `undefined` (anterior, não é 
    (`scripts/sql/dpv20-contrato-setes.sql`) → seeds 65 + 68 → `errors:gen` → janela única API + app (merge sobre a450909 com atenção à fábrica)
    + nfse-api restart. Decidir antes os 10 itens de privilégios do §3 (nenhum trava). **+ COSTURA A1 da auth-api (D-AU6, 2026-10-31)**:
    na mesma sessão, o veredito vira UMA peça com UM SQL (view `vw_user_access`) lida pelo setes-api, pelo núcleo e pelo menu — morrem as 4
-   cópias; D-UC9/D-GE3/Q-EA7 entram nela (`prompt_frente_auth_api.md` D-AU3/D-AU6). A extração (A2 — projeto `auth-api`) vem depois das
+   cópias; D-UC9/D-GE3/Q-EA7 entram nela; SEM cache do veredito (D-AU8); na MESMA janela, o GRANT do `fiscal_api` em `setes_central` passa
+   a listar só as tabelas lidas (D-AU12) (`prompt_frente_auth_api.md` D-AU3/D-AU6/D-AU8/D-AU12). A extração (A2 — projeto `auth-api`) vem depois das
    ondas 0 do grupo e do convidado, e a A3 antes da Onda 4.
 4a. **Campos — onda da D-CF4** (sessões próprias, depois de 4; inserido 2026-10-31): worktree `campos` a partir do `main` pós-privilégios →
    bloco 0 (cerca da D-CF2 com exceção nomeada de toda tela ainda não coberta) → A (service-list, price-lists, salesmen, tax-rules) → B
@@ -108,7 +109,7 @@ descartável sobrou (conferido); existe um banco `undefined` (anterior, não é 
 | NE-2 | Q-NE169 (UNIQUE da prova sem institution — Rec. a) · **Q-NE170** (de onde o ERP lê o AMBIENTE ao cunhar o nNF — Rec. a, ANTES da NE-6) · Q-NE171 (`deleted` nunca na faixa — Rec. a) · Q-NE172 (`sql_mode` estrito no pool do núcleo — transversal) | `prompt_onda_nfe_sefaz.md` §15.9 | Q-NE170 antes da NE-6 |
 | Terminal (onda 0) | Q-TM8 (admissão do L literal × derivada) · Q-TM9 (escopo do UNIQUE do L no grupo) · Q-TM10 (nome do header) · Q-TM11 (`POST /:id/restore`) · Q-TM12 (porta das três saídas do L) · Q-TM13 (fechamento "em parte") · Q-TM14 (estruturais auto-curativas) · A-TM6…A-TM10 | `prompt_frente_terminal.md` §10 | não |
 | Recuperação (D-RS4/D-RS5/D-PV46) | Q-RS7 (2+ Supers ativos) · Q-RS8 (momento do aviso C) · Q-RS9 (`OPS_ALERT_EMAIL`) · Q-RS10 (+1 sobrevive à falha do aviso) · Q-RS11 (marcador de produção) · Q-RS12 (texto do aviso) · Q-RS13 (fato do reset do Super) · Q-RS14 ("Super ativo") · A-RS5…A-RS12 | `prompt_privilegios_interfaces.md` §13.10 | não |
-| **auth-api (NOVA 2026-10-31)** | Q-AU1…Q-AU12 (escopo, dono de `tb_interface`, conferência, dados, credencial separada, ordem, topologia, cache, chave do sync, credencial de aplicativo, hash, GRANT da nfse-api) | `prompt_frente_auth_api.md` §4 | Q-AU6 decide a costura no bloco de privilégios |
+| **auth-api (2026-10-31)** | ~~Q-AU1…Q-AU12~~ → D-AU1…D-AU12 (FECHADA no mesmo dia) | `prompt_frente_auth_api.md` §5 | — |
 | Endurecer autenticação | Q-EA1…Q-EA12 (limite por conta, fato da falha, aviso, teto global, política de senha, oráculo "inativo", revogação, TTL do JWT, hash — reservada —, ordem, log forense, `Auth OK`) | `prompt_endurecer_autenticacao.md` | onda própria |
 | Campos em todas as telas | Rodadas 1 e 2 FECHADAS (D-CF1…D-CF5 — a D-CF5, 2026-10-31: a aba de parcerias aplica o catálogo de `partnerships`) · cruzamento com a auth-api: **A-CF1 RATIFICADA** (2026-10-31: o setes-api mantém SELECT no registro e na licença, perde só a escrita — leitura da D-AU4; levar à frente auth-api) · ~~Q-CF6~~ → **D-CF6** (2026-10-31: o lado API do motor vira biblioteca que a auth-api também chama nas telas que a A2 leva — `users`, `privileges`, `interfaces`, abas de `institutions`) — NENHUMA questão aberta | `prompt_frente_campos_todas_telas.md` §3.2/§4 | não |
 | IBS/CBS | ~~Q-IB1~~ → **D-IB99** (2026-10-31): regime = configuração por estabelecimento; executar antes de 01/01/2027 | `prompt_fase_ibs_cbs.md` §14 | não |
@@ -243,3 +244,14 @@ com as decisões de 27/10 ainda SEM commit.
   convidado; A2 extrai o projeto `auth-api`; A3 antes da Onda 4. §2 passo 4 atualizado. Próxima: Q-AU7.
 - **Q-AU7 → D-AU7** ((a)): instância própria (pasta/repo `auth-api`, porta 3004, `/v1`, deploy próprio — 5º Node e 4ª URL na D-F9).
   Próxima: Q-AU8.
+- **Q-AU8 → D-AU8** ((a)): sem cache do veredito — view lida viva a cada requisição; revê a D-PV29 a partir da A1; `EXPLAIN` fundível no
+  gate da A1. Próxima: Q-AU9.
+- **Q-AU9 → D-AU9** ((a)): chave de sincronia fora da auth-api (setes-api emite, setes-sync verifica; rever só com o grupo do sync).
+  **Ampliada** (Valdo): o setes-sync INTEIRO fica fora — pedidos/notas do sync são histórico para gerenciamento; a autorização acontece no
+  próprio PDV. Próxima: Q-AU10.
+- **Q-AU10 → D-AU10** ((a)): credencial de aplicativo da S1 (apps de terceiros na web) nasce na auth-api — um emissor de token só; revê em
+  parte a D-F13. Próxima: Q-AU11.
+- **Q-AU11 → D-AU11** ((a)): a troca do MD5 (Q-EA9) executa no setes-api ANTES da A2; na A2 a credencial só muda de banco. Pré-requisito
+  da A2: Q-EA9 executada. Próxima: Q-AU12.
+- **Q-AU12 → D-AU12** ((a)): estreitar já o GRANT do `fiscal_api` em `setes_central` (só as tabelas lidas; nenhuma API fiscal lê
+  `tb_user`), na janela do bloco. **Rodada 1 da auth-api FECHADA (D-AU1…D-AU12)**; A-PV24 absorvida pela D-AU1.

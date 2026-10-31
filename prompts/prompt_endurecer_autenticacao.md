@@ -181,7 +181,7 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   sql/67 não — conferir o setes-sync na onda, por leitura: `/user/sincronize` cria, não atualiza).
 - **Q-EA8 — TTL do JWT.** Opções: (a) **manter 24 h (decisão 19) — com a revogação da Q-EA7 o risco do token longo cai**; (b) 8 h sem
   refresh (relogin no meio do expediente); (c) 1 h + refresh token (mexe no app e cria outro segredo). **Rec.: (a)**.
-- **Q-EA9 — hash da senha (revê a decisão 2 da Fase 2 — reservada ao Valdo).** Opções: (a) **scrypt do Node com migração TRANSPARENTE
+- **Q-EA9 — hash da senha (revê a decisão 2 da Fase 2 — reservada ao Valdo).** ⚠️ *(2026-10-31 — D-AU11 da `prompt_frente_auth_api.md`: esta troca é EXECUTADA no setes-api ANTES da A2 (extração da auth-api); na A2 a credencial só muda de banco, já no hash novo. A frente auth-api também decide, na D-AU5, que a credencial vai para `tb_user_credential` no banco `auth_api` — as tabelas novas desta frente (Q-EA2) nascem chaveadas por `tb_user_id`, D-AU6.)* Opções: (a) **scrypt do Node com migração TRANSPARENTE
   no login (MD5 legado aceito e regravado)**; (b) bcrypt/argon2 (dependência nativa nova — pesa no deploy); (c) manter MD5 (risco
   aceito em 2026-07, quando a Setes era o único cliente). **Rec.: (a)** — sem dependência, sem janela, sem pedir troca a ninguém; o
   único efeito visível é o código de recuperação aberto morrer no 1º login depois do deploy (≤ 15 min, avisar no roteiro).

@@ -1,8 +1,9 @@
 # Frente — auth-api (autenticação + TODA a permissão do produto)
 
 **Escopo**: setes
-**Status**: Rodada 1 EM CURSO (2026-10-31) — D-AU1 (escopo = acesso completo); Q-AU2…Q-AU12 aguardam o Valdo, UMA questão por vez
-(antes: Rodada 0 ORGANIZADA — inventário + parecer do guardião `setes-conceito`) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente.
+**Status**: Rodada 1 FECHADA (2026-10-31 — D-AU1…D-AU12; NENHUMA questão aberta). Execução pela D-AU6: costura A1 dentro do bloco de
+privilégios (passo 4 do plano de retomada) + estreitar o GRANT da nfse-api na mesma janela (D-AU12) → ondas 0 do grupo e do convidado →
+troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente.
 **Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
 frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
 setes-api, nfe-api ou nfse-api ou outra api"*.
@@ -217,15 +218,15 @@ sessão de caixa — dizer "token"/"login") e **"contrato"** (ocupada — dizer 
   Onda 4. **Rec.: (a)**.
 - ✅ **Q-AU7 → D-AU7 (2026-10-31, (a)).** Texto original: **Topologia (D-F9): 5ª instância Node e 4ª URL no build.** (a) instância própria pequena (tráfego = login e concessão; o
   veredito é lido pela view); (b) começa como processo junto do setes-api. **Rec.: (a)**.
-- **Q-AU8 — Cache × "na hora" com N instâncias** (D-PV29 × D-UC9). (a) view lida a cada requisição, sem cache do veredito (uma consulta
+- ✅ **Q-AU8 → D-AU8 (2026-10-31, (a)).** Texto original: **Cache × "na hora" com N instâncias** (D-PV29 × D-UC9). (a) view lida a cada requisição, sem cache do veredito (uma consulta
   indexada); (b) manter TTL de 60 s. **Rec.: (a)**.
-- **Q-AU9 — `tb_sync_api_key`** (hoje emitida pelo setes-api, módulo institutions). (a) fora da frente — é do outro grupo, registrada como
+- ✅ **Q-AU9 → D-AU9 (2026-10-31, (a)).** Texto original: **`tb_sync_api_key`** (hoje emitida pelo setes-api, módulo institutions). (a) fora da frente — é do outro grupo, registrada como
   candidata; (b) a auth-api emite e revoga, o setes-sync só verifica. **Rec.: (a)**.
-- **Q-AU10 — Credencial de aplicativo sem humano** (frente S1; a D-F13 a pôs no setes-api). (a) passa para a auth-api quando a S1 nascer;
+- ✅ **Q-AU10 → D-AU10 (2026-10-31, (a)).** Texto original: **Credencial de aplicativo sem humano** (frente S1; a D-F13 a pôs no setes-api). (a) passa para a auth-api quando a S1 nascer;
   (b) fica no setes-api. **Rec.: (a)**, sem execução agora.
-- **Q-AU11 — Hash.** (a) a auth-api só nasce depois da Q-EA9 decidida e executada; (b) nasce já com o hash novo e a migração transparente.
+- ✅ **Q-AU11 → D-AU11 (2026-10-31, (a)).** Texto original: **Hash.** (a) a auth-api só nasce depois da Q-EA9 decidida e executada; (b) nasce já com o hash novo e a migração transparente.
   **Rec.: (a)** — um caminho de migração só.
-- **Q-AU12 — GRANT da nfse-api em `setes_central`** (achado do §0 — independe da frente). (a) estreitar JÁ, na janela do bloco de
+- ✅ **Q-AU12 → D-AU12 (2026-10-31, (a)).** Texto original: **GRANT da nfse-api em `setes_central`** (achado do §0 — independe da frente). (a) estreitar JÁ, na janela do bloco de
   privilégios: só as tabelas/colunas que o núcleo lê (nunca `password`/código de recuperação); (b) esperar a A1/A2 (a view resolve).
   **Rec.: (a)** — hoje um vazamento do usuário fiscal entrega os hashes MD5 de todos os logins.
 
@@ -282,6 +283,40 @@ sessão de caixa — dizer "token"/"login") e **"contrato"** (ocupada — dizer 
   (molde nfse-api); acrescenta à topologia da D-F9 o 5º processo Node e a 4ª URL no build do app (por configuração — `build-web.ps1`). A
   chave privada do token e a credencial saem do processo do ERP. Tráfego baixo por construção (login, seleção, administração de acesso,
   `/v1/access`); o veredito de cada requisição das outras APIs é lido da view, sem passar por ela.
+- **D-AU8** (Valdo, 2026-10-31 — fecha a **Q-AU8** = (a), literal: *"Sem cache (a)"*) — SEM cache do veredito: toda requisição protegida
+  lê `vw_user_access` VIVA (uma consulta indexada por usuário × estabelecimento × interface × verbo) — a revogação vale na hora em todas
+  as APIs por construção (D-UC9), sem invalidação entre processos. **REVÊ a D-PV29** (cache por processo, TTL 60 s) a partir da costura A1
+  (some `PRIVILEGE_VERDICT_CACHE_TTL_MS`). Item do gate da A1: `EXPLAIN` da view fundível, sem tabela temporária (PADROES §11.3). Se a
+  medição mostrar peso, a decisão volta ao Valdo COM números (nunca reabrir cache por conta própria — conhecimento negativo).
+- **D-AU9** (Valdo, 2026-10-31 — fecha a **Q-AU9** = (a), literal: *"Fica fora (a)"*) — a chave de sincronia (`tb_sync_api_key`, credencial
+  de MÁQUINA do sincronizador no setes-sync) fica FORA da auth-api: o setes-api segue emitindo (módulo institutions) e o setes-sync segue
+  verificando, sem mudança (regra dos dois grupos). Candidata registrada para rever COM o grupo do sync quando houver motivo — nunca
+  decidida a partir desta frente. Na A2 a emissão continua no setes-api (não sai com os escritores de acesso).
+  **Ampliada pelo Valdo no mesmo dia** (ao ler a Q-AU10, literal: *"aqui precisa registrar que as notas/pedidos que vem via setes-sync é
+  apenas para manter histórico, toda autorização é feita no próprio pdv e os dados sincronizados são apenas para gerar dados para
+  gerenciamento........então setes-sync fica fora do auth-api"*) — o **setes-sync INTEIRO fica fora da auth-api**, não só a chave: os
+  pedidos e notas que chegam pelo sync são HISTÓRICO para o gerenciamento; a autorização (fiscal e de quem opera) acontece no PRÓPRIO PDV/
+  retaguarda; nenhum dado sincronizado passa por veredito de acesso, e nenhuma pessoa opera pela porta do sync. Fato de domínio que vale
+  além desta frente (registrado na memória `regra-dois-grupos-sync`).
+- **D-AU10** (Valdo, 2026-10-31 — fecha a **Q-AU10** = (a), literal: *"Na auth-api (a)"*) — a credencial de APLICATIVO sem humano da frente
+  S1 (D-F6: apps de TERCEIROS que operam direto na web — criam pedido no setes-api e pedem autorização à nfe-api/nfse-api; não é o PDV do
+  legado, que fica no sync — D-AU9) nasce na AUTH-API, ao lado da credencial de pessoa: id + segredo só em hash trocados por token curto,
+  um emissor de token só no produto. O setes-api segue dono do CONTRATO público de pedidos/faturamento da S1. Nada se executa agora (a S1
+  não tem prompt aberto). **REVÊ em parte a D-F13** (a parte "credencial de aplicativo = S1, no setes-api, que emite o token").
+- **D-AU11** (Valdo, 2026-10-31 — fecha a **Q-AU11** = (a), literal: *"Antes (a)"*) — ORDEM do hash: a troca do MD5 (Q-EA9 — algoritmo
+  segue reservado ao Valdo na frente de endurecer) é decidida e EXECUTADA no setes-api, na onda de endurecer a autenticação, ANTES da A2;
+  na A2 a credencial só muda de banco (`tb_user.password` → `tb_user_credential`, D-AU5), já no hash novo — as MD5 que sobrarem seguem
+  migrando no login, pelo MESMO código levado para a auth-api. Uma mudança de risco por vez (banco × formato nunca juntos). Pré-requisito
+  da A2: Q-EA9 executada.
+- **D-AU12** (Valdo, 2026-10-31 — fecha a **Q-AU12** = (a), literal: *"Estreitar já (a)"*) — independe da frente: na JANELA do bloco de
+  privilégios, o GRANT do usuário `fiscal_api` em `setes_central` deixa de ser `SELECT setes_central.*` e passa a LISTAR só as tabelas que o
+  núcleo e as APIs fiscais leem. Conferido em 2026-10-31 (varredura do código de produção de `fiscal-api`, `nfse-api`, `nfe-api`): NENHUM lê
+  `tb_user`; leem `tb_institution`, `tb_company`, `tb_entity`, `tb_person`, `tb_address`, `tb_city`, `tb_state`, `tb_interface`,
+  `tb_interface_has_config`, `tb_tax_ibscbs_classification` (+ `tb_privilege` com a D-PV53). Na execução: a lista sai de VARREDURA do código
+  (cerca no teste: tabela de `setes_central` lida pelo código ⊂ GRANT — tabela nova que o núcleo passar a ler entra no GRANT junto), provada
+  em cópia descartável antes da janela; `tb_user`, `tb_user_password_reset*` e afins FORA. O `SELECT` nos schemas de cliente (`setes\_%`)
+  segue — estreitar lá é outra conversa (a view da D-AU3 é o caminho).
+  **Rodada 1 da frente FECHADA (D-AU1…D-AU12)** — próximo: execução pela ordem da D-AU6 (costura A1 no passo 4 do plano de retomada).
 
 ## 6. Fora de escopo / candidatas
 
