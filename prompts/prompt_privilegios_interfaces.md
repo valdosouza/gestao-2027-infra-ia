@@ -1514,59 +1514,128 @@ fica FORA do try para erro de bug subir à borda do job); timeouts do transporte
 
 #### 13.10.4 Assunções executadas (a ratificar)
 
-- **A-RS5** — a D-PV46 lida SEM as colunas que cita: elegibilidade pelo vínculo `tb_institution_has_user.kind = 'super'` na institution da
+- **A-RS5** ✅ *RATIFICADA pela D-RS15 (2026-10-31)* — a D-PV46 lida SEM as colunas que cita: elegibilidade pelo vínculo `tb_institution_has_user.kind = 'super'` na institution da
   Setes (como o `isSuper` do login); autoria em `tb_user.updated_at` + LOG do script + nota de operação; nenhum ALTER em `tb_user`
   (parecer do guardião: `updated_by` da casa = id de tb_user; gravar o id do super mentiria o autor).
-- **A-RS6** — o aviso 'C' é tomado no pedido CALADO (o 4º na hora / 11º no dia), não no 3º emitido: "teto atingido" = alguém bateu nele.
-- **A-RS7** — texto do aviso ÚNICO para as duas causas e sem link de ação (a causa é só forense; um link seria vetor de phishing por
+- **A-RS6** ✅ *RATIFICADA pela D-RS8 (2026-10-31)* — o aviso 'C' é tomado no pedido CALADO (o 4º na hora / 11º no dia), não no 3º emitido: "teto atingido" = alguém bateu nele.
+- **A-RS7** ✅ *RATIFICADA pela D-RS12 (2026-10-31 — a D-RS12 decidiu exatamente o texto único sem link)* — texto do aviso ÚNICO para as duas causas e sem link de ação (a causa é só forense; um link seria vetor de phishing por
   imitação).
-- **A-RS8** — o Super inativo é recusado pelo script (reativar é ato pela tela de outro Super; o script não reativa) e o script recusa
-  2+ Supers ativos (um define a do outro pela tela — complemento da D-PV46).
-- **A-RS9** (gate socrático, Q-RS11) — `npm start` É produção: `scripts/start-production.js` liga `NODE_ENV=production` quando a variável
+- **A-RS8** ✅ *1ª metade RATIFICADA pela D-RS16 (2026-10-31)* — o Super inativo é recusado pelo script (reativar é ato pela tela de outro Super; o script não reativa) e o script recusa
+  2+ Supers ativos (um define a do outro pela tela — complemento da D-PV46). ⚠️ *(2ª metade REVISTA pela D-RS7, 2026-10-31: com a D-PV48 a
+  tela não define senha de ninguém — 2+ Supers ativos = `--user-id` explícito obrigatório.)*
+- **A-RS9** ✅ *RATIFICADA pela D-RS11 (2026-10-31)* (gate socrático, Q-RS11) — `npm start` É produção: `scripts/start-production.js` liga `NODE_ENV=production` quando a variável
   está vazia e sobe o `dist/`; `npm run dev`/`tsx watch` seguem dev. Sem dependência nova (nada instalado na worktree — o `node_modules`
   é junção do vivo).
-- **A-RS10** (gate socrático, Q-RS14) — "Super ativo" no script = `tb_user.active = 'S'` E `tb_institution_has_user.active = 'S'` (o
+- **A-RS10** ✅ *RATIFICADA pela D-RS14 (2026-10-31)* (gate socrático, Q-RS14) — "Super ativo" no script = `tb_user.active = 'S'` E `tb_institution_has_user.active = 'S'` (o
   predicado do login — `getInstitutionsForUser`); vínculo adormecido = recusa `inactive`.
-- **A-RS11** (gate socrático, LOW) — o transporte SMTP ganha tetos de tempo (`connectionTimeout` 15 s, `greetingTimeout` 15 s,
+- **A-RS11** ✅ *RATIFICADA pela D-RS17 (2026-10-31)* (gate socrático, LOW) — o transporte SMTP ganha tetos de tempo (`connectionTimeout` 15 s, `greetingTimeout` 15 s,
   `socketTimeout` 30 s): um SMTP mudo não prende o trabalho em segundo plano por 10 min (padrão do nodemailer). Não muda o comportamento
   de sucesso.
-- **A-RS12** (gate adversarial, LOW) — em DEV, se o SMTP configurado FALHAR no envio do código, o código vai ao log (antes ia a lugar
+- **A-RS12** ✅ *RATIFICADA pela D-RS18 (2026-10-31)* (gate adversarial, LOW) — em DEV, se o SMTP configurado FALHAR no envio do código, o código vai ao log (antes ia a lugar
   nenhum e consumia o teto); em produção a falha do SMTP real fica só no log de erro — o código nunca vai ao log de produção (D-RS5).
   `isMailerConfigured()` apara o host (`SMTP_HOST` só espaços = não configurado, igual ao `mailerConfigProblems`).
 
 #### 13.10.5 Questões (aguardam o Valdo — nenhuma trava a entrega)
 
-- **Q-RS7 — script com 2+ Supers ATIVOS**: (a) recusar e apontar a tela (como executado — a exceção fica mínima; "os dois perderam a senha"
+**Decisões de 2026-10-31 (rodada "uma pergunta por vez")**:
+- **D-RS7** (Valdo, 2026-10-31 — fecha a **Q-RS7** = (b), literal: *"Aceitar --user-id (b)"*) — o script `reset-super-password.ts`
+  (D-PV46, única exceção à D-PV48 — A-PV22) com 2+ Supers ATIVOS aceita o alvo NOMEADO por `--user-id` (ou `--email`) também entre os
+  ativos; SEM o nome explícito continua recusando (nunca escolhe sozinho com mais de um); o log segue registrando usuário do SO, host,
+  instante, id e e-mail mascarado. Motivo da mudança de recomendação: a saída "use a tela de Usuários" morreu com a D-PV48 (ninguém define
+  senha de outro depois de criada a credencial). A mensagem de recusa deixa de citar a tela. EXECUTAR: a branch `recuperacao-senha` já
+  está no `main` do setes-api (9144652, 2026-10-31) — mudança pequena no script, em worktree, com teste e o "vai" (a árvore viva é deploy).
+- **D-RS8** (Valdo, 2026-10-31 — fecha a **Q-RS8** = (a), literal: *"A cada pedido calado (a)"*; RATIFICA a **A-RS6**) — o aviso 'C' ao
+  dono segue saindo no pedido CALADO pelo teto (o 4º da hora / 11º do dia), no máximo 1 por hora (D-RS4). O pior caso teórico (≈ 34
+  e-mails/dia sob ataque contínuo) é aceito: mais avisos = o dono sabe do ataque. Gatilho para rever: passeio ou cliente mostrando fadiga
+  → a (c) (um aviso por episódio de teto) é o próximo passo registrado. Sem execução nova.
+- **D-RS9** (Valdo, 2026-10-31 — fecha a **Q-RS9** = (a), literal: *"Só log (a)"*) — falha repetida do SMTP no envio do aviso ao dono
+  segue SÓ no log de erro (não é pane nossa; sem alarme próprio). O canal de alarme de operação é decidido UMA vez, para o sistema, na
+  Q-EA4 de `prompt_endurecer_autenticacao.md` — e, pela D-AU6, nasce na auth-api depois da extração. Sem execução nova.
+  *(Precisão pela D-EA4, 2026-10-31: o canal decidido é `OPS_ALERT_EMAIL` + `@shared/mailer`, da OPERAÇÃO e não da auth-api; o alarme
+  do login nasce no setes-api antes da A2 e muda com o login na A2.)*
+- **D-RS10** (Valdo, 2026-10-31 — fecha a **Q-RS10** = (a), literal: *"Ratificar (a)"*) — o aviso ao dono segue na MESMA transação do
+  gatilho, protegido por SAVEPOINT: falha só no aviso = `ROLLBACK TO SAVEPOINT` + log, e o +1 da tentativa errada e a 401 seguem (o código
+  sempre esgota na 5ª). Conhecimento negativo: não "simplificar" tirando o savepoint — sem ele, um GRANT esquecido na tabela irmã faria o
+  código nunca esgotar. A (b) (transação própria depois do COMMIT) fica como alternativa só se o savepoint incomodar. Sem execução nova.
+- **D-RS11** (Valdo, 2026-10-31 — fecha a **Q-RS11** = (a), literal: *"Ratificar (a)"*; RATIFICA a **A-RS9**) — `npm start` É produção:
+  `scripts/start-production.js` liga `NODE_ENV=production` quando a variável não vem (SMTP real obrigatório, código nunca no log — D-RS5);
+  só `npm run dev`/`tsx watch` fica fora. E MAIS um item no roteiro de deploy da Onda 4 ("conferir `NODE_ENV=production` no processo do
+  setes-api") para o deploy que não usar `npm start`. Sem execução nova (o item do roteiro entra quando a Onda 4 abrir o roteiro).
+- **D-RS12** (Valdo, 2026-10-31 — fecha a **Q-RS12** = (a), literal: *"Texto único (a)"*) — o aviso ao dono mantém o texto ÚNICO para as
+  duas causas, na forma ajustada na execução ("se precisar de um novo código, peça-o mais tarde — por segurança, os pedidos ficam limitados
+  por um tempo"), sem link de ação (A-RS7 — um link seria vetor de phishing por imitação). Sem execução nova.
+- **D-RS13** (Valdo, 2026-10-31 — fecha a **Q-RS13** = (b), literal: *"siga Avisar por email (b)"*) — o script `reset-super-password.ts`
+  passa a mandar, depois de gravar, um e-mail NEUTRO ao e-mail de login do Super alvo ("sua senha foi redefinida pelo operador em <instante
+  na zona>; se você não reconhece, avise") pela peça `@shared/mailer`, sem DDL e sem link de ação (A-RS7); falha do envio = log, não desfaz a
+  troca. O fato durável ("senha definida por terceiro") nasce depois, com a credencial da auth-api (D-AU5) / onda 0 do convidado (D-UC8).
+  Muda o comportamento descrito na D-PV46 — EXECUTAR junto da D-RS7 (mesmo script), em worktree, com teste e o "vai".
+  *(Nota de 2026-10-31, rodada seguinte: na MESMA execução, reescrever a seção "Senha perdida do SUPER" do `setes-api/CLAUDE.md` — ainda
+  cita a D-PV12 e "com DOIS Supers ativos, um define a do outro pela tela de Usuários", mortos pela D-PV48 — para D-RS7/D-RS13/D-RS14/
+  D-RS16.)*
+- **D-RS14** (Valdo, 2026-10-31 — fecha a **Q-RS14** = (a), literal: *"ok pode serguir"*; RATIFICA a **A-RS10**) — "Super ativo" no
+  script `reset-super-password.ts` é o MESMO predicado do login: `tb_user.active = 'S'` E `tb_institution_has_user.active = 'S'` (vínculo
+  'super' na institution da Setes); vínculo adormecido = recusa `inactive`. Já no `main` do setes-api (9144652 —
+  `src/modules/auth/super-password-reset.ts`, conferido em 2026-10-31). Sem execução nova. Conhecimento negativo: não "simplificar" para
+  só o `tb_user.active` — o script trocaria a senha de um Super que o login barra com 403.
+- **D-RS15** (Valdo, 2026-10-31 — RATIFICA a **A-RS5** = (a), literal: *"ok pode seguir"*) — a D-PV46 vale SEM as colunas que citava
+  (`tb_user.kind`, `updated_by` — não existem; conferido no sql/01 em 2026-10-31): Super = vínculo `tb_institution_has_user.kind = 'super'`
+  na institution da Setes (regra do login); autoria = `tb_user.updated_at` + LOG do script (usuário do SO, host, instante, id, e-mail
+  mascarado) + nota de operação; NENHUM ALTER em `tb_user`. Recusados: (b) `kind`/`updated_by` em `tb_user` (duplica o vínculo, o
+  `updated_by` da casa = id de tb_user e mentiria o autor, e a tabela vai PERDER a credencial — D-AU5); (c) tabela "senha definida por
+  terceiro" agora (nasce ao lado de `tb_user_credential` — D-AU5 / D-UC8, como a D-RS13 já previu). **Efeito da auth-api registrado**: o
+  script grava a credencial, logo MUDA para a auth-api na A2 junto dos outros escritores da credencial (D-AU6) — herança anotada no §6 do
+  `prompt_frente_auth_api.md`. Sem execução nova.
+- **D-RS16** (Valdo, 2026-10-31 — RATIFICA a **1ª metade da A-RS8** = (a), literal: *"ok, pode seguir"*; a 2ª metade já foi revista pela
+  D-RS7) — o script `reset-super-password.ts` RECUSA Super inativo (resposta `inactive`, usuário OU vínculo — D-RS14) e NUNCA reativa:
+  reativar é ato de OUTRO Super pela tela de Usuários (barreira `assertAccountManageable` da `privilegios-crud`: conta com vínculo super
+  só o Super altera, inclusive o "ativo"). Motivo: inativar é ato deliberado (ex.: saída da equipe) que, pela D-AU8, vale na hora em todas
+  as APIs; o script que reativasse o desfaria pela máquina do operador — a exceção da D-PV46 fica mínima (só repõe a senha). **Limite
+  conhecido**: o ÚNICO Super inativo não tem saída pela tela nem pelo script — só SQL manual do operador. Recusado: (b) `--reativar` no
+  script. Sem execução nova.
+- **D-RS17** (Valdo, 2026-10-31 — RATIFICA a **A-RS11** = (a), literal: *"ok pode serguit"*) — o transporte SMTP mantém os tetos de tempo
+  `connectionTimeout` 15 s · `greetingTimeout` 15 s · `socketTimeout` 30 s (`src/shared/mailer/mailer.ts`, no `main` desde 9144652 —
+  conferido em 2026-10-31): servidor de e-mail mudo não prende o trabalho em segundo plano pelos 10 min do nodemailer; estourado o teto, o
+  caso segue as decisões já tomadas (código ao log só em dev — A-RS12; aviso ao dono = log — D-RS9). Hoje só a autenticação envia e-mail;
+  pela D-AU4 o envio vai com a recuperação para a auth-api na A2, com os MESMOS tetos. Recusados: (b) outros valores sem medição; (c) sem
+  teto. Sem execução nova.
+- **D-RS18** (Valdo, 2026-10-31 — RATIFICA a **A-RS12** = (a), literal: *"ok pode serguir com a"*) — FORA de produção, código de
+  recuperação NÃO ENTREGUE (SMTP ausente, `SMTP_HOST` só espaços, OU SMTP do dev falhando) vai ao LOG; em PRODUÇÃO nunca (falha do SMTP
+  real = só o erro no log — D-RS5). Conferido no `main` em 2026-10-31 (`auth.service.ts` `sendRecoveryMail`: `!delivered &&
+  !isProduction()`; `isMailerConfigured()` apara o host). Pela D-RS11, `npm start` já é produção — só `npm run dev`/`tsx watch` cai no ramo
+  de dev. Vai com a recuperação para a auth-api na A2 (D-AU4), igual. Recusado: (b) log só sem SMTP configurado. Sem execução nova.
+  **Com a D-RS18, TODAS as A-RS5…A-RS12 estão ratificadas e o §13.10.5 não tem questão aberta.**
+
+- ✅ **Q-RS7 → D-RS7 (2026-10-31, (b) — a recomendação mudou pela D-PV48).** Texto original: **script com 2+ Supers ATIVOS**: (a) recusar e apontar a tela (como executado — a exceção fica mínima; "os dois perderam a senha"
   fica sem saída além do SQL manual); (b) permitir com `--user-id` explícito (cobre "os dois perderam"; o log registra). **Rec.: (a)**
   enquanto houver UM Super; rever quando nascer o 2º.
-- **Q-RS8 — momento do aviso 'C'**: (a) no pedido calado (executado — A-RS6); (b) na 3ª emissão da hora ("você usou o limite"); (c) só
+- ✅ **Q-RS8 → D-RS8 (2026-10-31, (a)) — RATIFICA a A-RS6.** Texto original: **momento do aviso 'C'**: (a) no pedido calado (executado — A-RS6); (b) na 3ª emissão da hora ("você usou o limite"); (c) só
   na TRANSIÇÃO para o teto (1 aviso por "episódio" de teto, não 1/h enquanto o atacante insistir — fecha o pior caso de 34 e-mails/dia
   do gate adversarial: 10 códigos + 24 avisos). **Rec.: (a)** enquanto o volume for teórico; (c) se o passeio ou um cliente mostrar fadiga.
-- **Q-RS9 — `OPS_ALERT_EMAIL`/alarme de operação** quando o SMTP falha repetidamente no aviso (hoje: log de erro, sem alarme na
+- ✅ **Q-RS9 → D-RS9 (2026-10-31, (a)).** Texto original: **`OPS_ALERT_EMAIL`/alarme de operação** quando o SMTP falha repetidamente no aviso (hoje: log de erro, sem alarme na
   crashlytics — falha de SMTP não é pane nossa): (a) manter; (b) alarme depois de N falhas seguidas. **Rec.: (a)** até a Onda 2 do prompt
   de autenticação (teto global + alarme) decidir o canal de operação (Q-EA4).
 
-- **Q-RS10 — o +1 da tentativa errada deve SOBREVIVER à falha do INSERT do aviso?** (gate socrático, MEDIUM: na 1ª forma o aviso vinha
+- ✅ **Q-RS10 → D-RS10 (2026-10-31, (a)).** Texto original: **o +1 da tentativa errada deve SOBREVIVER à falha do INSERT do aviso?** (gate socrático, MEDIUM: na 1ª forma o aviso vinha
   DEPOIS do +1 na mesma transação, sem savepoint — um GRANT da Onda 4 que esquecesse a tabela irmã faria toda 5ª errada desfazer o +1 e o
   código nunca esgotaria). (a) **SAVEPOINT em volta da vaga — EXECUTADO na sessão**: falha só no aviso = `ROLLBACK TO SAVEPOINT` + aviso
   no log, o +1 e a 401 seguem; (b) vaga em transação própria sob a trava do usuário depois do COMMIT do +1 (rec. do gate); (c) manter o
   limite. **Rec.: (a) como está** — mantém o parecer do guardião ("na MESMA transação que detectou o gatilho") e protege o fato primário;
   (b) só se o savepoint incomodar.
-- **Q-RS11 — marcador de produção (gate socrático, MEDIUM: `isProduction()` é opt-in — nada no repositório liga `NODE_ENV=production`;
+- ✅ **Q-RS11 → D-RS11 (2026-10-31, (a)) — RATIFICA a A-RS9.** Texto original: **marcador de produção (gate socrático, MEDIUM: `isProduction()` é opt-in — nada no repositório liga `NODE_ENV=production`;
   um deploy da Onda 4 que esqueça a variável deixa o SMTP opcional e o código no log)**: (a) **`npm start` passa a ligar
   `NODE_ENV=production` por padrão (`scripts/start-production.js`, sem dependência nova) — EXECUTADO (A-RS9)**; o único caminho fail-open
   fica sendo `npm run dev`/`tsx watch` (a árvore viva de hoje); (b) manter opt-in e item do roteiro. **Rec.: (a)** + item do roteiro da
   Onda 4 mesmo assim (o deploy pode não usar `npm start`).
-- **Q-RS12 — texto do aviso para a causa C** (gate socrático, LOW: "basta pedir um novo código" falha em silêncio por até 1 h quando o
+- ✅ **Q-RS12 → D-RS12 (2026-10-31, (a)).** Texto original: **texto do aviso para a causa C** (gate socrático, LOW: "basta pedir um novo código" falha em silêncio por até 1 h quando o
   teto foi atingido): o texto ÚNICO foi AJUSTADO na sessão para valer nas duas causas ("se precisar de um novo código, peça-o mais
   tarde — por segurança, os pedidos ficam limitados por um tempo"). (a) manter o texto único (como executado); (b) texto próprio para C
   dizendo "aguarde até 1 h" (o canal é só do dono — não fere a neutralidade da RESPOSTA). **Rec.: (a)**.
-- **Q-RS13 — o reset do Super pelo operador deve deixar FATO durável e/ou avisar o Super por e-mail?** (gate socrático, LOW: hoje só
+- ✅ **Q-RS13 → D-RS13 (2026-10-31, (b)).** Texto original: **o reset do Super pelo operador deve deixar FATO durável e/ou avisar o Super por e-mail?** (gate socrático, LOW: hoje só
   `updated_at` + log no host do operador). (a) nada agora (guardião: o fato "senha inicial definida por terceiro" nasce com a onda 0 do
   convidado, D-UC8); (b) e-mail neutro ao e-mail de login do Super ("sua senha foi redefinida pelo operador em T; se não reconhece,
   avise") pela peça `@shared/mailer` — sem DDL; (c) (a)+(b) depois. **Rec.: (b)** — barato e fecha o sinal fora da máquina; fica para o
   "vai" porque muda o comportamento descrito na D-PV46.
-- **Q-RS14 — "Super ativo" no script = `tb_user.active` E `tb_institution_has_user.active`** (gate socrático, LOW: o script ignorava o
+- ✅ **Q-RS14 → D-RS14 (2026-10-31, (a)) — RATIFICA a A-RS10.** Texto original: **"Super ativo" no script = `tb_user.active` E `tb_institution_has_user.active`** (gate socrático, LOW: o script ignorava o
   `active` do vínculo e listaria como ativo um Super que o login recusa com 403). **EXECUTADO na sessão (A-RS10)**: o mesmo predicado
   do login; vínculo adormecido = `inactive` (recusa). Ratificar.
 
@@ -1621,6 +1690,26 @@ sem revogação — a guarda não confere `active`/vínculo, D-UC9 vai conferir;
 riscos R1…R6, proposta em 5 ondas (limite por conta no login no molde da recuperação → teto global + alarme → política de senha →
 scrypt com migração transparente do MD5 → revogação por `iat × tb_user.updated_at`), questões **Q-EA1…Q-EA12** com recomendação. Só
 documento; nenhum código.
+
+### 13.11 Publicação EXECUTADA — 2026-10-31 (passo 2 do plano de retomada 10-21; Valdo: "Sim, vai")
+
+Pelo §13.8, na árvore viva (setes-api `tsx watch` = deploy):
+
+| Passo | Resultado |
+|---|---|
+| Ambiente | MariaDB (serviço `mysql`) iniciado pelo Valdo como administrador. ⚠️ Os `node_modules` de TODOS os repositórios e worktrees (e os `.dart_tool` do app) estavam APAGADOS desde 2026-10-27 17:30–17:31 — causa não registrada. Reinstalados por `npm ci`: fiscal-api 413 pacotes (o `prepare` refez o `dist`), nfse-api 434, setes-api 478; a worktree não tem `package-lock.json` (o setes-api o ignora no git) → lockfile copiado da API viva (a branch só muda o script `start`). O app refez o `pub get` no `flutter run`. |
+| Suíte da branch (worktree, máquina livre) | **132/132 suítes · 2112 verdes · 31 pulados** (251 s) |
+| 0 — SMTP | pré-voo `scripts/pre-deploy-tz-check.ts`: ✓ conexão e autenticação ok — `setes.com.br:465` (SSL), remetente `nao-responda@setes.com.br`; nada em voo |
+| 1 — sql/67 ANTES | aplicado em `setes_central`: `tb_user_password_reset` + `tb_user_password_reset_notice`, 5 CHECKs, 0 `activation_key` preenchida |
+| 2 — merge | setes-api `main` f53a618 → **9144652** (fast-forward: d19de9d + 9144652) · sql `main` → **66fc17c** (merge com o seed 65, sem conflito) |
+| 3 — sql/67 DEPOIS | reaplicado (OK) |
+| Boot | `Pedido de troca de senha (script 67): ok` · `E-mail (SMTP): smtp setes.com.br:465 (SSL) de Setes ERP <nao-responda@setes.com.br>, com autenticação` · nenhuma migration pendente · 9 gatilhos da F2a; nfse-api :3002 (tsx SEM watch); app :5051 com "Esqueci minha senha", console sem erro. Abas do Terminal: "setes-api 3000", "nfse-api producao", "setes-app web 5051". |
+| 4 — passeio | **FEITO com o Valdo** (conta do usuário 1, no app :5051; o agente só conferiu banco e log — nunca leu o e-mail nem digitou senha). E-mail inexistente → 200 `Se o email existir, um código de recuperação foi enviado` (~0,4 s, o piso). Código 1 (20:36): e-mail "Setes — código de recuperação de senha" entregue; 5 erradas = 5 `wrong`, a 5ª tomou a vaga `E` (`tb_user_password_reset_notice` seq 1) e o e-mail "Setes — aviso de segurança da sua conta" saiu; o código CERTO depois disso = 3× `exhausted` (seq 1: 5 erradas, sem uso). Código 2 (20:42): 1 errada + o certo com a senha nova → aceito (seq 2 `used_at` 20:45:30); NENHUM aviso novo. Não refeito no passeio: "mais 5 erradas no código novo na mesma hora não mandam outro aviso" — estouraria o limite de 10 trocas por e-mail em 15 min (429); está provado na prova 9/9 em InnoDB real. |
+| 5 — ensaio do script do Super | **NÃO rodado pelo agente**: o classificador de permissões recusou `scripts/reset-super-password.ts` mesmo sem `--vai` ("mudança de conta"). Valdo roda: `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts` (cwd `setes-api`) — deve listar o Super com e-mail mascarado e "ENSAIO — nada gravado". |
+| Push | **FEITO 2026-10-31** (Valdo: "Sim, push"; repos PÚBLICOS — varredura de segredos limpa, `.env.example` só com placeholders): setes-api `f53a618..9144652` · sql `9f4fcf3..66fc17c`. |
+
+⚠️ Para o passo 4 do plano (bloco de privilégios): a `privilegios-crud` também altera `package.json` e `src/modules/auth/auth.service.ts`
+— conflito esperado na fusão sobre o `main` novo.
 
 ## Decisões arquiteturais registradas
 

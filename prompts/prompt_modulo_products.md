@@ -1561,3 +1561,35 @@ do terminal for revisto; não editado aqui). O que entrou, item a item:
   `sourceKind` (Q-PR62) e a resposta do Valdo à Q-PR61 (o destino P fica barrado até o contrato do sync — hoje nenhum cliente P).
   Próximo número: **D-PR53** · questões: **Q-PR63** · assunções: **A-PR6**.
 
+### Rodada 8 — decisões (2026-10-31, "uma pergunta por vez")
+
+- ✅ **Q-PR59 → D-PR53 (2026-10-31, (a)).**
+- **D-PR53** (Valdo, 2026-10-31 — fecha a **Q-PR59** = (a), literal: *"Colunas + log (a)"*) — o motivo e o autor do ato "Encerrar a
+  transição" (`POST /api/institutions/:id/end-legacy-transition`, D-PR48/D-PR49) viram FATO do objeto: `tb_institution` ganha
+  `transition_ended_by` (INT NULL — o usuário que executou) e `transition_end_reason` (VARCHAR(255) NULL), escritos UMA vez, no MESMO UPDATE
+  condicionado que grava `source_kind`/`transition_ended_at` (write-once; os quatro nascem juntos — CHECK binário "todos NULL ou todos
+  preenchidos" a confirmar no `revisar-ddl`), E o log segue. Três colunas de UM ato não são maquete; viram tabela `_event` só se nascer um
+  2º ato desse tipo. Molde: `tb_invoice_cancel_waiver` (motivo + autor). Execução: migration aditiva pequena na branch `merchandise`, pelo
+  guardião + `revisar-ddl` (número da migration no rebase); `GET /:id` devolve autor e motivo; a tela de Institutions mostra os dois ao lado
+  da data. Revê o "trilha só no log" executado na Rodada 7.
+- ✅ **Q-PR60 → D-PR54 (2026-10-31, (a)) — RATIFICA a A-PR4.**
+- **D-PR54** (Valdo, 2026-10-31 — fecha a **Q-PR60** = (a), literal: *"Chave fica (a)"*) — no destino **P** o ato NÃO toca a chave de
+  sincronia: ela segue viva para os PDVs (uma chave por estabelecimento — D-TM11), sem reinstalação. Quem exclui o servidor desktop é o
+  FATO `source_kind = 'P'`, lido pelo setes-sync (contrato `SYNC_TRANSITION_ENDED` — grupo do sync), e o terminal L inativado (frente do
+  terminal, D-TM9/D-TM10). No destino **W** a chave é inativada em definitivo e nunca reativa (`SYNC_KEY_NOT_FOR_SOURCE`). Lê-se a D-PR48
+  ("inativar a chave em definitivo") como regra do destino W. Código já assim na branch — sem execução nova.
+- ✅ **Q-PR61 → D-PR55 (2026-10-31, (a)) — RATIFICA a A-PR5.**
+- **D-PR55** (Valdo, 2026-10-31 — fecha a **Q-PR61** = (a), literal: *"Barrado (a)"*) — o destino **P** do ato fica BARRADO (409
+  `LEGACY_TRANSITION_DESTINATION_PENDING` antes de qualquer transação; `OPEN_TRANSITION_DESTINATIONS = {W}`) até o grupo do sync publicar
+  a recusa do cadastro pelo fato (`SYNC_TRANSITION_ENDED`). Motivo: com a chave viva (D-PR54) e sem a recusa, L → P abriria DOIS escritores
+  no catálogo num ato irreversível. Nenhum cliente P hoje; quando o 1º aparecer, a prioridade é o contrato do sync (não tirar a barreira).
+  Conhecimento negativo: não liberar o P por roteiro de implantação ("parar o desktop antes") — a decisão é consciente. Código já assim.
+- ✅ **Q-PR62 → D-PR56 (2026-10-31, (a)).**
+- **D-PR56** (Valdo, 2026-10-31 — fecha a **Q-PR62** = (a), literal: *"Condição (a)"*) — `sourceKind` segue OBRIGATÓRIO no `POST
+  /api/institutions`, sem padrão ("fato declarado, nunca presumido" — um L cadastrado como W nunca teria a chave, e W não volta). É
+  CONDIÇÃO DA JANELA da branch `merchandise`: a janela só abre com a tela de Institutions do app mandando o campo — seletor W/L/P
+  obrigatório na inclusão, só leitura na edição (parte da onda 1 do app de produtos, passo 6 do plano de retomada). A cerca
+  `institutions-contract-fence.test.ts` (payload do app × DTO) é a régua. **Rodada 8 do bloco de produtos FECHADA** (D-PR53…D-PR56; A-PR4 e
+  A-PR5 ratificadas); sobram só as conferências do grupo do sync (Q-SY24, Q-SY25, contrato `SYNC_TRANSITION_ENDED`). Próximo número:
+  **D-PR57** · **Q-PR63** · **A-PR6**.
+

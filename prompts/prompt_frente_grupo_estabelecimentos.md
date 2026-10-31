@@ -251,6 +251,11 @@ pelos usuários da fundadora · (c) tudo por qualquer admin de qualquer estabele
 > **2026-10-18 (noite) — Fase 1 do plano de retomada (`prompts/plano_retomada_2026-10-18.md`)**: a branch `grupo-leitores` (ff2795f) foi
 > EMPURRADA ao GitHub (`origin/grupo-leitores`, só a branch) a pedido do Valdo. Segue SEM merge no `main`; publicar continua sendo o "vai"
 > (Fase 2, 2º passo — antes do bloco de privilégios, por causa do `admin.repository.ts`).
+>
+> **2026-10-31 — PUBLICADA (passo 3 do `prompts/plano_retomada_2026-10-21.md`; Valdo: "Sim, vai")**: `main` do setes-api juntado na branch
+> (merge `e61f9fe` — o `main` tinha recebido a recuperação de senha; nenhum arquivo em comum), suíte no código juntado 134/134 suítes ·
+> 2150 verdes, `main` fast-forward → **e61f9fe** na árvore viva (boot ok, menu 200) e no GitHub (`main` e `grupo-leitores`). Próximo da
+> frente: a ONDA 0 (D-GE3/D-GE20), depois do bloco de privilégios.
 
 Tarefa própria pedida pela D-GE4. Worktree `D:\Gestao2027\grupo-leitores\setes-api` (branch `grupo-leitores`, base f53a618; junções
 só-leitura `grupo-leitores\{fiscal-api,nfse-api}` e `node_modules` → árvore viva). Zero DDL, zero seed. **Neutro com 1 institution por
@@ -448,3 +453,11 @@ tabelas do grupo + vínculo da filial) · D-PR24 (onda 1 de produtos com 4 regra
 - A leitura da origem dos cadastros (`sourceKindOfInstitution` da peça `@shared/terminal`, interina até a 072 da `merchandise`) resolve
   HOJE a própria institution; quando `@shared/group` nascer, o leitor único (`sourceKindOf` de `@shared/catalog-owner`) resolve a
   FUNDADORA pelo `groupInstitutionId` (D-TM10) — a cerca 5 de `terminal-fence.test.ts` cobra a delegação no merge.
+
+---
+
+**Nota da frente do terminal (2026-10-31 — D-TM24, `prompt_frente_terminal.md` §10.10)**: o UNIQUE do terminal L é POR ESTABELECIMENTO;
+num grupo, um mesmo servidor/Firebird que atende N estabelecimentos aparece como N linhas L (D-TM8 × D-TM17). A onda 0/1 do grupo confere
+"uma fonte por grupo" no PAREAMENTO (uuid da base do L) — item a levar para o escopo dela. Também pendente para esta frente (D-NE169,
+`prompt_onda_nfe_sefaz.md` §15.9.7): dizer se um mesmo CNPJ pode viver em duas institutions.
+

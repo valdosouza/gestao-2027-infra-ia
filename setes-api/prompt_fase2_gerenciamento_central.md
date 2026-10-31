@@ -646,6 +646,9 @@ ALTER TABLE `tb_tax_icms_nr` ADD PRIMARY KEY (`id`);
 
 1. **Herança por PK compartilhada**: tabelas-filhas de `tb_entity` (`tb_address`, `tb_phone`, `tb_company`, `tb_person`, `tb_user`, `tb_institution`, `tb_customer` e futuras) usam `id` como PK **e** FK para `tb_entity.id`. Foge deliberadamente do padrão `tb_entity_id` — decisão arquitetural por similaridade/herança. Tabelas N:N (`tb_entity_has_mailing`, `tb_institution_has_user`) continuam no padrão `tb_<tabela>_id`.
 2. **Senha permanece MD5**; campo `salt` removido de `tb_user`. (Risco registrado: MD5 é reversível por rainbow table.)
+   ⚠️ **SUPERADA pela D-EA9 (Valdo, 2026-10-31 — `prompts/prompt_endurecer_autenticacao.md`)**: `scrypt` nativo do Node com sal
+   (`N=2^15, r=8, p=3`), migração transparente no login (MD5 legado aceito e regravado). Vale a partir da EXECUÇÃO da Onda 4 do endurecer —
+   antes da A2 da auth-api (D-AU11); até lá o código segue em MD5.
 3. **`tb_address` PK (`id`,`kind`)**: correto — permite vários endereços desde que de tipos diferentes.
 4. **`tb_institution.schema_name`** adicionado (absorve `tenants`).
 5. **`tb_interface`**: defaults `NULL` reais; `acao_botao` renomeado para `button_action`.

@@ -322,3 +322,15 @@ sessão de caixa — dizer "token"/"login") e **"contrato"** (ocupada — dizer 
 
 - Chave de sincronia (`tb_sync_api_key`) — Q-AU9; credencial de aplicativo (S1) — Q-AU10.
 - Menu (`tb_module*`), campos e configs — ficam no setes-api (salvo Q-AU1 (c)).
+- **Herança para a A2 (2026-10-31)**: o passo de boot que concede as telas ESTRUTURAIS a toda institution ativa (D-TM29,
+  `prompt_frente_terminal.md` §10.10) nasce no setes-api e MUDA para a auth-api na A2, junto da escrita da licença.
+- **Herança para a A2 (2026-10-31, D-RS15)**: o script `reset-super-password.ts` (D-PV46 + D-RS7/D-RS13/D-RS14) grava a credencial, logo
+  MUDA para a auth-api na A2 junto dos outros escritores dela (D-AU6); passa a gravar em `tb_user_credential` (D-AU5) — e, se nascer o fato
+  "senha definida por terceiro" ao lado dela, grava nele (`prompt_privilegios_interfaces.md` §13.10.5).
+- **Entra na COSTURA A1 (2026-10-31, D-EA7 do `prompt_endurecer_autenticacao.md`)**: a revogação da D-AU3 (4) tem forma decidida —
+  inativação pela view viva (sem instante); troca de senha pelo `iat` × fato próprio "senha definida em T" AO LADO do hash (nunca
+  `tb_user.updated_at`, que todo salvar do cadastro toca), gravado só pelos escritores da senha; vai com o hash para `tb_user_credential`
+  na A2. Tabelas da frente de endurecer que nascem antes da A2 em `setes_central` e mudam para o `auth_api` na A2: `tb_user_login_failure`
+  (D-EA2) e `tb_user_login_notice` (D-EA3); canal de alarme `OPS_ALERT_EMAIL` é da operação (D-EA4). A linha `Auth OK` do
+  `authMiddleware` sai na mesma costura (D-EA12). **Pré-requisito da A2 (D-AU11) DECIDIDO**: Q-EA9 → D-EA9 (`scrypt` nativo
+  `N=2^15, r=8, p=3`, migração transparente no login) — falta EXECUTAR (Onda 4 do endurecer, depois das Ondas 1+2 e 3 — D-EA10).

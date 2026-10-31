@@ -740,41 +740,41 @@ Na sessão da troca (D-TM13/D-TM16): código novo pela peça; listas/detalhes da
   livres (nunca foi distribuído; o veredito da origem segue valendo); PAREADO = kind travado (A-TM3), exclusão recusada (D-TM11) e
   inativar o L = só o ato (D-TM10 item 4). Antes dos gates as três saídas de "o L" divergiam (kind passava, active era recusado,
   exclusão passava) — forma incoerente. Ver Q-TM12.
-- **A-TM7** — leitura INTERINA da origem dos cadastros até a 072 da `merchandise` chegar ao `main`: chave do sincronizador VIVA
+- ✅ **A-TM7 — RATIFICADA (Valdo, 2026-10-31: "Ratificar")** — leitura INTERINA da origem dos cadastros até a 072 da `merchandise` chegar ao `main`: chave do sincronizador VIVA
   (`deleted='N'`, ativa OU pausada — a pausa não muda o dono, D-PR48) = **L**; sem chave = **W**; 'P' nunca é inferido. Na fusão,
   `sourceKindOfInstitution` delega a `sourceKindOf` de `@shared/catalog-owner` (um leitor; a sonda da coluna é por processo — o deploy que
   traz a 072 reinicia o processo).
-- **A-TM8 (revista)** — um L INATIVO pode nascer e existir livre (não é "o L" — o UNIQUE só conta ativos; a origem é conferida mesmo
+- ✅ **A-TM8 (revista) — RATIFICADA (Valdo, 2026-10-31: "Ratificar")** — um L INATIVO pode nascer e existir livre (não é "o L" — o UNIQUE só conta ativos; a origem é conferida mesmo
   assim: em W/P nenhum L nasce); reativar um L (inativado pelo ato) passa pelo veredito (institution já W/P → 409
   `TERMINAL_KIND_NOT_ALLOWED`; outro L ativo → 409 pelo UNIQUE).
-- **A-TM9** — a lista de apoio `/api/terminals/lookup` traz só vivos E ativos; a lista da tela traz todos os vivos (com "Inativo").
+- ✅ **A-TM9 — RATIFICADA (Valdo, 2026-10-31: "Ratificar")** — a lista de apoio `/api/terminals/lookup` traz só vivos E ativos; a lista da tela traz todos os vivos (com "Inativo").
 - **A-TM10** — a reativação por rota própria (`POST /:id/restore` do §4.3) NÃO nasceu: pareado não se exclui; não pareado se recria com
   número novo (A-TM4). Ver Q-TM11.
 
 **Questões para o Valdo (uma por vez; recomendação marcada)**:
-- **Q-TM8 — admissão do L: literal (como executado) ou derivada do fato (guardião)?** Hoje: o ato "encerrar a transição" INATIVA o L
+- ✅ **Q-TM8 → D-TM23 (2026-10-31, (a)).** Texto original: **admissão do L: literal (como executado) ou derivada do fato (guardião)?** Hoje: o ato "encerrar a transição" INATIVA o L
   (`inactivateLocalServerTerminal`) e "desativar o L pelo cadastro" é recusado; o UNIQUE do L conta ATIVOS. O guardião propõe: o ato
   escreve SÓ a 072; o L fica "não admitido" por DERIVAÇÃO (`kind='L'` e `source_kind ≠ 'L'` → 403 do sync); "desativar o L" vira PAUSA;
   o UNIQUE conta VIVOS. **(a) Recomendado: manter o literal** — o setes-sync lê UM predicado ("terminal vivo e ativo") sem precisar da
   072, e a contradição é impossível porque o ato chama a peça na MESMA transação (a peça já existe) · (b) a forma do guardião (um fato,
   um escritor — exige o sync ler `source_kind` e muda o UNIQUE para vivos, DDL antes do merge).
-- **Q-TM9 — escopo do UNIQUE do L na era do grupo.** A coluna gerada não lê outra tabela; e D-TM8 (servidor que atende N estabelecimentos
+- ✅ **Q-TM9 → D-TM24 (2026-10-31, (a)).** Texto original: **escopo do UNIQUE do L na era do grupo.** A coluna gerada não lê outra tabela; e D-TM8 (servidor que atende N estabelecimentos
   = N registros) × D-TM17 (um Firebird, N estabelecimentos = a mesma fonte) dariam N linhas L vivas no mesmo grupo. **(a) Recomendado
   (guardião): UNIQUE por ESTABELECIMENTO, como está** (neutro hoje); "uma fonte por grupo" conferida no PAREAMENTO (uuid do L) na onda 0/1
   do grupo — nota para `prompt_frente_grupo_estabelecimentos.md` · (b) UNIQUE pela chave do grupo (coluna comum gravada pela peça).
-- **Q-TM10 — nome do header do pareamento** (A-TM5 reservou para a onda 2/3): "base" já é ocupada (catálogo de base, Base de Troca, base
+- ✅ **Q-TM10 → D-TM25 (2026-10-31, (a)).** Texto original: **nome do header do pareamento** (A-TM5 reservou para a onda 2/3): "base" já é ocupada (catálogo de base, Base de Troca, base
   do pedido). **(a) Recomendado: `X-Sync-Holder`** · (b) `X-Sync-Installation` · (c) manter `X-Sync-Base`.
-- **Q-TM11 — rota de reativação (`POST /:id/restore`)?** **(a) Recomendado: não nasce** (A-TM10) · (b) nasce como ato ALTERAR
+- ✅ **Q-TM11 → D-TM26 (2026-10-31, (a)) — RATIFICA a A-TM10.** Texto original: **rota de reativação (`POST /:id/restore`)?** **(a) Recomendado: não nasce** (A-TM10) · (b) nasce como ato ALTERAR
   (`privilegeAct`) para "excluí por engano" de terminal não pareado.
-- **Q-TM12 — a porta das três saídas de "o L" (gates socrático e adversarial).** A D-TM10 item 4 diz, literal, "desativar o terminal L
+- ✅ **Q-TM12 → D-TM27 (2026-10-31, (a)) — RATIFICA a A-TM6 revista.** Texto original: **a porta das três saídas de "o L" (gates socrático e adversarial).** A D-TM10 item 4 diz, literal, "desativar o terminal L
   sem o ato = recusado"; executado como "o L PAREADO" (A-TM6 revista): um L registrado errado e ainda não pareado pode ser corrigido
   (tipo, inativação, exclusão) sem o ato irreversível; o L pareado só sai pelo ato. **(a) Recomendado: ratificar a porta = pareamento**
   (um L sem base nunca escreveu nada; a alternativa prende um registro errado até o ato L → W/P, que é irreversível) · (b) literal
   estrito: L ATIVO (pareado ou não) só sai pelo ato — exclusão e troca de tipo também recusadas.
-- **Q-TM13 — fechamento da onda 0 "em parte".** Esta entrega congela a dívida dos literais (cerca 4) mas não a quita — a D-TM16
+- ✅ **Q-TM13 → D-TM28 (2026-10-31, (a)).** Texto original: **fechamento da onda 0 "em parte".** Esta entrega congela a dívida dos literais (cerca 4) mas não a quita — a D-TM16
   manda a troca executar DEPOIS dos merges. **(a) Recomendado: confirmar** que a onda 0 fica "preparada" até o 2º passo (sessão
   própria com o gate dele — §10.9 item 5) · (b) trocar os literais já nesta branch (conflito certo com `privilegios-crud` e `merchandise`).
-- **Q-TM14 — telas ESTRUTURAIS auto-curativas (gate socrático)?** O contrato estrutural (`STRUCTURAL_INTERFACE_KEYS`) só é gravado no
+- ✅ **Q-TM14 → D-TM29 (2026-10-31, (a)).** Texto original: **telas ESTRUTURAIS auto-curativas (gate socrático)?** O contrato estrutural (`STRUCTURAL_INTERFACE_KEYS`) só é gravado no
   onboarding; um cliente anterior à tela nova ganha a flag pelo seed mas o menu (INNER JOIN com o contrato) não a mostra — hoje o seed 69
   cobre `setes_setes` e os demais exigem INSERT manual por schema. **(a) Recomendado: na era dos 1000 clientes, um passo do boot
   (`grantStructuralInterfaces` idempotente em cada institution ativa, no molde do laço do `assertTerminalSchema`)** — decisão
@@ -847,3 +847,50 @@ worktree) · prova da 074 **34/34** · app `flutter analyze` limpo · suíte com
    pelo `idx_order_terminal_counter`, cerca 4 zerada (e virada em "zero literal fora da peça"), `cashier.repository.ts` sem a constante
    local, `tb_order_sale.number`/`tb_order_stock_adjust.number` conferidos.
 6. Depois: ondas 2/3 no grupo do sync (§10.6) → onda 4 (ensaio ponta a ponta).
+
+### 10.10 Decisões de 2026-10-31 (rodada "uma pergunta por vez")
+
+- **D-TM23** (Valdo, 2026-10-31 — fecha a **Q-TM8** = (a), literal: *"Literal (a)"*) — a admissão do terminal L segue LITERAL, como
+  executado: o ato "encerrar a transição" INATIVA o L na MESMA transação (`inactivateLocalServerTerminal`, depois do UPDATE do fato);
+  desativar o L pelo cadastro comum é recusado (só o ato — D-TM10 item 4, porta = pareamento conforme a Q-TM12); o setes-sync confere UM
+  predicado ("terminal vivo e ativo") sem precisar ler `source_kind` para ADMITIR terminal; o UNIQUE do L segue contando ATIVOS. A forma do
+  guardião (L "não admitido" por derivação) fica rejeitada. Nota: o setes-sync lerá `source_kind` de qualquer forma para RECUSAR CADASTRO
+  no destino P (D-PR55, `SYNC_TRANSITION_ENDED`) — são perguntas diferentes.
+- **D-TM24** (Valdo, 2026-10-31 — fecha a **Q-TM9** = (a), literal: *"Por estabelecimento (a)"*) — o UNIQUE do L segue POR ESTABELECIMENTO
+  (como está; neutro hoje — nenhum cliente com filiais na web). "Uma fonte por grupo" (D-TM8 × D-TM17: um Firebird com N estabelecimentos =
+  N linhas L do MESMO servidor) é conferida no PAREAMENTO (uuid da base do L) na onda 0/1 do grupo — nota registrada em
+  `prompt_frente_grupo_estabelecimentos.md`. Rejeitada a coluna comum do grupo agora (manutenção a cada mudança de matriz/filial sem
+  consumidor).
+- **D-TM25** (Valdo, 2026-10-31 — fecha a **Q-TM10** = (a), literal: *"X-Sync-Holder (a)"*) — o header do pareamento do sincronizador se
+  chama **`X-Sync-Holder`** (mesmo nome do vínculo `tb_terminal_holder` — um nome só para o mesmo conceito nos dois grupos); "base" fica
+  fora (palavra ocupada: catálogo de base, Base de Troca, base do pedido — glossário do guardião). Entra no contrato das ondas 2/3 com o
+  grupo do sync (§10.6) no lugar do `X-Sync-Base` reservado pela A-TM5.
+- **D-TM26** (Valdo, 2026-10-31 — fecha a **Q-TM11** = (a), literal: *"Não nasce (a)"*; RATIFICA a **A-TM10**) — a rota de reativação
+  `POST /api/terminals/:id/restore` (§4.3) NÃO nasce: terminal pareado não se exclui (D-TM11) e não pareado excluído se recria com número
+  NOVO (A-TM4 — número não se reaproveita). O §4.3 fica superado neste ponto. Sem execução nova.
+- **D-TM27** (Valdo, 2026-10-31 — fecha a **Q-TM12** = (a), literal: *"Pareamento (a)"*; RATIFICA a **A-TM6 revista**) — a PORTA das três
+  saídas de "o L" (trocar o tipo, inativar, excluir) é o PAREAMENTO: L NÃO pareado = as três livres (cadastro errado se corrige; nunca
+  escreveu nada); L PAREADO = tipo travado (A-TM3), exclusão recusada (D-TM11) e inativação só pelo ato (D-TM10 item 4). Lê-se a D-TM10 item 4
+  ("desativar o terminal L sem o ato = recusado") como regra do L PAREADO. Código já assim. Sem execução nova.
+- **D-TM28** (Valdo, 2026-10-31 — fecha a **Q-TM13** = (a), literal: *"Confirmar (a)"*) — a onda 0 do terminal fica "PREPARADA": entra no
+  merge com a tabela, a peça, o módulo e a tela, e com a cerca 4 CONGELANDO a dívida dos ~140 literais `terminal = 0` (nenhum literal novo).
+  A QUITAÇÃO (trocar os literais pela peça; listas/detalhes/MAX+1 no terminal 0 — D-TM13) é o 2º passo, sessão própria com gate próprio,
+  DEPOIS dos merges de `privilegios-crud` e `merchandise` (D-TM16; §10.9 item 5). Rejeitado trocar já nesta branch (conflito certo nos
+  mesmos pontos das duas branches).
+- **D-TM29** (Valdo, 2026-10-31 — fecha a **Q-TM14** = (a), literal: *"Pelo boot (a)"*) — TRANSVERSAL: as telas ESTRUTURAIS
+  (`STRUCTURAL_INTERFACE_KEYS` — as 5 de hoje + `interface-fields`/`general-configs` da D-PV54 + `terminals`) passam a ser concedidas por
+  um PASSO DO BOOT: `grantStructuralInterfaces` idempotente em CADA institution ativa, molde do laço do `assertTerminalSchema` — tela
+  estrutural nova chega a todo cliente sozinha ("estrutural = todo cliente tem" por construção; o seed por schema deixa de ser necessário).
+  Onde executa: no setes-api, na janela do bloco de privilégios ou na do terminal (a que vier primeiro com tela estrutural nova); na A2 da
+  auth-api o passo MUDA para ela junto da escrita da licença (D-AU1/D-AU6 — nota em `prompt_frente_auth_api.md`). **Bloco de decisões do
+  terminal FECHADO (D-TM23…D-TM29)**; seguem as assunções A-TM7, A-TM8 e A-TM9 a ratificar.
+- **A-TM7 RATIFICADA** (Valdo, 2026-10-31, literal: *"Ratificar"*) — a leitura INTERINA da origem (chave viva = L; sem chave = W; P nunca
+  inferido) vale só na branch `terminal` até a fusão com a `merchandise`; na fusão `sourceKindOfInstitution` delega a `sourceKindOf`
+  (`@shared/catalog-owner`) e a interina morre — um leitor só. Pela ordem de merge (produtos antes do terminal), a interina nunca roda no
+  `main`.
+- **A-TM8 RATIFICADA** (Valdo, 2026-10-31, literal: *"Ratificar"*) — L INATIVO pode nascer e existir (não é "o L"; o UNIQUE conta só
+  ativos; a origem é conferida mesmo assim — em W/P nenhum L nasce); reativar um L passa pelo mesmo veredito do nascimento (W/P → 409
+  `TERMINAL_KIND_NOT_ALLOWED`; outro L ativo → 409 pelo UNIQUE). Cobre servidor ainda a instalar e histórico de servidor substituído.
+- **A-TM9 RATIFICADA** (Valdo, 2026-10-31, literal: *"Ratificar"*) — lista de apoio `/api/terminals/lookup` = só vivos E ativos (padrão
+  "ativo" da casa); lista da tela = todos os vivos com o selo "Inativo". **Frente do terminal SEM questão aberta** (D-TM23…D-TM29 +
+  A-TM6…A-TM10 ratificadas); sobram só os contratos com o grupo do sync (§10.6, com o `X-Sync-Holder` da D-TM25).

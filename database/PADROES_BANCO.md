@@ -156,7 +156,10 @@ Achou um `DELETE`/`REPLACE`/`TRUNCATE` fora desta lista = defeito (ou exceção 
 ## 6. Autenticação e permissões
 
 - `tb_user` controla **somente autenticação** (1 registro por entity; PK simples `id`)
-- Senha: MD5 sem salt (decisão registrada; risco de rainbow table aceito), hash aplicado **no backend**, nunca na query
+- Senha: MD5 sem salt (decisão registrada; risco de rainbow table aceito), hash aplicado **no backend**, nunca na query.
+  ⚠️ *A SER SUPERADA pela D-EA9 (2026-10-31): `scrypt` com sal (`scrypt$<params>$<sal>$<hash>` na mesma coluna), migração transparente no
+  login — vale quando a Onda 4 de `prompts/prompt_endurecer_autenticacao.md` for executada (antes da A2 da auth-api). E pela D-AU5, na A2 a
+  credencial sai de `tb_user` para `auth_api.tb_user_credential` (a 1ª linha desta seção muda junto, na execução).*
 - Perfil do usuário: `tb_institution_has_user.kind` — **por institution** (o mesmo usuário pode ter poderes diferentes em cada empresa)
 - Privilégio do usuário (`tb_user_has_privilege`): **por institution** (decisão 10 da Fase 2 + D-GE3, 2026-10-18). ⚠️ Hoje a tabela está
   SEM `tb_institution_id` (a migration 003 recriou sem a coluna) — defeito latente, inofensivo com 1 institution por schema; volta a ter a

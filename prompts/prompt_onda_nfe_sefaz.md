@@ -2583,7 +2583,7 @@ gates → publicação (Q-NE168); a Rodada 0 da NE-3 abre depois, com o §15.5 c
 
 #### 15.9.5 Questões novas (numeração permanente) e correções sem decisão
 
-- **Q-NE169** (parecer §15.3-6.1 revisitado na execução + gate socrático L5): a UNIQUE da PROVA `uk_invoice_number_void_withdrawn (environment,
+- ✅ **Q-NE169 → D-NE169 (2026-10-31, (a)).** Texto original: (parecer §15.3-6.1 revisitado na execução + gate socrático L5): a UNIQUE da PROVA `uk_invoice_number_void_withdrawn (environment,
   withdrawn_void_id)` NÃO tem institution — dentro do mesmo CNPJ é IMPLICADA pela chave da faixa `(institution, model, serie, environment,
   number_from, number_to, withdrawn)` (a prova mostrou que a chave da faixa é a MAIS estrita: outro ano no Id já é barrado por ela); ela só
   dispara sozinha quando o MESMO Id é retirado sob DUAS institutions (CNPJ re-implantado como institution nova; teste em H com o CNPJ de um
@@ -2591,19 +2591,19 @@ gates → publicação (Q-NE168); a Rodada 0 da NE-3 abre depois, com o §15.5 c
   com a NE-5 obrigada a traduzir o 1062 DESSA chave em 409 tipado (o valor duplicado é o Id do próprio chamador — não vaza linha alheia) e a frente
   do grupo de estabelecimentos dizendo se um CNPJ pode viver em duas institutions · (b) tirar (a chave da faixa já cobre o mesmo CNPJ; o 563 do fisco
   diz "já retirada") · (c) manter e acrescentar institution (vira cópia da chave da faixa — maquete). *Rec.: (a).*
-- **Q-NE170** (gate socrático MEDIUM 2 — D-NE110 × D-NE163): o leitor das faixas EXIGE o AMBIENTE, mas quem cunha o nNF do 55 é o ERP (D-F21),
+- ✅ **Q-NE170 → D-NE170 (2026-10-31, (a)).** Texto original: (gate socrático MEDIUM 2 — D-NE110 × D-NE163): o leitor das faixas EXIGE o AMBIENTE, mas quem cunha o nNF do 55 é o ERP (D-F21),
   cujo `tb_invoice.number_seq` é por (institution, modelo, série) SEM ambiente — e o ambiente do 55 mora em `tb_establishment_issuer` do `fiscal_api`,
   que NÃO tem view publicada (`nfe-api/ops/grants.sql` §2 lista só as duas views). De onde o ERP lê o eixo ao cunhar? (a) **view publicada da
   habilitação por modelo (`environment`, `cutover_at`) no núcleo**, lida pelo setes-api junto da view de faixas na janela da NE-6 (muda o GRANT e a
   superfície `fiscal-api/reading`) · (b) a nfe-api responde "próximo número livre" e o ERP para de ler faixas · (c) o ERP guarda o ambiente do 55 em
   configuração própria (2ª fonte — maquete). *Rec.: (a) — decidir ANTES da NE-6.* Cenário: 1º faturamento depois de o admin virar H→P com o ERP
   lendo o eixo errado = número cunhado dentro de uma faixa retirada em P.
-- **Q-NE171** (gate socrático MEDIUM 1): `deleted` em `tb_invoice_number_void` fica FORA das duas UNIQUE e a view esconde `deleted='S'` — um
+- ✅ **Q-NE171 → D-NE171 (2026-10-31, (a)).** Texto original: (gate socrático MEDIUM 1): `deleted` em `tb_invoice_number_void` fica FORA das duas UNIQUE e a view esconde `deleted='S'` — um
   soft delete numa faixa retirada faria dois leitores do mesmo fato responderem o contrário (o ERP volta a cunhar os números; o próximo pedido da
   mesma faixa recebe 1062). (a) **`deleted` NUNCA é escrito nesta tabela** (append-only como a voz — cerca por AST + conhecimento negativo; o filtro
   da view fica só por forma) · (b) `withdrawn` passa a considerar `deleted` (migration que recria a coluna gerada ANTES de qualquer linha — barato
   agora, caro na NE-5) · (c) deixar como está. *Rec.: (a).*
-- **Q-NE172** (gate adversarial MEDIUM 1 — TRANSVERSAL, pré-existente no núcleo e na nfse-api): o pool do núcleo não fixa `sql_mode`; no modo do dev
+- ✅ **Q-NE172 → D-NE172 (2026-10-31, (a)).** Texto original: (gate adversarial MEDIUM 1 — TRANSVERSAL, pré-existente no núcleo e na nfse-api): o pool do núcleo não fixa `sql_mode`; no modo do dev
   (não estrito) o motor TRUNCA o valor antes do CHECK e o domínio "fecha o que passa por fora" só vale para o CONTEÚDO, não para o COMPRIMENTO
   (`access_key` de 45 → 44 aceito; 'HX' → 'H'). (a) **sessão estrita no pool do núcleo (`STRICT_ALL_TABLES`, fixada por conexão como o REPEATABLE READ
   e o UTC — PADROES §9/§10) + `assertSessionInvariants` conferindo o `sql_mode` + sonda do boot com `access_key` de 45 esperando 1406**, numa janela
@@ -2676,3 +2676,32 @@ sem SQL; o 55 nasce virado). Scripts de reprodução do gate FORA dos repositór
 nfse-api (cópia do main) contra o núcleo FINAL **65 suítes, 949 passaram, 185 pulados (ao vivo)** + `tsc` limpo — o núcleo só acrescenta;
 `prove:001` re-rodado com a sonda nova (EXPLAIN das faixas: `range` pelo `uk_invoice_number_void_range`, sem filesort); banco descartável APAGADO;
 `fiscal_api` real sem nenhuma linha `nfe-api` em `_migrations` (conferido).
+
+#### 15.9.7 Decisões de 2026-10-31 (rodada "uma pergunta por vez")
+
+- **D-NE169** (Valdo, 2026-10-31 — fecha a **Q-NE169** = (a), literal: *"Manter (a)"*) — a UNIQUE da PROVA
+  `uk_invoice_number_void_withdrawn (environment, withdrawn_void_id)` FICA sem institution: é o grão do FISCO (uma `ProcInutNFe` por Id por
+  ambiente — identidade nacional, precedente da UNIQUE da `access_key`). Obrigações: a **NE-5** (1º escritor da família) traduz o 1062 DESSA
+  chave em 409 tipado (o valor duplicado é o Id do próprio CNPJ do chamador — não vaza linha alheia); a frente do **grupo de estabelecimentos**
+  diz se um CNPJ pode viver em duas institutions (até lá, o caso é teste em H com CNPJ de cliente ou CNPJ re-implantado). Nenhuma mudança na
+  001 publicada pela D-NE168.
+- **D-NE170** (Valdo, 2026-10-31 — fecha a **Q-NE170** = (a), literal: *"View do núcleo (a)"*) — o ERP lê o AMBIENTE do modelo 55 por uma
+  VIEW PUBLICADA da habilitação por modelo no núcleo (`environment`, `cutover_at` de `tb_establishment_issuer`, molde D-F15/D-F32 — fundível,
+  PADROES §11.3), lida pelo setes-api JUNTO da view de faixas, VIVA no momento de cunhar o nNF (nunca cache, nunca cópia). Uma fonte só para o
+  ambiente (a (c) seria 2ª fonte — maquete); a numeração segue no ERP (D-F21) e o setes-api segue sem chamar API fiscal (D-F4 — a (b) os
+  reabriria). Execução na janela da NE-6, ANTES do 1º faturamento de 55: a view nasce numa migration do núcleo, entra na superfície
+  `fiscal-api/reading`, o GRANT do `setes_api` ganha as duas views (§15.9.4 passo 4 — "NÃO agora" vira "na NE-6"). Cenário que fecha: virar H→P
+  com o ERP lendo o eixo errado e cunhar dentro de faixa retirada em P.
+- **D-NE171** (Valdo, 2026-10-31 — fecha a **Q-NE171** = (a), literal: *"Nunca apaga (a)"*) — `deleted` NUNCA é escrito em
+  `tb_invoice_number_void`: a tabela é APPEND-ONLY como a voz do fisco (faixa retirada é fato do fisco e não se desfaz; erro se corrige com
+  NOVA inutilização, nunca apagando linha). Na NE-5: cerca por AST (nenhum UPDATE/DELETE nesta tabela, nenhum `deleted` diferente de 'N' no
+  INSERT) + conhecimento negativo no escritor; o filtro `deleted='N'` da view fica só por FORMA (padrão da casa). Exceção à regra geral do
+  soft delete (D-PR37/PADROES §3.1) registrada aqui com motivo: o "apagar" não existe no domínio do fisco. A (b) — `withdrawn` considerando
+  `deleted` — fica rejeitada (daria sentido a um ato que o fisco não reconhece).
+- **D-NE172** (Valdo, 2026-10-31 — fecha a **Q-NE172** = (a), literal: *"Janela própria (a)"*) — TRANSVERSAL (núcleo + nfse-api + nfe-api):
+  o pool do núcleo fixa `sql_mode` ESTRITO por conexão (`STRICT_ALL_TABLES`, molde do REPEATABLE READ e do UTC — PADROES §9/§10);
+  `assertSessionInvariants` confere o `sql_mode`; a sonda do boot grava `access_key` de 45 e espera 1406. Numa JANELA PRÓPRIA, ANTES da NE-5
+  (o 1º escritor da família NF-e nasce no modo certo). Pré-condição da janela: MEDIR os escritores existentes do `fiscal_api` (nfse-api)
+  sob o modo estrito em cópia descartável — algum pode depender do corte silencioso; o que aparecer vira correção ou questão. Gates da
+  nfse-api no escopo (o restart muda o comportamento dela). Regra a destilar no PADROES junto da execução. **Bloco de decisões da NE-2
+  FECHADO (D-NE169…D-NE172)** — publicação da NE-2 (D-NE168) segue a qualquer hora com o "vai".

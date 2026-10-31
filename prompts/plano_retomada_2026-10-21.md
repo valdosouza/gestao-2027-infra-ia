@@ -15,8 +15,8 @@ os dois vão para `HISTORICO/`.
 | Bloco | Estado em 2026-10-21 | O que falta | Bloqueio |
 |---|---|---|---|
 | **Decisões** | 92 itens FECHADOS em 2026-10-20 (D-PV19…D-PV47, D-UC6…D-UC12, D-PR45…D-PR52, D-TM8…D-TM22, D-NE160…D-NE168, D-RS1…D-RS6; INDICE 10.35) | **58 itens novos** levantados pelas seis sessões (§3) + Q-IB1 (30/10) | só o Valdo, um por vez (regra `memory/feedback-uma-pergunta-por-vez`) |
-| **Recuperação de senha** | D-PV18 REVOGADA (D-PV47): a recuperação VOLTA, endurecida. Branch `recuperacao-senha` (api d19de9d · sql e1aa574) + D-RS4/D-RS5/D-PV46 executados na worktree (19 + 2 arquivos sem commit; §13.10 do prompt de privilégios); `sem-recuperacao-senha` DESCARTADA (worktrees e branches removidas) | commit de salvaguarda → "vai" → sql/67 antes e depois → merge api + sql → SMTP real no `.env` | **credenciais SMTP (Valdo)**; "vai" |
-| **Grupo — D-GE4** | branch `grupo-leitores` ff2795f no GitHub, sem merge | "vai" → merge ff | nenhum |
+| **Recuperação de senha** | D-PV18 REVOGADA (D-PV47): a recuperação VOLTA, endurecida. Branch `recuperacao-senha` (api d19de9d · sql e1aa574) + D-RS4/D-RS5/D-PV46 executados na worktree (19 + 2 arquivos sem commit; §13.10 do prompt de privilégios); `sem-recuperacao-senha` DESCARTADA (worktrees e branches removidas) | ✅ MERGEADA 2026-10-31 (api 9144652 · sql 66fc17c; sql/67 aplicado; boot ok — §2 passo 2) | passeio com o Valdo · ensaio do script do Super · push | Valdo |
+| **Grupo — D-GE4** | ✅ PUBLICADA 2026-10-31 (`main` e61f9fe, GitHub — §2 passo 3) | — | — |
 | **Privilégios — lote D-PV19…D-PV40** | EXECUTADO na worktree `privilegios/{setes-api 74, setes-app 54, nfse-api 5, sql 1}` sobre a branch `privilegios-crud`; gates 0,76/0,80; §11.10 | commit de salvaguarda → fusão com `privilegios-catalogo` (D-PV14/D-PV42 — NÃO feita) → script D-PV20 → seeds 65 + 68 → `errors:gen` → janela única API + app + nfse-api (restart manual) | 10 itens do §3 (nenhum trava) |
 | **Produtos — Rodada 7** | Rodada 6 REFEITA na worktree `merchandise/{setes-api 53, sql 3}` (branch `merchandise`): `tb_institution.source_kind` W/L/P + `@shared/catalog-owner` + `catalogOwnerGuard` + ato `end-legacy-transition` + rotas fiscais do serviço (D-PR45); gates fechados; "Rodada 7 — execução/gates" | commit de salvaguarda → rebase sobre o `main` pós-privilégios → `taxrules-ncm` junto → janela (migrations 071/072/073 + seed 66) — **condição da janela (Q-PR62): o form de Institutions do app com o seletor W/L/P** → onda 1 do APP | 8 itens do §3; Q-SY24/Q-SY25 (sync, conferência) |
 | **Terminal — onda 0** | PREPARADA na worktree `terminal/{setes-api 14, setes-app 8, sql 2}` (branch `terminal` do `main`): migration 074 (`tb_terminal`, `tb_terminal_holder`, DROP `tb_devices`), peça `@shared/terminal`, módulo `terminals` API + app, seed 69; §10 do prompt | commit de salvaguarda → merge DEPOIS de privilégios e produtos → troca dos ~200 literais (D-TM16) → ondas 2/3 no grupo do sync | 12 itens do §3 |
@@ -73,7 +73,20 @@ descartável sobrou (conferido); existe um banco `undefined` (anterior, não é 
 1. **Subir os serviços** (skill `dev-server-orchestrator`): setes-api :3000 (`npm run dev`), nfse-api :3002 (sem watch), app :5051.
 2. **Recuperação** — `recuperacao-senha`: SMTP real no `.env` vivo (Valdo) → sql/67 em `setes_central` → merge api + sql → sql/67 de novo →
    boot `Pedido de troca de senha (script 67): ok` → passeio (§13.8 do prompt de privilégios, revisto pelo §13.10).
+   ✅ **EXECUTADO 2026-10-31 (passos 1 e 2, Valdo: "Sim, vai")** — detalhe no §13.11 do prompt de privilégios: MariaDB iniciado pelo Valdo
+   (administrador); ⚠️ os `node_modules` de TODOS os repositórios (e os `.dart_tool` do app) tinham sido APAGADOS em 2026-10-27 17:30–17:31,
+   causa não registrada — reinstalados por `npm ci` (fiscal-api 413 + `dist` refeito · nfse-api 434 · setes-api 478 · worktree com o lockfile
+   da API viva, que é ignorado no git); suíte da branch 132/132 suítes · 2112 verdes · 31 pulados; pré-voo SMTP ok (`setes.com.br:465`
+   SSL); sql/67 aplicado ANTES e DEPOIS; setes-api `main` = **9144652** (ff), sql `main` = **66fc17c** (merge com o seed 65); boot com
+   `script 67: ok` + `E-mail (SMTP) …`; serviços nas abas "setes-api 3000", "nfse-api producao", "setes-app web 5051"; resposta neutra
+   conferida (e-mail inexistente = 200 genérico); **passeio FEITO com o Valdo** (5 erradas → aviso E por e-mail, código esgotado recusado,
+   código novo trocou a senha — §13.11). **Pendem**: ensaio do script do
+   Super (o classificador recusou rodá-lo pelo agente — Valdo roda). Push dos dois `main` FEITO 2026-10-31 (api 9144652 · sql 66fc17c).
 3. **Grupo** — `grupo-leitores`: merge ff → push.
+   ✅ **EXECUTADO 2026-10-31 (Valdo: "Sim, vai")**: o `main` tinha andado (recuperação), então o `main` foi JUNTADO na branch, na worktree
+   (merge `e61f9fe`, sem conflito — nenhum arquivo em comum), suíte no código juntado **134/134 suítes · 2150 verdes · 31 pulados** (worktree
+   com `npm ci` pelo lockfile vivo e cópia TEMPORÁRIA do `.env`, apagada), depois `main` fast-forward → **e61f9fe**; API reiniciada pelo
+   watch com boot completo; `/api/core/menus` 200 (6 módulos · 38 telas) no app; push do `main` e da branch (`ff2795f..e61f9fe`).
 4. **Bloco privilégios** (sessão própria, depois de 2 e 3): fusão `privilegios-crud` ↔ `privilegios-catalogo` (D-PV14 adaptador
    `listGatedRoutes()` em `CONSUMED_PRIVILEGES`; D-PV42 chave técnica; `error-codes` = soma; Q-PV56 CONSULTAR para o núcleo) → script D-PV20
    (`scripts/sql/dpv20-contrato-setes.sql`) → seeds 65 + 68 → `errors:gen` → janela única API + app (merge sobre a450909 com atenção à fábrica)
@@ -95,8 +108,11 @@ descartável sobrou (conferido); existe um banco `undefined` (anterior, não é 
 7. **Terminal — onda 0**: merge da `terminal` (migration 074, seed 69) → troca dos literais (D-TM16, sessão própria) → ondas 2/3 no grupo do sync.
 8. **Convidado — onda 0** (sessão própria, depois de 4): D-UC8…D-UC12 + D-UC10 (guardião + DDL) + "minha senha" com a peça do código (D-UC7).
 9. **Fora da cadeia, a qualquer hora com "vai"**: publicação da NE-2 (D-NE168; roteiro §15.9.4 do prompt da NF-e) · merge da `densidade-c` no app.
+   **Janela do modo estrito do núcleo (D-NE172)**: fora da cadeia do ERP, mas ANTES da NE-5 (medir os escritores da nfse-api antes).
 10. **Depois da janela de privilégios**: DDLs próprios D-PV33 (trilha `_event` do vínculo), D-PV43 (UNIQUE da `i18n_key`); D-PR59 (colunas do ato);
-    regra de tributação por cliente (D-PV30); onda de endurecer a autenticação (após Q-EA1…Q-EA12); limpeza (§1 ♻).
+    regra de tributação por cliente (D-PV30); limpeza (§1 ♻). **Endurecer a autenticação (D-EA10, 2026-10-31)**: a revogação (D-EA7)
+    entra no passo 4 (costura A1); depois dele, a partir do `main`: Ondas 1+2 → 3 → 4 (hash — pré-requisito da A2, D-AU11), cada uma com
+    gates e "vai", TODAS antes da A2; intercalam com 5–8, menos a Onda 1 com a onda 0 do convidado (as duas mexem no `login`).
 
 ---
 
@@ -255,3 +271,86 @@ com as decisões de 27/10 ainda SEM commit.
   da A2: Q-EA9 executada. Próxima: Q-AU12.
 - **Q-AU12 → D-AU12** ((a)): estreitar já o GRANT do `fiscal_api` em `setes_central` (só as tabelas lidas; nenhuma API fiscal lê
   `tb_user`), na janela do bloco. **Rodada 1 da auth-api FECHADA (D-AU1…D-AU12)**; A-PV24 absorvida pela D-AU1.
+- **Q-PR59 → D-PR53** ((a)): autor e motivo do "Encerrar a transição" viram colunas write-once em `tb_institution`
+  (`transition_ended_by`, `transition_end_reason`) + log; migration aditiva na `merchandise` (`prompt_modulo_products.md` Rodada 8).
+  Próxima: Q-PR60 (ratificar A-PR4).
+- **Q-PR60 → D-PR54** ((a)): no destino P a chave fica viva para os PDVs (o servidor desktop sai pelo fato + terminal L); no W morre.
+  Ratifica a A-PR4, sem execução nova. Próxima: Q-PR61 (ratificar A-PR5).
+- **Q-PR61 → D-PR55** ((a)): destino P BARRADO até o setes-sync honrar o fato (`SYNC_TRANSITION_ENDED`); ratifica a A-PR5, sem execução
+  nova. Próxima: Q-PR62 (form de Institutions = condição da janela).
+- **Q-PR62 → D-PR56** ((a)): `sourceKind` obrigatório; o seletor W/L/P na tela de Institutions é CONDIÇÃO DA JANELA de produtos. **Bloco de
+  produtos FECHADO** (sobram só as conferências do grupo do sync). Próxima: NE-2 (Q-NE169).
+- **Q-NE169 → D-NE169** ((a)): a UNIQUE da prova da inutilização fica sem institution (grão do fisco); a NE-5 traduz o 1062 em 409 tipado;
+  a frente do grupo diz se um CNPJ vive em duas institutions (`prompt_onda_nfe_sefaz.md` §15.9.7). Próxima: Q-NE170.
+- **Q-NE170 → D-NE170** ((a)): o ERP lê o ambiente do 55 por view publicada da habilitação no núcleo, viva ao cunhar o nNF, junto da view
+  de faixas — executa na janela da NE-6. Próxima: Q-NE171.
+- **Q-NE171 → D-NE171** ((a)): `tb_invoice_number_void` é append-only — `deleted` nunca é escrito (cerca por AST na NE-5). Próxima: Q-NE172.
+- **Q-NE172 → D-NE172** ((a)): pool do núcleo em `sql_mode` estrito numa JANELA PRÓPRIA antes da NE-5 (medir antes os escritores da
+  nfse-api em cópia descartável; gates dela no escopo). **Bloco da NE-2 FECHADO.** Próxima: terminal (Q-TM8).
+- **Q-TM8 → D-TM23** ((a)): admissão do L literal — o ato inativa o L na mesma transação; o sync confere "vivo e ativo"
+  (`prompt_frente_terminal.md` §10.10). Próxima: Q-TM9.
+- **Q-TM9 → D-TM24** ((a)): UNIQUE do L por estabelecimento; "uma fonte por grupo" conferida no pareamento na onda do grupo (nota no
+  prompt do grupo, junto da pergunta da D-NE169 sobre CNPJ em duas institutions). Próxima: Q-TM10.
+- **Q-TM10 → D-TM25** ((a)): header do pareamento = `X-Sync-Holder` (contrato das ondas 2/3 com o grupo do sync). Próxima: Q-TM11.
+- **Q-TM11 → D-TM26** ((a)): sem rota de reativação de terminal (ratifica a A-TM10). Próxima: Q-TM12.
+- **Q-TM12 → D-TM27** ((a)): a porta do L é o pareamento (não pareado = livre; pareado = só pelo ato); ratifica a A-TM6 revista.
+  Próxima: Q-TM13.
+- **Q-TM13 → D-TM28** ((a)): onda 0 do terminal "preparada" (cerca congela os literais); troca dos ~140 literais em sessão própria
+  depois dos merges (D-TM16). Próxima: Q-TM14.
+- **Q-TM14 → D-TM29** ((a)): telas estruturais concedidas por passo de boot idempotente a toda institution ativa (muda para a auth-api
+  na A2). **Bloco do terminal FECHADO** (sobram A-TM7/A-TM8/A-TM9 a ratificar). Próxima: A-TM7.
+- **A-TM7 RATIFICADA**: leitura interina da origem só na branch `terminal`; na fusão vira a peça `sourceKindOf`. Próxima: A-TM8.
+- **A-TM8 RATIFICADA**: L inativo pode nascer e existir; reativar passa pelas mesmas travas do nascimento. Próxima: A-TM9.
+- **A-TM9 RATIFICADA**: lookup só ativos; lista da tela com inativos. **Terminal sem questão aberta.** Próxima: recuperação (Q-RS7).
+- **Q-RS7 → D-RS7** ((b)): script do Super aceita `--user-id` entre 2+ Supers ativos (sem nome, recusa); a mensagem deixa de citar a
+  tela (D-PV48). EXECUTAR em worktree com teste e "vai" (o script já está no `main`). Próxima: Q-RS8.
+- **Q-RS8 → D-RS8** ((a)): aviso C no pedido calado, ≤ 1/h (ratifica a A-RS6); (c) só se houver fadiga. Próxima: Q-RS9.
+- **Q-RS9 → D-RS9** ((a)): falha do SMTP no aviso só no log; canal de alarme decidido na Q-EA4 (auth-api). Próxima: Q-RS10.
+- **Q-RS10 → D-RS10** ((a)): savepoint em volta do aviso — o +1 da tentativa errada sobrevive à falha do aviso. Próxima: Q-RS11.
+- **Q-RS11 → D-RS11** ((a)): `npm start` = produção por padrão (ratifica a A-RS9) + item no roteiro da Onda 4. Próxima: Q-RS12.
+- **Q-RS12 → D-RS12** ((a)): texto único do aviso, sem link de ação. Próxima: Q-RS13.
+- **Q-RS13 → D-RS13** ((b)): o script do Super avisa o Super por e-mail neutro ao redefinir a senha; executar JUNTO da D-RS7 (mesmo
+  script, worktree, teste, "vai").
+- **Q-RS14 → D-RS14** ((a)): "Super ativo" no script = predicado do login (usuário E vínculo ativos); ratifica a A-RS10; já no `main`,
+  sem execução nova. Próxima: A-RS5.
+- **A-RS5 → D-RS15** ((a)): script do Super sem `tb_user.kind`/`updated_by` — Super pelo vínculo, autor no log, nenhum ALTER; o script
+  muda para a auth-api na A2 (herança no §6 do prompt da auth-api). Próxima: A-RS8 (1ª metade).
+- **A-RS8 (1ª metade) → D-RS16** ((a)): o script recusa Super inativo e nunca reativa (reativar = outro Super pela tela); o único Super
+  inativo = SQL manual (limite conhecido). Próxima: A-RS11.
+- **A-RS11 → D-RS17** ((a)): tetos do SMTP 15 s / 15 s / 30 s mantidos; vão com a recuperação para a auth-api na A2. Próxima: A-RS12.
+- **A-RS12 → D-RS18** ((a)): fora de produção, código não entregue vai ao log; em produção nunca. **Recuperação sem questão aberta**
+  (A-RS5…A-RS12 todas ratificadas — A-RS7 pela D-RS12). Na execução da D-RS7/D-RS13: reescrever a seção "Senha perdida do SUPER" do
+  `setes-api/CLAUDE.md` (ainda cita D-PV12). Próxima: Q-EA1.
+- **Q-EA1 → D-EA1** ((a)): login bloqueia a conta com 10 erradas em 15 min (janela deslizante, mesma 401, sem botão); o script do Super
+  NÃO desbloqueia — o Super espera a janela (`prompt_endurecer_autenticacao.md`, Rodada 1). Próxima: Q-EA2.
+- **Q-EA2 → D-EA2** ((a)): `tb_user_login_failure` filha, só falhas, append-only, trava do usuário; nasce em `setes_central` (molde
+  sql/67) e muda para o `auth_api` na A2 sem reforma. Próxima: Q-EA3.
+- **Q-EA3 → D-EA3** ((b)): aviso neutro ao dono ao bloquear, ≤ 1/h, em tabela irmã própria `tb_user_login_notice` (até 2 avisos/h com a
+  recuperação — aceito). Próxima: Q-EA4.
+- **Q-EA4 → D-EA4** ((a)): alarme do login (>100 falhas/min ou >30 contas em 5 min; log + crashlytics + e-mail 1/15 min), nunca
+  bloqueia; `OPS_ALERT_EMAIL` obrigatório em produção; o canal é da operação (precisa a D-RS9). Próxima: Q-EA5.
+- **Q-EA5 → D-EA5** ((a)): senha mínimo 8, sem classes, lista de comuns, sem o e-mail, ≠ atual; existentes valem até a próxima troca; peça
+  única API + `setes_validators`. Próxima: Q-EA6.
+- **Q-EA6 → D-EA6** ((a)): login com UMA resposta (401 neutra, mesmo tempo) para senha errada, inexistente, inativo e sem vínculo — as
+  mensagens de hoje confirmavam SENHA CERTA (conferido no código); motivo só no log. Próxima: Q-EA7 (muda pela auth-api).
+- **Q-EA7 → D-EA7** ((a) REVISTA): inativação cai na hora pela view viva; troca de senha pelo `iat` × fato próprio "senha definida em T"
+  ao lado do hash (não o `tb_user.updated_at`, que todo salvar do cadastro toca); sem cache; entra na COSTURA A1 do passo 4 (D-AU6).
+  Próxima: Q-EA8.
+- **Q-EA8 → D-EA8** ((a)): token final segue 24 h sem refresh; rever só por exigência externa. Próxima: Q-EA9 (hash — reservada).
+- **Q-EA9 → D-EA9** ((a)): MD5 aposentado (revê a decisão 2 da Fase 2) — `scrypt` nativo `N=2^15, r=8, p=3` (corrigido de p=1),
+  migração transparente no login, mesma coluna; pré-requisito da A2 (D-AU11) agora DECIDIDO, falta executar. Próxima: Q-EA10 (muda pela
+  auth-api).
+- **Q-EA10 → D-EA10** ((a) REVISTA): revogação no passo 4; depois Ondas 1+2 → 3 → 4, todas antes da A2; Onda 1 nunca em paralelo com a
+  onda 0 do convidado; passo 10 do §2 ajustado. Próxima: Q-EA11.
+- **Q-EA11 → D-EA11** ((a)): uma linha de log por falha de login (e-mail mascarado, IP, motivo interno), nada a mais no banco. Próxima:
+  Q-EA12 (última da fila).
+- **Q-EA12 → D-EA12** ((a)): a linha `Auth OK` do `authMiddleware` sai, na costura A1. **Rodada do endurecer FECHADA (D-EA1…D-EA12)** e
+  **FILA DESTA RODADA ZERADA** (recuperação D-RS14…D-RS18 + endurecer D-EA1…D-EA12, 2026-10-31).
+- ~~⏯ RETOMAR A RODADA (2026-10-31, contexto alto)~~ — **CUMPRIDA no mesmo dia (sessão nova)**: Q-RS14 → A-RS5…A-RS12 → Q-EA1…Q-EA12
+  respondidas uma por vez (linhas acima). **Rodada "uma pergunta por vez" de 31/10 SEM questão na fila.**
+- **Execuções que nasceram em 31/10 (cada uma com "vai", em worktree)**: D-RS7+D-RS13 (script do Super — junto, reescrever "Senha perdida do
+  SUPER" do `setes-api/CLAUDE.md`, D-RS16) · D-IB99 (regime de IBS/CBS, antes de 01/01/2027) · D-PR53 (colunas do ato, na `merchandise`) ·
+  D-AU1…D-AU12 (costura A1 no passo 4 — com D-EA7 revogação e D-EA12 `Auth OK` — + GRANT da nfse-api) · endurecer Ondas 1+2 → 3 → 4
+  (D-EA1…D-EA6, D-EA9, D-EA11; ordem D-EA10; todas antes da A2). **Sem commit na Infra-IA**: as decisões de 31/10 depois da D-AU12
+  (D-PR53…D-PR56, D-NE169…D-NE172, D-TM23…D-TM29, A-TM7…A-TM9, D-RS7…D-RS18, D-EA1…D-EA12) + INDICE 10.52/10.53 — commitar só com
+  "commita" (repositório PÚBLICO; `git add` só dos arquivos da rodada).
