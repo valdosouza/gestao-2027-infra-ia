@@ -665,6 +665,9 @@ Herdadas e válidas sem decisão nova: decisões 9, 10, 14, 19 e 23 da Fase 2 ·
   credencial, todo vínculo aguardando vira ativo (`accepted_at` = agora) — sem botão Aceitar/Recusar, sem seção "Convites" (revê a
   D-UC11 nesse ponto; a rota de aceite explícito não nasce). Quem não quer o vínculo pede ao admin do cliente 2 para inativá-lo (D-UC2).
   A D-UC10 segue valendo (o estado "aguardando" existe entre o salvar e o login).
+- **D-PV48 (Valdo, 2026-10-27, no prompt de privilégios — fecha a Q-PV55)** — ANTECIPA a parte da senha da D-UC8: "o admin não troca
+  senha de usuário existente" vale já no bloco de privilégios (branch `privilegios-crud`, antes do merge), não na onda 0 desta frente;
+  vale também para o Super (o complemento da D-PV46 morre). A onda 0 daqui herda isso pronto.
 - **Efeito sobre a D-PV12 (ratificada)** — anotar no `prompt_privilegios_interfaces.md` quando o Valdo autorizar a edição daquele prompt:
   das quatro coisas que ela dava ao admin (senha, e-mail, ativo, exclusão), o e-mail e a exclusão deixam de existir (D-UC1), o "ativo" vai
   para o vínculo (D-UC2) e a senha segue a A-UC2 — confirmada a A-UC2, a D-PV12 fica toda SUPERADA (o admin gere o vínculo e o perfil; a

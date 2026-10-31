@@ -54,6 +54,9 @@ private_keys/
 *token*
 *password*
 *auth*
+# Exceção nominal (Valdo, 2026-10-31): o prompt da frente auth-api é documentação, sem segredo — o *auth* acima o escondia do git.
+# Só ESTE arquivo; segredo de verdade com "auth" no nome continua ignorado.
+!prompts/prompt_frente_auth_api.md
 *.secrets
 credentials.json
 service-account*.json

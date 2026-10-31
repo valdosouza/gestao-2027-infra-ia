@@ -925,34 +925,54 @@ APAGADO), `assets/translations/{pt,en}.json`. sql — `68_privilege_configure_co
 
 #### 11.10.4 Assunções executadas (A-PVn — ratificar)
 
-- **A-PV16** — o ALTERAR de `general-configs` saiu do catálogo junto com o dos dois painéis: a exceção da A-PV8 (ALTERAR da "Configurações
+- ✅ **A-PV16 — RATIFICADA (Valdo, 2026-10-31: "Ratificar (a)")**; efeito registrado: admin passa sempre; usuário comum que tinha ALTERAR
+  ali precisa receber CONFIGURAR em `general-configs` (o seed 68 não copia concessões). — o ALTERAR de `general-configs` saiu do catálogo junto com o dos dois painéis: a exceção da A-PV8 (ALTERAR da "Configurações
   Gerais" abria o painel dela) foi substituída pelo CONFIGURAR nela (D-PV25 regra 2) — par sem consumidor é defeito (C1). Se o Valdo quiser
   manter o ALTERAR lá, o seed 68 tira a chave da lista de remoção.
-- **A-PV17** — reaplicar: VISUALIZAR na guarda do roteador (chegar ao boleto) + o privilégio do EFEITO na política (gate adversarial; a
+- ✅ **A-PV17 — RATIFICADA pela D-PV57 (2026-10-31)** — reaplicar: VISUALIZAR na guarda do roteador (chegar ao boleto) + o privilégio do EFEITO na política (gate adversarial; a
   D-PV27 fala só do efeito).
-- **A-PV18** — D-PV24 na Módulos: para o super o catálogo inteiro de kind 'T' FORA do grupo Super (o menu do cliente nunca renderiza o grupo
+- ✅ **A-PV18 — RATIFICADA pela D-PV55 (2026-10-31)** — D-PV24 na Módulos: para o super o catálogo inteiro de kind 'T' FORA do grupo Super (o menu do cliente nunca renderiza o grupo
   Super — regra do menu, não licença); a decisão diz "catálogo inteiro de kind 'T'".
-- **A-PV19** — "ativo" do usuário: `GET /users/:id` sem foco (super na tela global) devolve `active: null` e a tela esconde o checkbox; a lista
+- ✅ **A-PV19 — RATIFICADA (Valdo, 2026-10-31: "Ratificar (a)")** — visão global do Super = ativo da CREDENCIAL (`tb_user.active`, trava
+  o login em todo lugar); por estabelecimento = ativo do VÍNCULO. — "ativo" do usuário: `GET /users/:id` sem foco (super na tela global) devolve `active: null` e a tela esconde o checkbox; a lista
   sem foco cai em `tb_user.active` (a credencial). O PUT do super com `active` exige `institutionId`.
-- **A-PV20** — D-PV32: "tenta mudar" = diferença entre o que o corpo TROUXE e o gravado (campo ausente e lista ausente não são mudança —
+- ✅ **A-PV20 — RATIFICADA (Valdo, 2026-10-31: "Ratificar (a)")** — só a diferença REAL contra o gravado é recusada. — D-PV32: "tenta mudar" = diferença entre o que o corpo TROUXE e o gravado (campo ausente e lista ausente não são mudança —
   mesma convenção da cadeia); a comparação normaliza `''`/`null` e números.
-- **A-PV21** — D-PV20: `interface-fields` ficou FORA do contrato da Setes (sem flag e não estrutural) — ver Q-PV57.
+- ⛔ **A-PV21 — SUPERADA pela D-PV54 (2026-10-27)**: `interface-fields` e `general-configs` viraram estruturais (sem ratificação a
+  fazer; execução no bloco). — D-PV20: `interface-fields` ficou FORA do contrato da Setes (sem flag e não estrutural) — ver Q-PV57.
 
 #### 11.10.5 Questões — Rodada 6 (aguardam o Valdo; nenhuma trava a entrega)
 
-- **Q-PV55 — a janela da A-PV13 morta**: até a onda 0 do convidado (D-UC6: o admin define só a senha INICIAL; "minha senha"/"esqueci" do
+- ✅ **Q-PV55 → D-PV48 (2026-10-27, fora das opções: nenhuma janela — só o titular troca a senha, pela recuperação; executar na
+  `privilegios-crud` antes do merge).** Texto original: **a janela da A-PV13 morta**: até a onda 0 do convidado (D-UC6: o admin define só a senha INICIAL; "minha senha"/"esqueci" do
   titular), o admin do cliente X pode redefinir a senha de um login que o Super também vinculou ao cliente Y (ou à Setes) e entrar em Y com
   o perfil dele. Hoje vínculo cruzado só o Super cria. (a) **aceitar como limite até a onda 0** (merge desta onda antes da do convidado —
   a ordem já prevista); (b) interino: o admin só redefine senha de conta cujos vínculos são todos com o próprio estabelecimento (a A-PV13 só
   para a SENHA); (c) a onda 0 do convidado entra antes do merge. **Rec.: (a)** — é o que a D-PV19 decidiu, com a trilha no log.
-- **Q-PV56 — a constante CONSULTAR da nfse-api**: vive em `nfse-api/src/modules/privileges.ts` porque a worktree não toca o núcleo
+- ✅ **Q-PV56 → D-PV49 (2026-10-27, fora das opções depois da correção do Valdo: privilégio num lugar só, no SETES-API — onde a
+  interface nasce —; as APIs fiscais não guardam número; o verbo é genérico, o sentido vem do par interface × privilégio; nasceu a
+  Q-PV59 — como a API fiscal cita o privilégio).** Texto original: **a constante CONSULTAR da nfse-api**: vive em `nfse-api/src/modules/privileges.ts` porque a worktree não toca o núcleo
   (`fiscal-api/src/erp/facts.ts`, junção para a árvore viva). (a) **mover para o núcleo na fusão/janela** (ao lado de TRANSMITIR/CANCELAR) e
   apagar a local; (b) deixar na nfse-api. **Rec.: (a)**.
-- **Q-PV57 — `interface-fields` e `general-configs` no contrato**: a D-PV20 dá `general-configs` à Setes (nomeada) mas não `interface-fields`
+- ✅ **Q-PV57 → D-PV54 (2026-10-27, (b), com condição: antes de avançar, a frente da cobertura do motor de campos).** Texto
+  original: **`interface-fields` e `general-configs` no contrato**: a D-PV20 dá `general-configs` à Setes (nomeada) mas não `interface-fields`
   (sem flag, não estrutural); o onboarding dá as 4 estruturais (sem `general-configs`), então a D-PV35 a deixou fora da lista de estruturais.
   (a) **como está** — o Super contrata o painel de campos a quem precisar (D-PV11); (b) `interface-fields` e `general-configs` viram
   estruturais (onboarding + D-PV20 + lista da D-PV35). **Rec.: (a)**.
-- **Q-PV58 — Módulos para o super (D-PV24)**: o grupo Super ficou fora da elegibilidade mesmo para o super (regra do menu do cliente).
+  **Conferido em 2026-10-27 (muda a recomendação)**: na branch, `/api/interface-fields` passou para `gatedModule('interface-fields')`
+  (`src/gateway/router.ts:108`) — o painel (lista, leitura e o `PUT /:id/:fieldName`, que é também o caminho da engrenagem de cada
+  tela — D-PV25) exige a LICENÇA; só `GET /key/:moduleKey` (a config que monta toda tela) segue aberta. No `main` ela é isenta de flag
+  (`feature-flag.middleware.ts`, junto da `interface-configs`). Com (a), no dia do merge o admin da Setes PERDE o ajuste de campos
+  (obrigatório/rótulo/máscara) por qualquer caminho até o Super contratar — contradiz o princípio da própria D-PV20 ("os dois admins não
+  perdem tela nem engrenagem no dia do merge"); cliente novo nasce sem ele. Opção nova (c): só a Setes recebe `interface-fields` na
+  D-PV20, sem virar estrutural. **Rec. revista: (b)** — a `interface-fields` é a gêmea da `interface-configs` (já estrutural); quem
+  ajusta continua decidido pelo CONFIGURAR na tela-alvo (D-PV25) — a estrutural só garante que a porta existe, não dá poder a ninguém.
+  Alcance (apanhado pedido pelo Valdo, 2026-10-27): a licença só tira a EDIÇÃO — o que já foi ajustado continua valendo em todas as
+  telas, porque a leitura que monta a tela (`GET /key/:moduleKey`) segue aberta. ~20 cadastros têm campos no catálogo (seeds 07, 11–20,
+  25–27, 43–49, 62) e aplicam a regra na tela e na API (`applyFieldConfig` + `assertClientRequired`); os cadastros de entidade
+  (Clientes, Colaboradores, Fornecedores, Transportadoras) NÃO usam o motor. O seed 07 (jul/2026) contratou o painel à Setes, mas a
+  conferência da D-PV20 no banco (21/10) não o achou entre as 14 contratadas.
+- ✅ **Q-PV58 → D-PV55 (2026-10-31, (a)) — ratifica a A-PV18.** Texto original: **Módulos para o super (D-PV24)**: o grupo Super ficou fora da elegibilidade mesmo para o super (regra do menu do cliente).
   (a) **manter**; (b) "catálogo inteiro de kind 'T'" ao pé da letra, inclusive o grupo Super. **Rec.: (a)**.
 
 #### 11.10.6 Limites conhecidos (conhecimento negativo)
@@ -974,7 +994,7 @@ APAGADO), `assets/translations/{pt,en}.json`. sql — `68_privilege_configure_co
    merchandise, 67 recuperação).
 3. Fusão com `privilegios-catalogo` (D-PV14/D-PV15/D-PV42): o adaptador lê `listGatedRoutes()` + as entradas do §11.10.6; `error-codes.ts`
    junta as listas (aqui: +4 códigos, −1).
-4. Merge da API + `npm run errors:gen` + nfse-api reiniciada à mão (Q-PV56: mover a constante ao núcleo nessa janela) + app publicado
+4. Merge da API + `npm run errors:gen` + nfse-api reiniciada à mão (D-PV49: as APIs fiscais deixam de guardar número de privilégio nessa janela — a forma é a Q-PV59) + app publicado
    JUNTO (janela única — D-PV28).
 5. Passeio logado: engrenagem/CONFIGURAR, boletos/CONSULTAR, aba de interfaces por marca, papel do próprio estabelecimento, usuário sem
    lixeira e e-mail imutável.
@@ -1914,6 +1934,170 @@ documento; nenhum código.
   (api fbf01a3 · app ad50385) é DESCARTADA sem merge. Ficam de pé desta rodada: D-UC6 (a senha é do titular; o admin não troca a
   definitiva) e D-PV46 (script do operador para o Super — vale ainda como saída sem e-mail). Voltam à fila: **Q-RS1…Q-RS6 e
   A-RS1…A-RS4** (§13.6/§13.9). Numeração de seeds: 67 = recuperação; 68 = CONFIGURAR/CONSULTAR (D-PV25/D-PV40); 69 = terminal.
+- **D-PV48** (Valdo, 2026-10-27 — fecha a **Q-PV55** FORA das três opções, literal: *"nao pode. Depois de criado a credencial apenas o
+  proprio usuario podera trocar a senha, usando o processo de recuperacao de senha"*) — **nenhuma janela**: a regra da senha da D-UC8 ("o
+  admin NÃO troca senha de usuário existente") passa a valer JÁ no bloco de privilégios, ANTES do merge da `privilegios-crud`, sem esperar
+  a onda 0 do convidado. (1) Terceiro define senha UMA vez só, na CRIAÇÃO da credencial; (2) depois, só o TITULAR troca, pelo processo de
+  recuperação (código por e-mail — D-PV47/D-UC7; o "minha senha" da D-UC8 usa a mesma peça); (3) vale para TODOS os perfis, admin e Super
+  — o complemento da D-PV46 ("um Super define a senha do outro pela tela de Usuários") MORRE; (4) código, na branch `privilegios-crud`:
+  toda porta do cadastro de usuários (`PUT /api/users/:id`, inclusive a aba Usuários de Institutions) RECUSA `password` em credencial
+  existente com erro próprio — nunca ignora em silêncio; o app mostra o campo senha só na criação e o botão "trocar senha" sai; a barreira
+  `assertAccountManageable` (A-PV13) fica só para o nome (A-UC7). A **D-PV12 fica SUPERADA por inteiro desde já**. Dependência já
+  satisfeita pela ordem do plano: a `recuperacao-senha` entra ANTES da `privilegios-crud` (o titular nunca fica sem caminho); em produção
+  o SMTP real é obrigatório (D-RS5).
+- ✅ **A-PV22 — RATIFICADA (Valdo, 2026-10-31: "Ratificar (a)")**. Achado de passagem (não é desta questão): o hash do login é MD5
+  (`hashInitialPassword` = `md5Password`) — tema já reservado na Q-EA9 de `prompt_endurecer_autenticacao.md`. — o script do operador da D-PV46 (Super sem acesso ao e-mail, rodado no servidor) segue como a
+  ÚNICA exceção à D-PV48: exceção explícita e documentada, nenhuma porta HTTP.
+- ✅ **A-PV23 — RATIFICADA (Valdo, 2026-10-31: "Ratificar (a)")** — a 1ª senha do admin na conta sem senha = criação da credencial, uma
+  vez só. — conta que nasceu SEM senha (usuário criado pelo setes-sync: `tb_user.password` NULL) ainda não
+  tem credencial: a 1ª senha que o admin define nela conta como a "criação da credencial" da D-PV48 — uma vez só. Alternativa: só pela
+  recuperação (exige e-mail válido no login).
+- **D-PV49** (Valdo, 2026-10-27 — fecha a **Q-PV56** = (a), com o princípio, literal: *"Privilegio sempre num lugar so, no nucleo, ex:
+  consultar é um privilegio, o tipo da consulta é irrelevante sozinho. A relevancia vai aparecer ao ser atrelado a uma interface que vai
+  ter uma operacao consultar seja ela qual for"*) e **CORRIGIDA por ele no mesmo dia** (literal: *"nao fica no nucleo fisca-api e sim
+  fica no setes-api operada por setes-app onde a interface nasce e precisa de privilegios"*) — (1) o catálogo de privilégios (o número e
+  o verbo) vive num lugar só: o **setes-api** (`@shared/auth/privileges` + o seed de `tb_privilege`), operado pelo **setes-app** (telas do
+  Super Privilégios/Interfaces) — onde a interface NASCE e recebe os privilégios (D-GE19); (2) as APIs fiscais (núcleo `fiscal-api`,
+  `nfse-api`, `nfe-api`) NÃO guardam número de privilégio: saem o 7 e o 9 de `fiscal-api/src/erp/facts.ts` e o 12 de
+  `nfse-api/src/modules/privileges.ts` (arquivo APAGADO) — como elas citam o privilégio passou a ser a **Q-PV59**; (3) **princípio**
+  (reafirma a D-PV27): o privilégio é o VERBO, genérico — não existe "CONSULTAR boleto" × "CONSULTAR NFS-e"; o sentido nasce do PAR
+  interface × privilégio (`tb_interface_has_privilege`; lista `CONSUMED_PRIVILEGES` da D-PV9); verbo novo só quando a FINALIDADE é nova,
+  nunca pelo objeto nem pelo transporte. A 1ª leitura ("sobe para o núcleo") MORREU com a correção — inclusive a 1ª redação da Q-PV59
+  (subpath `fiscal-api/privileges`).
+  ⚠️ **REVISTA pela D-AU1 (2026-10-31, `prompt_frente_auth_api.md`)**: o catálogo de privilégios passa a morar na AUTH-API, não no
+  setes-api; seguem de pé o item (3) (verbo genérico, sentido pelo par) e a D-PV53 (citação pelo nome).
+- **Q-PV59** (da D-PV49) — **como a API fiscal cita o privilégio sem guardar o número**. Hoje o núcleo cita a INTERFACE pela chave
+  (`i18n_key`) e resolve o id em `setes_central.tb_interface` na hora (`interfaceIdOf`, com cache), mas cita o PRIVILÉGIO pelo número
+  (`userHasPrivilege(…, privilegeId)`). (a) **pelo NOME do verbo** (`tb_privilege.description` — 'TRANSMITIR', 'CANCELAR', 'CONSULTAR'),
+  resolvido em `setes_central.tb_privilege` no mesmo molde da interface; o número existe só no setes-api; o nome já é protegido pela
+  D-PV15 (a tela do Super recusa renomear privilégio consumido) e a cerca da D-PV9 já varre a nfse-api; o GRANT não muda (`SELECT` em
+  `setes_central.*` — `nfse-api/ops/grants.sql`); custo: `userHasPrivilege`/`passScope` trocam número por nome, commit + build do
+  núcleo na janela (a NE-2 também publica o núcleo — D-NE168 —; a que entrar depois rebaseia); (b) o setes-api publica uma VIEW
+  "usuário × interface × verbo" (molde da D-F32, `vw_order_interface`) e a API fiscal lê a view pelo nome — o SQL da checagem também
+  passa a ter um dono só, mas custa migration + conferência no boot. **Rec.: (a)** — o mesmo molde que o núcleo já usa para a interface,
+  sem DDL. (2026-10-27: segue ABERTA — volta à fila depois das questões da forma do gate da D-PV50.)
+  ✅ **→ D-PV53 (2026-10-27, (a)).**
+- **D-PV53** (Valdo, 2026-10-27 — fecha a **Q-PV59** = (a), literal: *"a API fiscal cita o privilégio pelo nome do verbo, resolvido em
+  tb_privilege, no mesmo molde da interface"*) — na janela do bloco: o núcleo troca `userHasPrivilege(…, privilegeId)` por nome do verbo
+  (`tb_privilege.description`), resolvido em `setes_central.tb_privilege` com cache, no molde do `interfaceIdOf`; saem
+  `PRIVILEGE_CANCELAR`/`PRIVILEGE_TRANSMITIR` de `fiscal-api/src/erp/facts.ts` e o arquivo `nfse-api/src/modules/privileges.ts`; as
+  guardas da nfse-api (`requireBranchPrivilege`, `passScope`) passam o NOME literal ('TRANSMITIR', 'CANCELAR', 'CONSULTAR') — a mesma
+  forma do `CurrentInterface.can('X')` do app, então a cerca da D-PV9/D-PV51 lê um formato só nas três pontas; o teste da cerca "o núcleo
+  usa os MESMOS ids" vira "o nome existe no catálogo". Nome desconhecido no catálogo = privilégio negado (falha fechada) + alarme. GRANT
+  inalterado. **A forma do gate da D-PV50 está FECHADA** (D-PV51 · D-PV52 · D-PV53) — a A-PV24 (skill de sistema) pode ser escrita na
+  execução.
+- **D-PV54** (Valdo, 2026-10-27 — fecha a **Q-PV57** = (b), literal: *"vamos com a opcao b....mas quero ter certeza se todas e como é
+  estrutural devem ser todas as telas utlizem interface-fields...confirme ou abra uma frente para resolver isso antes de avancar"*) —
+  `interface-fields` e `general-configs` viram ESTRUTURAIS: entram no onboarding (`grantStructuralInterfaces`), no script da D-PV20
+  (contrato da Setes) e na constante `STRUCTURAL_INTERFACE_KEYS` da D-PV35 (a porta delegada não as revoga). Quem ajusta segue decidido
+  pelo CONFIGURAR na tela-alvo (D-PV25). **Condição do Valdo**: "todas as telas" usarem o motor NÃO se confirmou (inventário: 16 de 38
+  módulos do app com catálogo + app + api) → frente própria `Infra-IA/prompts/prompt_frente_campos_todas_telas.md` (Q-CF1…Q-CF4),
+  decidida ANTES de seguir para a Q-PV58.
+- **D-PV50 — REGRA DEFINITIVA interface × privilégio** (Valdo, 2026-10-27, literal: *"uma interface desenvolvida precisa ser
+  registrada no sistema tb_interface e os privilegios desta interface tb_privilegios deve conter todos os privilegios que o sistema
+  concede, porem somente atraves de tb_interface_has_privilegio é que a interface vai saber quais privilegios vai operar e assim nesta
+  ligacao entre o que foi registrado na interface e o que vai ser operado no codigo vai poder gerenciar a permissao dada ao usuario
+  [...] para ser usado independente da api seja setes-api, nfe-api ou nfse-api [...] para que se torne um gate validador de cada
+  interface"*) — consolida D-GE19 + D-PV1 + D-PV9 + D-PV27 + D-PV49 numa regra ÚNICA do SISTEMA, valendo para toda API (setes-api,
+  nfse-api, nfe-api e qualquer outra que vier):
+  1. toda interface desenvolvida é REGISTRADA em `setes_central.tb_interface`;
+  2. `tb_privilege` é o catálogo de TODOS os verbos que o sistema concede — genéricos, sem objeto (D-PV27);
+  3. só o vínculo `tb_interface_has_privilege` diz QUAIS verbos a interface opera — nenhum código conhece privilégio fora dele;
+  4. o que o código opera é o que está registrado no vínculo, e a permissão do usuário (`tb_user_has_privilege`) é sempre sobre um par
+     registrado;
+  5. a conferência código × registro é um **GATE VALIDADOR de cada interface**, em toda API.
+  **Estado conferido em 2026-10-27** (o Valdo considerava o assunto pacífico — e o MÉTODO é: está escrito desde 18/10 em
+  `setes-api/ARQUITETURA_MODULOS_API.md`, nas skills `setes-api/skills/novo-modulo.md` e `setes-app/skills/criar-formulario-cadastro.md`,
+  e a cerca da D-PV9 já confere código ↔ par registrado no setes-api, nas guardas da nfse-api e no `can()` do app). **Lacunas**: (i) a
+  cerca NÃO está no `main` — só na branch `privilegios-catalogo` (8b1fe27), à espera do passo 3 do roteiro; (ii) a regra não está escrita
+  do lado fiscal (`Infra-IA/fiscal-api`, `nfse-api`, `nfe-api`) e a cerca não enxerga a nfe-api (que, na NE-2, ainda não opera nenhum
+  privilégio); (iii) o boot só ALARMA (`[ALARME D-PV9]`), não recusa subir; (iv) a cerca cobra "todo par operado está registrado", mas
+  não o inverso — par registrado que nenhum código opera passa (Q-PV60); (v) o núcleo ainda cita o privilégio pelo número (Q-PV59). A
+  FORMA do gate fecha em questões, uma por vez: Q-PV60 → Q-PV61 (boot) → Q-PV59.
+- ⏸ **A-PV24 — EM SUSPENSO (2026-10-31)**: perguntado da A-PV24, o Valdo abriu a **frente auth-api** (literal: *"vamos criar uma
+  frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
+  setes-api, nfe-api ou nfse-api ou outra api"*) — a casa da regra (e talvez a D-PV49 "o catálogo mora no setes-api") passa a depender
+  dela: `Infra-IA/prompts/prompt_frente_auth_api.md`. — o texto canônico da regra ganha casa do SISTEMA, não de uma API: skill
+  `Infra-IA/skills-genericas/interface-e-privilegios.md` (o gate, com o checklist por interface), citada pelas skills do setes-api e do
+  setes-app e pelos INDEX de `fiscal-api`, `nfse-api` e `nfe-api` — escrita quando a forma do gate fechar (Q-PV60/Q-PV61/Q-PV59).
+- ✅ **Q-PV60 → D-PV51 (2026-10-27, (a)).** Texto original: **o gate exige IGUALDADE ou só que o código caiba no registro?** Hoje a cerca da D-PV9 reprova par operado
+  pelo código e não registrado, e entrada da lista que nenhum código opera; a conferência viva confere lista ⊂ catálogo. NADA confere o
+  inverso no catálogo: par em `tb_interface_has_privilege` que nenhum código opera aparece na tela de permissões, o admin concede, e não
+  faz nada (não medido hoje — MariaDB parado). (a) **IGUALDADE por interface**: registrado = operado nos dois sentidos — par registrado
+  sem código reprova o gate, salvo marca "reservado" com motivo (o verbo que a próxima onda vai operar); (b) só operado ⊂ registrado
+  (como hoje): registro a mais é tolerado. **Rec.: (a)** — é a regra da D-PV50 ao pé da letra (só o vínculo diz o que a interface opera;
+  vínculo que não opera é uma promessa falsa na tela de permissões).
+- **D-PV51** (Valdo, 2026-10-27 — fecha a **Q-PV60** = (a), literal: *"igualdade por interface — registrado = operado nos dois
+  sentidos, salvo marca "reservado" com motivo"*) — o gate da D-PV50 exige, POR INTERFACE, que o conjunto de pares em
+  `tb_interface_has_privilege` seja IGUAL ao conjunto que o código opera (todas as APIs + o app). Par operado sem registro reprova (como
+  hoje); par registrado sem código também reprova, salvo a marca **"reservado"** na lista única, com o MOTIVO (o verbo que a próxima onda
+  vai operar) — a mesma forma da marca "ausente por decisão" que a lista já tem. Na execução: a conferência viva deixa de ser "lista ⊂
+  catálogo" e passa a ser igualdade por interface (catálogo vivo e ativo = operados ∪ reservados); a 1ª medição dos pares sobrando roda
+  com o MariaDB no ar, e retirar um par do catálogo é soft delete (D-PR37) — a concessão de usuário sobre ele fica inócua, porque nenhum
+  código o pergunta.
+- ✅ **Q-PV61 → D-PV52 (2026-10-27, (a)).** Texto original: **a API recusa SUBIR quando o catálogo vivo não bate com o código?** Hoje o setes-api, ao subir, confere a
+  lista única inteira (inclusive os pares da nfse-api) contra o catálogo e só grita `[ALARME D-PV9]` no log; quem PARA é a cerca no
+  teste (gate de entrega) e o `build-web.ps1` na publicação do app (D-PV16); as telas do Super já recusam quebrar par operado (D-PV15).
+  Com a D-PV51 o boot passa a enxergar também o par sobrando. (a) **manter o alarme no boot** — o gate é o teste + a publicação; um
+  seed atrasado esconde UM botão, mas a API segue no ar; (b) **recusar subir** — nenhum código roda com par fora do registro; um seed
+  atrasado derruba a API INTEIRA (no caso da nfse-api, a emissão de nota). **Rec.: (a)** — a regra é cobrada na entrega e na
+  publicação; derrubar o sistema por uma linha de catálogo é desproporcional, e em execução as telas do Super já impedem a quebra.
+- **D-PV52** (Valdo, 2026-10-27 — fecha a **Q-PV61** = (a), literal: *"manter o alarme no boot; o gate é o teste e a publicação"*) — a
+  API SOBE mesmo com o catálogo vivo divergente do código; o boot só grita `[ALARME D-PV9]` (agora também pelo par sobrando da D-PV51).
+  Quem BARRA é o gate: a cerca no teste (gate de entrega de cada interface) e a publicação (`build-web.ps1` — D-PV16); em execução, as
+  telas do Super recusam quebrar par operado (D-PV15). Conhecimento negativo: não "endurecer" o boot depois — a decisão é consciente.
+- **D-PV55** (Valdo, 2026-10-31 — fecha a **Q-PV58** = (a), literal: *"Manter fora (a)"*; RATIFICA a **A-PV18**) — na tela Módulos, a
+  elegibilidade do Super (D-PV24: catálogo inteiro de kind 'T', sem licença) EXCLUI as telas do grupo Super (`group_default = 'Super'` —
+  Interfaces, Privilégios, CFOP, Lista de Serviços, Bancos, Institutions): o menu do cliente nunca renderiza o grupo Super — regra do MENU,
+  não de licença. Motivo: essas telas são guardadas pelo `superGuard` (`src/gateway/router.ts:75-86`); no menu do cliente seriam item que
+  nenhum usuário dele abre. O Super segue vendo-as no menu dele. Código já está assim na branch (`modules.repository.ts:99/108/126/134`) —
+  sem execução nova; a D-PV24 lê-se com esta exceção.
+- **D-PV56 — PRINCÍPIO da independência dos verbos** (Valdo, 2026-10-31, ao ser perguntado da A-PV17, literal: *"cada privilegio tem um
+  proposito e cada um deve ser obedecido sem presuncao, visualizar, alterar, cancelar, inserir configurar sao independentes"*) — estende
+  a D-PV27 ("nenhum verbo presume outro") a TODOS os verbos: VISUALIZAR, INSERIR, ALTERAR, CANCELAR, CONFIGURAR (e os demais) são
+  independentes; cada um é cobrado pelo PROPÓSITO dele e nenhum é exigido como condição de outro. Pontos da branch que compõem verbos
+  (conferido em 2026-10-31 — `privilegeAct(PRIVILEGE_VISUALIZAR…)` na entrada de ato que grava): `POST /bank-slips/:id/reapply`
+  (VISUALIZAR + efeito — A-PV17), `PUT /interface-configs/:id/:name` e `PUT /interface-fields/:id/:fieldName` (VISUALIZAR do painel +
+  CONFIGURAR na tela-alvo — D-PV25). A aplicação a cada um segue em questão (a A-PV17 primeiro). ⚠️ **REVISTA pela D-PV57 no mesmo
+  dia** (a dependência do VISUALIZAR é real).
+- **D-PV57 — a dependência do VISUALIZAR** (Valdo, 2026-10-31, revendo a D-PV56, literal: *"vamos revisar isso, para qualquer verbo que
+  depender de visualizar ao ser escolhido leva o visualizar de forma automatica....vc tem razao na questao, eu queria transferir
+  responsabilidade ao usuario, mas ha uma dependencia clara nisso..."*) — (1) os verbos seguem independentes no PROPÓSITO: cada ato cobra
+  o verbo da sua finalidade (D-PV27 de pé); (2) mas a dependência do VISUALIZAR é REAL: verbo que depende dele, ao ser ESCOLHIDO para o
+  usuário numa interface (concessão em `tb_user_has_privilege` — tela de permissões e a API da concessão), leva o VISUALIZAR da MESMA
+  interface automaticamente — a responsabilidade não fica com quem concede; (3) **A-PV17 RATIFICADA como executada** (leitura do "vc tem
+  razão na questão"): o reaplicar cobra VISUALIZAR na entrada + o verbo do efeito na política — o VISUALIZAR na entrada é a dependência
+  escrita no código; nenhuma mudança de código; (4) os PUT dos painéis (D-PV25) seguem como estão. Abertas, uma por vez: **Q-PV62** (quais
+  verbos dependem do VISUALIZAR e onde a dependência mora), depois o que acontece ao RETIRAR o VISUALIZAR de quem tem um dependente e as
+  concessões que já existem sem ele.
+- ✅ **Q-PV62 → D-PV58 (2026-10-31, (b) "Todos" — divergiu da recomendação (a) "todos menos CONFIGURAR").** Texto original: **quais
+  verbos levam o VISUALIZAR**: (a) todos menos CONFIGURAR (o painel solto da D-PV25 deixa configurar a tela X sem abri-la — configurar ≠ ver
+  os dados), regra no código da concessão, sem DDL; (b) todos, inclusive CONFIGURAR. Rec.: (a).
+- **D-PV58** (Valdo, 2026-10-31 — fecha a **Q-PV62** = (b), literal: *"Todos"*) — TODO verbo diferente do VISUALIZAR, escolhido para o
+  usuário numa interface, leva o VISUALIZAR da MESMA interface — inclusive o CONFIGURAR: quem configura a tela X passa a ver os dados de X
+  (consequência aceita; o painel solto da D-PV25 segue como caminho, mas não existe mais "configurar sem ver"). Onde mora: regra ÚNICA no
+  código da concessão (`saveUserPrivileges` recebe a lista INTEIRA do usuário × interface: lista com qualquer verbo e sem o VISUALIZAR →
+  o VISUALIZAR entra), espelhada na tela de permissões (marcar um verbo marca o VISUALIZAR); sem DDL (a dependência é a mesma para todos —
+  coluna em `tb_privilege` seria constante repetida). Interface sem VISUALIZAR no catálogo: nada a levar (pela D-PV51 toda interface
+  operada tem a leitura). Seguem: **Q-PV63** (desmarcar o VISUALIZAR na tela) e as concessões antigas sem ele.
+- ✅ **Q-PV63 → D-PV59 (2026-10-31, (a)).** Texto original: **desmarcar o VISUALIZAR na tela de permissões** (a API já não grava verbo
+  sem ele — D-PV58): (a) desmarca tudo — tirar o VISUALIZAR tira a tela inteira do usuário, mostrando antes de salvar o que vai sair;
+  (b) trava a caixa do VISUALIZAR enquanto houver outro verbo marcado. Rec.: (a).
+- **D-PV59** (Valdo, 2026-10-31 — fecha a **Q-PV63** = (a), literal: *"Desmarca tudo (a)"*) — na tela de permissões do usuário, desmarcar
+  o VISUALIZAR de uma interface desmarca TODOS os verbos dela (tirar o VISUALIZAR = tirar a tela) — espelho da D-PV57/D-PV58; a tela
+  mostra o que vai sair antes de salvar. Na API nada muda além da D-PV58: a lista inteira gravada é a autoridade (lista vazia = sem a
+  tela; lista com verbo sem VISUALIZAR → o VISUALIZAR entra). Segue: **Q-PV64** (concessões que já existem sem o VISUALIZAR).
+- ✅ **Q-PV64 → D-PV60 (2026-10-31, (b) — divergiu da recomendação (a) script na janela).** Texto original: **concessões que já existem
+  sem o VISUALIZAR** (quantidade não medida — MariaDB parado): (a) script na janela do bloco acrescenta o VISUALIZAR, com a lista de quem
+  passa a ver qual tela antes do "vai"; (b) não mexer no dado — corrige quando o admin salvar de novo as permissões daquele usuário naquela
+  tela. Rec.: (a).
+- **D-PV60** (Valdo, 2026-10-31 — fecha a **Q-PV64** = (b), literal: *"Corrigir ao salvar (b)"*) — NENHUM script mexe nas concessões
+  existentes: a regra das D-PV57…D-PV59 vale na ESCRITA; concessão antiga com verbo sem VISUALIZAR fica como está (o usuário segue sem a
+  tela no menu, como hoje) até o admin salvar de novo as permissões daquele usuário naquela tela — aí a D-PV58 acrescenta o VISUALIZAR.
+  Conhecimento negativo: (1) não "consertar" depois com script de backfill — a decisão é consciente; (2) teste/conferência NÃO pode
+  afirmar "nenhuma concessão sem VISUALIZAR no banco" — a invariante é da escrita, não do dado; (3) execução decide, com os gates, como a
+  tela de permissões MOSTRA a concessão antiga ao abrir (o salvar é que normaliza). Sequência da dependência do VISUALIZAR FECHADA
+  (D-PV57…D-PV60).
 - **A-PV14 — RATIFICADA (Valdo, 2026-10-20; integridade do catálogo, não acesso — convive com a D-PV24)** — a guarda vale também para o super: ela protege o DADO do catálogo, não a
   permissão de quem edita.
 - ⏳ **Q-PV19** — a resposta veio repetida como "Q-PV17 - a"; a confirmar. **A-PV12** — o Valdo pediu para relembrar; a ratificar.

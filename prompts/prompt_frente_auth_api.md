@@ -1,0 +1,289 @@
+# Frente — auth-api (autenticação + TODA a permissão do produto)
+
+**Escopo**: setes
+**Status**: Rodada 1 EM CURSO (2026-10-31) — D-AU1 (escopo = acesso completo); Q-AU2…Q-AU12 aguardam o Valdo, UMA questão por vez
+(antes: Rodada 0 ORGANIZADA — inventário + parecer do guardião `setes-conceito`) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente.
+**Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
+frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
+setes-api, nfe-api ou nfse-api ou outra api"*.
+**⚠️ TRANSVERSAL** (dizer de saída ao retomar): setes-api (auth, users, privileges, interfaces, institution-interfaces, modules, core),
+setes-app (login, seleção, `CurrentInterface`, menu), nfse-api (guardas), núcleo `fiscal-api` (`src/auth`, `src/erp/facts.ts`), nfe-api,
+`sql/`. Branches em curso que tocam o assunto: `privilegios-crud` (+ `privilegios-catalogo`), `recuperacao-senha`, frente do convidado,
+frente do grupo, `prompt_endurecer_autenticacao.md`. **Fora**: setes-sync e sincronizador (regra dos dois grupos — ver Q-AU9).
+**Numeração própria**: questões **Q-AUn**, assunções **A-AUn**, decisões **D-AUn**.
+**Método**: `skills-genericas/refinar-prompt-arquitetura.md` + `skills-genericas/guardiao-conceitual.md`.
+
+---
+
+## 0. Contexto — por que a frente
+
+Hoje a autenticação (login, seleção de estabelecimento, emissão do JWT RS256 com kid — D-F13) e TODO o catálogo de permissões vivem no
+setes-api; a nfse-api e o núcleo `fiscal-api` verificam o mesmo JWT e conferem privilégio por SQL direto no banco do produto; o app
+decide botões por `CurrentInterface.can()`. Fatos conferidos no código em 2026-10-31 (worktree `privilegios/`, branch `privilegios-crud`):
+
+- A regra do veredito "U pode V em I" existe em **quatro cópias + o app**: `setes-api/src/shared/auth/require-privilege.ts`,
+  `fiscal-api/src/erp/facts.ts:137` (comentário literal: *"mesma SQL do setes-api"*), as guardas da nfse-api (`src/modules/guards.ts`) e o
+  SQL do menu (`setes-api/src/modules/core/core.repository.ts`). `isSuper`/`isAdmin`/"institution 1" duplicados em
+  `setes-api/src/shared/auth/roles.ts` e `fiscal-api/src/auth/product-jwt.ts` (parecer do guardião, §3 abaixo).
+- O token leva o **`role`** (`setes-api/src/shared/auth/product-token.ts:107`) — rebaixar um admin só vale quando o token vence (24 h).
+- A senha é **MD5 sem salt, hex maiúsculo** (`setes-api/src/shared/auth/password.ts:8-9`) — tema da Q-EA9.
+- ⚠️ **Achado de segurança**: o usuário de banco da nfse-api tem `GRANT SELECT ON setes_central.*` (`nfse-api/ops/grants.sql`, seção 1) —
+  lê `tb_user.password` (o hash MD5) e o código de recuperação, que ele não usa. Ver Q-AU12.
+
+Precedente direto: a extração das APIs fiscais (`prompt_apis_fiscais_isoladas.md` §7 — D-F4 app cliente direto, D-F9 topologia 1 MySQL +
+Node, D-F10/D-F15 leitura do ERP por views + GRANT mínimo, D-F12/D-F17 pastas e núcleo como biblioteca, D-F13 mesmo login RS256,
+D-F19 "extrair no dev e só então a Onda 4").
+
+## 1. Decisões vigentes que a frente toca (não se decide nada aqui — só o mapa)
+
+| Decisão | O que diz | Efeito na frente |
+|---|---|---|
+| D-F13 | mesmo login; JWT RS256 com kid emitido pelo setes-api | o emissor passaria a ser a auth-api |
+| D-F4 | o app fala com as APIs do produto por datasources dedicados | a auth-api vira mais um datasource do app |
+| D-F9 | 1 MySQL + Node (setes-api, setes-sync, nfse-api, nfe-api) + Plesk | Q-AU7 (5ª instância) |
+| D-F15 / D-F32 | leitura entre serviços por VIEW + GRANT mínimo | molde da conferência (Q-AU3) |
+| **D-PV49** | o catálogo de privilégios mora num lugar só — **o setes-api**, "onde a interface nasce" | **a Q-AU1 (a) a REVÊ** |
+| D-PV50…D-PV53 | regra definitiva interface × privilégio; igualdade registrado = operado; boot só alarma; API cita o verbo pelo NOME | a auth-api é o lado "registrado" da igualdade |
+| D-PV29 | cache do veredito por PROCESSO (TTL) | Q-AU8 (N instâncias × revogação na hora) |
+| D-PV56…D-PV60 | verbos independentes no propósito; todo verbo leva o VISUALIZAR na concessão; corrige ao salvar | regra da ESCRITA da concessão — muda de dono, não de forma |
+| D-PV47 / D-RS* / D-PV48 / A-PV22 / A-PV23 | recuperação de senha volta; só o titular troca; script do Super; 1ª senha = criação da credencial | credencial é peça da auth-api (Q-AU5 pode matar a A-PV23 por construção) |
+| D-UC1…D-UC12 | credencial do titular, nunca excluída; ativo = vínculo; convite; D-UC9 inativação vale NA HORA | vínculo e convite são peças da auth-api; "na hora" pesa na Q-AU3/Q-AU8 |
+| D-GE3 / D-GE19…D-GE23 / PADROES §12 | privilégio POR estabelecimento; contrato de telas do GRUPO | `tb_user_has_privilege` ganha institution; licença é do grupo |
+| Q-EA1…Q-EA12 | endurecer a autenticação (limite por conta, fato da falha, hash, revogação, TTL) | onde executam depende da Q-AU6; hash = Q-AU11 |
+| A-PV24 (em suspenso) | casa única do texto da regra | resolvida pela Q-AU1/Q-AU2 |
+
+## 2. Inventário (Rodada 0 — 2026-10-31)
+
+Levantamento somente-leitura (agente Explore, 2026-10-31) das worktrees `privilegios/` (branch `privilegios-crud`),
+`privilegios-catalogo/`, `recuperacao-senha/`, `ne2/` e do núcleo; achados centrais conferidos no disco pela sessão. ⚠️ O estado atual está
+REPARTIDO entre três branches sem merge: guarda por roteador em `privilegios-crud`, cerca D-PV9 em `privilegios-catalogo` (anterior à
+guarda — 16 pares), recuperação endurecida em `recuperacao-senha`.
+
+### 2.1 Autenticação (setes-api)
+
+- Rotas `POST /auth/login`, `/select-institution`, `/recovery-password`, `/change-password`, `/switch-institution`
+  (`modules/auth/auth.routes.ts`); `/auth` público com o rate limit genérico (300/min por institution ou IP —
+  `gateway/rate-limit.middleware.ts`); **sem limite por e-mail no login**.
+- Login: acha o usuário pelo e-mail de login = e-mail do grupo 2 da CADEIA DE ENTIDADE (`tb_entity_has_mailing` + `tb_mailing` —
+  `auth.repository.ts`), compara MD5, lista vínculos ativos; 1 vínculo → token final; N → token de SELEÇÃO (5 min) + lista;
+  `resolveRole` rebaixa a `user` o super fora da institution 1. `tb_user.id = tb_entity.id`: o login depende de dado do ERP.
+- Token (`shared/auth/product-token.ts`, peça única): RS256 com kid (HS256 recusado); final `{institutionId, userId, role, schemaName}`,
+  24 h, **sem refresh**; `exp` obrigatório; boot recusa sem chave. A resposta do login traz também `context` (`isSalesman`, de `tb_salesman`
+  no schema do cliente — `shared/session-context`, cache 60 s) — dado do ERP, não de acesso.
+- **Sem logout nem revogação** no servidor (o app só apaga o token — `user_badge.dart`); `/auth/switch-institution` sem uso no app (só
+  citada em comentário/teste).
+- Senha: MD5 maiúsculo sem salt em `setes_central.tb_user.password` (usado também pelo cadastro e pelo onboarding). Recuperação: no `main`/
+  `privilegios-crud`, código de 6 dígitos em `tb_user.activation_key`; na `recuperacao-senha` (4 arquivos, ~1,2 mil linhas), tabelas
+  `tb_user_password_reset` + `_notice` (sql/67), código só como HMAC-SHA256 com chave **derivada por HKDF da chave privada do JWT**
+  (`deriveProductSecret`, `product-token.ts:103`) — acoplamento: a recuperação acompanha a chave de assinatura.
+- Variáveis (nomes): setes-api `JWT_PRIVATE_KEY_PATH`, `JWT_KID`, `JWT_PUBLIC_KEYS`, `PRIVILEGE_VERDICT_CACHE_TTL_MS`,
+  `FLAG_CACHE_TTL_MS`, `SESSION_CONTEXT_CACHE_TTL_MS`, `SMTP_*`; nfse-api/nfe-api `JWT_PUBLIC_KEYS`/`JWT_PUBLIC_KEY_PATH`; núcleo
+  `ERP_FACTS_CACHE_TTL_MS`.
+
+### 2.2 Verificação nas outras pontas
+
+- **nfse-api / nfe-api**: `productAuth`/`ProductTokenVerifier` do núcleo (`fiscal-api/src/auth/product-jwt.ts`), kid obrigatório, 401 com
+  log por classe; identidade reconferida no banco (`erp.assertInstitutionSchema` lê `setes_central.tb_institution`). nfse-api: guardas
+  `licensed`, `requireBranchPrivilege` (interface do ramo por `vw_order_interface`), `passScope`, `requireAdmin` (14 chamadas); sem cache de
+  veredito. nfe-api: só autentica + `requireAdmin` em `/v1/emitter` (privilégio por ramo fica para a NE-5).
+- **setes-app**: `CurrentInterface.can` (60 chamadas em 18 arquivos) lê o menu de `/api/core/menus` (libera enquanto o menu não chegou —
+  UX; quem decide é o 403 da API); `SessionUser.isAdmin`; modo super por `role=='super' && institutionId==1`; `SetesAuthGuard` só confere
+  o `exp`; token em `LocalPrefs` (localStorage/SharedPreferences, chave `session_token`); o `NfseApiClient` usa o MESMO token e confirma
+  401 da nfse-api no emissor por `GET /api/core/me`. Sem cliente da nfe-api ainda.
+
+### 2.3 Autorização no setes-api
+
+- Guardas de módulo: `superGuard`/`superWriteGuard`, `adminGuard`, `gatedModule` (28 módulos; verbo HTTP → V/I/A/E) + 56 `privilegeAct`
+  e 7 `openRoute` em 14 arquivos de rotas; `requirePrivilege`/`requirePrivilegeFor`/`requireInterfaceFor` (~37 usos, sobretudo billing).
+- Núcleo da decisão `privilegeVerdict` (`require-privilege.ts`): licença antes do privilégio (`escapesLicense`/`licensedFor` — super passa
+  tudo; admin passa o privilégio, não a licença; regular precisa de `tb_user_has_privilege`); cache por processo, TTL 60 s, invalidado em
+  `users.repository` e `shared/institution-interfaces`. Mais: `delegatedSuperVerdict`, `configureVerdict`, políticas avulsas (desconto,
+  canal bancário, escopo do admin em `users.service`), `featureFlagMiddleware` (fora dos módulos guardados — D-PV36).
+- Cerca D-PV9 (só na `privilegios-catalogo`): `CONSUMED_PRIVILEGES` + varredura por AST/tokenizador de setes-api, nfse-api, app e ids do
+  núcleo (`src/test-setup/privilege-fence.ts`, ~1 mil linhas); alarme no boot; `npm run check:privileges` trava o `build-web.ps1` (D-PV16).
+  Ainda não lê `gatedModule`/`privilegeAct` (D-PV14 — `listGatedRoutes()` já existe como insumo).
+
+### 2.4 Tabelas — onde moram, quem lê, quem escreve
+
+| Tabela | Onde | Lê | Escreve |
+|---|---|---|---|
+| `tb_user` | central | setes-api | setes-api (users, onboarding, troca de senha) |
+| `tb_institution_has_user` (`kind` = perfil) | central | setes-api | setes-api |
+| `tb_user_has_privilege` | **cliente** | setes-api; **nfse-api via núcleo** (`facts.ts`) | setes-api (users) |
+| `tb_privilege` | central | setes-api; nfse-api só pelos ids | setes-api (privileges) |
+| `tb_interface` | central | setes-api; **nfse-api via núcleo** | setes-api (interfaces) |
+| `tb_interface_has_privilege` | central | setes-api (menus, users, cerca) | setes-api (interfaces) |
+| `tb_institution_has_interface` (licença) | **cliente** | setes-api; **nfse-api via núcleo** | setes-api (institution-interfaces, onboarding) |
+| `tb_module`, `tb_module_has_interface` | cliente | setes-api (menus) | setes-api (modules) |
+| `tb_feature_flag`, `tb_user_has_preference` | central | setes-api | setes-api |
+| `tb_user_password_reset(_notice)` | central | recuperacao-senha | recuperacao-senha |
+| `tb_institution` (sem coluna de tipo — "a Setes" = id 1 fixo no código, duplicado no núcleo) | central | setes-api; nfse/nfe (`assertInstitutionSchema`) | setes-api |
+| `tb_sync_api_key` | central | setes-sync (não investigado — fronteira) | setes-api (`institutions.repository.ts`) |
+
+### 2.5 Administração de acesso (endpoints × telas)
+
+`/api/users` (adminGuard — `modules/users` + aba Usuários de Institutions) · `/api/privileges`, `/api/interfaces` (superGuard) ·
+`/api/institution-interfaces` (gatedModule delegável) · `/api/admin/institutions/:id/interfaces`, `/feature-flags` (super local) ·
+`/api/modules` (adminGuard) · `/api/core/me`, `/menus`, `/preferences`, `/theme` · `/auth/*` (login, seleção, recuperação, troca).
+
+### 2.6 Tamanho do que sairia
+
+- setes-api: ~65 arquivos / ~6,4 mil linhas de produção (`shared/auth`, `gateway` sem o router, `modules/auth`, `users`, `core` me/menus,
+  `privileges`, `interfaces`, `institution-interfaces`, `modules`, `admin`, `feature-flags`, `session-context`, `shared/institution-interfaces`,
+  `shared/user`, vitrine) + cerca (~1,5 mil) + ~18 testes (~2,4 mil). Não sai mas muda: ~100 marcações de guarda em 14 arquivos de rotas
+  (passam a ler o veredito por biblioteca).
+- nfse-api: 2 arquivos / 127 linhas; núcleo: `product-jwt.ts` (264) + ~60 linhas de `facts.ts`.
+- app: sobretudo a URL base do login/admin (áreas envolvidas ~8 mil linhas).
+- ⚠️ Partes que NÃO extraem limpo: e-mail de login pela cadeia de entidade (`tb_entity`), `isSalesman` no login, HMAC da recuperação pela
+  chave do JWT — todos tratados pelas peças do §3 (credencial com o próprio e-mail; `context` fica no setes-api via `/api/core/me`; a chave
+  vai junto com a recuperação).
+
+## 3. Parecer do guardião (`setes-conceito`, 2026-10-31 — somente leitura)
+
+**Conceito**: a auth-api é a **autoridade de acesso** do produto — responde "este portador pode exercer este verbo nesta interface deste
+estabelecimento?". É um SERVIÇO que compõe peças, não uma peça: há dois fatos geradores — o **login** (credencial apresentada → token) e a
+**concessão** (ato de quem concede → licença, vínculo, verbo); o veredito é a composição dos dois. O ganho é **um dono só do veredito**
+(hoje quatro cópias), não um processo a mais.
+
+| Peça | Fato gerador | Hoje |
+|---|---|---|
+| **Credencial** (hash, recuperação, falhas) | criação pelo admin / convite interceptado (D-UC4/D-UC8) | colunas de `tb_user` + sql/67 + Q-EA2 |
+| **Token** (chave privada, kid, rotação, seleção, revogação) | login / seleção | `product-token.ts` |
+| **Vínculo e perfil** (usuário × estabelecimento, user/admin/super, estado do convite — D-UC10) | ato do admin | `tb_institution_has_user` |
+| **Registro interface × verbo** (D-PV50 itens 1–3) | desenvolvimento da interface | `tb_interface`, `tb_privilege`, `tb_interface_has_privilege` |
+| **Concessão em dois níveis**: licença (Setes → estabelecimento, D-GE22) e privilégio (admin → usuário, D-PV57…D-PV60) | venda / ato do admin | `tb_institution_has_interface` × `tb_user_has_privilege` |
+| **Veredito** "U pode V em I no estabelecimento X" | composição | as quatro cópias |
+
+Licença e privilégio são o MESMO conceito (concessão) em níveis diferentes — mesma dona.
+
+**Não é dela**: a operação em si; a DECLARAÇÃO de quais pares cada API opera (D-PV50 item 5 — fica no repositório de cada API; a auth-api é
+o outro lado da igualdade da D-PV51); a pessoa e a cadeia fiscal (`tb_entity`); o menu (`tb_module*` — arranjo, D-GE20); catálogos de
+campos e configs (comportamento, não acesso); preferências/tema; `session-context`; `tb_feature_flag` (a D-PV36 já a tirou do caminho).
+
+**Como as outras APIs conferem** (Q-AU3): (a) permissões no token — enorme e velho por 24 h, contradiz a D-UC9 (o `role` no token já
+tem esse defeito); (b) chamada HTTP à auth-api por requisição com cache — um dono, mas salto a mais, serviço mais quente, ponto único de
+falha, chamada entre serviços que a D-F4 evitou; (c) VIEW publicada pela auth-api (`vw_user_access`, molde D-F15/D-F32: uma linha por
+usuário × estabelecimento × interface × verbo permitido, já dobrando licença, vínculo vivo, credencial viva e perfil) — zero salto,
+revogação na hora por construção, regra num SQL só; exige o leitor na mesma instância (D-F9 garante) e view fundível (PADROES §11.3), por
+schema (precedente `vw_order_interface`, migration 068); (d) **combinação (Rec.)**: token só com identidade (`userId`, `institutionId`,
+`schemaName`, `kid`, `iat` — sem `role`); veredito pela view para as APIs da instância; endpoint `/v1/access` para o app (menu e botões em
+lote) e para API fora da instância; D-UC9 e Q-EA7 viram uma leitura só.
+
+**Onde moram os dados** (Q-AU4): (i) tudo onde está, só o DONO da escrita muda (por GRANT); (ii) banco próprio `auth_api` para tudo — quebra
+as FKs (ex.: `tb_user_has_privilege` → `setes_central.tb_user`, `sql/03_schema_cliente_ddl.sql`) e as linhas de negócio que guardam o
+autor; PADROES §11.1 obrigaria a derrubá-las — maquete; (iii) **híbrido (Rec.)**: `auth_api` recebe só o NOVO e SECRETO (credencial,
+recuperação, falhas, avisos); registro, vínculo e concessões ficam em `setes_central`/schema do cliente com escrita só pela auth-api e
+leitura pela view; `tb_user_has_privilege` ganha `tb_institution_id` (D-GE3, PADROES §12).
+
+**Onde vira maquete — o que NÃO levar do setes-api**:
+- `tb_user` mistura dois conceitos: o ATOR (id = entity, autor do movimento, criado também pelo setes-sync sem senha) e a CREDENCIAL. Teste
+  da maquete: a A-PV23 ("a 1ª senha numa conta sem senha é a criação da credencial") só existe para a estrutura não se contradizer. Com
+  `tb_user_credential` separada, "sem credencial" = ausência da linha (Q-AU5).
+- `role` no token; `kind` do vínculo misturando PERFIL (user/admin/super) com ORIGEM ('SYNC'); e-mail de login lido da cadeia de cadastro
+  (pela D-UC1 ele nunca muda — é fato da credencial); MD5; cache em memória por processo copiado para N serviços (N janelas de revogação);
+  números de privilégio no contrato (o contrato é por NOME — chave da interface + verbo, como a D-PV53); inventar `tb_role`/RBAC (perfil +
+  verbo genérico — D-PV27 — já é o modelo).
+- O MENU segue no setes-api, mas lê o veredito em vez de refazer o SQL.
+
+**Ordem proposta** (Q-AU6) — extrair DEPOIS dos merges (molde D-F19), decidindo a frente AGORA para nenhuma branch criar uma 5ª cópia:
+- **A0 (agora)**: Rodada 0 + decisões Q-AU.
+- **A1 — costura, dentro do bloco de privilégios e das ondas 0 do grupo/convidado**: o veredito vira UMA peça com um SQL (a view), lida pelo
+  setes-api, pelo núcleo e pelo menu; D-UC9, D-GE3 e Q-EA7 entram nela; as tabelas novas da recuperação (sql/67) e do endurecer (Q-EA2)
+  nascem chaveadas por `tb_user_id` como filhas da credencial (mudam de banco sem reforma).
+- **A2 — projeto `auth-api`**: recebe os escritores (login, users, privileges, interfaces, institution-interfaces) e a chave privada; o
+  setes-api perde a escrita por GRANT.
+- **A3**: antes da Onda 4 (não publicar topologia que muda logo depois — D-F19).
+Redesenhar antes dos merges invalidaria os gates de cinco branches cujo comportamento a auth-api herda sem mudança.
+
+**Nomes propostos**: serviço/pasta/repo `auth-api`, porta **3004** (3000–3003 ocupadas), `/v1` (D-F8); banco `auth_api` (nunca `setes_*`);
+subpath de leitura `auth-api/access` (biblioteca, molde D-F33 — substitui a verificação do token e as funções de privilégio de
+`fiscal-api/src/auth` e `erp/facts.ts`); peça no setes-api `@shared/access`; view `vw_user_access`; credencial `tb_user_credential` (1:1,
+PK `tb_user_id`) com `tb_user_password_reset*` e `tb_user_login_failure` como filhas. Evitar **"sessão"** (ocupada: `session-context`,
+sessão de caixa — dizer "token"/"login") e **"contrato"** (ocupada — dizer **licença**).
+
+## 4. Rodada 1 — questões (uma por vez; recomendação do guardião entre parênteses, conferida)
+
+- ✅ **Q-AU1 → D-AU1 (2026-10-31, (a)).** Texto original: **Escopo da auth-api.** (a) credencial, token, vínculo e perfil, registro interface × verbo, as duas concessões (licença e
+  privilégio) e o veredito; (b) só autenticação — permissão fica no setes-api (a D-PV49 segue de pé); (c) (a) + menu, campos e configs.
+  **Rec.: (a)** — é o pedido do Valdo; REVÊ a D-PV49 ("o catálogo mora na auth-api"), mantendo o princípio do verbo genérico.
+- ✅ **Q-AU2 → D-AU2 (2026-10-31, (a)).** Texto original: **Dono de `tb_interface`.** (a) a auth-api (é o REGISTRO da D-PV50; campos e configs seguem apontando pela chave); (b) fica no
+  setes-api e a auth-api lê por view. **Rec.: (a)** — a D-PV50 diz "registrada no sistema", não "numa API".
+- ✅ **Q-AU3 → D-AU3 (2026-10-31, (d)).** Texto original: **Como as APIs conferem.** (a) token; (b) chamada HTTP; (c) view; (d) combinação (§3). **Rec.: (d)** — token sem `role`,
+  veredito por view, endpoint para o app.
+- ✅ **Q-AU4 → D-AU4 (2026-10-31, (iii)).** Texto original: **Onde moram os dados.** (i) onde estão; (ii) banco próprio para tudo; (iii) híbrido (§3). **Rec.: (iii)**.
+- ✅ **Q-AU5 → D-AU5 (2026-10-31, (a)).** Texto original: **Separar a credencial do usuário-ator.** (a) `tb_user_credential` no `auth_api` (revê PADROES §6 "tb_user controla somente
+  autenticação"; a A-PV23 morre por construção); (b) segue em `tb_user`. **Rec.: (a)**.
+- ✅ **Q-AU6 → D-AU6 (2026-10-31, (a)).** Texto original: **Ordem.** (a) A0 → costura A1 dentro dos merges → A2 → A3 antes da Onda 4; (b) redesenhar antes dos merges; (c) só depois da
+  Onda 4. **Rec.: (a)**.
+- ✅ **Q-AU7 → D-AU7 (2026-10-31, (a)).** Texto original: **Topologia (D-F9): 5ª instância Node e 4ª URL no build.** (a) instância própria pequena (tráfego = login e concessão; o
+  veredito é lido pela view); (b) começa como processo junto do setes-api. **Rec.: (a)**.
+- **Q-AU8 — Cache × "na hora" com N instâncias** (D-PV29 × D-UC9). (a) view lida a cada requisição, sem cache do veredito (uma consulta
+  indexada); (b) manter TTL de 60 s. **Rec.: (a)**.
+- **Q-AU9 — `tb_sync_api_key`** (hoje emitida pelo setes-api, módulo institutions). (a) fora da frente — é do outro grupo, registrada como
+  candidata; (b) a auth-api emite e revoga, o setes-sync só verifica. **Rec.: (a)**.
+- **Q-AU10 — Credencial de aplicativo sem humano** (frente S1; a D-F13 a pôs no setes-api). (a) passa para a auth-api quando a S1 nascer;
+  (b) fica no setes-api. **Rec.: (a)**, sem execução agora.
+- **Q-AU11 — Hash.** (a) a auth-api só nasce depois da Q-EA9 decidida e executada; (b) nasce já com o hash novo e a migração transparente.
+  **Rec.: (a)** — um caminho de migração só.
+- **Q-AU12 — GRANT da nfse-api em `setes_central`** (achado do §0 — independe da frente). (a) estreitar JÁ, na janela do bloco de
+  privilégios: só as tabelas/colunas que o núcleo lê (nunca `password`/código de recuperação); (b) esperar a A1/A2 (a view resolve).
+  **Rec.: (a)** — hoje um vazamento do usuário fiscal entrega os hashes MD5 de todos os logins.
+
+## 5. Decisões
+
+- **D-AU1** (Valdo, 2026-10-31 — fecha a **Q-AU1** = (a), literal: *"Acesso completo (a)"*) — a auth-api é a AUTORIDADE DE ACESSO do
+  produto e dona das seis peças do §3: credencial (senha, recuperação, falhas), token (chave, kid, emissão, seleção, revogação), vínculo
+  usuário × estabelecimento e perfil, registro interface × verbo (D-PV50 itens 1–3), as duas concessões (licença Setes → estabelecimento e
+  privilégio admin → usuário, com a regra das D-PV57…D-PV60 na escrita) e o VEREDITO. Fora: a operação, a declaração dos pares que cada API
+  opera (fica em cada repositório — D-PV50 item 5), a pessoa/cadeia fiscal, o menu, campos e configs, preferências, `session-context`,
+  feature flags. **REVÊ a D-PV49**: o catálogo de privilégios mora na AUTH-API (não no setes-api); seguem de pé o princípio do verbo
+  genérico (D-PV27/D-PV49 (3)) e a citação pelo NOME (D-PV53). A A-PV24 (casa do texto da regra) passa a ser da auth-api — forma na
+  execução.
+- **D-AU2** (Valdo, 2026-10-31 — fecha a **Q-AU2** = (a), literal: *"A auth-api (a)"*) — a auth-api é DONA de `tb_interface` (o
+  REGISTRO da D-PV50: chave `i18n_key`, descrição, `kind` T/R) junto com `tb_privilege` e `tb_interface_has_privilege`. Ficam no setes-api,
+  apontando para a tela pela CHAVE: catálogos de campos (`tb_interface_has_field`) e de configs (`tb_interface_has_config`) e o menu (que
+  usa `group_default`/`position` — se essas colunas ficam na tabela da auth-api ou migram para o arranjo do menu é detalhe da execução, com
+  o guardião). Consequência aceita: a tela "Interfaces" do Super fala com DUAS APIs (registro na auth-api; catálogo de configs — hoje
+  `interfaces.routes.ts:122/157` — no setes-api).
+- **D-AU3** (Valdo, 2026-10-31 — fecha a **Q-AU3** = (d), literal: *"Combinação (d)"*) — (1) o TOKEN leva só a IDENTIDADE (`userId`,
+  `institutionId`, `schemaName`, `kid`, `iat`, `exp`) — o `role` SAI do token; (2) as APIs da mesma instância de banco (setes-api, núcleo
+  `fiscal-api` → nfse-api/nfe-api) conferem pelo VEREDITO publicado pela auth-api como VIEW (`vw_user_access` — uma linha por usuário ×
+  estabelecimento × interface × verbo permitido, já compondo licença, vínculo vivo, credencial viva e perfil; molde D-F15/D-F32; fundível —
+  PADROES §11.3; por schema do cliente como a `vw_order_interface`), lida VIVA — revogação na hora por construção (D-UC9); (3) o app e
+  qualquer API fora da instância usam `GET /v1/access` da auth-api (menu e botões em lote — perfil e "sou admin/super" saem daqui, não do
+  token: `SessionUser.isAdmin` e o modo super da tela de usuários mudam); (4) a revogação de sessão da Q-EA7 (`iat` × fato da credencial)
+  entra na MESMA leitura. Cache do veredito: Q-AU8.
+- **D-AU4** (Valdo, 2026-10-31 — fecha a **Q-AU4** = (iii), literal: *"Híbrido (iii)"*) — banco próprio **`auth_api`** (nunca `setes_*`)
+  só com o NOVO e SECRETO: credencial (hash, e-mail de login — forma: Q-AU5), recuperação de senha (`tb_user_password_reset*` do sql/67),
+  falhas de login (Q-EA2) e avisos ao dono. Ficam ONDE ESTÃO, com ESCRITA só pela auth-api (o setes-api perde a escrita por GRANT) e
+  leitura pela view da D-AU3: `tb_interface`, `tb_privilege`, `tb_interface_has_privilege`, `tb_institution_has_user` (`setes_central`);
+  `tb_user_has_privilege` e `tb_institution_has_interface` (schema do cliente) — as FKs com o negócio (autor dos movimentos, usuário)
+  seguem de pé. `tb_user_has_privilege` ganha `tb_institution_id` (D-GE3, PADROES §12). Efeito no achado do §0: o segredo sai do alcance
+  de quem lê o banco do produto (o GRANT `SELECT setes_central.*` da nfse-api deixa de alcançar hash) — o estreitamento imediato segue na
+  Q-AU12.
+- **D-AU5** (Valdo, 2026-10-31 — fecha a **Q-AU5** = (a), literal: *"Separar (a)"*) — nasce **`tb_user_credential`** no banco `auth_api`
+  (1:1 com o usuário, PK `tb_user_id`, sem FK entre bancos — PADROES §11.1), com o hash, o e-mail de LOGIN (fato da credencial, imutável
+  — D-UC1; o login deixa de ser lido da cadeia de cadastro `tb_entity_has_mailing`) e as filhas (`tb_user_password_reset*`,
+  `tb_user_login_failure`). `tb_user` segue em `setes_central` como o ATOR (id = entity; autor dos movimentos; criado também pelo
+  setes-sync sem credencial). "Usuário sem credencial" = AUSÊNCIA da linha: a **A-PV23 deixa de ser exceção** (criar a credencial = criar
+  a linha, uma vez só — a D-PV48 vale por construção). REVÊ o PADROES §6 ("tb_user controla somente autenticação") — atualizar na
+  execução, junto do DDL (guardião + `revisar-ddl`). Migração das senhas atuais (MD5) para a nova tabela: com o hash novo — Q-AU11/Q-EA9.
+- **D-AU6** (Valdo, 2026-10-31 — fecha a **Q-AU6** = (a), literal: *"Costura e depois extrair (a)"*) — ORDEM, molde D-F19:
+  **A0** (agora) decisões Q-AU; **A1 — COSTURA** dentro do bloco de privilégios (passo 4 do §2 do plano de retomada) e das ondas 0 do grupo
+  e do convidado: as branches entram COMO ESTÃO (gates preservados) e, na mesma sessão do bloco, o veredito vira UMA peça com UM SQL (a
+  view `vw_user_access`) lida pelo setes-api, pelo núcleo e pelo menu — as 4 cópias morrem; D-UC9, D-GE3 e Q-EA7 entram nessa peça;
+  tabela nova de credencial nasce chaveada por `tb_user_id` (muda de banco sem reforma); nenhuma branch cria uma 5ª cópia (regra para
+  produtos, terminal, convidado, grupo). **A2** — projeto `auth-api`: recebe os escritores (login, users, privileges, interfaces,
+  institution-interfaces), a chave privada, a credencial (D-AU5) e o banco `auth_api` (D-AU4); o setes-api perde a escrita por GRANT; token
+  sem `role` (D-AU3). **A3** — antes da Onda 4 (não publicar topologia que muda logo depois). Custo aceito: o passo 4 cresce com a costura;
+  a onda de campos (4a) parte do `main` depois dela.
+- **D-AU7** (Valdo, 2026-10-31 — fecha a **Q-AU7** = (a), literal: *"Instância própria"*) — a auth-api é serviço PRÓPRIO desde a A2:
+  pasta/repositório `auth-api` (raiz do workspace + espelho `Infra-IA/auth-api/`, regra de simetria), porta **3004**, `/v1`, deploy próprio
+  (molde nfse-api); acrescenta à topologia da D-F9 o 5º processo Node e a 4ª URL no build do app (por configuração — `build-web.ps1`). A
+  chave privada do token e a credencial saem do processo do ERP. Tráfego baixo por construção (login, seleção, administração de acesso,
+  `/v1/access`); o veredito de cada requisição das outras APIs é lido da view, sem passar por ela.
+
+## 6. Fora de escopo / candidatas
+
+- Chave de sincronia (`tb_sync_api_key`) — Q-AU9; credencial de aplicativo (S1) — Q-AU10.
+- Menu (`tb_module*`), campos e configs — ficam no setes-api (salvo Q-AU1 (c)).
