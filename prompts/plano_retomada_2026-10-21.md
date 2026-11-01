@@ -356,4 +356,9 @@ com as decisões de 27/10 ainda SEM commit.
   INDICE 10.50…10.53 no commit **23068ef** (pull = já atualizado; só os 11 arquivos da rodada). Push: só com o pedido do Valdo.
 - **2026-11-01 — Q-EA13 → D-EA13** ((b), questão trazida pelo gate adversarial da costura A1): senha SÓ DE ESPAÇOS (`trim()` vazio)
   recusada JÁ, na costura do passo 4 (DTO de usuários; o `it.failing` de `adversarial-a1-delta-gate.test.ts` vira `it`); a peça da D-EA5
-  absorve na Onda 3. Repassada à sessão do passo 4.
+  absorve na Onda 3. Repassada à sessão do passo 4. **EXECUTADA** pela sessão do passo 4 (commit local 745d2af na `privilegios-crud`:
+  `newPasswordSchema` em users POST/PUT e no admin do onboarding).
+- **⏯ NOVA ETAPA desta linha (2026-11-01, Valdo: "salve tudo e prepare um prompt para a nova etapa em nova sessao")**: execução do
+  endurecer a autenticação + script do Super — prompt pronto no FIM de `prompt_endurecer_autenticacao.md` ("⏯ Execução — prompt para a
+  sessão nova"). PRÉ-CONDIÇÃO: passo 4 mergeado no `main` (mexe nos mesmos arquivos de `auth`). Ordem: script do Super (D-RS7/D-RS13 +
+  seção do `setes-api/CLAUDE.md`) → Ondas 1+2 → Onda 3 → Onda 4 (scrypt, antes da A2).

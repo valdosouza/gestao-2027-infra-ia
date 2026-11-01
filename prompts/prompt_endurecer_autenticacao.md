@@ -209,6 +209,12 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   **Efeito da auth-api**: nenhum na recomendação — o login vai para a auth-api na A2 com a mesma regra; "credencial viva + vínculo vivo"
   já compõe a leitura única (D-AU3) e a inativação vale na hora (D-AU8): a sessão aberta cai, o login devolve a mesma resposta neutra. A
   regra do convidado (D-UC12: o login é o aceite) roda ANTES da contagem de vínculos ativos. Recusado: (b) manter as mensagens.
+- **D-EA7 — EXECUTADA na costura A1 (2026-10-31 → 11-01, worktrees `privilegios/*`; §14 do `prompt_privilegios_interfaces.md`)**: a forma
+  final pelo guardião = `tb_user.password_set_at DATETIME NULL` (UTC, ao segundo) ao lado do hash, exposta crua na `vw_user_link`, comparada
+  na MESMA leitura da sessão (`password_set_at IS NULL OR password_set_at <= iat`). Assunções do guardião **RATIFICADAS** (Valdo,
+  2026-11-01, literal: *"Ratificar todas"*): **A-1** T pelo relógio de quem ASSINA o token (nunca `NOW()` do banco — exceção nomeada à letra
+  da PADROES §10 regra 1); **A-2** `iat = T` vale; **A-3** NULL sem backfill; **A-4** `iat` obrigatório nos dois verificadores, com o token
+  de SELEÇÃO conferido.
 - **D-EA7** (Valdo, 2026-10-31 — fecha a **Q-EA7** = (a) REVISTA pela auth-api, literal: *"siga recomendacao"*) — revogação de sessão em
   DOIS caminhos: (1) **inativação** (usuário OU vínculo) = pela leitura de acesso VIVA (`vw_user_access` só devolve acesso com credencial
   e vínculo vivos — D-AU3 (2), sem cache — D-AU8): cai NA HORA, sem comparar instante; (2) **troca de senha** = `iat` do token × FATO
@@ -265,12 +271,6 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   nele, vai na Onda 1. **Efeito da auth-api**: só o momento. Recusados: (b) nível debug por variável de ambiente; (c) manter.
   **Rodada 1 FECHADA (D-EA1…D-EA12) — nenhuma questão aberta nesta frente.** Execução pela D-EA10.
 
-## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
-
-- ✅ **Q-EA1 → D-EA1 (2026-10-31, (a)).** Texto original: **Q-EA1 — limite por conta no login: valores.** Problema: sem teto por conta, 18 000 palpites/h por IP. Opções: (a) **10 erradas em 15
-  min → bloqueio até a mais velha envelhecer (janela deslizante de 15 min)**; (b) 5 em 15 min (mais rígido; mais chamados de suporte);
-  (c) bloqueio progressivo (15 min, 1 h, 24 h). **Rec.: (a)** — dez erradas não acontecem por engano de digitação, e a janela deslizante
-  dispensa "desbloquear" (o admin não precisa de botão; o super bloqueado espera 15 min ou usa o D-PV46). Resposta SEMPRE a mesma 401.
 **Rodada 2 — 2026-11-01**:
 
 - **D-EA13** (Valdo, 2026-11-01 — fecha a **Q-EA13** = (b), literal: *"(b) Recusar já"*) — senha SÓ DE ESPAÇOS (`trim()` vazio) é
@@ -280,7 +280,19 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   aceitava '     ' (`z.string().min(5)`), e numa conta SEM credencial (vinda do sync) isso vira a 1ª senha que, pela D-PV48, só o titular
   troca; o app já barrava pela tela. **Efeito da auth-api**: nenhum — a regra vai com a peça da senha para a auth-api na A2. Recusados: (a)
   esperar a Onda 3; (c) não recusar. Repassada à sessão do passo 4 com o texto literal.
+  **EXECUTADA 2026-11-01** (sessão do passo 4, commit LOCAL **745d2af** do setes-api, branch `privilegios-crud`, sem push — conferido):
+  peça `newPasswordSchema` em `src/shared/auth/password.ts` (5 a 100 caracteres, `trim()` vazio recusado, espaço dentro vale) usada no
+  `users` POST e PUT **e também no admin do onboarding** (`institutions.dto.ts`) — toda porta do cadastro que cria credencial, além da letra
+  "DTO de usuários" (mesma intenção; a D-EA5 já previa as três portas de escrita). O `it.failing` do `adversarial-a1-delta-gate.test.ts`
+  virou `it`; teste novo em `users-d-pv48-d-pv58.test.ts`. A peça da D-EA5 (Onda 3) absorve `newPasswordSchema` junto do mínimo 8.
+  Registro da execução também no §14 do `prompt_privilegios_interfaces.md`.
 
+## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
+
+- ✅ **Q-EA1 → D-EA1 (2026-10-31, (a)).** Texto original: **Q-EA1 — limite por conta no login: valores.** Problema: sem teto por conta, 18 000 palpites/h por IP. Opções: (a) **10 erradas em 15
+  min → bloqueio até a mais velha envelhecer (janela deslizante de 15 min)**; (b) 5 em 15 min (mais rígido; mais chamados de suporte);
+  (c) bloqueio progressivo (15 min, 1 h, 24 h). **Rec.: (a)** — dez erradas não acontecem por engano de digitação, e a janela deslizante
+  dispensa "desbloquear" (o admin não precisa de botão; o super bloqueado espera 15 min ou usa o D-PV46). Resposta SEMPRE a mesma 401.
 - ✅ **Q-EA2 → D-EA2 (2026-10-31, (a)).** Texto original: **Q-EA2 — onde mora o fato da falha.** Opções: (a) **tabela filha `tb_user_login_failure` (só falhas, append-only, PK por usuário +
   seq, sob a trava da linha de `tb_user` — regras 12/13)**; (b) colunas `failed_logins`/`locked_until` em `tb_user` (ALTER na tabela do
   login + estado em vez de fato — o gate da Q-PV38 reprovou o molde); (c) tabela de TODAS as tentativas (sucesso incluído — 1 linha por
@@ -321,12 +333,6 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   produção; nenhum dado sensível). Opções: (a) **rebaixar para debug/remover (fica só o log de falhas)**; (b) manter. **Rec.: (a)** —
   item pequeno, pode entrar na Onda 1 ou na Onda 4 do deploy; não é segurança.
 
-## Fora de escopo desta frente
-
-- `X-Api-Key` do setes-sync / sincronizador (outro grupo — regra dos dois grupos); 2FA/TOTP (nenhum pedido; fica como ideia na Onda 5 se o
-  Valdo quiser); SSO/OAuth; CAPTCHA (a resposta neutra + limite por conta cobrem o caso); "minha senha" e convite (onda 0 do convidado —
-  D-UC6…D-UC12); `trust proxy`/HTTPS/CORS (Onda 4 do deploy — D-RS2); auditoria de LOGINS bem-sucedidos (ver Q-EA7 (b)).
-
 **Rodada 2 — aberta 2026-11-01 (questão trazida pelo gate adversarial do delta da costura A1, sessão do passo 4)**:
 
 - ✅ **Q-EA13 → D-EA13 (2026-11-01, (b) — recusar já, na costura do passo 4).** Texto original: **Q-EA13 — senha SÓ DE ESPAÇOS.** Fato (conferido 2026-11-01): o `userUpdateDto` do setes-api aceita `password` com
@@ -340,6 +346,12 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   fraca). Espaços DENTRO da senha seguem válidos em qualquer opção (frase-senha). *(Rec.: (b) — o furo existe hoje pela API, a correção é
   uma linha com teste pronto e a Onda 3 pode demorar semanas.)*
 
+## Fora de escopo desta frente
+
+- `X-Api-Key` do setes-sync / sincronizador (outro grupo — regra dos dois grupos); 2FA/TOTP (nenhum pedido; fica como ideia na Onda 5 se o
+  Valdo quiser); SSO/OAuth; CAPTCHA (a resposta neutra + limite por conta cobrem o caso); "minha senha" e convite (onda 0 do convidado —
+  D-UC6…D-UC12); `trust proxy`/HTTPS/CORS (Onda 4 do deploy — D-RS2); auditoria de LOGINS bem-sucedidos (ver Q-EA7 (b)).
+
 ## Critérios de sucesso (testáveis)
 
 1. 11ª tentativa errada numa conta em 15 min recebe a MESMA 401 que a 1ª, em tempo igual ao de uma conta inexistente (piso), e a senha
@@ -352,5 +364,58 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
 5. Login com hash MD5 legado passa e regrava em scrypt na mesma transação; o 2º login compara scrypt; prova em descartável com os dois
    formatos; `tsc` e suíte verdes.
 6. Trocar a senha (código, admin, script D-PV46) ou inativar o usuário faz o token anterior receber 401 `SESSION_REVOKED` em ≤ 60 s;
-   o token novo passa.
+   o token novo passa. *(Revisto pela D-EA7/D-AU8 e pela D-PV48: NA HORA, sem cache; o admin não troca senha de credencial existente —
+   troca = código, "minha senha" ou script do Super. Já executado na costura A1.)*
 7. Gates socrático ≥ 0,70 e adversarial sem HIGH/CRITICAL em cada onda; nenhuma senha, código ou e-mail inteiro em log.
+
+## ⏯ Execução — prompt para a sessão nova (preparado 2026-11-01, a pedido do Valdo: "salve tudo e prepare um prompt para a nova etapa")
+
+Estado ao preparar: decisões FECHADAS — recuperação D-RS1…D-RS18 (nenhuma questão aberta) e esta frente D-EA1…D-EA13 (nenhuma questão
+aberta). Já executado na COSTURA A1 (passo 4, branch `privilegios-crud`, sessão própria, ainda SEM merge no `main` ao preparar): D-EA7
+(`tb_user.password_set_at` + `iat`, inativação pela view viva — A-1…A-4 ratificadas), D-EA12 (`Auth OK` fora) e D-EA13 (`newPasswordSchema`,
+commit local 745d2af). Nada desta frente além disso tem código.
+
+Copiar para a sessão nova:
+
+> Executar a frente "endurecer a autenticação" + o ajuste do script do Super no setes-api (e no setes-app na Onda 3), na ordem da
+> D-EA10. Workspace `D:\Gestao2027`. ANTES de qualquer código, ler: `CLAUDE.md` da raiz; `Infra-IA/INDICE_CENTRAL.md`;
+> `Infra-IA/prompts/prompt_endurecer_autenticacao.md` (decisões D-EA1…D-EA13 em "Decisões arquiteturais registradas" — o texto das
+> ondas no §4 é a proposta da Rodada 0; onde divergir, vale a decisão); `prompt_privilegios_interfaces.md` §13.10.5 (D-RS7…D-RS18) e
+> §14 (execução da costura A1); `prompt_frente_auth_api.md` §5–§6 (D-AU4, D-AU5, D-AU6, D-AU11 e as heranças da A2);
+> `plano_retomada_2026-10-21.md` §2 (passo 10) e §6.3.
+>
+> **Pré-condição (conferir primeiro)**: o passo 4 do plano (bloco de privilégios + costura A1, branch `privilegios-crud`) está MERGEADO no
+> `main` do setes-api. Ele mexe em `auth.service.ts`, `auth.repository.ts`, `auth.middleware.ts` e `super-password-reset.ts` — tudo o que
+> esta frente toca. Se ainda não estiver no `main`, PARE e diga ao Valdo; nunca comece de outra base.
+>
+> **Ordem** (cada item em worktree própria a partir do `main`; parecer do guardião `setes-conceito` + `PADROES_BANCO` + `revisar-ddl`
+> ANTES de qualquer DDL, prova em schema descartável; gates `revisar-riscos-sistemicos` ≥ 0,70 e `testar-adversarial` sem HIGH/CRITICAL;
+> merge e publicação SÓ com o "vai" do Valdo — a árvore viva do setes-api roda `tsx watch` = deploy ao salvar, nunca editar lá):
+> 0. **Script do Super** — D-RS7 (`--user-id`/`--email` também entre 2+ Supers ATIVOS; sem nome explícito continua recusando; a mensagem
+>    deixa de citar a tela) + D-RS13 (depois de gravar, e-mail NEUTRO ao e-mail de login do Super pela `@shared/mailer`, sem link; falha do
+>    envio = log, não desfaz) + reescrever a seção "Senha perdida do SUPER" do `setes-api/CLAUDE.md` (ainda cita a D-PV12, morta pela
+>    D-PV48). Ficam como estão: D-RS14 (ativo = usuário E vínculo), D-RS15 (nada de `kind`/`updated_by` em `tb_user`), D-RS16 (Super
+>    inativo é recusado, o script nunca reativa). O ensaio real do script é do Valdo (o classificador recusa o agente).
+> 1. **Ondas 1+2** (nunca em paralelo com a onda 0 do convidado — as duas mexem no `login`): D-EA1 (10 erradas em 15 min, janela
+>    deslizante, mesma 401 no mesmo tempo, sem botão; o script do Super não desbloqueia), D-EA2 (`tb_user_login_failure`, só falhas,
+>    append-only, PK `(tb_user_id, seq)` sob a trava da linha do usuário — molde do sql/67; nasce em `setes_central`, muda para o `auth_api`
+>    na A2), D-EA3 (`tb_user_login_notice`, aviso ao dono 1/h, texto neutro sem link, vaga sob SAVEPOINT — D-RS10), D-EA6 (UMA resposta
+>    401 para senha errada/inexistente/inativo/sem vínculo; senha CERTA em conta inativa não conta como falha; o "login é o aceite" da
+>    D-UC12 antes da contagem), D-EA11 (uma linha de log por falha: e-mail mascarado, IP, motivo interno), D-EA4 (contador em memória;
+>    alarme acima de 100 falhas/min OU 30 contas/5 min → `[ALARME LOGIN]` + `recordCrash` + e-mail à operação 1/15 min; `OPS_ALERT_EMAIL`
+>    OBRIGATÓRIO em produção, recusado no boot como o `assertMailerReady`; NUNCA bloqueia o login).
+> 2. **Onda 3** (API e app JUNTOS): D-EA5 — peça `@shared/auth/password-policy` + espelho em `setes_validators` (mínimo 8, sem classes,
+>    lista das 10 mil senhas mais comuns com as brasileiras, arquivo no repositório; recusa a parte local do e-mail de login e a igual à
+>    atual; senhas existentes valem até a próxima troca), absorvendo o `newPasswordSchema` da D-EA13 (só espaços recusado). Portas:
+>    criação (users e admin do onboarding), `/auth/change-password`, "minha senha" (D-UC7) se já existir.
+> 3. **Onda 4** — D-EA9 (pré-requisito da A2, D-AU11): `scrypt` do `crypto` do Node, `N=2^15, r=8, p=3`, `maxmem` explícito, tempo e
+>    memória MEDIDOS no gate; `scrypt$<params>$<sal>$<hash>` em base64 na mesma coluna (hex não cabe no varchar(100)); migração
+>    transparente no login (MD5 legado confere e regrava na mesma transação); `timingSafeEqual` nos dois formatos; a regravação NÃO toca o
+>    `password_set_at` (D-EA7 — não derruba sessão); o código de recuperação aberto daquela conta morre (aviso no roteiro de deploy);
+>    trocar a peça `md5Password` cobre todos os escritores, e o script do Super deixa de validar a forma "32 hex".
+>
+> Depois disto vem a A2 da auth-api (fora deste prompt). Números de migration/seed: conferir o próximo livre na hora (075 = costura A1,
+> 076 = `ib99`, seed 71 = `ib99`). Questão nova que aparecer = UMA por mensagem ao Valdo (memória `feedback-uma-pergunta-por-vez`),
+> registrada em "Decisões arquiteturais registradas" deste prompt (próxima = D-EA14) + uma linha no §6.3 do plano. Ao fechar cada item:
+> skill `atualizar-infra-ia` (INDICE com `git fetch` antes de numerar — o repositório tem dois clones e é PÚBLICO; `CLAUDE.md` da raiz;
+> memória `endurecer-autenticacao`); commit da Infra-IA só dos próprios trechos, com o pedido do Valdo.
