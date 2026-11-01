@@ -44,6 +44,21 @@ A nfse-api de produção carrega o núcleo pelo `src` (`../fiscal-api/src`): o r
      UMA dessas notas, confira em "No fisco" e só então o resto; recuo do que já congelou = cancelar e refaturar (tirar a NBS do cadastro não
      desfaz o ramo).
    Depois do deploy, o "liga" em P é a classificação — um serviço e uma nota primeiro, conferindo o grupo e os valores do fisco em "No fisco".
+7. **Leiaute por ambiente (D-IB110/D-IB111 — 2026-11-01)** — o DPS sai no PACOTE XSD que o calendário (`src/authority/layout-calendar.ts`)
+   dá para o ambiente × instante; os pacotes vigentes têm a MESMA `versao="1.01"`. A cada deploy (e sempre que o fisco publicar pacote novo):
+   conferir a página oficial de PRODUÇÃO (https://www.gov.br/nfse/pt-br/biblioteca/documentacao-tecnica/documentacao-atual) e a de produção
+   restrita (`…/documentacao-tecnica/producao-restrita`); pacote novo anunciado para P = baixar e arquivar no acervo
+   (`Infra-IA/setes-api/integracoes/nfse-adn/`), linha nova no calendário com o `validFrom` anunciado, teste de ordem/forma contra o XSD do
+   pacote, DEPLOY ANTES da data. Fisco adiou/antecipou = novo deploy movendo a data. No ar: `[D-IB111] E1235 em PRODUÇÃO` no log (DPS ou
+   pedido de evento) = o fisco recusou PELO ESQUEMA — **não prova troca de pacote** (há E1235 por DADO: IM > 15, `nro`/`xBairro` > 60,
+   `xCpl` > 156 do cadastro, sem corte no montador): antes de publicar linha, ler a mensagem do validador gravada na voz R da tentativa citada
+   no alarme (elemento esperado × recebido — o E1235 da 8014 em H dizia "`cLocEmi` inesperado, esperado `cMotivoEmisTI, finNFSe`") E a página
+   oficial; só pacote novo confirmado vira linha. Nunca trocar de leiaute "na mão" nem por variável. Limite conhecido: o `dhEmi` (que decide
+   o leiaute) nasce antes do envio — na fronteira da virada uma tentativa pode sair no pacote antigo e levar R; a seguinte remonta com
+   `dhEmi` novo. **Recomendação**: no dia anunciado da virada de P, não rodar o lote mensal na janela da troca.
+8. **Classificar serviço em P (D-IB115 — 2026-11-01)**: a D-IB98 ("nenhum serviço classificado em P") só cai depois da prova em H passar
+   (IB-4: 8014 + 8015) **E** da D-IB113 no ar no setes-api (CST com `ind_gIBSCBS = 0` recusado no cadastro e no faturamento) — no pacote de
+   20/10/2026 o montador sempre leva `cIndOp` + `gIBSCBS`, que o fisco recusa com indicador 0 (E0859/E0961).
 
 Trocar a produção para o `dist` (e aposentar o item 1) = F3.
 

@@ -30,7 +30,14 @@ cópia tem de ter os MESMOS nomes — logo, outro servidor MariaDB (mesmo binár
    GRANTs da produção (SELECT `setes_central`.*, ALL `fiscal_api`.*, SELECT `setes_%`.*).
 3. `mysqldump --single-transaction --routines --triggers --events --databases setes_central setes_setes fiscal_api` da 3306 (só leitura)
    → restaurar na 3307.
-4. Na cópia: `UPDATE … tb_establishment_issuer SET environment='H', dps_last_number=900` nos DOIS lados (ERP e `fiscal_api`).
+4. Na cópia: `UPDATE … tb_establishment_issuer SET environment='H', dps_last_number=900` nos DOIS lados (ERP e `fiscal_api`). **Depois da
+   janela da F2a (2026-10-15) só no `fiscal_api`**: na cópia o gatilho de TRAVA da F2a recusa mexer na habilitação SE do ERP (aposentada e
+   congelada — ERRO 1644 "D-F110/D-F44"); é a trava funcionando, e o ERP não emite mais (2026-11-01, 2ª prova em H da IB-4).
+   **Prova em H da IB-4 (2026-11-01)**: não precisa da nfse-api da cópia — o `npm run smoke:adn-h -- --nota <id> [--vai]` roda do código
+   publicado com `DB_*` apontando para a 3307 (usuário `fiscal_api` da cópia), `SMOKE_DB_USER=setes` da cópia e o mesmo `NODE_OPTIONS`/
+   `PASSEIO_BLOCK_HOSTS`; a nota nasce na cópia pela API do setes-api da :3010 (token do ensaio por `setes-api/scripts/generate-token.ts`
+   com `JWT_PRIVATE_KEY_PATH`/`JWT_KID=passeio` no ambiente). Senhas da cópia num arquivo da pasta `S`, lidas por script — nunca na linha de
+   comando.
 5. Ambientes: `env-api.sh` (PORT 3010, DB 127.0.0.1:3307 `setes`, STORAGE/SECRETS/SMTP isolados, `JWT_PRIVATE_KEY_PATH` do passeio,
    `JWT_KID=passeio`, `CORS_ORIGIN=http://localhost:5052`) e `env-nfse.sh` (PORT 3012, DB 3307 `fiscal_api`, `JWT_PUBLIC_KEYS=passeio=…`,
    `STORAGE_PATH` isolado, `CORS_ORIGINS=http://localhost:5052`) + `PASSEIO_BLOCK_HOSTS` + `NODE_OPTIONS="--require <kit>/block-hosts.js"`.

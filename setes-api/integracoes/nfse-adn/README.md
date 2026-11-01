@@ -122,7 +122,16 @@ https://www.nfse.gov.br/consultapublica).
 | Arquivo | O quê |
 |---|---|
 | `anexo_b-lista_servico_nacional-v1.01.xlsx` | Anexo B v1.01 (22/01/2026): aba `LISTA.SERV.NAC.` = **338 códigos de tributação nacional** (`cTribNac`, 6 dígitos = item(2)+subitem(2)+desdobro(2); a planilha grava sem o zero à esquerda: `10201` = `010201`) + aba `LISTA.NBS_v2.0` (1.210 códigos NBS) |
-| `nfse-esquemas_xsd-v1.01-20260209.zip` → `xsd/Schemas/` | XSD oficiais v1.01 (DPS, NFS-e, eventos, componentes) — ⚠️ **não há validação local contra o XSD (decisão Q-IB84 → D-IB84, 2026-10-15)**: os XSD servem de FONTE para os testes de ordem/forma do grupo IBS/CBS (`nfse-api/src/__tests__/ibscbs-ib3.test.ts` extrai a sequência de `TCInfDPS`/`TCRTCInfoIBSCBS` daqui); a prova é a produção restrita (IB-4). Dependência de validação XSD (libxml) na máquina de produção = decisão nova |
+| `nfse-esquemas_xsd-v1.01-20260209.zip` → `xsd/Schemas/` | XSD oficiais v1.01 (DPS, NFS-e, eventos, componentes) — ⚠️ **não há validação local contra o XSD (decisão Q-IB84 → D-IB84, 2026-10-15)**: os XSD servem de FONTE para os testes de ordem/forma do grupo IBS/CBS (`nfse-api/src/__tests__/ibscbs-ib3.test.ts` extrai a sequência de `TCInfDPS`/`TCRTCInfoIBSCBS` daqui); a prova é a produção restrita (IB-4). Dependência de validação XSD (libxml) na máquina de produção = decisão nova. **É o pacote de PRODUÇÃO (P)** — desde 20/10/2026 a produção restrita (H) usa outro (abaixo) |
+
+## Produção restrita — pacote de 20/10/2026 (NT 009) — baixado em 2026-11-01 (autorização do Valdo)
+| Arquivo | O quê | SHA-256 |
+|---|---|---|
+| `producao-restrita-20261020/esquemas_prod_restrita_20261020.zip` → `producao-restrita-20261020/xsd/` | XSD da PRODUÇÃO RESTRITA de 20/10/2026 — **mesma `versao="1.01"`, leiaute DIFERENTE** (`finNFSe` no `infDPS`, `xDescServ` depois do `cNBS`, CST/cClassTrib direto em `IBSCBS/valores/trib`); o DPS do pacote de P recusa em H com E1235 (nota 8014, 2026-11-01) | `25fdcecc651a67a216496ab10d7566631e6ed10f721e37d62c7845dadb0ea267` |
+| `producao-restrita-20261020/anexo_i-sefin_adn-dps_nfse-snnfse_prodrest-v1-01-20261020.xlsx` | Anexo I PRODREST (leiaute DPS/NFS-e + regras — E0855, E0859/E0860, E0960/E0961 novas) | `72b05981c8882cdd807f3acf901b669465360f9cf1b9d9e235ac4363dacfb2d8` |
+| `producao-restrita-20261020/anexo_ii-sefin_adn-pedregevt_evt-snnfse_prodrest-v1-01-20261020.xlsx` | Anexo II PRODREST (eventos — leiaute igual; renumeração de erros de assinatura) | `6e0660d18def5dc674923f0e2f3731ada5bdbfac966f1dc615c090104d28688d` |
+
+Diferença completa (estrutura dos XSD, regras de negócio, eventos, NFS-e devolvida, conhecimento negativo): **[`producao-restrita-20261020/DIFERENCA.md`](producao-restrita-20261020/DIFERENCA.md)**.
 
 **Fato que decide o modelo do código nacional**: 338 códigos para os ~200 subitens da LC 116 → um subitem pode ter
 VÁRIOS desdobros nacionais (ex.: 1.01 tem 01.01.01; 7.02 tem vários). Logo `cTribNac` NÃO cabe como coluna de

@@ -1552,7 +1552,7 @@ códigos no catálogo central; GitHub: **api cfe9409 · sql 7cdce7e · infra (o 
 já no `main`) fica até a IB-3 começar. ⏯ **Próximo: IB-3** (nfse-api lê as 3 colunas e monta o grupo IBSCBS; DANFSe com o bloco; D-IB75 no
 app; Q-IB76) — e, com o contador, a classificação + NBS dos 45 serviços da Setes antes de dezembro (o pré-voo é a régua).
 
-## 13. IB-3 — PUBLICADA 2026-10-15 (§13.1–§13.8 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac) — ⚠️ RETOMAR: prova em H (IB-4) quando o fisco normalizar (§13.8)
+## 13. IB-3 — PUBLICADA 2026-10-15 (§13.1–§13.8 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac) — ✅ 2026-11-01: leiaute por ambiente PUBLICADO (nfse-api b6600c1, D-IB110…D-IB115) e **PROVA EM H (IB-4) PASSOU** (8014 com o grupo e 8015 só NBS autorizadas e canceladas em H; valores do fisco lidos) — classificar em P espera só a D-IB113 no setes-api (D-IB115) (§13.8, fim)
 
 **Escopo** (§4 + decisões já tomadas): (1) a fonte de fatos da nfse-api lê a DECLARAÇÃO congelada no ramo (`classification_code`,
 `place_indicator_code`, `nbs` — IB-2) e nunca reconsulta o catálogo (D-IB41); (2) o montador do DPS emite o grupo IBS/CBS (CST e `indDest`
@@ -1818,6 +1818,136 @@ serviços com NBS (61/62, resíduo da IB-1) DESATIVADOS a pedido do Valdo):
 (kit `fiscal-api/scripts/ensaio-janela/`): classificar o serviço de teste na CÓPIA, faturar, `smoke:adn-h -- --nota <id> --vai` (o roteiro já
 imprime o bloco IBS/CBS no passo 3b); só DEPOIS dela classificar em produção (um serviço e uma nota primeiro — D-IB82/D-IB96). Q-IB1 (opção de
 regime até 30/10) segue com o Valdo + contador.
+
+**Prova em H — nova tentativa (2026-10-31 → 2026-11-01, sessão filha; "vai" do Valdo em 2026-11-01) — BLOQUEADA, agora pelo LEIAUTE de H (não
+mais pelo E1000)**:
+- **Sonda leve (31/10 ~23h BRT, só GET, produção bloqueada no processo)**: fisco de H NO AR — `GET /dps/{Id inexistente}` → E2404 em 2,6 s;
+  fórum do ACBr relata o E1000 "corrigido" (sem data).
+- **Instância descartável** (kit `fiscal-api/scripts/ensaio-janela/`: MariaDB :3307 de dump só-leitura de 31/10, senhas novas, setes-api da
+  árvore viva `e61f9fe` SEM watch em :3010 com JWT de kid próprio, fisco/Inter de PRODUÇÃO bloqueados): serviço 1 classificado
+  000001/100301 + NBS 115021000 e serviço 5 só com NBS, ambos na CÓPIA; OS 8014 → nota 6794 congelada {000001,100301,115021000}
+  (`declared: true`); OS 8015 → nota 6795 congelada só com a NBS (`omitted: ['not-classified']` — caso D-IB85). Smoke sem `--vai` = pré-condições
+  OK nas duas; DPS local da 8014 com `<cNBS>` + `<IBSCBS>` último filho do `infDPS`; da 8015, só `<cNBS>`.
+- **`smoke:adn-h -- --nota 8014 --vai` (2026-11-01 10:50:50 UTC, série 900, DPS novo)** → **R E1235** "Falha no esquema XML do DF-e. (The element
+  'infDPS' … has invalid child element 'cLocEmi' … List of possible elements expected: 'cMotivoEmisTI, finNF[Se]'…)". Consulta = R; sem NFS-e,
+  sem cancelamento; banco do smoke apagado. **A 8015 NÃO foi transmitida**: a recusa é de esquema no `cLocEmi`, ANTES de qualquer grupo; daria a
+  mesma voz (o caso só-NBS fica para a mesma retomada).
+- **Causa (fatos levantados)**: a página oficial "Documentação Técnica (Homologação/testes)" do portal da NFS-e (atualizada 20/10/2026 18h10) publica
+  o pacote **`NFSe-ESQUEMAS_XSD-PRODREST-v1.01` de 20/10/2026** (`…/documentacao-tecnica/producao-restrita/esquemas_prod_restrita_20261020.zip`) +
+  Anexos I/II PRODREST de 20/10/2026 — leiaute da **NT 009** na produção restrita. A página de PRODUÇÃO segue com o pacote de **09/02/2026**
+  (o que o nosso montador segue — `Infra-IA/setes-api/integracoes/nfse-adn/xsd/`, conferido: `tpEmit → cMotivoEmisTI? → chNFSeRej? → cLocEmi`).
+  Relatos de integradores (OpenAC.Net.NFSe.Nacional #69, nfse-php #61/#68), NÃO conferidos no XSD: `finNFSe` OBRIGATÓRIO direto no `infDPS`
+  (`tpEmit → cMotivoEmisTI? → finNFSe → chNFSeRej? → cLocEmi`, valor único 0) e `xDescServ` do `cServ` DEPOIS de `cNBS`/`cIntContrib`; com isso
+  o DPS passou o esquema e parou em regra de negócio (E0312). Em P o leiaute antigo segue aceito — **sem data publicada para P migrar**.
+- **Leitura**: o E1000 deixou de ser o bloqueio conhecido (não provado — a recusa de esquema vem antes da Calculadora). A prova em H agora exige
+  o montador do DPS no leiaute da NT 009 PARA H (código da nfse-api — fora desta tarefa: árvore viva = deploy; decisão do Valdo sobre leiaute por
+  ambiente). ⚠️ **Risco para P**: quando a produção adotar o pacote da NT 009, TODA emissão de NFS-e recusa com E1235 até o montador mudar.
+- **Desmontagem**: setes-api :3010 e MariaDB :3307 parados (pela porta + caminho), pasta da instância apagada. Produção conferida só-leitura
+  depois: 0 serviço classificado vivo (as 22 linhas de `tb_service_ibscbs` são da IB-1, todas `deleted='S'`, iguais no dump de 31/10), 0 serviço
+  ativo com NBS, 0 ramo congelado, notas 8014/8015 inexistentes. **D-IB98 segue valendo** (nada classificado em produção).
+- **Próximo**: baixar e conferir o pacote PRODREST de 20/10/2026 (arquivar no acervo `nfse-adn` com SHA-256), decidir o leiaute por ambiente na
+  nfse-api (worktree + gates), refazer esta prova (8014 + 8015) com o kit.
+
+**Leiaute da NT 009 na nfse-api — Rodada 0 (2026-11-01, sessão filha; numeração em BLOCO Q-IB110…/D-IB110… — a sessão da D-IB99 usa Q-IB103/Q-IB104
+e D-IB100+)**:
+- **Pacote BAIXADO** (autorização do Valdo) e arquivado em `Infra-IA/setes-api/integracoes/nfse-adn/producao-restrita-20261020/` (XSD + Anexos I/II
+  PRODREST de 20/10/2026, SHA-256 no README do acervo); **diferença completa em `…/producao-restrita-20261020/DIFERENCA.md`**. Fatos que decidem:
+  (1) **mesma `versao="1.01"` com leiaute DIFERENTE** — o calendário não distingue pela versão; (2) o DPS muda em 4 pontos: `finNFSe` OBRIGATÓRIO no
+  `infDPS` (entre `cMotivoEmisTI` e `chNFSeRej`), `xDescServ` depois de `cNBS`/`cIntContrib`, o grupo `IBSCBS` perde o `finNFSe` e `cIndOp` vira
+  opcional, `CST`/`cClassTrib` sobem para `IBSCBS/valores/trib` (o `gIBSCBS` fica só com opcionais); (3) eventos IDÊNTICOS (o cancelamento não muda);
+  (4) regras novas: **E0855** (grupo obrigatório com competência ≥ 01/10/2026 — sem exceção do Simples no TEXTO da regra; a nota do leiaute diz "SN
+  só em 2027"), E0859/E0860 e E0960/E0961 (`cIndOp`/`gIBSCBS` pelo `ind_gIBSCBS` do CST — 000 = 1), E0234 sai (E0239/E0241/E0243); (5) na NFS-e
+  devolvida, `gIBS`/`gCBS` passam a opcionais (só com indicador 1); (6) conhecimento negativo: o Anexo I PRODREST imprime o caminho do `finNFSe`
+  errado (vale o XSD) e a NT 009 entrou PARCIAL em H (sem `regApIBSCBSSN`).
+- **Guardião** (setes-conceito, 2026-11-01 — parecer conferido no disco): nenhuma peça nova; o calendário nomeia o LEIAUTE pelo pacote oficial
+  (`'xsd-20260209' | 'xsd-20261020'` — nunca "NT 009" nem "H") separado da versão; UM montador com três costuras por `switch` exaustivo no leiaute;
+  leitura da declaração pela FORMA do documento (nunca pelo calendário); maquetes: escolher por `environment === 'H'`, flag/variável de leiaute,
+  reenviar com o outro leiaute no E1235, coluna "leiaute" na tentativa, constante CST→indicador na nfse-api, apagar o `cIndOp` congelado.
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB110** (= Q-IB110 (a), Valdo 2026-11-01) | Leiaute POR AMBIENTE pelo calendário (`layout-calendar.ts`): `DPS · H · desde 20/10/2026 18h10 BRT → xsd-20261020` (versão 1.01); P segue no `xsd-20260209` até o fisco anunciar; o EVENTO segue igual nos dois. **Evolui a D-IB81**: `layoutAt` devolve `{layout, version}` — o leiaute é o pacote, a versão é o atributo; continua sem decidir o grupo |
+| **D-IB111** (= Q-IB111 (a)) | Virada de P = linha nova no calendário por DEPLOY antes da data anunciada (com teste); fisco adia/antecipa = novo deploy movendo a data; E1235 em P = alarme no log; nunca trocar sozinho nem por flag/variável; o checklist de deploy da nfse-api ganha "conferir a página oficial de produção" |
+| **D-IB112** (= Q-IB112 (a)) | No leiaute `xsd-20261020` o grupo declarado leva `<gIBSCBS/>` VAZIO depois de `CST`/`cClassTrib` (letra da E0960 com `ind_gIBSCBS = 1`); a prova da 8014 confirma — se o fisco recusar o vazio, omitir no mesmo leiaute (conformidade) |
+| **D-IB113** (= Q-IB113 (a)) | CST com `ind_gIBSCBS = 0` é RECUSADO no ERP por ora ("ainda não suportado na NFS-e"): o catálogo grava o indicador do CST (coluna em `tb_tax_ibscbs`; o `parse.ts` hoje lê e descarta) e o cadastro e o faturamento recusam pelo MESMO predicado; suporte completo com o 1º cliente que precisar. A nfse-api nunca consulta o indicador (grupo declarado ⇒ `cIndOp` + `gIBSCBS`, por construção). Execução: sessão própria do setes-api com `revisar-ddl` |
+| **D-IB114** (= Q-IB114 (a)) | E0855 sem espelho local na nfse-api (a obrigação é do ERP — D-IB13); a prova em H transmite a 8015 (só NBS) para ver se a regra atinge o Simples; se atingir e P adotar a regra, a data da obrigação reabre no ERP e classificar a Setes em P (D-IB98) vira tarefa ANTES da virada de P |
+
+**Conformidade sem decisão** (o XSD manda): `finNFSe`=0 no `infDPS`, ordem do `cServ` e forma do grupo no leiaute novo; leitura da declaração nas duas
+formas (excludentes pelo XSD; forma mista = ilegível); testes de ordem/forma POR PACOTE contra o acervo; `parseNfseIbscbs` e a tabela da D-IB77 NÃO
+mudam (indicador 0 fica fora pela D-IB113 — com indicador 1, `gIBS`/`gCBS` ausentes seguem anomalia com alarme).
+
+**Execução (2026-11-01, WORKTREE `D:\Gestao2027\nt009\{nfse-api,fiscal-api}`, branch `nt009-leiaute` sobre os `main` vivos 62c5fcf/abce0b8 —
+núcleo INTOCADO, só para o `tsconfig` resolver; NADA na árvore viva, NADA commitado)**:
+- `src/authority/layout-calendar.ts`: `NfseLayout = 'xsd-20260209' | 'xsd-20261020'`, `layoutAt` → `{layout, version}`, linha `DPS · H ·
+  2026-10-20T21:10:00Z → xsd-20261020`; linhas tipadas sem `as` + `assertLayoutCalendar` no CARREGAMENTO (validFrom fora da forma UTC/
+  inexistente, linha repetida ou par sem piso = o boot não sobe — a linha de P chega por deploy sob pressão).
+- `src/authority/dps-builder.ts`: UM montador, três costuras por `switch` exaustivo com o cinto `unknownLayout` (`finNFSe` no `infDPS`, ordem do
+  `cServ`, grupo com `<gIBSCBS></gIBSCBS>` vazio); evento igual (`assertCancelEventForm`); `parseNfseDeclaration` pelas DUAS formas (mista =
+  null); `requiredText` (obrigatório esvaziado pelo saneamento = erro de programação) + `dpsText` exportado.
+- `src/facts/service-facts.ts`: nome do tomador que o saneamento esvazia = 422 `FISCAL_RECIPIENT_INCOMPLETE` (`recipient.name`); descrição
+  esvaziada cai em "Serviços" — decide pelo MESMO saneamento do montador (ADV-NT009-01, abaixo).
+- `src/nfse/transmission.ts`: alarme `[D-IB111] E1235 em PRODUÇÃO` no DPS e no pedido de EVENTO, antes da gravação da voz/liberação do K,
+  com rótulo que manda CONFERIR (o E1235 não prova troca de pacote).
+- Testes: `leiaute-nt009.test.ts` (ordem + obrigatórios contra o XSD OFICIAL de cada pacote, ida e volta da declaração, alarme, cercas da
+  forma por leiaute e do calendário) + do gate adversarial `adv-nt009-xsd.test.ts` (**validação REAL por `xmllint`/libxml2 do Git for
+  Windows, `--nonet`**: 7 casos × 2 pacotes, assinados sha1/sha256 e não assinados, todos válidos no seu pacote e inválidos no outro — sempre
+  pelo `finNFSe`, o mesmo E1235 da 8014; assinatura sobre o grupo vazio verifica), `adv-nt009-borda.test.ts`, `adv-nt009-achados.test.ts`;
+  `ibscbs-ib3`/`adv-ib3-xml` passam a fixar o pacote de 09/02 em P. Docs: checklist de deploy da nfse-api itens 7 (leiaute) e 8 (D-IB115).
+- **Contagem final** (worktree, depois do retrabalho): nfse-api **1082 verdes / 0 falha** (185 pulados — banco/ao vivo) · `tsc` limpo; árvores
+  vivas `nfse-api`/`fiscal-api` com `git status` vazio.
+- **Gates**: socrático **0,80 ✅** · adversarial **0,86 ✅** (nenhum HIGH). Retrabalho na sessão (sem decisão nova): ADV-NT009-01 (LOW,
+  anterior ao delta — texto obrigatório só com caracteres fora do Latin-1 saía do DPS em silêncio, fora do esquema → E1235 e alarme falso em
+  P); runbook e alarme não afirmam mais troca de pacote (MEDIUM — há E1235 por dado); alarme também no evento (Q-c) e antes da transação (L6);
+  cerca do calendário (L4); mensagem do cinto E0234 cita E0243 (L7).
+- **Conhecimento negativo (gate adversarial)**: no pacote de 09/02 o `TSSerieDPS` é `^0{0,4}\d{1,5}$` — no XSD `^`/`$` são LITERAIS e o
+  libxml2 recusa TODA série; o validador do fisco (.NET) aceita (a 704 autorizou) e o pacote de 20/10 corrigiu o padrão. O teste valida numa
+  cópia sem as âncoras.
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB115** (= Q-IB115 (a), Valdo 2026-11-01 — do gate socrático) | A D-IB98 (nenhum serviço classificado em P) só cai depois da prova em H passar **E** da D-IB113 no ar no setes-api; pré-condição escrita no item 8 do checklist de deploy da nfse-api |
+
+**Limites conhecidos registrados (sem decisão)**: o `dhEmi` nasce antes do envio — na fronteira da virada uma tentativa pode sair no pacote
+antigo e levar R (a seguinte corrige; recomendação no runbook: não rodar o lote mensal na janela da virada de P); campos do tomador sem corte
+pelo XSD (IM > 15, `nro`/`xBairro` > 60, `xCpl` > 156 — anterior ao delta) geram E1235 por DADO em qualquer leiaute; o lote do app não para
+no E1235 em massa (`FISCAL_DPS_REJECTED` não é falha do emitente).
+
+**PUBLICADA 2026-11-01 ("Vai, publicar" do Valdo)** — checklist de deploy da nfse-api conferido: (1) núcleo vivo limpo em abce0b8 (= o da
+worktree); (2) merge ff `nt009-leiaute` → `main` **b6600c1** na árvore viva, suíte NA árvore viva 1082 verdes / 0 falha (checkout CRLF);
+(3) sem migration nova (última aplicada 007); (6/8) produção só-leitura: 0 serviço classificado vivo, 0 com NBS, 0 ramo congelado sem NFS-e
+(D-IB98 segue de pé); (7) página oficial de PRODUÇÃO ainda com `nfse-esquemas_xsd-v1-01-20260209.zip` + Anexo I de 09/02 = a linha de P do
+calendário; leitura das NFS-e REAIS 704–707 pelo código publicado idêntica (sem grupo, declaração nula, DANFSe gerado); processo antigo
+(`npx tsx --require tsconfig-paths/register src/server.ts`, de 31/10 20:26) parado e o MESMO comando subido numa aba nova "nfse-api producao"
+(PID 30124, 14:28 UTC) — `/v1/health` 200 (`db`/`masterKey`/`storage`), rota protegida 401 sem token; GitHub `main` 62c5fcf..b6600c1. INERTE em
+P (P segue no pacote de 09/02 até a linha nova); em H o DPS já sai no pacote de 20/10. Infra-IA NÃO commitada (arquivos compartilhados com
+outras sessões — commit só pelos trechos, com pedido).
+**Próximo**: (1) ~~"vai" do Valdo para publicar a nfse-api~~ FEITO (acima); (2) a prova em H (8014 com o grupo + 8015 só NBS) pelo kit `fiscal-api/scripts/ensaio-janela/`, com novo "vai"
+(o smoke precisa do código desta branch — rodar da worktree, com o `.env` da instância descartável, ou depois da publicação: a sessão da
+prova decide); (3) D-IB113 no setes-api (sessão própria, `revisar-ddl`).
+
+**🎉 PROVA EM H (IB-4) PASSOU — 2026-11-01 14:53 UTC ("Vai, prova em H" do Valdo), código PUBLICADO da nfse-api (`main` b6600c1)**:
+- **Instância descartável** (kit `fiscal-api/scripts/ensaio-janela/`): MariaDB :3307 (só 127.0.0.1) de dump SÓ-LEITURA da produção do mesmo dia,
+  usuários `setes`/`fiscal_api` com senhas NOVAS; setes-api da árvore viva SEM watch na :3010 com JWT de kid próprio (`passeio`), SMTP para
+  127.0.0.1:1, storage/segredos isolados; `block-hosts.js` recusando `sefin.nfse.gov.br`, `adn.nfse.gov.br` e o Inter de produção. ⚠️ Conhecimento:
+  o gatilho da F2a na cópia RECUSA mexer na habilitação SE do ERP (aposentada e congelada) — o "UPDATE … environment='H'" do kit vale só para o
+  `fiscal_api` (o ERP não emite). Na cópia, pela API: serviço 1 classificado 000001/100301 + NBS 115021000; serviço 5 só NBS; OS **8014** (cliente
+  209 da D-F54, prévia "COM o grupo" hoje e na obrigação) → nota 6794 congelada {000001, 100301, 115021000}; OS **8015** → nota 6795 só com a NBS
+  (`omitted: ['not-classified']`). DPS local das duas no pacote `xsd-20261020` (o calendário publicado deu H = 20/10).
+- **8014 (com o grupo) — AUTORIZADA em H** (NFS-e de H nº 4, chave `41069022207742094000113000000000000426117167090320`, série 900): passou o ESQUEMA da NT 009 e as
+  regras; **o `<gIBSCBS></gIBSCBS>` VAZIO foi aceito (D-IB112 CONFIRMADA — E0960 não disparou)**; a Calculadora integrada respondeu (o E1000 de
+  14/10 sumiu); o fisco devolveu o grupo dele: **vTotNF 10,00 · vIBSTot 0,01 · vCBS 0,09** (alíquotas de teste de 2026 sobre R$ 10; vTotNF =
+  vLiq em 2026 — fato T3), gravados pelo escritor da IB-3 e lidos em "No fisco" (`groupInDps: true`) — **a dúvida da D-IB97 (E1515) se fechou:
+  o fisco devolve o grupo**; DANFSe gerado; cancelamento e101101 aceito em H (voz C 101101).
+- **8015 (só NBS, sem o grupo) — AUTORIZADA em H** (NFS-e de H nº 5): **a E0855 NÃO recusou a nota do Simples com competência 11/2026** — vale a
+  nota do leiaute ("SN só a partir de 2027"); a data da obrigação do ERP (01/01/2027 para o Simples) NÃO reabre (D-IB114). Conhecimento para o
+  regime REGULAR: a E0855 diz 01/10/2026 — cliente fora do Simples precisará do grupo desde essa competência quando P adotar o pacote.
+  Cancelada em H (voz C 101101).
+- **Desmontagem**: setes-api :3010 e MariaDB :3307 parados (shutdown normal), pasta da instância (datadir + dump) APAGADA; logs do smoke na pasta
+  de notas da sessão. **Produção conferida só-leitura depois**: nenhuma ordem/nota/tentativa 8014/8015, serviços 1 e 5 sem NBS, 0 classificado/0
+  congelado, habilitação real SE em P com a virada, nenhum banco de smoke.
+- **Consequência (D-IB98 × D-IB115)**: a condição "prova em H" da D-IB98 está CUMPRIDA (autorização + valores do fisco lidos + cancelamento em H).
+  Pela D-IB115, classificar serviço em P ainda espera a **D-IB113 no ar** (sessão própria do setes-api, em curso). Depois dela: em P, UM serviço e
+  UMA nota primeiro, conferidos em "No fisco" (D-IB82/D-IB96).
 
 ## 14. Regime de IBS/CBS como CONFIGURAÇÃO por estabelecimento — D-IB99 (2026-10-31)
 
