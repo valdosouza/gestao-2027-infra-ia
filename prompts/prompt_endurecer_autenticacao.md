@@ -1,6 +1,7 @@
 # Prompt — Endurecer a autenticação do setes-api (login, senha, sessão)
 
-**Status**: Rodada 1 FECHADA (2026-10-31 — D-EA1…D-EA12, "uma pergunta por vez", à luz da frente auth-api; NENHUMA questão aberta).
+**Status**: Rodada 1 FECHADA (2026-10-31 — D-EA1…D-EA12, "uma pergunta por vez", à luz da frente auth-api). Rodada 2 ABERTA
+(2026-11-01 — Q-EA13 → D-EA13: senha só de espaços recusada já, na costura do passo 4) — NENHUMA questão aberta.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -270,6 +271,16 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   min → bloqueio até a mais velha envelhecer (janela deslizante de 15 min)**; (b) 5 em 15 min (mais rígido; mais chamados de suporte);
   (c) bloqueio progressivo (15 min, 1 h, 24 h). **Rec.: (a)** — dez erradas não acontecem por engano de digitação, e a janela deslizante
   dispensa "desbloquear" (o admin não precisa de botão; o super bloqueado espera 15 min ou usa o D-PV46). Resposta SEMPRE a mesma 401.
+**Rodada 2 — 2026-11-01**:
+
+- **D-EA13** (Valdo, 2026-11-01 — fecha a **Q-EA13** = (b), literal: *"(b) Recusar já"*) — senha SÓ DE ESPAÇOS (`trim()` vazio) é
+  RECUSADA na validação, JÁ, na costura do passo 4 (regra no DTO de usuários do setes-api, POST e PUT — o `it.failing` de
+  `src/__tests__/adversarial-a1-delta-gate.test.ts` vira `it`); a peça da política da D-EA5 (Onda 3, API + espelho Dart) ABSORVE a regra
+  depois, junto do mínimo 8. Espaços DENTRO da senha seguem válidos (frase-senha). Origem: gate adversarial do delta da costura A1 — o DTO
+  aceitava '     ' (`z.string().min(5)`), e numa conta SEM credencial (vinda do sync) isso vira a 1ª senha que, pela D-PV48, só o titular
+  troca; o app já barrava pela tela. **Efeito da auth-api**: nenhum — a regra vai com a peça da senha para a auth-api na A2. Recusados: (a)
+  esperar a Onda 3; (c) não recusar. Repassada à sessão do passo 4 com o texto literal.
+
 - ✅ **Q-EA2 → D-EA2 (2026-10-31, (a)).** Texto original: **Q-EA2 — onde mora o fato da falha.** Opções: (a) **tabela filha `tb_user_login_failure` (só falhas, append-only, PK por usuário +
   seq, sob a trava da linha de `tb_user` — regras 12/13)**; (b) colunas `failed_logins`/`locked_until` em `tb_user` (ALTER na tabela do
   login + estado em vez de fato — o gate da Q-PV38 reprovou o molde); (c) tabela de TODAS as tentativas (sucesso incluído — 1 linha por
@@ -315,6 +326,19 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
 - `X-Api-Key` do setes-sync / sincronizador (outro grupo — regra dos dois grupos); 2FA/TOTP (nenhum pedido; fica como ideia na Onda 5 se o
   Valdo quiser); SSO/OAuth; CAPTCHA (a resposta neutra + limite por conta cobrem o caso); "minha senha" e convite (onda 0 do convidado —
   D-UC6…D-UC12); `trust proxy`/HTTPS/CORS (Onda 4 do deploy — D-RS2); auditoria de LOGINS bem-sucedidos (ver Q-EA7 (b)).
+
+**Rodada 2 — aberta 2026-11-01 (questão trazida pelo gate adversarial do delta da costura A1, sessão do passo 4)**:
+
+- ✅ **Q-EA13 → D-EA13 (2026-11-01, (b) — recusar já, na costura do passo 4).** Texto original: **Q-EA13 — senha SÓ DE ESPAÇOS.** Fato (conferido 2026-11-01): o `userUpdateDto` do setes-api aceita `password` com
+  `z.string().min(5)` (`users.dto.ts` POST e PUT, no `main` e na `privilegios-crud`) — '     ' passa e, numa conta SEM credencial (vinda
+  do sync), vira a 1ª senha; pela D-PV48 depois só o titular troca. O app já fecha o caminho da tela (a aba Usuários do Estabelecimento
+  manda `null` quando `trim()` dá vazio — commit local na `privilegios-crud`); a API segue aceitando. Teste que fixa o achado:
+  `setes-api/src/__tests__/adversarial-a1-delta-gate.test.ts` ("PUT /api/users/:id com password só de espaços é recusado na validação",
+  hoje `it.failing`). Com o mínimo 8 da D-EA5, oito espaços também passariam. Opções: (a) recusar quando `trim()` dá vazio, na peça da
+  política da D-EA5 (Onda 3, API + espelho Dart) — até lá só o app barra; (b) igual a (a), mas a API já recusa AGORA, na costura do passo 4
+  (regra no DTO de usuários, o `it.failing` vira `it`), e a peça da D-EA5 absorve depois; (c) não recusar (oito espaços seria só senha
+  fraca). Espaços DENTRO da senha seguem válidos em qualquer opção (frase-senha). *(Rec.: (b) — o furo existe hoje pela API, a correção é
+  uma linha com teste pronto e a Onda 3 pode demorar semanas.)*
 
 ## Critérios de sucesso (testáveis)
 

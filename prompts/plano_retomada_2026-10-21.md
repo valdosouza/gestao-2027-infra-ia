@@ -354,3 +354,6 @@ com as decisões de 27/10 ainda SEM commit.
   (D-EA1…D-EA6, D-EA9, D-EA11; ordem D-EA10; todas antes da A2). **Infra-IA COMMITADA (Valdo, 2026-10-31: pull antes do commit)**:
   as decisões de 31/10 depois da D-AU12 (D-PR53…D-PR56, D-NE169…D-NE172, D-TM23…D-TM29, A-TM7…A-TM9, D-RS7…D-RS18, D-EA1…D-EA12) +
   INDICE 10.50…10.53 no commit **23068ef** (pull = já atualizado; só os 11 arquivos da rodada). Push: só com o pedido do Valdo.
+- **2026-11-01 — Q-EA13 → D-EA13** ((b), questão trazida pelo gate adversarial da costura A1): senha SÓ DE ESPAÇOS (`trim()` vazio)
+  recusada JÁ, na costura do passo 4 (DTO de usuários; o `it.failing` de `adversarial-a1-delta-gate.test.ts` vira `it`); a peça da D-EA5
+  absorve na Onda 3. Repassada à sessão do passo 4.
