@@ -1,9 +1,10 @@
 # Skill: Carregar o catálogo IBS/CBS (rotina do Super)
 
-**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB61)
+**Status**: Vigente (2026-10-11 — D-IB32 da fase IBS/CBS; limite, impacto e aviso prospectivo até a D-IB61; 2026-11-01 — D-IB113: o
+indicador do grupo IBS/CBS do CST — `ind_gIBSCBS` — é gravado, conferido com a Calculadora e recusa a classificação do CST sem o grupo)
 **Objetivo**: Carregar/recarregar em `setes_central` o catálogo oficial do IBS/CBS (CST, cClassTrib com vigência e aplicabilidade
 por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o que não foi conferido
-**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50), §11.25 (D-IB51…D-IB53), §11.28 (D-IB54…D-IB57), §11.31 (D-IB58…D-IB60), §11.35 (D-IB61);
+**Referências**: `Infra-IA/prompts/prompt_fase_ibs_cbs.md` §10.5 (D-IB22…D-IB27), §11 (IB-1, A-IB1/A-IB2), §11.7 (D-IB28…D-IB33), §11.10 (D-IB34…D-IB38), §11.13 (D-IB39…D-IB41), §11.16 (D-IB42…D-IB44), §11.19 (D-IB45…D-IB48), §11.22 (D-IB49…D-IB50), §11.25 (D-IB51…D-IB53), §11.28 (D-IB54…D-IB57), §11.31 (D-IB58…D-IB60), §11.35 (D-IB61), §13.8 fim (D-IB113 — execução no setes-api + sql);
 `Infra-IA/database/PADROES_BANCO.md` §5 ("carga de catálogo externo = ato com plano"); código: `setes-api/scripts/load-ibscbs-catalog.ts`
 + peça `setes-api/src/shared/ibscbs-catalog/`
 **Tempo**: ~10 min (o ensaio leva ~1–2 min: a conferência consulta a Calculadora por par NFS-e × cClassTrib)
@@ -43,8 +44,10 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
    ```
 3. **Conferir o relatório** (JSON):
    - `conferencia.unconfirmed` — linhas que a Calculadora ainda não tem (A-IB1/A-IB2) — sem aplicabilidade;
-   - `conferencia.blocked` — linhas cujo ATRIBUTO diverge na Calculadora (aceitação na NFS-e, tributação regular) — perdem a
-     aplicabilidade na NFS-e (D-IB28 (a));
+   - `conferencia.blocked` — linhas cujo ATRIBUTO diverge na Calculadora (aceitação na NFS-e, tributação regular e — D-IB113 — o
+     grupo IBS/CBS: `exigeGrupoIbsCbs` do par × `ind_gIBSCBS` do CST no IT, motivo "grupo IBS/CBS diverge (IT: CST x … × Calculadora
+     …)") — perdem a aplicabilidade na NFS-e (D-IB28 (a)); o fisco decide o grupo PELA Calculadora (E0961 "conforme consulta à
+     calculadora");
    - `conferencia.divergences` — só informativo (o IT não aceita e a Calculadora aceita — vale o IT);
    - `relatorio.validity.deactivated` + chaves — linhas de vigência que SUMIRAM da fonte e ganham o fato "ausente desde a versão"
      (D-IB36; nunca são apagadas; a peça passa a ignorá-las) — ex.: o IT corrigiu a dIniVig de um código;
@@ -72,6 +75,11 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
      aceita (linha futura ACEITA na janela — o selo diz "aceita"; D-IB59: entre as vigentes só a mais nova conta, a mesma do
      faturamento), mas o faturamento na data já não.
      `relatorio.validityRegularOn` = só informação (linhas vigentes em que a fonte LIGOU a tributação regular).
+   - D-IB113: `relatorio.cstGroupOff` = CSTs que passam a NÃO levar o grupo IBS/CBS nesta carga (de 'S' ou do indicador desconhecido —
+     NULL, CST gravado antes do script 73); toda classificação deles passa a ser RECUSADA no cadastro e no faturamento (motivo
+     `cst-without-group` — "ainda não suportado na NFS-e"). O impacto lista os serviços desses códigos com esse motivo — inclusive na 1ª
+     carga depois do script 73 (NULL → 'N'), em que o "antes" já recusava pela falha fechada e a diferença do veredito sozinha não os
+     mostraria. Reclassificar o serviço (o suporte ao CST sem o grupo vem com o 1º cliente que precisar — D-IB113).
    - D-IB45/D-IB49/D-IB50: `relatorio.impactAhead` (informativo, FORA do limite) = serviços cujo código aceito na data da carga —
      pela data do fato ou só pelo cadastro (linha futura; a linha traz `acceptedFrom`, o dia em que passa a valer) — deixa de ser
      aceito até o horizonte `relatorio.impactAheadUntil` (o maior entre a obrigação e a data + 90 dias; depois de 01/01/2027, data + 90),
@@ -126,6 +134,14 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
   em `tb_service` (a FK `tb_service_ibscbs → tb_service` faria a sincronia desses serviços falhar com 1451).
 - Ordem: `sql/61` e `sql/63` (fato "ausente da fonte" — D-IB36) em `setes_central` → carga do catálogo (este procedimento) →
   deploy do setes-api com a 066 (a peça de classificação LÊ a coluna do script 63: sem ela o cadastro de serviços dá 500).
+- **D-IB113 (2026-11-01) — mesma ordem (scripts → carga → deploy; o indicador desconhecido nunca chega à produção)**: `sql/73`
+  (coluna `requires_ibscbs_group` + CHECK binário `ck_tax_ibscbs_requires_group`) em `setes_central` — o setes-api em produção ignora a
+  coluna → ESTA carga (ensaio + ato) rodada da pasta da BRANCH que traz a D-IB113 (a rotina usa a peça da própria árvore e grava o
+  indicador) → deploy do setes-api (sem a coluna ou sem o CHECK o boot NÃO sobe e diz o script). **D-IB120 (Valdo 2026-11-01)**: o
+  boot também NÃO sobe enquanto um CST de indicador desconhecido (NULL) ainda tem cClassTrib com linha viva — a carga tem de rodar antes;
+  CST desconhecido que saiu da fonte (todas as linhas superadas) só gera o ALERTA `[D-IB113] … SEM cClassTrib vivo`. Conferir antes do
+  deploy: `SELECT COUNT(*) FROM setes_central.tb_tax_ibscbs WHERE deleted = 'N' AND requires_ibscbs_group IS NULL` = 0. Esperado na 1ª carga: `relatorio.cstGroupOff` = 400, 410, 620, 800, 810, 811, 820 (IT v1.70) e 0 bloqueio novo na
+  conferência; o impacto lista os serviços desses códigos. A D-IB98 só cai com a prova em H E isto no ar (D-IB115).
 
 ## 5. Casos reais
 
@@ -136,3 +152,11 @@ por documento, cIndOp, NBS) — em dev ou em produção — sem nunca gravar o q
   inclui essa coluna (sem ela 100301 e 100302 eram indistinguíveis na tela).
 - **2026-10-10 (Rodada 3)**: 1ª conferência de atributos — 70 pares, 0 bloqueados, 1 divergência informativa (410028: o IT não aceita
   na NFS-e e a Calculadora aceita).
+- **2026-11-01 (D-IB113, prova ao vivo numa CÓPIA do catálogo — `setes-api/scripts/prove-ibscbs-cst-group-live.ts --calculadora`)**: a
+  aba CST do IT v1.70 traz `ind_gIBSCBS` 0 em 400, 410, 620, 800, 810, 811 e 820; dos 71 cClassTrib aceitos na NFS-e, 30 passam a
+  recusados (todos de CST sem o grupo) e 41 seguem (000001 da Setes incluso); o par da Calculadora devolve `exigeGrupoIbsCbs` e
+  concorda com o IT nos 71 (0 divergência). A aba CST termina com uma LEGENDA de linhas sem CST ("0 = Não é permitido") — ignorada.
+- **2026-11-01 (publicação da D-IB113 — carga REAL no `setes_central`, da pasta da branch)**: depois do `sql/73`, ensaio + ato com o plano
+  `b07477b619129422` — CST 18 atualizados (NULL → indicador), `cstGroupOff` = os 7 CSTs, 73 pares conferidos sem bloqueio, nada encolhe,
+  impacto vazio. Os 9 códigos da A-IB1 chegaram à Calculadora: a carga deu presença na NFS-e a 000006, 200055 e 200056 (os demais não são
+  da NFS-e) — o lembrete mensal da A-IB1 pode parar. Depois do ato, 0 CST NULL e o deploy subiu (o boot da D-IB120 passou).

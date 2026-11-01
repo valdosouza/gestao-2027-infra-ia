@@ -10,7 +10,7 @@ Ato Conjunto nº 4/2026) · D-NE4 ("prompt aberto JÁ") · D-NE31 (vigência de 
 XSD 1.01, NT 007/008/009, anexos I e II, FAQ) · (B) inventário do produto (setes-api, nfse-api, fiscal-api, sql) · (C) fotografia do legado
 Gestao2016 (agente legacy-analyst) · (D) legislação e documentos oficiais na web (fontes primárias, datadas) · + `Infra-IA/nfe-api/referencia-acbr/03-ibs-cbs-rtc.md`
 (ACBr, terceiro — só conferência).
-**Estado**: **⏯ 2026-11-01: D-IB99 EXECUTADA em worktree (`D:\Gestao2027\ib99`, branch `ib99` — §14.1–§14.3): D-IB100 (Valdo: peça PRÓPRIA `tb_establishment_ibscbs_assessment`, revê a letra da D-IB7; D-IB24 não vem junto), migration 076 + seed sql/71 provados em schema descartável, recusa no `issueInvoice` para toda nota, sub-recurso + aba "Regime IBS/CBS"; gates 0,76/0,72 sem HIGH; **D-IB101** (Valdo, Q-IB104 = (a): a opção nunca muda o que uma nota já leu — fronteira = maior entre hoje e a última nota viva; gates do delta 0,74/0,74; §14.4); **D-IB102** (Q-IB105 = (a): 2/3 só com opSimpNac 3/4 gravado; gates do delta 0,76 · re-prova 0,86; §14.5); **D-IB103** (Q-IB107 = (b): a fronteira conta só as notas do ERP web; re-prova 0,78/0,80; §14.6); **D-IB104** (Q-IB106 = (a): a aba avisa quem também emite pelo ERP Desktop; §14.7); ⏳ Q-IB108 aguarda o Valdo; NADA mergeado — entra no `main` depois do bloco de privilégios, com o "vai".** (antes:) **⏯ 2026-10-31: D-IB99 (§14) — o regime de IBS/CBS vira CONFIGURAÇÃO datada por estabelecimento (revê a D-IB66); a Q-IB1 deixa de ser questão do sistema (é dado da Setes); escolher o regular grava e o faturamento recusa até o cálculo existir; no ar antes de 01/01/2027.** (antes:) **⏯ 2026-10-15 (tarde): IB-3 PUBLICADA (§13 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac; 007 em produção) — D-IB98: nenhum serviço classificado em produção até a prova em H passar (fisco de H com E1000); RETOMAR pela prova em H (§13.8).** (antes:) **⏯ 2026-10-15: IB-2 EXECUTADA na worktree `setes-api-ib2` (branch `ib2`) — Rodada 1 D-IB62…D-IB73 (§12.6), execução (§12.7), gates 0,74/0,80 + D-IB74/D-IB75 e retrabalho (§12.8: trava da presunção provada e corrigida — 1213; pré-voo pela união por cliente); setes-api 1899/1899; PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e; 070 aplicada em produção); Q-IB76 aberta; próximo = IB-3.** (antes: 2026-10-14 Rodada 0 da IB-2) (antes:) **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
+**Estado**: **⏯ 2026-11-01: D-IB113 + D-IB120 PUBLICADAS (sql/73 aplicado, carga do catálogo gravada, setes-api/sql/app no `main`, no ar e no GitHub) — a D-IB115 está cumprida e a D-IB98 CAI: em P, um serviço e uma nota primeiro (§13.8, fim).** (antes:) **⏯ 2026-11-01: D-IB113 EXECUTADA em worktree (`D:\Gestao2027\ib113`, branch `ib113` — §13.8, fim): CST sem o grupo IBS/CBS recusado no ERP pelo veredito único (`cst-without-group`), sql/73 provado e NÃO aplicado, gates 0,76/0,86 sem HIGH; **D-IB120** (Valdo: o boot recusa com CST de indicador desconhecido em uso) executada; ⏳ Q-IB121 + A-IB120…A-IB122 aguardam o Valdo; publicar com "vai" (merge do `main` antes) — com ela no ar a D-IB115 está cumprida (a prova em H já passou).** (antes:) **⏯ 2026-11-01: D-IB99 EXECUTADA em worktree (`D:\Gestao2027\ib99`, branch `ib99` — §14.1–§14.3): D-IB100 (Valdo: peça PRÓPRIA `tb_establishment_ibscbs_assessment`, revê a letra da D-IB7; D-IB24 não vem junto), migration 076 + seed sql/71 provados em schema descartável, recusa no `issueInvoice` para toda nota, sub-recurso + aba "Regime IBS/CBS"; gates 0,76/0,72 sem HIGH; **D-IB101** (Valdo, Q-IB104 = (a): a opção nunca muda o que uma nota já leu — fronteira = maior entre hoje e a última nota viva; gates do delta 0,74/0,74; §14.4); **D-IB102** (Q-IB105 = (a): 2/3 só com opSimpNac 3/4 gravado; gates do delta 0,76 · re-prova 0,86; §14.5); **D-IB103** (Q-IB107 = (b): a fronteira conta só as notas do ERP web; re-prova 0,78/0,80; §14.6); **D-IB104** (Q-IB106 = (a): a aba avisa quem também emite pelo ERP Desktop; §14.7); **D-IB105** (Q-IB108 = (a): aviso não bloqueante ao tirar do Simples com opção futura 2/3 — a EXECUTAR na `ib99` antes da janela; §14.8); NADA mergeado — entra no `main` depois do bloco de privilégios, com o "vai".** (antes:) **⏯ 2026-10-31: D-IB99 (§14) — o regime de IBS/CBS vira CONFIGURAÇÃO datada por estabelecimento (revê a D-IB66); a Q-IB1 deixa de ser questão do sistema (é dado da Setes); escolher o regular grava e o faturamento recusa até o cálculo existir; no ar antes de 01/01/2027.** (antes:) **⏯ 2026-10-15 (tarde): IB-3 PUBLICADA (§13 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac; 007 em produção) — D-IB98: nenhum serviço classificado em produção até a prova em H passar (fisco de H com E1000); RETOMAR pela prova em H (§13.8).** (antes:) **⏯ 2026-10-15: IB-2 EXECUTADA na worktree `setes-api-ib2` (branch `ib2`) — Rodada 1 D-IB62…D-IB73 (§12.6), execução (§12.7), gates 0,74/0,80 + D-IB74/D-IB75 e retrabalho (§12.8: trava da presunção provada e corrigida — 1213; pré-voo pela união por cliente); setes-api 1899/1899; PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e; 070 aplicada em produção); Q-IB76 aberta; próximo = IB-3.** (antes: 2026-10-14 Rodada 0 da IB-2) (antes:) **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
 guardião). Antes: Rodada 1 DECIDIDA (2026-10-10, "siga as recomendações" — §8, D-IB1…D-IB21).
 ⚠️ A opção de regime da Setes (D-IB1) segue com o Valdo e o contador até **30/10/2026**; o patch do legado (D-IB3) está COMMITADO (SVN r1300) e
 compilado — falta só a versão aos clientes (conferência dispensada: nenhum cliente de serviço emitiu com a reforma).
@@ -402,7 +402,8 @@ série com a F2a (corte 30/11 — D-IB15). Nenhuma questão da fase está aberta
    em `/api-docs`, tags "VERSÃO BETA"): lista de cClassTrib por DATA (`/calculadora/dados-abertos/classificacoes-tributarias/cbs-ibs?data=`
    → **161 códigos vigentes em 01/01/2027**, com flags, reduções e `tiposDfeClassificacao`, **sem `dIniVig`/`dFimVig`** — a vigência vem do
    parâmetro); flags POR PAR cClassTrib × documento (`/classificacoes-tributarias/cbs-ibs/{sigla}/{cClassTrib}?data=` → válido,
-   `exigeGrupoTributacaoRegular`, `permiteDiferimento`, `possibilidadeCreditoPresumido`); NBS (`/dados-abertos/nbs/lista`, 920 códigos);
+   `exigeGrupoTributacaoRegular`, `permiteDiferimento`, `possibilidadeCreditoPresumido` e — visto em 2026-11-01, D-IB113 —
+   `exigeGrupoIbsCbs`, o `ind_gIBSCBS` do CST que o fisco consulta no E0961); NBS (`/dados-abertos/nbs/lista`, 920 códigos);
    cIndOp por NBS (`/calculadora/nfse/indicador-operacao?nbs=`) — às vezes VÁRIOS; classificações por NBS
    (`/calculadora/nfse/situacoes-classificacoes-tributarias?nbs=`); alíquotas por UF/município/União por data.
 5. **A Setes, conferido na fonte**: para as NBS de desenvolvimento (1.1502.10/20/90), manutenção (1.1508.00), SaaS (1.1506.21) e licenciamento
@@ -1949,6 +1950,105 @@ prova decide); (3) D-IB113 no setes-api (sessão própria, `revisar-ddl`).
   Pela D-IB115, classificar serviço em P ainda espera a **D-IB113 no ar** (sessão própria do setes-api, em curso). Depois dela: em P, UM serviço e
   UMA nota primeiro, conferidos em "No fisco" (D-IB82/D-IB96).
 
+**D-IB113 no setes-api + sql — EXECUTADA em WORKTREE (2026-11-01, sessão filha; `D:\Gestao2027\ib113\{setes-api,sql,setes-app}`, branch `ib113` a
+partir dos `main` api e61f9fe · sql 66fc17c · app a450909 — NADA commitado, aplicado em banco vivo ou com push; numeração em BLOCO 120+ — 100+ é
+da D-IB99, 110+ do leiaute)**:
+- **sql/73** `73_ibscbs_cst_requires_group.sql`: `setes_central.tb_tax_ibscbs.requires_ibscbs_group CHAR(1) NULL` (o `ind_gIBSCBS` do CST; NULL =
+  CST gravado por carga anterior ao 73 — nenhum DEFAULT inventa) + CHECK binário `ck_tax_ibscbs_requires_group` (`IS NULL OR … COLLATE
+  utf8mb4_bin IN ('S','N')`), re-executável (`ADD COLUMN IF NOT EXISTS`, `DROP CONSTRAINT IF EXISTS` + `ADD` no mesmo ALTER); espelho no 61 e
+  no canônico 01. Guardião: atributo da peça do CST (molde `requires_regular_taxation`), sem peça nova (`revisar-ddl` sem achado). **Provado
+  em schema descartável** (`setes-api/scripts/prove-ibscbs-cst-group.ts`, 26/26: cópia do `tb_tax_ibscbs` vivo, 73 duas vezes, 18/18 NULL, CHECK
+  recusa `s`/`n`/`X`/`''` e vem ANTES da PK, boot antes/depois do 73, script interrompido entre os comandos, ambiente novo 61 + 73, bloco do 01 =
+  do 61). **NÃO aplicado** no `setes_central`.
+- **Carga do catálogo** (`@shared/ibscbs-catalog`): `parse.ts` confere o `ind_gIBSCBS` 0/1 da aba CST (vazio, `2`, `S`, `1.0` = fonte
+  recusada; a LEGENDA no fim da aba — linhas sem CST — é ignorada); `apply.ts` grava/atualiza o indicador e devolve `relatorio.cstGroupOff`
+  (CSTs que passam a não levar o grupo); o impacto lista os serviços deles com o motivo novo; `reconcile.ts` — a conferência D-IB28 (a)
+  compara também `exigeGrupoIbsCbs` do PAR da Calculadora (campo que existe — visto ao vivo) com o indicador do CST no IT.
+- **Peça** `@shared/ibscbs-classification` (a regra ÚNICA — D-IB47): `ClassificationAt.cstRequiresGroup` (JOIN com `tb_tax_ibscbs`); `verdictOf`
+  ganha o motivo **`cst-without-group`** por ÚLTIMO (todo veredito anterior fica idêntico; só o aceito pode virar recusa); indicador NULL também
+  recusa (falha fechada); frase única `groupRefusalText` (o 422 do cadastro e o do faturamento dizem o mesmo; o NULL diz "ainda não foi
+  carregado"). Cadastro: 422 **`IBSCBS_CLASSIFICATION_GROUP_UNSUPPORTED`** em `ibscbs.classificationCode`; lista de apoio e selo do GET pelo
+  mesmo veredito. Faturamento/prévia (validate, OS aberta, lote): omissão nova `cst-without-group` na lista FECHADA (D-IB91 — Swagger de billing
+  e OS, espelho + i18n do app); antes da obrigação a nota sai SEM o grupo (nunca congela `cIndOp` com CST sem o grupo), depois 422
+  `INVOICE_SERVICE_IBSCBS_REQUIRED` nomeando o motivo. Boot (`assertIbscbsCatalogSchema`, molde D-IB26/D-IB36): sem a coluna do 73 não sobe e
+  diz o script; o CHECK é PROVADO pelo NOME (duas sondas — fora do domínio e a minúscula —, PK própria, transação desfeita; PK ocupada 1062 ou
+  espera de trava 1205 = sem o CHECK, dito como tal); CST com indicador NULL = ALERTA `[D-IB113]` — revisto pela D-IB120 (abaixo): com
+  cClassTrib vivo o boot RECUSA.
+- **App** (`ib113/setes-app`): `kIbscbsOmissions` + `ibscbs.omitted.cst-without-group` pt/en; `ibscbs_ib3_test.dart` (contagem 9) 18/18; analyze
+  limpo. Publicar JUNTO com a API (o app antigo mostra o motivo cru — parse tolerante).
+- **Prova ao vivo** (`setes-api/scripts/prove-ibscbs-cst-group-live.ts --calculadora`: cópia das 7 tabelas do catálogo vivo num schema
+  descartável + 73 + carga REAL do IT v1.70 + a peça apontada para a cópia): indicador gravado = aba CST; 1ª carga `cstGroupOff` = 400, 410,
+  620, 800, 810, 811, 820; dos 71 cClassTrib aceitos HOJE na NFS-e, **41 seguem (000001 da Setes incluso) e 30 passam a recusados — exatamente
+  os desses CSTs**; lista, 422 do cadastro e faturamento antes × depois da obrigação coerentes; 2ª carga inalterada; **Calculadora × IT: 71
+  pares, 0 divergência** (o gate adversarial: 173 pares nas datas de conferência e 9 códigos em 6 datas até 2033 — 0). Censo só-leitura do
+  vivo: 0 serviço classificado, 0 ramo congelado.
+- **Testes**: `ibscbs-cst-group.test.ts` (novo); blocos D-IB113 e A-IB120 em `ibscbs-catalog-apply.test.ts`; boot em `ibscbs-classification.test.ts`;
+  motivo novo em `ibscbs-declaration.test.ts`; do gate `adv-ib113-gate.test.ts` (puros + 3 ao vivo opt-in `IB113_ADV_LIVE=1`, schemas
+  `setes_ib113_adv_*`; o ADV-IB113-01 segue `it.failing`) + scripts `adv-ib113-{matrix,calculadora,calc-dates,boot-lock,nonstrict}.ts`. Suíte da
+  worktree: **136 suítes, 2202 verdes, 34 ao vivo pulados** (com a D-IB120; dois testes de TEMPO — F2a r4 e D-RS4 — estouraram uma vez sob carga e passam sozinhos) (`tsc` limpo; o gate ao vivo 26/26 com `IB113_ADV_LIVE=1`; nenhum schema
+  `setes_ib113_*` ficou; o `setes_central` segue sem a coluna). Ambiente: junções `ib113/fiscal-api` e `ib113/nfse-api` → árvores vivas, só leitura (as cercas da F2a leem `../nfse-api`).
+- **Gates**: socrático **0,76 ✅** · adversarial **0,86 ✅** (nenhum HIGH/CRITICAL). Retrabalho na sessão: (1) a 1ª carga depois do 73 tinha o
+  "antes" do impacto todo recusado (indicador NULL) e escondia perdas por OUTRO motivo → o "antes" é lido DEPOIS de gravar o indicador e a perda
+  pelo indicador entra pelo `cstGroupOff` (A-IB120; teste da ORDEM dos comandos); (2) ordem de deploy alinhada ao precedente da D-IB33 —
+  **script 73 → carga da branch → deploy** — o desconhecido nunca chega à produção (cabeçalho do 73 + skill `carregar-catalogo-ibscbs` §4, com a
+  conferência "0 CST NULL" antes do deploy); (3) sonda do boot com frase clara nos casos 1062/1205 (ADV-IB113-02); (4) `exigeGrupoIbsCbs` no
+  acervo da Calculadora (linha das flags POR PAR, acima).
+
+| Assunção (a ratificar) | O que fixa |
+|---|---|
+| **A-IB120** | Linha de base do impacto da carga: o veredito "antes" é lido DEPOIS de gravar o indicador do CST (o "antes" usa o indicador da FONTE); a perda pelo próprio indicador (`S`/NULL → `N`) entra no impacto pelo `cstGroupOff`. Revê a letra da D-IB47 só nesse ponto — para tudo o mais o impacto segue sendo a diferença do veredito |
+| **A-IB121** | A conferência D-IB28 (a) confere também o GRUPO: `exigeGrupoIbsCbs` do par NFS-e × cClassTrib da Calculadora × `ind_gIBSCBS` do CST no IT; divergência tira a linha da NFS-e (o fisco decide o grupo pela Calculadora — E0961). Par sem o campo booleano = estrutura mudada, carga recusada |
+| **A-IB122** | Indicador DESCONHECIDO (NULL) = recusado com o MESMO motivo `cst-without-group` (o 422 diz "ainda não foi carregado"; omissão e selo não distinguem) — e, pela D-IB120, ele não chega a um setes-api no ar enquanto o CST tiver cClassTrib vivo |
+
+- ✅ **Q-IB120 → D-IB120 (Valdo 2026-11-01, "Sim, recusar").** Texto original: **o boot RECUSA subir com CST de indicador desconhecido?** —
+  (a) recusar quando um CST com indicador NULL ainda tem cClassTrib com linha viva (não superada); (b) manter o alerta + a conferência no
+  checklist. Rec.: (a).
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB120** (= Q-IB120 (a), Valdo 2026-11-01: "Sim, recusar") | O boot do setes-api (`assertIbscbsCatalogSchema`) NÃO sobe enquanto um CST de indicador do grupo DESCONHECIDO (NULL) ainda tem cClassTrib com linha VIVA (não superada — o código segue na fonte, a carga o alcança); a mensagem nomeia os CSTs e manda rodar a carga ANTES do deploy (ordem script 73 → carga → deploy). CST desconhecido sem linha viva (saiu da fonte antes da 1ª carga depois do 73) = só ALERTA. Com isto "D-IB113 no ar" (D-IB115) exige a carga por construção |
+
+**Execução da D-IB120 (mesma worktree, mesmo dia)**: uma consulta por CST desconhecido (`EXISTS` de cClassTrib com linha viva) na peça;
+testes do boot (recusa nomeando os CSTs; só alerta fora da fonte); prova do DDL (`prove-ibscbs-cst-group.ts`, agora com a identidade e a
+história do cClassTrib copiadas) **28/28** — 73 aplicado sem a carga = o boot recusa listando os 18 CSTs; o 830 desconhecido e fora da fonte
+= sobe com alerta; volta à fonte = recusa de novo; o teste ao vivo do gate passou a copiar a identidade do cClassTrib.
+- ⏳ **Q-IB121 — ADV-IB113-01 (LOW, conhecimento negativo da CASA)**: numa sessão SEM modo estrito (o servidor do dev), SQL direto
+  `SET requires_ibscbs_group = 'Sem grupo'` é TRUNCADO para `'S'` antes do CHECK e passa (vale para todo CHAR(1) com CHECK; a rotina do Super
+  grava em STRICT). (a) registrar no PADROES §11 regra 11 e exigir `STRICT_ALL_TABLES` global no servidor de produção na Onda 4; (b) alargar
+  as colunas de domínio. **Rec.: (a)** (questão da Onda 4; não trava a D-IB113).
+
+**Limites conhecidos registrados (sem decisão)**: ADV-IB113-03 — carga que vire um CST de `S` para `N` com um faturamento já aberto: a nota
+congela pelo retrato da transação (o mesmo limite da D-IB70; a consequência agora seria E0859/E0961 — só numa mudança oficial do IT que a
+Calculadora também confirme); o indicador NÃO tem data (atributo do CST, como a descrição): o IT que trocar o indicador muda o veredito de
+competências ainda não faturadas — a nota congelada nunca reconsulta; CST que sair da fonte com NULL fica desconhecido (alerta a cada boot) —
+hoje 18/18 na fonte; a sonda do boot grava (e desfaz) em `setes_central.tb_tax_ibscbs` — 2ª tabela do catálogo no boot, como a `tb_nbs` da
+D-IB26: o GRANT mínimo da Onda 4 precisa de INSERT nela; ramo congelado ANTES do deploy com CST sem o grupo seguiria para o fisco (0 hoje —
+censo); MySQL 8 revê o 73 (cláusulas só do MariaDB); aba cClass que ganhe a coluna `ind_gIBSCBS` seria lida como a do CST — recusa por CST
+repetido (teste do gate).
+
+**🎉 D-IB113 + D-IB120 PUBLICADAS — 2026-11-01 ("Vai, publicar" do Valdo), nesta ordem**:
+1. Commits na `ib113` (api d5a7f35 · sql 3a11ca5 · app 0e6d0b5) + merge do `main` nos três SEM conflito (api 5cfd052 · sql 2232b84 · app
+   b9f1f2a); suíte do merge **160 suítes, 2705 verdes** (34 ao vivo pulados), `tsc` limpo, `check:privileges` sem alarme, app 18/18.
+2. **sql/73 aplicado em `setes_central`** (`apply-seed.ts`): coluna + CHECK conferidos no `information_schema`; os 18 CSTs NULL; o setes-api
+   antigo seguiu no ar (ignora a coluna).
+3. **Carga do catálogo da pasta da branch** (IT v1.70, Anexo VII v1.03.00, NBS da Calculadora): ENSAIO plano `b07477b619129422` — CST 18
+   atualizados, `cstGroupOff` = 400, 410, 620, 800, 810, 811, 820, conferência 0 não confirmado/0 bloqueio/0 divergência (73 pares), nada
+   encolhe, impacto vazio — e ATO com o mesmo plano: **GRAVADO**. Efeito a mais, da própria fonte: **3 presenças NOVAS na NFS-e — 000006, 200055
+   e 200056** (códigos da A-IB1 que a Calculadora passou a ter; CST 000/200 levam o grupo → passam a ser OFERECIDOS no cadastro). Depois:
+   0 CST com indicador NULL.
+4. **Merge ff no `main`** do sql e do setes-api (`tsx watch` reiniciou: PID novo 20208, `/health` ok — o servidor só escuta depois de todas as
+   conferências do boot, inclusive o 73, o CHECK e a D-IB120) + `npm run errors:gen` (179 códigos). Conferência no vivo (só leitura + a sonda
+   do boot): boot `ok`; 000001/000006/200055/200056 aceitos; 410014/400001/811001/820001 recusados por `cst-without-group`; a lista de apoio
+   (41 códigos) sem nenhum de CST sem o grupo.
+5. **App**: merge ff no `main` (b9f1f2a) e o `flutter run -d web-server --web-port 5051 --dart-define-from-file=.env` REINICIADO numa aba
+   nova "setes-app web 5051" (o processo antigo parado pela árvore do PID); `pt.json` servido com `cst-without-group`.
+
+**Consequência (D-IB115)**: as duas condições estão cumpridas (prova em H + D-IB113 no ar) — a D-IB98 CAI: classificar serviço em P é
+permitido, UM serviço e UMA nota primeiro, conferidos em "No fisco" (D-IB82/D-IB96). **GitHub EMPURRADO** (Valdo: "Sim, empurrar" — api 42278bf..5cfd052 · sql ff79a50..2232b84 · app 8b054f7..b9f1f2a; o remoto não tinha andado). Infra-IA não
+commitada (arquivos compartilhados com outras sessões). ⚠️ A pasta `D:\Gestao2027\ib113` tem JUNÇÕES (`fiscal-api`, `nfse-api`) para as árvores
+vivas: ao remover a worktree, apagar as junções com `cmd /c rmdir` ANTES (um `Remove-Item -Recurse` no PowerShell 5.1 pode apagar o conteúdo
+do alvo).
+
 ## 14. Regime de IBS/CBS como CONFIGURAÇÃO por estabelecimento — D-IB99 (2026-10-31)
 
 **Origem** (Valdo, ao ser cobrado da Q-IB1 vencida em 30/10, literal): *"por que tenho que responder isso e simplesmente não ter uma opção
@@ -2221,7 +2321,7 @@ corrigido → **re-prova 0,86 ✅**:
   2/3 forem suportados, decidir se o `issueInvoice` também confere o opSimpNac (a linha 3 deixada por quem saiu do Simples).
 
 **Questões abertas (uma por vez)**: **Q-IB107** (quais notas formam a fronteira — §14.4; MEDIUM; Rec. (b) só as emitidas pelo ERP web) ·
-**Q-IB106** (estabelecimento que emite também pelo ERP Desktop — §14.3) · ⏳ **Q-IB108 — o PUT do estabelecimento que TIRA do Simples (3 → 1/2) com linha 2/3 futura deve AVISAR?**
+**Q-IB106** (estabelecimento que emite também pelo ERP Desktop — §14.3) · ✅ **Q-IB108 → D-IB105 (§14.8)** — o PUT do estabelecimento que TIRA do Simples (3 → 1/2) com linha 2/3 futura deve AVISAR?
 (socrático do delta; recusar está fora — a D-IB102 deixa a linha excluível). (a) **aviso não bloqueante no app ao salvar (o faturamento a
 partir da data da linha será recusado até excluí-la ou registrar a 1)**; (b) sem aviso (a aba já mostra o aviso vermelho). *(Rec.: (a).)*
 
@@ -2292,3 +2392,19 @@ pede juntar o `main` novo na `ib99` (conflito provável em `router.ts`/guarda po
 `establishment`, D-PV9) e rodar a suíte + os dois gates do merge. **Retomar por aqui**: Q-IB108 (uma questão), depois a janela de publicação
 (renumerar 076/sql-71 se preciso; seed 71 antes do app; `errors:gen`; a 076 sobe no boot e o boot confere o CHECK; com a `merchandise`, o
 `desktopEmission` passa a ler `source_kind`).
+
+### 14.8 Rodada 6 da execução — D-IB105 (Valdo 2026-11-01, pela fila única do portfólio)
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB105** (Valdo 2026-11-01: "Avisa sem bloquear" — fecha a Q-IB108) | Quando o admin salva o estabelecimento TIRANDO-O do Simples (opSimpNac 3 → 1/2) e já existe linha FUTURA de opção de apuração 2 ou 3 (`tb_establishment_ibscbs_assessment`), o app mostra um AVISO NÃO BLOQUEANTE ao salvar: o faturamento a partir da data dessa linha será recusado até excluí-la ou registrar a opção 1. O salvamento segue. Recusar o salvamento está fora (a D-IB102 deixa a linha excluível). Descartada: (b) sem aviso, contando só com o aviso vermelho da aba |
+
+**Execução**: NÃO feita — o Valdo pediu decidir tudo antes de voltar ao código (fila única de 2026-11-01, `D:\Setes-Governanca\fila\`).
+Entra na branch `ib99` ANTES da janela de publicação, junto com o merge do `main` novo. Rascunho para a sessão que executar (sem mudar o
+contrato salvo de forma aditiva): a resposta do PUT do estabelecimento (ou a visão do sub-recurso) diz se há linha futura 2/3 a partir de
+qual data; o app mostra o aviso depois de salvar. **Textos FINAIS (Valdo 2026-11-01, "Aprovar os dois")** — D-IB104: *"Este
+estabelecimento também envia notas de outro sistema pela sincronização: a opção registrada aqui vale só para as notas emitidas por este
+sistema."* (o rascunho do §14.7 vira o texto final) · D-IB105: *"Este estabelecimento tem uma opção de apuração do IBS/CBS a partir de
+DD/MM/AAAA que só vale para o Simples Nacional. O faturamento a partir dessa data será recusado até essa opção ser excluída ou trocada."*
+(DD/MM/AAAA = data da 1ª linha futura 2/3). **Retomar por aqui**: executar a
+D-IB105 na `ib99` → merge do `main` → suíte + gates → janela.

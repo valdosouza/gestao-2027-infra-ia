@@ -191,3 +191,8 @@ Thumbs.db
 
 # deny-lists de casos ficam fora do repo (o repo e publico) - 2026-10-28
 prompts/*-denylist.txt
+
+# Governanca de projetos (D-GP14, 2026-11-01): mudou para o repositorio
+# PRIVADO D:\Setes-Governanca (o repo da Infra-IA e publico). A regra fica
+# como cerca contra copia: nada da governanca e commitado aqui.
+prompts/prompt_governanca_projetos*.md
