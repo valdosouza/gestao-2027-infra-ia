@@ -95,6 +95,11 @@ descartável sobrou (conferido); existe um banco `undefined` (anterior, não é 
    cópias; D-UC9/D-GE3/Q-EA7 entram nela; SEM cache do veredito (D-AU8); na MESMA janela, o GRANT do `fiscal_api` em `setes_central` passa
    a listar só as tabelas lidas (D-AU12) (`prompt_frente_auth_api.md` D-AU3/D-AU6/D-AU8/D-AU12). A extração (A2 — projeto `auth-api`) vem depois das
    ondas 0 do grupo e do convidado, e a A3 antes da Onda 4.
+   ✅ **FEITO 2026-11-01 (Valdo: "Vai") — `main` LOCAL, sem push** (`prompt_privilegios_interfaces.md` §14 — §14.6 = a janela): fusão +
+   costura A1 + D-PV61…D-PV65 + gates (1ª rodada 0,74/0,78; re-gate 0,78/0,84) → banco (sql/70, D-PV20, seeds 65/68/72, GRANT da D-AU12
+   provado) → `main` ff: núcleo 9b19a9e · setes-api 42278bf · nfse-api c6cc83d · sql ff79a50 · app 8b054f7 → `check:privileges` = 0 →
+   serviços no ar (abas da sessão do passo 4) → passeio + **D-EA7 ao vivo** (troca de senha → sessão antiga 401 `SESSION_REVOKED`).
+   **PUSH FEITO** no mesmo dia ("Vai, push") e worktrees `privilegios/*` removidas (§14.6).
 4a. **Campos — onda da D-CF4** (sessões próprias, depois de 4; inserido 2026-10-31): worktree `campos` a partir do `main` pós-privilégios →
    bloco 0 (cerca da D-CF2 com exceção nomeada de toda tela ainda não coberta) → A (service-list, price-lists, salesmen, tax-rules) → B
    (árvores) → C (cadeia de entidade, D-CF3; aba de parcerias pelo catálogo de `partnerships`, D-CF5) → D (processo e diálogos) → exceções zeradas. 7–9 sessões, sem prazo
