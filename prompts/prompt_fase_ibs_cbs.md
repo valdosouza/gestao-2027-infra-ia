@@ -10,7 +10,7 @@ Ato Conjunto nº 4/2026) · D-NE4 ("prompt aberto JÁ") · D-NE31 (vigência de 
 XSD 1.01, NT 007/008/009, anexos I e II, FAQ) · (B) inventário do produto (setes-api, nfse-api, fiscal-api, sql) · (C) fotografia do legado
 Gestao2016 (agente legacy-analyst) · (D) legislação e documentos oficiais na web (fontes primárias, datadas) · + `Infra-IA/nfe-api/referencia-acbr/03-ibs-cbs-rtc.md`
 (ACBr, terceiro — só conferência).
-**Estado**: **⏯ 2026-10-31: D-IB99 (§14) — o regime de IBS/CBS vira CONFIGURAÇÃO datada por estabelecimento (revê a D-IB66); a Q-IB1 deixa de ser questão do sistema (é dado da Setes); escolher o regular grava e o faturamento recusa até o cálculo existir; no ar antes de 01/01/2027.** (antes:) **⏯ 2026-10-15 (tarde): IB-3 PUBLICADA (§13 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac; 007 em produção) — D-IB98: nenhum serviço classificado em produção até a prova em H passar (fisco de H com E1000); RETOMAR pela prova em H (§13.8).** (antes:) **⏯ 2026-10-15: IB-2 EXECUTADA na worktree `setes-api-ib2` (branch `ib2`) — Rodada 1 D-IB62…D-IB73 (§12.6), execução (§12.7), gates 0,74/0,80 + D-IB74/D-IB75 e retrabalho (§12.8: trava da presunção provada e corrigida — 1213; pré-voo pela união por cliente); setes-api 1899/1899; PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e; 070 aplicada em produção); Q-IB76 aberta; próximo = IB-3.** (antes: 2026-10-14 Rodada 0 da IB-2) (antes:) **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
+**Estado**: **⏯ 2026-11-01: D-IB99 EXECUTADA em worktree (`D:\Gestao2027\ib99`, branch `ib99` — §14.1–§14.3): D-IB100 (Valdo: peça PRÓPRIA `tb_establishment_ibscbs_assessment`, revê a letra da D-IB7; D-IB24 não vem junto), migration 076 + seed sql/71 provados em schema descartável, recusa no `issueInvoice` para toda nota, sub-recurso + aba "Regime IBS/CBS"; gates 0,76/0,72 sem HIGH; **D-IB101** (Valdo, Q-IB104 = (a): a opção nunca muda o que uma nota já leu — fronteira = maior entre hoje e a última nota viva; gates do delta 0,74/0,74; §14.4); **D-IB102** (Q-IB105 = (a): 2/3 só com opSimpNac 3/4 gravado; gates do delta 0,76 · re-prova 0,86; §14.5); **D-IB103** (Q-IB107 = (b): a fronteira conta só as notas do ERP web; re-prova 0,78/0,80; §14.6); **D-IB104** (Q-IB106 = (a): a aba avisa quem também emite pelo ERP Desktop; §14.7); ⏳ Q-IB108 aguarda o Valdo; NADA mergeado — entra no `main` depois do bloco de privilégios, com o "vai".** (antes:) **⏯ 2026-10-31: D-IB99 (§14) — o regime de IBS/CBS vira CONFIGURAÇÃO datada por estabelecimento (revê a D-IB66); a Q-IB1 deixa de ser questão do sistema (é dado da Setes); escolher o regular grava e o faturamento recusa até o cálculo existir; no ar antes de 01/01/2027.** (antes:) **⏯ 2026-10-15 (tarde): IB-3 PUBLICADA (§13 — D-IB76…D-IB98; api e4af7aa · nfse ba78074 · app fbc2fac; 007 em produção) — D-IB98: nenhum serviço classificado em produção até a prova em H passar (fisco de H com E1000); RETOMAR pela prova em H (§13.8).** (antes:) **⏯ 2026-10-15: IB-2 EXECUTADA na worktree `setes-api-ib2` (branch `ib2`) — Rodada 1 D-IB62…D-IB73 (§12.6), execução (§12.7), gates 0,74/0,80 + D-IB74/D-IB75 e retrabalho (§12.8: trava da presunção provada e corrigida — 1213; pré-voo pela união por cliente); setes-api 1899/1899; PUBLICADA 2026-10-15 (api cfe9409 · sql 7cdce7e; 070 aplicada em produção); Q-IB76 aberta; próximo = IB-3.** (antes: 2026-10-14 Rodada 0 da IB-2) (antes:) **IB-1 FECHADA no dev (2026-10-10, 2ª sessão — §11.1…§11.6 = PONTO DE RETOMADA): gates socrático 0.66→0.75 ✅ e adversarial 0.80 ✅ (retrabalho com teste: Calculadora vazia recusada, conferência por linha/data — A-IB2, o ato da carga tem PLANO, CHECK conferido no boot + CHECK nas colunas congeladas, orçamento de memória do xlsx, autor da classificação), passeio logado feito (achado corrigido: cIndOp sem o "local do fornecimento" — 7 pares iguais), catálogo de campos da interface services (seed 62 + caminho do payload); código COMMITADO só pelos caminhos da IB-1 (§11.6 — api e635fef · sql 5dcede9 · app 27cc7a6, PUBLICADO; Infra-IA integrada e commitada); **Rodada 3 DECIDIDA e EXECUTADA (§11.7/§11.8 — D-IB28…D-IB33, A-IB1/A-IB2 confirmadas; gates do delta 0.72/0.74 ✅; não commitada); Rodada 4 Q-IB34…Q-IB38 aberta (§11.9 — Q-IB34 antes de dezembro)**; Rodada 3 Q-IB28…Q-IB33 + confirmar A-IB1/A-IB2 aguardam o Valdo.** (antes: IB-1 implementada na 1ª sessão) (antes: IB-0 + Rodada 2 — §10.5) (antes: IB-0 com parecer do
 guardião). Antes: Rodada 1 DECIDIDA (2026-10-10, "siga as recomendações" — §8, D-IB1…D-IB21).
 ⚠️ A opção de regime da Setes (D-IB1) segue com o Valdo e o contador até **30/10/2026**; o patch do legado (D-IB3) está COMMITADO (SVN r1300) e
 compilado — falta só a versão aos clientes (conferência dispensada: nenhum cliente de serviço emitiu com a reforma).
@@ -1971,3 +1971,324 @@ partir de 01/01/2027 — aí o cálculo do regime regular (D-IB11/D-IB12) vira t
 |---|---|
 | **D-IB99** (Valdo 2026-10-31: "Opção (a)") | O regime de IBS/CBS do Simples é CONFIGURAÇÃO de cada estabelecimento, com data de início — as três opções (`regApIBSCBSSN` 1 = não optar, IBS/CBS no DAS · 2 = só CBS regular · 3 = IBS e CBS regular), resolvida pela data de COMPETÊNCIA; padrão de quem não preenche = 1 (D-IB1). Escolher 2/3 é aceito e gravado; o faturamento RECUSA (422 com código próprio e mensagem "ainda não suportado") toda nota cuja competência caia na vigência de 2/3, até o cálculo do regime regular (D-IB11/D-IB12) existir — nunca emite nota errada. **REVÊ a D-IB66**: a configuração datada nasce JÁ, não espera o 1º fato datado (os três gatilhos da D-IB66 morrem). Prazo: no ar antes de 01/01/2027 (data da obrigação do Simples). Execução: sessão própria (setes-api establishment + billing, `sql/`, setes-app Meu Estabelecimento) pelo guardião + `revisar-ddl` sobre o rascunho B3 (`prompt_fase_ibs_cbs-ddl-ib1-rascunho.sql`); a D-IB66 apontava que a tabela sem a D-IB24 (CRT derivado) espalha o CRT em duas casas — a execução confere com o guardião se a D-IB24 vem junto (se exigir escolha, vira questão). Vale a D-CF1 (motor de campos na aba). Liga com a D-PV32 (6) do `prompt_privilegios_interfaces.md` (tributação do EMITENTE separada da RELAÇÃO em peça datada "fica para a D-IB7, sem prazo") — com a D-IB99 o prazo passa a ser 01/01/2027 para o regime; o resto do enquadramento segue o que o guardião disser |
 
+**Correção de documentação (sem decisão — NT 009 p. 9, conferida 2026-10-31)**: `regApIBSCBSSN` **2 = CBS apurada pelo SN e IBS pelo
+regime regular** (a D-IB99 e a Q-IB102 descreveram a opção 2 ao contrário; o §0 e o B3 do rascunho estão certos). O comportamento não muda —
+2 e 3 são recusados igual —; o rótulo da tela e a mensagem seguem a NT.
+
+### 14.1 Parecer do guardião e Rodada 1 da execução — D-IB100 (2026-10-31)
+
+Parecer do `setes-conceito` (íntegra na pasta de notas da sessão-mãe, `ib99-parecer-guardiao.md`): a opção do Simples pelo regime de
+apuração do IBS/CBS tem FATO GERADOR PRÓPRIO (opção CGSN 194, semestral e irretratável no semestre; no MAT para quem abre a empresa) —
+distinto do enquadramento no Simples (opSimpNac: opção/exclusão), do sublimite (regApTribSN) e do pTotTribSN (mensal). A linha única do B3
+precisaria de dois CHECKs cruzados só para não se contradizer e copiaria os vizinhos a cada mudança (teste da maquete). Divergia da letra
+da D-IB7 → questão ao Valdo, uma só:
+
+- ✅ **Q-IB103 → D-IB100 (Valdo 2026-10-31, "(b) Peça própria").** Texto original: **onde fica a opção de regime IBS/CBS datada** —
+  (a) letra da D-IB7: tabela com o enquadramento inteiro + D-IB24 + troca do leitor do NÚCLEO (`fiscal-api/src/erp/facts.ts`, janela da
+  D-F133) + contract das colunas de `tb_entity_tax`; (b) **peça própria SÓ da opção, `tb_establishment_ibscbs_assessment`
+  (estabelecimento × `valid_from`, `assessment` 1/2/3, autor obrigatório); opSimpNac/regApTribSN/pTotTribSN/regEspTrib/CRT ficam em
+  `tb_entity_tax` até o próprio 1º fato datado (somam depois, sem reforma); núcleo e nfse-api não mudam (o leiaute 1.01 não leva o
+  campo)**. *(Rec.: (b).)*
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB100** (Valdo 2026-10-31: "(b) Peça própria") | A opção de apuração do IBS/CBS do Simples é peça PRÓPRIA e DATADA do ESTABELECIMENTO — `tb_establishment_ibscbs_assessment` (PK estabelecimento × `valid_from`; `assessment` CHAR(1) 1/2/3 com CHECK binário; `tb_user_id` NOT NULL), dona única a peça `@shared/ibscbs-assessment`. **REVÊ a letra da D-IB7** (a tabela única `tb_establishment_tax_regime` com o enquadramento inteiro não nasce): opSimpNac, regApTribSN, pTotTribSN, regEspTrib e o CRT seguem em `tb_entity_tax` sob a convenção "sem história" da D-IB66 (limite conhecido: a nfse-api lê o opSimpNac na transmissão) e cada um vira peça datada própria quando tiver o seu 1º fato datado. **A D-IB24 (CRT derivado) NÃO vem junto** — com a peça só da opção o CRT continua numa casa só; a dupla codificação CRT × opSimpNac (maquete nº 10) fica como está, sem piorar. Núcleo `fiscal-api` e nfse-api intocados |
+
+**O resto do parecer (não diverge de decisão — executado como regra da peça)**: sem `valid_until` (a linha seguinte fecha a anterior; a PK
+impede sobreposição) · **sem linha = 1** (efeito legal da D-IB1 — sem backfill e sem piso; uma linha '1' explícita só fecha um período 2/3)
+· inserir com início ≥ hoje do estabelecimento (fuso — PADROES §10) · alterar/excluir (soft) só linha FUTURA; a vigente e as passadas são
+imutáveis (o passado já lido por uma nota nunca muda) · revive da mesma PK sem herdar nada (PADROES §3.1) · **2/3 só com início ≥
+2027-01-01** (piso legal na peça, 422 no campo da data); o calendário 01/01·01/07 NÃO é travado (MAT/exclusão de ofício têm "data do fato
+motivador") — a tela só SUGERE o próximo início de semestre · "suportado" é propriedade do CÓDIGO (constante que cresce com a D-IB11/D-IB12),
+nunca coluna · a recusa mora no ESCRITOR ÚNICO da nota (`issueInvoice`), antes de cunhar o número, com leitura travante compartilhada na
+conexão da transação — vale para TODO modelo (SE/55/65) e todo produtor (venda, conjugada, devolução, OS, lote, revive); as prévias (validate
+da venda, detalhe da OS) perguntam pela MESMA regra, sem trava · `emitterRegimeAt` não muda (a obrigação do Simples começa em 01/01/2027
+qualquer que seja a opção) · o não optante segue barrado na transmissão pela nfse-api (F4/IB-N) · sub-recurso próprio como escritor único (o
+PUT do estabelecimento não recebe a opção) · motor de campos: só as 2 colunas da seção no catálogo de `establishment` (o resto da tela na onda
+da D-CF4) · glossário: "apuração (assessment)" ≠ "regime". **Para conferir com o contador (não trava nada)**: o MEI pode fazer a opção? (a
+NT 009 diz "optante ou pendente"); a opção é da RAIZ do CNPJ e a tabela é por estabelecimento (filiais repetem o valor — limite para a frente
+do grupo).
+
+### 14.2 Execução da D-IB99/D-IB100 (2026-10-31→11-01, worktrees `D:\Gestao2027\ib99\{setes-api,sql,setes-app}`, branch `ib99`, a partir do `main` — NADA mergeado, aplicado em banco vivo ou com push)
+
+- **DDL**: migration **076** `setes-api/src/migrations/sql/076_establishment_ibscbs_assessment.sql` (CREATE TABLE IF NOT EXISTS + FK para
+  `setes_central.tb_institution` + `ck_establishment_ibscbs_assessment` `assessment COLLATE utf8mb4_bin IN ('1','2','3')` por ADD CONSTRAINT IF
+  NOT EXISTS — re-executável); espelho no canônico `sql/03_schema_cliente_ddl.sql`; seed **`sql/71_establishment_ibscbs_assessment_fields_seed.sql`**
+  (catálogo de campos da interface `establishment`: `valid_from` Date + `assessment` String, técnicos 'S'; id da interface por `i18n_key`).
+  Números conferidos livres em 31/10 (071–075 e sql/66–70 são de outras branches). **Provado em schema descartável** —
+  `setes-api/scripts/prove-ibscbs-assessment.ts`: 076 aplicada 3× sem erro; CHECK pelo NOME e corpo (o MariaDB 10.4 guarda
+  `` `assessment` collate utf8mb4_bin in ('1','2','3') ``); domínio recusa '4','0','',' ','a'; a peça inteira (registrar, duplicata, alterar,
+  excluir soft com autor, reviver sem herdar, vigente imutável, piso do regular, recusa na competência); **a TRAVA**: com o faturamento lendo a
+  opção (LOCK IN SHARE MODE) na competência, registrar opção com início ≤ competência ESPERA — com e SEM linha anterior (a gap lock cobre a 1ª
+  opção); depois do commit passa. Conhecimento (MariaDB 10.4, provado): a mesma leitura também segura o registro de início DEPOIS da
+  competência (next-key da busca descendente) — inofensivo (espera curta). Schema apagado; nenhum resíduo.
+- **setes-api**: peça **`@shared/ibscbs-assessment`** (dona única — cerca `ibscbs-assessment-fence.test.ts`: nenhum outro arquivo de `src/`,
+  `scripts/` ou migrations nomeia a tabela; sem DELETE/REPLACE/TRUNCATE): `ibscbsAssessmentAt` (linha viva de maior início ≤ data; travante
+  sob pedido), `assessmentRefusalOf`/`assertIbscbsAssessmentSupported` (422 **`IBSCBS_REGULAR_REGIME_UNSUPPORTED`**, mensagem com a opção, o
+  início e a competência), `previewIbscbsAssessmentRefusal`, `readIbscbsAssessmentView`, `createIbscbsAssessment` / `changeIbscbsAssessment` /
+  `removeIbscbsAssessment` (transação + `withDeadlockRetry`; trava de REGISTRO pela PK completa — PADROES §9 regra 8; INSERT atômico, duplicata
+  viva 409, morta = revive), `isIsoDate` (data de calendário real — o servidor roda sem modo estrito), boot `assertIbscbsAssessmentChecks` (CHECK
+  pelo nome e corpo em cada schema vivo; faltando, NÃO sobe — `server.ts`, depois das migrations). **`issueInvoice`** chama a regra ANTES do
+  `nextInvoiceNumber`. Prévias: `previewServiceIbscbs` dobra a recusa da opção no `refusal` (e no `atObligation`) DEPOIS da recusa da declaração
+  (a ordem do faturamento); o validate da venda empurra a issue `order/ibscbsAssessment` também na venda só de mercadoria, sem repetir quando a
+  prévia do serviço já a trouxe. Sub-recurso **`GET/POST /api/establishment/ibscbs-assessments`** e **`PUT/DELETE …/:validFrom`** (adminGuard
+  herdado; institution do token; a data é a identidade; Swagger), DTO com data real e domínio da NT; o PUT do estabelecimento NÃO recebe a
+  opção. Motor de campos: **`assertClientRequired(..., onlyFields)`** — tela com DOIS salvares sobre o mesmo catálogo confere em cada porta só
+  as colunas que ela recebe (sem isso, o campo apertado numa seção recusaria a outra). Códigos novos: `IBSCBS_REGULAR_REGIME_UNSUPPORTED`,
+  `IBSCBS_ASSESSMENT_DATE_PAST`, `_REGULAR_TOO_EARLY`, `_DUPLICATE`, `_NOT_FOUND`, `_IN_EFFECT` (`errors:gen` NÃO rodado — escreve no
+  `setes_central` vivo; roda na publicação).
+- **setes-app**: 6ª aba **"Regime IBS/CBS"** no Meu Estabelecimento — seção AUTÔNOMA (molde da aba Emissor fiscal: datasource próprio
+  `EstablishmentIbscbsAssessmentDatasource` → setes-api, botões próprios, ponte de feedback): "vale hoje" (sem linha = apuração pelo Simples),
+  AVISO vermelho quando há 2/3 vigente ou futura ("a partir de dd/mm/aaaa o faturamento será RECUSADO"), histórico com linha futura editável
+  (Salvar/Excluir) e as demais só leitura, registrar com data sugerida (próximo 01/01 ou 01/07) + opção; pendências espelham a regra da API
+  antes do envio. A página carrega o motor de campos (`FieldConfigLoader('establishment')`) e a seção aplica o rótulo do cliente. i18n pt/en.
+- **Provas**: `tsc` limpo · **setes-api 137/137 suítes, 2184 testes** (31 ao vivo pulados) — novos: `ibscbs-assessment` (16), `ibscbs-assessment-fence`
+  (3), `establishment-ibscbs-assessment` (7) + `invoice` (recusa ANTES do número, sem linha segue), `billing` (issue na venda só de mercadoria,
+  sem duplicar), `ibscbs-ib3-erp` (prévia com a opção 3; declaração incompleta vem primeiro; linha '1' fecha o período), `field-config`
+  (`onlyFields`) · app: teste novo `establishment_ibscbs_assessment_test.dart` 10/10 (+ `flutter analyze` e suíte — ver abaixo).
+- **Limites conhecidos (registrados, sem decisão)**: notas que chegam pelo sincronizador (setes-sync) não passam pelo `issueInvoice` (o legado
+  emite) — fora do alcance da recusa; a convenção "sem história" segue para opSimpNac & cia (nota de 30/12 transmitida em 02/01 sai com o
+  opSimpNac do dia da transmissão — D-IB66); a recusa usa a competência `dt_emission` (D-IB64) — se a D-IB64 mudar com o contador, muda junto
+  pelo dono único da data.
+- **Para a JANELA de publicação (depois do passo 4 do plano 10-21, com o "vai")**: o bloco de privilégios põe a guarda POR ROTEADOR (D-PV2) —
+  conferir que as 4 rotas novas caem nos verbos V/I/A/E de `establishment` e entram na lista da cerca (D-PV9); renumerar 076 / sql/71 se outra
+  branch tiver tomado o número; aplicar o seed 71 antes do app; `errors:gen`; a migration 076 sobe no boot (o boot confere o CHECK).
+- **Consumidor seguinte (sem decisão — liga com a IB-4, §13.8 fim)**: a produção restrita usa desde 20/10/2026 o pacote da NT 009, que
+  tem `regApIBSCBSSN` no `prest/regTrib` do DPS. Quando o montador da nfse-api adotar a NT 009, ESTA peça é a fonte do campo, lida pela
+  competência (`dCompet`) — pela fonte de fatos da nfse-api (view + GRANT mínimo, molde D-F15), nunca por cópia; o núcleo/nfse-api
+  ganham o leitor nessa janela (D-F133). Até lá, nada vai ao fisco (o 1.01 não leva o campo).
+
+### 14.3 Gates da D-IB99/D-IB100 (2026-11-01) — socrático **0,76 ✅** · adversarial **0,72 ✅** (nenhum HIGH/CRITICAL; 2 MEDIUM dependem de decisão)
+
+Agentes independentes, seguindo `skills-genericas/revisar-riscos-sistemicos.md` e `testar-adversarial.md` (ataques reais SÓ em schemas
+descartáveis `setes_ib99_adv_*`, todos apagados; nada escrito em `setes_setes`/`setes_central`/árvores vivas).
+
+**Corrigido na sessão (sem decisão)**:
+- **ADV-IB99-03 (LOW)** — competência inválida (`''`, `'abc'`, `'2027-13-45'`) acharia "sem linha" e valeria 1 (a nota passaria com 3
+  vigente): `ibscbsAssessmentAt` falha FECHADO (erro de programação do produtor) antes do SQL — teste na peça.
+- **ADV-IB99-04 (LOW, transversal)** — `:param` com URI malformada (`%`, `%E0%A4%A`) dava 500 sem `code` (URIError do Express 4 antes do
+  controller): o handler global de `app.ts` devolve 400 `VALIDATION_FAILED` — vale para TODA rota com parâmetro; teste
+  `adversarial-ib99-gate.test.ts` pela porta HTTP real (inclusive 403/401 seguem).
+- **ADV-IB99-05 (LOW)** — 4 reviveres simultâneos da mesma data morta esgotavam o retry (INSERT com chave duplicada pega trava S e
+  sobe para X → 1213 → 409 RESOURCE_BUSY): o registro agora escolhe o caminho por leitura consistente, TRAVA a linha que existe por
+  REGISTRO antes de decidir e só INSERE a que não existe (duplicata no INSERT = 409 DUPLICATE). Provado ao vivo (schema descartável):
+  revive ×4 e criação ×4 = 1 ok + 3 `IBSCBS_ASSESSMENT_DUPLICATE`, sem deadlock.
+- Socrático LOW: Swagger dos dois faturamentos (`/api/billing/invoice`, `/api/service-orders/:id/invoice`) cita o 422 novo; o texto da
+  peça e da prova promete só o que a trava faz (ORDENA o registro depois do faturamento em curso — não confere notas já nascidas); app:
+  `initialDate` do seletor de data preso ao intervalo (data digitada fora dele derrubava o Flutter) e **registrar/trocar para opção sem
+  suporte pede decisão explícita** (como a exclusão — é o ato que bloqueia o faturamento a partir da data).
+
+**Conhecimento (sem ação)**: a leitura travante SEM linha do estabelecimento põe trava de intervalo até a fronteira com o estabelecimento
+vizinho do MESMO schema (grupo) — o registro de outra filial espera faturamentos alheios (espera curta, sem ciclo: o faturamento nunca
+espera o registro); `onlyFields` hoje não tem efeito (as 2 colunas do seed 71 são técnicas e o PUT principal não chama o motor) — é
+preventivo para a onda da D-CF4; boot: `assertIbscbsAssessmentChecks` consulta `information_schema` por schema, em série (como o
+`assertF2aFreezeTriggers`) — um schema sem o CHECK impede o boot de todos (raio de explosão aceito pelo molde D-IB26; orçamento de boot com
+1000 clientes = item da Onda 4/F3). Lote da OS: a ordem recusada vira linha do relatório com o código, o lote segue (analisado).
+
+**Questões para o Valdo (uma por vez — recomendação entre parênteses)**:
+- ✅ **Q-IB104 → D-IB101 (Valdo 2026-11-01, "(a) Hoje ou última nota" — §14.4). A fronteira do que muda (ADV-IB99-01 + ADV-IB99-02, MEDIUM; socrático ponto 1).** A competência é por DIA: uma nota de
+  hoje nasce com 1 às 10h; às 10h05 o admin registra 3 com início HOJE (aceito — só se recusa início antes de hoje) e a nota passa a cair na
+  vigência de 3 (quando a NT 009 levar o `regApIBSCBSSN` ao DPS, a nfse-api leria 3 para uma nota calculada como Simples). O mesmo na virada
+  da meia-noite, e — provado — trocando o fuso do estabelecimento (SP → Rio_Branco, opção do seed 60) o "hoje" volta um dia: a linha vigente
+  vira editável e o início "ontem" passa. A trava só ORDENA. (a) **a fronteira é o MAIOR entre hoje e a última `dt_emission` de nota VIVA do
+  estabelecimento, lida TRAVADA na transação do registro, com o relógio de DEPOIS da trava: registrar/alterar/excluir recusam (409) início ≤
+  essa data** — fecha o "hoje", a meia-noite e o fuso trocado; (b) início só DEPOIS de hoje (simétrico a alterar/excluir) — não fecha a
+  meia-noite nem o fuso; (c) manter início ≥ hoje como limite conhecido. *(Rec.: (a) — é a leitura literal de "o passado já lido por uma
+  nota nunca muda"; os testes ao vivo do gate — `ib99-adversarial-live.test.ts` na pasta de notas da sessão-mãe — passam com (a).)*
+- ✅ **Q-IB105 → D-IB102 (Valdo 2026-11-01, "(a) API recusa 2/3" — §14.5). Estabelecimento que NÃO é do Simples (socrático ponto 2).** Hoje a aba aparece para todos e a API aceita 2/3 de qualquer
+  estabelecimento: um Lucro Presumido que registre 3 (ou um optante que saia do Simples deixando uma linha 3 futura) passa a ter TODO
+  faturamento recusado com uma mensagem que fala da opção do Simples. (a) **a API recusa REGISTRAR/TROCAR para 2/3 quando o opSimpNac
+  gravado não é 3/4; a aba segue sempre visível (uma linha futura nunca fica órfã — dá para excluí-la)**; (b) aba só com opSimpNac 3/4 (o
+  guardião sugeriu) e a API sem conferência; (c) como está. *(Rec.: (a).)*
+- ✅ **Q-IB106 → D-IB104 (Valdo 2026-11-01, "(a) Avisar na aba" — §14.7). Estabelecimento que emite também pelo ERP Desktop (socrático ponto 3).** *(Reformulada 2026-11-01 com os termos "ERP Desktop"
+  × "ERP web", pedido do Valdo — o conteúdo não mudou.)* A opção registrada na aba "Regime IBS/CBS" é do **ERP web**: só a nota emitida pelo
+  ERP web passa pela recusa (`issueInvoice`). As notas do **ERP Desktop** chegam ao mesmo `tb_invoice` pelo sincronizador/setes-sync sem passar
+  por ela, e o ERP Desktop tem a própria chave da reforma (D-IB3) — no mesmo CNPJ haveria notas do ERP web recusadas e notas do ERP Desktop vivas
+  na vigência de 2/3. (a) **a aba avisa, quando o estabelecimento tem sincronizador, que a opção governa só as notas emitidas pelo ERP web**
+  (o texto visível segue a regra de não citar o sistema antigo na tela — redação final do Valdo); (b) o sub-recurso recusa 2/3 enquanto o
+  estabelecimento emitir pelo ERP Desktop; (c) limite conhecido, sem aviso. *(Rec.: (a).)*
+
+**Estado**: branch `ib99` com testes verdes (ver §14.2, contagem final abaixo), gates passados com as questões acima como pendência
+explícita (regra do gate: score ≥ 0,70 com pontos abertos → entrega registrando-os). Nada mergeado/aplicado/pushado. A Q-IB104, se (a),
+muda só a peça (`@shared/ibscbs-assessment`) e a prova; a Q-IB105 (a) toca a peça (lê o opSimpNac de `tb_entity_tax`); a Q-IB106 (a) só o app.
+
+**Contagem final (2026-11-01, depois das correções dos gates)**: `tsc` limpo · **setes-api 138/138 suítes, 2193 testes** (31 ao vivo pulados) · prova `scripts/prove-ibscbs-assessment.ts` OK (inclui revive ×4 e criação ×4 concorrentes) · **app: `flutter analyze` sem aviso, 645 testes verdes** (28 pulados; `establishment_ibscbs_assessment_test.dart` 11/11). Commit LOCAL na branch `ib99` dos três repositórios — api **2d6c393** · sql **0d3df12** · app **bef45ad** — (sem push, sem merge); os testes ao vivo do gate adversarial para a Q-IB104 ficaram na pasta de notas (`ib99-adversarial-live.test.ts`, opt-in `IB99_ADV_LIVE=1`) — entram no repositório com a decisão.
+
+### 14.4 Rodada 2 da execução — D-IB101 (Valdo 2026-11-01) e a execução
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB101** (Valdo 2026-11-01: "(a) Hoje ou última nota" — fecha a Q-IB104) | A FRONTEIRA do que a opção de apuração do IBS/CBS pode mudar é o MAIOR entre HOJE e a ÚLTIMA data de emissão (`dt_emission`) de nota VIVA do estabelecimento (qualquer terminal/modelo; a autorizada cancelada segue viva), lida na transação do registro DEPOIS da trava que serializa com o faturamento e com o relógio REAL de depois da espera: registrar, alterar ou excluir com início ≤ essa data = **409 `IBSCBS_ASSESSMENT_INVOICED`** (`fields[validFrom]`). Leitura literal de "o passado já lido por uma nota nunca muda": fecha a opção registrada HOJE depois de uma nota de hoje, a virada da meia-noite e a troca do fuso do estabelecimento (o "hoje" anda para trás; a nota não). A espera ORDENA (o faturamento lê com LOCK IN SHARE MODE); quem CONFERE é o escritor da opção |
+
+**Nota do Valdo à Q-IB104 (2026-11-01, sessão-mãe — literal)**: *"Q-IB104 o governo tem regras proprias para troca de regime, normalmente
+depois de escolher deve ficar o ano fiscal nela, pode acnotecer de sr expulso de um regime por falta de complaince...nao acredito que
+precisemos cuidar disso"*. **Complemento da D-IB101 — conhecimento negativo**: o sistema NÃO controla as regras do governo sobre a opção —
+permanência mínima no período (ano/semestre, "irretratável no semestre"), prazo/calendário para optar, exclusão do regime por
+descumprimento. A opção é DADO DECLARADO pelo estabelecimento; não nascem trava de permanência, calendário de opção nem exclusão automática.
+A D-IB101 não é regra do governo: só protege o passado já lido por uma nota. **Conferido no código (2026-11-01)**: nenhuma trava desse tipo
+— registrar/alterar/excluir dependem só de "linha futura" (D-IB100) e "depois da última nota" (D-IB101); trocar de opção é registrar uma
+linha nova a qualquer momento; o calendário 01/01·01/07 é só SUGESTÃO na tela. A única regra legal na peça é o PISO de 01/01/2027 para 2/3
+(a opção pelo regular só existe na lei a partir daí — evita parar o faturamento por uma data digitada em 2026); não é regra de troca de
+regime — se o Valdo quiser tirá-lo também, é ajuste de uma linha (`assertRegularFloor`).
+
+**Execução (worktree `ib99`, mesma branch — nada mergeado/aplicado/pushado)**:
+- Peça `@shared/ibscbs-assessment`: `frontierAfterLock` (hoje por `todayFor(…, conn, new Date())` + `lastLiveEmissionDate`) chamada SEMPRE depois
+  da trava, sem leitura consistente antes dela na transação (o retrato nasce depois da espera e enxerga a nota que o faturamento concorrente
+  acabou de gravar); `assertNotInvoiced` nos três atos. **Registrar em DUAS transações**: (1) o INSERT é a própria trava (espera o faturamento
+  que leu a data) e a fronteira vem depois — falhou, desfaz; chave já existente encerra a transação sem nada gravado; (2) a linha existente é
+  travada por REGISTRO (`FOR UPDATE`) antes da fronteira e do revive (ADV-IB99-05 segue fechado). Piso do regular antes de abrir transação.
+- `@shared/invoice/emission-date` (dono único da data de emissão) ganhou `lastLiveEmissionDate` — MAX(`dt_emission`) de `tb_invoice`
+  `deleted='N'` da institution (prefixo `tb_institution_id` do `idx_invoice_number_seq`), leitura consistente; a peça da opção não nomeia
+  `tb_invoice` (cerca de dono único intacta). Código novo `IBSCBS_ASSESSMENT_INVOICED`.
+- Provas: testes da peça reescritos para o fluxo (a trava é o 1º comando; a fronteira vem depois; `todayFor` com relógio real; INVOICED nos
+  três atos; revive respeita a fronteira) · **`src/__tests__/adversarial-ib99-live.test.ts`** (opt-in `IB99_ADV_LIVE=1`, schema descartável):
+  ADV-IB99-01, -02 (fuso SP → Rio_Branco) e -05 — **3/3 verdes** · prova `scripts/prove-ibscbs-assessment.ts` ganhou a corrida-chave: o
+  faturamento lê a opção (travado), o registro com início na competência ESPERA, o faturamento grava a nota e confirma, o registro passa e
+  **recusa com INVOICED** (o retrato nasceu depois da espera) — PROVA OK, schema apagado. App: sugestão da data diz "depois da última nota
+  emitida" (o 409 com `fields[validFrom]` já foca o campo).
+
+**Gates do delta da D-IB101 (2026-11-01) — socrático 0,74 ✅ · adversarial 0,74 ✅ (sem HIGH/CRITICAL)**. Confirmado pelo ataque (schemas
+`setes_ib99_d101_*`, apagados): a premissa "nenhuma leitura consistente antes da trava" vale nos 4 caminhos (o INSERT é o 1º comando; a FK
+no pai central é leitura travante e não cria o retrato; revive/alterar/excluir começam pelo `FOR UPDATE`); a 1ª transação do registro com
+chave duplicada solta a trava S no commit, sem resíduo; corridas registro × faturamento consistentes em todas as ordens (revive de linha
+morta, início posterior à competência, linha viva anterior). **Corrigido na sessão (sem decisão)**:
+- **ADV-D101-02 (MEDIUM)** — a MAX(`dt_emission`) varria todas as notas da institution sob a trava (300 mil notas: 4–6 s com o faturamento
+  parado; um registro com data passada que terminava em 422 segurou o faturamento 4,8 s): índice **`idx_invoice_live_emission`
+  (`tb_institution_id`, `deleted`, `dt_emission`) na própria 076** (+ canônico `sql/03`) — EXPLAIN provado: *Select tables optimized away* — e
+  **pré-checagem pelo pool, SEM trava** (`assertRegistrable` antes da transação; a conferência DECISIVA continua depois da trava — teste
+  "o hoje virou entre a pré-checagem e a trava").
+- **ADV-D101-05 (LOW)** — Swagger dos três atos cita o 409 `IBSCBS_ASSESSMENT_INVOICED`; a visão (`GET`) ganhou `lastInvoice` e `firstStart`
+  (o 1º início aceito = o maior entre hoje e o dia seguinte à última nota) e `editable` respeita a última nota; app: sugestão e seletor a partir
+  do `firstStart`, pendência própria ("já existe nota emitida em …") e a recusa de uma LINHA não leva o foco ao campo do registro novo.
+- **ADV-D101-06 (LOW)** — os testes ao vivo passam a fixar o relógio REAL (`jest.setSystemTime`, só o `Date` falso) — exercitam o "hoje", o
+  fuso e a meia-noite de verdade; + a corrida "o registro que espera o faturamento enxerga a nota e recusa" como teste permanente (4/4 ao vivo).
+- **Conhecimento (sem ação)**: **ADV-D101-03 (LOW)** — o INSERT da opção toma trava S no pai da FK (`setes_central.tb_institution`) e a venda
+  toma X no mesmo pai DEPOIS de ler a opção (`lockInstitutionCounters` do `nextSettledCode`): impasse provado; o InnoDB escolheu o REGISTRO
+  (transação menor), que refez e terminou em INVOICED — os dois lados têm `withDeadlockRetry`. **ADV-D101-04 (LOW)** — nota do legado/PDV ainda
+  na fila do sincronizador não entra na fronteira (limite da Q-IB106).
+
+**Questão nova para o Valdo (do MEDIUM ADV-D101-01 — o socrático chegou à mesma)**:
+- ✅ **Q-IB107 → D-IB103 (Valdo 2026-11-01, "(b) Só do ERP web" — §14.6). Quais notas formam a fronteira da D-IB101.** *(Reformulada 2026-11-01 com os termos "ERP Desktop" × "ERP web", pedido do
+  Valdo — o conteúdo não mudou.)* A D-IB101 protege "o que uma nota já leu": a opção registrada no ERP web nunca muda a data de uma nota que a
+  leu. Hoje a fronteira conta TODA nota viva do estabelecimento em `tb_invoice`, que guarda três tipos: (1) as notas emitidas pelo **ERP web**
+  — nascem pelo `issueInvoice`, que lê a opção (têm evento E em `tb_invoice_event`; 678 das 680 do dev); (2) as notas emitidas pelo **ERP
+  Desktop**, que chegam pelo sincronizador (6.470 no dev, sem evento E) — NUNCA leram a opção do ERP web (o desktop tem a própria chave, D-IB3);
+  (3) as COMPRAS (notas de terceiros recebidas). Provado: uma nota do tipo (2) ou (3) com `dt_emission` 2062-06-20 (data digitada errada no ERP
+  Desktop/PDV) impede registrar a opção 3 em 2027-01-01, sem saída pela tela — e a opção pelo regular tem prazo legal; uma compra de HOJE impede
+  registrar a partir de hoje. (a) as três (como está); (b) **só as notas emitidas pelo ERP web (as que de fato leram a opção)**. O campo `issuer`
+  não serve para separar (o sincronizador grava `issuer` = cliente); o critério é o evento E. *(Rec.: (b).)*
+
+**Conferência pedida pela sessão-mãe (2026-11-01)**: nenhuma trava de permanência/calendário/exclusão no código — ver a nota do Valdo acima.
+
+**Contagem final do delta (2026-11-01)**: `tsc` limpo · **setes-api 138/138 suítes, 2196 testes** (35 pulados — inclusive a suíte ao vivo opt-in `adversarial-ib99-live`, 4/4 com `IB99_ADV_LIVE=1`) · prova OK (corrida + EXPLAIN do índice) · app `flutter analyze` sem aviso, **648 verdes**. Commits LOCAIS na branch `ib99`: api **921149f** · sql **070ddc7** · app **8571d23** (sobre 2d6c393 · 0d3df12 · bef45ad). Observado: `adversarial-d-rs4-gate.test.ts` (recuperação de senha, fora desta frente) falhou 1× na suíte completa e passou sozinho (23/23) e na rodada seguinte — intermitente por tempo.
+
+### 14.5 Rodada 3 da execução — D-IB102 (Valdo 2026-11-01)
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB102** (Valdo 2026-11-01: "(a) API recusa 2/3" — fecha a Q-IB105) | Registrar ou TROCAR para o regime regular (2/3) só com o opSimpNac GRAVADO no estabelecimento = **3 (ME/EPP) ou 4 (opção pendente)** — senão **422 `IBSCBS_ASSESSMENT_NOT_SIMPLES`** (`fields[assessment]`, a mensagem nomeia o regime gravado). A aba segue SEMPRE visível: registrar a opção 1 e EXCLUIR linha futura nunca leem o regime — a linha 2/3 deixada por quem saiu do Simples nunca fica órfã. O opSimpNac é lido de `tb_entity_tax` (convenção "sem história" — D-IB66), pela peça dona dele (`emitterRegimeAt`). O faturamento NÃO muda: recusa toda nota na vigência de 2/3 (D-IB99), qualquer que seja o regime |
+
+**Execução (mesma worktree/branch `ib99`)**: peça `@shared/ibscbs-assessment` — `assertRegularAllowed` na PRÉ-CHECAGEM (pool, sem trava) e na
+conferência DECISIVA dentro das transações de registrar, reviver e trocar, com leitura TRAVANTE compartilhada do regime (PADROES §9 regra 2),
+depois da trava da linha da opção; visão com `simplesRegime`/`regularAllowed`; Swagger (422 nos atos). App: pendência própria (2/3 sem
+ME/EPP nem pendente — nada vai à API) e aviso "Regime do Simples gravado: … — as opções 2 e 3 não são aceitas; a 1 e a exclusão seguem
+possíveis". MEI ('2') fica de fora (letra da D-IB99/Q-IB105; a pergunta ao contador "o MEI pode optar?" segue do §14.1). Testes: peça
+(+ pré-checagem sem transação, decisiva travante depois do INSERT, MEI/não optante/não informado, 1 e excluir sem ler o regime, troca),
+ao vivo `adversarial-ib99-live.test.ts` **5/5** (o schema descartável ganhou `tb_entity_tax` ME/EPP), prova OK, app 16/16.
+
+**Gates do delta da D-IB102 (2026-11-01)** — socrático **0,76 ✅**; adversarial 1ª rodada **0,68 ✗** (sem HIGH, reprovado pelo score) →
+corrigido → **re-prova 0,86 ✅**:
+- **ADV-D102-01 (MEDIUM, provado)** — ORDEM DE TRAVAS invertida em relação ao faturamento: o registro travava X na opção e DEPOIS pedia S em
+  `tb_entity_tax`; o faturamento trava S em `tb_entity_tax` (declaração IBS/CBS) e DEPOIS lê a opção (S) no `issueInvoice`. Com um PUT do
+  regime (X em `tb_entity_tax`) na fila, fechava ciclo de 3 e o PUT era a VÍTIMA (1213, sem retry, com a cadeia já gravada). **Correção**: a
+  leitura TRAVANTE do regime é o 1º comando das transações de registrar, reviver e trocar (só para 2/3) — a mesma ordem do faturamento.
+  **Conhecimento provado (MariaDB 10.4)**: leitura TRAVANTE (`LOCK IN SHARE MODE`/`FOR UPDATE`, inclusive em linha inexistente) NÃO abre o
+  retrato do REPEATABLE READ — a 1ª leitura consistente depois dela ainda enxerga o que outra sessão gravou no meio; a fronteira da D-IB101
+  continua nascendo depois da espera (teste vivo "D-IB101 × D-IB102" com a opção 3). Re-prova: tempestades de 12 e 20 rodadas (até 100
+  faturamentos, 80 PUTs, revive e notas no meio) sem nenhum deadlock — o "LATEST DETECTED DEADLOCK" do InnoDB ficou o da 1ª rodada.
+- **LOWs corrigidos**: app aceitava JSON sem `regularAllowed` (agora estrito — falha de LEITURA, nunca "não informado" inventado para um ME/EPP);
+  a mensagem prometia ajustar para "pendente" pela tela (agora "ajuste-o para ME/EPP na aba Principal" — a tela só grava 1/2/3); a seção não
+  relia a visão depois de uma recusa nem depois de salvar a aba Principal (agora relê — `refreshEpoch` — SEM apagar o rascunho); a recusa
+  por regime virou a ÚLTIMA conferência (data já registrada, inexistente, vigente e já faturada vêm antes — a trava do regime segue a 1ª).
+- Testes permanentes: `ADV-D102-01` e "D-IB101 × D-IB102" no `adversarial-ib99-live.test.ts` (**7/7** ao vivo); a ordem das travas e a ordem
+  dos erros nos testes da peça; o recarregar sem perder rascunho no app. **Contagem final**: `tsc` limpo · setes-api **138/138 suítes, 2204
+  testes** · app `flutter analyze` sem aviso, **651 verdes** · prova OK. Commits LOCAIS `ib99`: api **b364418** · app **70bedc3** (sql sem mudança).
+  Regra permanente nova: `database/PADROES_BANCO.md` §9 **regra 14** (v2.3).
+- **Assunção A-IB4 (sem decisão — confirmar com o Valdo quando oportuno)**: o opSimpNac **4 "pendente"** segue ACEITO se gravado por outra via
+  (sincronizador/NT 009 — `emitterRegimeAt` lê 1–4), mas a tela do estabelecimento só grava 1/2/3 e a mensagem não promete o 4. Gravar o 4 pela
+  tela é mudança de produto, fora desta frente.
+- **Para a D-IB11 (quando o cálculo do regular nascer — sem ação agora)**: o faturamento hoje não lê o opSimpNac (recusa qualquer 2/3); quando
+  2/3 forem suportados, decidir se o `issueInvoice` também confere o opSimpNac (a linha 3 deixada por quem saiu do Simples).
+
+**Questões abertas (uma por vez)**: **Q-IB107** (quais notas formam a fronteira — §14.4; MEDIUM; Rec. (b) só as emitidas pelo ERP web) ·
+**Q-IB106** (estabelecimento que emite também pelo ERP Desktop — §14.3) · ⏳ **Q-IB108 — o PUT do estabelecimento que TIRA do Simples (3 → 1/2) com linha 2/3 futura deve AVISAR?**
+(socrático do delta; recusar está fora — a D-IB102 deixa a linha excluível). (a) **aviso não bloqueante no app ao salvar (o faturamento a
+partir da data da linha será recusado até excluí-la ou registrar a 1)**; (b) sem aviso (a aba já mostra o aviso vermelho). *(Rec.: (a).)*
+
+### 14.6 Rodada 4 da execução — D-IB103 (Valdo 2026-11-01)
+
+Termos (memória `terminologia-erp-desktop-web`, pedido do Valdo no mesmo dia): **ERP web** = setes-app + setes-api (+ APIs fiscais) · **ERP
+Desktop** = o Gestao2016, cujas notas chegam a `tb_invoice` pelo sincronizador/setes-sync.
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB103** (Valdo 2026-11-01: "(b) Só do ERP web" — fecha a Q-IB107) | A fronteira da D-IB101 conta SÓ as notas VIVAS emitidas pelo **ERP web** — as que nasceram pelo escritor único `issueInvoice` e por isso LERAM a opção (critério: evento **E** vivo em `tb_invoice_event`). As notas do **ERP Desktop** (sincronizador, sem evento E) e as COMPRAS de terceiros não contam — nunca leram a opção do ERP web; uma data digitada errado nelas não trava mais a opção. O campo `issuer` não serve de critério (o sincronizador grava `issuer` = cliente) |
+
+**Execução (mesma worktree/branch `ib99`)**: `@shared/invoice/emission-date` — `lastLiveEmissionDate` virou **`lastErpWebEmissionDate`**: a última
+`dt_emission` de nota viva da institution com EXISTS de evento E vivo (mesma institution/id/terminal), por varredura DESCENDENTE no índice
+`idx_invoice_live_emission` (076) que para na 1ª nota do ERP web — EXPLAIN provado (`key=idx_invoice_live_emission · Using where; Using
+index`). A peça da opção só troca o nome; o critério mora no dono da data de emissão. Testes: unidade (o SQL tem o EXISTS do evento E e
+os 3 parâmetros) · ao vivo `adversarial-ib99-live.test.ts` **8/8** (+ "D-IB103: nota do ERP DESKTOP com data 2062 e de hoje não trava a
+opção; a do ERP web trava"; as notas das corridas passaram a gravar o evento E, como o `issueInvoice`) · prova OK (a nota da corrida com
+evento E; EXPLAIN da consulta nova).
+
+**Gates do delta da D-IB103 (2026-11-01)** — 1ª rodada socrático **0,66 ✗** · adversarial **0,68 ✗** → corrigido → **re-prova 0,78 ✅ · 0,80 ✅**
+(sem HIGH/CRITICAL):
+- **ADV-D103-01 (MEDIUM, provado)** — a 1ª forma (notas `WHERE EXISTS (evento E)`) virou semi-join MATERIALIZADO no MariaDB 10.4: copiava todos os
+  eventos E e varria as notas do ERP Desktop mais novas — 1,3–1,6 s com o faturamento parado (300 mil notas). **Correção**: a fronteira é lida a
+  partir do FATO — `tb_invoice_event e STRAIGHT_JOIN tb_invoice i`, varredura descendente no índice novo **`idx_invoice_event_issue`
+  (`tb_institution_id`, `kind`, `deleted`, `dt_record`) na 076** — o `idx_invoice_live_emission` de `tb_invoice` (da D-IB101) SAIU, ficou sem
+  consumidor; a 076 nunca foi aplicada em schema nenhum (o dev está na 075), a versão final é a deste commit — e **devolve `e.dt_record`** (a data
+  que a nota do ERP web LEU; igual à `dt_emission` em todo caminho — `issueInvoice` e os backfills 042/046 —, conferido no dev). ANALYZE: **1+1
+  linhas lidas, 0,6–0,8 ms** (só ERP web 300 mil; misto com 150 mil do ERP Desktop mais novas; revivida; grupo com outra institution grande).
+- Fechados junto: **ADV-D103-02** (o sincronizador reescrevendo na MESMA PK o cabeçalho de uma nota do ERP web não move mais a fronteira — vale a
+  data do evento); prova pelo PLANO (pelos eventos, sem MATERIALIZED) e teste vivo por ANALYZE (`src/__tests__/adversarial-d103-live.test.ts`,
+  opt-in); textos (app e o 409 da API) dizem "nota emitida **por este sistema**"; o canônico `sql/03` aplica o índice DEPOIS do CREATE de
+  `tb_invoice_event`. Conferido sem efeito colateral: o `MAX(event)+1 FOR UPDATE` e a view `vw_invoice_life` seguem pelo PRIMARY; revive × nota
+  nova e C × E sem espera.
+- **Limites conhecidos (assunção A-IB5 — confirmar com o Valdo quando oportuno)**: (1) cada nota PENDENTE CANCELADA (soft-deleted) mais nova que a
+  última nota viva custa 1 leitura na varredura (10 mil = 61 ms; 100 mil = ~1 s; no dev: 0 — uma pendente cancelada costuma ser refaturada e
+  REVIVE na mesma PK); (2) se o sincronizador gravar `deleted='S'` na PK de uma nota do ERP web (a colisão de ids da Q-SY12, grupo do sync), a nota
+  sai da fronteira e ela RECUA — mesmo limite da Q-SY12, não investigado aqui (fronteira dos grupos).
+- Provas: `tsc` limpo · setes-api **138/138 suítes, 2204 testes** (+ 2 suítes ao vivo opt-in: **11/11**) · prova OK · app `flutter analyze` sem
+  aviso, **651 verdes**. Commits LOCAIS `ib99`: api **95181b9** · sql **b98274c** · app **6a69090**. Regra PADROES §9 regra 14 (d) reescrita
+  ("a leitura que decide sob trava parte do FATO que a define, pelo índice dele").
+
+### 14.7 Rodada 5 da execução — D-IB104 (Valdo 2026-11-01)
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB104** (Valdo 2026-11-01: "(a) Avisar na aba" — fecha a Q-IB106) | Quando o estabelecimento tem SINCRONIZADOR (chave viva em `setes_central.tb_sync_api_key` — ativa ou pausada), a aba "Regime IBS/CBS" AVISA que a opção de apuração vale só para as notas emitidas por ESTE sistema (o ERP web): as notas do ERP Desktop chegam pela sincronização sem passar pela opção (o desktop tem a própria chave da reforma — D-IB3). Só aviso: nada é recusado por isso. O texto visível não cita o sistema antigo (regra da casa) |
+
+**Execução (mesma worktree/branch `ib99`)**: a visão do sub-recurso ganhou **`desktopEmission`** (só a PRESENÇA da chave viva — `SELECT 1 … LIMIT 1`
+pela institution do token; a chave nunca sai); Swagger; app: aviso informativo na aba — rascunho do texto (**a redação final é do Valdo**): *"Este
+estabelecimento também envia notas de outro sistema pela sincronização: a opção registrada aqui vale só para as notas emitidas por este
+sistema."* Testes: peça (presença/ausência, nunca lê a chave), app (aviso com e sem sincronizador; `desktopEmission` estrito no JSON).
+
+**Gate do delta da D-IB104 (2026-11-01)** — socrático **0,82 ✅** · adversarial **0,84 ✅** (sem HIGH/CRITICAL). Conferido: institution do token,
+`adminGuard`, a chave nunca sai (só `1`; JSON leva o booleano), `ref` por `fk_sak_to_institution` (1 linha), texto sem o sistema antigo; a Setes
+(institution 1) tem chave no dev — a aba dela mostra o aviso. **Nota para a JANELA de merge (sem decisão nova — alinhamento com a D-PR47)**: a
+branch `merchandise` (fora do `main`) traz o FATO `tb_institution.source_kind` (W/L/P — "origem dos cadastros é fato da institution") e o ato
+"encerrar a transição" L→W deixa a chave do sincronizador INATIVA e viva em definitivo — com este predicado (presença da chave) o cliente que
+virou W seria avisado para sempre. **Ao juntar as duas branches, `desktopEmission` passa a ler `source_kind IN ('L','P')`** (um fato, um
+predicado) + o teste "D-IB104 × D-PR48: W depois de encerrar a transição não avisa"; com o grupo (D-TM10), a filial herda o fato da fundadora.
+Publicação: a API sobe ANTES ou junto do app (o app lê `desktopEmission` estrito).
+
+**Estado em 2026-11-01 (fim da sessão — "salva tudo" do Valdo)**: commits LOCAIS na branch `ib99` (sem push, sem merge): setes-api **3a7dbd3**
+(topo: 2d6c393 → 921149f → b364418 → 95181b9 → 3a7dbd3) · sql **b98274c** (0d3df12 → 070ddc7 → b98274c) · setes-app **b9a3416**
+(bef45ad → 8571d23 → 70bedc3 → 6a69090 → b9a3416). Suítes da D-IB104: `tsc` limpo · setes-api 138/138 (2205; + 2 suítes ao vivo opt-in 11/11) · app 652 verdes. ⚠️ O passo 4 do plano 10-21
+(bloco de privilégios + costura A1) foi PUBLICADO por outra sessão em 2026-11-01 (INDICE 10.66) — a `ib99` saiu do `main` ANTES dele: o merge
+pede juntar o `main` novo na `ib99` (conflito provável em `router.ts`/guarda por roteador — as 4 rotas novas caem na guarda V/I/A/E de
+`establishment`, D-PV9) e rodar a suíte + os dois gates do merge. **Retomar por aqui**: Q-IB108 (uma questão), depois a janela de publicação
+(renumerar 076/sql-71 se preciso; seed 71 antes do app; `errors:gen`; a 076 sobe no boot e o boot confere o CHECK; com a `merchandise`, o
+`desktopEmission` passa a ler `source_kind`).
