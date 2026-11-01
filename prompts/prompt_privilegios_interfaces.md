@@ -1711,6 +1711,127 @@ Pelo §13.8, na árvore viva (setes-api `tsx watch` = deploy):
 ⚠️ Para o passo 4 do plano (bloco de privilégios): a `privilegios-crud` também altera `package.json` e `src/modules/auth/auth.service.ts`
 — conflito esperado na fusão sobre o `main` novo.
 
+## 14. Passo 4 do plano 10-21 — bloco de privilégios + costura A1 da auth-api (2026-10-31 → 11-01, worktrees `D:\Gestao2027\privilegios\*`)
+
+**Escopo**: setes · ⚠️ TRANSVERSAL (setes-api, setes-app, nfse-api, núcleo `fiscal-api`, `sql/`). Commits LOCAIS na branch `privilegios-crud`
+de cada repo — NADA em `main`, nada aplicado ao banco, nada no GitHub até o "vai" da janela.
+
+### 14.1 O que foi feito
+- **Fusão** `privilegios-crud` ↔ `privilegios-catalogo` (D-PV14: a lista consumida = lista à mão ∪ `listGatedRoutes()`; D-PV42; error-codes
+  somados; nomes da D-PV53) e **merge do `main`** (e61f9fe no setes-api; a450909 no app).
+- **Costura A1** (D-AU3/D-AU6/D-AU8/D-AU12, parecer do guardião no §3 do `prompt_frente_auth_api.md`): pilha de views fundíveis —
+  `setes_central.vw_user_link` + `vw_interface_catalog` (`sql/70`) e, por schema, `vw_user_reach` + `vw_user_access` (migration **075**) —
+  lida VIVA (sem cache) pela biblioteca ÚNICA `fiscal-api/access` (setes-api pelo adaptador `@shared/access`; nfse-api pelo barrel; menu).
+  As 4 cópias do veredito morreram. Sessão viva em toda rota (401 `SESSION_REVOKED`, 503 `SESSION_UNAVAILABLE`); D-EA7 (`iat` ×
+  `tb_user.password_set_at`); GRANT da nfse-api estreitado (D-AU12, `nfse-api/ops/grants.sql` + `grants-d-au12-dev-local.sql`).
+- **D-PV48** (senha só na criação da credencial — 409 `PASSWORD_OWNER_ONLY`; 1ª senha de conta sem senha uma vez, A-PV23) e
+  **D-PV57…D-PV60** (VISUALIZAR acompanha todo verbo na escrita) na API e no app; script **D-PV20** (`scripts/sql/dpv20-contrato-setes.sql`).
+- **D-PV61** (seed **72**) e **D-PV62** (super/admin só por par registrado) — texto nas decisões abaixo.
+- **Retrabalho dos gates** (1ª rodada: socrático 0,74 · adversarial 0,78, ambos passando com achados): PAD SPACE fechado no `kind`, na
+  `i18n_key` e no nome do verbo (`CHAR_LENGTH(x) = CHAR_LENGTH(RTRIM(x))` nas views; chave fora da forma canônica não vai ao banco); nome do
+  verbo EXATO na guarda e no boot (A-PV26); 503 no `productAuth` do núcleo; boots conferem as views (nfse-api a central; setes-api as por
+  schema); config gravada pelo Super leva o par CONFIGURAR (D-PV25); `code` no 401 da seleção; 1ª senha opcional ao editar conta sem senha.
+
+### 14.2 Provas (bancos DESCARTÁVEIS — `setes_central` só lido)
+- `setes-api/scripts/prove-user-access-views.ts` — semântica por perfil, D-UC9, D-EA7 (fronteira do segundo), PAD SPACE, EXPLAIN fundido
+  (vínculo `const`, licença/concessão `eq_ref`), duas colações sem erro 1267, re-executável, GRANT com sombra do curinga: **PROVA OK**.
+- `setes-api/scripts/prove-privilege-catalog-window.ts` — catálogo do dev copiado + seeds 65 → 68 → 72 (duas vezes): hoje 4 classes de
+  alarme da D-PV51 → depois **ZERO**; os 4 pares da D-PV61 com a linha mantida.
+- `setes-api/scripts/measure-access-reads.ts` — **D-AU8 medida** (40 interfaces, 157 pares, 1 001 estabelecimentos, 10 991 vínculos,
+  92 316 concessões; pool 20; máquina do Valdo): p50 sessão 2,2 ms · veredito 4,9 ms · negado (2 leituras) 6,6 ms · menu 5–8 ms; rajada de
+  3 000 (sessão + veredito) com 60 paralelas = **~930 req/s**, p50 54 ms (fila do pool). Remedir na topologia da Onda 4.
+- Suítes: núcleo 60/60 · setes-api 155/156 (só `privilege-catalog-live`, que lê o catálogo do dev e fica verde com os seeds da janela) ·
+  nfse-api verde · app analyze limpo + 4/4.
+
+### 14.3 Assunções executadas — RATIFICADAS (Valdo, 2026-11-01, literal: *"Ratificar todas"* — todas as abaixo, menos a A-AU11, não executada)
+Do parecer do guardião da costura (A-AUn — `prompt_frente_auth_api.md`):
+- **A-AU1** forma em 4 views fundíveis (2 centrais, 2 por schema); presença = permissão; colunas derivadas e de nome em `utf8mb4_bin`;
+  `kind` em binário (agora também sem PAD SPACE).
+- **A-AU2** sessão lida no middleware de TODA rota protegida (setes-api e núcleo) → 401 `SESSION_REVOKED`; perfil VIVO no `role` até a
+  A2 (promover/rebaixar vale na hora, também nas guardas de admin e Super).
+- **A-AU3** os literais `1` (D-PV37) e `'institution-interfaces'` (D-PV11) só nas views centrais, amarrados por cerca às constantes
+  (`assertAccessViews` no boot); viram dado na A2 — toca a LETRA da D-PV37 ("todo lugar lê a constante"; SQL não importa TS).
+- **A-AU4** `active = 'S'` estrito (NULL conferido em 2026-10-31: nenhum).
+- ~~A-AU5~~ → decidida pela **D-PV62**.
+- **A-AU6** grupo Super fora da view (D-PV55); a tela delegável fica fora da licença e do escape do admin.
+- **A-AU7** a D-UC9 entra agora; D-GE3 e D-GE22 só ganham o lugar (uma linha cada). A Q-EA7 do parecer virou a D-EA7 (31/10) e JÁ
+  entrou (`password_set_at` na `vw_user_link`) — conferido também pela sessão da rodada Q-RS14 → Q-EA em 2026-11-01.
+- **A-AU8** motivo do 403 por 2ª leitura só na negação; licença sozinha = `vw_user_reach`; o contrato cru só nos editores.
+- **A-AU9** biblioteca `fiscal-api/access` (vira `auth-api/access` na A2); verbo pelo NOME em todas as pontas.
+- **A-AU10** GRANT pela lista da varredura + `vw_user_link`; sombra do `setes\_%` com prova negativa; `tb_privilege`, `ihp` e
+  `tb_tax_ibscbs_classification` fora.
+- **A-AU11** UNIQUE em `tb_interface.i18n_key` e `tb_privilege.description` — **NÃO executada** (DDL proposta; vira questão própria).
+Da D-EA7 (parecer do guardião, `prompt_endurecer_autenticacao.md`):
+- **A-1** o instante T vem do relógio de quem ASSINA o token (parâmetro, truncado ao segundo), nunca `NOW()` do banco — exceção nomeada à
+  letra da PADROES §10 regra 1 (o valor segue UTC). **A-2** `iat = T` vale (limite do mesmo segundo). **A-3** `password_set_at` NULL sem
+  backfill. **A-4** `iat` obrigatório nos dois verificadores, com o token de SELEÇÃO conferido.
+Da fusão da cerca:
+- **A-PV25** a regra do menu ficou "VISUALIZAR em toda tela kind 'T'", inclusive do grupo Super (sem o par, a tela sumiria até do menu do
+  Super, que poderia se trancar fora da tela Interfaces) — criar tela 'T' do grupo Super sem VISUALIZAR passa a dar 409.
+- **(a)** a 1ª chave de uma interface sem chave não conta como renomear; **(b)** o conserto de duplicata por troca de chave morreu (só
+  exclusão); **(c)** IMPRIMIR agora é consumido (PDF do boleto) e não se renomeia — o verbo livre é CATALOGAR (10); **(d)** a exclusão do
+  `cashier` na engrenagem depende de um fato do banco (não tem config).
+Do retrabalho:
+- **A-PV26** o nome do verbo consumido é EXATO (nem a caixa muda) na guarda da tela Privilégios e na conferência do boot; outra linha "com o
+  nome" de um consumido é recusada/acusada na comparação mais frouxa (caixa e espaços das pontas não contam). Motivo: desde a A1 quem decide
+  é a view + a biblioteca (binário, vocabulário fechado); 'faturar' tiraria o FATURAR de todos, inclusive do super.
+
+### 14.5 Re-gate do delta do retrabalho (2026-11-01) — socrático **0,78** · adversarial **0,84**, ambos passam, nenhum HIGH
+Corrigido sem decisão (commits locais: núcleo 9b19a9e · sql fb0d75c · setes-api 91e20cd · app 8f38bc3):
+- **M1** reativar o estabelecimento pela EDIÇÃO roda as migrations do schema ANTES de gravar (o mesmo provisionamento do onboarding; falhou =
+  nada gravado, segue 'N') — sem isso, a 075 faltando no schema derrubaria toda guarda daquele cliente.
+- UM classificador da falha de LER a sessão: 503 `SESSION_UNAVAILABLE` nasce no `sessionOf` da biblioteca (middleware do setes-api, troca do
+  token de seleção — era 500 — e `productAuth` das APIs fiscais); o adaptador traduz para o `HttpError` do setes-api (classes diferentes).
+- `kind` em BINÁRIO no script do Super (`super-password-reset.ts`); a forma canônica da chave é UMA (`INTERFACE_KEY_FORM` da biblioteca,
+  usada pelo catálogo como `INTERFACE_KEY_PATTERN`); o menu (`accessRows`) também só devolve chave canônica.
+- CONFIGURAR conferido pelo NOME exato (não só o id 11) no escritor da config, no `fields:gen --apply` (que agora também garante o par) e
+  na conferência do seed 68; o seed 65 registra o CONFIGURAR da config que cria — as SEIS ordens dos seeds 65/68/72 dão zero alarme
+  (`prove-privilege-catalog-window.ts`, item 5).
+- App: a tela Interfaces espelha o CONFIGURAR depois da 1ª config (o próximo ✓ não leva mais 409); a aba Usuários do Estabelecimento manda
+  null quando a senha é só espaço; guarda de schema e JSDoc no adaptador; comentário do `configure-privilege.ts` alinhado à D-PV62.
+- **A-PV27** — RATIFICADA (Valdo, 2026-11-01, literal: *"Ratificar"*): a guarda da tela Privilégios e o boot protegem TODO o vocabulário fechado da biblioteca
+  (`PRIVILEGE_NAMES`), não só os verbos consumidos — a view lê qualquer linha com esse nome como o verbo (ex.: um 2º CATALOGAR antes do seed 66).
+Limites conhecidos (registrados, sem decisão agora): (1) a leitura da sessão não tem PRAZO — com o banco lento ou o pool de 20 esgotado, a
+requisição fica na fila (o 503 só sai com ERRO); prazo e tamanho do pool entram na remedição da Onda 4; (2) corrida de baixa probabilidade:
+o PUT da tela Interfaces lê as configs sem trava — uma edição concorrente com a 1ª config pode tirar o CONFIGURAR recém-criado (a cerca acusa
+no boot). Encaminhada à rodada do endurecer: **Q-EA13** → decidida **D-EA13** (Valdo, 2026-11-01, literal: *"(b) Recusar já"*) e EXECUTADA
+aqui (setes-api 745d2af): peça `newPasswordSchema` (`@shared/auth/password`: 5–100 caracteres, `trim()` vazio recusado, espaço dentro vale)
+no users POST/PUT e no admin do onboarding; o `it.failing` do `adversarial-a1-delta-gate.test.ts` virou `it`. Questões para o Valdo: **Q-PV68** (par que VOLTA ao catálogo reativa as concessões antigas?) e
+**Q-PV69** (excluir a última config/campo de uma tela retira o CONFIGURAR no mesmo ato?).
+Suítes: núcleo 61/61 · setes-api 157/158 (só `privilege-catalog-live`) · nfse-api 69/69 · app 662 + analyze limpo.
+
+### 14.6 JANELA EXECUTADA (2026-11-01 — Valdo: *"Vai"*; o passo 4 do plano 10-21 está no `main` LOCAL, sem push)
+| Passo | Resultado |
+|---|---|
+| Banco (`setes-api/scripts/apply-seed.ts` da árvore viva, arquivos da worktree) | `sql/70` · script D-PV20 (30 telas no contrato da Setes) · seeds 65 → 68 → 72 — todos OK com as conferências internas. Conferido só lendo: `vw_user_link`/`vw_interface_catalog` existem, `tb_user.password_set_at` DATETIME, verbos 11 CONFIGURAR/12 CONSULTAR, `billing` só com CONFIGURAR, `establishment` V+CONFIGURAR, `users` sem EXCLUIR, painéis sem ALTERAR, `institution-interfaces` A/V/CONFIGURAR. |
+| GRANT da D-AU12 | só as linhas da seção 1a do `ops/grants.sql` ('%') + `grants-d-au12-dev-local.sql` (os 4 hosts do `fiscal_api` já existiam — conferido antes, porque GRANT a host inexistente criaria usuário sem senha). Prova negativa com o usuário REAL da nfse-api (`fiscal_api@localhost`): `tb_user`, `tb_user_password_reset`, `tb_institution_has_user` NEGADOS; `vw_user_link` (com `password_set_at`), cadastro, `setes\_%` e `fiscal_api` legíveis. |
+| `main` (todos fast-forward) | núcleo **9b19a9e** (+ `npm run build`; a setes-api e a nfse-api vivas apontam para ele por link) · setes-api **42278bf** + `errors:gen` (178 códigos) + **`check:privileges` = 0, zero alarme** (176 pares exigidos, 3 ausentes por decisão, 2 reservados) · nfse-api **c6cc83d** (inclui o `main` b6600c1 da NT 009, merge na branch antes da janela, suíte 73/73) · sql **ff79a50** · app **8b054f7**. |
+| Serviços (abas DESTA sessão: "setes-api 3000", "nfse-api producao", "setes-app web 5051") | a setes-api (:3000) e o app (:5051) estavam PARADOS antes da janela; a nfse-api antiga (PID 30124, aberta por outra aba) foi parada e subiu de novo. Boot da setes-api: `script 70: ok`, migration **075 aplicada** em `setes_setes`, views por schema ok, catálogo de privilégios OK. Boot da nfse-api: `Sessão viva (vw_user_link): ok`. |
+| Passeio (navegador do app, sessão do Super já aberta) | menu pela leitura nova (Usuários sem EXCLUIR; Meu Estabelecimento só V/CONFIGURAR; "Client interfaces" no grupo Super); cadastro de usuário sem campo de senha (D-PV48) e aba Permissões; OS abertas e faturadas com os selos; detalhe da OS 7376 → nfse-api **200** (NFS-e 707 cancelada). Console vazio; logs sem erro e sem `Auth OK` (D-EA12). |
+| **D-EA7 ao vivo** | o Valdo trocou a senha do Super pelo "Esqueci minha senha" no Chrome (e-mail do código 15:21:00 UTC; `password_set_at` = `used_at` = 15:22:01). A sessão ANTIGA do navegador do app recebeu **401 `SESSION_REVOKED`** em todas as chamadas e o app voltou ao login. O agente nunca viu senha nem código. |
+Pendente: push dos `main` (outro "vai" — varredura de segredos antes: setes-api, setes-app e sql são PÚBLICOS); remover as worktrees `privilegios/*` depois do push; o commit/push da Infra-IA (arquivos com mudança de outras sessões no mesmo disco). Destravados: execução do endurecer (pré-condição "passo 4 no `main`" cumprida localmente), passo 4a (campos em todas as telas), D-PV63 (UNIQUE), merge da `ib99`.
+
+### 14.4 Pendente até a janela
+~~Ratificar o §14.3~~ (feito) · ~~Q-PV67~~ → **D-PV63** (UNIQUE dos dois nomes = tarefa própria DEPOIS da janela) · ~~re-gate~~ (§14.5) ·
+~~Q-PV68~~ → **D-PV64** · ~~Q-PV69~~ → **D-PV65** · D-EA13 executada · ~~A-PV27~~ ratificada · janela com "vai".
+**Estado em 2026-11-01 (fim do dia)**: as cinco worktrees `privilegios/*` LIMPAS, tudo em commit local na `privilegios-crud` — núcleo
+9b19a9e · sql ff79a50 · setes-api 42278bf · nfse-api c6cc83d (com o merge do `main` b6600c1 — NT 009 do IBS/CBS; suíte 73/73) · app 8b054f7. Nada em `main`, nada aplicado a banco, nada no GitHub.
+**Roteiro da janela** (cada passo com o Valdo; serviços nas abas "setes-api 3000" — `tsx watch` = deploy ao salvar —, "nfse-api producao" —
+sem watch, restart manual — e "setes-app web 5051"):
+1. `sql/70` em `setes_central` (com `SET NAMES utf8mb4`) — coluna `password_set_at` + as duas views centrais.
+2. Script D-PV20 (`setes-api/scripts/sql/dpv20-contrato-setes.sql`) — o contrato de telas da Setes.
+3. Seeds **65 → 68 → 72** (qualquer ordem dá zero alarme — §14.5), conferências de cada um no fim.
+4. GRANT da D-AU12: `nfse-api/ops/grants.sql` seção 1a ('%') + `grants-d-au12-dev-local.sql` (localhost/127.0.0.1/::1) + prova negativa
+   (`SELECT password FROM setes_central.tb_user` NEGADO para o usuário fiscal).
+5. Núcleo no `main` + `npm run build` (o `dist` que o setes-api e a nfse-api consomem).
+6. setes-api no `main` (a 075 roda no boot; o boot confere as views centrais e as por schema) + `npm run errors:gen`.
+7. **`npm run check:privileges` = 0 ANTES de seguir** (D-PV62: verbo sem registro = negado a todos).
+8. nfse-api no `main` + restart manual (o boot confere a `vw_user_link`).
+9. sql no `main`; app no `main` + `flutter run` :5051.
+10. Passeio logado (menu, permissões, Interfaces com a 1ª config, troca de senha derrubando a sessão anterior).
+11. Push dos `main` só com OUTRO "vai" (repos públicos: varredura de segredos antes).
+Depois da janela: tarefa própria da D-PV63 (UNIQUE) e passo 4a (campos em todas as telas).
+
 ## Decisões arquiteturais registradas
 
 ### Rodada 1 — respondida em parte (Valdo, 2026-10-18)
@@ -2190,6 +2311,73 @@ Pelo §13.8, na árvore viva (setes-api `tsx watch` = deploy):
   afirmar "nenhuma concessão sem VISUALIZAR no banco" — a invariante é da escrita, não do dado; (3) execução decide, com os gates, como a
   tela de permissões MOSTRA a concessão antiga ao abrir (o salvar é que normaliza). Sequência da dependência do VISUALIZAR FECHADA
   (D-PV57…D-PV60).
+- ✅ **Q-PV65 → D-PV61 (2026-11-01, Rec. (a)).** Texto original: **4 pares REGISTRADOS que nenhum código confere depois da costura A1**
+  (passo 4 do plano 10-21 — a cerca da D-PV51 acusa no boot e o `check:privileges` recusa a janela): `billing` × VISUALIZAR (interface 'R',
+  quem fatura é o FATURAR da tela do ramo) e × ALTERAR (A-PV2, passado ao CONFIGURAR pela D-PV25), `establishment` × ALTERAR (tela do perfil
+  admin — D-PV5) e `users` × EXCLUIR (exclusão morta — D-PV19/D-UC1): (a) retirar os 4 por soft delete; (b) reservar os 4 com o motivo
+  (`RESERVED_PRIVILEGES`); (c) misto. Rec.: (a). Na 1ª apresentação o Valdo pediu explicação — "catálogo" = `tb_interface_has_privilege`, as
+  caixinhas da seção Permissões do cadastro do usuário; hoje marcá-las não muda nada.
+- **D-PV61** (Valdo, 2026-11-01 — fecha a **Q-PV65** = (a), literal: *"Retirar as 4"*) — os 4 pares saem do catálogo por SOFT DELETE
+  (`active='N'`, `deleted='S'` — PADROES §3.1), pelo seed **72** `sql/72_privilege_unconsumed_retire_seed.sql` (re-executável; a
+  conferência no fim FALHA o script se algum dos 4 seguir vivo; ordem 64 → 65 → 68 → 72, ANTES do setes-api da janela). Nada muda no
+  acesso: a `vw_user_access` só lê par vivo e, em 2026-11-01, nenhum usuário de `setes_setes` (único schema com `tb_user_has_privilege`)
+  tinha concessão em `billing`/`establishment`/`users`; concessão antiga noutro schema fica como está (D-PV60). Um desses pares só volta na
+  MESMA entrega do código que passar a conferi-lo (regra da D-PV9). Interface sem VISUALIZAR no catálogo (o `billing` fica só com o
+  CONFIGURAR do seed 68) já é tratada nas duas pontas da D-PV58 (`withVisualizar` e a tela só levam o VISUALIZAR quando o catálogo o tem).
+  **Prova** (2026-11-01): `setes-api/scripts/prove-privilege-catalog-window.ts` — cópia descartável das 6 tabelas do catálogo, seeds
+  65 → 68 → 72 aplicados DUAS vezes, a mesma conferência do `check:privileges`: hoje 4 classes de alarme → depois ZERO; os 4 pares com a
+  linha mantida (`N`/`S`). Próximo número: D-PV62 · A-PV25 · Q-PV66.
+- ✅ **Q-PV66 → D-PV62 (2026-11-01, Rec. (a)).** Texto original: **super e admin presos ao que está REGISTRADO no catálogo?** (gate socrático
+  da costura A1). Antes da costura a API não olhava o catálogo para os dois (A-PV1/D-PV24: o super escapa de tudo; D32: o admin passa
+  sempre); a `vw_user_access` (migration 075) dá ao super todo par REGISTRADO e vivo e ao admin todo par registrado menos as delegáveis —
+  verbo que o código confere sem registro barra até o super. (a) só os registrados; (b) super/admin escapam do registro na biblioteca
+  (volta a letra antiga, mas o catálogo deixa de ser a fonte única e o verbo exercido não aparece no menu nem na tela de Permissões).
+  Rec.: (a).
+- **D-PV62** (Valdo, 2026-11-01 — fecha a **Q-PV66** = (a), literal: *"Sim, só registrados"*) — super e admin passam por todo par
+  REGISTRADO e vivo em `tb_interface_has_privilege`, nunca por par que não existe: o catálogo é a fonte ÚNICA do que existe (D-AU3 presença
+  = permissão; D-PV50). REVÊ a letra da A-PV1/D-PV24 e da D32 só nesse ponto: o super segue escapando da LICENÇA e da concessão; o admin, da
+  concessão (menos nas delegáveis — D-PV11). Consequência aceita: verbo novo conferido pelo código sem o seed = negado a TODOS até o seed —
+  quem barra é a cerca (D-PV51: o boot grita; `check:privileges` e `build-web.ps1` param a publicação — D-PV16) e o roteiro da janela (passo
+  `check:privileges` com saída 0 ANTES de subir os serviços). A **D-PV52 segue** (o boot só grita): a premissa "o admin passa" caiu com esta
+  decisão, mas a D-PV52 registrou "não endurecer o boot depois — decisão consciente"; o gate continua sendo o teste e a publicação. Nada a
+  mudar no código (é o comportamento da 075). Conhecimento negativo: não pôr "o super passa sem olhar o registro" na biblioteca.
+  Próximo número: D-PV63 · A-PV25 · Q-PV67.
+- ✅ **Q-PV67 → D-PV63 (2026-11-01, Rec.).** Texto original: **quando criar o UNIQUE em `tb_interface.i18n_key` e
+  `tb_privilege.description`** (a A-AU11 do parecer do guardião da costura A1, não executada)? Fato do dev: 40 interfaces, nenhuma excluída,
+  nenhuma chave nem verbo repetido; as duas colunas em `utf8mb4_general_ci` (o UNIQUE recusaria também 'Orders'/'orders '). (a) depois da
+  janela, em tarefa própria; (b) na janela. Rec.: (a).
+- **D-PV63** (Valdo, 2026-11-01 — fecha a **Q-PV67** = (a), literal: *"Depois da janela"*) — o UNIQUE nos dois nomes é TAREFA PRÓPRIA
+  depois da janela do passo 4: script novo no `sql/` (guardião + `revisar-ddl.md`; provado em cópia descartável; confere duplicata viva E
+  excluída antes), e os cadastros Interfaces/Privilégios respondem 409 legível quando o nome colide com uma linha EXCLUÍDA (ou a revivem — a
+  tarefa decide com o guardião, padrão "reviver" da D-PR37). Até lá a defesa é a das telas (D-PV42, A-PV26) + o alarme do boot (D-PV51).
+  Próximo número: D-PV64 · A-PV27 · Q-PV68.
+- ✅ **Q-PV68 → D-PV64 (2026-11-01, Rec. (a)).** Texto original (re-gate socrático da costura A1, M2): **par que VOLTA ao catálogo reativa as
+  concessões antigas?** As concessões de um par retirado ficam em `tb_user_has_privilege` (D-PV60: nenhum script mexe nelas), mortas pela
+  view; na volta do par todas valem de novo, sem nenhum admin ver — o caso agudo é `users × EXCLUIR` (D-PV61) voltando com outro sentido.
+  (a) aceitar, e o ato que traz o par de volta (seed ou entrega) lista ANTES do "vai" quem volta a ter o verbo (molde da D-PV59); (b) a
+  retirada também aposenta as concessões (migration por schema na mesma janela do seed); (c) a volta exige concessão nova. Rec.: (a).
+- **D-PV64** (Valdo, 2026-11-01 — fecha a **Q-PV68** = (a), literal: *"Aceitar, mostrando antes"*) — par que volta ao catálogo REATIVA as
+  concessões antigas dele; por isso todo seed ou entrega que traz um par de volta (revive `tb_interface_has_privilege` soft-deletado) traz
+  junto a LISTA de quem passa a ter o verbo (por schema: usuário × interface × verbo das concessões vivas daquele par), mostrada ANTES do "vai".
+  Exceção: o CONFIGURAR que o escritor da config revive sozinho (D-PV25) — sem config o par não tinha uso, a concessão antiga volta ao sentido
+  de sempre. Fora desta decisão (limite conhecido): o Super re-marcar um par retirado na tela Interfaces não mostra a lista — se virar caso,
+  a tela ganha o aviso. Conhecimento negativo: a retirada de par NÃO apaga concessão por script (D-PV60) — a defesa é a lista na volta.
+  Em 2026-11-01 nenhum usuário de `setes_setes` tinha concessão nos 4 pares da D-PV61. Próximo número: D-PV65 · A-PV28 · Q-PV69.
+- ✅ **Q-PV69 → D-PV65 (2026-11-01, Rec. (a)).** Texto original (re-gate socrático da costura A1): **excluir a última config (ou campo) de
+  uma tela retira o CONFIGURAR no mesmo ato?** Hoje a exclusão deixa o par: ele vira "sobrando" (D-PV51) — o boot grita e o
+  `check:privileges` barra a publicação seguinte por um ato de rotina do Super. (a) sim, soft delete na mesma transação, salvo se o par for
+  exigido por código, pela regra (Configurações Gerais) ou por reserva — o espelho da criação (D-PV25) e o molde da D-PV61; (b) não — o
+  Super o tira à mão quando o boot acusar. Rec.: (a).
+- **D-PV65** (Valdo, 2026-11-01 — fecha a **Q-PV69** = (a), literal: *"Sim, retira junto"*) — a exclusão da ÚLTIMA config viva de uma
+  interface (sem campo vivo no catálogo) retira o par (interface × CONFIGURAR) por SOFT DELETE na mesma transação, salvo quando o par segue
+  EXIGIDO sem config (pela mesma peça `requiredPairsOf`: código, `general-configs` ou reservado). A resposta do DELETE diz se o par saiu
+  (`retiredConfigure`) e a tela Interfaces espelha. As concessões do par ficam (D-PV60); se a config voltar, o par revive com elas (exceção
+  da D-PV64). O nascimento e a morte do par passam pelo MESMO escritor (`interfaces.repository`) — a regra do CONFIGURAR fica simétrica.
+  **Alcance real (conferido na execução, 2026-11-01)**: a lista consumida tem o CONFIGURAR da ENGRENAGEM da fábrica do app em 35 telas — nelas
+  o par segue exigido sem config (não sai e não vira "sobrando"); a retirada acontece nas interfaces SEM consumidor do CONFIGURAR (ex.:
+  `billing`). Executada: setes-api (`softDeleteInterfaceConfig` + `removeInterfaceConfig` + `retiredConfigure` no DELETE e no Swagger),
+  app (a tela Interfaces tira o par quando a API diz que saiu); provada em banco descartável (última config → `N/S`; sobra config ou campo →
+  fica; id 11 com outro nome → intocado). Próximo número: D-PV66 · A-PV28 · Q-PV70.
 - **A-PV14 — RATIFICADA (Valdo, 2026-10-20; integridade do catálogo, não acesso — convive com a D-PV24)** — a guarda vale também para o super: ela protege o DADO do catálogo, não a
   permissão de quem edita.
 - ⏳ **Q-PV19** — a resposta veio repetida como "Q-PV17 - a"; a confirmar. **A-PV12** — o Valdo pediu para relembrar; a ratificar.

@@ -317,6 +317,10 @@ sessão de caixa — dizer "token"/"login") e **"contrato"** (ocupada — dizer 
   em cópia descartável antes da janela; `tb_user`, `tb_user_password_reset*` e afins FORA. O `SELECT` nos schemas de cliente (`setes\_%`)
   segue — estreitar lá é outra conversa (a view da D-AU3 é o caminho).
   **Rodada 1 da frente FECHADA (D-AU1…D-AU12)** — próximo: execução pela ordem da D-AU6 (costura A1 no passo 4 do plano de retomada).
+- **Costura A1 EXECUTADA em worktree (2026-10-31 → 11-01, passo 4 do plano 10-21)** — registro, provas, medição da D-AU8 e roteiro da
+  janela no §14 do `prompt_privilegios_interfaces.md`. Assunções do parecer do guardião **A-AU1…A-AU4 e A-AU6…A-AU10 RATIFICADAS** (Valdo,
+  2026-11-01, literal: *"Ratificar todas"*); a **A-AU5** virou a **D-PV62** (super e admin só por par REGISTRADO); a **A-AU11** (UNIQUE em
+  `tb_interface.i18n_key` e `tb_privilege.description`) NÃO foi executada — questão própria (Q-PV67, §14 de lá).
 
 ## 6. Fora de escopo / candidatas
 
