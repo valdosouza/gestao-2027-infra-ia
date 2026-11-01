@@ -2,6 +2,18 @@
 
 **Status**: Rodada 1 FECHADA (2026-10-31 — D-EA1…D-EA12, "uma pergunta por vez", à luz da frente auth-api). Rodada 2 ABERTA
 (2026-11-01 — Q-EA13 → D-EA13: senha só de espaços recusada já, na costura do passo 4) — NENHUMA questão aberta.
+**Preparação da execução FEITA (2026-11-01, seção final "⏸ Preparação da execução")**: pré-condição NÃO cumprida (passo 4 fora do `main`)
+— só documento: leitura do auth, parecer do guardião, DDL em rascunho pelo `revisar-ddl`, plano de testes, pré-medição do scrypt. A
+preparação abriu a fila **Q-EA14…Q-EA17 + A-EA1…A-EA9** (§P.6), a perguntar UMA por vez antes da onda de cada uma. Rodada 3: **D-EA14**
+(aviso = `tb_user_login_block_notice`), **D-EA15** (aviso na falha que leva a 10) e A-EA1…A-EA8 ratificadas — a Onda 1 não tem
+questão aberta; **D-EA16** (parte local do e-mail só conta com 4+ caracteres) e A-EA9 ratificada — a Onda 3 sem questão aberta; **D-EA17** (o peso
+final do scrypt sai da medição no servidor real) e **D-EA18** (a Onda 4 executa já, com o peso provisório; o ajuste vira recálculo no
+login) — fila ZERADA. **EXECUÇÃO INICIADA (2026-11-01)**: o passo 4 entrou no `main` (42278bf); **item 0 (script do Super, D-RS7 +
+D-RS13) EXECUTADO em worktree `super-reset` com gates 0,78/0,75 ✅, NADA commitado** (§P.8); o item 0 abriu Q-EA19…Q-EA22 (uma por vez) —
+**D-EA19** (aviso ANTES da senha), **D-EA20** (Super sem e-mail de login recusado) e **D-EA21** (e-mail mascarado em todo log da
+mailer) decididas e executadas; **D-EA22** (corrida rebaixar × redefinir = limite conhecido) — questões do item 0 FECHADAS; **gates do
+DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 — **D-EA23** (regra única do e-mail de login) e **D-EA24**
+(teto total de 60 s no aviso) decididas e executadas; seguem Q-EA25/Q-EA26 (uma por vez); próximo = Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -173,7 +185,7 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
 - **D-EA3** (Valdo, 2026-10-31 — fecha a **Q-EA3** = (b), literal: *"segue recomendacao"*) — ao BLOQUEAR a conta (D-EA1) o dono recebe
   e-mail NEUTRO, no máximo 1/h, texto único sem link de ação (molde D-RS4/D-RS12): "registramos tentativas de acesso que não foram
   concluídas; se não foi você, troque a senha" (pela D-PV48 = o titular pede código pela recuperação). O fato da vaga mora em tabela IRMÃ
-  PRÓPRIA `tb_user_login_notice` (mesmo molde da `tb_user_password_reset_notice`: PK `(tb_user_id, seq)`, `created_at` = instante em que
+  PRÓPRIA `tb_user_login_notice` *(NOME revisto pela D-EA14, 2026-11-01: `tb_user_login_block_notice`)* (mesmo molde da `tb_user_password_reset_notice`: PK `(tb_user_id, seq)`, `created_at` = instante em que
   o sistema tomou a vaga, sem `sent_at`; vaga sob SAVEPOINT na transação do gatilho — D-RS10; falha do SMTP = log — D-RS9). Consequência
   aceita: conta atacada no login E na recuperação recebe até 2 avisos/h (um de cada processo — princípio da D-RS8). **Efeito da
   auth-api**: nenhum na recomendação — nasce em `setes_central` e muda para o `auth_api` na A2 com as outras filhas (D-AU4, D-EA2); ter um
@@ -286,6 +298,119 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   "DTO de usuários" (mesma intenção; a D-EA5 já previa as três portas de escrita). O `it.failing` do `adversarial-a1-delta-gate.test.ts`
   virou `it`; teste novo em `users-d-pv48-d-pv58.test.ts`. A peça da D-EA5 (Onda 3) absorve `newPasswordSchema` junto do mínimo 8.
   Registro da execução também no §14 do `prompt_privilegios_interfaces.md`.
+
+**Rodada 3 — 2026-11-01 (a fila aberta pela preparação da execução — §P.6; uma por vez)**:
+
+- **D-EA14** (Valdo, 2026-11-01 — fecha a **Q-EA14** = (a), literal: *"(a) login_block_notice"*) — a tabela do aviso ao dono da D-EA3 se
+  chama **`tb_user_login_block_notice`** (revê só o NOME da letra da D-EA3, que trazia `tb_user_login_notice`; o resto da D-EA3 fica). Motivo
+  (parecer do guardião, §P.3): a própria D-EA3 justificou a tabela própria por "bloqueio de login é outro processo" — o nome diz o processo;
+  "login notice" costuma ser o aviso de acesso BEM-SUCEDIDO (aparelho novo), irmão possível de outra cadência que não pode dividir a
+  coalescência 1/h desta tabela; "block" e não "lock" (trava é vocabulário do banco na casa). Constraints `fk_user_login_block_notice_to_user`
+  e `ck_user_login_block_notice_seq` (o nome da FK é contrato da A2). **Efeito da auth-api**: nenhum — muda para o `auth_api` na A2 com as
+  outras filhas, pelo nome novo. Recusado: (b) `tb_user_login_notice` (letra da D-EA3, simétrica com a irmã do 67).
+- **D-EA15** (Valdo, 2026-11-01 — fecha a **Q-EA15** = (a), literal: *"(a) Ao atingir 10"*) — a vaga do aviso ao dono (D-EA3/D-EA14) é
+  tomada na FALHA QUE LEVA A JANELA A 10 (contagem antes do INSERT = 9, sob a trava), no máximo 1 por hora por conta (coalescência
+  `EXISTS created_at > NOW() - 1 HOUR`), sob `runIsolated` (D-RS10); a tentativa DURANTE o bloqueio não grava falha nem toma vaga — o caminho
+  bloqueado fica só-leitura. Sob ataque contínuo a janela deslizante volta a 10 a cada falha que envelhece, o gatilho dispara de novo e a
+  coalescência limita a 1/h (critério de sucesso 2). Motivo: é a letra "ao BLOQUEAR" da D-EA3 e cobre o stuffing que faz exatamente 10
+  palpites e passa à próxima conta; no login as 10 erradas JÁ são o abuso (D-EA1), diferente da recuperação, onde 3 pedidos/h são legítimos
+  e o aviso sai no pedido calado (D-RS8). **Efeito da auth-api**: nenhum — vai com o login na A2. Recusados: (b) a cada recusa durante o
+  bloqueio (molde da D-RS8); (c) os dois.
+- **A-EA1…A-EA8 RATIFICADAS** (Valdo, 2026-11-01, literal: *"Ratificar todas"* — o texto de cada uma no §P.6): A-EA1 falha e aviso valem
+  com o ACESSO inativo (fatos da credencial); A-EA2 protocolo do login do §P.3 (senha conferida FORA da trava, pré-filtro sem trava, caminho
+  certo também sob a trava, token assinado com a trava segura) + o limite da trava S das FKs de negócio até a A2; A-EA3 conta sem credencial
+  = inexistente, sem linha; A-EA4 piso só nas recusas; A-EA5 volume sem retenção, medido; A-EA6 bloqueio sustentado = limite conhecido;
+  A-EA7 sem a "2ª camada" 429 por e-mail; A-EA8 400 dos campos fica, corpo não-texto vira 400 (`bodyText`). **Com isto a Onda 1 não tem
+  questão aberta** — executa no dia em que o passo 4 entrar no `main` (§P.7).
+- **D-EA16** (Valdo, 2026-11-01 — fecha a **Q-EA16** = (a), literal: *"(a) Só com 4+ letras"*) — a regra da D-EA5 "a senha não pode conter
+  a parte local do e-mail de login" só se aplica quando a parte local (o trecho antes do `@`) tem **4 ou mais caracteres**; a comparação é
+  SEM maiúsculas e SEM acento (as duas pontas normalizadas do mesmo jeito, na peça `@shared/auth/password-policy` e no espelho Dart). Parte
+  local de 1 a 3 caracteres = a regra não se aplica (o resto da política — mínimo 8, lista de comuns, igual à atual — segue valendo). Motivo:
+  com `jo@…` toda senha com "jo" no meio seria recusada ("joaninha2026", "major-tom-88"); a regra quer pegar "valdo2026" para valdo@…, não
+  coincidência de duas letras. **Efeito da auth-api**: nenhum — vai com a peça da política na A2. Recusados: (b) sempre; (c) só a senha
+  IGUAL à parte local.
+- **A-EA9 RATIFICADA** (Valdo, 2026-11-01, literal: *"Ratificar"*) — a lista de senhas comuns da D-EA5 é comparada SEM caixa ("Senha@123" =
+  "senha@123"); vem de fonte pública com licença livre (ex.: SecLists, MIT) somada a uma lista brasileira; fica como ARQUIVO no setes-api,
+  carregado uma vez (o boot recusa subir sem ele); o app guarda uma cópia e um teste confere o SHA-256 das duas. **Com isto a Onda 3 não tem
+  questão aberta.**
+- **D-EA17** (Valdo, 2026-11-01 — fecha a **Q-EA17** = (c), literal: *"(c) Medir no servidor"*) — o PESO final do scrypt (os parâmetros da
+  D-EA9, `N=2^15,r=8,p=3`) é decidido pela MEDIÇÃO no servidor real, não pela máquina do dev (pré-medição de 2026-11-01: `p=3` ≈ 1,3 s por
+  verificação aqui, `p=1` ≈ 0,4 s — §P.6). Valem em qualquer peso: o hash só é calculado com a conta FORA do bloqueio (pré-filtro — A-EA2) e
+  o e-mail inexistente não calcula hash falso (o piso esconde). Recusados: (a) manter `p=3` e aceitar o piso acima de 1 s já; (b) `p=1`.
+  ⚠️ **Choque com a ordem (achado ao registrar, dito ao Valdo)**: a recomendação desta questão dizia "até lá a Onda 4 do endurecer espera";
+  mas a **D-AU11** exige o MD5 trocado ANTES da A2 e a **D-AU6** põe a A3 ANTES da Onda 4 do deploy (D-EA10 repete a ordem) — esperar o
+  servidor do deploy para executar a Onda 4 empurraria a A2 e a A3 para depois do deploy. O jeito de conciliar é a **Q-EA18** (§P.6).
+- **D-EA18** (Valdo, 2026-11-01 — fecha a **Q-EA18** = (a), literal: *"(a) Executar já"*) — a Onda 4 EXECUTA na ordem da D-EA10 (depois da
+  Onda 3, antes da A2), com o peso da D-EA9 (`N=2^15,r=8,p=3`) como valor PROVISÓRIO; a medição no servidor real (D-EA17) confirma ou
+  AJUSTA o peso depois, e o ajuste entra como troca de parâmetro: a peça reconhece "hash com parâmetros diferentes dos vigentes" e RECALCULA
+  no próximo login certo, na mesma transação, pelo MESMO caminho da migração do MD5 (compare-and-set; sem tocar o `password_set_at` — não
+  derruba sessão — exceção nomeada já registrada na cerca da D-EA7). Os parâmetros vigentes ficam num lugar só da peça (constante
+  versionada, nunca no `.env` solto); o formato `scrypt$<params>$<sal>$<hash>` carrega os parâmetros de cada senha, então senhas com peso
+  antigo seguem conferindo até o recálculo. Ordem da D-EA10/D-AU6/D-AU11 INTACTA (o MD5 sai antes da A2; a A3 antes do deploy). Motivo: hoje
+  não há servidor público (memória "nada em produção") — o peso só pesa na máquina do dev até o deploy; esperar a medição travaria a A2.
+  **Efeito da auth-api**: o recálculo por troca de parâmetro vai com a peça para a auth-api na A2 (como o do MD5). Recusados: (b) medir
+  antes numa máquina igual à do servidor (a Onda 4 e a A2 esperariam); (c) A2/A3 depois do deploy (revia a D-AU6).
+  **Com isto a fila da preparação (§P.6) está ZERADA — nenhuma questão aberta nesta frente.**
+
+**Rodada 4 — 2026-11-01 (questões abertas pela EXECUÇÃO do item 0 — §P.8; uma por vez)**:
+
+- **D-EA19** (Valdo, 2026-11-01 — fecha a **Q-EA19** = (b), literal: *"(b) Aviso primeiro"*) — no script do Super, o aviso da D-RS13 sai
+  DEPOIS do COMMIT, FORA do `withDeadlockRetry` e **ANTES de a senha aparecer** no terminal: o sinal fora da máquina precede a entrega do
+  segredo (o motivo da D-RS13). A espera é limitada pelos tetos do SMTP (15/15/30 s — D-RS17, ~1 min); o terminal avisa que cancelar na
+  espera deixa a senha trocada e desconhecida — roda-se de novo (cada rodada, um aviso). O desfecho do aviso (enviado / ⚠ não enviado) é
+  dito ANTES da senha. **EXECUTADA na mesma hora** na worktree `super-reset` (script + cerca S6 invertida + teste do adversarial "aviso antes
+  da senha" + `CLAUDE.md` do setes-api; 59/59 + `adversarial-d-rs4-gate` 23/23; `tsc` limpo). Recusados: (a) senha primeiro + "NÃO feche";
+  (c) sem a linha.
+- **D-EA20** (Valdo, 2026-11-01 — fecha a **Q-EA20** = (a), literal: *"(a) Recusar"*; MUDA o comportamento descrito na D-PV46) — o script
+  RECUSA, sem escrita, redefinir a senha de Super SEM e-mail de login (grupo 2, vivo, não vazio): o login é pelo e-mail — a senha nova não
+  serviria para entrar, o aviso da D-RS13 não teria destino e a troca só derrubaria as sessões (D-EA7). Duas camadas: o ENSAIO anuncia
+  "SEM E-MAIL DE LOGIN — o --vai será RECUSADO" e o `--vai` recusa antes da transação; o ATO (`resetSuperPasswordTx`) reconfere SOB a trava
+  da linha do usuário (veredito `no-login-email`). A saída: cadastrar o e-mail de login do Super antes e rodar de novo (o script não
+  cadastra e-mail — fora da exceção da D-PV46). **EXECUTADA na mesma hora** na worktree `super-reset` (peça + script + dublês dos dois
+  testes + prova ao vivo no schema descartável com um Super ativo sem e-mail; 61/61; nenhuma sobra de schema descartável). Recusado: (b)
+  manter a troca com o aviso no log.
+- **D-EA21** (Valdo, 2026-11-01 — fecha a **Q-EA21** = (a), literal: *"(a) Mascarar em todos"*) — todo e-mail que vai ao LOG sai
+  MASCARADO (`v***@setes.com.br` — 1ª letra + domínio), para TODO e-mail que a casa envia (código de recuperação, aviso ao dono — D-RS4 —,
+  aviso ao Super — D-RS13): a regra é UMA e mora na peça de envio — `@shared/mailer` exporta `maskEmail` e `mailErrorForLog` (código,
+  código de resposta do SMTP e a mensagem com TODO endereço mascarado; `response`/`rejected` do nodemailer nunca vão crus ao log); os logs
+  da própria mailer ("Email enviado", modo sem SMTP) e dos chamadores (falha do envio da recuperação e da D-RS4, código em modo dev, aviso
+  da D-RS4 em dev, aviso do Super) passam por ela; o `maskEmail` do módulo auth virou reexporte. O transporte recebe o endereço inteiro (só
+  o LOG muda). Em dev o código de recuperação segue no log, agora com o e-mail mascarado. **EXECUTADA na mesma hora** na worktree
+  `super-reset` (teste novo `mailer-mask-d-ea21.test.ts`; o `ADV-RS13-01` do gate virou `it`; dublês da mailer nos 4 arquivos de teste
+  herdam as funções reais; mailer + recuperação + item 0 = 172 verdes). Recusados: (b) só no aviso do Super; (c) aceitar e corrigir o texto.
+  Efeito na auth-api: nenhum — a mailer é da OPERAÇÃO (D-EA4); a regra vale para quem a usar.
+- **D-EA22** (Valdo, 2026-11-01 — fecha a **Q-EA22** = (a), literal: *"(a) Limite conhecido"*) — a corrida "redefinir a senha do Super pelo
+  script × outro Super rebaixar/revogar o vínculo pela tela de Usuários no MESMO instante" fica como LIMITE CONHECIDO: o
+  `setInstitutionLinks` (módulo `users`) muda `kind`/`active` do vínculo sem a trava da linha do usuário, então a senha nova pode cair numa
+  conta que, no COMMIT, já é admin; o desfecho é o de uma ordem válida ("redefine → rebaixa"), sem escalada de acesso — só a ordem no relógio
+  se inverte. Os testes `ADV-RS16-02a/b` (`adversarial-super-reset-gate.test.ts`, ao vivo em schema descartável com a FK real) FIXAM a
+  semântica (conhecimento negativo: não "consertar" sem decisão). Gatilho para rever: a A2 (os escritores de acesso mudam para a auth-api
+  e a trava passa a ser a linha de `tb_user_credential`) ou um caso real. Recusado: (b) o `setInstitutionLinks` tomar a trava da linha do
+  usuário como 1º passo (mexe no módulo `users`, fora deste item). Sem execução nova.
+  **Com isto as questões do item 0 estão FECHADAS (D-EA19…D-EA22).**
+
+**Rodada 5 — 2026-11-01 (questões abertas pelos gates do DELTA do item 0 — §P.8; uma por vez)**:
+
+- **D-EA23** (Valdo, 2026-11-01 — fecha a **Q-EA23** = (a), literal: *"(a) Regra única"*) — "o e-mail de login do Super" para o script é UM,
+  escolhido por UMA regra, na peça `pickLoginEmail` (`super-password-reset.ts`): o 1º (na ordem do id) e-mail de login vivo (grupo 2,
+  vínculo e `tb_mailing` não excluídos) que, APARADO, é um endereço válido pelo MESMO `z.string().email()` do cadastro — devolvido aparado;
+  nenhum válido = sem e-mail de login (recusa da D-EA20). A LISTA (`listSuperAccounts` traz os candidatos em `GROUP_CONCAT` na ordem do id)
+  e o ENSAIO usam a peça; o ATO aplica a MESMA peça SOB a trava e devolve o escolhido no veredito (`{ status: 'reset', userId, loginEmail }`);
+  o aviso da D-RS13 vai a ESSE e-mail (o script monta `{ ...target, loginEmail: verdict.loginEmail }`). Efeitos: 1º e-mail em branco + 2º
+  válido → vale o 2º (o login entra por ele e o aviso sai a ele); espaço no fim → vale aparado; e-mail gravado como lista ou só de espaços
+  → recusa ANTES da transação; e-mail trocado por SQL entre a lista e o ato → o aviso vai ao escolhido sob a trava. **EXECUTADA na mesma
+  hora** na worktree `super-reset` (peça + script + dublês dos 3 testes; os achados ADV-EA20-01a/b/c e ADV-EA20-02 viraram `it` e os 3
+  testes ao vivo foram reescritos para a regra nova; super-reset = 97 verdes). Recusados: (b) só alinhar a lista ao ato; (c) limite conhecido.
+- **D-EA24** (Valdo, 2026-11-01 — fecha a **Q-EA24** = (a), literal: *"(a) Teto de 60 s"*) — a espera do aviso ao Super (D-EA19) tem TETO
+  TOTAL de 60 s (`SUPER_NOTICE_CAP_MS`, corrida entre o envio e um relógio, na peça `sendSuperResetNotice`); estourado, o desfecho é
+  `unconfirmed` — a tela diz "⚠ Aviso ao Super NÃO CONFIRMADO em 60 s (pode ainda sair — o desfecho vai ao log)" e a senha aparece; o envio
+  SEGUE em segundo plano e o desfecho tardio (confirmado ou falhou) vai ao log, mascarado, nunca como rejeição solta; o processo só termina
+  quando o servidor de e-mail responder ou desistir (a senha já está na tela). Junto, o transporte ganhou `dnsTimeout` de 15 s explícito
+  (o padrão do nodemailer 6.10 é 30 s — o "DNS sem teto" do gate estava errado nesse ponto; o teto total segue necessário porque o
+  `socketTimeout` conta só SILÊNCIO). Conhecimento negativo: os tetos do SMTP nunca limitam a espera TOTAL; quem precisa de teto total o
+  põe por cima. **EXECUTADA na mesma hora** na worktree `super-reset` (peça + transporte + script; testes do teto com relógio curto —
+  "unconfirmed", confirmação e falha tardias no log, relógio desligado no envio rápido; o `ADV-EA19-02` virou `it` e passa com o nodemailer
+  REAL contra o SMTP local que pinga a resposta; 125 verdes nas suítes do item). Recusados: (b) outro teto; (c) limite conhecido.
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -419,3 +544,475 @@ Copiar para a sessão nova:
 > registrada em "Decisões arquiteturais registradas" deste prompt (próxima = D-EA14) + uma linha no §6.3 do plano. Ao fechar cada item:
 > skill `atualizar-infra-ia` (INDICE com `git fetch` antes de numerar — o repositório tem dois clones e é PÚBLICO; `CLAUDE.md` da raiz;
 > memória `endurecer-autenticacao`); commit da Infra-IA só dos próprios trechos, com o pedido do Valdo.
+
+## ⏸ Preparação da execução (2026-11-01 — a pré-condição ainda NÃO está cumprida; só documento)
+
+Sessão aberta pelo prompt acima. **Pré-condição conferida em 2026-11-01**: o `main` do setes-api está em **e61f9fe** (recuperação de senha +
+D-GE4); o passo 4 (bloco de privilégios + costura A1) segue na branch `privilegios-crud` (ponta **42278bf**, com a D-EA7 e a D-EA13 —
+745d2af), sem merge, em sessão própria. Por isso NENHUM código, branch ou worktree desta frente foi criado: a preparação abaixo é só
+documento, para a execução começar no dia do merge sem reabrir leitura. Toda leitura de código foi feita na worktree
+`D:\Gestao2027\privilegios\{setes-api,setes-app,sql}` SÓ PARA LER (nada editado lá); o banco do dev foi lido só por contagem.
+
+### P.1 Números e estado conferidos (refazer a conferência na hora — outras frentes andam)
+
+> **Atualização 2026-11-01 (mesma sessão, depois da fila zerada)**: o passo 4 ENTROU no `main` do setes-api — `main` = **42278bf** (o
+> fast-forward da `privilegios-crud`; sql `main` = ff79a50; núcleo `main` = 9b19a9e); a worktree `privilegios` foi removida pela sessão do
+> passo 4. **Pré-condição CUMPRIDA** — a execução começa pelo item 0 (§P.7). Números: sql livre = **74** (73 = `ib113`, sem merge);
+> migration livre = **077** (075 no `main`, 076 = `ib99`).
+
+- **Scripts sql** ocupados: 64–73 (66 `merchandise`, 67 recuperação, 68/70/72 `privilegios`, 69 `terminal`, 71 `ib99`, 73 `ib113`) →
+  próximo livre **74**. **Migrations** do setes-api: 075 (`privilegios`), 076 (`ib99`) → próximo **077**. As duas tabelas novas são de
+  `setes_central` (D-EA2/D-EA3): vão em SCRIPT sql numerado (molde do 67) + espelho no `sql/01`, não em migration por schema.
+- **Banco do dev** (`setes_central.tb_user`, leitura de 2026-11-01): 13 usuários (3 vivos), **13 senhas MD5 em MAIÚSCULAS**, nenhuma
+  vazia, nenhuma de outra forma; nenhuma tabela `tb_user_login*` ainda. `tb_user.password` = `varchar(100)`.
+
+### P.2 Leitura do código (branch `privilegios-crud` 42278bf) — o que cada item toca
+
+| Item | Arquivo · trecho | Hoje | Muda para |
+|---|---|---|---|
+| 0 | `src/modules/auth/super-password-reset.ts` + `scripts/reset-super-password.ts` (`pickTarget`) | 2+ Supers ATIVOS = recusa citando "a tela de Usuários do Super"; `--user-id`/`--email` só servem entre inativos; nenhum e-mail ao Super | D-RS7: nome explícito vale também entre ativos (sem nome segue recusando, mensagem sem a tela); D-RS13: e-mail neutro ao login do alvo DEPOIS do COMMIT, falha = log |
+| 0 | `setes-api/CLAUDE.md` "Senha perdida do SUPER" | cita "Recusa … 2+ Supers ativos" e a tela | reescrita para D-RS7/D-RS13/D-RS14/D-RS16 (a D-PV12 já não aparece na versão da branch; o texto de 2+ ativos sim) |
+| 1 | `src/modules/auth/auth.service.ts` `login` (l. 68–88) | sem transação, sem piso de tempo; compara MD5 por `toUpperCase() !==` (não constante); "Usuário inativo" (401) e "sem institution ativa" (**403**) saem DEPOIS da senha certa | D-EA1/D-EA6: trava da linha do usuário → contagem na janela → veredito; UMA 401 no MESMO piso; falha gravada; log da D-EA11 |
+| 1 | `src/modules/auth/auth.routes.ts` `POST /auth/login` (l. 91–109) | lê `req.body` CRU — **achado da preparação**: `email` em array vira SQL inválido no mysql2 3.22 (`= 'a', 'b'`) → **500**; `password` objeto → `createHash().update(obj)` lança → **500** (o objeto no `email` vira `'[object Object]'` no 3.22 — conferido, sem injeção) | a coerção ÚNICA `bodyText` (`@shared/auth/login-email`), como a recuperação: não-texto = 400, nunca 500 |
+| 1 | `auth.service.ts` `withResponseFloor`, `inPasswordResetTx`, `alarmNeutral`, `runInBackground`, `claimOwnerNotice` · `auth.repository.ts` `lockUserForPasswordReset` | moldes LOCAIS da recuperação | o login reusa os mesmos moldes (forma de compartilhar: §P.3) |
+| 1 | `src/server.ts` (boot) | `assertPasswordResetReady` (script 67), `assertMailerReady` | + conferência das duas tabelas novas (script 74) e, na Onda 2, do `OPS_ALERT_EMAIL` em produção |
+| 2 | `src/shared/mailer/mailer.ts` | única porta de e-mail; `assertMailerReady`/`mailerConfigProblems`/`isProduction` | `OPS_ALERT_EMAIL` entra na conferência de produção (molde D-RS5) + pré-voo `scripts/pre-deploy-tz-check.ts` |
+| 3 | `src/shared/auth/password.ts` `newPasswordSchema` (5–100, só espaços recusado — D-EA13) · portas: `users.dto.ts` POST/PUT, `institutions.dto.ts` (admin), `auth.service.ts` `changePassword` (`length < 5` → 400) | mínimo 5 | peça `@shared/auth/password-policy` absorve o `newPasswordSchema` |
+| 3 | app: `apps/web/.../users/presentation/page/user_page.dart` (l. 157–166, `minLength(5)`), `.../institutions/presentation/widget/institution_users_tab.dart` (l. 280–283, `minLength(5)`), `.../institutions/presentation/widget/institution_tab.dart` (l. 95, `< 5`), `packages/core/.../auth/presentation/page/change_password_page.dart` (l. 44, `< 5`) | 4 telas, 3 formas de escrever a mesma regra | um validador em `packages/setes_validators` (espelho) usado pelas 4 |
+| 4 | `md5Password` em `users.service.ts` (l. 139 e 180), `institutions.service.ts` (l. 104), `auth.service.ts` (`changePassword`), `super-password-reset.ts` (`hashInitialPassword` + `/^[0-9A-F]{32}$/`) | todos os escritores passam pela peça (conferido de novo — confirma a D-EA9) | a peça grava `scrypt$…`; o login reconhece os dois formatos |
+
+### P.3 Parecer do guardião (`setes-conceito`, 2026-11-01) — `tb_user_login_failure` (D-EA2) e o aviso da D-EA3
+
+Pedido e lido nesta sessão (só leitura; o agente leu o molde do 67, o auth da `privilegios-crud`, PADROES §3/§3.1/§9/§10/§11 e a auth-api
+§3–§6). Afirmações conferidas depois por leitura direta: a peça `@shared/db/savepoint.runIsolated` existe; FKs para
+`setes_central.tb_user` em `tb_order` (migration 015), `tb_user_has_privilege` (003), `tb_institution_has_user` e nas filhas do 67.
+
+- **Conceitos**: FALHA = "uma senha ERRADA foi julgada contra a credencial do usuário, num login ADMITIDO (conta fora do bloqueio), no
+  instante T"; AVISO = "o sistema tomou a vaga horária de avisar o dono de que o login da conta foi bloqueado". Duas PEÇAS (fatos puros,
+  sem regra embutida, sem coluna de estado); o `login` é a COMPOSIÇÃO (serializador da credencial + falha + vaga do aviso isolada + piso da
+  recusa + mailer + log da D-EA11). O código fica no módulo `auth` (um consumidor só; o módulo inteiro muda para a auth-api na A2) — nada
+  vai para `@shared`. **Nenhuma divergência com decisão do Valdo**; um nome diferente da letra da D-EA3 e o momento do aviso viram questões.
+- **Nomes**: `tb_user_login_failure` CONFIRMADO (`_attempt` seria a opção (c) recusada na D-EA2). Aviso: recomenda
+  **`tb_user_login_block_notice`** no lugar de `tb_user_login_notice` — a D-EA3 justificou a tabela própria por "bloqueio de login é outro
+  processo"; "login notice" costuma ser o aviso de acesso BEM-SUCEDIDO (aparelho novo), um irmão possível de outra cadência → **Q-EA14**.
+  Os nomes das FKs são CONTRATO da A2 (o DROP da FK entre bancos é pelo nome).
+- **Falha** = PK + `created_at` + colunas padrão, sem `kind` (causa única; motivo só no log — D-EA11). **Grava**: senha errada contra
+  credencial EXISTENTE, inclusive com usuário ou vínculo inativo/ausente (o fato é da CREDENCIAL; o acesso é a `vw_user_link` — D-AU5). **Não
+  grava**: senha certa (qualquer estado — D-EA6), e-mail inexistente, **conta SEM credencial** (`password` NULL ou `''` — o predicado da
+  A-PV23; na A2 "sem credencial" é a ausência da linha-mãe), tentativa DURANTE o bloqueio, recusa por contenção na trava.
+- **Tentativa no bloqueio não grava** (nenhum palpite é julgado, nem o certo): ≤ 10 linhas por 15 min por conta (≤ 960/dia sob ataque, ~25–30
+  MB/ano por conta atacada com o índice, sem retenção — §3.1); "50 erradas em paralelo" = exatamente 10 − (falhas já na janela); o bloqueio
+  expira sozinho 15 min depois da 1ª das 10 (se a recusa gravasse, o próprio dono tentando de novo se bloquearia para sempre).
+  **Conhecimento negativo**: o julgamento NÃO filtra por `password_set_at` — senão trocar a senha (até pelo script do Super) desbloquearia,
+  contra a letra da D-EA1. **Limite conhecido**: quem conhece o e-mail mantém a conta bloqueada (~1 palpite a cada 90 s); o aviso 1/h é o
+  sinal ao dono.
+- **Leitura que decide**: índice **`idx_user_login_failure_window (tb_user_id, created_at)`** + `COUNT(*) … created_at > NOW() - INTERVAL 15
+  MINUTE` (a letra da D-EA1; como o bloqueio não grava, a janela nunca passa de 10 entradas — `range` + `Using index`, qualquer que seja a
+  história). Recusados: COUNT pelo prefixo da PK (varre a história sob a trava) e `ORDER BY seq DESC LIMIT 1 OFFSET 9` (exige a invariante
+  "seq cresce com created_at", que o NTP quebra — teste da maquete). `deleted`/`updated_at` NÃO entram no julgamento (falha é fato que
+  aconteceu; soft delete não desbloqueia — "sem botão" por construção). `created_at` = `NOW()` do banco em UTC (§10 regra 1 — a exceção do
+  relógio da D-EA7 NÃO se aplica aqui).
+- **Aviso**: sem `kind` (causa única = o nome); coalescência `EXISTS(created_at > NOW() - INTERVAL 60 MINUTE)` sob a trava (≤ 24 linhas/dia,
+  sem índice extra); vaga sob SAVEPOINT pela peça `runIsolated` (D-RS10 — sem ele, um GRANT esquecido desfaria justamente a 10ª falha e a conta
+  nunca bloquearia); destinatário = e-mail de login GRAVADO. Momento recomendado: **na falha que LEVA a janela a 10** ("ao BLOQUEAR" — D-EA3;
+  cobre o stuffing que faz exatamente 10 e passa à próxima conta, e o caminho bloqueado fica só-leitura) → **Q-EA15**.
+- **Protocolo do login** (pela trava da D-EA1 e a D-EA9 à frente): a senha é conferida FORA da trava; quatro ajustes — **(a)** o caminho da
+  senha CERTA também passa pela trava antes de revelar o veredito (senão o 1205 → 401 vira palpite GRÁTIS: o errado não grava e o certo
+  daria token); **(b)** sob a trava, o hash travado tem de ser o conferido (mudou = reconfere contra o travado); **(c)** pré-filtro SEM trava
+  (COUNT consistente fora de transação): bloqueada = 401 sem conferir senha e sem trava — o scrypt e a fila não amplificam o ataque;
+  **(d)** o token é assinado com a trava segura (fecha a troca de senha entre a admissão e a assinatura). Sequência:
+
+  ```
+  1. conta = findUserByEmail (fora de transação); sem conta, ou password NULL/'' → 401 (log: inexistente / sem credencial)
+  2. pré-filtro: COUNT na janela (consistente, autocommit); ≥ 10 → 401 (log: bloqueado)
+  3. veredito = confere(senha, conta.hash)                      -- FORA da trava (na Onda 4: scrypt)
+  4. withDeadlockRetry: BEGIN
+     a. SELECT id, password, active FROM setes_central.tb_user WHERE id = ? AND deleted = 'N' FOR UPDATE WAIT 5   -- 1º statement
+        sumiu → 401 | hash ≠ conta.hash → reconfere contra o hash travado
+     b. antes = COUNT(*) na janela (consistente — regra 13); antes ≥ 10 → 401, nada gravado, veredito NÃO olhado
+     c. errada → INSERT (seq = MAX+1); se antes + 1 = 10: vaga do aviso via runIsolated (D-RS10); COMMIT → 401; e-mail depois, em 2º plano
+     d. certa  → [Onda 4: regrava MD5 em scrypt sem tocar password_set_at — D-EA9]; vínculos (vw_user_link, consistente); D-UC12 só aqui;
+                 inativo / sem vínculo → 401 sem gravar (D-EA6); senão assina o token → COMMIT → 200 (sem esperar o piso)
+     1205 → 401 neutra, nada gravado, aviso de contenção no log; só 1213 reexecuta (regra 4)
+  ```
+- **Riscos registrados**: fila de logins da mesma conta (espera 5 s; acima, 401 neutra); tempo como oráculo sob contenção (limite já aceito
+  na recuperação); a `vw_user_link`/`authMiddleware` leem consistente e não esperam; o PUT do cadastro trava `tb_entity` → `tb_user` sem
+  ciclo com o login. ⚠️ **Toda tabela com FK para `tb_user` (pedido, privilégio, vínculo, filhas do 67) toma trava S na linha do usuário no
+  INSERT até o COMMIT** — o login da MESMA conta espera a transação de negócio aberta e, passados 5 s, quem digitou a senha CERTA recebe
+  "Email ou senha inválidos" (medir na prova; some na A2, quando a trava vira a linha de `tb_user_credential`, que nenhum negócio referencia).
+  Recusado `FOR SHARE` no caminho certo (a regravação da D-EA9 promoveria S → X: dois logins paralelos = 1213 — regra 8).
+- **Veículo**: script `sql/NN_user_login_failure_ddl.sql` em `setes_central` (NN = 74 hoje), re-executável, espelho no `sql/01` logo depois de
+  `tb_user_password_reset_notice`; boot confere as DUAS tabelas pelas colunas (sem elas, toda senha errada viraria 500) — o índice não entra
+  no boot (sem ele o login fica certo, só lento; conferido pelo EXPLAIN da prova); aplicar ANTES do setes-api (a árvore viva é deploy); fora
+  do GRANT do usuário fiscal (D-AU12, lista positiva).
+- **Nomes e peças no código**: `lockUserForPasswordReset`/`PASSWORD_RESET_LOCK_WAIT_SECONDS` passam a servir ao login → renomear pelo conceito
+  (**`lockUserCredential`**/`CREDENTIAL_LOCK_WAIT_SECONDS` — o serializador de TODO fato da credencial; a A2 troca UMA função; nada de 2ª
+  função de trava). `claimOwnerNotice` reimplementa à mão a receita do `runIsolated` → uma função do módulo auth sobre `runIsolated` +
+  `alarmNeutral`, parametrizada pela PORTA da tabela de cada processo (nunca por um `kind` que misture processos). `withResponseFloor` →
+  "piso da recusa neutra" do módulo auth com constante própria **`LOGIN_REFUSAL_FLOOR_MS`** (medida no gate e de novo na Onda 4). `maskEmail`
+  sai do `super-password-reset.ts` para helper do módulo auth (log da D-EA11 — motivo interno ganha "sem credencial" e "contenção").
+  `assertPasswordResetSchema` → conferência por LISTA (tabela, colunas, script, decisão) de todos os fatos da credencial. D-UC12 (convite
+  aceito no login) só DEPOIS da admissão — senha certa em conta bloqueada nunca aceita convite.
+
+### P.4 DDL — RASCUNHO pelo `revisar-ddl` (NÃO aplicado em lugar nenhum)
+
+Texto do guardião (cabeçalho longo dele resumido aqui em comentário curto — o script final leva o cabeçalho completo no molde do 67, com o
+conceito das duas tabelas, o protocolo de trava, o que NÃO grava e o efeito da A2). Nome do aviso DECIDIDO pela **D-EA14**.
+
+```sql
+-- NN — setes_central.tb_user_login_failure + tb_user_login_block_notice (D-EA1/D-EA2/D-EA3 — limite por conta no /auth/login)
+-- Escopo: setes · molde sql/67 · Re-executável · aplicar em setes_central ANTES do setes-api (o boot confere as duas pelas colunas)
+SET NAMES utf8mb4;
+USE `setes_central`;
+
+CREATE TABLE IF NOT EXISTS `tb_user_login_failure` (
+  `tb_user_id` int(11)  NOT NULL COMMENT 'Usuario dono da credencial contra a qual a senha errada foi julgada',
+  `seq`        int(11)  NOT NULL COMMENT 'N-esima falha do usuario: MAX+1 sob FOR UPDATE da linha tb_user',
+  `created_at` datetime NOT NULL COMMENT 'Instante UTC (NOW do banco) do julgamento - a janela de 15 min da D-EA1 le este relogio',
+  `updated_at` datetime DEFAULT NULL COMMENT 'Padrao da casa; fato imutavel - sem escritor depois do INSERT',
+  `deleted`    char(1)  NOT NULL DEFAULT 'N' COMMENT 'Padrao da casa; sem escritor - o julgamento conta toda linha (soft delete nao desbloqueia)',
+  PRIMARY KEY (`tb_user_id`, `seq`),
+  KEY `idx_user_login_failure_window` (`tb_user_id`, `created_at`),
+  CONSTRAINT `fk_user_login_failure_to_user` FOREIGN KEY (`tb_user_id`) REFERENCES `tb_user` (`id`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ck_user_login_failure_seq` CHECK (`seq` > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  COMMENT='D-EA2: senha errada julgada contra a credencial num login admitido; bloqueio = 10+ na janela de 15 min (derivado)';
+-- revisar-ddl item 2 (abaixo): o índice também por fora, para o reexecutar CONSERTAR uma tabela criada sem ele
+CREATE INDEX IF NOT EXISTS `idx_user_login_failure_window` ON `tb_user_login_failure` (`tb_user_id`, `created_at`);
+
+CREATE TABLE IF NOT EXISTS `tb_user_login_block_notice` (
+  `tb_user_id` int(11)  NOT NULL COMMENT 'Usuario dono da credencial avisado',
+  `seq`        int(11)  NOT NULL COMMENT 'N-esimo aviso do usuario: MAX+1 sob FOR UPDATE da linha tb_user',
+  `created_at` datetime NOT NULL COMMENT 'Instante UTC em que o sistema tomou a vaga da hora (e-mail sai depois do COMMIT)',
+  `updated_at` datetime DEFAULT NULL COMMENT 'Padrao da casa; sem escritor depois do INSERT',
+  `deleted`    char(1)  NOT NULL DEFAULT 'N' COMMENT 'Padrao da casa; sem escritor',
+  PRIMARY KEY (`tb_user_id`, `seq`),
+  CONSTRAINT `fk_user_login_block_notice_to_user` FOREIGN KEY (`tb_user_id`) REFERENCES `tb_user` (`id`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `ck_user_login_block_notice_seq` CHECK (`seq` > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  COMMENT='D-EA3: vaga horaria do aviso ao dono de que o login da conta foi bloqueado (1/h por conta)';
+```
+
+Leituras e gravações (todas depois da trava; o pré-filtro usa a mesma contagem fora de transação):
+`SELECT COUNT(*) FROM setes_central.tb_user_login_failure WHERE tb_user_id = ? AND created_at > NOW() - INTERVAL 15 MINUTE` ·
+`SELECT COALESCE(MAX(seq), 0) + 1 … WHERE tb_user_id = ?` · `INSERT … (tb_user_id, seq, created_at, updated_at, deleted) VALUES (?, ?, NOW(),
+NOW(), 'N')` · aviso no molde do 67 (`EXISTS` 60 min + MAX+1 + INSERT) dentro do `runIsolated`.
+
+**Relatório do `revisar-ddl`** (2026-11-01; parser `sqlglot` 30.17 com `read='mysql'` = OK, 4 comandos — sem o `CREATE INDEX IF NOT EXISTS`,
+que é sintaxe da MariaDB e se prova na aplicação em descartável):
+
+1. **Estrutura**: PK `(tb_user_id, seq)` com as duas colunas declaradas; FK para `tb_user(id)`, que é PK; PK composta compatível com "N
+   falhas/avisos por usuário" — ✅ sem achado.
+2. **Re-executável × índice**: `CREATE TABLE IF NOT EXISTS` NÃO acrescenta o `idx_user_login_failure_window` a uma tabela que já exista sem
+   ele (criada à mão num ensaio, ou por versão anterior do script) — e o boot, de propósito, não confere o índice. **Correção (aplicada no
+   rascunho acima)**: `CREATE INDEX IF NOT EXISTS` logo depois do CREATE (MariaDB ≥ 10.1.4; o boot já detecta ≥ 10.3); a prova reaplica o script
+   sobre uma tabela sem o índice e confere o EXPLAIN.
+3. **Padrões da casa**: `tb_`, inglês, singular; `created_at`/`updated_at`/`deleted 'N'`; sem AUTO_INCREMENT (seq pela aplicação); `DEFAULT
+   NULL` real; base certa (`setes_central` — fato da credencial, como o 67) — ✅. Comentário de TABELA (`COMMENT='…'`) é novidade frente ao 67
+   (que não tem) — inofensivo; manter ou tirar por uniformidade é escolha de execução.
+4. **Soft delete / pai apagado**: só INSERT; nenhum `DELETE`/`REPLACE`/`TRUNCATE`; o pai `tb_user` nunca é apagado fisicamente (§3.1 — o 67 já
+   tem as mesmas FKs) — ✅.
+5. **UNIQUE além da PK**: o índice NÃO é UNIQUE; nenhum `ON DUPLICATE KEY UPDATE` previsto (regra 10) — ✅.
+6. **Collation**: nenhuma coluna de texto é comparada nem entra em JOIN (o `deleted` não decide nada) → sem CHECK com `COLLATE utf8mb4_bin` e
+   sem risco de 1267; `utf8mb4_unicode_ci` como o 67 — ✅.
+7. **CHECK**: `seq > 0` nas duas; o boot já confere que o banco aplica CHECK (`assertCheckConstraintsEnforced` — D-IB26) — ✅.
+8. **Tempo**: `created_at` e a janela pelo MESMO `NOW()` do banco; o boot já confere a sessão em UTC (`assertSessionTimeZoneUtc` — Q-TZ1) — ✅.
+9. **GRANT**: as duas ficam FORA do usuário fiscal (D-AU12 — lista positiva, estreitada na janela do passo 4). **Conferir na execução**
+   (`SHOW GRANTS` do usuário da nfse-api depois do script) — se o passo 4 ainda tiver deixado `setes_central.*`, o GRANT novo é questão.
+10. **Ordem/seed**: sem seed; CREATEs depois de `tb_user` (que já existe); espelho no `sql/01` logo depois de `tb_user_password_reset_notice` —
+    ✅ (a fazer na execução).
+11. **Segurança**: nenhuma senha, hash, IP ou e-mail nas tabelas (D-EA11) — ✅.
+
+Nada aplicado: nem no dev, nem em schema descartável (a prova é da execução, depois do merge do passo 4).
+
+### P.5 Plano de testes por item (o que cada gate precisa ver passar)
+
+**Regras de todos os itens**: worktree própria a partir do `main` (com o passo 4 dentro); suíte inteira + `tsc` verdes; prova ao vivo SÓ
+em schema descartável (molde `scripts/prove-password-reset-lock.ts`: cópia vazia de `tb_user`, SQL do código real com o schema trocado no
+texto, `setes_central` conferido antes/depois, apaga no fim); gates `revisar-riscos-sistemicos` ≥ 0,70 e `testar-adversarial` sem
+HIGH/CRITICAL (achado confirmado vira teste jest); nenhuma senha, código ou e-mail inteiro em log (varredura do JSON do logger nos testes).
+
+**Item 0 — script do Super (D-RS7 + D-RS13)** — `src/__tests__/super-password-reset-d-pv46.test.ts` (dublê) + bloco ao vivo em descartável:
+- S1 2+ Supers ATIVOS sem `--user-id`/`--email` → recusa (exit 2) e a mensagem NÃO cita tela nenhuma.
+- S2 2+ ativos com `--user-id` de um deles → redefine aquele, e só aquele (o outro intocado: hash e `password_set_at`).
+- S3 `--email` entre ativos → idem; e-mail de quem não é Super, ou de 2 Supers → recusa sem escrita.
+- S4 Super inativo (usuário OU vínculo — D-RS14) segue recusado com nome explícito; o script nunca reativa (D-RS16).
+- S5 depois do COMMIT sai UM e-mail ao e-mail de login GRAVADO do alvo, pela `@shared/mailer`: texto neutro com o instante na zona do
+  estabelecimento da Setes (peça `@shared/time-zone`, config `time_zone` da institution 1), SEM link (regex `https?://` vazio), SEM a senha.
+- S6 o e-mail sai FORA do `withDeadlockRetry` (deadlock simulado na 1ª volta → 1 envio só) e nunca antes do COMMIT (rollback = 0 envio).
+- S7 `sendMail` lança → log de erro, a senha SEGUE trocada, a senha é impressa, exit 0 (D-RS13: falha do envio não desfaz).
+- S8 dev sem SMTP → o aviso vai ao log como o da D-RS4 — sem a senha (varredura).
+- S9 `password_set_at` gravado pela peça (D-EA7): o token anterior do Super recebe 401 `SESSION_REVOKED`.
+- S10 `setes-api/CLAUDE.md`: a seção cita D-RS7/D-RS13/D-RS14/D-RS16, e nada de "tela de Usuários" como saída nem D-PV12.
+- O ENSAIO real do script é do Valdo (o classificador recusa o agente) — dizer isso na entrega.
+
+**Item 1 — Ondas 1+2** — testes de unidade com dublê (molde `auth-login.test.ts` + `auth-password-reset-q-pv38.test.ts`) e a prova
+`scripts/prove-login-lock.ts` em descartável:
+- L1 senha errada → 401 "Email ou senha inválidos" + 1 linha de falha; e-mail inexistente e conta SEM credencial (`password` NULL/`''`) → a
+  MESMA 401, nenhuma transação, nenhuma linha.
+- L2 senha CERTA em conta inativa, e senha certa sem vínculo vivo (`vw_user_link` vazia) → a MESMA 401 (o 403 morre), SEM linha de falha
+  (D-EA6); senha ERRADA em conta inativa ou sem vínculo → linha de falha (palpite julgado contra a credencial — §P.3; A-EA1).
+- L3 corpo, status e cabeçalhos IGUAIS nos 6 caminhos (errada, inexistente, sem credencial, inativo, sem vínculo, bloqueado) — corpo inteiro.
+- L4 piso de tempo (`LOGIN_REFUSAL_FLOOR_MS`): TODO 401 responde ≥ piso (relógio controlado), o bloqueado pelo pré-filtro não sai mais cedo;
+  o 200 sai sem esperar o piso (A-EA4).
+- L4b pré-filtro: conta bloqueada NÃO confere a senha (espião na peça de conferência: zero chamadas) e NÃO toma a trava; a decisão de gravar
+  é refeita sob a trava (pré-filtro diz "livre", 10 falhas chegam antes da trava → a tentativa seguinte é recusada sem gravar).
+- L4c caminho CERTO sob a trava: com a linha do usuário presa por outra transação além de 5 s, a senha CERTA recebe a MESMA 401 (sem token)
+  e a errada não grava — contenção não revela veredito; hash trocado entre a conferência e a trava → reconfere contra o travado.
+- L5 10 erradas na janela → a 11ª com a senha CERTA = a mesma 401, sem token, sem linha nova; a falha mais velha envelhece (15 min) → a
+  senha certa passa (janela DESLIZANTE, sem botão).
+- L6 o script do Super troca a senha e NÃO desbloqueia (as falhas seguem; a senha nova também recebe 401 até a janela envelhecer).
+- L7 lock wait (1205) na trava do login → a MESMA 401 + `logger.warn` (nunca 409 `RESOURCE_BUSY` — seria oráculo: conta inexistente
+  nunca espera); deadlock (1213) → retentativa (`withDeadlockRetry`) e, esgotada, a mesma 401 + alarme com ref.
+- L8 `email`/`password` não-texto (array, objeto, número) → 400, nunca 500 (`bodyText`).
+- L9 log da D-EA11: UMA linha por falha com e-mail MASCARADO, IP, motivo interno (errada/inexistente/inativo/sem vínculo/bloqueado),
+  instante — nunca a senha nem o e-mail inteiro.
+- L10 aviso ao dono (D-EA3): vaga tomada na falha que LEVA a janela a 10 (Q-EA15), no máximo 1/h; tentativas no bloqueio não avisam nem
+  gravam; o e-mail sai DEPOIS do COMMIT, em segundo plano (a 401 não espera o SMTP), ao e-mail de login GRAVADO; falha do INSERT do aviso
+  (GRANT ausente simulado) → `runIsolated` desfaz só o aviso e a 10ª falha SOBREVIVE (D-RS10 — a conta bloqueia); e-mail inexistente nunca
+  gera aviso; texto neutro sem link.
+- L10b a troca de senha (código ou script do Super) NÃO filtra as falhas por `password_set_at` — a conta segue bloqueada (conhecimento
+  negativo do §P.3).
+- L13 **trava S das FKs**: login da MESMA conta enquanto uma transação de negócio dela insere em tabela com FK para `tb_user` (pedido) e
+  segura o COMMIT por 6 s → medir e registrar (o esperado pelo parecer: 401 neutra depois de 5 s); 1 s → o login espera e passa.
+- L11 seleção/troca de estabelecimento (`select-institution`/`switch-institution`) inalteradas; boot recusa subir sem as duas tabelas.
+- L12 D-UC12 (o login é o aceite do convidado) ainda NÃO existe no `main` — se a onda 0 do convidado entrar antes, o aceite roda ANTES da
+  contagem de vínculos ativos (D-EA6) e nunca em paralelo com esta onda (D-EA10).
+- Prova `prove-login-lock.ts`: P1 DDL aplica e reaplica, CHECKs recusam o que devem; P2 **50 erradas em paralelo na mesma conta = exatamente
+  10 linhas**, `seq` 1..10 sem buraco, zero deadlock que passe do retry; P3 40 contas × 3 erradas em paralelo = zero deadlock (regra 13 —
+  leitura do filho consistente, sem FOR UPDATE de faixa); P4 rodada MISTA na mesma conta (erradas + certa + pedido e consumo de código da
+  recuperação — as três filhas sob a MESMA trava) = zero deadlock; P5 `created_at` recuado → desbloqueia; P6 aviso: 50 erradas paralelas = 1
+  linha de aviso, recuada 1 h → o próximo bloqueio toma `seq` 2; P7 a leitura que decide lê no máximo N linhas (EXPLAIN) com 10 mil falhas
+  antigas da conta; P8 `setes_central` intocado.
+- **Onda 2 (D-EA4)**, relógio controlado: A1 100 falhas/min não dispara, a 101ª dispara UMA vez; 30 contas distintas em 5 min não dispara, a
+  31ª dispara; A2 dentro de 15 min, um e-mail à operação só; depois de 15 min, outro; A3 `[ALARME LOGIN]` no log + `recordCrash` com ref; A4
+  o alarme NUNCA bloqueia (login certo de outra conta passa com o alarme no ar); A5 e-mail INEXISTENTE conta no contador; A6 memória com
+  TETO: 1 milhão de e-mails distintos não crescem a estrutura (chave de tamanho fixo — `loginEmailBucket` — e corte na entrada acima do
+  limiar); A7 boot em produção sem `OPS_ALERT_EMAIL` = não sobe (e com valor fora da forma de e-mail também), fora de produção vazio = só
+  log; A8 falha do SMTP no e-mail de alarme = log, o login segue; A9 o pré-voo confere `OPS_ALERT_EMAIL` como confere o SMTP.
+
+**Item 2 — Onda 3 (D-EA5)**, API e app juntos:
+- PP1 a peça devolve a lista de problemas da senha; TODA porta usa a mesma peça e o mesmo `fields[{field:'password', message}]`:
+  `POST /api/users`, `PUT /api/users/:id` (1ª senha de conta sem credencial — A-PV23), admin do onboarding (`institutions`),
+  `/auth/change-password`, "minha senha" se já existir (D-UC7).
+- PP2 7 caracteres recusa, 8 passa; 101 recusa; só espaços recusa (absorve a D-EA13 — o teste da D-EA13 segue verde); espaço dentro vale.
+- PP3 lista de comuns (arquivo no repositório, carregado UMA vez; boot recusa subir sem ele): "12345678", "senha123" e as brasileiras
+  recusadas; comparação sem caixa (proposta — §P.6).
+- PP4 senha que contém a parte local do e-mail de login recusada, sem caixa e sem acento (`Valdo@…` × "VÁLDO2026" recusada), SÓ com parte
+  local de 4+ caracteres (D-EA16): `jo@…` aceita "joaninha2026"; `abc@…` aceita "abc-12345"; `valdo@…` recusa "xvaldo99"; o MESMO julgamento
+  no espelho Dart (vetor de casos compartilhado).
+- PP5 **"igual à atual" só DEPOIS do código conferido**: no `/auth/change-password` a regra compara com o hash ATUAL; se rodasse antes de
+  julgar o código, viraria ORÁCULO da senha atual sem código e sem o limite do login — a validação que não depende da conta (tamanho, lista,
+  e-mail digitado) fica ANTES do código (como hoje, 400); a "igual à atual" fica DENTRO do julgamento, sob a trava, depois do código certo
+  (e o código NÃO é consumido nessa recusa). Teste adversarial obrigatório (candidato a HIGH se errar).
+- PP6 senha existente de 5 caracteres ainda LOGA (nada força troca); a senha inicial do script do Super (16 aleatórios) passa na política.
+- PA1 espelho Dart em `packages/setes_validators` com os MESMOS casos — o teste Dart lê o vetor de casos do setes-api AO LADO (molde do
+  `federal_id_test.dart`, que lê o vetor do núcleo); PA2 a lista do app = a lista da API (teste compara o SHA-256 dos dois arquivos); PA3 as
+  4 telas do §P.2 usam o validador único e mostram a regra no campo; PA4 o 422 da API ancora no campo `password`; PA5 medir o tamanho do
+  build web com a lista (decidir carregar sob demanda se pesar).
+
+**Item 3 — Onda 4 (D-EA9)**:
+- H1 formato `scrypt$<params>$<sal>$<hash>` em base64, sal de 16 bytes, `N=2^15, r=8, p=3`; maior valor ≤ 100 caracteres (cabe na coluna);
+  `maxmem` EXPLÍCITO (128·N·r = 32 MiB = exatamente o padrão do Node — sem `maxmem` maior a chamada pode ser recusada: o teste fixa por quê).
+- H2 certo/errado nos dois formatos com `timingSafeEqual`; hash fora das duas formas (texto puro, prefixo sem partes, base64 inválido,
+  parâmetros fora da lista) = recusa neutra + alarme, nunca 500.
+- H3 MD5 legado confere e REGRAVA em scrypt na MESMA transação; o 2º login compara scrypt; a regravação NÃO toca `password_set_at` (a cerca
+  da D-EA7 já registra esta exceção nomeada — a sessão aberta NÃO cai).
+- H4 regravação por compare-and-set (`WHERE id = ? AND password = <MD5 lido>`): senha trocada em paralelo (código da recuperação) nunca é
+  sobrescrita pela migração.
+- H5 a regravação mata o código de recuperação aberto (HMAC amarrado ao hash) — teste que fixa + linha no roteiro de deploy.
+- H6 todos os escritores gravam scrypt pela peça (users POST/PUT, admin do onboarding, troca pelo código, script do Super); cerca por
+  varredura: nenhum `createHash('md5')` de senha fora da peça; o script do Super deixa de exigir "32 hex".
+- H7 **verificação FORA da trava** (protocolo do §P.3, já desde a Onda 1): o scrypt (centenas de ms, 32 MiB) roda ANTES de travar a linha e
+  SÓ quando o pré-filtro diz "não bloqueada"; sob a trava só contar, decidir e gravar — senão cada login seguraria a linha e uma conexão do
+  pool durante o hash; se o hash lido sob a trava ≠ o verificado, reverifica; conta inexistente NÃO calcula hash falso (o piso esconde).
+- H8 MEDIÇÃO no gate: p50/p95/p99 do tempo e o pico de memória com 20 logins paralelos; o piso do login (L4) fica ACIMA do p99 do scrypt (a
+  conta inexistente não calcula hash — sem isso o tempo diria quem existe); custo de CPU sob 300 req/min por IP registrado.
+- H9 prova em descartável com os DOIS formatos (critério de sucesso 5): 10 contas MD5 + 10 scrypt em logins paralelos → todas migram, zero
+  deadlock, `password_set_at` intacto.
+- H10 **troca de PESO (D-EA18)**: com os parâmetros vigentes trocados na peça (ex.: `p=3` → `p=1` num teste), a senha gravada com o peso
+  antigo AINDA confere (o peso vem do próprio valor gravado) e, no login certo, é RECALCULADA no peso novo na mesma transação, por
+  compare-and-set, sem tocar o `password_set_at` (a sessão aberta não cai); login ERRADO nunca recalcula; senha já no peso vigente não é
+  regravada (zero escrita no login comum); parâmetros vigentes num lugar só da peça (cerca: nenhum `N=`/`r=`/`p=` literal fora dela); o
+  valor gravado com parâmetros FORA da lista aceita (ex.: `N` absurdo que estouraria a memória) = recusa neutra + alarme, nunca cálculo.
+- H11 a medição no servidor real (D-EA17) vira tarefa do roteiro da Onda 4 do DEPLOY: rodar o mesmo script da H8 no servidor, registrar
+  p50/p95/p99 e memória, e só então o Valdo confirma ou ajusta o peso (o ajuste = H10 em produção).
+
+### P.6 Questões e assunções levantadas pela preparação (perguntar UMA por vez ao Valdo, antes da onda a que pertencem)
+
+**Pré-medição do scrypt (fato, 2026-11-01 — máquina do dev, i7-8550U de 4 núcleos com os serviços do dev no ar, Node v21.7.3)**: por
+verificação, `N=2^14,r=8,p=1` ≈ 190 ms · `N=2^15,r=8,p=1` ≈ 415 ms · **`N=2^15,r=8,p=3` (a D-EA9) ≈ 1,3 s** · `N=2^17,r=8,p=1` ≈ 2,0 s;
+8 verificações em paralelo com o `crypto.scrypt` assíncrono = 3,0 s (o pool de threads do libuv tem 4 — ≈ 2,7 verificações/s nesta
+máquina, e o MESMO pool atende `fs` e DNS: arquivo fiscal e SMTP esperariam na fila). Sem `maxmem` explícito o Node RECUSA `p=3`
+(`ERR_CRYPTO_INVALID_SCRYPT_PARAMS` — 128·N·r = 32 MiB = o padrão). Valor de `$<params>$` com sal e hash em base64 = 92 caracteres (cabe
+no `varchar(100)`). Leitura: a D-EA9 já manda confirmar por MEDIÇÃO no gate; o número acima é da máquina do dev carregada, não do servidor
+da Onda 4 — mas, se o servidor ficar perto disso, o piso do login passa de 1 s e cada palpite contra conta EXISTENTE custa 1,3 s de CPU.
+
+**Fila, na ordem de perguntar** (questões Q-EA uma por mensagem; as assunções A-EA podem ir juntas para ratificar, como as A-1…A-4 da
+D-EA7 — "Ratificar todas"). Nenhuma trava a preparação; todas as da Onda 1 precisam estar fechadas ANTES do DDL e do código da Onda 1.
+
+**Onda 1**
+- ✅ **Q-EA14 → D-EA14 (2026-11-01, (a)).** Texto original: **Q-EA14 — nome da tabela do aviso** (guardião, §P.3): (a)
+  **`tb_user_login_block_notice`** — nomeia o processo que a própria D-EA3 cita ("bloqueio de login") e não ocupa "aviso de login" (que
+  costuma ser o de acesso bem-sucedido); (b) `tb_user_login_notice` — a letra da D-EA3, simétrica com a irmã do 67. *(Rec.: (a).)*
+- ✅ **Q-EA15 → D-EA15 (2026-11-01, (a)).** Texto original: **Q-EA15 — momento do aviso ao dono**: (a) **na falha que LEVA a janela a 10** (a letra "ao BLOQUEAR"; cobre a rajada única e o ataque
+  contínuo, até 1/h; o caminho bloqueado fica só-leitura); (b) a cada recusa DURANTE o bloqueio, até 1/h (molde da D-RS8 da recuperação) —
+  não avisa quem faz exatamente 10 e passa à próxima conta, e põe escrita no caminho bloqueado; (c) os dois. *(Rec.: (a) — na recuperação o
+  abuso começa no 4º pedido porque 3/h são legítimos; no login as 10 erradas JÁ são o abuso — D-EA1.)*
+- ✅ **A-EA1** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — falha e aviso valem também com o ACESSO inativo (usuário ou vínculo inativo/ausente): são fatos da CREDENCIAL e não leem o
+  acesso. Alternativas recusadas: só avisar com `tb_user.active = 'S'`; não gravar nada (a senha certa também dá 401).
+- ✅ **A-EA2** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — protocolo do login do §P.3: caminho CERTO também sob a trava; 1205 = 401 sem gravar; hash reconferido sob a trava; pré-filtro
+  do bloqueio sem trava e sem conferir senha; token assinado com a trava segura. Limite aceito junto: a trava S das FKs de negócio (L13) até
+  a A2. Recusado: só o caminho errado sob a trava (palpite grátis sob contenção).
+- ✅ **A-EA3** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — conta SEM credencial (`password` NULL ou `''`) = tratada como inexistente, sem linha (na A2 a linha ficaria sem pai).
+- ✅ **A-EA4** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — piso de tempo SÓ nas recusas (todo 401); o 200 sai sem esperar (o token já distingue o sucesso). Recusado: piso em toda resposta
+  (+ ~400 ms em todo login certo).
+- ✅ **A-EA5** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — volume sem retenção (≤ 960 linhas/dia por conta atacada) aceito e medido; o índice tira o peso do login. Recusado: exceção à
+  §3.1 para expurgar falhas antigas.
+- ✅ **A-EA6** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — bloqueio sustentado por quem conhece o e-mail (~1 palpite a cada 90 s mantém a conta bloqueada) = LIMITE CONHECIDO, com gatilho
+  para rever em passeio ou cliente. Recusado agora: "recuperação concluída encerra o bloqueio" (reveria a letra da D-EA1).
+- ✅ **A-EA7** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — a "memória por e-mail (2ª camada), 20/15 min, 429" do texto da Onda 1 (§4) NÃO entra: a D-EA1/D-EA6 fixaram UMA 401 no mesmo
+  tempo, e um 429 que só a conta existente pudesse provocar seria oráculo; o teto por IP do gateway e o alarme da D-EA4 cobrem o volume.
+- ✅ **A-EA8** *(RATIFICADA 2026-11-01 — "Ratificar todas")* — o 400 "Os campos email e password são obrigatórios" fica (não depende da conta); só o corpo não-texto passa a 400 pela
+  `bodyText` (hoje 500 — achado do §P.2).
+
+**Onda 3**
+- ✅ **Q-EA16 → D-EA16 (2026-11-01, (a)).** Texto original: **Q-EA16 — parte local CURTA do e-mail**: a D-EA5 recusa senha que CONTENHA a parte local do e-mail de login; com `jo@…` toda senha com "jo"
+  cairia. (a) **aplicar só quando a parte local tem 4+ caracteres, sem caixa nem acento**; (b) sempre; (c) só recusar a senha IGUAL à parte
+  local. *(Rec.: (a).)*
+- ✅ **A-EA9** *(RATIFICADA 2026-11-01 — "Ratificar")* — a lista de comuns é comparada SEM caixa ("Senha@123" = "senha@123") e vem de fonte pública com licença livre (ex.: SecLists,
+  MIT) + uma lista brasileira, guardada como arquivo no setes-api; o espelho do app confere o SHA-256.
+
+**Onda 4**
+- ✅ **Q-EA17 → D-EA17 (2026-11-01, (c)).** Texto original: **Q-EA17 — custo do scrypt × piso do login × CPU sob ataque** (com a pré-medição acima): (a) manter `N=2^15,r=8,p=3` e aceitar piso acima de
+  1 s se o servidor medir perto disto (com `UV_THREADPOOL_SIZE` maior); (b) `N=2^15,r=8,p=1` (≈ 0,4 s aqui — abaixo do mínimo da OWASP que
+  motivou o `p=3`); (c) **decidir só com a medição no servidor da Onda 4 do deploy; até lá a Onda 4 do endurecer espera**. Em qualquer opção:
+  o hash só é calculado com a conta FORA do bloqueio (pré-filtro do §P.3) e a conta inexistente não calcula hash falso. *(Rec. provisória:
+  (c) — a D-EA9 já mandava medir; o número desta máquina é sinal, não veredito.)*
+- ✅ **Q-EA18 → D-EA18 (2026-11-01, (a)).** Texto original: **Q-EA18 — quando a Onda 4 executa, já que o peso final só sai da medição no servidor real (D-EA17)** — a D-AU11 exige o MD5 trocado
+  ANTES da A2 e a D-AU6 põe a A3 ANTES do deploy; esperar o servidor do deploy empurra a A2 e a A3 para depois dele. Fato que ajuda: o
+  formato `scrypt$<params>$<sal>$<hash>` GUARDA o peso junto de cada senha — trocar o peso depois é a MESMA migração transparente da troca
+  do MD5 (quem logar com o peso antigo é recalculado no novo, na mesma transação, sem tocar o `password_set_at`). E hoje não há servidor
+  público (memória "nada em produção") — o peso só pesa no dev até o deploy. (a) **executar a Onda 4 já com o peso da D-EA9 como
+  PROVISÓRIO; a medição no servidor real confirma ou ajusta, e o ajuste entra como troca de parâmetro com recálculo no próximo login; a ordem
+  da D-EA10/D-AU6/D-AU11 fica intacta**; (b) medir ANTES numa máquina igual à do servidor (ligar o plano da SaveInCloud só para medir), antes
+  da A2 — a Onda 4 espera essa medição; (c) aceitar a A2 e a A3 DEPOIS do deploy (revê a D-AU6: o servidor público nasceria com a topologia
+  que muda logo depois). *(Rec.: (a) — cumpre a D-EA17 sem travar a A2; o custo é a peça reconhecer "peso diferente do atual" e recalcular.)*
+
+### P.7 Retomada — o que fazer no dia em que o passo 4 entrar no `main`
+
+1. `git log` do `main` do setes-api: o merge da `privilegios-crud` está lá (procure 5931232/745d2af/42278bf ou o merge deles). Confira se o
+   §P.2 ainda vale (`auth.service.ts`, `auth.repository.ts`, `super-password-reset.ts`, `password.ts` — mudaram depois de 42278bf?) e refaça
+   o §P.1 (próximos números livres).
+2. A fila do §P.6 está ZERADA (D-EA14…D-EA18 + A-EA1…A-EA9, 2026-11-01): comece pelo **item 0** (script do Super): worktree
+   `D:\Gestao2027\super-reset\setes-api` (branch nova a partir do `main`), testes S1–S10, gates, entrega sem merge.
+3. Ondas 1+2 em worktree própria — script `sql/74` (o rascunho do §P.4, já com `tb_user_login_block_notice` — D-EA14 — e o cabeçalho
+   completo) + espelho no `sql/01` + prova `prove-login-lock.ts` em descartável ANTES do código; aviso na falha que leva a 10 (D-EA15);
+   testes L1–L13 e A1–A9.
+4. Onda 3 (D-EA5 + D-EA16 + A-EA9; testes PP/PA) e depois Onda 4 (D-EA9 com o peso PROVISÓRIO — D-EA18; testes H1–H10; a H11 vai para o
+   roteiro do deploy). Cada uma: worktree própria, gates, "vai" para merge/publicação.
+
+### P.8 Execução — item 0 (script do Super: D-RS7 + D-RS13) — 2026-11-01, com gates; NADA commitado
+
+- **Onde**: worktree `D:\Gestao2027\super-reset\setes-api` (branch `super-reset`, a partir do `main` 42278bf) + irmãs DESTACADAS no
+  `main` para as cercas entre repositórios: `super-reset\fiscal-api` (9b19a9e, `npm ci` + build), `super-reset\sql` (ff79a50) e
+  `super-reset\nfse-api` (c6cc83d, `npm ci`). ⚠️ Ao remover: apagar ANTES as junções `setes-api\node_modules\fiscal-api` e
+  `nfse-api\node_modules\fiscal-api` (memória `tooling-worktree-juncao-node-modules`) — hoje apontam para a irmã `super-reset\fiscal-api`,
+  nunca para a árvore viva (conferido). `.env` e `package-lock.json` copiados da árvore viva (o lockfile do setes-api não é versionado).
+- **O que mudou** (4 arquivos + 1 teste do gate): `src/modules/auth/super-password-reset.ts` — `pickSuperTarget` (D-RS7: alvo nomeado vale
+  entre 2+ ativos; sem nome recusa; nenhuma recusa cita tela; e-mail vazio nunca casa), `inactiveTargetExit` (saída REAL do inativo: com
+  outro ativo, a tela; sem outro, SQL manual — limite da D-RS16), `setesInstitutionZone` + `wallTimeInZone` (instante na zona do
+  estabelecimento da Setes, falha = zona padrão), `superResetNoticeText` + `sendSuperResetNotice` (D-RS13: um e-mail ao e-mail de login
+  GRAVADO, neutro, sem link, sem a senha, só para UM endereço válido pelo `z.email()` do cadastro; nunca lança; produção sem SMTP =
+  'failed'); `scripts/reset-super-password.ts` (usa as peças; ENSAIO mostra o SMTP e o alvo inativo; o aviso sai DEPOIS do COMMIT e FORA do
+  `withDeadlockRetry`, com "NÃO feche o terminal" antes); `CLAUDE.md` do setes-api — seção "Senha perdida do SUPER" reescrita para
+  D-RS7/D-RS13/D-RS14/D-RS16 (sem "um Super define a do outro pela tela").
+- **Testes**: `super-password-reset-d-pv46.test.ts` (S1–S8 + cerca S6 por âncoras obrigatórias + ensaio ao vivo por `spawnSync`, que
+  separa a recusa — código 2 — da falha) e `adversarial-super-reset-gate.test.ts` (31 do gate, prova ao vivo em schema descartável com a FK
+  real) = **59/59**; `tsc` limpo; suíte inteira com as irmãs: verde (as 7 falhas da 1ª rodada eram as cercas sem `sql`/`nfse-api` ao lado).
+- **Gates**: socrático **0,78 ✅** (1 MEDIUM + 4 LOW) · adversarial **0,75 ✅** (5 LOW) — nenhum HIGH/CRITICAL. CORRIGIDOS na sessão:
+  MEDIUM-1 (a linha "NÃO feche" — a ordem é a Q-EA19), LOW-2 (estado do SMTP no ensaio + ⚠ em "SMTP ausente" qualquer que seja o
+  NODE_ENV), LOW-3/ADV-RS16-01 (ensaio e recusa do inativo com a saída real), LOW-4 (âncoras da cerca + `spawnSync`), ADV-RS13-02 (lista de
+  endereços no e-mail gravado), ADV-RS7-01 (e-mail vazio na peça). FICAM: ADV-RS13-01 (`it.failing` — Q-EA21) e ADV-RS16-02 (semântica
+  fixada — Q-EA22). Limites registrados pelo adversarial: COMMIT com desfecho incerto (perda de conexão no COMMIT = senha desconhecida e
+  sem aviso; rodar de novo resolve — anterior a esta entrega); o script por `npx tsx` se vê como dev (só o `npm start` liga
+  `NODE_ENV=production`) — por isso o ⚠ não depende do NODE_ENV; Ctrl+C durante o envio = troca sem aviso (Q-EA19).
+- **Pendente**: as questões abaixo; o ENSAIO real do script é do Valdo (o classificador recusa o agente); merge/publicação só com o "vai".
+
+**Questões do item 0 (uma por vez; nenhuma trava as Ondas 1+2)**:
+- ✅ **Q-EA19 → D-EA19 (2026-11-01, (b) — EXECUTADA).** Texto original: **Q-EA19 — o aviso ao Super sai antes ou depois de a senha aparecer no terminal?** (gate socrático, Q-SR1) Hoje: senha primeiro, aviso
+  depois + "NÃO feche". (a) manter assim (SMTP lento nunca segura a senha; fechar o terminal ainda mata o aviso); (b) **aviso primeiro, a
+  senha só depois do desfecho** (até ~60 s de espera com SMTP mudo — D-RS17; Ctrl+C na espera = senha gravada e desconhecida, roda-se de
+  novo, cada rodada um aviso); (c) sem a linha "NÃO feche". *(Rec.: (b) — o sinal fora da máquina precede a entrega do segredo, que é o
+  motivo da D-RS13; a cerca S6 e o CLAUDE.md invertem.)*
+- ✅ **Q-EA20 → D-EA20 (2026-11-01, (a) — EXECUTADA).** Texto original: **Q-EA20 — Super SEM e-mail de login: o script redefine a senha?** (gate socrático, Q-SR2) Hoje grava e imprime, mas o login é pelo
+  e-mail — a senha nova não serve para entrar e não há aviso possível ('no-email'); a troca só derruba as sessões (D-EA7). (a) **recusar sem
+  escrita** ("Super sem e-mail de login — corrija o e-mail antes"); (b) manter, com o aviso no log. *(Rec.: (a) — muda o comportamento
+  descrito na D-PV46.)*
+- ✅ **Q-EA21 → D-EA21 (2026-11-01, (a) — EXECUTADA).** Texto original: **Q-EA21 — o e-mail de login inteiro no log da `@shared/mailer`** (gate adversarial, ADV-RS13-01): a peça e o script mascaram, mas a
+  mailer loga o destinatário INTEIRO ao enviar (`Email enviado` {to}) e no modo sem SMTP — o logger é o console, o e-mail aparece no mesmo
+  terminal. A mailer serve também a recuperação e o aviso da D-RS4. (a) **mascarar o destinatário no log da própria mailer, para todos os
+  e-mails da casa**; (b) mascarar só no aviso do Super; (c) aceitar e corrigir o texto do CLAUDE.md. *(Rec.: (a).)*
+- ✅ **Q-EA22 → D-EA22 (2026-11-01, (a) — limite conhecido).** Texto original: **Q-EA22 — redefinição pelo operador × rebaixamento do vínculo por outro Super no mesmo instante** (gate adversarial, ADV-RS16-02 —
+  ANTERIOR a esta entrega): `setInstitutionLinks` (módulo `users`) muda `kind`/`active` do vínculo sem a trava da linha do usuário; provado
+  ao vivo que a senha nova pode cair numa conta que, no COMMIT, já é admin — o desfecho é o de uma ordem válida "redefine → rebaixa" (sem
+  escalada). (a) **aceitar como limite conhecido** (os testes ADV-RS16-02a/b fixam a semântica); (b) `setInstitutionLinks` toma a trava da
+  linha do usuário como 1º passo (mexe no módulo `users`, fora deste branch). *(Rec.: (a).)*
+
+**Gates do DELTA do item 0 (2026-11-01 — D-EA19…D-EA21 + correções da 1ª rodada)**: socrático **0,77 ✅** (1 MEDIUM + 4 LOW) ·
+adversarial **0,75 ✅** (5 LOW; arquivo novo `src/__tests__/adversarial-super-reset-delta-gate.test.ts`, 33 testes, nodemailer REAL contra
+SMTP local de teste, prova ao vivo em schema descartável). Nenhum HIGH/CRITICAL. CORRIGIDOS na sessão (cabem em regra decidida): ADV-EA19-01
+(`mailErrorForLog` nunca lança; o catch da peça blinda o log — a senha ainda aparece), ADV-EA21-01/L1 (`maskEmail` mascara TODO endereço
+de valor gravado em lista), ADV-EA21-02 (as três rotas públicas de `/auth` param de logar o `err` cru — o `sql` do mysql2 levava o e-mail
+digitado; agora código, errno e mensagem mascarada), M1 (o texto "~1 min" passa a dizer a verdade: servidor mudo ~1 min, lento/DNS passam
+disso), L3 (o `CLAUDE.md` escopa a D-EA21 ao destinatário), L4 (comentários, cabeçalho do script com a D-EA20) e INFO (`userId` no log do
+código em dev). Os 6 `it.failing` correspondentes viraram `it`; ficam 5 `it.failing` à espera das decisões abaixo (ADV-EA20-01a/b/c,
+ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo. ⚠️ O `main` do setes-api ANDOU depois da base desta branch
+(D-IB113: d5a7f35, 5cfd052 — sem arquivo em comum): antes do merge, trazer o `main` para a `super-reset`.
+
+**Questões do delta (uma por vez; nenhuma trava as Ondas 1+2)**:
+- ✅ **Q-EA23 → D-EA23 (2026-11-01, (a) — EXECUTADA).** Texto original: **Q-EA23 — qual é "o e-mail de login do Super" para o script?** (ADV-EA20-01/02, L2) A lista (fora da trava, 1º por id, sem filtrar
+  branco), o ato (sob a trava, qualquer não vazio) e o aviso (`z.email()` no valor da lista) julgam de jeitos diferentes — provado ao vivo:
+  1º e-mail só de espaços + 2º válido → o ato grava, o login entra pelo 2º e o aviso dá 'failed'; e-mail com espaço no fim → idem; e-mail
+  trocado por SQL entre a lista e o ato → o aviso vai ao e-mail velho; e-mail só de espaços → o ensaio promete e o `--vai` recusa. Hoje 0
+  linhas assim (o cadastro não deixa entrar). (a) **uma regra só, na peça: o ato, sob a trava, escolhe o e-mail de login que vale (vivo,
+  aparado, endereço válido), o devolve no veredito e o aviso vai a ele; sem nenhum válido, recusa sem escrita; a lista e o ensaio usam a
+  MESMA regra**; (b) só alinhar a lista ao ato (ignorar e-mail em branco); (c) limite conhecido. *(Rec.: (a).)*
+- ✅ **Q-EA24 → D-EA24 (2026-11-01, (a) — EXECUTADA).** Texto original: **Q-EA24 — teto TOTAL da espera do aviso ao Super** (M1, ADV-EA19-02): o teto de 30 s do SMTP conta só silêncio e o DNS não tem teto —
+  provado com o nodemailer real que um servidor que responde aos poucos prende o aviso sem fim (aos 62 s seguia pendente, senha gravada e
+  não mostrada). (a) **teto total de 60 s no aviso (+ `dnsTimeout` no transporte); estourado, o desfecho é "⚠ aviso não confirmado em 60 s
+  (pode ainda sair)" e a senha aparece**; (b) outro teto (ex.: 2 min); (c) limite conhecido, só o texto corrigido (já feito). *(Rec.: (a) —
+  a D-EA19 foi aceita por ser uma espera limitada.)*
+- **Q-EA25 — dado pessoal no log nas DEMAIS telas** (ADV-EA21-02 fora de `/auth`, L3): o `handleError` comum a todos os módulos loga o
+  erro do banco cru — com o banco falhando, e-mail, CPF e nome de qualquer cadastro vão ao log (o `sql` do mysql2 vem com os parâmetros).
+  (a) **frente própria "dado pessoal no log"** (inventário de todo log da casa; agora só as rotas de `/auth`, já feitas); (b) estender a
+  D-EA21 já a todos os módulos; (c) limite conhecido fora de `/auth`. *(Rec.: (a).)*
+- **Q-EA26 — a peça de envio recusa destinatário que não seja UM endereço válido, para TODO e-mail da casa?** (socrático do delta, Q-B —
+  risco ANTERIOR, exposto pelo delta) A recuperação de senha e o aviso da D-RS4 mandam ao e-mail gravado sem a conferência de endereço
+  único que protege o aviso do Super: um e-mail gravado como lista ("a@x; b@y", de SQL ou carga do legado) faria o nodemailer mandar o
+  CÓDIGO de recuperação a todos da lista. Hoje 0 linhas assim. (a) **o `sendMail` recusa (lança) destinatário que não seja um endereço
+  válido pelo `z.email()` — a regra é uma e mora na peça, molde da D-EA21**; (b) manter só no aviso do Super. *(Rec.: (a).)*
+
+### P.9 ⏯ Retomar — estado ao encerrar a sessão de 2026-11-01 (Valdo: "salve tudo e vamos encerrar esta sessao")
+
+- **Código**: item 0 (script do Super) + D-EA19…D-EA24 + correções dos gates, na worktree `D:\Gestao2027\super-reset\setes-api`, branch
+  `super-reset` — **commit LOCAL de salvaguarda `e8c9ee7`** (sobre o `main` 42278bf; sem push, sem merge). Irmãs destacadas na mesma pasta:
+  `super-reset\{fiscal-api, sql, nfse-api}` (só para as cercas entre repositórios; nada mudou nelas). ⚠️ Ao remover: apagar ANTES as junções
+  `setes-api\node_modules\fiscal-api` e `nfse-api\node_modules\fiscal-api` (memória `tooling-worktree-juncao-node-modules`).
+- **Verde ao encerrar**: suíte inteira do setes-api na worktree 161/161 arquivos (2748 testes, 31 pulados, 0 falha); `tsc` limpo; nenhum
+  schema descartável sobrando no banco do dev. Arquivos de teste novos: `adversarial-super-reset-gate.test.ts`,
+  `adversarial-super-reset-delta-gate.test.ts`, `mailer-mask-d-ea21.test.ts` (o resto são ajustes em testes existentes).
+- **Decisões desta sessão**: D-EA14…D-EA24 + A-EA1…A-EA9 (Rodadas 3–5 em "Decisões arquiteturais registradas").
+- **Falta, NESTA ordem**:
+  1. Perguntar ao Valdo, uma por vez, **Q-EA25** (dado pessoal no log das demais telas — rec. frente própria) e **Q-EA26** (`sendMail` só
+     para UM endereço válido — rec. (a)); executar o que couber no item 0 (a Q-EA26 (a) mexe na `@shared/mailer`).
+  2. **Gate do delta FINAL** (socrático + adversarial) sobre o que entrou DEPOIS dos gates do delta: D-EA23 (`pickLoginEmail`, veredito com
+     `loginEmail`), D-EA24 (teto de 60 s, `dnsTimeout`) e o que a Q-EA26 trouxer.
+  3. Trazer o `main` do setes-api para a `super-reset` (o `main` andou com a D-IB113 — d5a7f35/5cfd052, sem arquivo em comum) e rodar a suíte.
+  4. O **ensaio real** do script é do Valdo (o classificador recusa o agente): `npx tsx --require tsconfig-paths/register
+     scripts/reset-super-password.ts` (sem `--vai`) na worktree.
+  5. Merge/publicação do item 0 só com o "vai" do Valdo (a árvore viva do setes-api é deploy ao salvar).
+  6. Depois: **Ondas 1+2** pelo §P.7 passo 3 (o rascunho do script 74 do §P.4 já com `tb_user_login_block_notice` — D-EA14; aviso na falha
+     que leva a 10 — D-EA15; protocolo do §P.3 ratificado — A-EA2).

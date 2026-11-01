@@ -1569,6 +1569,10 @@ fica FORA do try para erro de bug subir à borda do job); timeouts do transporte
   na zona>; se você não reconhece, avise") pela peça `@shared/mailer`, sem DDL e sem link de ação (A-RS7); falha do envio = log, não desfaz a
   troca. O fato durável ("senha definida por terceiro") nasce depois, com a credencial da auth-api (D-AU5) / onda 0 do convidado (D-UC8).
   Muda o comportamento descrito na D-PV46 — EXECUTAR junto da D-RS7 (mesmo script), em worktree, com teste e o "vai".
+  **D-RS7 + D-RS13 EXECUTADAS em worktree 2026-11-01** (branch `super-reset` do setes-api, gates 0,78/0,75, sem commit nem merge —
+  registro no §P.8 do `prompt_endurecer_autenticacao.md`, que também traz as questões abertas pela execução, Q-EA19…Q-EA22).
+  *(2026-11-01: a D-PV46 ganhou duas mudanças pelo `prompt_endurecer_autenticacao.md` — **D-EA19** o aviso sai ANTES de a senha aparecer;
+  **D-EA20** Super SEM e-mail de login é recusado sem escrita.)*
   *(Nota de 2026-10-31, rodada seguinte: na MESMA execução, reescrever a seção "Senha perdida do SUPER" do `setes-api/CLAUDE.md` — ainda
   cita a D-PV12 e "com DOIS Supers ativos, um define a do outro pela tela de Usuários", mortos pela D-PV48 — para D-RS7/D-RS13/D-RS14/
   D-RS16.)*

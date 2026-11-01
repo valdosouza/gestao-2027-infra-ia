@@ -367,3 +367,30 @@ com as decisões de 27/10 ainda SEM commit.
   endurecer a autenticação + script do Super — prompt pronto no FIM de `prompt_endurecer_autenticacao.md` ("⏯ Execução — prompt para a
   sessão nova"). PRÉ-CONDIÇÃO: passo 4 mergeado no `main` (mexe nos mesmos arquivos de `auth`). Ordem: script do Super (D-RS7/D-RS13 +
   seção do `setes-api/CLAUDE.md`) → Ondas 1+2 → Onda 3 → Onda 4 (scrypt, antes da A2).
+- **2026-11-01 — preparação da execução + Q-EA14 → D-EA14** (a sessão da nova etapa achou o passo 4 fora do `main` e preparou só em
+  documento — §P.1–§P.7 de `prompt_endurecer_autenticacao.md`; fila nova Q-EA14…Q-EA17 + A-EA1…A-EA9): **D-EA14** ((a)) — o aviso ao dono
+  da D-EA3 mora em `tb_user_login_block_notice` (só o nome muda). **Q-EA15 → D-EA15** ((a)) — a vaga do aviso é tomada na falha que
+  leva a janela a 10 (1/h; o caminho bloqueado não grava). **A-EA1…A-EA8 RATIFICADAS** ("Ratificar todas") — a Onda 1 fica sem
+  questão aberta. **Q-EA16 → D-EA16** ((a)) — a senha não pode conter a parte local do e-mail só quando ela tem 4+ caracteres (sem
+  caixa, sem acento). **A-EA9 RATIFICADA** (lista de comuns sem caixa, fonte pública + brasileira, arquivo no setes-api com o SHA-256
+  conferido pelo app) — a Onda 3 fica sem questão aberta. **Q-EA17 → D-EA17** ((c)) — o peso final do scrypt sai da medição no servidor
+  real; ⚠️ choca com a ordem D-AU6/D-AU11 (MD5 trocado antes da A2; A3 antes do deploy) → aberta a **Q-EA18** (executar a Onda 4 com o
+  peso provisório e ajustar por recálculo no login — rec. — × medir antes numa máquina igual × A2/A3 depois do deploy). **Q-EA18 →
+  D-EA18** ((a)) — a Onda 4 executa já, com o peso da D-EA9 como PROVISÓRIO; a medição no servidor real ajusta depois por recálculo no
+  login; ordem D-EA10/D-AU6/D-AU11 intacta. **Fila do endurecer ZERADA** — a execução espera só o passo 4 no `main` (§P.7 do prompt).
+- **2026-11-01 — execução do endurecer INICIADA** (o passo 4 entrou no `main`, 42278bf): **item 0 — script do Super (D-RS7 + D-RS13) +
+  seção do `setes-api/CLAUDE.md` EXECUTADOS** em worktree `D:\Gestao2027\super-reset` (branch `super-reset`), gates 0,78/0,75 ✅, 59/59 +
+  suíte verde, NADA commitado (§P.8 do prompt). Abertas pela execução: Q-EA19 (aviso antes da senha), Q-EA20 (Super sem e-mail), Q-EA21
+  (mascarar o e-mail no log da mailer), Q-EA22 (corrida rebaixar × redefinir — limite conhecido), uma por vez. Próximo: Ondas 1+2. O ensaio
+  real do script segue com o Valdo. **Q-EA19 → D-EA19** ((b)) — o aviso ao Super sai ANTES de a senha aparecer no terminal; executada na
+  mesma hora na worktree `super-reset`. **Q-EA20 → D-EA20** ((a)) — Super SEM e-mail de login é recusado sem escrita (muda a D-PV46);
+  executada na mesma hora. **Q-EA21 → D-EA21** ((a)) — todo e-mail que vai ao log sai mascarado (regra única na `@shared/mailer`:
+  `maskEmail` + `mailErrorForLog`; vale para recuperação, D-RS4 e D-RS13); executada na mesma hora. **Q-EA22 → D-EA22** ((a)) — a
+  corrida "redefinir × rebaixar o vínculo" fica como limite conhecido (testes ADV-RS16-02a/b fixam). Questões do item 0 FECHADAS.
+  **Gates do delta 0,77/0,75 ✅** (correções na sessão: `mailErrorForLog` nunca lança, `maskEmail` mascara lista, rotas de `/auth` sem `err`
+  cru, texto da espera); abertas **Q-EA23** (regra única do e-mail de login), **Q-EA24** (teto total da espera do aviso), **Q-EA25** (dado
+  pessoal no log das demais telas — frente própria), **Q-EA26** (`sendMail` só para UM endereço válido), uma por vez. ⚠️ o `main` andou
+  (D-IB113) — trazer para a `super-reset` antes do merge. **Q-EA23 → D-EA23** ((a)) — o e-mail de login do Super é UM, pela peça
+  `pickLoginEmail` (1º vivo que, aparado, é endereço válido), usada pela lista, pelo ensaio e pelo ato sob a trava; o aviso vai ao escolhido
+  pelo ato; executada na mesma hora. **Q-EA24 → D-EA24** ((a)) — teto TOTAL de 60 s no aviso ao Super ("NÃO CONFIRMADO — pode ainda sair",
+  a senha aparece, o envio segue e o desfecho tardio vai ao log) + `dnsTimeout` 15 s; executada na mesma hora. Abertas: Q-EA25, Q-EA26.
