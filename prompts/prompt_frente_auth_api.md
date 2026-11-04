@@ -3,7 +3,7 @@
 **Escopo**: setes
 **Status**: Rodada 1 FECHADA (2026-10-31 — D-AU1…D-AU12; NENHUMA questão aberta). Execução pela D-AU6: costura A1 dentro do bloco de
 privilégios (passo 4 do plano de retomada) + estreitar o GRANT da nfse-api na mesma janela (D-AU12) → ondas 0 do grupo e do convidado →
-troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente.
+troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias) — próxima pergunta: Q-EA25.
 **Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
 frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
 setes-api, nfe-api ou nfse-api ou outra api"*.
@@ -338,3 +338,83 @@ sessão de caixa — dizer "token"/"login") e **"contrato"** (ocupada — dizer 
   (D-EA2) e `tb_user_login_notice` (D-EA3); canal de alarme `OPS_ALERT_EMAIL` é da operação (D-EA4). A linha `Auth OK` do
   `authMiddleware` sai na mesma costura (D-EA12). **Pré-requisito da A2 (D-AU11) DECIDIDO**: Q-EA9 → D-EA9 (`scrypt` nativo
   `N=2^15, r=8, p=3`, migração transparente no login) — falta EXECUTAR (Onda 4 do endurecer, depois das Ondas 1+2 e 3 — D-EA10).
+
+## 7. Caminho até a A2 (2026-11-04 — frente da auth-api, sessão aberta pela orquestradora `local_7e8ede3a`)
+
+**Pedido** (Valdo, 2026-11-04, pela orquestradora): *"abra uma sessão sobre auth-api, precisamos resolvê-la antes de continuar as
+outras"*. **Como foi conferido** (só documento e código — nada presumido): este prompt; `prompt_endurecer_autenticacao.md` (Decisões,
+§P.7–§P.9); `prompt_frente_usuario_convidado.md` (D-UC8, "Questões pendentes"); `prompt_privilegios_interfaces.md` (D-RS13, Q-RS13);
+`prompt_frente_grupo_estabelecimentos.md` (D-GE3, §5, §10); `prompt_frente_campos_todas_telas.md` (§3.2, D-CF6, §5); na governança
+(`D:\Setes-Governanca`, só leitura) `dados/auth-api.md`, `dados/setes-api.md`, `dados/setes-app.md`, `dados/FORMATO.md` §3 e a conta
+`python -I ferramentas/conferir_dados.py dados --hoje 2026-11-04`; no código, a worktree `super-reset` (commit local `e8c9ee7` sobre o
+`main` 42278bf; o `main` andou para 5cfd052 com a D-IB113) e `src/shared/http/controller-utils.ts:39` (o `handleError` comum loga
+`{ err }` cru — 47 arquivos de `src/modules` o usam).
+
+**Estado da conta em 04/11**: auth-api 2/12 passos (só a A0); os 10 restantes em "decisão a tomar" E "impedidos"; nenhum pronto para
+começar; faltam 15–24 dias só da auth-api (A2 12–18 + A3 1–3 + deploy 2–3).
+
+### 7.1 A cadeia conferida (o que segura a A2)
+
+A A2 (`auth-api:AUTH.E2`) depende de quatro coisas do setes-api (governança: `AUTH.E2 → setes-api:AUTH.E5 · GRUPO.E3.P1 · CONV.E2`, e
+`AUTH.E2.P4 → setes-api:CAMPO.E10.P1.T1`). A ordem vem das decisões: **D-AU11** (o MD5 sai antes da A2), **D-EA10** (TODAS as ondas
+1+2 → 3 → 4 antes da A2; A2 depois das ondas 0 do grupo e do convidado), **D-AU6** (idem), **D-CF6** (o lado API do motor de campos vira
+biblioteca, "execução: na A2").
+
+| # | Elo | Segura | Fonte conferida | Estado em 04/11 |
+|---|---|---|---|---|
+| 1 | **Q-EA25** (erro cru do banco no log das demais telas) e **Q-EA26** (e-mail só para UM endereço) | `setes-api:SENHA.E7.P2` (fechar e publicar o item 0) → `AUTH.E3` (Ondas 1+2) → `AUTH.E4` (+ `setes-app:AUTH.E2.P1`, Onda 3) → `AUTH.E5` (Onda 4, scrypt) → toda a A2 | endurecer §P.8 (texto das duas, SEM ✅) e §P.9 passo 1; §P.7 (item 0 antes das ondas); D-EA10 | **abertas**. A fila única diz "respondidas em outra sessão" no sentido de "lá, não aqui" — aquela sessão foi arquivada em 01/11 (D-GP33) sem registrar decisão |
+| 1b | Ensaio real do script do Super (sem `--vai`) | `SENHA.E7.P2.T3` — e por ele os 10 passos "impedidos" da auth-api | endurecer §P.9 passo 4; governança: impedimento de 01/11 | **ação só do Valdo** (o classificador recusa o agente) |
+| 2 | **P-111** — "senha inicial definida por terceiro" vira registro durável? nasce com a credencial da auth-api ou na onda do convidado? | `setes-api:CONV.E2.P5` ("minha senha") → `CONV.E2.P6` (gates e janela) → toda a A2 | D-RS13 deixa as duas casas em aberto ("nasce depois, com a credencial da auth-api (D-AU5) / onda 0 do convidado (D-UC8)"); §6 deste prompt (D-RS15: "se nascer o fato…"); o prompt do convidado NÃO a registra (lá "nenhuma questão aberta", próximo número D-UC13) | **aberta só na governança** — falta virar questão de uma frente (proposta: do convidado, Q-UC28) |
+| 3 | `setes-api:GRUPO.E3.P1` (privilégio por estabelecimento, D-GE3) | toda a A2 | grupo §10 e D-GE3 ("janela com plano: toca TRANSMITIR/CANCELAR"); a nota de 03/11 no fim do prompt do grupo (B2) não muda a onda 0 | **sem decisão pendente; pronto para começar** (processo conhecido, 2 dias). D-AU6/D-EA10 dizem "onda 0 do grupo"; a governança exige só o P1 (o único que toca concessão — P2 é o menu, que fica no setes-api; P3/P4 não são acesso). Leitura coerente com as decisões |
+| 4 | `setes-api:CAMPO.E10.P1.T1` (motor de campos como subpath, D-CF6) + **P-CAMPO-4** (onde mora o pacote) | só `auth-api:AUTH.E2.P4` (escritores e GRANT) → P5 → P6 → P7 | D-CF6: "onde mora o pacote e a forma da leitura são **detalhe de execução, com o guardião**"; "execução: na A2" | ⚠️ ver §7.4: a governança põe o CAMPO.E10 depois do fecho da onda de campos inteira (CAMPO.E9), o que nenhum documento pede |
+| 5 | Na própria auth-api: **P-1** (o que a A3 inclui) | só `AUTH.E3.P1` e o deploy — NÃO a A2 | D-AU6 ("A3 — antes da Onda 4", sem conteúdo); §3 "Ordem proposta" (idem) | aberta (decisão) |
+| 5b | **P-2** (`group_default`/`position`) e **P-3** (casa do texto da regra, A-PV24) | `AUTH.E2.P4` e `AUTH.E2.P6` | D-AU2 e D-AU1 entregam as duas à execução, com o guardião | localizadas — resolvem-se no passo, não pedem o Valdo |
+
+Restrição de calendário (não decisão): a Onda 1 do endurecer (`AUTH.E3`) e o aceite do convidado (`CONV.E2.P3`) mexem no `login` — nunca
+em paralelo (D-EA10, D-UC12). A medição do peso do scrypt no servidor real (`P-AUTH-1`, suspeita) NÃO trava a Onda 4: a D-EA18 manda
+executar com o peso provisório.
+
+### 7.2 Decisões que faltam, em ordem de quem destrava mais
+
+1. **Q-EA25** — junto da 2 destrava a cadeia mais longa: 7 passos do setes-api + 1 do app (item 0 → Ondas 1+2 → 3 → 4) e, por ela, os 7
+   passos da A2. Recomendação do prompt: (a) frente própria "dado pessoal no log".
+2. **Q-EA26** — mesma cadeia; a (a) mexe na `@shared/mailer` e entra no gate do delta final do item 0.
+3. **P-111** — destrava `CONV.E2.P5` e `P6` (o convidado inteiro; P1–P4 já podem andar sem ela). Precisa antes ser escrita como questão
+   da frente do convidado (Q-UC28).
+4. **P-CAMPO-4** — destrava o `CAMPO.E10` (e por ele `AUTH.E2.P4…P7`). Pela letra da D-CF6 é detalhe de execução; se o Valdo confirmar
+   isso, deixa de ser decisão dele e se resolve com o guardião no próprio passo.
+5. **P-1** (conteúdo da A3) — não segura a A2; só depois dela.
+
+Ações do Valdo que também seguram (não são decisões): o ensaio real do script do Super (`SENHA.E7.P2.T3`) e os "vai" de cada publicação
+(item 0, Ondas 1+2, 3, 4, onda 0 do grupo, convidado).
+
+### 7.3 Passos do setes-api/app a executar antes da A2 (estimativas da governança, em dias)
+
+| Cadeia | Passos | Dias | Pronto hoje? |
+|---|---|---|---|
+| Endurecer (crítica) | `SENHA.E7.P2` 1 → `AUTH.E3.P1` 1 · `P2` 1–2 · `P3` 1 → `AUTH.E4.P1` 1–2 · `setes-app:AUTH.E2.P1` 1 · `AUTH.E4.P2` 1 → `AUTH.E5.P1` 1–2 · `P2` 1 | **9–12** | não (Q-EA25/26 + ensaio) |
+| Convidado | `CONV.E2.P1` 1–2 → `P2` 2 → `P3` 1–2 → `P4` 1; `P5` 1–2; `P6` 2 | **8–11** | P1 sim; P5/P6 não (P-111) |
+| Grupo | `GRUPO.E3.P1` 2 (janela com plano) | **2** | sim |
+| Campos | `CAMPO.E10.P1` 1–2 | **1–2** (ou +7–8 da onda de campos inteira e as cadeias de produtos, terminal e IBS/CBS, se ficar a dependência do §7.4) | não |
+
+Somados em fila: **20–27 dias** antes da A2 (sem a onda de campos). Em paralelo — endurecer ao lado de convidado, grupo e campos, com o
+`CONV.E2.P3` fora da janela da Onda 1 — o caminho crítico é o endurecer: **~10–13 dias** (o +1 é o desvio do P3). Depois, a A2: 12–18.
+
+### 7.4 Achados para a orquestradora (dados da governança — a frente só aponta)
+
+- **`setes-api:CAMPO.E10` depende de `CAMPO.E9.P1`** (fecho da onda de campos, que por sua vez espera `PROD.E7.P2`, `TERM.E3.P2` e
+  `IBS.E6.P5`, dois deles impedidos). Nenhum documento pede isso: a D-CF6 diz só "execução: na A2" e "a cerca da D-CF2 varre os dois
+  repositórios" (o que pede a CERCA existir — `CAMPO.E5` —, não o fecho). Como está, a A2 herda a onda de campos inteira (7–8 dias + três
+  frentes). Sugestão de pedido de mudança: `CAMPO.E10 → CAMPO.E5.P1` (ou sem dependência, com a T3 "a cerca varre a auth-api" só quando a
+  cerca existir).
+- **P-CAMPO-4** está com gate `decisão`; a D-CF6 a entregou à execução com o guardião (como P-2/P-3, que estão `localizada`).
+- **P-111** está só na governança; precisa morar numa frente (proposta: convidado).
+- **Fila única §0**: "Q-EA25 e Q-EA26 → respondidas em outra sessão" — a sessão foi arquivada sem registrar; seguem abertas e passam para
+  esta frente (D-GP9: uma sessão por assunto — o assunto aqui é o caminho da auth-api).
+
+### 7.5 Ponto de retomada
+
+Próxima pergunta ao Valdo: **Q-EA25** (texto simples no relatório da sessão e na linha de 2026-11-04 de
+`D:\Setes-Governanca\orquestracao\notas-das-frentes.md`). Ao voltar a resposta: registrar como **D-EA25** no
+`prompt_endurecer_autenticacao.md` (Decisões + ✅ no §P.8) e trazer a **Q-EA26**; depois P-111 (registrar antes como Q-UC28 no prompt do
+convidado), depois P-CAMPO-4. Execução de código só com o "sim" do Valdo para cada passo (governança de código: worktree, gates, "vai").
