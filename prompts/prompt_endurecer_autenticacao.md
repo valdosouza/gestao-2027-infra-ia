@@ -14,8 +14,8 @@ D-RS13) EXECUTADO em worktree `super-reset` com gates 0,78/0,75 ✅, NADA commit
 mailer) decididas e executadas; **D-EA22** (corrida rebaixar × redefinir = limite conhecido) — questões do item 0 FECHADAS; **gates do
 DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 — **D-EA23** (regra única do e-mail de login) e **D-EA24**
 (teto total de 60 s no aviso) decididas e executadas; **D-EA25** (2026-11-04: dado pessoal no log fora de `/auth` = frente própria);
-**D-EA26** (2026-11-04: a peça de e-mail recusa destinatário que não seja um endereço único válido) — fila ZERADA; próximo = executar
-D-EA26 no item 0 + gate do delta final (com o "sim"), depois Ondas 1+2.
+**D-EA26** (2026-11-04: a peça de e-mail recusa destinatário que não seja um endereço único válido) — **executada 2026-11-04 com o gate do
+delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 (uma por vez); depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -1033,3 +1033,44 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   5. Merge/publicação do item 0 só com o "vai" do Valdo (a árvore viva do setes-api é deploy ao salvar).
   6. Depois: **Ondas 1+2** pelo §P.7 passo 3 (o rascunho do script 74 do §P.4 já com `tb_user_login_block_notice` — D-EA14; aviso na falha
      que leva a 10 — D-EA15; protocolo do §P.3 ratificado — A-EA2).
+
+### P.10 Fechamento do item 0 — 2026-11-04 (Valdo: "Sim, executar"; pela frente da auth-api, `prompt_frente_auth_api.md` §7)
+
+- **Passos 1–3 do §P.9 FEITOS** na worktree `D:\Gestao2027\super-reset\setes-api`, commits LOCAIS na branch `super-reset` (sem push, sem
+  merge no `main`): `939b6bc` D-EA26 · `80d1ab8` merge do `main` (5cfd052, D-IB113 — sem conflito) · `acff626` correções do gate. Irmã
+  `super-reset\sql` movida para o `main` do sql (2232b84, script 73); `super-reset\fiscal-api` FICA em 9b19a9e (o `main` do núcleo andou para
+  c2c0a2f com a NE-2 de outra sessão — não entra aqui).
+- **D-EA26 executada**: peça `singleMailAddress` (aparado + `z.string().email()`; não-texto = recusa) + `MailRecipientRejectedError`
+  (`MAIL_RECIPIENT_INVALID`, mensagem mascarada) na `@shared/mailer`; `sendMail` recusa ANTES do transporte e do modo dev; `pickLoginEmail` e
+  o aviso ao Super pelo MESMO predicado. Testes: `mailer-recipient-d-ea26.test.ts` (35 — o 1º achou o TypeError do não-texto, corrigido) e o
+  bloco D-EA26 do `auth-password-reset-q-pv38.test.ts` (recuperação em PRODUÇÃO com e-mail gravado como lista: resposta 200 neutra, código só
+  no HMAC, erro mascarado, nenhum código no log); fixture `a@x` → `a@x.com` no `mailer-d-rs5`.
+- **Gate do delta final** (D-EA23 + D-EA24 + D-EA26): socrático **0,80 ✅** (5 pontos abertos, LOW/INFO) · adversarial **0,78 ✅** (1 MEDIUM
+  + 3 LOW; arquivo `adversarial-super-reset-final-gate.test.ts`, 69 testes — nodemailer REAL `jsonTransport` em 18 endereços com cara de
+  ataque que o validador aceita: UM destinatário no envelope; 37 recusados antes do transporte; prova AO VIVO em schema descartável, CHECKSUM
+  de `setes_central` igual). Nenhum HIGH/CRITICAL. **CORRIGIDOS na sessão** (cabem nas regras decididas): ADV-FG-01 MEDIUM (a lista partia
+  pelo `\n` um e-mail gravado inválido num pedaço válido que só a lista escolhia — D-EA23: o SQL da lista deixa FORA o candidato com quebra
+  de linha, o mesmo que o ato recusa; e a lista CORTADA pelo `group_concat_max_len` — MySQL 8 padrão 1024 — é recusada alto); ADV-FG-02 (log
+  e linha da senha com o e-mail que o ATO escolheu); ADV-FG-03 (a máscara aceita a aspa simples da parte local — D-EA21); a leitura da zona
+  do aviso ganhou teto de 5 s (`SUPER_ZONE_CAP_MS`) e vem ANTES da promessa dos 60 s; a conferência do aviso ao Super é a da peça (era mais
+  estrita); `CLAUDE.md` com D-EA25/D-EA26. Os 5 `it.failing` viraram `it` `[CORRIGIDO]`; teste novo `super-reset-final-gate-fixes.test.ts`.
+- **Suíte**: antes das correções 2835 verdes + 1 falha de CARGA (`adversarial-f2a-a3-gate`, que passou isolado 27/27 — a suíte rodou junto
+  dos gates); suítes do item 131/131 depois das correções; **suíte inteira depois das correções: 166/166 arquivos, 2909 verdes, 34
+  pulados, 0 falha**; `tsc` limpo.
+- **Censo no dev** (só leitura, pelo socrático): 3 logins vivos, 0 que a peça recusaria, 0 com espaço nas pontas.
+- **Questões novas do gate (uma por vez; nenhuma é HIGH — o item pode ser publicado com elas como pendência explícita)**:
+  - **Q-EA27 — "aparado" é qual corte?** O ato e a peça aparam pelo `trim()` do JS (espaço do início, tab, quebra, NBSP); o login acha a
+    conta por igualdade com PAD SPACE (ignora só o espaço do FIM). Login gravado " a@x.com" ou "a@x.com\t" → o script troca a senha e avisa
+    "a@x.com", mas o login com "a@x.com" não acha a conta (contradiz o motivo da D-EA20). (a) **só o espaço do FIM é aparado (a mesma
+    igualdade do login); qualquer outro branco nas pontas = recusa**; (b) manter o `trim()` (limite conhecido; dado só por SQL; 0 linhas no
+    dev). *(Rec.: (a).)*
+  - **Q-EA28 — troca do e-mail de login pela tela no mesmo instante do ato do script** (`syncLoginEmail` do módulo `users` troca sem a
+    trava da linha do usuário): o aviso pode ir ao e-mail velho. (a) **estender o limite conhecido da D-EA22 ao e-mail, com teste que fixa
+    a semântica**; (b) o módulo `users` toma a trava da linha do usuário antes de trocar o e-mail (mexe fora do item 0). *(Rec.: (a) — mesma
+    família e mesma razão da D-EA22.)*
+  - **Q-EA29 — censo dos logins que a D-EA26 recusaria**: a recuperação de uma conta assim emite o código, consome o teto e não entrega
+    (o único sinal é um `logger.error` por pedido). (a) **entra no pré-voo do deploy (`scripts/pre-deploy-tz-check.ts`) como ALARME**; (b)
+    como recusa de subir; (c) só o log a cada pedido (como está). *(Rec.: (a).)*
+- **Falta, NESTA ordem**: Q-EA27 → Q-EA28 → Q-EA29 (executar o que couber); o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
+  4 — `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`); o **"vai"** do merge `super-reset` → `main`
+  e do push (árvore viva = deploy); depois as Ondas 1+2.

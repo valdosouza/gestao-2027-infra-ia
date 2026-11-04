@@ -427,3 +427,7 @@ só como registro.
 **2026-11-04**: Q-EA26 → **D-EA26** (Valdo, *"(a) Recusar em todos"*: a peça de e-mail recusa destinatário que não seja um endereço único
 válido). Com ela o elo 1 do §7.1 fica SEM decisão pendente: `setes-api:SENHA.E7.P2` passa a esperar só o "sim" para executar (D-EA26 no
 item 0 + gate do delta final + trazer o `main` + suíte) e, depois, o ensaio do Valdo e o "vai" do merge. Próxima pergunta: o "sim" do item 0.
+**2026-11-04 — "Sim, executar"**: item 0 fechado na `super-reset` (commits locais 939b6bc · 80d1ab8 · acff626) — D-EA26 executada, `main`
+trazido, gate do delta final socrático 0,80 · adversarial 0,78 sem HIGH, achados corrigidos (registro no §P.10 do
+`prompt_endurecer_autenticacao.md`). O gate abriu **Q-EA27…Q-EA29** (nenhuma HIGH); com elas, o ensaio do Valdo e o "vai", o
+`SENHA.E7.P2` fecha e as Ondas 1+2 (`AUTH.E3`) podem começar. Próxima pergunta: **Q-EA27**.
