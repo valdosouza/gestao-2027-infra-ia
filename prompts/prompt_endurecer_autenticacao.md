@@ -13,7 +13,8 @@ D-RS13) EXECUTADO em worktree `super-reset` com gates 0,78/0,75 ✅, NADA commit
 **D-EA19** (aviso ANTES da senha), **D-EA20** (Super sem e-mail de login recusado) e **D-EA21** (e-mail mascarado em todo log da
 mailer) decididas e executadas; **D-EA22** (corrida rebaixar × redefinir = limite conhecido) — questões do item 0 FECHADAS; **gates do
 DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 — **D-EA23** (regra única do e-mail de login) e **D-EA24**
-(teto total de 60 s no aviso) decididas e executadas; seguem Q-EA25/Q-EA26 (uma por vez); próximo = Ondas 1+2.
+(teto total de 60 s no aviso) decididas e executadas; **D-EA25** (2026-11-04: dado pessoal no log fora de `/auth` = frente própria);
+segue a Q-EA26; próximo = Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -411,6 +412,13 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   põe por cima. **EXECUTADA na mesma hora** na worktree `super-reset` (peça + transporte + script; testes do teto com relógio curto —
   "unconfirmed", confirmação e falha tardias no log, relógio desligado no envio rápido; o `ADV-EA19-02` virou `it` e passa com o nodemailer
   REAL contra o SMTP local que pinga a resposta; 125 verdes nas suítes do item). Recusados: (b) outro teto; (c) limite conhecido.
+- **D-EA25** (Valdo, 2026-11-04 — fecha a **Q-EA25** = (a), literal: *"a"*; perguntada pela frente da auth-api, §7 do
+  `prompt_frente_auth_api.md`) — dado pessoal no log FORA de `/auth` (o `handleError` comum de `src/shared/http/controller-utils.ts:39`
+  loga o `{ err }` cru do banco; o `sql` do mysql2 leva os parâmetros — e-mail, CPF, nome do cadastro; 47 arquivos de `src/modules` o usam)
+  vira **FRENTE PRÓPRIA "dado pessoal no log"**: inventário de todo log da casa e correção de uma vez, com regra única. Nada muda no item 0
+  (as três rotas públicas de `/auth` já foram corrigidas no delta — ADV-EA21-02) e a frente nova NÃO trava as Ondas nem a A2. Abrir a
+  frente é da orquestradora da governança (todo trabalho nasce dela — D-GP28). Recusados: (b) estender já a todos os módulos dentro do item
+  0; (c) limite conhecido fora de `/auth`.
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -985,7 +993,7 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   não mostrada). (a) **teto total de 60 s no aviso (+ `dnsTimeout` no transporte); estourado, o desfecho é "⚠ aviso não confirmado em 60 s
   (pode ainda sair)" e a senha aparece**; (b) outro teto (ex.: 2 min); (c) limite conhecido, só o texto corrigido (já feito). *(Rec.: (a) —
   a D-EA19 foi aceita por ser uma espera limitada.)*
-- **Q-EA25 — dado pessoal no log nas DEMAIS telas** (ADV-EA21-02 fora de `/auth`, L3): o `handleError` comum a todos os módulos loga o
+- ✅ **Q-EA25 → D-EA25 (2026-11-04, (a) — frente própria).** Texto original: **Q-EA25 — dado pessoal no log nas DEMAIS telas** (ADV-EA21-02 fora de `/auth`, L3): o `handleError` comum a todos os módulos loga o
   erro do banco cru — com o banco falhando, e-mail, CPF e nome de qualquer cadastro vão ao log (o `sql` do mysql2 vem com os parâmetros).
   (a) **frente própria "dado pessoal no log"** (inventário de todo log da casa; agora só as rotas de `/auth`, já feitas); (b) estender a
   D-EA21 já a todos os módulos; (c) limite conhecido fora de `/auth`. *(Rec.: (a).)*
@@ -1006,7 +1014,7 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   `adversarial-super-reset-delta-gate.test.ts`, `mailer-mask-d-ea21.test.ts` (o resto são ajustes em testes existentes).
 - **Decisões desta sessão**: D-EA14…D-EA24 + A-EA1…A-EA9 (Rodadas 3–5 em "Decisões arquiteturais registradas").
 - **Falta, NESTA ordem**:
-  1. Perguntar ao Valdo, uma por vez, **Q-EA25** (dado pessoal no log das demais telas — rec. frente própria) e **Q-EA26** (`sendMail` só
+  1. ~~**Q-EA25**~~ → **D-EA25** (2026-11-04: frente própria, nada no item 0). Perguntar ao Valdo **Q-EA26** (`sendMail` só
      para UM endereço válido — rec. (a)); executar o que couber no item 0 (a Q-EA26 (a) mexe na `@shared/mailer`).
   2. **Gate do delta FINAL** (socrático + adversarial) sobre o que entrou DEPOIS dos gates do delta: D-EA23 (`pickLoginEmail`, veredito com
      `loginEmail`), D-EA24 (teto de 60 s, `dnsTimeout`) e o que a Q-EA26 trouxer.

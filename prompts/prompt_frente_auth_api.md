@@ -3,7 +3,7 @@
 **Escopo**: setes
 **Status**: Rodada 1 FECHADA (2026-10-31 — D-AU1…D-AU12; NENHUMA questão aberta). Execução pela D-AU6: costura A1 dentro do bloco de
 privilégios (passo 4 do plano de retomada) + estreitar o GRANT da nfse-api na mesma janela (D-AU12) → ondas 0 do grupo e do convidado →
-troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias) — próxima pergunta: Q-EA25.
+troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias); D-EA25 decidida — próxima pergunta: Q-EA26.
 **Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
 frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
 setes-api, nfe-api ou nfse-api ou outra api"*.
@@ -418,3 +418,6 @@ Próxima pergunta ao Valdo: **Q-EA25** (texto simples no relatório da sessão e
 `D:\Setes-Governanca\orquestracao\notas-das-frentes.md`). Ao voltar a resposta: registrar como **D-EA25** no
 `prompt_endurecer_autenticacao.md` (Decisões + ✅ no §P.8) e trazer a **Q-EA26**; depois P-111 (registrar antes como Q-UC28 no prompt do
 convidado), depois P-CAMPO-4. Execução de código só com o "sim" do Valdo para cada passo (governança de código: worktree, gates, "vai").
+
+**2026-11-04 (mesmo dia)**: Q-EA25 → **D-EA25** (Valdo, *"a"*: frente própria "dado pessoal no log"; nada muda no item 0; abrir a frente
+é da orquestradora). Próxima pergunta: **Q-EA26**.
