@@ -2745,3 +2745,28 @@ nfse-api (cópia do main) contra o núcleo FINAL **65 suítes, 949 passaram, 185
 5. Limpeza: além do §15.9.4, `git branch -d ne2-sobre-main` no núcleo depois do ff (e as junções acima antes do `worktree remove`).
 
 **⏯ Ponto de retomada**: a junção está pronta e provada; falta só o "vai" V14 (núcleo + nfe-api juntos). Nada mais a fazer antes dele.
+
+#### 15.9.9 PUBLICAÇÃO da NE-2 (D-NE168) — EXECUTADA 2026-11-04 ("vai" do Valdo = V14 da fila, os dois juntos)
+
+- **Núcleo**: árvore viva limpa em 9b19a9e → `git merge --ff-only ne2-sobre-main` → **`main` = c2c0a2f**; `tsc` limpo; `npm run build` ok (o `dist`
+  traz `fiscal-api/access` e `fiscal-api/reading` sem mudança de superfície); **`npm test` na viva: 63 suítes, 1152 passaram, 1 pulado, 0 falhas** (a
+  P6 passa — o gêmeo do setes-api tem `node_modules` aqui); `git push origin main` (9b19a9e..c2c0a2f). Nenhum serviço estava no ar (3000/3002/5051
+  livres) — nada reiniciou; nfse-api e setes-api levam o núcleo novo no próximo restart.
+- **nfe-api**: `git merge --ff-only ne2` → e615f29, push. Na árvore viva: `npm ci` (a junção `node_modules\fiscal-api` → o núcleo VIVO), `.env` a partir
+  do `.env.example` com os valores da nfse-api (`PORT=3003`, `FISCAL_DB_NAME=fiscal_api`; gitignored). ⚠️ **Achado na viva**: 1 teste da
+  `migration-001.test.ts` falhou — o `autocrlf=true` desta máquina gravou o `.sql` em CRLF no checkout (a worktree tinha LF) e o teste lê o texto.
+  Correção sem decisão, no molde do setes-api (F2a, 2026-10-15): **`.gitattributes` `*.sql text eol=lf`** (commit **6f7b315**, push) → re-checkout dos
+  dois `.sql` em LF → **41/41**. ⚠️ A nfse-api e o núcleo também não têm `.gitattributes` (os `.sql` deles hoje estão em LF no disco) — candidatos ao
+  mesmo conserto na próxima vez que forem tocados.
+- **`npm run db:migrate`** da nfe-api: aplicou **só `nfe-api/001_nfe_baseline`** no `fiscal_api` (20:42:13Z); conferido: `_migrations` com a linha
+  `nfe-api 001` e as 3 tabelas + 2 views da família (`tb_invoice_merchandise_transmission`, `…_event`, `tb_invoice_number_void`,
+  `vw_invoice_merchandise_transmission`, `vw_invoice_number_void`). Nenhuma tabela do núcleo ou da NFS-e tocada.
+- **Boot UMA vez** (`tsx src/server.ts`): migrations, sondas e conferência das views passaram ANTES de ouvir; `GET /v1/health` 200
+  `{status ok, db, masterKey, storage}`; `/v1/openapi.yaml` 200; `/docs/` 200; `/v1/emitter` sem token 401; `/v1/nfe/invoices/pending` 404. **Derrubada**
+  (⚠️ matar o `npx` deixou o `node` filho vivo na 3003 — encerrado pelo PID; conhecimento negativo para o próximo boot de conferência).
+- **GRANT ao `setes_api` e catálogo**: NÃO (NE-6, D-NE170).
+- **Limpeza**: junções `ne2\nfse-api` e `ne2\nfe-api` → `node_modules\fiscal-api` apagadas com `cmd /c rmdir` ANTES; `git worktree remove` das 4 pastas
+  `ne2\*`; branches `ne2` e `ne2-sobre-main` (núcleo) e `ne2` (nfe-api) apagadas (`-d`, já no `main`); a pasta `D:\Gestao2027\ne2` (logs + `qa-adv`)
+  removida.
+- **Estado**: NE-2 **PUBLICADA** (núcleo c2c0a2f · nfe-api 6f7b315 no `main` e no GitHub; `fiscal_api` com a 001 da nfe-api; nfe-api fora do ar).
+  ⏯ **Próximo da família NF-e: Rodada 0 da NE-3 (§15.5)**; a janela própria da D-NE172 (sessão estrita) vem antes da NE-5.
