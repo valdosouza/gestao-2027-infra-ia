@@ -15,7 +15,7 @@ mailer) decididas e executadas; **D-EA22** (corrida rebaixar × redefinir = limi
 DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 — **D-EA23** (regra única do e-mail de login) e **D-EA24**
 (teto total de 60 s no aviso) decididas e executadas; **D-EA25** (2026-11-04: dado pessoal no log fora de `/auth` = frente própria);
 **D-EA26** (2026-11-04: a peça de e-mail recusa destinatário que não seja um endereço único válido) — **executada 2026-11-04 com o gate do
-delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 (uma por vez); depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
+delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 — **D-EA27** (aparado = só o espaço do fim) decidida e executada; seguem Q-EA28/Q-EA29 (uma por vez); depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -427,6 +427,17 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   `sendMail` (`src/shared/mailer/mailer.ts:186`) repassa `message.to` ao transporte sem conferir. Quem chama trata a recusa como
   falha de envio (a recuperação segue neutra — a resposta ao público não muda; o aviso ao Super dá 'failed'). Entra no item 0 e vai ao
   **gate do delta final** (§P.9 passo 2). Execução: só com o "sim" do Valdo para fechar o item 0. Recusado: (b) manter só no aviso ao Super.
+  **EXECUTADA 2026-11-04** com o "Sim, executar" (§P.10).
+- **D-EA27** (Valdo, 2026-11-04 — fecha a **Q-EA27** = (a), literal: *"(a) Só o do fim"*; aberta pelo gate socrático do delta final) —
+  "aparado" na regra única do e-mail (D-EA23 × D-EA26) = SÓ o espaço (U+0020) do FIM, a MESMA igualdade com que o login acha a conta (PAD
+  SPACE da colação). Espaço no início, tab, quebra, NBSP, BOM e afins nas pontas = RECUSA (o `z.email()` não os aceita). Motivo: com o
+  `trim()` do JS o script do Super trocava a senha e avisava "a@x.com" numa conta gravada " a@x.com", com que ninguém entra (o motivo da
+  D-EA20). Vale para TODO e-mail da casa (a peça é uma). **EXECUTADA na mesma hora** na worktree `super-reset` (commit local `5c397f6`):
+  `singleMailAddress` corta só `/ +$/`; testes que fixavam o corte antigo ajustados (o gate adversarial final passou os brancos que não são
+  o espaço do fim de "aceitos" para "recusados"). Recusado: (b) manter o `trim()` como limite conhecido. Suíte inteira depois dela:
+  2910 verdes, 2 falhas de TEMPO sob carga (`adversarial-d-rs4-gate` "diferença < 300 ms" mediu 508 ms; `grupo-leitores-d-ge4` estourou
+  5 s) — as duas passam isoladas (a do D-RS4, que tem o envio dublado e não passa pela peça, passou 2× seguidas); conhecimento negativo:
+  na máquina do dev com outras sessões, cada rodada da suíte derruba um teste de tempo diferente — conferir isolado antes de chamar defeito.
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -1059,7 +1070,7 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   pulados, 0 falha**; `tsc` limpo.
 - **Censo no dev** (só leitura, pelo socrático): 3 logins vivos, 0 que a peça recusaria, 0 com espaço nas pontas.
 - **Questões novas do gate (uma por vez; nenhuma é HIGH — o item pode ser publicado com elas como pendência explícita)**:
-  - **Q-EA27 — "aparado" é qual corte?** O ato e a peça aparam pelo `trim()` do JS (espaço do início, tab, quebra, NBSP); o login acha a
+  - ✅ **Q-EA27 → D-EA27 (2026-11-04, (a) — EXECUTADA, `5c397f6`).** Texto original: **Q-EA27 — "aparado" é qual corte?** O ato e a peça aparam pelo `trim()` do JS (espaço do início, tab, quebra, NBSP); o login acha a
     conta por igualdade com PAD SPACE (ignora só o espaço do FIM). Login gravado " a@x.com" ou "a@x.com\t" → o script troca a senha e avisa
     "a@x.com", mas o login com "a@x.com" não acha a conta (contradiz o motivo da D-EA20). (a) **só o espaço do FIM é aparado (a mesma
     igualdade do login); qualquer outro branco nas pontas = recusa**; (b) manter o `trim()` (limite conhecido; dado só por SQL; 0 linhas no
@@ -1071,6 +1082,6 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   - **Q-EA29 — censo dos logins que a D-EA26 recusaria**: a recuperação de uma conta assim emite o código, consome o teto e não entrega
     (o único sinal é um `logger.error` por pedido). (a) **entra no pré-voo do deploy (`scripts/pre-deploy-tz-check.ts`) como ALARME**; (b)
     como recusa de subir; (c) só o log a cada pedido (como está). *(Rec.: (a).)*
-- **Falta, NESTA ordem**: Q-EA27 → Q-EA28 → Q-EA29 (executar o que couber); o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
+- **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → Q-EA28 → Q-EA29 (executar o que couber); o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
   4 — `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`); o **"vai"** do merge `super-reset` → `main`
   e do push (árvore viva = deploy); depois as Ondas 1+2.

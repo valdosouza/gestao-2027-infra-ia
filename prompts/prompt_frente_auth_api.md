@@ -431,3 +431,4 @@ item 0 + gate do delta final + trazer o `main` + suíte) e, depois, o ensaio do 
 trazido, gate do delta final socrático 0,80 · adversarial 0,78 sem HIGH, achados corrigidos (registro no §P.10 do
 `prompt_endurecer_autenticacao.md`). O gate abriu **Q-EA27…Q-EA29** (nenhuma HIGH); com elas, o ensaio do Valdo e o "vai", o
 `SENHA.E7.P2` fecha e as Ondas 1+2 (`AUTH.E3`) podem começar. Próxima pergunta: **Q-EA27**.
+**2026-11-04**: Q-EA27 → **D-EA27** (*"(a) Só o do fim"*: aparado = só o espaço do fim, como o login; executada, `5c397f6`). Próxima: **Q-EA28**.
