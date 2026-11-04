@@ -14,7 +14,8 @@ D-RS13) EXECUTADO em worktree `super-reset` com gates 0,78/0,75 ✅, NADA commit
 mailer) decididas e executadas; **D-EA22** (corrida rebaixar × redefinir = limite conhecido) — questões do item 0 FECHADAS; **gates do
 DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 — **D-EA23** (regra única do e-mail de login) e **D-EA24**
 (teto total de 60 s no aviso) decididas e executadas; **D-EA25** (2026-11-04: dado pessoal no log fora de `/auth` = frente própria);
-segue a Q-EA26; próximo = Ondas 1+2.
+**D-EA26** (2026-11-04: a peça de e-mail recusa destinatário que não seja um endereço único válido) — fila ZERADA; próximo = executar
+D-EA26 no item 0 + gate do delta final (com o "sim"), depois Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -419,6 +420,13 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   (as três rotas públicas de `/auth` já foram corrigidas no delta — ADV-EA21-02) e a frente nova NÃO trava as Ondas nem a A2. Abrir a
   frente é da orquestradora da governança (todo trabalho nasce dela — D-GP28). Recusados: (b) estender já a todos os módulos dentro do item
   0; (c) limite conhecido fora de `/auth`.
+- **D-EA26** (Valdo, 2026-11-04 — fecha a **Q-EA26** = (a), literal: *"(a) Recusar em todos"*) — a peça única de envio
+  (`@shared/mailer`, `sendMail`) RECUSA (lança) destinatário que não seja UM endereço válido pelo `z.email()` do cadastro, para TODO
+  e-mail da casa (recuperação de senha, aviso ao dono da D-RS4, aviso ao Super da D-RS13, e o que vier). A regra é uma e mora na peça,
+  molde da D-EA21; a conferência própria do aviso ao Super passa a ser a da peça. Conferido em 2026-11-04 na worktree `super-reset`:
+  `sendMail` (`src/shared/mailer/mailer.ts:186`) repassa `message.to` ao transporte sem conferir. Quem chama trata a recusa como
+  falha de envio (a recuperação segue neutra — a resposta ao público não muda; o aviso ao Super dá 'failed'). Entra no item 0 e vai ao
+  **gate do delta final** (§P.9 passo 2). Execução: só com o "sim" do Valdo para fechar o item 0. Recusado: (b) manter só no aviso ao Super.
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -997,7 +1005,7 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   erro do banco cru — com o banco falhando, e-mail, CPF e nome de qualquer cadastro vão ao log (o `sql` do mysql2 vem com os parâmetros).
   (a) **frente própria "dado pessoal no log"** (inventário de todo log da casa; agora só as rotas de `/auth`, já feitas); (b) estender a
   D-EA21 já a todos os módulos; (c) limite conhecido fora de `/auth`. *(Rec.: (a).)*
-- **Q-EA26 — a peça de envio recusa destinatário que não seja UM endereço válido, para TODO e-mail da casa?** (socrático do delta, Q-B —
+- ✅ **Q-EA26 → D-EA26 (2026-11-04, (a) — a executar no item 0).** Texto original: **Q-EA26 — a peça de envio recusa destinatário que não seja UM endereço válido, para TODO e-mail da casa?** (socrático do delta, Q-B —
   risco ANTERIOR, exposto pelo delta) A recuperação de senha e o aviso da D-RS4 mandam ao e-mail gravado sem a conferência de endereço
   único que protege o aviso do Super: um e-mail gravado como lista ("a@x; b@y", de SQL ou carga do legado) faria o nodemailer mandar o
   CÓDIGO de recuperação a todos da lista. Hoje 0 linhas assim. (a) **o `sendMail` recusa (lança) destinatário que não seja um endereço
@@ -1014,8 +1022,9 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   `adversarial-super-reset-delta-gate.test.ts`, `mailer-mask-d-ea21.test.ts` (o resto são ajustes em testes existentes).
 - **Decisões desta sessão**: D-EA14…D-EA24 + A-EA1…A-EA9 (Rodadas 3–5 em "Decisões arquiteturais registradas").
 - **Falta, NESTA ordem**:
-  1. ~~**Q-EA25**~~ → **D-EA25** (2026-11-04: frente própria, nada no item 0). Perguntar ao Valdo **Q-EA26** (`sendMail` só
-     para UM endereço válido — rec. (a)); executar o que couber no item 0 (a Q-EA26 (a) mexe na `@shared/mailer`).
+  1. ~~**Q-EA25**~~ → **D-EA25** (2026-11-04: frente própria, nada no item 0); ~~**Q-EA26**~~ → **D-EA26** (2026-11-04: (a), a peça
+     recusa — EXECUTAR com o "sim"). Fila do item 0 ZERADA. (Texto anterior: perguntar ao Valdo **Q-EA26** (`sendMail` só
+     para UM endereço válido — rec. (a)); executar o que couber no item 0 (a Q-EA26 (a) mexe na `@shared/mailer`).)
   2. **Gate do delta FINAL** (socrático + adversarial) sobre o que entrou DEPOIS dos gates do delta: D-EA23 (`pickLoginEmail`, veredito com
      `loginEmail`), D-EA24 (teto de 60 s, `dnsTimeout`) e o que a Q-EA26 trouxer.
   3. Trazer o `main` do setes-api para a `super-reset` (o `main` andou com a D-IB113 — d5a7f35/5cfd052, sem arquivo em comum) e rodar a suíte.

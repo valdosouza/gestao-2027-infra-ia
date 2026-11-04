@@ -3,7 +3,7 @@
 **Escopo**: setes
 **Status**: Rodada 1 FECHADA (2026-10-31 — D-AU1…D-AU12; NENHUMA questão aberta). Execução pela D-AU6: costura A1 dentro do bloco de
 privilégios (passo 4 do plano de retomada) + estreitar o GRANT da nfse-api na mesma janela (D-AU12) → ondas 0 do grupo e do convidado →
-troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias); D-EA25 decidida — próxima pergunta: Q-EA26.
+troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias); D-EA25 e D-EA26 decididas — próximo: o "sim" para fechar o item 0 do endurecer.
 **Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
 frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
 setes-api, nfe-api ou nfse-api ou outra api"*.
@@ -421,3 +421,9 @@ convidado), depois P-CAMPO-4. Execução de código só com o "sim" do Valdo par
 
 **2026-11-04 (mesmo dia)**: Q-EA25 → **D-EA25** (Valdo, *"a"*: frente própria "dado pessoal no log"; nada muda no item 0; abrir a frente
 é da orquestradora). Próxima pergunta: **Q-EA26**.
+**Regra de condução (D-GP53, Valdo, 2026-11-04, avisada pela orquestradora)**: perguntas e "vai" desta frente vão ao Valdo DIRETO na
+sessão da frente — a governança não as leva; a cada parada segue uma linha em `D:\Setes-Governanca\orquestracao\notas-das-frentes.md`,
+só como registro.
+**2026-11-04**: Q-EA26 → **D-EA26** (Valdo, *"(a) Recusar em todos"*: a peça de e-mail recusa destinatário que não seja um endereço único
+válido). Com ela o elo 1 do §7.1 fica SEM decisão pendente: `setes-api:SENHA.E7.P2` passa a esperar só o "sim" para executar (D-EA26 no
+item 0 + gate do delta final + trazer o `main` + suíte) e, depois, o ensaio do Valdo e o "vai" do merge. Próxima pergunta: o "sim" do item 0.
