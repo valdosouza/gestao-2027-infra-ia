@@ -2705,3 +2705,43 @@ nfse-api (cópia do main) contra o núcleo FINAL **65 suítes, 949 passaram, 185
   sob o modo estrito em cópia descartável — algum pode depender do corte silencioso; o que aparecer vira correção ou questão. Gates da
   nfse-api no escopo (o restart muda o comportamento dela). Regra a destilar no PADROES junto da execução. **Bloco de decisões da NE-2
   FECHADO (D-NE169…D-NE172)** — publicação da NE-2 (D-NE168) segue a qualquer hora com o "vai".
+
+#### 15.9.8 Junção do `ne2` sobre o `main` atual do núcleo (2026-11-04 — passo `FAMILIA.E4.P2` da governança; NADA publicado)
+
+> Por que: o `main` do núcleo andou 4 commits da costura A1 (cb7e546…9b19a9e, passo 4 do plano 10-21) depois do `ne2` (6edb45f, sobre abce0b8),
+> então o `git merge --ff-only ne2` do §15.9.4 passo 2 não vale mais. Feito numa branch de trabalho, nunca no `main` (o ff + push = "vai" V14).
+
+- **Estado conferido pelo git**: árvore viva `D:\Gestao2027\fiscal-api` LIMPA em `main` = `origin/main` = 9b19a9e; base comum abce0b8. O `ne2` mexe em
+  12 arquivos (só `src/` e testes), o `main` em 13 (costura A1: `access/`, `auth/product-jwt.ts`, `erp/facts.ts`, `error-codes.ts`, `package.json` com o
+  subpath `./access`, testes). **Único arquivo em comum: `src/index.ts`** (exports da NE-2 × export da A1) — junção automática, sem conflito, nenhuma
+  decisão tocada. Nenhuma dependência nova (o `package.json` só ganhou o subpath).
+- **Branch de trabalho `ne2-sobre-main`** na worktree `D:\Gestao2027\ne2\fiscal-api`: commit de merge **c2c0a2f** (pais 9b19a9e · 6edb45f), LOCAL, sem push.
+  O `ne2` (6edb45f) ficou intacto.
+- **Provas na árvore mesclada** (`npm ci` refeito — os `node_modules` das worktrees `ne2` tinham sumido de novo):
+  - núcleo: `tsc --noEmit` limpo · `npm run build` ok · **`npm test`: 63 suítes, 1152 passaram, 1 pulado, 0 falhas** (inclui `ne2-merchandise`,
+    `ne2-numbering`, `access-a1`, `adversarial-a1-delta-gate` e a P6 do CNPJ inteira);
+  - **nfse-api** (cópia destacada `ne2\nfse-api` movida para o `main` atual dela, **c6cc83d** — o "949" do §15.9.6 era do 62c5fcf; ela cresceu com a
+    NT 009 e o passo 4) contra o núcleo mesclado: `tsc --noEmit` limpo · **73 suítes, 1110 passaram, 185 pulados (ao vivo), 0 falhas**. A nfse-api no
+    ar NÃO foi tocada nem reiniciada;
+  - **nfe-api** (`ne2\nfe-api`, branch `ne2` e615f29, só medida): `tsc` limpo · **41/41** contra o núcleo mesclado.
+- **As 2 falhas da P6 (§15.9.2) — causa PROVADA, não tem nada a ver com a costura A1**: a P6 carrega os três gêmeos `federal-id-fence.ts` pela pasta
+  AVÔ da worktree (`WORKSPACE = ../../..` do teste → `D:\Gestao2027\ne2`), e o gêmeo do setes-api faz `import ts from 'typescript'`; a cópia
+  destacada `ne2\setes-api` não tem `node_modules`, então o `require` dá `MODULE_NOT_FOUND` (provado fora do jest: o MESMO arquivo — idêntico ao
+  da árvore viva, conferido por diff — carrega e acusa na viva e falha na cópia). Com a costura A1 e sem `typescript` na cópia, as 2 falhas
+  continuavam (1150/1/2). Correção do AMBIENTE de prova (sem código): cópia SIMPLES do pacote `typescript` 5.9.3 (a mesma versão da árvore viva) em
+  `ne2\setes-api\node_modules\` (gitignored; nunca junção) → a P6 passa. ⚠️ Conhecimento negativo: `NODE_PATH` e `jest --modulePaths` NÃO resolvem
+  (o require do gêmeo fora do `rootDir` segue a resolução pela pasta do arquivo). Na árvore viva o gêmeo tem `node_modules` — a P6 passa lá.
+- Cópias destacadas movidas (só leitura, nada commitado nelas): `ne2\nfse-api` → c6cc83d, `ne2\setes-api` → 5cfd052 (o `main` vivo do setes-api).
+  Junções criadas pelo `npm ci` (`file:../fiscal-api`): `ne2\nfse-api\node_modules\fiscal-api` e `ne2\nfe-api\node_modules\fiscal-api` →
+  `ne2\fiscal-api`; nenhuma aponta para árvore viva. ⚠️ Apagar as duas com `cmd /c rmdir` ANTES de qualquer `git worktree remove` (o remove
+  segue a junção).
+
+**Roteiro de publicação REVISTO** (substitui só o passo 2 do §15.9.4; o resto vale como está — executar SÓ com o "vai" V14):
+2. Núcleo: na árvore viva conferir `git status` LIMPO e `main` = 9b19a9e; **`git merge --ff-only ne2-sobre-main`** (c2c0a2f — o ff ainda vale enquanto
+   o `main` não andar; se andar, refazer esta junção); `npm run build`; `npm test` na viva (alvo: 1152/1 pulado/0); `git push origin main`. Sem restart
+   da nfse-api nem do setes-api (a superfície `fiscal-api/access` e `fiscal-api/reading` não muda; levam o núcleo novo no próximo restart que
+   houver por outro motivo).
+3. nfe-api: **o `--ff-only` ainda vale** (`main` a9ef9ac é ancestral do `ne2` e615f29 — conferido) — passo 3 do §15.9.4 sem mudança.
+5. Limpeza: além do §15.9.4, `git branch -d ne2-sobre-main` no núcleo depois do ff (e as junções acima antes do `worktree remove`).
+
+**⏯ Ponto de retomada**: a junção está pronta e provada; falta só o "vai" V14 (núcleo + nfe-api juntos). Nada mais a fazer antes dele.
