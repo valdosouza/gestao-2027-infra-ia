@@ -133,7 +133,7 @@ Pedido do Valdo, antes do commit: *"verifique o que vai interferir e vamos nos a
   salvar dessas telas passa antes pelo setes-api (fachada) — chamada entre serviços que a D-F4/D-AU3 evitaram. **Rec.: (a)** — onde o
   usuário digita o cliente pode apertar (critério da D-CF1) e a regra fica em UM lugar; (b) devolveria ao "nada" 3 telas hoje completas.
   Não trava a onda 4a (essas telas não são tocadas nela); precisa estar decidida antes da A2 da auth-api.
-- **Q-CF7 — a extração da auth-api (A2) espera a onda de campos INTEIRA terminar?** (2026-11-05, aberta pela frente da auth-api —
+- ✅ **Q-CF7 → D-CF7 (2026-11-05, (a)).** Texto original: **Q-CF7 — a extração da auth-api (A2) espera a onda de campos INTEIRA terminar?** (2026-11-05, aberta pela frente da auth-api —
   `prompt_frente_auth_api.md` §7.4; na governança era a P-CAMPO-4 + a dependência `setes-api:CAMPO.E10 → CAMPO.E9.P1`.) Hoje a governança põe
   a biblioteca do motor (D-CF6) DEPOIS do fecho da onda (cerca sem exceção, que espera também produtos, terminal e a aba do regime IBS/CBS) —
   a A2 herdaria a onda inteira (7–8 sessões + três frentes). A D-CF6 diz só "execução: na A2 (antes dela não há 2º consumidor)" e entrega o
@@ -190,6 +190,13 @@ Pedido do Valdo, antes do commit: *"verifique o que vai interferir e vamos nos a
   D-CF2 varre os dois repositórios. Porquê: onde o usuário digita o cliente pode apertar (critério da D-CF1) e a regra fica em um lugar
   só — (b) devolveria 3 telas completas ao "nada"; (c) criaria chamada entre serviços. Execução: na A2 da auth-api (antes dela não há
   2º consumidor); onde mora o pacote (repositório/subpath) e a forma da leitura são detalhe de execução, com o guardião.
+- **D-CF7** (Valdo, 2026-11-05 — fecha a **Q-CF7** = (a), literal: *"(a) Não espera"*; perguntada pela frente da auth-api) — a A2 da
+  auth-api NÃO espera a onda de campos: a biblioteca do lado API do motor (D-CF6) nasce DENTRO da A2, no passo dos escritores; o lugar do
+  pacote e a forma da leitura (a antiga P-CAMPO-4 da governança) são decididos com o guardião no próprio passo — detalhe de execução, não
+  questão ao Valdo. A cerca da D-CF2, quando existir, varre os dois repositórios (como a D-CF6 já diz); se a A2 vier antes do bloco 0, a
+  cerca nasce já lendo a auth-api. Efeito na governança: a dependência `setes-api:CAMPO.E10 → CAMPO.E9.P1` cai (o passo da biblioteca não
+  espera o fecho da onda, nem produtos, terminal ou IBS/CBS); a T3 "a cerca varre a auth-api" só cobra quando a cerca existir. Recusados:
+  (b) esperar a onda inteira; (c) esperar só o bloco 0 (traria P-CAMPO-1/P-CAMPO-3 para o caminho da A2).
 
 ## 5. Roteiro de execução (2026-10-31 — PROPOSTA, não decide)
 

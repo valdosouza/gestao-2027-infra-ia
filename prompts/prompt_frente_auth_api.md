@@ -441,3 +441,24 @@ em paralelo podem andar `GRUPO.E3.P1` (pronto, janela com plano) e `CONV.E2.P1�
 (§7.2 item 3 — registrar antes como Q-UC28 no prompt do convidado).
 **2026-11-05**: P-111 = Q-UC28 → **D-UC13** (*"(a) Não criar agora"* — sem registro durável da senha inicial até haver leitor; prompt do
 convidado). O convidado (`CONV.E2`) fica SEM decisão pendente. Próxima decisão da cadeia: **P-CAMPO-4** (§7.2 item 4).
+**2026-11-05**: P-CAMPO-4 + a dependência `CAMPO.E10 → CAMPO.E9.P1` = Q-CF7 → **D-CF7** (*"(a) Não espera"*: a biblioteca do motor nasce
+DENTRO da A2; lugar do pacote com o guardião no passo). **Com isso o ENTORNO da A2 não tem mais decisão pendente** — falta só EXECUÇÃO:
+item 0 (ensaio + "vai") → Ondas 1+2 → 3 → 4 do endurecer; `GRUPO.E3.P1`; `CONV.E2.P1…P6`. As perguntas localizadas da própria A2 (P-2, P-3)
+resolvem-se no passo, com o guardião. Para a governança (pedidos de mudança, a frente só aponta): Q-EA25/Q-EA26/P-111/P-CAMPO-4 fechadas;
+a dependência `setes-api:CAMPO.E10 → CAMPO.E9.P1` cai (D-CF7).
+
+### 7.6 A A3 — o que nenhum documento diz (2026-11-05)
+
+A D-AU6 só diz "A3 — antes da Onda 4 (não publicar topologia que muda logo depois)"; o §3 repete. Conferido nos prompts da frente, do
+endurecer, de privilégios e no plano 10-21: nenhum dá conteúdo à A3. Achado ao procurar: **nenhum documento diz o que acontece com a CÓPIA
+ANTIGA da senha em `setes_central`** depois que a A2 muda a credencial para `tb_user_credential` (D-AU11: "a credencial só muda de banco";
+a tarefa `AUTH.E2.P2.T1` da governança: "recebe sem perder") — mas o motivo da D-AU4 é justamente "o segredo sai do alcance de quem lê o
+banco do produto". Hoje ficam lá `tb_user.password` (o hash) e `tb_user.activation_key` (resto da recuperação antiga).
+
+- **Q-AU13 — o que é a A3?** (a) **a etapa que TIRA o segredo antigo do banco do produto depois que a A2 roda estável: esvaziar
+  `tb_user.password` e `tb_user.activation_key` em `setes_central` (a auth-api já lê só `tb_user_credential`), conferir que nenhum código
+  do setes-api, do núcleo ou das APIs fiscais lê essas colunas (cerca), e o que mais a A2 deixar de sobra — tudo antes da Onda 4, para o
+  servidor público nascer sem hash no banco do produto**; (b) a A3 deixa de existir: a A2 já esvazia a cópia antiga no MESMO passo em que
+  migra a credencial; (c) decidir o conteúdo da A3 só quando a A2 terminar. *(Rec.: (a) — cumpre o motivo da D-AU4 e mantém "uma mudança
+  de risco por vez" (D-AU11): primeiro a credencial muda de banco e roda; depois a cópia antiga some, com a volta possível enquanto ela
+  existe; (b) junta as duas mudanças de risco; (c) deixa o deploy sem critério.)*
