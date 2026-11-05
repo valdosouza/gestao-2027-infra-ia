@@ -1114,3 +1114,41 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
 - *(histórico)* **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → ~~Q-EA28~~ (D-EA28, provada ao vivo) → ~~Q-EA29~~ (D-EA29, executada) — fila ZERADA; o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
   4 — `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`); o **"vai"** do merge `super-reset` → `main`
   e do push (árvore viva = deploy); depois as Ondas 1+2.
+
+### P.11 Ondas 1+2 — execução em worktree (2026-11-05; Valdo: "Sim, começar"; NADA publicado, NADA aplicado em `setes_central`)
+
+- **Onde**: `D:\Gestao2027\ondas12\{setes-api, sql}` (branches `ondas12`, a partir dos `main` 1270ba0 / 2232b84) + irmãs destacadas
+  `ondas12\{fiscal-api (main c2c0a2f, build), nfse-api}` só para as cercas (junções `node_modules/fiscal-api` apontam para a irmã — apagar
+  ANTES de remover). Commits LOCAIS: sql **474bf2a** (script `74_user_login_failure_ddl.sql` + espelho no `01`) · setes-api **07c2f7c**
+  (entrega) · **444c253** (correções dos gates) · **89d1ac4** (teste da re-prova).
+- **O que entrou** (pelo §P.3–§P.5): `tb_user_login_failure` + `tb_user_login_block_notice` (D-EA2/D-EA14, boot recusa sem elas —
+  `assertLoginLockReady`); login com limite por conta (D-EA1: 10/15 min, janela deslizante, senha certa recusada no bloqueio, sem
+  desbloqueio por troca de senha), resposta única 401 com piso `LOGIN_REFUSAL_FLOOR_MS` = 400 ms (D-EA6; "Usuário inativo"/403 morreram),
+  senha conferida fora da trava em tempo constante (`passwordMatches`), trava `lockUserCredential` (ex-`lockUserForPasswordReset`), aviso ao dono
+  na falha que leva a 10 sob SAVEPOINT (D-EA15; receita única `claimNoticeSlot` também para a recuperação), uma linha de log por recusa
+  (D-EA11), alarme global em memória `src/modules/auth/login-watch.ts` (D-EA4) com `OPS_ALERT_EMAIL` obrigatório em produção (boot +
+  pré-voo), Swagger do `/auth/login`, `CLAUDE.md`. Testes `auth-login-lock-d-ea1` (34) + `login-watch-d-ea4` (15) cobrindo L1–L13/A1–A9.
+  Prova `scripts/prove-login-lock.ts` em descartável: 50 erradas paralelas = 10 linhas, 0 deadlock, 1 aviso; EXPLAIN pelo índice; L13 =
+  limite aceito (trava S de FK de negócio segura o login até 5 s → recusa neutra).
+- **Gates**: 1ª rodada REPROVADA — socrático **0,66** · adversarial **0,62**, o MESMO **HIGH**: sob a trava do login (1 conexão + FOR
+  UPDATE) o caminho da senha certa pedia OUTRA conexão ao pool (vínculos e contexto por `pool.query`; pool 20, sem prazo) → 20 logins
+  certos simultâneos travavam a API inteira (provado com o pool dublado e a semântica do mysql2 provada ao vivo). **CORRIGIDO**: vínculos pela
+  conexão da transação, assinatura (sem banco) segue sob a trava, o `context` lido DEPOIS do COMMIT. Junto: log do e-mail digitado só mascara
+  endereço único (ADV-O12-03 — "e-mail + senha" no campo levava a senha ao log), teto de 320 caracteres no e-mail (acima = mesma recusa do
+  inexistente, sem banco), uma linha por recusa na contenção. **Re-prova do delta: socrático 0,80 ✅ · adversarial 0,82 ✅**, sem HIGH.
+  **Conhecimento negativo**: NUNCA `pool.*` com transação aberta (o mysql2 espera conexão sem prazo — teste `[SEMÂNTICA]` ao vivo); o
+  `recordCrash` do `alarmNeutral` dentro do SAVEPOINT só não trava porque é sem `await` — nunca pôr `await` ali.
+- **Suíte inteira** depois das correções: **170/170 arquivos, 2990 verdes, 34 pulados, 0 falha**; `tsc` limpo.
+- **Questões (uma por vez, ao Valdo direto — D-GP53)**:
+  - **Q-EA30 — contexto ilegível depois do COMMIT** (ADV-REGATE-02, LOW, aberto pela correção do HIGH): se a leitura do bloco "é vendedor"
+    falhar depois da admissão, o login com a senha certa hoje responde 500 sem ref (a errada responde 401). (a) **entra com o contexto padrão
+    (`isSalesman: false`) + alarme com ref — a admissão já foi decidida e o contexto é só ajuda de tela**; (b) recusa neutra 401 + alarme
+    (como antes da correção). *(Rec.: (a).)*
+  - **Q-EA31 — token assinado no mesmo segundo de uma troca de senha concorrente**: a revogação compara `password_set_at <= iat` ao
+    segundo; uma troca que grava no MESMO segundo da assinatura deixa vivo o token recém-assinado. (a) **limite conhecido até a A2, com teste
+    que fixa**; (b) comparação estrita (derruba também o token emitido no mesmo segundo da própria troca). *(Rec.: (a).)*
+  - **Q-EA32…Q-EA35 (da implementação)**: `userId` na linha do log (D-EA11 lista e-mail mascarado, IP, motivo, instante; incluído porque
+    duas contas `v***@x` ficariam indistinguíveis); o texto do aviso de bloqueio (segue a D-EA3, não diz "conta suspensa"); a linha
+    `[ALARME LOGIN]` do log também respeita os 15 min; o piso de 400 ms provisório (medir no servidor real, junto da D-EA17).
+- **Falta**: Q-EA30…Q-EA35 → executar o que couber → "vai" (janela: script 74 em `setes_central` ANTES do código; `OPS_ALERT_EMAIL` no
+  `.env` vivo; merge `ondas12` → `main` nos dois repositórios + push) → Onda 3.
