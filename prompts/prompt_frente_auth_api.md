@@ -434,3 +434,8 @@ trazido, gate do delta final socrático 0,80 · adversarial 0,78 sem HIGH, achad
 **2026-11-04**: Q-EA27 → **D-EA27** (*"(a) Só o do fim"*: aparado = só o espaço do fim, como o login; executada, `5c397f6`). Próxima: **Q-EA28**.
 **2026-11-05**: Q-EA28 → **D-EA28** (*"(a) Limite conhecido"*; teste que fixa a semântica escrito — a prova ao vivo espera o MySQL do dev,
 que estava PARADO). Próxima: **Q-EA29**.
+**2026-11-05**: Q-EA29 → **D-EA29** (*"(a) Alarme no pré-voo"*; executada, `1270ba0`); MySQL de volta → D-EA28 provada ao vivo (34/34).
+**O item 0 não tem mais decisão pendente** — `setes-api:SENHA.E7.P2` espera só (1) o ENSAIO real do script pelo Valdo, sem `--vai` (o agente
+não pode rodá-lo), e (2) o "vai" do merge `super-reset` → `main` + push. Depois: Ondas 1+2 (`AUTH.E3`, pelo §P.7 passo 3 do endurecer);
+em paralelo podem andar `GRUPO.E3.P1` (pronto, janela com plano) e `CONV.E2.P1…P4` (prontos); a próxima DECISÃO da cadeia é a **P-111**
+(§7.2 item 3 — registrar antes como Q-UC28 no prompt do convidado).

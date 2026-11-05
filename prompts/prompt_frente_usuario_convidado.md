@@ -713,6 +713,18 @@ Herdadas e válidas sem decisão nova: decisões 9, 10, 14, 19 e 23 da Fase 2 ·
 > descartável, onda 0 depois da fusão da `privilegios-crud` (mesmo `users.service.ts`), coordenada com a branch `recuperacao-senha`
 > (D-UC7 reaproveita a peça do código por e-mail). Próximo número: **D-UC13**.
 
+> **2026-11-05 — questão nova, aberta pela frente da auth-api** (`prompt_frente_auth_api.md` §7.2 item 3; na governança era a P-111, que
+> trava o passo "minha senha" desta onda e, por ele, a A2):
+> - **Q-UC28 — a senha INICIAL definida por outra pessoa deixa um registro durável?** Hoje, quando o admin cria o usuário com a senha
+>   inicial (D-UC8), ou o operador redefine a senha do Super (D-PV46/D-RS13), nada no banco diz "esta senha foi definida por terceiro, por
+>   quem, quando" — só o `tb_user.updated_at`, o `password_set_at` (D-EA7) e o log do operador. A D-RS13 e a D-RS15 deixaram o lugar em
+>   aberto ("nasce com a credencial da auth-api — D-AU5 — / onda 0 do convidado — D-UC8"); o parecer do guardião (`prompt_privilegios_
+>   interfaces.md` §13.10.1) nomeou a peça possível (`tb_user_password_assignment`), sem consumidor. (a) **não criar agora: o log e os
+>   avisos bastam; a peça só nasce quando houver quem a leia (fica no Futuro da governança, F-SENHA-3)**; (b) criar na A2, ao lado da
+>   `tb_user_credential` no banco `auth_api`; (c) criar já nesta onda, em `setes_central`, e mudar de banco na A2. *(Rec.: (a) — nenhuma
+>   tela nem regra lê o fato hoje (a D-UC8 recusou a troca obrigatória no 1º acesso); (a) e (b) destravam o "minha senha" na hora; (c) põe
+>   DDL nesta onda sem leitor.)*
+
 
 Depois da 2ª resposta do Valdo (análise no §7.2):
 - ~~Confirmar primeiro: A-UC2~~ → **A-UC2 SEM OBJETO (D-PV18, 2026-10-18: os apps não têm recuperação de senha)**; no lugar, decidir a

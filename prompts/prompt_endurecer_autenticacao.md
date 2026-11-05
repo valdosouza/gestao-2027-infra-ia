@@ -15,7 +15,8 @@ mailer) decididas e executadas; **D-EA22** (corrida rebaixar × redefinir = limi
 DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 — **D-EA23** (regra única do e-mail de login) e **D-EA24**
 (teto total de 60 s no aviso) decididas e executadas; **D-EA25** (2026-11-04: dado pessoal no log fora de `/auth` = frente própria);
 **D-EA26** (2026-11-04: a peça de e-mail recusa destinatário que não seja um endereço único válido) — **executada 2026-11-04 com o gate do
-delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 — **D-EA27** (aparado = só o espaço do fim) decidida e executada; **D-EA28** (troca do e-mail × script = limite conhecido, teste que fixa) decidida; segue a Q-EA29; depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
+delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 — **D-EA27** (aparado = só o espaço do fim) decidida e executada; **D-EA28** (troca do e-mail × script = limite conhecido, teste que fixa) e **D-EA29** (censo dos e-mails ruins no pré-voo, alarme)
+decididas e executadas — fila do item 0 ZERADA; depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -442,7 +443,18 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   nada escala, a senha nunca vai a ninguém. Teste que FIXA a semântica: `[SEMÂNTICA D-EA28]` em
   `adversarial-super-reset-delta-gate.test.ts` (ao vivo, schema descartável). ⚠️ Escrito em 2026-11-05 com o MySQL do dev PARADO (serviço
   `mysql` Stopped — ligar exige administrador): a prova ao vivo do teste e a re-rodada da suíte ficam para quando o Valdo ligar o serviço.
-  Recusado: (b) o módulo `users` tomar a trava da linha do usuário antes de trocar o e-mail (fora do item 0).
+  Recusado: (b) o módulo `users` tomar a trava da linha do usuário antes de trocar o e-mail (fora do item 0). **PROVADO ao vivo
+  2026-11-05** com o MySQL de volta: `adversarial-super-reset-delta-gate` 34/34 (commit `fa5ff93`).
+- **D-EA29** (Valdo, 2026-11-05 — fecha a **Q-EA29** = (a), literal: *"(a) Alarme no pré-voo"*; aberta pelo gate socrático do delta
+  final) — o pré-voo do deploy (`scripts/pre-deploy-tz-check.ts`) faz o CENSO dos e-mails de login que a peça de envio recusaria
+  (D-EA26/D-EA27) e mostra um ALARME com a contagem e os ids (e-mail mascarado — D-EA21), sem nunca barrar o deploy (não muda o código de
+  saída). Motivo: para uma conta assim a recuperação de senha emite o código, consome o teto e não entrega — o único sinal era um
+  `logger.error` por pedido; o censo deixa corrigir o cadastro antes de o titular precisar. **EXECUTADA na mesma hora** na worktree
+  `super-reset` (commit local `1270ba0`): peça `src/modules/auth/login-email-census.ts` (`censusUnsendableLoginEmails` — a junção do login,
+  o MESMO predicado `singleMailAddress`, só leitura), `checkLoginEmails` no pré-voo, teste `login-email-census-d-ea29.test.ts` (2/2);
+  pré-voo rodado ao vivo no dev: 3 e-mails de login conferidos, nenhum com defeito. Recusados: (b) recusar subir; (c) só o log.
+  **Fila do gate do delta final ZERADA (Q-EA27…Q-EA29).** Suíte inteira na `super-reset` depois da D-EA29, com o MySQL de volta:
+  **167/167 arquivos, 2915 verdes, 34 pulados, 0 falha**; `tsc` limpo.
   *(Registro da D-EA27, que fica aqui pela ordem da escrita)* **Suíte inteira depois da D-EA27**:
   2910 verdes, 2 falhas de TEMPO sob carga (`adversarial-d-rs4-gate` "diferença < 300 ms" mediu 508 ms; `grupo-leitores-d-ge4` estourou
   5 s) — as duas passam isoladas (a do D-RS4, que tem o envio dublado e não passa pela peça, passou 2× seguidas); conhecimento negativo:
@@ -1088,9 +1100,9 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
     trava da linha do usuário): o aviso pode ir ao e-mail velho. (a) **estender o limite conhecido da D-EA22 ao e-mail, com teste que fixa
     a semântica**; (b) o módulo `users` toma a trava da linha do usuário antes de trocar o e-mail (mexe fora do item 0). *(Rec.: (a) — mesma
     família e mesma razão da D-EA22.)*
-  - **Q-EA29 — censo dos logins que a D-EA26 recusaria**: a recuperação de uma conta assim emite o código, consome o teto e não entrega
+  - ✅ **Q-EA29 → D-EA29 (2026-11-05, (a) — EXECUTADA, `1270ba0`).** Texto original: **Q-EA29 — censo dos logins que a D-EA26 recusaria**: a recuperação de uma conta assim emite o código, consome o teto e não entrega
     (o único sinal é um `logger.error` por pedido). (a) **entra no pré-voo do deploy (`scripts/pre-deploy-tz-check.ts`) como ALARME**; (b)
     como recusa de subir; (c) só o log a cada pedido (como está). *(Rec.: (a).)*
-- **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → ~~Q-EA28~~ (D-EA28; provar o teste ao vivo quando o MySQL voltar) → Q-EA29 (executar o que couber); o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
+- **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → ~~Q-EA28~~ (D-EA28, provada ao vivo) → ~~Q-EA29~~ (D-EA29, executada) — fila ZERADA; o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
   4 — `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`); o **"vai"** do merge `super-reset` → `main`
   e do push (árvore viva = deploy); depois as Ondas 1+2.
