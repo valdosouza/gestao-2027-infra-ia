@@ -4,7 +4,7 @@
 **Status**: Rodada 1 FECHADA (2026-10-31 — D-AU1…D-AU12; NENHUMA questão aberta). Execução pela D-AU6: costura A1 dentro do bloco de
 privilégios (passo 4 do plano de retomada) + estreitar o GRANT da nfse-api na mesma janela (D-AU12) → ondas 0 do grupo e do convidado →
 troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias); D-EA25…D-EA29, D-UC13, D-CF7 e **D-AU13** (a A3 apaga a cópia antiga da senha) decididas em 04–05/11 — **NENHUMA questão aberta na frente
-nem no entorno da A2**; item 0 do endurecer fechado na `super-reset` (falta o ensaio do Valdo e o "vai"). ⏯ Retomar pelo **§7.7**.
+nem no entorno da A2**; item 0 do endurecer PUBLICADO em 05/11 (setes-api `main` 1270ba0). Próximo: Ondas 1+2. ⏯ Retomar pelo **§7.7**.
 **Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
 frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
 setes-api, nfe-api ou nfse-api ou outra api"*.
@@ -476,7 +476,8 @@ banco do produto". Hoje ficam lá `tb_user.password` (o hash) e `tb_user.activat
 
 **Nenhuma decisão pendente na frente nem no entorno da A2** (D-EA25…D-EA29, D-UC13, D-CF7, D-AU13 — todas de 04–05/11). Falta só execução,
 cada passo com o "sim" do Valdo e pela governança de código (worktree, gates, "vai"):
-1. **Item 0 do endurecer** (worktree `D:\Gestao2027\super-reset`, commits locais até `1270ba0`, suíte 167/167): o Valdo roda o ENSAIO
+1. ✅ **PUBLICADO 2026-11-05** ("Ensaio ok, vai"): setes-api `main` = **1270ba0** (fast-forward, GitHub), worktree `super-reset` removida.
+   *(texto anterior)* **Item 0 do endurecer** (worktree `D:\Gestao2027\super-reset`, commits locais até `1270ba0`, suíte 167/167): o Valdo roda o ENSAIO
    (`npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`, em `super-reset\setes-api`) → "vai" → merge na
    árvore viva + push (antes: conferir se o `main` andou de novo) → remover a worktree (apagar ANTES as junções `node_modules/fiscal-api`).
 2. **Ondas 1+2** (§P.7 passo 3 do endurecer: script 74, `prove-login-lock.ts`, testes L/A) → **Onda 3** (API + app) → **Onda 4** (scrypt).

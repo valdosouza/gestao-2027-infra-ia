@@ -16,7 +16,7 @@ DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 —
 (teto total de 60 s no aviso) decididas e executadas; **D-EA25** (2026-11-04: dado pessoal no log fora de `/auth` = frente própria);
 **D-EA26** (2026-11-04: a peça de e-mail recusa destinatário que não seja um endereço único válido) — **executada 2026-11-04 com o gate do
 delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 — **D-EA27** (aparado = só o espaço do fim) decidida e executada; **D-EA28** (troca do e-mail × script = limite conhecido, teste que fixa) e **D-EA29** (censo dos e-mails ruins no pré-voo, alarme)
-decididas e executadas — fila do item 0 ZERADA; depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
+decididas e executadas — fila do item 0 ZERADA; **item 0 PUBLICADO 2026-11-05** (`main` 1270ba0, GitHub; §P.10); depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -1103,6 +1103,14 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   - ✅ **Q-EA29 → D-EA29 (2026-11-05, (a) — EXECUTADA, `1270ba0`).** Texto original: **Q-EA29 — censo dos logins que a D-EA26 recusaria**: a recuperação de uma conta assim emite o código, consome o teto e não entrega
     (o único sinal é um `logger.error` por pedido). (a) **entra no pré-voo do deploy (`scripts/pre-deploy-tz-check.ts`) como ALARME**; (b)
     como recusa de subir; (c) só o log a cada pedido (como está). *(Rec.: (a).)*
-- **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → ~~Q-EA28~~ (D-EA28, provada ao vivo) → ~~Q-EA29~~ (D-EA29, executada) — fila ZERADA; o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
+- **✅ PUBLICADO 2026-11-05** (Valdo: *"Ensaio ok, vai"* — o ENSAIO real do script, sem `--vai`, foi rodado pelo Valdo e passou):
+  `main` do setes-api avançado direto (fast-forward) de `5cfd052` para **`1270ba0`** na árvore viva e enviado ao GitHub; o setes-api não
+  estava no ar (nada recarregou); nada de banco nesta entrega (nenhum script novo de `sql/`). Worktrees `super-reset\{setes-api, fiscal-api,
+  sql, nfse-api}` REMOVIDAS (junções `node_modules/fiscal-api` apagadas antes — apontavam para a irmã, não para a árvore viva) e a branch
+  `super-reset` apagada (o conteúdo está no `main`). Suíte na ÁRVORE VIVA (irmãs vivas — núcleo `fiscal-api` em c2c0a2f, com a NE-2): 2910
+  verdes e 5 falhas de TEMPO sob carga (rodada de 810 s; 2 testes estouraram 5 s, 2 medições de tempo fora do limite, o ensaio do script
+  passou dos 120 s do `spawnSync`); os 5 arquivos re-rodados em fila (`--runInBand`): **158/158 verdes**. `tsc` limpo. **Próximo: Ondas
+  1+2** pelo §P.7 passo 3 (worktree própria a partir deste `main`).
+- *(histórico)* **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → ~~Q-EA28~~ (D-EA28, provada ao vivo) → ~~Q-EA29~~ (D-EA29, executada) — fila ZERADA; o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
   4 — `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`); o **"vai"** do merge `super-reset` → `main`
   e do push (árvore viva = deploy); depois as Ondas 1+2.
