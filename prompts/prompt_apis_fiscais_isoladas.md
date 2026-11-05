@@ -5645,3 +5645,79 @@ trilha com cTribMun "0102" + desativar as regras de ISS 1/3/4) → 7 (trilha →
 PENDÊNCIAS FORA DO CAMINHO CRÍTICO (chips abertos): "Levar D-F206/D-F217 às listas do app" e "Levar D-F209/D-F210 aos módulos do app".
 Ao fim de cada passo: docs (§22.50+), INDICE_CENTRAL, CLAUDE.md da raiz, memória apis-fiscais-isoladas.
 ```
+
+---
+
+## 23. F3 — DEPLOY.E1.P1: o núcleo por VERSÃO MARCADA (R13, D-F133 parte (a)) — Rodada 0 (2026-11-05)
+
+**Escopo**: setes · Passo da governança `fiscal-api:DEPLOY.E1.P1` (escolha do Valdo em 2026-11-05: "Versão marcada"). Provas exigidas: (T1) o
+núcleo publicado numa tag/pacote e nfse-api e setes-api dependendo dela em vez de `file:../fiscal-api`; (T2) o `dist` reconstruído da tag e
+conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de produção; (T3) as suítes da nfse-api e do setes-api contra a tag.
+
+### 23.1 Fatos do inventário (conferidos no disco, núcleo `main` 9e11daa)
+
+1. **Os três consumidores** (nfse-api, nfe-api, setes-api) declaram `"fiscal-api": "file:../fiscal-api"` — o npm cria uma JUNÇÃO para a pasta
+   viva; o `package-lock` registra `"resolved": "../fiscal-api"` (sem versão, sem integridade).
+2. **A nfse-api e a nfe-api leem a RAIZ do núcleo pelo `src` vizinho** em três lugares: `tsconfig.json` `paths` (`fiscal-api` →
+   `../fiscal-api/src/index.ts`, usado pelo `tsx --require tsconfig-paths/register` do `dev`/`migrate:setes`), `jest.moduleNameMapper` (mesmo
+   alvo) e — por consequência — a produção da nfse-api, que roda `tsx` (PADROES §11 regra 17, checklist da `nfse-api/INDEX.md`, item 1). Os
+   SUBPATHS (`fiscal-api/reading`, `/federal-id`, `/pdf`, `/access`) já vão pelo pacote (`exports` → `dist`). O `tsconfig.build.json` zera os
+   `paths`: o `node dist/server.js` (script `start`) já resolveria tudo pelo pacote. **Consequência**: trocar só o `package.json` NÃO pina nada
+   enquanto a produção rodar `tsx` com `paths` — o passo inclui a produção da nfse-api passar a `node dist` (o "trocar a produção para o
+   `dist`" que a `nfse-api/INDEX.md` deixou para a F3).
+3. **As suítes da nfse-api e da nfe-api testam o `src` VIZINHO, não o pacote** (o `moduleNameMapper`) — a prova T3 exige outro caminho.
+   Testes que LEEM o código do núcleo vizinho de propósito: `nfse-api/src/__tests__/grants-d-au12.test.ts` (`CORE_SRC`); as demais menções são
+   comentário. No setes-api: `f2a-fiscal-api-fence.test.ts:51` CRAVA `file:../fiscal-api` (muda junto) e `scripts/adv-a1-probe.ts:182` lê o
+   `src` do núcleo (script de gate, fora do runtime).
+4. **O `package-lock.json` do setes-api está no `.gitignore`** (nfse-api e nfe-api versionam o lock) — no setes-api nada fica pinado nem pelo
+   lock. E o núcleo declara dependências com faixa (`mysql2 ^3.6.5`, `jsonwebtoken ^9.0.2`, `node-forge ^1.4.0`, `xml-crypto ^6.3.1`) — um
+   pacote do núcleo instalado resolve a faixa NA HORA da instalação (o `mysql2` é o motor da sessão estrita e do conhecimento negativo do
+   `nextTick` — D-NE175).
+5. **O pacote é pequeno**: `npm pack` = 183 KB (544 KB aberto) — `dist` + `src/migrations/sql` (`files`).
+6. ⚠️ **Conhecimento negativo (npm 10.5.0, node 21.7.3)**: `npm pack` roda o `prepare` (= `npm run build`, recompila o `dist`) NA PASTA ONDE
+   RODA — mesmo com `--dry-run` E com `--ignore-scripts`. Medindo o pacote nesta sessão o `dist` da árvore viva foi recompilado DUAS vezes (do
+   mesmo `src` limpo 9e11daa; nenhum serviço no ar — portas 3000/3002/3003/3004/5051 sem escuta). Regra: o pacote nasce SEMPRE de uma cópia
+   limpa da tag (worktree descartável), nunca da árvore viva.
+7. **Repositório do núcleo é PRIVADO no GitHub**: dependência por URL git exigiria credencial na máquina de produção E rodaria o `prepare` na
+   instalação (compila no servidor — contra a T2).
+
+### 23.2 Questões (uma por vez — recomendação entre parênteses)
+
+- **Q-F221 — forma da versão**: (a) **arquivo do pacote (`.tgz`) gerado pelo `npm pack` numa cópia limpa da tag `vX.Y.Z`, guardado DENTRO de
+  cada consumidor (`vendor/fiscal-api-X.Y.Z.tgz`, versionado no git dele) e declarado `file:vendor/fiscal-api-X.Y.Z.tgz` — o lock grava a
+  integridade; a produção instala sem compilar e sem credencial** · (b) dependência por URL git com a tag (precisa de credencial no servidor e
+  compila na instalação) · (c) registro privado (GitHub Packages — token no servidor e em cada máquina). *(Rec.: (a).)*
+  → **D-F221 (Valdo, 2026-11-05: "Arquivo em cada serviço") = (a)**.
+- **Q-F222 — o desenvolvimento do dia a dia**: (a) **tudo pelo pacote — saem o `paths` do `tsconfig.json` e o `moduleNameMapper` da
+  nfse-api e da nfe-api; suítes, `dev` e produção usam só o `.tgz`; a produção da nfse-api passa a `node dist`; a frente que mexe no núcleo
+  gera o pacote de novo na worktree dela (um comando) para testar nos consumidores** · (b) produção pelo pacote, desenvolvimento pelo `src`
+  vizinho + uma suíte separada contra o pacote antes do deploy (raiz de um lugar e subpaths de outro). *(Rec.: (a).)*
+  → **D-F222 (Valdo, 2026-11-05: "Tudo pela versão") = (a)**.
+- **Q-F223 — número da 1ª versão**: (a) **1.0.0, tag `v1.0.0`, com a regra: correção sobe o 3º número; só acrescenta (export, subpath,
+  migration nova) sobe o do meio; muda o que os consumidores usam sobe o 1º** · (b) 0.2.0 até a F3 terminar. *(Rec.: (a) — em produção desde
+  14/10.)* → **D-F223 (Valdo, 2026-11-05: "1.0.0 com a regra") = (a)**.
+- **Q-F224 — dependências do núcleo com faixa e o lock do setes-api**. Fato novo: com a junção `file:` a nfse-api usa as dependências da
+  pasta do NÚCLEO (o lock dele: `mysql2` 3.24.5 — a versão em que a sessão estrita e o `nextTick` da D-NE175 foram provados); instalada pelo
+  `.tgz`, o npm resolve as faixas do núcleo NO CONSUMIDOR, na hora (o setes-api tem hoje `mysql2` 3.22.4). (a) **o núcleo declara as
+  dependências de execução na versão EXATA do lock dele + o setes-api passa a versionar o `package-lock.json` (sai do `.gitignore`)** · (b) só
+  as versões exatas no núcleo · (c) deixar as faixas. *(Rec.: (a).)*
+  → **D-F224 (Valdo, 2026-11-05: "Exatas + lista no setes-api") = (a)**.
+- **Q-F225 — a nfe-api entra junto**: (a) **sim — os três consumidores passam juntos para o `.tgz` 1.0.0** · (b) só nfse-api e setes-api.
+  *(Rec.: (a) — fora de produção, custo pequeno; senão ela fica a única pela pasta vizinha.)* → **D-F225 (Valdo, 2026-11-05: "Incluir a
+  nfe-api") = (a)**. **Rodada 0 FECHADA — nenhuma questão aberta.**
+
+### 23.3 Roteiro da execução (worktrees irmãs `D:\Gestao2027ersao\{fiscal-api,nfse-api,nfe-api,setes-api}`, branch `versao-1.0.0`)
+
+1. **Núcleo**: `version` 1.0.0; dependências de execução EXATAS pelo lock do núcleo (`mysql2` 3.24.5, `jsonwebtoken` 9.0.3, `node-forge`
+   1.4.0, `xml-crypto` 6.3.2 — D-F224); suíte; commit; tag `v1.0.0` LOCAL (o push da tag é da publicação).
+2. **Pacote**: `npm pack` numa cópia LIMPA da tag (fato 6) → `fiscal-api-1.0.0.tgz`; registrar `integrity` (sha512); a T2 se prova
+   gerando de novo, de outra cópia limpa da tag, e conferindo a MESMA integridade (o `npm pack` fixa a data dos arquivos).
+3. **Consumidores**: `vendor/fiscal-api-1.0.0.tgz` + `"fiscal-api": "file:vendor/fiscal-api-1.0.0.tgz"`; nfse-api e nfe-api perdem o
+   `paths` e o `moduleNameMapper` (D-F222); testes que liam o `src` vizinho passam a ler o pacote instalado; a cerca do setes-api
+   (`f2a-fiscal-api-fence.test.ts:51`) crava a dependência nova; o setes-api versiona o `package-lock.json` (D-F224).
+4. **Suítes contra o pacote** (T3): núcleo, nfse-api, nfe-api, setes-api; boot de conferência da nfse-api por `node dist` contra cópia
+   descartável do `fiscal_api` (as migrations do núcleo saem de `node_modules/fiscal-api/src/migrations/sql`).
+5. **Gates** (socrático ≥ 0,70 + adversarial sem HIGH) no delta.
+6. **Publicação** (só com o "vai"): ff dos quatro `main` + push + push da tag; `npm ci` nas árvores vivas dos consumidores (a junção
+   some); a produção da nfse-api passa a `npm run build` + `npm start` (`nfse-api/INDEX.md`, checklist item 1 reescrito); PADROES §11
+   regra 17 aposentada pela regra nova (o núcleo entra em produção só por versão marcada).
