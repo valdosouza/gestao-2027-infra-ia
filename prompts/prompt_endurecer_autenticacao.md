@@ -464,6 +464,12 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   tela) é lido DEPOIS do COMMIT e, se a leitura falhar, a pessoa ENTRA com o contexto padrão (`isSalesman: false`) e sai alarme com ref
   (`alarmNeutral`) — nunca 500 (era oráculo da senha certa: a errada responde 401). **EXECUTADA** na `ondas12` (setes-api `aec9911`); o
   `it.failing` do gate virou `[CORRIGIDO D-EA30]`. Recusado: (b) recusar com a 401 + alarme.
+- **D-EA31** (Valdo, 2026-11-05 — fecha a **Q-EA31** = (a), literal: *"(a) Limite conhecido"*; aberta pelo gate socrático das Ondas 1+2) —
+  o token assinado no MESMO segundo de uma troca de senha concorrente sobrevive à troca (a revogação da D-EA7 compara
+  `password_set_at <= iat`, os dois ao segundo): LIMITE CONHECIDO até a A2 (quando a credencial muda para `tb_user_credential`, a precisão
+  pode ser revista). Sem código novo: a semântica JÁ está fixada pelo teste `fiscal-api/src/__tests__/access-a1.test.ts:138` ("semântica
+  fixada — não corrigir"), pelo comentário em `fiscal-api/src/access/access.ts:84` e pela prova em descartável do setes-api
+  (`password-set-at-d-ea7.test.ts`). Recusado: (b) comparação estrita (derrubaria o token emitido no mesmo segundo da própria troca).
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -1149,7 +1155,7 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
     falhar depois da admissão, o login com a senha certa hoje responde 500 sem ref (a errada responde 401). (a) **entra com o contexto padrão
     (`isSalesman: false`) + alarme com ref — a admissão já foi decidida e o contexto é só ajuda de tela**; (b) recusa neutra 401 + alarme
     (como antes da correção). *(Rec.: (a).)*
-  - **Q-EA31 — token assinado no mesmo segundo de uma troca de senha concorrente**: a revogação compara `password_set_at <= iat` ao
+  - ✅ **Q-EA31 → D-EA31 (2026-11-05, (a) — limite conhecido, já fixado por teste).** Texto original: **Q-EA31 — token assinado no mesmo segundo de uma troca de senha concorrente**: a revogação compara `password_set_at <= iat` ao
     segundo; uma troca que grava no MESMO segundo da assinatura deixa vivo o token recém-assinado. (a) **limite conhecido até a A2, com teste
     que fixa**; (b) comparação estrita (derruba também o token emitido no mesmo segundo da própria troca). *(Rec.: (a).)*
   - **Q-EA32…Q-EA35 (da implementação)**: `userId` na linha do log (D-EA11 lista e-mail mascarado, IP, motivo, instante; incluído porque
