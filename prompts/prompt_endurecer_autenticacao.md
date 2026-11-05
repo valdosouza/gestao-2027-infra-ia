@@ -15,7 +15,7 @@ mailer) decididas e executadas; **D-EA22** (corrida rebaixar × redefinir = limi
 DELTA 0,77/0,75 ✅** com correções (§P.8); o delta abriu Q-EA23…Q-EA26 — **D-EA23** (regra única do e-mail de login) e **D-EA24**
 (teto total de 60 s no aviso) decididas e executadas; **D-EA25** (2026-11-04: dado pessoal no log fora de `/auth` = frente própria);
 **D-EA26** (2026-11-04: a peça de e-mail recusa destinatário que não seja um endereço único válido) — **executada 2026-11-04 com o gate do
-delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 — **D-EA27** (aparado = só o espaço do fim) decidida e executada; seguem Q-EA28/Q-EA29 (uma por vez); depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
+delta final 0,80/0,78 sem HIGH (§P.10)**; o gate abriu Q-EA27…Q-EA29 — **D-EA27** (aparado = só o espaço do fim) decidida e executada; **D-EA28** (troca do e-mail × script = limite conhecido, teste que fixa) decidida; segue a Q-EA29; depois o ensaio do Valdo, o "vai" do merge e as Ondas 1+2.
 Execução pela D-EA10: revogação (D-EA7) e remoção do `Auth OK` (D-EA12) na COSTURA A1 (passo 4 do plano de retomada); depois Ondas 1+2 →
 3 → 4, todas antes da A2. Mudaram de recomendação pela auth-api: Q-EA7 e Q-EA10. Antes: Rodada 0 ORGANIZADA (2026-10-21).
 NENHUM código desta frente foi escrito; o que já existe (recuperação de senha endurecida, aviso ao dono, SMTP obrigatório em produção,
@@ -434,7 +434,16 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   `trim()` do JS o script do Super trocava a senha e avisava "a@x.com" numa conta gravada " a@x.com", com que ninguém entra (o motivo da
   D-EA20). Vale para TODO e-mail da casa (a peça é uma). **EXECUTADA na mesma hora** na worktree `super-reset` (commit local `5c397f6`):
   `singleMailAddress` corta só `/ +$/`; testes que fixavam o corte antigo ajustados (o gate adversarial final passou os brancos que não são
-  o espaço do fim de "aceitos" para "recusados"). Recusado: (b) manter o `trim()` como limite conhecido. Suíte inteira depois dela:
+  o espaço do fim de "aceitos" para "recusados"). Recusado: (b) manter o `trim()` como limite conhecido.
+- **D-EA28** (Valdo, 2026-11-05 — fecha a **Q-EA28** = (a), literal: *"(a) Limite conhecido"*; aberta pelo gate socrático do delta final) —
+  a troca do e-mail de login pela tela (`syncLoginEmail`, módulo `users`, sem a trava da linha do usuário) no MESMO instante do ato do
+  script do Super é LIMITE CONHECIDO, da mesma família e pela mesma razão da D-EA22: se a troca confirma depois de o ato ler o e-mail e antes
+  do COMMIT, o ato grava e o aviso vai ao e-mail que o ato LEU (o velho) — desfecho de uma ordem serial válida ("redefine → troca o e-mail"),
+  nada escala, a senha nunca vai a ninguém. Teste que FIXA a semântica: `[SEMÂNTICA D-EA28]` em
+  `adversarial-super-reset-delta-gate.test.ts` (ao vivo, schema descartável). ⚠️ Escrito em 2026-11-05 com o MySQL do dev PARADO (serviço
+  `mysql` Stopped — ligar exige administrador): a prova ao vivo do teste e a re-rodada da suíte ficam para quando o Valdo ligar o serviço.
+  Recusado: (b) o módulo `users` tomar a trava da linha do usuário antes de trocar o e-mail (fora do item 0).
+  *(Registro da D-EA27, que fica aqui pela ordem da escrita)* **Suíte inteira depois da D-EA27**:
   2910 verdes, 2 falhas de TEMPO sob carga (`adversarial-d-rs4-gate` "diferença < 300 ms" mediu 508 ms; `grupo-leitores-d-ge4` estourou
   5 s) — as duas passam isoladas (a do D-RS4, que tem o envio dublado e não passa pela peça, passou 2× seguidas); conhecimento negativo:
   na máquina do dev com outras sessões, cada rodada da suíte derruba um teste de tempo diferente — conferir isolado antes de chamar defeito.
@@ -1075,13 +1084,13 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
     "a@x.com", mas o login com "a@x.com" não acha a conta (contradiz o motivo da D-EA20). (a) **só o espaço do FIM é aparado (a mesma
     igualdade do login); qualquer outro branco nas pontas = recusa**; (b) manter o `trim()` (limite conhecido; dado só por SQL; 0 linhas no
     dev). *(Rec.: (a).)*
-  - **Q-EA28 — troca do e-mail de login pela tela no mesmo instante do ato do script** (`syncLoginEmail` do módulo `users` troca sem a
+  - ✅ **Q-EA28 → D-EA28 (2026-11-05, (a) — limite conhecido; teste escrito, prova ao vivo pendente do MySQL).** Texto original: **Q-EA28 — troca do e-mail de login pela tela no mesmo instante do ato do script** (`syncLoginEmail` do módulo `users` troca sem a
     trava da linha do usuário): o aviso pode ir ao e-mail velho. (a) **estender o limite conhecido da D-EA22 ao e-mail, com teste que fixa
     a semântica**; (b) o módulo `users` toma a trava da linha do usuário antes de trocar o e-mail (mexe fora do item 0). *(Rec.: (a) — mesma
     família e mesma razão da D-EA22.)*
   - **Q-EA29 — censo dos logins que a D-EA26 recusaria**: a recuperação de uma conta assim emite o código, consome o teto e não entrega
     (o único sinal é um `logger.error` por pedido). (a) **entra no pré-voo do deploy (`scripts/pre-deploy-tz-check.ts`) como ALARME**; (b)
     como recusa de subir; (c) só o log a cada pedido (como está). *(Rec.: (a).)*
-- **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → Q-EA28 → Q-EA29 (executar o que couber); o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
+- **Falta, NESTA ordem**: ~~Q-EA27~~ (D-EA27) → ~~Q-EA28~~ (D-EA28; provar o teste ao vivo quando o MySQL voltar) → Q-EA29 (executar o que couber); o **ensaio real** do script pelo Valdo na worktree (§P.9 passo
   4 — `npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`); o **"vai"** do merge `super-reset` → `main`
   e do push (árvore viva = deploy); depois as Ondas 1+2.
