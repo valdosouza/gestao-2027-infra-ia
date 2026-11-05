@@ -2850,3 +2850,63 @@ nfse-api (cópia do main) contra o núcleo FINAL **65 suítes, 949 passaram, 185
 roteiro: (1) núcleo `--ff-only sessao-estrita` → build → `npm test` na viva → push; (2) nfe-api `--ff-only` → push (fora do ar; sobe só para o passeio);
 (3) nfse-api `--ff-only` → push → **restart MANUAL da nfse-api** (produção roda tsx SEM watch — o restart muda o comportamento dela: a sessão passa a ser
 estrita) e conferir no log do boot as sondas novas; (4) limpeza das worktrees `strict\*` (junções antes) e das branches; (5) INDICE + CLAUDE.md + memória.
+
+#### 15.9.11 Decisões D-NE173, D-NE174 e D-NE175 (2026-11-05, "uma pergunta por vez" direto na sessão da frente — D-GP53) e a execução
+
+- **D-NE173** (Valdo, 2026-11-05 — fecha a **Q-NE173** = (a), literal: *"Sim, também"*) — o EXECUTOR de migrations do núcleo (`db/migrations.ts`,
+  conexão PRÓPRIA) nasce no MESMO modo estrito do pool (D-NE172) e confere o modo ANTES de criar o banco ou aplicar qualquer migration (falhou =
+  nada aplicado) e DE NOVO depois de cada arquivo (gates do delta: a migration que desliga o modo — `SET sql_mode`, o cabeçalho `/*!40101 … */`
+  do mysqldump — não é registrada e o resto não roda). Cerca dos `.sql` nos 3 repositórios: nenhuma migration cita `sql_mode` nem usa
+  `INSERT IGNORE`. Prova no motor real: `'abcdefgh'` num `VARCHAR(5)` por migration dá **1406** e não entra em `_migrations`.
+- **D-NE174** (Valdo, 2026-11-05 — fecha a **Q-NE174** = (a), literal: *"Sim, somar e recusar"*) — o estrito segue SOMADO ao modo do servidor
+  (os outros modos ficam; fixar a lista inteira mudaria as leituras do ERP sem prova no MySQL 8 — D-NE165), e a casa RECUSA herdar
+  `NO_BACKSLASH_ESCAPES` e `ANSI_QUOTES`: o driver mysql2 escapa no CLIENTE com barra invertida. **Provado no motor real**: com
+  `NO_BACKSLASH_ESCAPES`, `O'Brien` rompe o comando (1064) e — o caso PIOR, SILENCIOSO — `a\nb` grava como barra + `n` (4 caracteres) SEM
+  erro (o PEM do A1, as mensagens do fisco); com um texto montado, injeção de SQL (gate adversarial). O SERVIDOR que traz o modo proibido no
+  GLOBAL não sobe (boot das APIs e executor de migrations — `assertServerSqlModeClean`); mensagem única com os dois problemas.
+- **D-NE175** (Valdo, 2026-11-05 — fecha a **Q-NE175** = (a), literal: *"Sim, toda conexão"*) — a recusa vale em TODA conexão nova do pool
+  (servidor que muda o GLOBAL depois do boot, outro servidor atrás do proxy, script que nunca passa pelo boot). ⚠️ **Conhecimento negativo
+  (provado no motor real, mysql2 3.x)**: o retorno de um comando da conexão chega num `process.nextTick` DEPOIS de o mysql2 já ter despachado
+  o PRÓXIMO comando da fila — uma conferência assíncrona (ler o modo e destruir) mata a conexão TARDE: o 1º comando de quem a pediu já foi ao
+  servidor no modo errado (a 1ª versão da D-NE175 provou isso: `a\nb` gravado com a barra mesmo com o alarme disparado). Por isso a defesa é do
+  SERVIDOR, que executa em ordem: (1) a conexão nova lê o modo HERDADO antes de qualquer SET — proibido nele = alarme + conexão DESTRUÍDA;
+  (2) o SET da casa RETIRA da sessão os proibidos e os modos COMBINADOS que os trazem (`ANSI`, `ORACLE`, `MSSQL`, `POSTGRESQL`, `DB2`, `MAXDB` —
+  o MariaDB mantém o nome do combinado na lista e ele reativaria o `ANSI_QUOTES`) e soma o estrito — o comando que escapa antes da destruição
+  roda LIMPO; (3) confere o modo final. Retirar da sessão é a CINTA; a regra continua sendo a recusa (alarme + destruição + o servidor torto
+  não sobe). Prova no motor real: com o servidor entregando `NO_BACKSLASH_ESCAPES` nas conexões novas, a consulta FALHA ALTO
+  (`ERR_STREAM_WRITE_AFTER_END`) ou roda limpa — nunca grava a barra.
+- **Execução** (worktrees `strict`, branch `sessao-estrita`, commits LOCAIS): núcleo aef24ec (D-NE173) · ac96f33 (D-NE174) · bbf79aa (gates do delta)
+  · db877a1 (D-NE175) · 9e11daa (executor lê o herdado); nfse-api 1116a29 · 38a3b15 · 5ccaf80 · de74c20 · 6f57d52 (provas no motor real); nfe-api
+  c7cc952 (cerca dos `.sql`). Pontas: núcleo **9e11daa** · nfse-api **6f57d52** · nfe-api **c7cc952**.
+- **Suítes finais**: núcleo **1200 / 1 pulado / 0** · nfse-api **1114 / 0** · nfe-api **47/47** · testes de banco no motor real **26/26**
+  (`NFSE_ADV_IB3_DB=1 SETES_API_DIR=… npx jest --runInBand adv-ib3-db adv-ib3y-db strict-writers-db` na nfse-api). ⚠️ Conhecimento negativo do
+  ambiente: o jest da nfe-api em segundo plano pode morrer com `EPERM` no `kill` de um worker (Windows) — não é falha de teste; repetir.
+- **Gates**: delta D-NE173+D-NE174 — adversarial **0,74 ✅** · socrático **0,80 ✅** (achados de execução corrigidos: conferência depois de cada
+  migration, cerca dos `.sql`, mensagem única, teste do fechamento, caso silencioso registrado; o alcance por conexão virou a Q-NE175);
+  delta D-NE175 — adversarial **0,86 ✅** (3.637 combinações de modo no motor real: nenhuma deixa o proibido na sessão; 588 operações com o
+  servidor torto simulado — query, execute, transação, concorrência —: zero injeção, zero valor errado, todas falham alto; servidor limpo: 210
+  operações concorrentes, zero falha) · socrático **0,78 ✅** (MEDIUM-1 corrigido: no pool toda tentativa falha alto e a RETIRADA do SET é
+  provada ISOLADA no motor real para cada combinado; MEDIUM-2 = este registro e a regra 11 (e) do PADROES; LOW-1 corrigido: o executor lê o
+  modo HERDADO da sessão antes do SET e recusa como o pool — núcleo 9e11daa, nfse-api 6f57d52).
+- **Limites conhecidos (registrados, sem decisão pendente)**: (1) o executor confere o modo no FIM de cada arquivo — um `.sql` que liga o proibido,
+  grava e desliga no mesmo arquivo escaparia (a cerca dos `.sql` impede o texto; `PREPARE` de um `CONCAT` com o nome montado passaria — só análise);
+  (2) com o servidor torto, quem chama recebe o erro técnico cru (`ERR_STREAM_WRITE_AFTER_END`); o motivo D-NE175 fica na linha de alarme do log —
+  falha FECHADO; (3) os invariantes de sessão (isolamento, fuso, estrito) são fixados só na CRIAÇÃO da conexão: `resetOnRelease`, `changeUser` ou
+  proxy que reaproveita conexões entre clientes (ProxySQL/MaxScale) os desfaria — nenhum código usa os dois primeiros; a topologia da D-F9 é um
+  servidor só, sem proxy (**Q-NE177** para a F3: prever proxy ou registrar como limite da topologia); (4) os outros modos do servidor ficam
+  (PIPES_AS_CONCAT, HIGH_NOT_PRECEDENCE…) — só os dois proibidos são recusados (D-NE174).
+
+**Questões novas registradas (fora desta frente — para a frente dona)**
+- **Q-NE176** (gate socrático, transversal — D-F9, a MESMA instância MySQL): o setes-api e o setes-sync usam o mesmo driver no mesmo servidor e
+  NÃO recusam `NO_BACKSLASH_ESCAPES`/`ANSI_QUOTES` (o único lugar que mexe no `sql_mode` no setes-api é a carga do catálogo IBS/CBS). Com o
+  servidor nesse modo, as APIs fiscais não sobem, mas o ERP web seguiria gravando com o escape quebrado. Estender a mesma regra a eles? —
+  pertence às frentes do setes-api e do setes-sync (o grupo do sync é separado — regra dos dois grupos).
+- Achado LOW (gate adversarial): DATETIME zero em `DEFAULT` de migration passa num servidor sem `NO_ZERO_DATE` — fora da D-NE174 (os outros
+  modos do servidor ficam); o MySQL 8 já traz `NO_ZERO_DATE` (D-NE165 confere na F3).
+- ⚠️ Incidente registrado: um agente do gate adversarial exibiu, na saída das ferramentas DELE (local, nesta máquina), o valor de
+  `FISCAL_MASTER_KEYS` (o backup do A1) ao ler o `.env`. Não saiu do relatório nem da máquina. Trocar a chave = operação própria (re-cifrar o A1),
+  decisão do Valdo. Os gates seguintes foram instruídos a nunca imprimir o `.env`.
+
+**⏯ Ponto de retomada**: nenhuma questão aberta na janela da D-NE172. Falta só o "vai" da publicação, no roteiro do §15.9.10 (núcleo → nfe-api →
+nfse-api COM restart manual — a partir do restart a nfse-api grava na sessão estrita, retira da sessão os modos proibidos e não sobe com o
+servidor torto).
