@@ -470,6 +470,10 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   pode ser revista). Sem código novo: a semântica JÁ está fixada pelo teste `fiscal-api/src/__tests__/access-a1.test.ts:138` ("semântica
   fixada — não corrigir"), pelo comentário em `fiscal-api/src/access/access.ts:84` e pela prova em descartável do setes-api
   (`password-set-at-d-ea7.test.ts`). Recusado: (b) comparação estrita (derrubaria o token emitido no mesmo segundo da própria troca).
+- **D-EA32** (Valdo, 2026-11-05 — fecha a **Q-EA32** = (a), literal: *"(a) Sim, manter"*) — a linha de log da recusa do login (D-EA11)
+  leva também o `userId` quando a conta foi achada (além do e-mail mascarado, IP, motivo e instante): com o e-mail mascarado, duas contas
+  `v***@x` ficariam indistinguíveis na perícia (mesmo motivo da D-EA21). Complementa a letra da D-EA11. Sem código novo (já é assim na
+  `ondas12`). Recusado: (b) tirar o número.
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -1158,7 +1162,7 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   - ✅ **Q-EA31 → D-EA31 (2026-11-05, (a) — limite conhecido, já fixado por teste).** Texto original: **Q-EA31 — token assinado no mesmo segundo de uma troca de senha concorrente**: a revogação compara `password_set_at <= iat` ao
     segundo; uma troca que grava no MESMO segundo da assinatura deixa vivo o token recém-assinado. (a) **limite conhecido até a A2, com teste
     que fixa**; (b) comparação estrita (derruba também o token emitido no mesmo segundo da própria troca). *(Rec.: (a).)*
-  - **Q-EA32…Q-EA35 (da implementação)**: `userId` na linha do log (D-EA11 lista e-mail mascarado, IP, motivo, instante; incluído porque
+  - **Q-EA32…Q-EA35 (da implementação)** — ✅ Q-EA32 → D-EA32 (2026-11-05, (a)): `userId` na linha do log (D-EA11 lista e-mail mascarado, IP, motivo, instante; incluído porque
     duas contas `v***@x` ficariam indistinguíveis); o texto do aviso de bloqueio (segue a D-EA3, não diz "conta suspensa"); a linha
     `[ALARME LOGIN]` do log também respeita os 15 min; o piso de 400 ms provisório (medir no servidor real, junto da D-EA17).
 - **Falta**: Q-EA30…Q-EA35 → executar o que couber → "vai" (janela: script 74 em `setes_central` ANTES do código; `OPS_ALERT_EMAIL` no
