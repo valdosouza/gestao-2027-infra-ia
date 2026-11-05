@@ -459,6 +459,11 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   2910 verdes, 2 falhas de TEMPO sob carga (`adversarial-d-rs4-gate` "diferença < 300 ms" mediu 508 ms; `grupo-leitores-d-ge4` estourou
   5 s) — as duas passam isoladas (a do D-RS4, que tem o envio dublado e não passa pela peça, passou 2× seguidas); conhecimento negativo:
   na máquina do dev com outras sessões, cada rodada da suíte derruba um teste de tempo diferente — conferir isolado antes de chamar defeito.
+- **D-EA30** (Valdo, 2026-11-05 — fecha a **Q-EA30** = (a), literal: *"(a) Entra com padrão"*; aberta pela re-prova dos gates das Ondas 1+2,
+  ADV-REGATE-02) — no login com a senha certa, a admissão é decidida sob a trava; o bloco `context` ("é vendedor", decisão 17 — só ajuda de
+  tela) é lido DEPOIS do COMMIT e, se a leitura falhar, a pessoa ENTRA com o contexto padrão (`isSalesman: false`) e sai alarme com ref
+  (`alarmNeutral`) — nunca 500 (era oráculo da senha certa: a errada responde 401). **EXECUTADA** na `ondas12` (setes-api `aec9911`); o
+  `it.failing` do gate virou `[CORRIGIDO D-EA30]`. Recusado: (b) recusar com a 401 + alarme.
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -1140,7 +1145,7 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   `recordCrash` do `alarmNeutral` dentro do SAVEPOINT só não trava porque é sem `await` — nunca pôr `await` ali.
 - **Suíte inteira** depois das correções: **170/170 arquivos, 2990 verdes, 34 pulados, 0 falha**; `tsc` limpo.
 - **Questões (uma por vez, ao Valdo direto — D-GP53)**:
-  - **Q-EA30 — contexto ilegível depois do COMMIT** (ADV-REGATE-02, LOW, aberto pela correção do HIGH): se a leitura do bloco "é vendedor"
+  - ✅ **Q-EA30 → D-EA30 (2026-11-05, (a) — EXECUTADA, `aec9911`).** Texto original: **Q-EA30 — contexto ilegível depois do COMMIT** (ADV-REGATE-02, LOW, aberto pela correção do HIGH): se a leitura do bloco "é vendedor"
     falhar depois da admissão, o login com a senha certa hoje responde 500 sem ref (a errada responde 401). (a) **entra com o contexto padrão
     (`isSalesman: false`) + alarme com ref — a admissão já foi decidida e o contexto é só ajuda de tela**; (b) recusa neutra 401 + alarme
     (como antes da correção). *(Rec.: (a).)*
