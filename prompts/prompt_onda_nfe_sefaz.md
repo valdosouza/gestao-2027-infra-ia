@@ -2927,3 +2927,22 @@ servidor torto).
   destacada); `git branch -d sessao-estrita` nos 3 repos; apagar a pasta `D:\Gestao2027\strict` (só logs); (4) **Infra-IA**: INDICE_CENTRAL (próximo
   número livre — fetch antes), estado no `CLAUDE.md` da raiz, memória (tópico `apis-fiscais-isoladas`/novo), e o push da Infra-IA (coberto pelo "vai");
   (5) linha nas notas da governança (`D:\Setes-Governanca\orquestracao\notas-das-frentes.md`): FAMILIA.E5.P2 T4 publicado.
+
+#### 15.9.13 PUBLICAÇÃO da sessão estrita CONCLUÍDA (2026-11-05 — fecha o §15.9.12)
+
+- **Boot de conferência** das pastas oficiais contra uma cópia descartável (`fiscal_api_adv_bootcheck`, portas 3012/3013, derrubadas pelo PID da
+  porta, cópia apagada; o `fiscal_api` real segue com as 13 migrations): nfse-api e nfe-api subiram com TODAS as sondas (inclusive a sessão estrita,
+  o modo proibido e a sonda de comprimento) antes de abrir a porta; `GET /v1/health` 200 nas duas. A nfse-api não estava no ar — não houve restart; o
+  próximo start real já nasce estrito.
+- **Achado LOW corrigido**: o caminho padrão do `.env` do dono nos testes de banco subia 4 níveis (caía em `D:\setes-api`) — eram TRÊS arquivos
+  (`adv-ib3-db`, `adv-ib3y-db`, `strict-writers-db`), corrigidos para 3 níveis: `NFSE_ADV_IB3_DB=1 npx jest --runInBand adv-ib3-db adv-ib3y-db
+  strict-writers-db` na pasta oficial, SEM `SETES_API_DIR`: **26/26**. nfse-api `main` = **8d8e030** (c5fa858 + 8d8e030), no GitHub; só teste, sem
+  restart.
+- **Limpeza**: junções `strict\{nfse-api,nfe-api}\node_modules\fiscal-api` apagadas com `cmd /c rmdir` ANTES (varredura confirmou nenhuma restante);
+  worktrees `strict\{fiscal-api,nfse-api,nfe-api,setes-api}` removidas; branch `sessao-estrita` apagada nos 3 repositórios (já no `main`); pasta
+  `D:\Gestao2027\strict` (só logs) apagada.
+- **Pontas finais**: núcleo `main` **9e11daa** · nfe-api **c7cc952** · nfse-api **8d8e030** — todos no GitHub. INDICE 10.71.
+- **Avisos que ficam com o Valdo** (nenhuma ação daqui): (a) um agente de gate exibiu LOCALMENTE o valor de `FISCAL_MASTER_KEYS` (backup do A1) —
+  trocar a chave é operação própria (re-cifrar o A1); (b) **Q-NE176** — setes-api e setes-sync no MESMO servidor não recusam
+  `NO_BACKSLASH_ESCAPES`/`ANSI_QUOTES` (frentes deles); (c) **Q-NE177** — proxy que reaproveita conexões desfaria os invariantes de sessão (F3).
+- ⏯ **Próximo da família NF-e**: Rodada 0 da NE-3 (§15.5). A janela da D-NE172 está FECHADA.
