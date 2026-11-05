@@ -2910,3 +2910,20 @@ estrita) e conferir no log do boot as sondas novas; (4) limpeza das worktrees `s
 **⏯ Ponto de retomada**: nenhuma questão aberta na janela da D-NE172. Falta só o "vai" da publicação, no roteiro do §15.9.10 (núcleo → nfe-api →
 nfse-api COM restart manual — a partir do restart a nfse-api grava na sessão estrita, retira da sessão os modos proibidos e não sobe com o
 servidor torto).
+
+#### 15.9.12 PUBLICAÇÃO da sessão estrita (D-NE172…D-NE175) — "Vai, publicar" do Valdo, 2026-11-05 — EM ANDAMENTO (⏯ retomar aqui)
+
+- **Feito**: núcleo `main` = **9e11daa** (ff da `sessao-estrita`; build; `npm test` na pasta oficial **1200 / 1 pulado / 0**; push c2c0a2f..9e11daa) ·
+  nfe-api `main` = **c7cc952** (ff; **47/47**; push) · nfse-api `main` = **6f57d52** (ff; **1114 / 0**; push). Testes de banco no motor real na pasta
+  oficial da nfse-api: **26/26** com `NFSE_ADV_IB3_DB=1 SETES_API_DIR=D:/Gestao2027/setes-api`. O setes-api NÃO muda de sessão (usa só
+  `fiscal-api/access` com o pool dele — conferido). Nenhum serviço estava no ar (3000/3002/3003/5051 livres).
+- ⚠️ **Achado (LOW, corrigir na retomada)**: o caminho PADRÃO do `.env` do dono em `adv-ib3-db.test.ts` (pré-existente) e em `strict-writers-db.test.ts`
+  (copiado dele) sobe QUATRO pastas (`__dirname/../../../../setes-api`) — na pasta oficial cai em `D:\setes-api\.env` e os 26 falham com ENOENT; o certo
+  são TRÊS. Sem `SETES_API_DIR` explícito a suíte de banco só roda nas worktrees `strict\*`. Corrigir nos dois arquivos (commit + push da nfse-api).
+- **Falta (retomada)**: (1) **nfse-api**: não está no ar — não há o que reiniciar; conferir o boot da pasta oficial contra uma cópia descartável
+  (`FISCAL_DB_NAME=fiscal_api_adv_*`, porta livre ≠ 3002, derrubar pelo PID da porta) para ver as sondas novas passarem; o próximo start real já nasce
+  estrito; (2) o achado acima; (3) **limpeza**: `cmd /c rmdir` das junções `D:\Gestao2027\strict\nfse-api\node_modules\fiscal-api` e
+  `strict\nfe-api\node_modules\fiscal-api` ANTES; `git worktree remove --force` de `strict\{fiscal-api,nfse-api,nfe-api,setes-api}` (a do setes-api é
+  destacada); `git branch -d sessao-estrita` nos 3 repos; apagar a pasta `D:\Gestao2027\strict` (só logs); (4) **Infra-IA**: INDICE_CENTRAL (próximo
+  número livre — fetch antes), estado no `CLAUDE.md` da raiz, memória (tópico `apis-fiscais-isoladas`/novo), e o push da Infra-IA (coberto pelo "vai");
+  (5) linha nas notas da governança (`D:\Setes-Governanca\orquestracao\notas-das-frentes.md`): FAMILIA.E5.P2 T4 publicado.
