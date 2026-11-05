@@ -1204,3 +1204,10 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
 - **2026-11-05 (sessão sucessora)**: passos 1–3 FEITOS — **D-EA34** e **D-EA35** decididas, ambas (a), sem código novo; suíte inteira na
   `ondas12` depois da D-EA30: 170/171 arquivos, 3004 verdes, 1 falha de TEMPO sob carga (`adversarial-d-rs4-gate`) que passou isolada 23/23 —
   sem gate do delta (nenhum código novo). `main` do setes-api (1270ba0) e do sql (2232b84) NÃO andaram. Falta o passo 4 (o "vai").
+- **✅ PUBLICADO 2026-11-05** (Valdo: *"Vai"*): `main`s conferidos sem avanço (nem no GitHub) → script `sql/74` APLICADO em `setes_central`
+  ANTES do código (as duas tabelas conferidas, com o índice da janela) → fast-forward no sql (2232b84 → **474bf2a**) e no setes-api
+  (1270ba0 → **aec9911**), os dois enviados ao GitHub → na árvore viva `tsc` limpo e os testes do login 102/102 → boot de conferência
+  (`Limite por conta do login (script 74): ok`; `OPS_ALERT_EMAIL` ausente = só log fora de produção; health 200) e desligado (não estava no
+  ar) → worktrees `ondas12\{setes-api, sql, fiscal-api, nfse-api}` REMOVIDAS (junções apagadas antes; apontavam para a irmã), branches
+  `ondas12` apagadas. ⚠️ **Ação do Valdo**: `OPS_ALERT_EMAIL` no `.env` vivo antes da produção (Onda 4/F3). **Próximo: Onda 3** (política de
+  senha, API + app juntos — §P.5 item 2), com o "sim" do Valdo.
