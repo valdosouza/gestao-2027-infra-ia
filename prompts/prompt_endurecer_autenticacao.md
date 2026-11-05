@@ -479,6 +479,14 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   pouco, tentativas de acesso à sua conta do Setes ERP que não foram concluídas. Se não foi você, troque a sua senha pela opção 'Esqueci
   minha senha' da tela de login. Não respondemos a este e-mail." — NÃO diz que a conta está bloqueada nem por quanto tempo (informação útil
   ao atacante). Sem código novo. Recusado: (b) acrescentar "o acesso fica suspenso por alguns minutos".
+- **D-EA34** (Valdo, 2026-11-05 — fecha a **Q-EA34** = (a), literal: *"(a) Manter assim"*) — a linha `[ALARME LOGIN]` do LOG do alarme
+  global (D-EA4) respeita o MESMO intervalo de 15 min do e-mail: no máximo uma a cada 15 min, para um ataque longo não inundar o log; cada
+  recusa segue com a sua linha própria (D-EA11), nada se perde. Sem código novo (é o que `login-watch.ts` já faz). Recusado: (b) a linha de
+  alarme a cada disparo, só o e-mail espaçado.
+- **D-EA35** (Valdo, 2026-11-05 — fecha a **Q-EA35** = (a), literal: *"(a) Manter 400 ms"*) — o piso de tempo das recusas do login
+  (`LOGIN_REFUSAL_FLOOR_MS` = 400 ms, copiado da recuperação) fica PROVISÓRIO na publicação das Ondas 1+2; o valor final sai da medição do
+  p99 da resposta no SERVIDOR REAL, feita junto da D-EA17 (peso do scrypt). Sem código novo. Recusado: (b) medir agora no dev (não
+  representa o servidor; exigiria reajuste).
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -1193,3 +1201,6 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
      só em produção; fora dela vazio = só log) → fast-forward `ondas12` → `main` no setes-api e no sql + push → remover a worktree (junções antes).
   5. Depois: **Onda 3** (política de senha, API + app juntos — §P.5 item 2) → **Onda 4** (scrypt) → a A2 da auth-api (§7.7 do
      `prompt_frente_auth_api.md`).
+- **2026-11-05 (sessão sucessora)**: passos 1–3 FEITOS — **D-EA34** e **D-EA35** decididas, ambas (a), sem código novo; suíte inteira na
+  `ondas12` depois da D-EA30: 170/171 arquivos, 3004 verdes, 1 falha de TEMPO sob carga (`adversarial-d-rs4-gate`) que passou isolada 23/23 —
+  sem gate do delta (nenhum código novo). `main` do setes-api (1270ba0) e do sql (2232b84) NÃO andaram. Falta o passo 4 (o "vai").
