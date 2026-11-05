@@ -474,6 +474,11 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   leva também o `userId` quando a conta foi achada (além do e-mail mascarado, IP, motivo e instante): com o e-mail mascarado, duas contas
   `v***@x` ficariam indistinguíveis na perícia (mesmo motivo da D-EA21). Complementa a letra da D-EA11. Sem código novo (já é assim na
   `ondas12`). Recusado: (b) tirar o número.
+- **D-EA33** (Valdo, 2026-11-05 — fecha a **Q-EA33** = (a), literal: *"Mantenho o TExto"*) — o e-mail ao dono no bloqueio do login
+  (D-EA3/D-EA15) fica com o texto da implementação, neutro: assunto "Setes — tentativas de acesso à sua conta"; corpo "Registramos, há
+  pouco, tentativas de acesso à sua conta do Setes ERP que não foram concluídas. Se não foi você, troque a sua senha pela opção 'Esqueci
+  minha senha' da tela de login. Não respondemos a este e-mail." — NÃO diz que a conta está bloqueada nem por quanto tempo (informação útil
+  ao atacante). Sem código novo. Recusado: (b) acrescentar "o acesso fica suspenso por alguns minutos".
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -1162,8 +1167,29 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   - ✅ **Q-EA31 → D-EA31 (2026-11-05, (a) — limite conhecido, já fixado por teste).** Texto original: **Q-EA31 — token assinado no mesmo segundo de uma troca de senha concorrente**: a revogação compara `password_set_at <= iat` ao
     segundo; uma troca que grava no MESMO segundo da assinatura deixa vivo o token recém-assinado. (a) **limite conhecido até a A2, com teste
     que fixa**; (b) comparação estrita (derruba também o token emitido no mesmo segundo da própria troca). *(Rec.: (a).)*
-  - **Q-EA32…Q-EA35 (da implementação)** — ✅ Q-EA32 → D-EA32 (2026-11-05, (a)): `userId` na linha do log (D-EA11 lista e-mail mascarado, IP, motivo, instante; incluído porque
+  - **Q-EA32…Q-EA35 (da implementação)** — ✅ Q-EA32 → D-EA32 (2026-11-05, (a)) · ✅ Q-EA33 → D-EA33 (2026-11-05, (a) manter o texto): `userId` na linha do log (D-EA11 lista e-mail mascarado, IP, motivo, instante; incluído porque
     duas contas `v***@x` ficariam indistinguíveis); o texto do aviso de bloqueio (segue a D-EA3, não diz "conta suspensa"); a linha
     `[ALARME LOGIN]` do log também respeita os 15 min; o piso de 400 ms provisório (medir no servidor real, junto da D-EA17).
 - **Falta**: Q-EA30…Q-EA35 → executar o que couber → "vai" (janela: script 74 em `setes_central` ANTES do código; `OPS_ALERT_EMAIL` no
   `.env` vivo; merge `ondas12` → `main` nos dois repositórios + push) → Onda 3.
+
+### P.12 ⏯ Retomar — estado ao encerrar a sessão de 2026-11-05 (Valdo: "salve tudo e abra uma nova sessão", contexto em 76%)
+
+- **Código** (nada publicado, nada aplicado em `setes_central`): worktree `D:\Gestao2027\ondas12` — `setes-api` branch `ondas12` até
+  **aec9911** (07c2f7c entrega · 444c253 correções do HIGH · 89d1ac4 teste da re-prova · aec9911 D-EA30); `sql` branch `ondas12` em **474bf2a**
+  (script 74 + espelho no 01); irmãs destacadas `ondas12\{fiscal-api (c2c0a2f, build), nfse-api}` só para as cercas — ⚠️ ao remover, apagar
+  ANTES as junções `setes-api\node_modules\fiscal-api` e `nfse-api\node_modules\fiscal-api` (`cmd /c rmdir`; apontam para a irmã).
+- **Verde ao encerrar**: suíte inteira 170/170 (2990) antes da D-EA30; depois dela, os arquivos de login 61/61; `tsc` limpo; gates 0,80/0,82.
+- **Decididas nesta sessão**: D-EA30 (contexto padrão + alarme), D-EA31 (mesmo segundo = limite conhecido), D-EA32 (`userId` no log),
+  D-EA33 (texto do aviso mantido).
+- **Falta, NESTA ordem**:
+  1. **Q-EA34** — a linha `[ALARME LOGIN]` do LOG também respeita o intervalo de 15 min (a D-EA4 diz "no máximo 1 a cada 15 min" só para o
+     e-mail; a implementação segurou também o log, para não inundar). (a) manter assim (rec.); (b) o log sai a cada disparo, só o e-mail espera.
+  2. **Q-EA35** — o piso de tempo das recusas do login (`LOGIN_REFUSAL_FLOOR_MS` = 400 ms) é provisório (copiado da recuperação). (a) manter 400
+     e medir o p99 no servidor real junto da D-EA17 (rec.); (b) medir agora no dev e ajustar antes da publicação.
+  3. Rodar a suíte inteira de novo na `ondas12` (depois da D-EA30); se uma questão mexer em código, gate do delta.
+  4. **"vai" da janela** (com o Valdo): conferir se o `main` do setes-api/sql andou (trazer para a `ondas12` e re-rodar) → aplicar o
+     **script 74 em `setes_central` ANTES do código** (o boot recusa subir sem as tabelas) → pôr `OPS_ALERT_EMAIL` no `.env` vivo (obrigatório
+     só em produção; fora dela vazio = só log) → fast-forward `ondas12` → `main` no setes-api e no sql + push → remover a worktree (junções antes).
+  5. Depois: **Onda 3** (política de senha, API + app juntos — §P.5 item 2) → **Onda 4** (scrypt) → a A2 da auth-api (§7.7 do
+     `prompt_frente_auth_api.md`).

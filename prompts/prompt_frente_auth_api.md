@@ -5,7 +5,8 @@
 privilégios (passo 4 do plano de retomada) + estreitar o GRANT da nfse-api na mesma janela (D-AU12) → ondas 0 do grupo e do convidado →
 troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias); D-EA25…D-EA29, D-UC13, D-CF7 e **D-AU13** (a A3 apaga a cópia antiga da senha) decididas em 04–05/11 — **NENHUMA questão aberta na frente
 nem no entorno da A2**; item 0 do endurecer PUBLICADO em 05/11 (setes-api `main` 1270ba0). **Ondas 1+2 executadas em worktree
-`ondas12`** (gates 0,80/0,82 depois de corrigir um HIGH; suíte 170/170; §P.11 do endurecer) — faltam Q-EA30…Q-EA35 e o "vai". ⏯ Retomar pelo **§7.7**.
+`ondas12`** (gates 0,80/0,82 depois de corrigir um HIGH; suíte 170/170; §P.11 do endurecer); D-EA30…D-EA33 decididas — faltam Q-EA34/Q-EA35
+e o "vai". ⏯ **Retomar pelo §P.12 do `prompt_endurecer_autenticacao.md`** (depois, §7.7 deste).
 **Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
 frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
 setes-api, nfe-api ou nfse-api ou outra api"*.
