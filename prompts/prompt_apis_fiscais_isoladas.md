@@ -5721,3 +5721,26 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
 6. **Publicação** (só com o "vai"): ff dos quatro `main` + push + push da tag; `npm ci` nas árvores vivas dos consumidores (a junção
    some); a produção da nfse-api passa a `npm run build` + `npm start` (`nfse-api/INDEX.md`, checklist item 1 reescrito); PADROES §11
    regra 17 aposentada pela regra nova (o núcleo entra em produção só por versão marcada).
+
+### 23.4 Execução em worktree (2026-11-05 — branch `versao-1.0.0`; NADA publicado: sem push, sem tag no GitHub, árvores vivas intactas)
+
+- **Núcleo** (`D:\Gestao2027\versao\fiscal-api`): f434ee7 (1.0.0 + dependências exatas + `scripts/pack-release.mjs` + CLAUDE.md) · fe29c44 +
+  bcb9132 (pacote REPRODUZÍVEL) · tag LOCAL `v1.0.0` → bcb9132. Suíte 1200 / 1 pulado / 0 (a cerca P6 inclusa).
+- ⚠️ **Conhecimento negativo achado na execução**: (1) o 1º pacote e o 2º da MESMA tag deram integridades diferentes — o `npm pack` NÃO
+  normaliza o fim de linha e o `git status` não acusa (compara normalizado): um `package.json` editado (LF) × extraído com `core.autocrlf=true`
+  (CRLF); (2) o `tsc` copia o fim de linha do `.ts` para DENTRO das strings de várias linhas (o SQL das peças) e o `dist` do Windows sai CRLF.
+  Conserto: `.gitattributes` `* text=auto eol=lf` no núcleo (nenhum blob mudou — o índice já era LF), `newLine: lf` no `tsconfig.build.json`, e
+  o `pack-release.mjs` passou a receber a TAG e criar ele mesmo uma worktree NOVA destacada numa pasta temporária (npm ci + npm pack lá,
+  confere a cópia limpa, apaga sempre — falha por exceção para o `finally` rodar; recusa argumento com espaço no shell do `npm.cmd`).
+  Prova T2: duas gerações da tag = `sha512-G/zer57ZfNG0PmdOnSmJVVHHBw7ffS5DXAPM0rX/EIBK4StIhI6LqcfPFiV7O3ouDD7erE9S5MJUFX+1NfA9cg==`
+  (182 929 bytes, 0 arquivo com CR).
+- **Consumidores** (`vendor/fiscal-api-1.0.0.tgz`, `vendor/*.tgz binary` no `.gitattributes`): nfe-api 51f4081 (47/47; tsc e build) ·
+  nfse-api 3f8fd41 (1114 / 195 pulados / 0 = linha de base; tsc e build; a cerca D-AU12 lê o `dist` INSTALADO do núcleo; o gate R22 simula a
+  troca do tipo na declaração publicada do pacote — trocar o `src` irmão não mudava mais nada e o ataque passaria cego) · setes-api 664d146
+  (lock VERSIONADO; 2977 / 34 pulados — 3 suítes que leem a irmã `sql` passam 60/60 com ela presente; efeito: o `mysql2` do próprio
+  setes-api subiu 3.22.4 → 3.24.5 pelo dedupe com a versão exata do núcleo).
+- **Boot de conferência**: nfse-api por `node dist` contra banco DESCARTÁVEL VAZIO (`fiscal_api_adv_bootver`, porta 3012, apagado no fim):
+  5 migrations do núcleo saídas de DENTRO do pacote + 7 da nfse-api; health 200 (`db`, `masterKey`, `storage`).
+- ⚠️ `npm pack` na árvore viva do núcleo recompilou o `dist` dela DUAS vezes nesta sessão (medindo o pacote; mesmo `src` limpo 9e11daa;
+  nenhum serviço no ar) — fato 6 do §23.1.
+- **Pendente**: gates (socrático + adversarial) em curso → publicação com o "vai" (§23.3 passo 6).
