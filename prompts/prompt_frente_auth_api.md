@@ -3,7 +3,8 @@
 **Escopo**: setes
 **Status**: Rodada 1 FECHADA (2026-10-31 — D-AU1…D-AU12; NENHUMA questão aberta). Execução pela D-AU6: costura A1 dentro do bloco de
 privilégios (passo 4 do plano de retomada) + estreitar o GRANT da nfse-api na mesma janela (D-AU12) → ondas 0 do grupo e do convidado →
-troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias); D-EA25 e D-EA26 decididas — próximo: o "sim" para fechar o item 0 do endurecer.
+troca do hash (Q-EA9, D-AU11) → A2 (projeto `auth-api`) → A3 antes da Onda 4. (antes: Rodada 0 ORGANIZADA — inventário + guardião) (`memory/feedback-uma-pergunta-por-vez`). Nenhum código, DDL, seed ou commit desta frente. **2026-11-04: §7 "Caminho até a A2"** (cadeia conferida, decisões em ordem, dias); D-EA25…D-EA29, D-UC13, D-CF7 e **D-AU13** (a A3 apaga a cópia antiga da senha) decididas em 04–05/11 — **NENHUMA questão aberta na frente
+nem no entorno da A2**; item 0 do endurecer fechado na `super-reset` (falta o ensaio do Valdo e o "vai"). ⏯ Retomar pelo **§7.7**.
 **Origem** (Valdo, 2026-10-31, ao ser perguntado da A-PV24 — a casa única da regra interface × privilégio —, literal): *"vamos criar uma
 frente em que possamos criar uma auth-api que faria além da autenticação cuidaria de toda a parte de permissão seja para setes-app,
 setes-api, nfe-api ou nfse-api ou outra api"*.
@@ -321,6 +322,14 @@ sessão de caixa — dizer "token"/"login") e **"contrato"** (ocupada — dizer 
   janela no §14 do `prompt_privilegios_interfaces.md`. Assunções do parecer do guardião **A-AU1…A-AU4 e A-AU6…A-AU10 RATIFICADAS** (Valdo,
   2026-11-01, literal: *"Ratificar todas"*); a **A-AU5** virou a **D-PV62** (super e admin só por par REGISTRADO); a **A-AU11** (UNIQUE em
   `tb_interface.i18n_key` e `tb_privilege.description`) NÃO foi executada — questão própria (Q-PV67, §14 de lá).
+- **D-AU13** (Valdo, 2026-11-05 — fecha a **Q-AU13** = (a), literal: *"(a) Sim, apagar na A3"*; §7.6) — a **A3** é a etapa que, DEPOIS
+  que a A2 roda estável, TIRA o segredo antigo do banco do produto: esvazia `setes_central.tb_user.password` e `tb_user.activation_key` (a
+  auth-api já lê só `tb_user_credential` — D-AU5), prova por cerca que nenhum código do setes-api, do núcleo `fiscal-api` ou das APIs
+  fiscais lê essas colunas, e recolhe o que mais a A2 deixar de sobra — tudo ANTES da Onda 4 do deploy, para o servidor público nascer sem
+  hash no banco do produto (o motivo da D-AU4). "Uma mudança de risco por vez" (D-AU11): primeiro a credencial muda de banco e roda; depois a
+  cópia antiga some — enquanto ela existe, a volta é possível. Esvaziar é DADO (UPDATE para NULL), não apaga linha nem coluna (D-PR37: nada se
+  apaga fisicamente); tirar as colunas do DDL, se um dia, é decisão própria. Recusados: (b) esvaziar no mesmo passo da migração da
+  credencial; (c) decidir só depois da A2. **Com a D-AU13 a frente não tem NENHUMA questão aberta** (P-2/P-3 são do passo, com o guardião).
 
 ## 6. Fora de escopo / candidatas
 
@@ -455,10 +464,24 @@ ANTIGA da senha em `setes_central`** depois que a A2 muda a credencial para `tb_
 a tarefa `AUTH.E2.P2.T1` da governança: "recebe sem perder") — mas o motivo da D-AU4 é justamente "o segredo sai do alcance de quem lê o
 banco do produto". Hoje ficam lá `tb_user.password` (o hash) e `tb_user.activation_key` (resto da recuperação antiga).
 
-- **Q-AU13 — o que é a A3?** (a) **a etapa que TIRA o segredo antigo do banco do produto depois que a A2 roda estável: esvaziar
+- ✅ **Q-AU13 → D-AU13 (2026-11-05, (a)).** Texto original: **Q-AU13 — o que é a A3?** (a) **a etapa que TIRA o segredo antigo do banco do produto depois que a A2 roda estável: esvaziar
   `tb_user.password` e `tb_user.activation_key` em `setes_central` (a auth-api já lê só `tb_user_credential`), conferir que nenhum código
   do setes-api, do núcleo ou das APIs fiscais lê essas colunas (cerca), e o que mais a A2 deixar de sobra — tudo antes da Onda 4, para o
   servidor público nascer sem hash no banco do produto**; (b) a A3 deixa de existir: a A2 já esvazia a cópia antiga no MESMO passo em que
   migra a credencial; (c) decidir o conteúdo da A3 só quando a A2 terminar. *(Rec.: (a) — cumpre o motivo da D-AU4 e mantém "uma mudança
   de risco por vez" (D-AU11): primeiro a credencial muda de banco e roda; depois a cópia antiga some, com a volta possível enquanto ela
   existe; (b) junta as duas mudanças de risco; (c) deixa o deploy sem critério.)*
+
+### 7.7 ⏯ Ponto de retomada (2026-11-05, ao fechar a fila de decisões)
+
+**Nenhuma decisão pendente na frente nem no entorno da A2** (D-EA25…D-EA29, D-UC13, D-CF7, D-AU13 — todas de 04–05/11). Falta só execução,
+cada passo com o "sim" do Valdo e pela governança de código (worktree, gates, "vai"):
+1. **Item 0 do endurecer** (worktree `D:\Gestao2027\super-reset`, commits locais até `1270ba0`, suíte 167/167): o Valdo roda o ENSAIO
+   (`npx tsx --require tsconfig-paths/register scripts/reset-super-password.ts`, sem `--vai`, em `super-reset\setes-api`) → "vai" → merge na
+   árvore viva + push (antes: conferir se o `main` andou de novo) → remover a worktree (apagar ANTES as junções `node_modules/fiscal-api`).
+2. **Ondas 1+2** (§P.7 passo 3 do endurecer: script 74, `prove-login-lock.ts`, testes L/A) → **Onda 3** (API + app) → **Onda 4** (scrypt).
+3. Em paralelo, sem decisão: `GRUPO.E3.P1` (privilégio por estabelecimento — janela com plano, toca TRANSMITIR/CANCELAR) e
+   `CONV.E2.P1…P6` (o `P3` nunca junto da Onda 1 — os dois mexem no login; a onda de campos mexe nos mesmos arquivos de `users`).
+4. **A2** (governança `auth-api:AUTH.E2.P1…P7`, com a biblioteca do motor de campos dentro — D-CF7) → **A3** (D-AU13) → deploy.
+Sobra para a governança (pedidos de mudança — a frente só aponta): fechar Q-EA25/Q-EA26/P-111/P-CAMPO-4/P-1, tirar a dependência
+`CAMPO.E10 → CAMPO.E9.P1` (D-CF7), escrever a tarefa da A3 pela D-AU13.
