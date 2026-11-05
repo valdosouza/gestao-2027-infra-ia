@@ -704,6 +704,14 @@ Herdadas e válidas sem decisão nova: decisões 9, 10, 14, 19 e 23 da Fase 2 ·
 - **A-UC8 — RATIFICADA (Valdo, 2026-10-20; "aceite" = o login do titular, D-UC12)** (reativar) — o aceite é a 1ª ativação de um vínculo interceptado; depois dele, o admin daquele estabelecimento inativa e reativa
   o PRÓPRIO vínculo direto (D-UC2), sem novo aceite (o consentimento com aquele estabelecimento já foi dado). Vínculo nunca aceito só ativa
   pelo aceite.
+- **D-UC13** (Valdo, 2026-11-05 — fecha a **Q-UC28** = (a), literal: *"(a) Não criar agora"*; perguntada pela frente da auth-api, era a
+  P-111 da governança) — a senha INICIAL definida por terceiro (admin na criação — D-UC8; Super que cria Super; operador pelo script —
+  D-PV46/D-RS13) NÃO ganha registro durável agora: bastam o `password_set_at` (D-EA7), o `tb_user.updated_at`, o log do operador e os avisos
+  por e-mail (D-RS13). A peça possível (`tb_user_password_assignment`, parecer do guardião no §13.10.1 do `prompt_privilegios_interfaces.md`)
+  só nasce quando houver quem a LEIA (nenhuma tela nem regra lê hoje — a D-UC8 recusou a troca obrigatória no 1º acesso); fica no Futuro da
+  governança (F-SENHA-3). Fecha o "nasce depois… / onda 0 do convidado" deixado aberto pela D-RS13 e pela D-RS15. Efeito: o passo "minha
+  senha" desta onda (D-UC7/D-UC8) fica SEM decisão pendente. Recusados: (b) criar na A2 ao lado da `tb_user_credential`; (c) criar já nesta
+  onda. Próximo número: **D-UC14**.
 
 ## Questões pendentes
 
@@ -715,7 +723,7 @@ Herdadas e válidas sem decisão nova: decisões 9, 10, 14, 19 e 23 da Fase 2 ·
 
 > **2026-11-05 — questão nova, aberta pela frente da auth-api** (`prompt_frente_auth_api.md` §7.2 item 3; na governança era a P-111, que
 > trava o passo "minha senha" desta onda e, por ele, a A2):
-> - **Q-UC28 — a senha INICIAL definida por outra pessoa deixa um registro durável?** Hoje, quando o admin cria o usuário com a senha
+> - ✅ **Q-UC28 → D-UC13 (2026-11-05, (a)).** Texto original: **Q-UC28 — a senha INICIAL definida por outra pessoa deixa um registro durável?** Hoje, quando o admin cria o usuário com a senha
 >   inicial (D-UC8), ou o operador redefine a senha do Super (D-PV46/D-RS13), nada no banco diz "esta senha foi definida por terceiro, por
 >   quem, quando" — só o `tb_user.updated_at`, o `password_set_at` (D-EA7) e o log do operador. A D-RS13 e a D-RS15 deixaram o lugar em
 >   aberto ("nasce com a credencial da auth-api — D-AU5 — / onda 0 do convidado — D-UC8"); o parecer do guardião (`prompt_privilegios_

@@ -133,6 +133,15 @@ Pedido do Valdo, antes do commit: *"verifique o que vai interferir e vamos nos a
   salvar dessas telas passa antes pelo setes-api (fachada) — chamada entre serviços que a D-F4/D-AU3 evitaram. **Rec.: (a)** — onde o
   usuário digita o cliente pode apertar (critério da D-CF1) e a regra fica em UM lugar; (b) devolveria ao "nada" 3 telas hoje completas.
   Não trava a onda 4a (essas telas não são tocadas nela); precisa estar decidida antes da A2 da auth-api.
+- **Q-CF7 — a extração da auth-api (A2) espera a onda de campos INTEIRA terminar?** (2026-11-05, aberta pela frente da auth-api —
+  `prompt_frente_auth_api.md` §7.4; na governança era a P-CAMPO-4 + a dependência `setes-api:CAMPO.E10 → CAMPO.E9.P1`.) Hoje a governança põe
+  a biblioteca do motor (D-CF6) DEPOIS do fecho da onda (cerca sem exceção, que espera também produtos, terminal e a aba do regime IBS/CBS) —
+  a A2 herdaria a onda inteira (7–8 sessões + três frentes). A D-CF6 diz só "execução: na A2 (antes dela não há 2º consumidor)" e entrega o
+  lugar do pacote e a forma da leitura à execução, com o guardião. (a) **não espera: a biblioteca nasce DENTRO da A2 (passo dos escritores),
+  com o lugar do pacote decidido com o guardião no próprio passo; a cerca de campos, quando existir, varre os dois repositórios (a D-CF6 já
+  diz)**; (b) espera a onda inteira (como está na governança); (c) espera só o bloco 0 da onda (a cerca nascer), para a auth-api já nascer
+  cercada. *(Rec.: (a) — é a letra da D-CF6; (b) prende a A2 a frentes que não tocam acesso; (c) traz para o caminho da A2 as duas
+  questões abertas da cerca, P-CAMPO-1/P-CAMPO-3.)*
 
 ## 4. Decisões
 

@@ -439,3 +439,5 @@ que estava PARADO). Próxima: **Q-EA29**.
 não pode rodá-lo), e (2) o "vai" do merge `super-reset` → `main` + push. Depois: Ondas 1+2 (`AUTH.E3`, pelo §P.7 passo 3 do endurecer);
 em paralelo podem andar `GRUPO.E3.P1` (pronto, janela com plano) e `CONV.E2.P1…P4` (prontos); a próxima DECISÃO da cadeia é a **P-111**
 (§7.2 item 3 — registrar antes como Q-UC28 no prompt do convidado).
+**2026-11-05**: P-111 = Q-UC28 → **D-UC13** (*"(a) Não criar agora"* — sem registro durável da senha inicial até haver leitor; prompt do
+convidado). O convidado (`CONV.E2`) fica SEM decisão pendente. Próxima decisão da cadeia: **P-CAMPO-4** (§7.2 item 4).
