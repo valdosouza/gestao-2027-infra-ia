@@ -2770,3 +2770,83 @@ nfse-api (cópia do main) contra o núcleo FINAL **65 suítes, 949 passaram, 185
   removida.
 - **Estado**: NE-2 **PUBLICADA** (núcleo c2c0a2f · nfe-api 6f7b315 no `main` e no GitHub; `fiscal_api` com a 001 da nfe-api; nfe-api fora do ar).
   ⏯ **Próximo da família NF-e: Rodada 0 da NE-3 (§15.5)**; a janela própria da D-NE172 (sessão estrita) vem antes da NE-5.
+
+#### 15.9.10 Janela da D-NE172 — sessão ESTRITA no pool do núcleo (2026-11-04 — passo `FAMILIA.E5.P2` da governança; executada em worktree, NADA publicado)
+
+> Valdo, 2026-11-04: "Sim, modo estrito" (começar pelo FAMILIA.E5.P2). Worktrees `D:\Gestao2027\strict\{fiscal-api,nfse-api,nfe-api}` na branch
+> `sessao-estrita` (saídas dos `main` c2c0a2f · c6cc83d · 6f7b315) + cópia destacada `strict\setes-api` (5cfd052, só para a cerca P6 e o `.env` do
+> dono). As junções `strict\{nfse-api,nfe-api}\node_modules\fiscal-api` apontam para `strict\fiscal-api` — ⚠️ apagar com `cmd /c rmdir` ANTES
+> de qualquer `git worktree remove`.
+
+**O que mudou (commits LOCAIS, sem push)**
+- **Núcleo** (524a578 + c16ba88): `createFiscalPool` roda `STRICT_SESSION_SQL` em toda conexão nova (`CONCAT_WS(',', NULLIF(@@SESSION.sql_mode,''),
+  'STRICT_ALL_TABLES')` — SOMA ao modo do servidor; o motor deduplica e normaliza), ao lado do REPEATABLE READ e do UTC; a conexão em que QUALQUER
+  dos três SETs falha é DESTRUÍDA (antes só ia ao log); `assertSessionInvariants` confere o modo POR ITEM (`sqlModeIsStrict` — `STRICT_TRANS_TABLES`
+  sozinho, vazio ou nome parecido falham) e devolve `sqlMode`; `assertLengthRefused` (`db/check.ts`) = sonda de COMPRIMENTO numa transação sempre
+  desfeita (erro diferente de 1406 sobe como está; ROLLBACK que falha destrói a conexão), com a transação comum `probeInTransaction` servindo também o
+  `assertCheckRefuses`; `toUtcDb` devolve null quando a conversão sai de 1000–9999 (gate adversarial: '9999-12-31T23:59:59-03:00' virava o ano 10000 →
+  1292 na sessão estrita derrubaria a voz em TODA consulta); cerca: só `db/pool.ts` cita `sql_mode`. `sessao-estrita.test.ts` (26).
+- **nfe-api** (faf16a1 + a678fb1): `assertMerchandiseStrictSession` — a chave VÁLIDA da sonda + 1 posição (45 no VARCHAR(44)); cortada nas 44 ela passaria
+  no `ck_invoice_merchandise_transmission_key`, então só a sessão estrita a recusa; no boot depois dos invariantes e antes do `listen`; motor simulado
+  com `strict: false` prova o lado negativo; cerca do `sql_mode` em `src/`+`scripts/`.
+- **nfse-api** (b2c6401 + 0a2502d): `assertServiceStrictSession` — 51 posições no `access_key VARCHAR(50)` (a chave da NFS-e tem 50, sem CHECK de forma);
+  mesma ordem no boot; cerca do `sql_mode`; `adv-ib3-db` (d4) passa a fixar a RECUSA (1264) pelo pool e ganha (d4b) o conhecimento negativo (sessão sem o
+  modo ainda corta) e (d4c) a sonda falhando alto numa sessão sem o modo, no motor real; NOVO `strict-writers-db.test.ts` (com `NFSE_ADV_IB3_DB=1`).
+- **Assunção (A-NE172a)**: "fixa sql_mode ESTRITO" executado como SOMA de `STRICT_ALL_TABLES` ao modo do servidor (os outros modos do servidor ficam) — a
+  alternativa (fixar a lista inteira) é a 2ª questão abaixo. **Assunção (A-NE172b)**: a sonda "`access_key` de 45" vale para a NF-e; na NFS-e o análogo é
+  51 (coluna de 50).
+
+**A medição (pré-condição da janela) — provas**
+- **Testes de banco da nfse-api com e sem o modo** (`NFSE_ADV_LIVE=1`, sem os `*.live.test.ts`): núcleo SEM o modo **1118 / 20 pulados / 0** × COM o modo
+  **1118 / 20 / 0** — idênticos.
+- **Escritores do ciclo pelo CÓDIGO de produção, no motor real, na sessão estrita** (`strict-writers-db.test.ts`, banco descartável `fiscal_api_strictdb_<pid>`,
+  apagado no fim): habilitação 55 criar/excluir/reviver · SE virada com nDPS contínuo · aluguel do rodízio tomar/renovar/soltar · A1 gravar/excluir (assunto
+  de 214, impressão de 95) · DPS da vida (Id 45) · tentativa · vozes R/K/F/A/C/N (mensagem do fisco > 255 com emoji no corte — o CÓDIGO corta) ·
+  `fillAuthorityData` (chave 53 → 50, número 17 → 13 pelo código) · `fillAuthorityIbscbs` no teto · `touchQueriedAt` · `recordNfseNotGenerated` → **4/4**;
+  com `adv-ib3-db`/`adv-ib3y-db` = **22/22** na sessão estrita.
+- **Dados reais do `fiscal_api` (só leitura)**: dos 5 VARCHAR com valor no limite, 4 são de tamanho fixo por natureza (impressão 95, modelo 'SE', Id do DPS
+  45, chave da NFS-e 50) e a `message` de 255 é corte do próprio escritor (`slice(0, 255)`) — **nenhum indício de corte calado do banco**.
+- **Motor real, cópia descartável** (`fiscal_api_adv_strict`, apagada): as 13 migrations (núcleo 001–005, nfse 001–007, nfe 001 — 28 comandos) aplicam
+  e REaplicam na sessão estrita sem erro; sem o modo a chave de 45 é ACEITA e gravada com 44 (aviso 1265 — o defeito); com ele, **1406**; `INSERT IGNORE`
+  na sessão estrita AINDA corta (o IGNORE vence o STRICT); a sonda do núcleo passa no motor real e não deixa linha.
+- **Boot real das duas APIs** contra cópia descartável (portas 3012/3013, derrubadas pelo PID): migrations, todas as sondas (inclusive as novas) e as views
+  passaram antes de ouvir; `GET /v1/health` 200.
+- **Gate adversarial** (agente independente, 0,82, `passou: true`, sem HIGH): A1 a sessão nasce estrita em `query`, `execute` e 6 conexões simultâneas, e
+  após `KILL`; A2 as sondas discriminam (no modo do dev e no vazio falham alto; com `STRICT_TRANS_TABLES` a sonda passa e o invariante recusa); A5 os
+  escritores pelo SQL do código com emoji/surrogate/`\u0000`/datas do fisco; A7 HTTP ponta a ponta (PUT/DELETE/revive do 55, 422 dos tortos); A8
+  `migrate:setes --dry-run` sobre os dados reais do ERP (1 habilitação, 4 DPS, 20 tentativas, 23 vozes, desfeito); scripts em
+  `scratchpad\gate-adv\` (fora dos repositórios). LOWs corrigidos na sessão: conexão sem invariante destruída, `toUtcDb` no intervalo, cerca do `sql_mode`;
+  conhecimento negativo no PADROES (`WHERE model = 55` numérico vira 1292).
+- **Gate socrático**: 1ª rodada **0,66** (HIGH = a medição só por leitura nos escritores do ciclo; MEDIUMs = as duas questões abaixo; LOWs = destruir a
+  conexão, regra no PADROES, lado negativo da sonda da NFS-e no motor real) → executado acima → **re-score 0,78 ✅** (agente independente; os 4 pontos
+  de execução FECHADOS, 22/22 re-rodado por ele; os 2 MEDIUM seguem como questões ao dono). Do re-score: LOW 3 corrigido na sessão (o teste dos escritores
+  agora põe o EMOJI no corte — par substituto partido pelo `slice(0, 255)`, nfse-api 3b29d24); LOW 1 e LOW 2 viraram achados abaixo.
+- **Suítes finais nas worktrees**: núcleo **1178 / 1 pulado / 0** · nfe-api **46/46** · nfse-api **1113 / 0** (com a CPU em 100% por outras sessões, 2
+  testes — `adversarial-r10-gate`, `adversarial-f2a-r12-gate` — estouraram o limite de 5 s, IGUAL na árvore viva sem este delta; com a CPU em 12% a suíte
+  inteira passou: conhecimento negativo — esses dois são sensíveis à carga da máquina) · testes de banco **22/22**. PADROES_BANCO v2.5 (§11 regra 11 (e) +
+  nota da linha 114).
+
+**Achados registrados (sem decisão)**
+- As 8 suítes `*.live.test.ts` da nfse-api (150 testes) falham 149/150 JÁ na base desde a janela de 15/10: partem da habilitação RÉPLICA (`cutover_at` NULL)
+  e de "notas frescas" no ERP — o mundo de antes da virada. Não cobrem nada hoje; reescrever o harness para depois da virada é tarefa própria.
+- `migrate:setes` (re-sincronia da RÉPLICA, papel cumprido na virada de 15/10) no pool estrito: o passo do `INSERT … SELECT` sem IGNORE passa a RECUSAR o
+  que antes cortava e os passos com `INSERT IGNORE` seguem cortando calados (o IGNORE vence o STRICT); data zerada do ERP vira 1292 e derruba a institution
+  — sempre "falha alto", nunca "corrompe calado". Medido só pelo `--dry-run` do gate adversarial (A8, sem log arquivado). Se o script voltar a ter uso, ganha
+  teste próprio sob o modo estrito.
+- `fillAuthorityData` ainda CORTA no código (`accessKey.slice(0, 50)`, `nfseNumber.slice(0, 13)`): hoje inerte (o `asNfseAccessKey` só deixa passar a forma
+  de 50), mas se a validação afrouxar, uma chave truncada (= OUTRA chave) grava sem erro — a classe que a D-NE172 fechou no banco. Candidato a trocar o
+  corte por recusa na próxima vez que o escritor for tocado (pede decisão: muda o desfecho de uma resposta torta do fisco).
+
+**Questões novas (numeração permanente) — uma por vez ao Valdo**
+- **Q-NE173** (gates socrático MEDIUM 2 + adversarial MEDIUM-1): o executor de migrations do núcleo (`db/migrations.ts`) abre conexão PRÓPRIA e não é estrito
+  (só fixa o UTC) — uma migration futura que encolher coluna ou fizer backfill corta calada (provado: `'abcdefgh'` em VARCHAR(5) grava `'abcde'`). (a) o runner
+  abre a conexão com o MESMO modo estrito (as 13 de hoje já provadas na sessão estrita) · (b) deixar e registrar como limite conhecido. *Rec.: (a).*
+- **Q-NE174** (gate socrático MEDIUM 3): SOMAR o estrito ao modo do servidor (executado) × FIXAR a lista inteira — somar herda o resto do servidor
+  (no MySQL 8 da F3, `ONLY_FULL_GROUP_BY`/`ERROR_FOR_DIVISION_BY_ZERO`; no pior caso `NO_BACKSLASH_ESCAPES`, que quebra o escape do driver). (a) somar e o boot
+  RECUSAR os modos incompatíveis com o driver (`NO_BACKSLASH_ESCAPES`, `ANSI_QUOTES`) · (b) fixar a lista inteira da casa · (c) só somar (como está).
+  *Rec.: (a)* — fixar a lista mudaria o comportamento das leituras do ERP sem prova no MySQL 8 (D-NE165).
+
+**⏯ Ponto de retomada**: decidir Q-NE173 e Q-NE174 (uma por vez); executar o que vier na mesma branch; re-gates do delta; então o "vai" da publicação —
+roteiro: (1) núcleo `--ff-only sessao-estrita` → build → `npm test` na viva → push; (2) nfe-api `--ff-only` → push (fora do ar; sobe só para o passeio);
+(3) nfse-api `--ff-only` → push → **restart MANUAL da nfse-api** (produção roda tsx SEM watch — o restart muda o comportamento dela: a sessão passa a ser
+estrita) e conferir no log do boot as sondas novas; (4) limpeza das worktrees `strict\*` (junções antes) e das branches; (5) INDICE + CLAUDE.md + memória.
