@@ -487,6 +487,13 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   (`LOGIN_REFUSAL_FLOOR_MS` = 400 ms, copiado da recuperação) fica PROVISÓRIO na publicação das Ondas 1+2; o valor final sai da medição do
   p99 da resposta no SERVIDOR REAL, feita junto da D-EA17 (peso do scrypt). Sem código novo. Recusado: (b) medir agora no dev (não
   representa o servidor; exigiria reajuste).
+- **D-EA36** (Valdo, 2026-11-05 — fecha a **Q-EA36** = (a), literal: *"(a) Pode baixar"*) — a lista de senhas comuns da D-EA5/A-EA9 = o
+  arquivo `Passwords/Common-Credentials/10k-most-common.txt` do SecLists (MIT, (c) 2018 Daniel Miessler; SHA-256 `68782d6a…fdcce`, baixado
+  em 2026-11-05) + uma lista BRASILEIRA escrita à mão (`setes-api/data/common-passwords-br.txt` — não há lista brasileira pública com
+  licença clara), juntas por `scripts/gerar-common-passwords.ts` em `setes-api/data/common-passwords.txt` (só entradas de 8 a 100
+  caracteres, em minúsculas, sem repetição — as menores já caem pelo tamanho; 2.231 entradas) e copiadas para o app como
+  `setes_validators/lib/src/common_passwords.g.dart`. A conferência das duas cópias é ENTRADA POR ENTRADA (mais forte que o SHA-256 da
+  A-EA9). Recusado: (b) o Valdo baixar à mão.
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
@@ -1211,3 +1218,36 @@ ADV-EA20-02, ADV-EA19-02). Suítes de auth/mailer/script = 217/217; `tsc` limpo.
   ar) → worktrees `ondas12\{setes-api, sql, fiscal-api, nfse-api}` REMOVIDAS (junções apagadas antes; apontavam para a irmã), branches
   `ondas12` apagadas. ⚠️ **Ação do Valdo**: `OPS_ALERT_EMAIL` no `.env` vivo antes da produção (Onda 4/F3). **Próximo: Onda 3** (política de
   senha, API + app juntos — §P.5 item 2), com o "sim" do Valdo.
+
+### P.13 Onda 3 — política de senha em worktree (2026-11-05; Valdo: "Sim, começar"; NADA publicado)
+
+- **Onde**: `D:\Gestao2027\onda3\{setes-api, setes-app}` (branches `onda3`, a partir dos `main` aec9911 / b9f1f2a) + irmãs destacadas
+  `onda3\{fiscal-api, nfse-api, sql}` só para as cercas (junções `node_modules/fiscal-api` em setes-api e nfse-api — APAGAR antes de remover).
+  Commits LOCAIS: setes-api **3e54300** + **3a4cdb5** · setes-app **e7119c6**.
+- **O que entrou**: peça `@shared/auth/password-policy` (mínimo 8, máximo 100, só espaços recusado — absorve o `newPasswordSchema` da
+  D-EA13, que vira reexportação —, lista de comuns sem caixa, parte local do e-mail de 4+ caracteres sem caixa e sem acento por TABELA
+  explícita, não NFD); `refinePassword` no objeto (users POST/PUT, admin do onboarding — `fields[]` no campo da senha); troca pelo código:
+  o que não depende da conta vem ANTES do código (400 `newPassword`), a "igual à atual" só DEPOIS do código certo e sob a trava (422
+  `PASSWORD_SAME_AS_CURRENT`, o código NÃO é gasto nem conta erro — PP5); boot recusa subir sem a lista (`assertPasswordPolicyReady`);
+  Swagger. App: espelho `PasswordPolicy` em `setes_validators` (lê o VETOR `password-policy.vector.json` do setes-api ao lado e confere a
+  lista entrada por entrada), `SetesValidators.password`, `RegisterField.formValidator` (regra que olha outro campo — sobrevive à
+  `applyFieldConfig`), as 4 telas com a regra no campo (dica `forms.validation.password.hint`), i18n pt (= texto da API) e en; chaves
+  antigas de "mínimo 5" removidas.
+- **Provas**: suíte setes-api 172/172 (3063 verdes) — testes antigos com senha de 5–6 caracteres atualizados (o mínimo mudou de propósito);
+  app: web 662, core 80, setes_validators 130; `tsc` e `flutter analyze` limpos. PA5 (peso no build web): a cópia Dart tem 34 KB de fonte —
+  não medido no build.
+- **Gates (2026-11-05)**: socrático **0,80 ✅** (7 LOW + 3 INFO) · adversarial **0,82 ✅** (8 LOW, 11 resistências; arquivo
+  `src/__tests__/adversarial-onda3-gate.test.ts`). **PP5 RESISTIU** (a "igual à atual" não é oráculo sem o código). **CORRIGIDOS na sessão**
+  (cabem nas regras decididas): "branco" por lista EXPLÍCITA igual nas duas pontas (o `trim()` do JS não apara U+0085 e o do Dart apara —
+  oito NEL passavam na API); marcas combinantes U+0300–U+036F retiradas depois do `toLowerCase()` na lista E na regra do e-mail ("İLOVEYOU"
+  passava na API e caía no app; acento em NFD escapava da D-EA16 nas duas pontas); BOM no início da lista; `newPassword` não-texto = 400
+  como o login (A-EA8 — `{}` virava "[object Object]"); UMA pendência por campo no DTO; o boot confere a contagem do cabeçalho do gerador
+  (lista truncada ou trocada não sobe); aviso MIT INTEIRO nas duas cópias; o sorteio da senha do Super passa pela peça; a tela de troca
+  julga com o MESMO e-mail que o app envia. Casos novos no VETOR (as duas suítes os cumprem).
+- **Questões (uma por vez, ao Valdo)**: Q-EA37 rastro no log da recusa "igual à atual" (quem tem o código pode testar ~10 palpites da
+  senha atual sem barulho) · Q-EA38 a lista compara a senha APARADA (" 12345678" e "password " passam hoje) · Q-EA39 recusar caractere de
+  controle/invisível e surrogate solto (o MD5 iguala surrogates soltos a U+FFFD) · Q-EA40 troca pelo código julga o e-mail DIGITADO (`ılda@`
+  acha a conta `ilda@` pela colação e deixa gravar "ilda2026") · Q-EA41 o campo do erro na troca fica `newPassword` (nome do corpo) ou
+  `password` (letra do PP1) · Q-EA42 no PUT de conta COM credencial a política fala antes do 409 `PASSWORD_OWNER_ONLY`.
+- **Conhecimento negativo**: no PowerShell 5.1, `Set-Content -Encoding utf8` grava BOM e a crase de texto entre aspas duplas é ESCAPE
+  (`` `n ``/`` `r ``/`` `f `` viram controle) — editar código por `Edit`/node, nunca por substituição em string do PS.
