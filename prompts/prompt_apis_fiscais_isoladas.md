@@ -5706,7 +5706,7 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
   *(Rec.: (a) — fora de produção, custo pequeno; senão ela fica a única pela pasta vizinha.)* → **D-F225 (Valdo, 2026-11-05: "Incluir a
   nfe-api") = (a)**. **Rodada 0 FECHADA — nenhuma questão aberta.**
 
-### 23.3 Roteiro da execução (worktrees irmãs `D:\Gestao2027ersao\{fiscal-api,nfse-api,nfe-api,setes-api}`, branch `versao-1.0.0`)
+### 23.3 Roteiro da execução (worktrees irmãs `D:\Gestao2027\versao\{fiscal-api,nfse-api,nfe-api,setes-api}`, branch `versao-1.0.0`)
 
 1. **Núcleo**: `version` 1.0.0; dependências de execução EXATAS pelo lock do núcleo (`mysql2` 3.24.5, `jsonwebtoken` 9.0.3, `node-forge`
    1.4.0, `xml-crypto` 6.3.2 — D-F224); suíte; commit; tag `v1.0.0` LOCAL (o push da tag é da publicação).
