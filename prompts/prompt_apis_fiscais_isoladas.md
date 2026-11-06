@@ -5779,3 +5779,33 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
   do núcleo NA TAG); o que é de execução (o `dist`, o `mysql2` da D-NE175) passa a ler o pacote INSTALADO; uma cerca impede a volta da
   leitura da pasta irmã** · (b) manter a varredura, apontando para o `dist` instalado (cercas por AST reescritas para JS). *(Rec.: (a).)*
   → **D-F228 (Valdo, 2026-11-06: "Cada um no seu") = (a)**. **Rodada 1 do DEPLOY.E1.P1 FECHADA.**
+
+### 23.6 Execução da Rodada 1 + roteiro REVISTO da publicação (2026-11-06 — achado 3 do socrático)
+
+- **D-F226**: `pack-release.mjs` aceita `vX.Y.Z-<frente>.<n>` (ex.: `v1.1.0-ne3.1`); a cerca gêmea `fiscal-api-package-fence` aceita o nome de
+  rascunho e o RECUSA quando a branch é `main`; `pack-release.test.ts` ganhou o caso de rascunho (5/5); a cerca `f2a-fiscal-api-fence` do
+  setes-api aceita o nome. **D-F227**: setes-api declara `mysql2` `3.24.5` (lock sem mudança de versão; cerca nova "versão EXATA").
+  **D-F228**: as cercas da nfse-api/setes-api que liam a pasta irmã foram reescritas por um agente (ver §23.7). **Selo do dist** (achado 3d):
+  `npm run build` da nfse-api grava `dist/build-info.json` (commit) e o boot registra "núcleo fiscal-api X (pacote instalado) · dist do
+  commit Y" e RECUSA subir com `dist` de outro commit que o da pasta (`src/build-info.ts` + teste 4/4). A nfe-api ganha o mesmo selo quando
+  for a produção.
+- **Roteiro da publicação (só com o "vai"; NESTA ordem)**:
+  1. Núcleo: a tag `v1.0.0` (LOCAL) é recriada no commit FINAL da `versao-1.0.0` (só mudaram teste/script — o pacote tem de sair com a
+     MESMA integridade `sha512-G/zer57Z…`, conferida por `pack-release` numa saída descartável); ff do `main` vivo; **push do `main` e da
+     TAG antes de qualquer `npm ci`** (a junção viva aponta para esta pasta, que guarda o `.git` com a tag).
+  2. Parar o que estiver no ar das três (abas "nfse-api producao" e "setes-api 3000"; `npm ci` com processo vivo troca o `node_modules`
+     debaixo dele).
+  3. Nas três árvores vivas: `cmd /c rmdir node_modules\fiscal-api` (a JUNÇÃO para `D:\Gestao2027\fiscal-api`) ANTES de qualquer
+     comando npm/git que remova pastas — memória `tooling-worktree-juncao-node-modules`; conferir o núcleo vivo intacto (`git status`,
+     `git worktree list`, a tag).
+  4. setes-api: mover o `package-lock.json` SOLTO da árvore viva (fora do git até hoje) para o scratch — o ff recusa sobrescrever arquivo
+     não rastreado.
+  5. ff do `main` de nfse-api, nfe-api, setes-api (e o `vendor/` vem junto) + push.
+  6. `npm ci` nas três vivas; `npx jest fiscal-api-package-fence sibling-core-fence` verde em cada uma (prova vendor = lock = instalado na
+     viva).
+  7. nfse-api: `npm run build` (grava o selo) → quando for subir, `npm start` (nunca mais `tsx`) → a 1ª linha do log diz núcleo 1.0.0 e o
+     commit; `GET /v1/health` 200. setes-api: nada muda no start.
+  8. Infra-IA: PADROES §11 regra 17 reescrita (o núcleo entra em produção SÓ pelo pacote; a árvore viva do núcleo deixa de ser deploy);
+     `nfse-api/INDEX.md` checklist item 1 reescrito (versão do núcleo e selo pela linha do log; `npm run build` antes do `npm start`);
+     `fiscal-api/INDEX.md`; INDICE_CENTRAL; CLAUDE.md da raiz; memória; push (fetch antes — dois clones).
+  9. Remover as worktrees `versao\{fiscal-api,nfse-api,nfe-api,setes-api,sql}` (sem junção — pastas reais) e a branch `versao-1.0.0`.
