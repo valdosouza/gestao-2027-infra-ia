@@ -5744,3 +5744,36 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
 - ⚠️ `npm pack` na árvore viva do núcleo recompilou o `dist` dela DUAS vezes nesta sessão (medindo o pacote; mesmo `src` limpo 9e11daa;
   nenhum serviço no ar) — fato 6 do §23.1.
 - **Pendente**: gates (socrático + adversarial) em curso → publicação com o "vai" (§23.3 passo 6).
+
+### 23.5 Gates do DEPLOY.E1.P1 (2026-11-05/06) e Rodada 1
+
+- **Socrático 0,66 ✗** (abaixo de 0,70) · **adversarial 0,78 ✓** (sem HIGH/CRITICAL). Achados:
+  - **HIGH (socrático 1 = adversarial L4)**: com o cache do npm já cheio, regravar `vendor/fiscal-api-X.Y.Z.tgz` com o MESMO nome e
+    conteúdo novo NÃO falha — `npm ci`/`npm install` instalam calados o conteúdo ANTIGO (o lock guarda a integridade antiga e o cache a
+    entrega); só um cache vazio recusa com EINTEGRITY. → **corrigido**: cerca GÊMEA `src/__tests__/fiscal-api-package-fence.test.ts` nos três
+    consumidores — vendor = integridade do lock = instalado byte a byte (e sem junção), + nenhum `paths`/`moduleNameMapper` para `fiscal-api`;
+    provada (um byte a mais no `dist` instalado → falha). A regra de número fica na Q-F226.
+  - **MEDIUM (socrático 2 = adversarial M1)**: cercas e testes da nfse-api (9 arquivos: `voice-kind-fence.ts`, `adversarial-ne1a/r20/r21/r22`,
+    `ne1a-registro`, `adv-ib3-db`, `adv-ib3y-db`, `strict-writers-db`) e do setes-api (`adversarial-f2a-r13-gate`) ainda LEEM o `src`/`dist`
+    da pasta irmã ou fazem `require` do `mysql2` DELA — quando o núcleo andar e o `vendor/` não, provam outro artefato; a prova ao vivo da
+    D-NE175 (`strict-writers-db`, só com `NFSE_ADV_IB3_DB=1`) troca o `createPool` da instância ERRADA do mysql2 e falha. → **Q-F228**.
+  - **MEDIUM (socrático 3)**: roteiro da publicação sem a junção viva, o serviço no ar, o lock solto do setes-api e o `dist` velho. →
+    roteiro reescrito no §23.6 (sem decisão).
+  - **MEDIUM (adversarial M2)** pacote recusado ficava na saída; **LOW L1** `worktree prune` global; **L2** interrupção; **L3** saída criada
+    antes da recusa → **corrigidos** no `pack-release.mjs` (empacota na pasta temporária e só copia depois de todas as conferências; remove
+    só a própria cópia; limpa em Ctrl+C — kill forçado segue limite conhecido) + `src/__tests__/pack-release.test.ts` (4) num repositório
+    git temporário. **L5** comentário da cerca do setes-api corrigido. **Socrático 7** (CLAUDE.md da nfe-api + cerca contra a volta do
+    `paths`) corrigido.
+  - **LOW (socrático 4)** o `mysql2` do ERP passa a seguir o núcleo pelo dedupe → **Q-F227**. **LOW (socrático 5)** dependências
+    indiretas do núcleo resolvidas no lock de cada consumidor (inofensivo hoje) = limite conhecido. **LOW (socrático 6)** o script aceita
+    qualquer tag local (não confere `origin`/`main`) = conferido no roteiro da publicação (§23.6).
+- **Q-F226 — como uma frente que mexe no núcleo testa nos consumidores antes do número final**: (a) **números de pré-versão por iteração
+  (`1.1.0-ne3.1`, `-ne3.2`…) — o script aceita tag de pré-versão, cada iteração tem arquivo novo, e uma cerca recusa pré-versão no `main` dos
+  consumidores** · (b) o mesmo número com `npm cache clean --force` antes de instalar, por regra escrita · (c) só gerar o pacote com o núcleo
+  pronto e mergeado. *(Rec.: (a) — torna o achado HIGH impossível por construção.)*
+- **Q-F227 — o `mysql2` do setes-api**: (a) **o setes-api declara `mysql2` na versão EXATA (hoje 3.24.5); uma troca no núcleo não move o
+  driver do ERP sem decisão do setes-api (o npm aninha a do núcleo)** · (b) o ERP segue o núcleo pelo dedupe, conferindo o lock na revisão.
+  *(Rec.: (a).)*
+- **Q-F228 — as cercas cruzadas da nfse-api sobre o núcleo**: (a) **sai do escopo delas o `src` do núcleo (a garantia passa a ser a suíte
+  do núcleo NA TAG); o que é de execução (o `dist`, o `mysql2` da D-NE175) passa a ler o pacote INSTALADO; uma cerca impede a volta da
+  leitura da pasta irmã** · (b) manter a varredura, apontando para o `dist` instalado (cercas por AST reescritas para JS). *(Rec.: (a).)*
