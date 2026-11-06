@@ -5809,3 +5809,23 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
      `nfse-api/INDEX.md` checklist item 1 reescrito (versão do núcleo e selo pela linha do log; `npm run build` antes do `npm start`);
      `fiscal-api/INDEX.md`; INDICE_CENTRAL; CLAUDE.md da raiz; memória; push (fetch antes — dois clones).
   9. Remover as worktrees `versao\{fiscal-api,nfse-api,nfe-api,setes-api,sql}` (sem junção — pastas reais) e a branch `versao-1.0.0`.
+
+### 23.7 D-F228 executada + commits da Rodada 1 (2026-11-06; branch `versao-1.0.0`, LOCAL)
+
+- **Cercas cada uma no seu repositório**: o que os consumidores conferiam no FONTE do núcleo foi portado para
+  `fiscal-api/src/__tests__/cercas-portadas-dos-consumidores.test.ts` (blocos A–H: escopo da voz S por AST com SQL de várias linhas, K/N
+  literais da `policy.ts`, aviso D-F102 da `kinds.ts`, `VoiceFamily`/`INSERT INTO ${table}`/sem cast de `kind`, `terminal = ?` no
+  `event-table`, `service.ts` pelo `authorityRecordedOf`, logs do núcleo sem erro inteiro, `cutover_at NOW()` do issuer, nenhum número de
+  privilégio no `src` do núcleo); os consumidores leem só o PACOTE INSTALADO (o `dist`, o `.d.ts` publicado, o `mysql2` por
+  `require.resolve(..., { paths: [pacote] })` — a prova ao vivo da D-NE175 volta a trocar o `createPool` da instância que o pool do núcleo
+  usa: **26/26 ao vivo** com `NFSE_ADV_IB3_DB=1`); cerca nova `sibling-core-fence.test.ts` nos três consumidores (provada com leitura injetada).
+  Ficou para a próxima versão do núcleo: o comentário de `fiscal-api/src/voice/kinds.ts:13-19` ainda aponta a cerca antiga (mexer muda o
+  `.d.ts` publicado). Direção oposta (testes do núcleo que leem a nfse-api/setes-api como texto) = fora do escopo da D-F228.
+- **Suítes**: núcleo 1217 / 1 pulado / 0 · nfse-api 1126 / 195 pulados / 0 · nfe-api 55/55 · setes-api 3014 / 34 pulados / 0.
+- ⚠️ **Achado pré-existente (fora desta entrega)**: a suíte AO VIVO grande da nfse-api (`NFSE_ADV_LIVE=1 npx jest live` — fisco falso, cópias
+  `fiscal_api_adv_*`) falha 149/150 por falta de "notas-alvo frescas" no banco do dev (notas fixas 8005, 6531… fora do estado esperado);
+  o código PUBLICADO (árvore viva 8d8e030) falha IGUAL (adversarial-f1.live 25/25). A última rodada verde registrada é de 2026-10-10
+  ("ao vivo 150/150"); depois as sessões rodaram só sem o modo ao vivo. Tarefa própria: refazer as pré-condições de dados (ou o harness
+  escolher notas pelo estado, não por id fixo).
+- **Commits (LOCAIS)**: núcleo 30c0776 (tag local `v1.0.0` RECRIADA nele — o pacote sai com a MESMA integridade `sha512-G/zer57Z…`,
+  conferido) · nfse-api b015928 · nfe-api a68b400 · setes-api 8e96663. Gates do delta em curso.
