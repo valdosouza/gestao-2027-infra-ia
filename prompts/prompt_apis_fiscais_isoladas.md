@@ -5790,6 +5790,7 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
   commit Y" e RECUSA subir com `dist` de outro commit que o da pasta (`src/build-info.ts` + teste 4/4). A nfe-api ganha o mesmo selo quando
   for a produção.
 - **Roteiro da publicação (só com o "vai"; NESTA ordem)**:
+  0. (socrático do delta, LOW 6 — vem ANTES do passo 1) parar o que estiver no ar das três (abas "nfse-api producao" e "setes-api 3000").
   1. Núcleo: a tag `v1.0.0` (LOCAL) é recriada no commit FINAL da `versao-1.0.0` (só mudaram teste/script — o pacote tem de sair com a
      MESMA integridade `sha512-G/zer57Z…`, conferida por `pack-release` numa saída descartável); ff do `main` vivo; **push do `main` e da
      TAG antes de qualquer `npm ci`** (a junção viva aponta para esta pasta, que guarda o `.git` com a tag).
@@ -5829,3 +5830,35 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
   escolher notas pelo estado, não por id fixo).
 - **Commits (LOCAIS)**: núcleo 30c0776 (tag local `v1.0.0` RECRIADA nele — o pacote sai com a MESMA integridade `sha512-G/zer57Z…`,
   conferido) · nfse-api b015928 · nfe-api a68b400 · setes-api 8e96663. Gates do delta em curso.
+
+### 23.8 Gates do delta (2026-11-06) — socrático **0,80 ✓** · adversarial **0,76 ✓** (sem HIGH/CRITICAL) + correções
+
+- **Corrigido na sessão** (núcleo 9c01848 — tag LOCAL `v1.0.0` recriada nele, MESMA integridade `sha512-G/zer57Z…` · nfse-api d746593 ·
+  nfe-api 1dc9a23 · setes-api 7009f81):
+  - **adversarial M1**: a cerca gêmea lia só `pkg.jest.moduleNameMapper` e o `tsconfig.json` cru (um `jest.config.js` ou um `tsconfig` com
+    `extends` trazia a pasta irmã de volta com a cerca verde) → passa a conferir ONDE o processo resolve `fiscal-api` (caminho real dentro
+    de `node_modules`), o tsconfig EFETIVO (`getParsedCommandLineOfConfigFile`, segue `extends`) e recusa `jest.config.*` (provado: o
+    ataque do agente agora falha).
+  - LOW: "sem junção" pelo caminho REAL (o `require.resolve` já devolve o real — o `lstat` nele nunca via a junção); HEAD destacado num
+    commit que já está no `main` também exige versão final (`merge-base --is-ancestor`); o arquivo de uma versão é o MESMO blob do commit
+    que o acrescentou (regravar o mesmo número com outro conteúdo falha); nome de rascunho À RISCA (`-<frente>.<n>`, letra primeiro,
+    iteração ≥ 1; semver sem zero à esquerda) no script e na cerca; `npm pack` com destino RELATIVO (`%TEMP%` com espaço funcionava nunca);
+    cópia para a saída com `COPYFILE_EXCL`; selo lê o commit pela pasta do PROJETO (nunca pelo cwd), diz "NÃO conferido" sem git/sem selo e
+    "(compilado de árvore com alteração)". Boot por `node dist` com o selo contra banco descartável: health 200, 1ª linha "núcleo
+    fiscal-api 1.0.0 (pacote instalado) · dist do commit …".
+- **Limites conhecidos (registrados, sem código)**: a `sibling-core-fence` é SINTÁTICA — pega as formas literais da casa (todas as que o
+  código usava), não pega nome montado por variável/concatenação, `process.env` nem caminho absoluto (a defesa por resolução real ficou na
+  cerca gêmea, que olha o que o processo CARREGA); a regra do rascunho no `main` e o selo dependem de git (sem git, só log — Q-F230);
+  testes do núcleo ainda leem a nfse-api/setes-api irmãos como texto (direção inversa, fora da D-F228); reprodutibilidade com OUTRA versão
+  do npm não provada (o gzip pode mudar — o pacote é gerado uma vez e guardado; a prova é a integridade do lock).
+- **Roteiro §23.6 corrigido (socrático LOW 6)**: o passo 2 (parar o que está no ar) vem ANTES do passo 1 (o `main` vivo do núcleo anda
+  — o setes-api roda `tsx watch` sobre a junção); no passo 7 o setes-api também é reiniciado.
+- **Questões abertas (uma por vez)**:
+  - **Q-F229 — a suíte do núcleo na tag**: a D-F228 tirou dos consumidores as cercas sobre o fonte do núcleo ("a garantia passa a ser a
+    suíte do núcleo NA TAG"), mas nada manda rodá-la. (a) **o `pack-release` roda a suíte do núcleo na cópia limpa da tag e recusa
+    empacotar se falhar (+ a regra 17 nova do PADROES exige suíte verde no commit da tag)** · (b) só a regra escrita. *(Rec.: (a).)*
+  - **Q-F230 — rascunho em produção sem git**: (a) **o boot da nfse-api recusa núcleo de rascunho (`X.Y.Z-frente.N`) quando
+    `NODE_ENV=production`, valendo sem git** · (b) só a cerca (depende de git). *(Rec.: (a).)*
+  - **Q-F231 — a suíte ao vivo da nfse-api (149/150 falhando por dado do dev, pré-existente)**: (a) **tarefa própria para repor as
+    pré-condições (ou o harness escolher as notas pelo estado, não por id fixo), sem travar esta publicação** · (b) resolver nesta
+    entrega. *(Rec.: (a).)*
