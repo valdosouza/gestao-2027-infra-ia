@@ -494,6 +494,51 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   caracteres, em minúsculas, sem repetição — as menores já caem pelo tamanho; 2.231 entradas) e copiadas para o app como
   `setes_validators/lib/src/common_passwords.g.dart`. A conferência das duas cópias é ENTRADA POR ENTRADA (mais forte que o SHA-256 da
   A-EA9). Recusado: (b) o Valdo baixar à mão.
+- **D-EA37** (Valdo, 2026-11-06 — fecha a **Q-EA37** = (a), literal: *"(a) Registrar no log"*) — a recusa "nova senha igual à atual" da
+  troca pelo código (que não gasta o código nem conta erro — PP5) deixa UMA linha forense no log (`Troca de senha recusada: nova senha igual
+  à atual (D-EA37)`, com a conta e o e-mail MASCARADO; nunca a senha nem o código) — rastro de quem tem o código e testa palpites da senha
+  atual. EXECUTADA (setes-api `onda3`). Recusados: (b) contar também como erro do código; (c) deixar sem rastro.
+- **D-EA38** (Valdo, 2026-11-06 — fecha a **Q-EA38** = (a), literal: *"(a) Ignorar as pontas"*) — a lista de senhas comuns compara a senha
+  SEM o branco das pontas (a mesma lista explícita de brancos da peça): " 12345678" e "password " são recusadas como comuns; a senha GRAVADA
+  segue como foi digitada e o espaço no meio continua valendo (frase-senha). Na peça e no espelho Dart, casos no vetor. EXECUTADA.
+  Recusado: (b) deixar como estava.
+- **D-EA39** (Valdo, 2026-11-06 — fecha a **Q-EA39** = (a), literal: *"(a) Recusar"*) — a política recusa senha com caractere que a
+  pessoa não vê nem redigita (controle C0/DEL/C1 — inclusive tab, quebra de linha e U+0085 —, hífen suave, marcas de direção do texto,
+  espaços de largura zero, U+FEFF) e meio emoji (substituto UTF-16 sem o par — o MD5 de hoje grava todos como U+FFFD), com o problema
+  `invalid-char` ("A senha tem um caractere que não pode ser usado"); lista por UNIDADE UTF-16, igual na peça e no espelho; emoji inteiro,
+  acento e espaços visíveis seguem valendo. EXECUTADA. Recusado: (b) deixar para a Onda 4.
+- **D-EA40** (Valdo, 2026-11-06 — fecha a **Q-EA40** = (a), literal: *"(a) Limite conhecido"*) — na troca pelo código a regra do e-mail
+  (D-EA16) julga o e-mail DIGITADO; a variante que a colação do banco iguala ao login (`ı` = `i`, `ß` = `ss`) acha a conta e deixa o
+  titular — que tem o código — gravar uma senha com o nome do e-mail. LIMITE CONHECIDO (o titular escolhendo senha fraca, não ataque); o
+  teste `[LIMITE CONHECIDO — D-EA40]` do `adversarial-onda3-gate.test.ts` fixa a semântica. Recusado: (b) julgar também com o e-mail da
+  conta depois do código.
+- **D-EA41** (Valdo, 2026-11-06 — fecha a **Q-EA41** = (a), literal: *"(a) Manter assim"*) — o `fields[].field` da recusa da senha aponta
+  o NOME DO CAMPO QUE O CORPO TROUXE: `newPassword` na troca pelo código (`/auth/change-password`), `password` nos cadastros (users,
+  `admin.password` no onboarding). Revê a letra do PP1/PA4 do §P.5 ("sempre `password`"); a tela ancora pelo caminho do corpo (Framework
+  de Mensagens). Sem código novo. Recusado: (b) sempre `password` com tradução na tela.
+- **D-EA42** (Valdo, 2026-11-06 — fecha a **Q-EA42** = (a), literal: *"(a) Limite conhecido"*) — no `PUT /api/users/:id` de conta que JÁ
+  tem credencial, a política de senha (no DTO) fala antes do 409 `PASSWORD_OWNER_ONLY` (no service): quem chama a API direto com senha
+  fraca vê primeiro "senha muito comum". LIMITE CONHECIDO — a tela nem mostra o campo de senha nessa conta. Sem código novo. Recusado: (b)
+  inverter a ordem no fluxo do cadastro.
+- **Fila da Onda 3 ZERADA** (D-EA36…D-EA42).
+- **Gate do DELTA da Onda 3 (2026-11-06; 3a4cdb5..onda3 · e7119c6..onda3)**: socrático **0,80 ✅** · adversarial **0,84 ✅** (só LOW).
+  Provado fora do jest: as 65.536 unidades UTF-16 em 5 formas de senha dão o MESMO branco, `invalid-char` e ORDEM de problemas em node e no
+  Dart VM; o gerador reproduz a lista byte a byte. **Corrigidos** (cabem nas decisões): U+2028/U+2029 entram no `invalid-char` (D-EA39 —
+  quebra de linha) e o sigma final `ς` dobra para `σ` nas duas pontas (D-EA16 — o `toLowerCase` do JS escreve Σ como ς no fim de palavra; o
+  Dart VM não). **Limites conhecidos** (registro, sem decisão nova): seletores de variação U+FE00–FE0F e TAGs U+E0000–E007F seguem aceitos
+  (fazem parte de emoji inteiro — D-EA39 "emoji inteiro vale"); o Dart VM (Android) tem tabela de caixa mais antiga em ~192 letras raras
+  (Cherokee, Georgiano) — a API decide, o pior caso é a tela aceitar e a API recusar no campo; o boot confere a CONTAGEM da lista, não o
+  conteúdo. Commits: setes-api `f40d9a8` (D-EA37) · `41aa476` (D-EA38) · `ed1a077` (D-EA39) · `5f1732c` (D-EA40) · `ea0555e` (delta) ·
+  setes-app `384cae6` · `8ef508a` · `1039494`. Testes de TEMPO da recuperação (`adversarial-d-rs4-gate`, `adversarial-q-pv38-gate`) oscilam
+  sob carga — passam isolados (49/49) e no `main`.
+- **✅ PUBLICADO 2026-11-06** (Valdo: *"vai"*): o `main` do setes-api tinha andado (DEPLOY.E1.P1 de outra frente — núcleo fiscal pelo pacote
+  `vendor/fiscal-api-1.0.0.tgz` + `package-lock.json` versionado) → juntado na `onda3` sem conflito (48cddd6; a junção `node_modules/fiscal-api`
+  apagada ANTES do `npm ci`), suíte 175/175 (3124 verdes), `tsc` limpo → fast-forward no `main` do setes-api (**48cddd6**) e do setes-app
+  (**1039494**), os dois no GitHub; na árvore viva `tsc` limpo, testes da política 156/156, `setes_validators` 152/152, boot de conferência
+  (`Política de senha: lista de senhas comuns com 2231 entradas`; health 200) e desligado (não estava no ar). Nada de banco nesta onda.
+  Worktrees `onda3\{setes-api, setes-app, sql, fiscal-api, nfse-api}` REMOVIDAS (junção da nfse-api apagada antes), branches `onda3`
+  apagadas. **Próximo: Onda 4** (scrypt no lugar do MD5 — D-EA9 com o peso provisório da D-EA18; plano de testes H1–H10 no §P.5 item 3),
+  com o "sim" do Valdo; depois a A2 da auth-api (§7.7 do `prompt_frente_auth_api.md`).
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
