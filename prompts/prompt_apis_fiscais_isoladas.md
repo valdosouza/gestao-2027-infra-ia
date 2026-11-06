@@ -5771,9 +5771,11 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
   (`1.1.0-ne3.1`, `-ne3.2`…) — o script aceita tag de pré-versão, cada iteração tem arquivo novo, e uma cerca recusa pré-versão no `main` dos
   consumidores** · (b) o mesmo número com `npm cache clean --force` antes de instalar, por regra escrita · (c) só gerar o pacote com o núcleo
   pronto e mergeado. *(Rec.: (a) — torna o achado HIGH impossível por construção.)*
+  → **D-F226 (Valdo, 2026-11-06: "Número de rascunho") = (a)**.
 - **Q-F227 — o `mysql2` do setes-api**: (a) **o setes-api declara `mysql2` na versão EXATA (hoje 3.24.5); uma troca no núcleo não move o
   driver do ERP sem decisão do setes-api (o npm aninha a do núcleo)** · (b) o ERP segue o núcleo pelo dedupe, conferindo o lock na revisão.
-  *(Rec.: (a).)*
+  *(Rec.: (a).)* → **D-F227 (Valdo, 2026-11-06: "Prender no setes-api") = (a)**.
 - **Q-F228 — as cercas cruzadas da nfse-api sobre o núcleo**: (a) **sai do escopo delas o `src` do núcleo (a garantia passa a ser a suíte
   do núcleo NA TAG); o que é de execução (o `dist`, o `mysql2` da D-NE175) passa a ler o pacote INSTALADO; uma cerca impede a volta da
   leitura da pasta irmã** · (b) manter a varredura, apontando para o `dist` instalado (cercas por AST reescritas para JS). *(Rec.: (a).)*
+  → **D-F228 (Valdo, 2026-11-06: "Cada um no seu") = (a)**. **Rodada 1 do DEPLOY.E1.P1 FECHADA.**
