@@ -5857,8 +5857,27 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
   - **Q-F229 — a suíte do núcleo na tag**: a D-F228 tirou dos consumidores as cercas sobre o fonte do núcleo ("a garantia passa a ser a
     suíte do núcleo NA TAG"), mas nada manda rodá-la. (a) **o `pack-release` roda a suíte do núcleo na cópia limpa da tag e recusa
     empacotar se falhar (+ a regra 17 nova do PADROES exige suíte verde no commit da tag)** · (b) só a regra escrita. *(Rec.: (a).)*
+    → **D-F229 (Valdo, 2026-11-06: "O script roda a suíte") = (a)**.
   - **Q-F230 — rascunho em produção sem git**: (a) **o boot da nfse-api recusa núcleo de rascunho (`X.Y.Z-frente.N`) quando
     `NODE_ENV=production`, valendo sem git** · (b) só a cerca (depende de git). *(Rec.: (a).)*
+    → **D-F230 (Valdo, 2026-11-06: "Recusar na partida") = (a)**.
   - **Q-F231 — a suíte ao vivo da nfse-api (149/150 falhando por dado do dev, pré-existente)**: (a) **tarefa própria para repor as
     pré-condições (ou o harness escolher as notas pelo estado, não por id fixo), sem travar esta publicação** · (b) resolver nesta
     entrega. *(Rec.: (a).)*
+    → **D-F231 (Valdo, 2026-11-06: "Tarefa própria") = (a)**. **Rodada 2 do DEPLOY.E1.P1 FECHADA — nenhuma questão aberta.**
+
+### 23.9 D-F229/D-F230 executadas — DEPLOY.E1.P1 PRONTO PARA PUBLICAR (2026-11-06; tudo LOCAL, nada publicado)
+
+- **D-F229**: o `pack-release.mjs` roda `npm test` NA PASTA de onde é chamado (vários testes do núcleo leem as irmãs do workspace — numa
+  cópia isolada em `%TEMP%` não provariam nada), exige essa pasta EXATAMENTE na tag e sem alteração, e recusa empacotar se a suíte falhar;
+  depois empacota na cópia limpa de `%TEMP%` como antes. `pack-release.test.ts` 7/7 (suíte vermelha recusa; pasta fora da tag ou suja recusa).
+- **D-F230**: o boot da nfse-api recusa núcleo de RASCUNHO com `NODE_ENV=production`, com ou sem git (`build-info.ts`, teste 6/6).
+- **Prova final (T2 + D-F229)**: `node scripts/pack-release.mjs v1.0.0 <saída>` na worktree na tag → suíte do núcleo **1219 / 1 pulado / 0**
+  no commit da tag → pacote com a MESMA integridade `sha512-G/zer57Z…` do `vendor/` dos três consumidores; nenhuma cópia temporária
+  sobrou. Suítes: núcleo 1219/1/0 · nfse-api 1129+/195 ao vivo pulados/0 · nfe-api 57/57 · setes-api 3014/34/0 · testes de banco ao vivo da
+  nfse-api 26/26 · boot por `node dist` contra banco descartável com o selo: health 200.
+- **Pontas (LOCAIS, branch `versao-1.0.0`)**: núcleo **13f877f** (tag LOCAL `v1.0.0` nele) · nfse-api **3f147a1** · nfe-api **1dc9a23** ·
+  setes-api **7009f81**. Gates: socrático 0,66 → **0,80** · adversarial 0,78 → delta **0,76**.
+- ⏯ **Próximo = a publicação pelo roteiro do §23.6 (passos 0–9), só com o "vai" do Valdo.** No passo 1, rodar o `pack-release` da
+  árvore VIVA do núcleo depois do ff (ela fica na tag) para provar a integridade na pasta oficial. Tarefa própria aberta: a suíte ao vivo da
+  nfse-api (D-F231).
