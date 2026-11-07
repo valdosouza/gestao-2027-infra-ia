@@ -541,6 +541,14 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   se a conta tem código ABERTO, no prazo e não esgotado ANTES dos dois scrypt; sem ele, a recusa neutra sai SEM calcular e sem gravar
   (none/used/expired/exhausted nunca contam erro — a regra do julgamento); o piso de 700 ms esconde a diferença; o julgamento de verdade
   segue sob a trava. Fecha o ADV-O4-03. Recusado: (b) limite conhecido. **Fila da Onda 4 ZERADA** (D-EA43…D-EA46).
+- **✅ ONDA 4 PUBLICADA 2026-11-07** (Valdo: *"Vai"*): o `main` do setes-api não tinha andado → fast-forward para **653a563** e push; na
+  árvore viva `tsc` limpo, testes da onda 207/207, boot de conferência (health 200; desligado em seguida — não estava no ar); suíte inteira
+  na worktree 177/177 (3196 verdes). Nada de banco. Worktrees `onda4\{setes-api, sql, fiscal-api, nfse-api}` removidas (o
+  `nfse-api\node_modules\fiscal-api` era pasta real, não junção — o núcleo agora vem pelo pacote), branch `onda4` apagada. **Roteiro do
+  deploy**: (1) a regravação no 1º login mata o código de recuperação aberto daquela conta (pedir outro); (2) H11 — rodar
+  `scripts/measure-scrypt.ts` no servidor real, com e sem carga, e então confirmar/ajustar o peso (D-EA17) e o piso (D-EA43/D-EA45).
+  **Próximo**: A2 da auth-api (§7.7 do `prompt_frente_auth_api.md`) — levar para lá: onde mora a peça da senha (biblioteca comum × só na
+  auth-api), a versão do Node do servidor e a confirmação com o grupo do sync de que nada lê `tb_user.password` em MD5.
 - **Gate do DELTA da Onda 3 (2026-11-06; 3a4cdb5..onda3 · e7119c6..onda3)**: socrático **0,80 ✅** · adversarial **0,84 ✅** (só LOW).
   Provado fora do jest: as 65.536 unidades UTF-16 em 5 formas de senha dão o MESMO branco, `invalid-char` e ORDEM de problemas em node e no
   Dart VM; o gerador reproduz a lista byte a byte. **Corrigidos** (cabem nas decisões): U+2028/U+2029 entram no `invalid-char` (D-EA39 —
