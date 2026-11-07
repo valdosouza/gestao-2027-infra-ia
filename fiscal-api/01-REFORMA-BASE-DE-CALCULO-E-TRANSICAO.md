@@ -41,7 +41,7 @@
 
 - **[texto]** Base = **valor da operação**: o valor integral cobrado pelo fornecedor a qualquer título, incluindo acréscimos, juros, multas, descontos **condicionais**, transporte cobrado, seguros e taxas (§ 1º).
 - **[texto]** **Não integram a base** (§ 2º): o próprio IBS/CBS ("por fora"), o IPI, os descontos **incondicionais**, reembolsos de terceiros e, **de 01/01/2026 a 31/12/2032, o ICMS, o ISS, o PIS e a COFINS**.
-- **[texto]** NT 2025.002 v1.53, regra UB16-10: o `vBC` do IBS/CBS é a soma de `vProd`, `vServ`, `vFrete`, `vSeg`, `vOutro`, `vII`, menos `vDesc`, `vPIS`, `vCOFINS`, `vICMS`, `vICMSUFDest`, `vFCP`, `vFCPUFDest`, `vISSQN`, mais `vIS` (confira o texto completo antes de implementar).
+- **[texto]** NT 2025.002 v1.53, regra UB16-10: o `vBC` do IBS/CBS é a soma de `vProd`, `vServ`, `vFrete`, `vSeg`, `vOutro`, `vII`, menos `vDesc`, `vPIS`, `vCOFINS`, `vICMS`, `vICMSUFDest`, `vFCP`, `vFCPUFDest`, **`vICMSMono`**, `vISSQN`, mais `vIS`. **Exceções 1 e 2:** não subtrair o PIS/COFINS por substituição tributária quando compõem o total da NF-e (`indSomaPISST` e `indSomaCOFINSST` = 1); a NT marca a nota "implementação futura, aguardando orientação normativa" (conferido no texto da NT em 07/11/2026; a lista anterior deste item omitia o `vICMSMono`).
 - **[texto]** Valor do IBS: `vIBSUF = vBC × pIBSUF/100 − vDif − vDevTrib`, com **tolerância de 0,01** a mais ou a menos (regra UB35-10).
 
 ## 3. Simples Nacional

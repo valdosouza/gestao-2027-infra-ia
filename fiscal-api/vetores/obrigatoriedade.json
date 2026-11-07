@@ -1,0 +1,227 @@
+{
+  "funcao": "obrigatoriedadeIBSCBS",
+  "versao": 1,
+  "regras": [
+    "RF-CAL-03",
+    "RF-CAL-04",
+    "RF-NFS-07"
+  ],
+  "convencao": {
+    "numeros": "valores e alíquotas são STRINGS decimais (nunca número JSON), para não perder precisão; reais com 2 casas",
+    "aliquotas": "fração decimal: \"0.12\" = 12%",
+    "datas": "AAAA-MM-DD; instantes em UTC: AAAA-MM-DDTHH:MM:SSZ",
+    "grau": "T = escrito na norma · L = leitura nossa · E = observado em homologação ou produção"
+  },
+  "descricao": "A partir de que competência a declaração de IBS/CBS é OBRIGATÓRIA (a obrigação legal, por documento e regime). O MEI é dispensado e fica fora. A obrigação legal não é a rejeição do fisco: os casos \"observados\" registram o que a autoridade fez em homologação.",
+  "casos": [
+    {
+      "id": "OBR-001",
+      "descricao": "NF-e do regime normal na véspera",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFe",
+        "regime": "normal",
+        "grupoNFSe": null,
+        "competencia": "2026-08-02"
+      },
+      "saida": {
+        "obrigatoria": false,
+        "obrigatoriaAPartirDe": "2026-08-03"
+      }
+    },
+    {
+      "id": "OBR-002",
+      "descricao": "NF-e do regime normal no primeiro dia",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFe",
+        "regime": "normal",
+        "grupoNFSe": null,
+        "competencia": "2026-08-03"
+      },
+      "saida": {
+        "obrigatoria": true,
+        "obrigatoriaAPartirDe": "2026-08-03"
+      }
+    },
+    {
+      "id": "OBR-003",
+      "descricao": "NFC-e do regime normal",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFCe",
+        "regime": "normal",
+        "grupoNFSe": null,
+        "competencia": "2026-09-15"
+      },
+      "saida": {
+        "obrigatoria": true,
+        "obrigatoriaAPartirDe": "2026-08-03"
+      }
+    },
+    {
+      "id": "OBR-004",
+      "descricao": "NFS-e de serviço da alínea d na véspera",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFSe",
+        "regime": "normal",
+        "grupoNFSe": "d",
+        "competencia": "2026-09-30"
+      },
+      "saida": {
+        "obrigatoria": false,
+        "obrigatoriaAPartirDe": "2026-10-01"
+      }
+    },
+    {
+      "id": "OBR-005",
+      "descricao": "NFS-e de serviço da alínea d no primeiro dia",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFSe",
+        "regime": "normal",
+        "grupoNFSe": "d",
+        "competencia": "2026-10-01"
+      },
+      "saida": {
+        "obrigatoria": true,
+        "obrigatoriaAPartirDe": "2026-10-01"
+      }
+    },
+    {
+      "id": "OBR-006",
+      "descricao": "NFS-e dos demais serviços na véspera",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFSe",
+        "regime": "normal",
+        "grupoNFSe": "demais",
+        "competencia": "2026-11-30"
+      },
+      "saida": {
+        "obrigatoria": false,
+        "obrigatoriaAPartirDe": "2026-12-01"
+      }
+    },
+    {
+      "id": "OBR-007",
+      "descricao": "NFS-e dos demais serviços no primeiro dia",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFSe",
+        "regime": "normal",
+        "grupoNFSe": "demais",
+        "competencia": "2026-12-01"
+      },
+      "saida": {
+        "obrigatoria": true,
+        "obrigatoriaAPartirDe": "2026-12-01"
+      }
+    },
+    {
+      "id": "OBR-008",
+      "descricao": "NF-e do Simples na véspera de 2027",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFe",
+        "regime": "simples",
+        "grupoNFSe": null,
+        "competencia": "2026-12-31"
+      },
+      "saida": {
+        "obrigatoria": false,
+        "obrigatoriaAPartirDe": "2027-01-01"
+      }
+    },
+    {
+      "id": "OBR-009",
+      "descricao": "NF-e do Simples em 01/01/2027",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFe",
+        "regime": "simples",
+        "grupoNFSe": null,
+        "competencia": "2027-01-01"
+      },
+      "saida": {
+        "obrigatoria": true,
+        "obrigatoriaAPartirDe": "2027-01-01"
+      }
+    },
+    {
+      "id": "OBR-010",
+      "descricao": "NFS-e do Simples em 11/2026: ainda não obrigatória",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFSe",
+        "regime": "simples",
+        "grupoNFSe": null,
+        "competencia": "2026-11-15"
+      },
+      "saida": {
+        "obrigatoria": false,
+        "obrigatoriaAPartirDe": "2027-01-01"
+      }
+    },
+    {
+      "id": "OBR-011",
+      "descricao": "NFS-e do Simples em 01/01/2027",
+      "grau": "T",
+      "fonte": "Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º",
+      "entrada": {
+        "documento": "NFSe",
+        "regime": "simples",
+        "grupoNFSe": null,
+        "competencia": "2027-01-01"
+      },
+      "saida": {
+        "obrigatoria": true,
+        "obrigatoriaAPartirDe": "2027-01-01"
+      }
+    }
+  ],
+  "observados": [
+    {
+      "id": "OBS-001",
+      "grau": "E",
+      "descricao": "Observado em H (nota 8015 da nfse-api, 01/11/2026): NFS-e de optante do Simples com competência 11/2026 e SEM o grupo IBS/CBS foi AUTORIZADA; a regra E0855 (obrigatório desde 01/10/2026) não recusou",
+      "fonte": "prova em H de 01/11/2026 (prompt_fase_ibs_cbs.md §13.8, D-IB114)",
+      "entrada": {
+        "ambiente": "H",
+        "pacote": "xsd-20261020",
+        "regime": "simples",
+        "competencia": "2026-11",
+        "grupoDeclarado": false
+      },
+      "saida": {
+        "autorizada": true
+      }
+    },
+    {
+      "id": "OBS-002",
+      "grau": "E",
+      "descricao": "Observado em H (nota 8014, 01/11/2026): com o grupo declarado vazio (<gIBSCBS/>) depois de CST e cClassTrib a NFS-e foi AUTORIZADA (E0960 não disparou)",
+      "fonte": "prova em H de 01/11/2026 (D-IB112)",
+      "entrada": {
+        "ambiente": "H",
+        "pacote": "xsd-20261020",
+        "grupoDeclarado": true,
+        "gIBSCBS": "vazio"
+      },
+      "saida": {
+        "autorizada": true
+      }
+    }
+  ]
+}

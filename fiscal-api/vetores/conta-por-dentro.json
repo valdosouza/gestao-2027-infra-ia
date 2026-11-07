@@ -1,0 +1,1032 @@
+{
+  "funcao": "contaPorDentro",
+  "versao": 1,
+  "regras": [
+    "RF-PRC-02",
+    "RF-PRC-03",
+    "RF-PRC-04",
+    "RF-BC-04"
+  ],
+  "convencao": {
+    "numeros": "valores e alíquotas são STRINGS decimais (nunca número JSON), para não perder precisão; reais com 2 casas",
+    "aliquotas": "fração decimal: \"0.12\" = 12%",
+    "datas": "AAAA-MM-DD; instantes em UTC: AAAA-MM-DDTHH:MM:SSZ",
+    "grau": "T = escrito na norma · L = leitura nossa · E = observado em homologação ou produção"
+  },
+  "descricao": "Item de NF-e ou NFC-e do regime normal com o preço final como entrada (IBS e CBS dentro do preço, ICMS por dentro). Entrada: valor cobrado do item P (sem IPI), alíquota do ICMS e alíquotas efetivas de IBS e CBS. Saída: ICMS, base do IBS/CBS, IBS, CBS e vProd líquido, fechando vProd + vIBS + vCBS = P com a tolerância de 0,01 da NT (UB35-10).",
+  "propriedades": [
+    "vProd + vIBS + vCBS == P em todos os casos (fecha = true)",
+    "vIBS e vCBS ficam a no máximo 0,01 de vBC x alíquota (tolerância da NT)",
+    "icms == P x aliquotaICMS arredondado a 2 casas (meio para cima)"
+  ],
+  "casos": [
+    {
+      "id": "CPD-001",
+      "descricao": "Exemplo oficial da SEFA-PR (Consulta 48/2026): preço 123,64, ICMS 14,84, base 100,00, IBS 0,10, CBS 8,70, vProd 114,84",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "123.64",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "14.84",
+        "vBC": "100.00",
+        "vIBS": "0.10",
+        "vCBS": "8.70",
+        "vProd": "114.84",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-002",
+      "descricao": "ICMS zero (Simples com regime regular de IBS/CBS)",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "100.00",
+        "aliquotaICMS": "0",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "0.00",
+        "vBC": "91.91",
+        "vIBS": "0.09",
+        "vCBS": "8.00",
+        "vProd": "91.91",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-003",
+      "descricao": "CBS de 11,2%",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "1000.00",
+        "aliquotaICMS": "0.17",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "170.00",
+        "vBC": "745.73",
+        "vIBS": "0.75",
+        "vCBS": "83.52",
+        "vProd": "915.73",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-004",
+      "descricao": "Preço com centavos",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "59.90",
+        "aliquotaICMS": "0.18",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "10.78",
+        "vBC": "45.14",
+        "vIBS": "0.05",
+        "vCBS": "3.93",
+        "vProd": "55.92",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-005",
+      "descricao": "",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "15.37",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "1.84",
+        "vBC": "12.16",
+        "vIBS": "0.01",
+        "vCBS": "1.36",
+        "vProd": "14.00",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-006",
+      "descricao": "Caso que exige o ajuste de 1 centavo dentro da tolerância de 0,01",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "2499.99",
+        "aliquotaICMS": "0.195",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "487.50",
+        "vBC": "1849.71",
+        "vIBS": "1.85",
+        "vCBS": "160.93",
+        "vProd": "2337.21",
+        "ajusteCentavo": true,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-007",
+      "descricao": "Valor muito pequeno",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "0.99",
+        "aliquotaICMS": "0.07",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "0.07",
+        "vBC": "0.85",
+        "vIBS": "0.00",
+        "vCBS": "0.07",
+        "vProd": "0.92",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-008",
+      "descricao": "",
+      "grau": "L",
+      "fonte": "02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md §3 e §4 (vetores do documento)",
+      "entrada": {
+        "P": "987.65",
+        "aliquotaICMS": "0.04",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "39.51",
+        "vBC": "851.88",
+        "vIBS": "0.85",
+        "vCBS": "95.41",
+        "vProd": "891.39",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-009",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "999.84",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "119.98",
+        "vBC": "790.53",
+        "vIBS": "0.79",
+        "vCBS": "88.54",
+        "vProd": "910.51",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-010",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "12345.04",
+        "aliquotaICMS": "0.04",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "493.80",
+        "vBC": "10648.01",
+        "vIBS": "10.65",
+        "vCBS": "1192.58",
+        "vProd": "11141.81",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-011",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "9.27",
+        "aliquotaICMS": "0.18",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "1.67",
+        "vBC": "6.98",
+        "vIBS": "0.01",
+        "vCBS": "0.61",
+        "vProd": "8.65",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-012",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "250.39",
+        "aliquotaICMS": "0",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "0.00",
+        "vBC": "230.14",
+        "vIBS": "0.23",
+        "vCBS": "20.02",
+        "vProd": "230.14",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-013",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "9.51",
+        "aliquotaICMS": "0",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "0.00",
+        "vBC": "8.54",
+        "vIBS": "0.01",
+        "vCBS": "0.96",
+        "vProd": "8.54",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-014",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "12345.23",
+        "aliquotaICMS": "0.07",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "864.17",
+        "vBC": "10552.45",
+        "vIBS": "10.55",
+        "vCBS": "918.06",
+        "vProd": "11416.62",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-015",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "250.30",
+        "aliquotaICMS": "0.07",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "17.52",
+        "vBC": "213.96",
+        "vIBS": "0.21",
+        "vCBS": "18.61",
+        "vProd": "231.48",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-016",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "59.80",
+        "aliquotaICMS": "0.18",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "10.76",
+        "vBC": "45.07",
+        "vIBS": "0.05",
+        "vCBS": "3.92",
+        "vProd": "55.83",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-017",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "1.83",
+        "aliquotaICMS": "0.17",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "0.31",
+        "vBC": "1.40",
+        "vIBS": "0.00",
+        "vCBS": "0.12",
+        "vProd": "1.71",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-018",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "9.07",
+        "aliquotaICMS": "0.17",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "1.54",
+        "vBC": "6.76",
+        "vIBS": "0.01",
+        "vCBS": "0.76",
+        "vProd": "8.30",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-019",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "250.06",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "30.01",
+        "vBC": "202.25",
+        "vIBS": "0.20",
+        "vCBS": "17.60",
+        "vProd": "232.26",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-020",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "999.95",
+        "aliquotaICMS": "0.04",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "40.00",
+        "vBC": "882.31",
+        "vIBS": "0.88",
+        "vCBS": "76.76",
+        "vProd": "922.31",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-021",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "250.09",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "30.01",
+        "vBC": "197.73",
+        "vIBS": "0.20",
+        "vCBS": "22.15",
+        "vProd": "227.74",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-022",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "8000.78",
+        "aliquotaICMS": "0.17",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "1360.13",
+        "vBC": "6103.54",
+        "vIBS": "6.10",
+        "vCBS": "531.01",
+        "vProd": "7463.67",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-023",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "100.78",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "12.09",
+        "vBC": "81.52",
+        "vIBS": "0.08",
+        "vCBS": "7.09",
+        "vProd": "93.61",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-024",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "5.08",
+        "aliquotaICMS": "0.17",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "0.86",
+        "vBC": "3.79",
+        "vIBS": "0.00",
+        "vCBS": "0.43",
+        "vProd": "4.65",
+        "ajusteCentavo": true,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-025",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "9.13",
+        "aliquotaICMS": "0",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "0.00",
+        "vBC": "8.20",
+        "vIBS": "0.01",
+        "vCBS": "0.92",
+        "vProd": "8.20",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-026",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "33.40",
+        "aliquotaICMS": "0.18",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "6.01",
+        "vBC": "24.61",
+        "vIBS": "0.02",
+        "vCBS": "2.76",
+        "vProd": "30.62",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-027",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "8000.73",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "960.09",
+        "vBC": "6471.18",
+        "vIBS": "6.47",
+        "vCBS": "562.99",
+        "vProd": "7431.27",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-028",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "12.47",
+        "aliquotaICMS": "0.07",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "0.87",
+        "vBC": "10.66",
+        "vIBS": "0.01",
+        "vCBS": "0.93",
+        "vProd": "11.53",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-029",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "0.31",
+        "aliquotaICMS": "0.04",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "0.01",
+        "vBC": "0.28",
+        "vIBS": "0.00",
+        "vCBS": "0.02",
+        "vProd": "0.29",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-030",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "1500.20",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "180.02",
+        "vBC": "1186.14",
+        "vIBS": "1.19",
+        "vCBS": "132.85",
+        "vProd": "1366.16",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-031",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "8000.87",
+        "aliquotaICMS": "0.04",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "320.03",
+        "vBC": "6901.02",
+        "vIBS": "6.90",
+        "vCBS": "772.92",
+        "vProd": "7221.05",
+        "ajusteCentavo": true,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-032",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "9.57",
+        "aliquotaICMS": "0.195",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "1.87",
+        "vBC": "7.07",
+        "vIBS": "0.01",
+        "vCBS": "0.62",
+        "vProd": "8.94",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-033",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "1.83",
+        "aliquotaICMS": "0",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "0.00",
+        "vBC": "1.65",
+        "vIBS": "0.00",
+        "vCBS": "0.18",
+        "vProd": "1.65",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-034",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "1500.42",
+        "aliquotaICMS": "0.195",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "292.58",
+        "vBC": "1085.21",
+        "vIBS": "1.09",
+        "vCBS": "121.54",
+        "vProd": "1377.79",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-035",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "12345.76",
+        "aliquotaICMS": "0",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "0.00",
+        "vBC": "11092.33",
+        "vIBS": "11.09",
+        "vCBS": "1242.34",
+        "vProd": "11092.33",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-036",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "100.44",
+        "aliquotaICMS": "0.04",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "4.02",
+        "vBC": "88.62",
+        "vIBS": "0.09",
+        "vCBS": "7.71",
+        "vProd": "92.64",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-037",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "8000.01",
+        "aliquotaICMS": "0.195",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "1560.00",
+        "vBC": "5919.13",
+        "vIBS": "5.92",
+        "vCBS": "514.96",
+        "vProd": "7479.13",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-038",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "59.72",
+        "aliquotaICMS": "0.07",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "4.18",
+        "vBC": "51.05",
+        "vIBS": "0.05",
+        "vCBS": "4.44",
+        "vProd": "55.23",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-039",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "8000.94",
+        "aliquotaICMS": "0.07",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "560.07",
+        "vBC": "6839.03",
+        "vIBS": "6.84",
+        "vCBS": "595.00",
+        "vProd": "7399.10",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-040",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "12.40",
+        "aliquotaICMS": "0.195",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "2.42",
+        "vBC": "9.17",
+        "vIBS": "0.01",
+        "vCBS": "0.80",
+        "vProd": "11.59",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-041",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "59.86",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "7.18",
+        "vBC": "47.33",
+        "vIBS": "0.05",
+        "vCBS": "5.30",
+        "vProd": "54.51",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-042",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "12345.88",
+        "aliquotaICMS": "0.17",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "2098.80",
+        "vBC": "9418.27",
+        "vIBS": "9.42",
+        "vCBS": "819.39",
+        "vProd": "11517.07",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-043",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "0.68",
+        "aliquotaICMS": "0",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "0.00",
+        "vBC": "0.63",
+        "vIBS": "0.00",
+        "vCBS": "0.05",
+        "vProd": "0.63",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-044",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "250.16",
+        "aliquotaICMS": "0.17",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "42.53",
+        "vBC": "190.84",
+        "vIBS": "0.19",
+        "vCBS": "16.60",
+        "vProd": "233.37",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-045",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "59.73",
+        "aliquotaICMS": "0.12",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "7.17",
+        "vBC": "47.22",
+        "vIBS": "0.05",
+        "vCBS": "5.29",
+        "vProd": "54.39",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-046",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "1500.38",
+        "aliquotaICMS": "0.04",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "60.02",
+        "vBC": "1323.86",
+        "vIBS": "1.32",
+        "vCBS": "115.18",
+        "vProd": "1383.88",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-047",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "12.53",
+        "aliquotaICMS": "0.18",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.087"
+      },
+      "saida": {
+        "icms": "2.26",
+        "vBC": "9.44",
+        "vIBS": "0.01",
+        "vCBS": "0.82",
+        "vProd": "11.70",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    },
+    {
+      "id": "CPD-048",
+      "descricao": "Gerado com semente fixa (20261107) pela referência",
+      "grau": "L",
+      "fonte": "referencia.py (conta_por_dentro)",
+      "entrada": {
+        "P": "1500.76",
+        "aliquotaICMS": "0.195",
+        "aliquotaIBS": "0.001",
+        "aliquotaCBS": "0.112"
+      },
+      "saida": {
+        "icms": "292.65",
+        "vBC": "1085.45",
+        "vIBS": "1.09",
+        "vCBS": "121.57",
+        "vProd": "1378.10",
+        "ajusteCentavo": false,
+        "fecha": true
+      }
+    }
+  ]
+}

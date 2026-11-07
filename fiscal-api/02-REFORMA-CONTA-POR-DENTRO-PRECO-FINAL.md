@@ -76,6 +76,8 @@ def item_preco_final(P, t, a_ibs, a_cbs, tol=D('0.01')):
 
 ### Vetores de teste (gerados com o algoritmo acima; IBS 0,1%)
 
+**Agora também em JSON, para o legado e a web lerem o mesmo arquivo:** `vetores/conta-por-dentro.json` (48 casos: estes 8 e mais 40) com a referência verificável em `vetores/referencia/` (ver `vetores/INDEX.md`).
+
 | P (preço final) | ICMS % | CBS % | ICMS | vBC IBS/CBS | vIBS | vCBS | vProd | Ajuste de 1 centavo |
 |---|---|---|---|---|---|---|---|---|
 | 123,64 | 12 | 8,7 | 14,84 | 100,00 | 0,10 | 8,70 | 114,84 | não |

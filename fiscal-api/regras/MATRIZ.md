@@ -41,7 +41,7 @@
 |---|---|---|---|
 | RF-BC-01 | I (motor em `Un_RegraIBSCBS2027`) · não homologado em 2027 | NF-e: sem motor (D-E17) · NFS-e: Calculadora (D-IB11) | Divergência 1 |
 | RF-BC-02 | I (idem) | idem | idem |
-| RF-BC-03 | I (UB16-10 no motor; hoje o `vBC` é calculado **antes** das alíquotas efetivas) · não homologado em 2027 | NF-e: sem motor | Divergência 5 |
+| RF-BC-03 | I (UB16-10 no motor; hoje o `vBC` é calculado **antes** das alíquotas efetivas; **conferir se inclui `vICMSMono`**) · não homologado em 2027 | NF-e: sem motor | Divergência 5 |
 | RF-BC-04 | D (tolerância de ±0,01 no desenho, D-EM49) · código ainda não | Calculadora; a voz confere em R$ 0,01 (D-IB12) | — |
 | RF-BC-05 | — (não preenche a NFS-e; Decisão Nº 4) | I · H (montador da DPS, IB-3; nota 8014) | NFSE.E4 do legado |
 

@@ -1,0 +1,107 @@
+{
+  "funcao": "leiauteNFSe",
+  "versao": 1,
+  "regras": [
+    "RF-NFS-02",
+    "RF-NFS-03"
+  ],
+  "convencao": {
+    "numeros": "valores e alíquotas são STRINGS decimais (nunca número JSON), para não perder precisão; reais com 2 casas",
+    "aliquotas": "fração decimal: \"0.12\" = 12%",
+    "datas": "AAAA-MM-DD; instantes em UTC: AAAA-MM-DDTHH:MM:SSZ",
+    "grau": "T = escrito na norma · L = leitura nossa · E = observado em homologação ou produção"
+  },
+  "descricao": "Qual pacote XSD a autoridade aceita por documento, ambiente e instante. A versão (\"1.01\") é igual nos dois pacotes e NUNCA decide o leiaute. Estado de 01/11/2026: se a produção adotar o pacote novo, entra uma linha nova por deploy antes da data anunciada.",
+  "casos": [
+    {
+      "id": "LAY-001",
+      "descricao": "DPS em H um segundo antes da troca (20/10/2026 18h10 de Brasília = 21:10 UTC)",
+      "grau": "E",
+      "fonte": "nfse-api, layout-calendar.ts (D-IB110, D-IB111); portal da NFS-e",
+      "entrada": {
+        "documento": "DPS",
+        "ambiente": "H",
+        "instante": "2026-10-20T21:09:59Z"
+      },
+      "saida": {
+        "leiaute": "xsd-20260209",
+        "versao": "1.01"
+      }
+    },
+    {
+      "id": "LAY-002",
+      "descricao": "DPS em H na troca: pacote de 20/10/2026",
+      "grau": "E",
+      "fonte": "nfse-api, layout-calendar.ts (D-IB110, D-IB111); portal da NFS-e",
+      "entrada": {
+        "documento": "DPS",
+        "ambiente": "H",
+        "instante": "2026-10-20T21:10:00Z"
+      },
+      "saida": {
+        "leiaute": "xsd-20261020",
+        "versao": "1.01"
+      }
+    },
+    {
+      "id": "LAY-003",
+      "descricao": "DPS em H no dia da prova (notas 8014 e 8015)",
+      "grau": "E",
+      "fonte": "nfse-api, layout-calendar.ts (D-IB110, D-IB111); portal da NFS-e",
+      "entrada": {
+        "documento": "DPS",
+        "ambiente": "H",
+        "instante": "2026-11-01T14:53:00Z"
+      },
+      "saida": {
+        "leiaute": "xsd-20261020",
+        "versao": "1.01"
+      }
+    },
+    {
+      "id": "LAY-004",
+      "descricao": "DPS em produção segue o pacote de 09/02/2026 até o fisco anunciar",
+      "grau": "E",
+      "fonte": "nfse-api, layout-calendar.ts (D-IB110, D-IB111); portal da NFS-e",
+      "entrada": {
+        "documento": "DPS",
+        "ambiente": "P",
+        "instante": "2026-11-07T12:00:00Z"
+      },
+      "saida": {
+        "leiaute": "xsd-20260209",
+        "versao": "1.01"
+      }
+    },
+    {
+      "id": "LAY-005",
+      "descricao": "Pedido de evento em H: o mesmo pacote de 09/02/2026",
+      "grau": "E",
+      "fonte": "nfse-api, layout-calendar.ts (D-IB110, D-IB111); portal da NFS-e",
+      "entrada": {
+        "documento": "EVENT",
+        "ambiente": "H",
+        "instante": "2026-11-01T14:53:00Z"
+      },
+      "saida": {
+        "leiaute": "xsd-20260209",
+        "versao": "1.01"
+      }
+    },
+    {
+      "id": "LAY-006",
+      "descricao": "Pedido de evento em produção",
+      "grau": "E",
+      "fonte": "nfse-api, layout-calendar.ts (D-IB110, D-IB111); portal da NFS-e",
+      "entrada": {
+        "documento": "EVENT",
+        "ambiente": "P",
+        "instante": "2026-11-07T12:00:00Z"
+      },
+      "saida": {
+        "leiaute": "xsd-20260209",
+        "versao": "1.01"
+      }
+    }
+  ]
+}

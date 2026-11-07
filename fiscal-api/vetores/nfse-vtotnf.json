@@ -1,0 +1,186 @@
+{
+  "funcao": "vTotNFnfse",
+  "versao": 1,
+  "regras": [
+    "RF-PRC-08"
+  ],
+  "convencao": {
+    "numeros": "valores e alíquotas são STRINGS decimais (nunca número JSON), para não perder precisão; reais com 2 casas",
+    "aliquotas": "fração decimal: \"0.12\" = 12%",
+    "datas": "AAAA-MM-DD; instantes em UTC: AAAA-MM-DDTHH:MM:SSZ",
+    "grau": "T = escrito na norma · L = leitura nossa · E = observado em homologação ou produção"
+  },
+  "descricao": "Valor total da NFS-e com IBS e CBS por fora. Não cobre o MEI (opSimpNac 2, E1302) nem o pendente com regApIBSCBSSN 1 ou 2 (texto ambíguo na E1555).",
+  "casos": [
+    {
+      "id": "VTN-001",
+      "descricao": "Não optante em 2026: IBS/CBS não somam",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (não optante, 2026)",
+      "entrada": {
+        "opSimpNac": 1,
+        "regApIBSCBSSN": null,
+        "anoCompetencia": 2026,
+        "vLiq": "1000.00",
+        "vCBS": "9.00",
+        "vIBSTot": "1.00"
+      },
+      "saida": {
+        "vTotNF": "1000.00"
+      }
+    },
+    {
+      "id": "VTN-002",
+      "descricao": "Não optante em 2027: soma CBS e IBS por fora",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (não optante, 2027)",
+      "entrada": {
+        "opSimpNac": 1,
+        "regApIBSCBSSN": null,
+        "anoCompetencia": 2027,
+        "vLiq": "1000.00",
+        "vCBS": "90.00",
+        "vIBSTot": "10.00"
+      },
+      "saida": {
+        "vTotNF": "1100.00"
+      }
+    },
+    {
+      "id": "VTN-003",
+      "descricao": "Optante pendente em 2027 sem regime informado: como o regular",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (pendente, 2027)",
+      "entrada": {
+        "opSimpNac": 4,
+        "regApIBSCBSSN": null,
+        "anoCompetencia": 2027,
+        "vLiq": "500.00",
+        "vCBS": "45.00",
+        "vIBSTot": "5.00"
+      },
+      "saida": {
+        "vTotNF": "550.00"
+      }
+    },
+    {
+      "id": "VTN-004",
+      "descricao": "ME/EPP com IBS e CBS no regime regular (regApIBSCBSSN 3) em 2026",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (ME/EPP regime regular, 2026)",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 3,
+        "anoCompetencia": 2026,
+        "vLiq": "1000.00",
+        "vCBS": "9.00",
+        "vIBSTot": "1.00"
+      },
+      "saida": {
+        "vTotNF": "1000.00"
+      }
+    },
+    {
+      "id": "VTN-005",
+      "descricao": "ME/EPP com IBS e CBS no regime regular (regApIBSCBSSN 3) em 2027",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (ME/EPP regime regular, 2027)",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 3,
+        "anoCompetencia": 2027,
+        "vLiq": "1000.00",
+        "vCBS": "90.00",
+        "vIBSTot": "10.00"
+      },
+      "saida": {
+        "vTotNF": "1100.00"
+      }
+    },
+    {
+      "id": "VTN-006",
+      "descricao": "ME/EPP com IBS e CBS no Simples (regApIBSCBSSN 1) em 2026",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (ME/EPP no Simples, 2026)",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 1,
+        "anoCompetencia": 2026,
+        "vLiq": "1000.00",
+        "vCBS": "0.00",
+        "vIBSTot": "0.00"
+      },
+      "saida": {
+        "vTotNF": "1000.00"
+      }
+    },
+    {
+      "id": "VTN-007",
+      "descricao": "ME/EPP com IBS e CBS no Simples (regApIBSCBSSN 1) em 2027: vTotNF = vLiq",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (ME/EPP no Simples, 2027)",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 1,
+        "anoCompetencia": 2027,
+        "vLiq": "1000.00",
+        "vCBS": "0.00",
+        "vIBSTot": "0.00"
+      },
+      "saida": {
+        "vTotNF": "1000.00"
+      }
+    },
+    {
+      "id": "VTN-008",
+      "descricao": "ME/EPP com CBS no Simples e IBS regular (regApIBSCBSSN 2) em 2026",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (ME/EPP CBS no SN, 2026)",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 2,
+        "anoCompetencia": 2026,
+        "vLiq": "1000.00",
+        "vCBS": "0.00",
+        "vIBSTot": "10.00"
+      },
+      "saida": {
+        "vTotNF": "1000.00"
+      }
+    },
+    {
+      "id": "VTN-009",
+      "descricao": "ME/EPP com CBS no Simples e IBS regular (regApIBSCBSSN 2) em 2027: soma só o IBS",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regra E1555 (ME/EPP CBS no SN, 2027)",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 2,
+        "anoCompetencia": 2027,
+        "vLiq": "1000.00",
+        "vCBS": "0.00",
+        "vIBSTot": "10.00"
+      },
+      "saida": {
+        "vTotNF": "1010.00"
+      }
+    },
+    {
+      "id": "VTN-010",
+      "descricao": "Observado em homologação (nota 8014 da nfse-api, 01/11/2026): R$ 10,00 de serviço, o fisco devolveu vIBSTot 0,01 e vCBS 0,09 e vTotNF 10,00 em 2026",
+      "grau": "E",
+      "fonte": "prova em H de 01/11/2026 (prompt_fase_ibs_cbs.md §13.8)",
+      "entrada": {
+        "opSimpNac": 1,
+        "regApIBSCBSSN": null,
+        "anoCompetencia": 2026,
+        "vLiq": "10.00",
+        "vCBS": "0.09",
+        "vIBSTot": "0.01"
+      },
+      "saida": {
+        "vTotNF": "10.00"
+      }
+    }
+  ]
+}

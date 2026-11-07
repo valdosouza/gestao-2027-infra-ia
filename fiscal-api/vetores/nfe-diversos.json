@@ -1,0 +1,205 @@
+{
+  "funcao": "nfeDiversos",
+  "versao": 1,
+  "regras": [
+    "RF-BC-03",
+    "RF-CLS-02",
+    "RF-DEV-03"
+  ],
+  "convencao": {
+    "numeros": "valores e alíquotas são STRINGS decimais (nunca número JSON), para não perder precisão; reais com 2 casas",
+    "aliquotas": "fração decimal: \"0.12\" = 12%",
+    "datas": "AAAA-MM-DD; instantes em UTC: AAAA-MM-DDTHH:MM:SSZ",
+    "grau": "T = escrito na norma · L = leitura nossa · E = observado em homologação ou produção"
+  },
+  "descricao": "Regras curtas da NF-e e da classificação: base do IBS/CBS (UB16-10), CST como prefixo do cClassTrib (E0959) e chave referenciada na devolução (VC02-14). Fora dos vetores: o caso \"nenhuma chave\" (sem texto na VC02-14) e as exceções 1 e 2 da UB16-10 (PIS/COFINS por substituição tributária com indSomaPISST/indSomaCOFINSST = 1), que a NT marca como \"implementação futura, aguardando orientação normativa\".",
+  "casosVBC": [
+    {
+      "id": "VBC-001",
+      "descricao": "Só o produto",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra UB16-10",
+      "entrada": {
+        "vProd": "100.00"
+      },
+      "saida": {
+        "vBC": "100.00"
+      }
+    },
+    {
+      "id": "VBC-002",
+      "descricao": "Produto, frete e seguro, menos desconto",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra UB16-10",
+      "entrada": {
+        "vProd": "100.00",
+        "vFrete": "10.00",
+        "vSeg": "2.00",
+        "vDesc": "5.00"
+      },
+      "saida": {
+        "vBC": "107.00"
+      }
+    },
+    {
+      "id": "VBC-003",
+      "descricao": "Tira ICMS, PIS e COFINS",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra UB16-10",
+      "entrada": {
+        "vProd": "1000.00",
+        "vICMS": "170.00",
+        "vPIS": "16.50",
+        "vCOFINS": "76.00"
+      },
+      "saida": {
+        "vBC": "737.50"
+      }
+    },
+    {
+      "id": "VBC-004",
+      "descricao": "Soma o Imposto Seletivo e o imposto de importação",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra UB16-10",
+      "entrada": {
+        "vProd": "500.00",
+        "vII": "50.00",
+        "vIS": "25.00",
+        "vICMS": "90.00"
+      },
+      "saida": {
+        "vBC": "485.00"
+      }
+    },
+    {
+      "id": "VBC-005",
+      "descricao": "Serviço (vServ) com ISSQN",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra UB16-10",
+      "entrada": {
+        "vServ": "800.00",
+        "vISSQN": "40.00",
+        "vOutro": "10.00"
+      },
+      "saida": {
+        "vBC": "770.00"
+      }
+    },
+    {
+      "id": "VBC-006",
+      "descricao": "Tira o ICMS monofásico (vICMSMono), que a UB16-10 também subtrai",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra UB16-10",
+      "entrada": {
+        "vProd": "300.00",
+        "vICMSMono": "24.00"
+      },
+      "saida": {
+        "vBC": "276.00"
+      }
+    }
+  ],
+  "casosCST": [
+    {
+      "id": "CST-001",
+      "descricao": "Situações tributadas integralmente pelo IBS e CBS",
+      "grau": "T",
+      "fonte": "Anexo VI, regra E0959 (CST = prefixo do cClassTrib)",
+      "entrada": {
+        "cClassTrib": "000001"
+      },
+      "saida": {
+        "CST": "000"
+      }
+    },
+    {
+      "id": "CST-002",
+      "descricao": "Operações com bens imóveis",
+      "grau": "T",
+      "fonte": "Anexo VI, regra E0959 (CST = prefixo do cClassTrib)",
+      "entrada": {
+        "cClassTrib": "200046"
+      },
+      "saida": {
+        "CST": "200"
+      }
+    },
+    {
+      "id": "CST-003",
+      "descricao": "Prestação de serviços de profissões intelectuais",
+      "grau": "T",
+      "fonte": "Anexo VI, regra E0959 (CST = prefixo do cClassTrib)",
+      "entrada": {
+        "cClassTrib": "200052"
+      },
+      "saida": {
+        "CST": "200"
+      }
+    },
+    {
+      "id": "CST-004",
+      "descricao": "Documento com informações de fornecimento de serviços financeiros",
+      "grau": "T",
+      "fonte": "Anexo VI, regra E0959 (CST = prefixo do cClassTrib)",
+      "entrada": {
+        "cClassTrib": "820007"
+      },
+      "saida": {
+        "CST": "820"
+      }
+    },
+    {
+      "id": "CST-005",
+      "descricao": "Desenquadramento do Simples",
+      "grau": "T",
+      "fonte": "Anexo VI, regra E0959 (CST = prefixo do cClassTrib)",
+      "entrada": {
+        "cClassTrib": "811003"
+      },
+      "saida": {
+        "CST": "811"
+      }
+    }
+  ],
+  "casosChaveReferenciada": [
+    {
+      "id": "CHV-001",
+      "descricao": "Chave só no cabeçalho (refNFe)",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra VC02-14",
+      "entrada": {
+        "refNFeNoCabecalho": true,
+        "dfeReferenciadoNoItem": false
+      },
+      "saida": {
+        "valida": true
+      }
+    },
+    {
+      "id": "CHV-002",
+      "descricao": "Chave só no item (DFeReferenciado)",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra VC02-14",
+      "entrada": {
+        "refNFeNoCabecalho": false,
+        "dfeReferenciadoNoItem": true
+      },
+      "saida": {
+        "valida": true
+      }
+    },
+    {
+      "id": "CHV-003",
+      "descricao": "Chave nos dois lugares: inválida (VC02-14)",
+      "grau": "T",
+      "fonte": "NT 2025.002 v1.53, regra VC02-14",
+      "entrada": {
+        "refNFeNoCabecalho": true,
+        "dfeReferenciadoNoItem": true
+      },
+      "saida": {
+        "valida": false
+      }
+    }
+  ]
+}

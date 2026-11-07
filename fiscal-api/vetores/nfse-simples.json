@@ -1,0 +1,242 @@
+{
+  "funcao": "simplesNFSe",
+  "versao": 1,
+  "regras": [
+    "RF-SN-10",
+    "RF-SN-11"
+  ],
+  "convencao": {
+    "numeros": "valores e alíquotas são STRINGS decimais (nunca número JSON), para não perder precisão; reais com 2 casas",
+    "aliquotas": "fração decimal: \"0.12\" = 12%",
+    "datas": "AAAA-MM-DD; instantes em UTC: AAAA-MM-DDTHH:MM:SSZ",
+    "grau": "T = escrito na norma · L = leitura nossa · E = observado em homologação ou produção"
+  },
+  "descricao": "NFS-e do Simples Nacional pela NT 009 v1.01: valor da receita bruta e presença do grupo gTribSN. Não cobre o tpRBSN 9 (sem fórmula no texto) nem o arredondamento de vIBSSN e vCBSSN (não especificado).",
+  "casosReceitaBruta": [
+    {
+      "id": "RBS-001",
+      "descricao": "Receita interna sem descontos nem ajustes",
+      "grau": "T",
+      "fonte": "NT 009 v1.01, item 2.4 (vReceitaBrutaSN)",
+      "entrada": {
+        "vServ": "1000.00",
+        "descIncond": "0.00",
+        "vCalcAjusteBCIBSCBS": "0.00",
+        "vCalcAjusteBCISSQN": "0.00",
+        "ajusteProfissionalParceiro": false,
+        "tpRBSN": 1
+      },
+      "saida": {
+        "vReceitaBrutaSN": "1000.00"
+      }
+    },
+    {
+      "id": "RBS-002",
+      "descricao": "Desconto incondicional sai da receita",
+      "grau": "T",
+      "fonte": "NT 009 v1.01, item 2.4 (vReceitaBrutaSN)",
+      "entrada": {
+        "vServ": "1000.00",
+        "descIncond": "100.00",
+        "vCalcAjusteBCIBSCBS": "0.00",
+        "vCalcAjusteBCISSQN": "0.00",
+        "ajusteProfissionalParceiro": false,
+        "tpRBSN": 1
+      },
+      "saida": {
+        "vReceitaBrutaSN": "900.00"
+      }
+    },
+    {
+      "id": "RBS-003",
+      "descricao": "Ajuste da base do IBS/CBS sai da receita",
+      "grau": "T",
+      "fonte": "NT 009 v1.01, item 2.4 (vReceitaBrutaSN)",
+      "entrada": {
+        "vServ": "1000.00",
+        "descIncond": "0.00",
+        "vCalcAjusteBCIBSCBS": "200.00",
+        "vCalcAjusteBCISSQN": "0.00",
+        "ajusteProfissionalParceiro": false,
+        "tpRBSN": 1
+      },
+      "saida": {
+        "vReceitaBrutaSN": "800.00"
+      }
+    },
+    {
+      "id": "RBS-004",
+      "descricao": "Ajuste da base do ISSQN só entra com profissional parceiro (tipo 9): aqui NÃO entra",
+      "grau": "T",
+      "fonte": "NT 009 v1.01, item 2.4 (vReceitaBrutaSN)",
+      "entrada": {
+        "vServ": "1000.00",
+        "descIncond": "0.00",
+        "vCalcAjusteBCIBSCBS": "0.00",
+        "vCalcAjusteBCISSQN": "300.00",
+        "ajusteProfissionalParceiro": false,
+        "tpRBSN": 1
+      },
+      "saida": {
+        "vReceitaBrutaSN": "1000.00"
+      }
+    },
+    {
+      "id": "RBS-005",
+      "descricao": "Com profissional parceiro (tipo 9) o ajuste do ISSQN entra",
+      "grau": "T",
+      "fonte": "NT 009 v1.01, item 2.4 (vReceitaBrutaSN)",
+      "entrada": {
+        "vServ": "1000.00",
+        "descIncond": "0.00",
+        "vCalcAjusteBCIBSCBS": "0.00",
+        "vCalcAjusteBCISSQN": "300.00",
+        "ajusteProfissionalParceiro": true,
+        "tpRBSN": 1
+      },
+      "saida": {
+        "vReceitaBrutaSN": "700.00"
+      }
+    },
+    {
+      "id": "RBS-006",
+      "descricao": "Exportação direta (tpRBSN 3) segue a mesma fórmula",
+      "grau": "T",
+      "fonte": "NT 009 v1.01, item 2.4 (vReceitaBrutaSN)",
+      "entrada": {
+        "vServ": "2500.00",
+        "descIncond": "0.00",
+        "vCalcAjusteBCIBSCBS": "0.00",
+        "vCalcAjusteBCISSQN": "0.00",
+        "ajusteProfissionalParceiro": false,
+        "tpRBSN": 3
+      },
+      "saida": {
+        "vReceitaBrutaSN": "2500.00"
+      }
+    },
+    {
+      "id": "RBS-007",
+      "descricao": "tpRBSN 0 (não é receita bruta): vale zero, mesmo com serviço",
+      "grau": "T",
+      "fonte": "NT 009 v1.01, item 2.4 (vReceitaBrutaSN)",
+      "entrada": {
+        "vServ": "1000.00",
+        "descIncond": "0.00",
+        "vCalcAjusteBCIBSCBS": "0.00",
+        "vCalcAjusteBCISSQN": "0.00",
+        "ajusteProfissionalParceiro": false,
+        "tpRBSN": 0
+      },
+      "saida": {
+        "vReceitaBrutaSN": "0.00"
+      }
+    }
+  ],
+  "casosGTribSN": [
+    {
+      "id": "GTS-001",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 1, regApIBSCBSSN None",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 1,
+        "regApIBSCBSSN": null
+      },
+      "saida": {
+        "gTribSNPresente": false
+      }
+    },
+    {
+      "id": "GTS-002",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 2, regApIBSCBSSN None",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 2,
+        "regApIBSCBSSN": null
+      },
+      "saida": {
+        "gTribSNPresente": false
+      }
+    },
+    {
+      "id": "GTS-003",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 3, regApIBSCBSSN 1",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 1
+      },
+      "saida": {
+        "gTribSNPresente": true
+      }
+    },
+    {
+      "id": "GTS-004",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 3, regApIBSCBSSN 2",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 2
+      },
+      "saida": {
+        "gTribSNPresente": true
+      }
+    },
+    {
+      "id": "GTS-005",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 3, regApIBSCBSSN 3",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 3,
+        "regApIBSCBSSN": 3
+      },
+      "saida": {
+        "gTribSNPresente": false
+      }
+    },
+    {
+      "id": "GTS-006",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 4, regApIBSCBSSN 1",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 4,
+        "regApIBSCBSSN": 1
+      },
+      "saida": {
+        "gTribSNPresente": true
+      }
+    },
+    {
+      "id": "GTS-007",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 4, regApIBSCBSSN 2",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 4,
+        "regApIBSCBSSN": 2
+      },
+      "saida": {
+        "gTribSNPresente": true
+      }
+    },
+    {
+      "id": "GTS-008",
+      "descricao": "O grupo gTribSN aparece? opSimpNac 4, regApIBSCBSSN 3",
+      "grau": "T",
+      "fonte": "Anexo VI v1.04.01, regras de gTribSN",
+      "entrada": {
+        "opSimpNac": 4,
+        "regApIBSCBSSN": 3
+      },
+      "saida": {
+        "gTribSNPresente": false
+      }
+    }
+  ]
+}

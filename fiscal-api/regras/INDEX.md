@@ -27,6 +27,6 @@ CAL 8 · BC 5 · PRC 8 · SN 13 · DEV 4 · CLS 5 · NFS 9 · NFE 4 — **56 reg
 
 ## O que vem depois (peças combinadas)
 
-1. **Vetores de teste neutros** (JSON, entrada e saída esperada por regra), lidos pelo teste do Delphi e pelo da web. A coluna "Vetor" do catálogo é onde eles se ligam; hoje só RF-BC-04, RF-PRC-02 a RF-PRC-04 têm vetor (os 8 do documento 02).
+1. ~~**Vetores de teste neutros**~~ — **feito em 07/11/2026**: [`../vetores/INDEX.md`](../vetores/INDEX.md), 6 arquivos JSON com 100 casos para **15 das 56 regras** (a coluna "Vetor" do catálogo aponta para cada um), lidos pelo teste do Delphi e pelo da web; verificação 69/69. Faltam vetores para as demais regras.
 2. **Calendário único de fatos com data** (leiaute por ambiente e data, alíquotas por ano, obrigatoriedade por documento e regime), para acabar com as duas constantes de data (divergência 6 da matriz).
 3. **Fichas de implementação** por entrega, cada uma dizendo a regra (ID), a decisão de produto, o arquivo e a função onde mora em cada lado, os testes e o critério de pronto.
