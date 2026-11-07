@@ -5904,3 +5904,56 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
 - **Decisão repassada** (D-F231, sessão própria): **Q-F232 → (a) "Marcar históricos"** (Valdo, 2026-11-07) — os 6 testes ao vivo do ato da
   virada/re-sincronia ficam desligados com motivo e data; a execução é da sessão "Reparar a suíte ao vivo da nfse-api".
 - **DEPLOY.E1.P1 cumprido.** Destrava DEPLOY.E1.P2 (motor do banco da SaveInCloud), DEPLOY.E2 (armazenamento do XML) e o IBS.E1.
+
+### 23.11 D-F231 executada — a suíte AO VIVO da nfse-api volta a ficar verde (2026-11-06/07; sessão própria, árvore viva `main`)
+
+- **Antes**: `NFSE_ADV_LIVE=1 npx jest live --runInBand` = 1/150 (última rodada verde registrada: 2026-10-10). **Depois** (sobre o `main` NOVO
+  3f147a1, núcleo pelo pacote `vendor/fiscal-api-1.0.0.tgz`): **144 passam · 5 desligados (D-F232) · 0 falhas por suíte**; na rodada das 8 de uma
+  vez, 1 teste de TEMPO da r5 ("duas passadas simultâneas — convênio lento 1,5 s") caiu com a máquina carregada e passou sozinho (26 + 1 pulado).
+  Suíte comum da nfse-api: 1130 / 195 ao vivo pulados / 0. Só testes mudaram: `src/__tests__/live-harness.ts` + as 8 `adversarial-f1*.live.test.ts`.
+- **Causas (dado/ambiente do dev — nenhuma do código de produção)**:
+  1. **Notas-alvo**: as "notas frescas" eram as da trilha faturadas pela WEB, canceladas na janela da F2a (D-F207). As 381 notas E que sobraram
+     vieram do ERP Desktop pelo sincronizador — o ramo de serviço delas não tem os fatos do ISS (sem cTribNac, sem cidade, base 0) → 422
+     `SERVICE_RULE_NATIONAL_CODE_REQUIRED` em todas; as notas por id FIXO (8005, 6756, 8011, 7971…) mudaram de estado.
+  2. **Sessão viva (costura A1, 2026-11-01)**: os usuários sintéticos do ataque (990001…) não existem em `setes_central.vw_user_link` → toda rota
+     401 `SESSION_REVOKED`. As suítes nasceram antes da costura e não rodaram ao vivo depois dela.
+  3. **Virada real (janela 2026-10-14/15)**: o `fiscal_api` real ficou VIRADO e com vidas de DEPOIS da virada (NFS-e 707, tentativa 8013/1); as
+     suítes da cerca partem da RÉPLICA (antes da virada) e a re-sincronia acusava "dual-write" com razão.
+  4. **Vigilância incompleta**: o CHECKSUM do real vigiava uma lista fixa — as tabelas da família NF-e (nfe-api/001, 2026-11-04) ficavam de fora.
+- **Correção (peças do harness)**:
+  - `completeBranchForAttack` — o ramo sem cTribNac é COMPLETADO EM MEMÓRIA com os fatos do ISS do RAMO-MOLDE (o ramo mais recente que a WEB
+    congelou no mesmo estabelecimento), mantendo o valor da nota; o mesmo princípio da normalização do cTribMun que já existia. Sem molde = falha
+    alta com a frase do que falta; leitura que falha não fica em cache. Nada escrito no ERP.
+  - `noteByState` / `cancelledAtAuthorityNote` — sincronizada, sem ramo (com vida E), excluída e "cancelada no fisco de P e no ERP" escolhidas por
+    PREDICADO; nenhuma nota por id fixo nas suítes. A nota "1ª tentativa F em H" (antes a 8005) é PRODUZIDA pela própria API na cópia (emissor da
+    cópia em H, fisco falso recusando a autenticação 403 → voz F, a forma real do `https-json`).
+  - `attackSession` — os usuários do ataque (990000–990999) EMPRESTAM o acesso VIVO de um ADMIN real do mesmo estabelecimento (escolhido em
+    `vw_user_link`, nunca o super); `role:'user'` no token = comum SEM concessão; usuário real passa direto pela biblioteca; troca por atribuição
+    nas 4 funções da `access` (o `spyContractCut` espia por cima). Chamado DEPOIS do `ctx` (falhar ali ainda passa pelo `afterAll`). Expectativa
+    corrigida: schema/estabelecimento sem vínculo = 401 `SESSION_REVOKED` (o `INSTITUTION_MISMATCH` foi aposentado pela costura).
+  - `turned:false` = toda habilitação RÉPLICA + `trimToOrigin` (a cópia só com as tentativas que a ORIGEM — `setes_setes.tb_invoice_service_transmission`
+    — conhece, e o contador SE da origem); as restaurações "do real" das suítes (r4/r5/r6/r7/r11) também voltam réplica.
+  - Vigilância do `drop()` sobre TODA tabela-base do real (lida do `information_schema`, nomes com crase); a r5 confere IGUALDADE.
+  - **Trava entre processos**: `GET_LOCK('nfse_api_live_harness', 900)` numa conexão própria até o `drop()` — o `--runInBand` só serializa
+    dentro de um processo; duas sessões apagavam a cópia uma da outra na varredura de sobras.
+- **D-F232 (Valdo, 2026-11-07, Q-F232 → (a) "Marcar históricos")**: os testes que ensaiam o ATO da virada e a re-sincronia da institution 1
+  exigem o mundo de ANTES da virada (habilitação SE VIVA no ERP + A1 no cofre em arquivo do setes-api); a virada real retirou os dois e a F2a
+  congelou a origem. Ficam no código DESLIGADOS com motivo e data (verdes até 2026-10-14, §22.51): `it.skip` em r4 ("--cutover SEM a
+  confirmação"), r5 ("a migração AINDA renova o A1"), r6 ("D-F44 — o ATO aposenta"), r11 ("a RE-SINCRONIA copia a SE como RÉPLICA" e "M3 +
+  D-F57 — ensaio"); na r4 "virada da CÓPIA" só a ÚLTIMA asserção (`openIssuer` depois da re-sincronia) — o teste prepara a cópia virada dos dois
+  seguintes. Nenhum cliente novo emite pelo setes-api desde a F2a: o ato não volta a rodar (aposentar o script = tarefa própria, se o Valdo quiser).
+- **Gates**: socrático **0,71 ✓** (ponto 1: o retrato da r2 era tirado antes da poda → "RESÍDUO" falso — corrigido; ponto 2: `attackSession` antes
+  do `ctx` pulava o `afterAll` — corrigido; ponto 5: concorrência entre sessões — trava nova) · adversarial **0,80 ✓** sem HIGH/CRITICAL (6 LOW:
+  contador da réplica, molde em cache, crase no CHECKSUM, igualdade na r5, predicado do "sem ramo", rótulos "704" — corrigidos; o perfil do
+  comum simulado no invólucro fica como limite). O adversarial não pôde rodar suíte ao vivo (janela da publicação do DEPLOY.E1.P1); as provas
+  ao vivo são as rodadas desta sessão.
+- **Limites conhecidos**: o ramo completado prova a máquina da voz, não o DPS das notas do ERP Desktop; o veredito do usuário COMUM é simulado
+  no invólucro (o dev não tem usuário comum na Setes — a troca do `role` do token pelo perfil vivo segue coberta por `app.test.ts` e pelo
+  `access-a1.test.ts` do núcleo); a suíte depende de UM ramo faturado pela web e UM admin vivo na institution 1 (falha alta com a frase do que
+  falta); o molde segue a ÚLTIMA nota de serviço faturada pela web (nota de teste com outra regra muda os fatos herdados); o CHECKSUM do real
+  acusa escrita da nfse-api/setes-api de produção que rodam nesta máquina (alarme, nunca silêncio); testes de TEMPO (r4/r5, convênio lento)
+  oscilam com a máquina carregada.
+- **Questões para depois (uma por vez — vindas do gate socrático)**: Q-F233 — usuário de teste REGISTRADO (admin e comum) num estabelecimento
+  de teste por seed, no lugar de emprestar o admin real *(Rec.: sim, em tarefa própria)*; Q-F234 — a suíte ao vivo exige a nfse-api de produção
+  parada ou o real sai da vigilância *(Rec.: manter a vigilância e rodar com a produção parada)*; Q-F235 — aposentar o script `migrate:setes`/o
+  ato da virada *(Rec.: sim, em tarefa própria)*.
