@@ -5881,3 +5881,26 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
 - ⏯ **Próximo = a publicação pelo roteiro do §23.6 (passos 0–9), só com o "vai" do Valdo.** No passo 1, rodar o `pack-release` da
   árvore VIVA do núcleo depois do ff (ela fica na tag) para provar a integridade na pasta oficial. Tarefa própria aberta: a suíte ao vivo da
   nfse-api (D-F231).
+
+### 23.10 PUBLICAÇÃO do DEPLOY.E1.P1 — EXECUTADA (2026-11-06/07, "Vai, publicar" do Valdo)
+
+- **Publicado no GitHub**: núcleo `main` **13f877f** + tag **`v1.0.0`** · nfe-api `main` **1dc9a23** · setes-api `main` **7009f81** · nfse-api
+  `main` **3f147a1**. Nas três árvores vivas a JUNÇÃO `node_modules\fiscal-api` foi removida com `cmd /c rmdir` ANTES de tudo (o núcleo vivo
+  conferido intacto depois de cada uma), `npm ci` instalou o núcleo pelo `vendor/fiscal-api-1.0.0.tgz` e as cercas passaram na viva
+  (nfe-api 10/10 · setes-api 13/13 · nfse-api 16/16); o `package-lock.json` solto do setes-api foi para o scratch antes do ff. A nfse-api
+  ganhou `npm run build` (selo do commit 3f147a1); NÃO estava no ar e não foi iniciada — o próximo start é `npm start` (`node dist`).
+  Nenhum serviço estava no ar.
+- **Prova na pasta OFICIAL do núcleo** (`pack-release v1.0.0` na árvore viva, já com as irmãs novas): suíte **1219 / 1 pulado / 0** no
+  commit da tag e o pacote com a MESMA integridade `sha512-G/zer57Z…` do `vendor/`.
+- ⚠️ **Conhecimento negativo da publicação**: a 1ª tentativa dessa prova na pasta oficial (antes do ff dos consumidores) foi RECUSADA pela
+  D-F229 — o `adversarial-r22-gate` do NÚCLEO lê a nfse-api IRMÃ (direção inversa, §23.8) e via a cerca antiga. Ordem certa da prova na
+  pasta oficial: os consumidores avançam ANTES (ou a prova roda no conjunto de worktrees da frente, como foi feita na execução). A sessão
+  paralela da D-F231 trabalhava na MESMA árvore viva da nfse-api (sem worktree própria): a janela da nfse-api esperou a rodada dela terminar
+  e as 9 alterações dela (testes ao vivo) ficaram intactas — o selo do `dist` registrou "(compilado de árvore com alteração)" por isso.
+- **Limpeza**: worktrees `D:\Gestao2027\versao\{fiscal-api,nfse-api,nfe-api,setes-api,sql}` removidas (sem junção), branch `versao-1.0.0`
+  apagada nos quatro repositórios (já no `main`), pasta `versao` apagada.
+- **Docs**: PADROES_BANCO §11 regra 17 reescrita (v2.7); `nfse-api/INDEX.md` checklist item 1; `fiscal-api/INDEX.md`; INDICE 10.73; CLAUDE.md
+  da raiz; memória `apis-fiscais-isoladas`.
+- **Decisão repassada** (D-F231, sessão própria): **Q-F232 → (a) "Marcar históricos"** (Valdo, 2026-11-07) — os 6 testes ao vivo do ato da
+  virada/re-sincronia ficam desligados com motivo e data; a execução é da sessão "Reparar a suíte ao vivo da nfse-api".
+- **DEPLOY.E1.P1 cumprido.** Destrava DEPLOY.E1.P2 (motor do banco da SaveInCloud), DEPLOY.E2 (armazenamento do XML) e o IBS.E1.

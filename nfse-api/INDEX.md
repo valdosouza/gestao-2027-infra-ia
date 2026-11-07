@@ -23,10 +23,11 @@
 
 ## Checklist de deploy da nfse-api (D-IB83 — 2026-10-15; PADROES_BANCO §11 regra 17)
 
-A nfse-api de produção carrega o núcleo pelo `src` (`../fiscal-api/src`): o restart é o deploy do núcleo TAMBÉM. Antes de reiniciar:
+Desde 2026-11-06 (DEPLOY.E1.P1, D-F221…D-F231) a nfse-api carrega o núcleo SÓ pelo pacote `vendor/fiscal-api-X.Y.Z.tgz` e a produção roda `npm run build` + `npm start` (`node dist`). Antes de reiniciar:
 
-1. **Núcleo da árvore viva** — `git -C D:\Gestao2027\fiscal-api status --short` VAZIO e `git -C D:\Gestao2027\fiscal-api rev-parse HEAD` = o
-   commit esperado (o mesmo da worktree onde a frente foi provada). Diferente = PARA (alguém editou o núcleo vivo).
+1. **Núcleo pelo pacote** — `npx jest fiscal-api-package-fence sibling-core-fence` verde (vendor = lock = instalado; nada da pasta irmã);
+   `npm run build` ANTES de `npm start` (grava o selo); a 1ª linha do log diz "núcleo fiscal-api X (pacote instalado) · dist do commit Y"
+   — `dist` de outro commit não sobe, núcleo de rascunho não sobe em produção (D-F230). Núcleo novo = versão nova no `vendor/` + `npm ci`.
 2. **nfse-api** — o merge da frente aplicado, `npm test` verde, `.env` intacto.
 3. **Migrations** — as novas rodam no boot (`_migrations (project, version)`); o boot falha ALTO em número repetido (regra 14) e confere
    CHECKs/views pelo nome. Conferir no log do boot.
@@ -60,7 +61,7 @@ A nfse-api de produção carrega o núcleo pelo `src` (`../fiscal-api/src`): o r
    (IB-4: 8014 + 8015) **E** da D-IB113 no ar no setes-api (CST com `ind_gIBSCBS = 0` recusado no cadastro e no faturamento) — no pacote de
    20/10/2026 o montador sempre leva `cIndOp` + `gIBSCBS`, que o fisco recusa com indicador 0 (E0859/E0961).
 
-Trocar a produção para o `dist` (e aposentar o item 1) = F3.
+Produção pelo `dist` + núcleo por pacote = FEITO em 2026-11-06 (DEPLOY.E1.P1 — `../prompts/prompt_apis_fiscais_isoladas.md` §23).
 
 ## O que a nfse-api faz (D-F10)
 
