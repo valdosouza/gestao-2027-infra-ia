@@ -1,0 +1,269 @@
+Pagamentos CBS 
+ Documentação da apuração CBS 
+ Índice
+ Objetivo
+ Histórico de versão
+ Regras de retorno
+ Endpoint da api
+ Estrutura principal do JSON do arquivo de retorno (download via urlAssinada)
+ Exemplo do JSON de retorno (download via urlAssinada)
+ Consultar pagamentos de CBS
+ 1. Objetivo
+ Retorna as atualizações de pagamentos de CBS que extinguem os débitos do contribuinte, compreendendo: o pagamento do próprio contribuinte e o recolhimento de seus adquirentes.
+ Esta API funciona em modo assíncrono. Para orientações de uso, consulte as Regras Comuns às APIs Assíncronas da Apuração de CBS: regras de APIs assíncronas 
+ 2. Histórico de versão
+ Data 
+ Versão 
+ Descrição 
+ 03/09/2026 
+ 1.0 
+ Versão inicial 
+ 17/09/2026 
+ 1.1 
+ Ajustes nos exemplos de chamada 
+ 14/10/2026 
+ 1.2 
+ Atualizar o payload de notificação enviado ao webhook. Atualizar o fluxo de obtenção e download do arquivo de retorno por meio da `urlAssinada`. Atualizar seção 5. 
+ 3. Regras de retorno
+ Para solicitações com consulta concluída nos últimos 3 meses, são retornadas as inclusões e atualizações desde a data de atualização da solicitação concluída mais recente, limitada aos últimos 8 dias. Quando não há consulta concluída nesse período, a busca começa no 1º dia do mês corrente.
+ 4. Endpoint da api
+ URL de Produção: 
+ https://api.receitafederal.gov.br/apuracao-cbs/v2/pagamentos/{cnpj} 
+ 4.1 Campos de Entrada
+ Campo 
+ Formato 
+ Descrição 
+ cnpj 
+ String (8) 
+ CNPJ base informado no path. 
+ 4.2 Header
+ Campo 
+ Formato 
+ Descrição 
+ Content-Type String application/json 
+ 4.3 Request Body
+ Campo 
+ Formato 
+ Descrição 
+ urlRetorno 
+ String 
+ Opcional. URL do webhook para receber a notificação de retorno. Quando não houver webhook, informar "" (string vazia). 
+ 4.4 Acionar o endpoint
+ Substitua $TOKEN pelo valor de access_token .
+ Substitua {cnpj} pelo CNPJ base com 8 dígitos .
+ Opcionalmente, informe no corpo uma urlRetorno (URL do webhook) acessível por HTTP ou HTTPS para receber a notificação de conclusão da solicitação ou de erro no processamento. Quando não houver webhook, informar "" (string vazia). Sem esse campo, consulte a situação da solicitação para acompanhar o processamento.
+ Exemplo de chamada (com variável TOKEN)
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/pagamentos/{cnpj}' \
+ --header "Authorization: Bearer $TOKEN" \
+ --header 'Content-Type: application/json' \
+ --data '{ "urlRetorno": "https://cliente.exemplo.com/webhooks/apuracao-cbs" }'
+ Exemplo com dados fictícios
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/pagamentos/12345678' \
+ --header 'Content-Type: application/json' \
+ --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dadoFicticio.assinaturaFicticia' \
+ --data '{ "urlRetorno": "https://cliente.exemplo.com/webhooks/apuracao-cbs" }'
+ Exemplo de chamada (sem webhook)
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/pagamentos/{cnpj}' \
+ --header "Authorization: Bearer $TOKEN" \
+ --header 'Content-Type: application/json' \
+ --data '{"urlRetorno":""}'
+ 4.5 Campos Retornados
+ Campo 
+ Formato 
+ Descrição 
+ tiqueteSolicitacao 
+ String 
+ Em caso de sucesso, tíquete gerado na requisição. 
+ tEASegundos 
+ Integer (segundos) 
+ Em caso de sucesso, tempo estimado para atendimento da solicitação, em segundos. O valor -1 indica que não foi possível obter uma estimativa. 
+ codigoErro 
+ String 
+ Em caso de erro - Identifica o erro ocorrido durante a requisição. Retornado apenas em caso de erro. 
+ mensagemErro 
+ String 
+ Em caso de erro - Mensagem descritiva do erro ocorrido durante a requisição. Retornado apenas em caso de erro. 
+ Exemplo de retorno em caso de sucesso (HTTP 201)
+ {
+ "tiqueteSolicitacao": "692b7b25-44cb-4415-8625-2b9522dd7933.B5E08D55",
+ "tEASegundos": 120
+}
+ Exemplos de retorno em caso de erro
+ Requisição inválida (HTTP 400): 
+ {
+ "codigoErro": "REQUISICAO_INVALIDA",
+ "mensagemErro": "corpo da requisição inválido"
+}
+ Não autorizado (HTTP 401): 
+ {
+ "codigoErro": "NAO_AUTORIZADO",
+ "mensagemErro": "consumidor não autorizado para este NI"
+}
+ Erro interno (HTTP 500): 
+ {
+ "codigoErro": "ERRO_INTERNO",
+ "mensagemErro": "erro interno ao processar solicitação"
+}
+ Exemplo de objeto enviado para urlRetorno(webhook) em caso de sucesso (HTTP 2xx)
+ {
+ "tiqueteSolicitacao":"48d88a3c-eff9-4489-8e3a-cde8d878d3f7.1E0CE7A4",
+ "situacao": "CONCLUIDA" 
+ } 
+ 5. Estrutura principal do JSON do arquivo de retorno(download via urlAssinada)
+ Campo 
+ Nível 
+ Cardinalidade 
+ Formato 
+ Descrição 
+ tiqueteSolicitacao 
+ 1 
+ 1:1 
+ String 
+ Tíquete da solicitação. 
+ ni 
+ 1 
+ 1:1 
+ String (8) 
+ Ni base a ser consultado 
+ niConsumidor 
+ 1 
+ 1:1 
+ String(14) 
+ Inscrição no CPF ou CNPJ do usuário detentor da credencial de acesso, ou seja, quem está consumindo o serviço.
+ geradoEm 
+ 1 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de geração do arquivo. 
+ apuracao[] 
+ 1 
+ 0:N 
+ Array 
+ Lista de apurações. 
+ apuracao[].dataArrecadacao 
+ 2 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora da arrecadação. 
+ apuracao[].pagamentos[] 
+ 2 
+ 1:N 
+ Array 
+ Lista de pagamentos. 
+ apuracao[].pagamentos[].numeroDARF 
+ 3 
+ 1:1 
+ String (17) 
+ Número do DARF. 
+ apuracao[].pagamentos[].tipo 
+ 3 
+ 1:1 
+ Integer 
+ Tipo de pagamento:
+ 1 = RAD - Recolhimento pelo adquirente
+ 2 = PCONT - Pagamento pelo contribuinte
+ apuracao[].pagamentos[].niAdquirente 
+ 3 
+ 1:1 
+ String (14) 
+ NI do adquirente se tipo pagamento é RAD ou Ni do contribuinte se tipo pagamento é PCONT 
+ apuracao[].pagamentos[].composicao[] 
+ 3 
+ 1:N 
+ Array 
+ Composição do pagamento. 
+ apuracao[].pagamentos[].composicao[].sequencial 
+ 4 
+ 1:1 
+ numérico (8) 
+ Sequencial do item de composição. 
+ apuracao[].pagamentos[].composicao[].pa 
+ 4 
+ 1:1 
+ String (MM/AAAA) 
+ Período de apuração. 
+ apuracao[].pagamentos[].composicao[].vencimento 
+ 4 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de vencimento. 
+ apuracao[].pagamentos[].composicao[].ni_contribuinte 
+ 4 
+ 1:1 
+ String (14) 
+ NI do contribuinte - preenchido somente quando pagamento é do tipo RAD 
+ apuracao[].pagamentos[].composicao[].chaveDFE 
+ 4 
+ 1:1 
+ String (100) 
+ Chave do DFE - preenchido somente quando pagamento é do tipo RAD 
+ apuracao[].pagamentos[].composicao[].principal 
+ 4 
+ 1:1 
+ number (18,2) 
+ Valor principal. 
+ apuracao[].pagamentos[].composicao[].multa 
+ 4 
+ 1:1 
+ number (18,2) 
+ Valor de multa. 
+ apuracao[].pagamentos[].composicao[].juros 
+ 4 
+ 1:1 
+ number (18,2) 
+ Valor de juros. 
+ apuracao[].pagamentos[].composicao[].total 
+ 4 
+ 1:1 
+ number (18,2) 
+ Valor total. 
+ 6. Exemplo do JSON de retorno (download via urlAssinada)
+ {
+ "tiqueteSolicitacao": "48d88a3c-eff9-4489-8e3a-cde8d878d3f7.1E0CE7A4",
+ "ni": "12345678",
+ "niConsumidor": "12345678",
+ "geradoEm": "2026-08-27T14:48:05Z",
+ "apuracao": [
+ {
+ "dataArrecadacao": "2026-08-27T14:48:05.745Z",
+ "pagamentos": [
+ {
+ "numeroDARF": "20260827000000001",
+ "tipo": 1,
+ "niAdquirente": "",
+ "composicao": [
+ {
+ "sequencial": 1,
+ "pa": "08/2026",
+ "vencimento": "2026-09-20T00:00:00Z",
+ "ni_contribuinte": "12345678000195",
+ "chaveDFE": "",
+ "principal": 100.00,
+ "multa": 2.00,
+ "juros": 1.00,
+ "total": 103.00
+ }
+ ]
+ },
+ {
+ "numeroDARF": "20260827000000002",
+ "tipo": 2,
+ "niAdquirente": "98765432000123",
+ "composicao": [
+ {
+ "sequencial": 2,
+ "pa": "08/2026",
+ "vencimento": "2026-09-20T00:00:00Z",
+ "ni_contribuinte": "12345678000195",
+ "chaveDFE": "35260812345678000195550010000001231234567890",
+ "principal": 80.00,
+ "multa": 0.50,
+ "juros": 1.25,
+ "total": 81.75
+ }
+ ]
+ }
+ ]
+ }
+ ]
+}

@@ -1,0 +1,299 @@
+Débitos CBS 
+ Documentação da apuração CBS 
+ Índice
+ Objetivo
+ Histórico de versão
+ Regras de retorno
+ Endpoint da api
+ Estrutura principal do JSON do arquivo de retorno(download via urlAssinada)
+ Exemplo do JSON de retorno (download via urlAssinada)
+ Consultar débitos em operações de consumo (CBS)
+ 1. Objetivo
+ Retorna os débitos de Contribuição sobre Bens e Serviços (CBS) incluídos ou atualizados entre a data consulta e a data da última consulta anterior.
+ Esta API funciona em modo assíncrono. Para orientações de uso, consulte as Regras Comuns às APIs Assíncronas da Apuração de CBS: regras de APIs assíncronas 
+ 2. Histórico de versão
+ Data 
+ Versão 
+ Descrição 
+ 03/09/2026 
+ 1.0 
+ Versão inicial 
+ 17/09/2026 
+ 1.1 
+ Correção dos dados retornados(seção 5). Ajustes nos exemplos de chamada. 
+ 14/10/2026 
+ 1.2 
+ Atualizar o payload de notificação enviado ao webhook. Atualizar o fluxo de obtenção e download do arquivo de retorno por meio da `urlAssinada`. Atualizar seção 5 
+ 3. Regras de retorno
+ Para solicitações com consulta concluída nos últimos 3 meses, são retornadas as inclusões e atualizações desde a data de atualização da solicitação concluída mais recente, limitada aos últimos 8 dias. Quando não há consulta concluída nesse período, a busca começa no 1º dia do mês corrente.
+ 4. Endpoint da api
+ URL de Produção: 
+ https://api.receitafederal.gov.br/apuracao-cbs/v2/debitos/{cnpj} 
+ 4.1 Campos de Entrada
+ Campo 
+ Formato 
+ Descrição 
+ cnpj 
+ String (8) 
+ CNPJ base informado no path. 
+ 4.2 Header
+ Campo 
+ Formato 
+ Descrição 
+ Authorization 
+ String 
+ Bearer <token de acesso> , informado na requisição. 
+ 4.3 Request Body
+ Campo 
+ Formato 
+ Descrição 
+ urlRetorno 
+ String 
+ Opcional. URL do webhook para receber a notificação de retorno. Quando não houver webhook, informar "" (string vazia). 
+ 4.4 Acionar o endpoint
+ Substitua $TOKEN pelo valor de access_token .
+ Substitua {cnpj} pelo CNPJ base com 8 dígitos .
+ Opcionalmente, informe no corpo uma urlRetorno (URL do webhook) acessível por HTTP ou HTTPS para receber a notificação de conclusão da solicitação ou de erro no processamento. Quando não houver webhook, informar "" (string vazia). Sem esse campo, consulte a situação da solicitação para acompanhar o processamento.
+ Exemplo de chamada (com variável TOKEN)
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/debitos/{cnpj}' \
+ --header "Authorization: Bearer $TOKEN" \
+ --header 'Content-Type: application/json' \
+ --data '{ "urlRetorno": "https://cliente.exemplo.com/webhooks/apuracao-cbs" }'
+ Exemplo com dados fictícios
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/debitos/12345678' \
+ --header 'Content-Type: application/json' \
+ --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dadoFicticio.assinaturaFicticia' \
+ --data '{ "urlRetorno": "https://cliente.exemplo.com/webhooks/apuracao-cbs" }'
+ Exemplo de chamada (sem webhook)
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/debitos/{cnpj}' \
+ --header "Authorization: Bearer $TOKEN" \
+ --header 'Content-Type: application/json' \
+ --data '{"urlRetorno":""}'
+ 4.5 Campos Retornados
+ Campo 
+ Formato 
+ Descrição 
+ tiqueteSolicitacao 
+ String 
+ Em caso de sucesso, tíquete gerado na requisição. 
+ tEASegundos 
+ Integer (segundos) 
+ Em caso de sucesso, tempo estimado para atendimento da solicitação, em segundos. O valor -1 indica que não foi possível obter uma estimativa. 
+ codigoErro 
+ String 
+ Em caso de erro - Identifica o erro ocorrido durante a requisição. Retornado apenas em caso de erro. 
+ mensagemErro 
+ String 
+ Em caso de erro - Mensagem descritiva do erro ocorrido durante a requisição. Retornado apenas em caso de erro. 
+ Exemplo de retorno em caso de sucesso (HTTP 201)
+ {
+ "tiqueteSolicitacao": "692b7b25-44cb-4415-8625-2b9522dd7933.B5E08D55",
+ "tEASegundos": 120
+}
+ Exemplos de retorno em caso de erro
+ Requisição inválida (HTTP 400): 
+ {
+ "codigoErro": "REQUISICAO_INVALIDA",
+ "mensagemErro": "corpo da requisição inválido"
+}
+ Não autorizado (HTTP 401): 
+ {
+ "codigoErro": "NAO_AUTORIZADO",
+ "mensagemErro": "consumidor não autorizado para este NI"
+}
+ Erro interno (HTTP 500): 
+ {
+ "codigoErro": "ERRO_INTERNO",
+ "mensagemErro": "erro interno ao processar solicitação"
+}
+ Exemplo de objeto enviado para urlRetorno(webhook) em caso de sucesso (HTTP 200)
+ {
+ "tiqueteSolicitacao":"48d88a3c-eff9-4489-8e3a-cde8d878d3f7.1E0CE7A4",
+ "situacao": "CONCLUIDA" 
+ } 
+ 5. Estrutura principal do JSON do arquivo de retorno(download via urlAssinada)
+ Campo
+ Nível
+ Cardinalidade
+ Formato
+ Descrição
+ tiqueteSolicitacao 
+ 1 
+ 1:1 
+ string 
+ Tíquete da solicitação. 
+ ni 
+ 1 
+ 1:1 
+ String (8) 
+ Ni base do contribuinte. 
+ niConsumidor 
+ 1 
+ 1:1 
+ String (14) 
+ Inscrição no CPF ou CNPJ do usuário detentor da credencial de acesso, ou seja, quem está consumindo o serviço. 
+ geradoEm 
+ 1 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de geração do arquivo de retorno. 
+ apuracao 
+ 1 
+ 0:N 
+ object 
+ Grupo de apurações retornadas. 
+ apuracao[].pa 
+ 2 
+ 1:1 
+ date (mm/aaaa) 
+ Período de apuração. 
+ apuracao[].debitos 
+ 2 
+ 1:N 
+ object 
+ Grupo de débitos da apuração. 
+ apuracao[].debitos[].origem 
+ 3 
+ 1:1 
+ integer 
+ Origem do débito:
+ 0 = NORMAL
+ 20 = DEVOLUCAO_POR_PCONT
+ 21 = DEVOLUCAO_POR_RAD
+ 22 = DEVOLUCAO_POR_CREDITO
+ 30 = CANCELAMENTO_CREDITO
+ 31 = CANCELAMENTO_RAD
+ 32 = CANCELAMENTO_PCONT
+ 50 = PERECIMENTO_TRANSPORTE_FOB
+ 51 = PERECIMENTO_TRANSPORTE_CIF
+ 52 = DEVOLUCAO_PERECIMENTO_TRANSPORTE_CIF_POR_PCONT
+ 53 = DEVOLUCAO_PERECIMENTO_TRANSPORTE_CIF_POR_RAD
+ 54 = DEVOLUCAO_PERECIMENTO_TRANSPORTE_CIF_POR_CREDITO
+ 55 = NOTA_CREDITO_MULTA_JUROS
+ apuracao[].debitos[].documento 
+ 3 
+ 1:1 
+ integer 
+ Tipo/Número do documento:
+ 55 = NF-e — Nota Fiscal Eletrônica
+ 57 = CT-e — Conhecimento de Transporte Eletrônico
+ 62 = NFCOM — Nota Fiscal Fatura de Serviços de Comunicação Eletrônica
+ 63 = BP-e — Bilhete de Passagem Eletrônico
+ 64 = GTV-e — Guia de Transporte de Valores Eletrônica
+ 65 = NFC-e — Nota Fiscal de Consumidor Eletrônica
+ 66 = NF3-e — Nota Fiscal de Energia Elétrica Eletrônica
+ 67 = CT-e OS — Conhecimento de Transporte Eletrônico para Outros Serviços
+ 91 = NFS-e — Nota Fiscal de Serviço Eletrônica
+ 92 = NFS-e Via — Nota Fiscal de Serviço Eletrônica de Exploração de Vias
+ 93 = BP-e TM — Bilhete de Passagem Eletrônico Transporte Metropolitano
+ 94 = DERE — Declaração de Regimes Específicos
+ 97 = CT-e Simplificado — Conhecimento de Transporte Eletrônico Simplificado
+ apuracao[].debitos[].chave 
+ 3 
+ 1:1 
+ string (100) 
+ Chave do documento fiscal. 
+ apuracao[].debitos[].emissao 
+ 3 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de emissão. 
+ apuracao[].debitos[].registro 
+ 3 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de registro. 
+ apuracao[].debitos[].atualizacao 
+ 3 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora da última atualização. 
+ apuracao[].debitos[].cbs 
+ 3 
+ 1:1 
+ object 
+ Grupo de valores CBS. 
+ apuracao[].debitos[].cbs.excedente 
+ 4 
+ 0:1 
+ number (18,2) 
+ Valor excedente - valor não processado por inconsistência em relação ao documento vinculado. 
+ apuracao[].debitos[].cbs.apurado 
+ 4 
+ 1:1 
+ number (18,2) 
+ Valor apurado - valor processado a partir do documento e origem. 
+ apuracao[].debitos[].cbs.inexigivel 
+ 4 
+ 0:1 
+ number (18,2) 
+ Valor inexigível - parte do valor apurado que, em razão de eventos posteriores, não pode ser mais exigível (cobrável) pela administração tributária. 
+ apuracao[].debitos[].cbs.suspenso 
+ 4 
+ 0:1 
+ number (18,2) 
+ Valor suspenso - parte do valor apurado que, em razão da classificação tributária (cClassTrib), tem exigibilidade suspensa. 
+ apuracao[].debitos[].cbs.pgtoAntecipado 
+ 4 
+ 0:1 
+ number (18,2) 
+ Valor do pagamento antecipado - parte do valor apurado extinto por pagamento antecipado, identificado em documento vinculado(nota de débito) 
+ apuracao[].debitos[].cbs.extinto 
+ 4 
+ 0:1 
+ number (18,2) 
+ Valor extinto - parte do valor apurado que foi extinto pela compensação com créditos ou pagamentos. 
+ apuracao[].debitos[].cbs.saldoDevedor 
+ 4 
+ 1:1 
+ number (18,2) 
+ Saldo devedor - parte do valor apurado que é exigível (cobrável), ou seja, que não consta como extinto, suspenso ou inexigível. 
+ Observação: Com exceção dos campos apurado e saldoDevedor , os demais campos de valor não serão exibidos se o resultado for igual a zero.
+Se não houver débitos que atendam à janela de consulta, o campo apuracao será retornado como uma lista vazia ( [] ).
+ 6. Exemplo do JSON de retorno (download via urlAssinada)
+ {
+ "tiqueteSolicitacao": "48d88a3c-eff9-4489-8e3a-cde8d878d3f7.1E0CE7A4", 
+ "ni": "00409834",
+ "niConsumidor": "20182807000131",
+ "geradoEm": "2026-08-19T21:08:32Z",
+ "apuracao": [
+ {
+ "pa": "06/2026",
+ "debitos": [
+ {
+ "origem": 0,
+ "documento": 55,
+ "chave": "36662749229766700825725366193706115810782882",
+ "emissao": "2026-06-03T04:53:58Z",
+ "registro": "2026-08-13T21:19:16.190202Z",
+ "atualizacao": "2026-08-13T21:19:16.190202Z",
+ "cbs": {
+ "apurado": 80,
+ "excedente": 10,
+ "inexigivel": 5,
+ "suspenso": 15,
+ "extinto": 10,
+ "saldoDevedor": 40
+ }
+ }
+ ]
+ },
+ {
+ "pa": "08/2026",
+ "debitos": [
+ {
+ "origem": 0,
+ "documento": 55,
+ "chave": "36662749229766700825725366193706115810782882",
+ "emissao": "2026-08-13T04:53:56Z",
+ "registro": "2026-08-14T12:40:16.763258Z",
+ "atualizacao": "2026-08-14T12:40:16.763258Z",
+ "cbs": {
+ "apurado": 40,
+ "saldoDevedor": 40
+ }
+ }
+ ]
+ }
+ ] 
+}

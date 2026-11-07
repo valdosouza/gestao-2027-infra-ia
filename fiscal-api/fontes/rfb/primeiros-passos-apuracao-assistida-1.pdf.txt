@@ -1,0 +1,322 @@
+   APURAÇÃO ASSISTIDA
+
+                   PRIMEIROS PASSOS
+                               1
+
+1  Número 1 – 07/07/2025
+OBJETIVOS:
+
+    1. Simular uma Operação de Venda da Empresa
+    2. Simular um Pagamento Integral da Operação de Venda
+    3. Simular uma Operação de Compra da Empresa
+    4. Simular um Recolhimento Integral de CBS em uma compra Realizada
+
+1. Simular uma Operação de Venda da sua Empresa
+
+Objetivos:
+    a) Iniciar a simulação de documentos fiscais
+    b) Observar como o AA trata o documento
+
+PASSOS:
+1º) Simule UM documento fiscal
+A partir do ícone “SIMULAR OPERAÇÕES DE CONSUMO”, no Portal TRIBUTOS
+SOBRE BENS E SERVIÇOS, simule o documento de venda de sua empresa para uma
+outra.
+
+Entre em DOCUMENTOS FISCAIS (lembre-se de ter ao menos uma etiqueta para
+auxiliar a organizar seus documentos):
+
+Inclua o arquivo XML para gerar o documento. Lembre-se que pode DUPLICAR um
+documento modelo ou que já foi utilizado. Então, altere os campos necessários
+
+2  Número 1 – 07/07/2025
+Recomenda-se que seja simulado apenas um documento que represente uma
+venda da sua empresa. Assim, no arquivo XML, sugerem-se as seguintes
+substituições obrigatórias (outros campos, como nomes, podem ser modificados,
+mas não afetam os resultados da apuração assistida):
+
+             ✓ Colocar como data da emissão a data de hoje (formato AAAA-MM-
+                  DD) e o horário da simulação. Recomenda-se fortemente que seja
+                  uma data de julho. A apuração ainda não começou e isto marcará seu
+                  início.
+
+             ✓ Colocar o CNPJ da sua empresa (FORNECEDORA), sem pontos,
+                  barra e hífen:
+
+   ✓ Defina o destinatário (ADQUIRENTE), sem pontos, barra e hífen.
+       Escolha um dos seus CNPJ de trabalho e substitua o campo
+
+3  Número 1 – 07/07/2025
+                  marcado abaixo. Lembre-se que deve ser um dos CNPJ que sua
+                  empresa indicou para a RFB para este período de testes:
+
+             ✓ Por fim, defina o valor da CBS (se desejar valores com decimais,
+                  utilize “ponto” – ex: 40.50). Observe que “vCBS” aparece em
+                  diversos pontos do documento, mas só é necessário alterar no
+                  indicado abaixo:
+
+1 - SALVE as alterações.
+2 - Selecione o XML criado, marcando o quadrinho e clique em ENVIAR.
+3 – Clique no botão Enviar
+
+   Tela do segundo clique (confirmação do envio) - Enviar
+
+4  Número 1 – 07/07/2025
+Após o envio, irá aparecer a indicação em verde abaixo:
+
+Se houver indicação de erro, revise seu XML. Se o erro persistir, busque auxílio na
+RFB.
+Uma vez simulado o documento fiscal, é o momento de se verificar se o APURAÇÃO
+ASSISTIDA – AA recebeu a informação e como a processou.
+A partir do Portal “TRIBUTOS SOBRE BENS E SERVIÇOS”, selecione o ícone
+“MINHAS APURAÇÕES ASSISTIDAS DA CBS”:
+
+Se conseguiu gerar o documento e entrou rapidamente no AA, pode aparecer a
+seguinte tela:
+
+5  Número 1 – 07/07/2025
+Pode aparecer com saldo ZERADO pois o documento simulado pode não ter sido
+processado ainda. Lembre-se que o processamento se dá a cada 10 min, durante
+os testes no ambiente de produção restrita. Por exemplo, se o documento foi
+transmitido às 06:34, o processamento deve acontecer às 06:40.
+
+Observe a situação “EM ANDAMENTO”. Ou seja, a apuração foi iniciada e teve seu
+marco em julho. Observe o ícone de detalhamento sob o título AÇÕES. Clique.
+
+Observe que aparecem 3 abas (APURAÇÃO, EVENTOS e OUTRAS INFORMAÇÕES).
+Na ABA selecionada (APURAÇÃO), não aparece nenhum valor de débito
+processado, apesar de ter sido gerado um documento de venda. Por que isso
+ocorre? Como se mencionou, é necessário esperar o processamento do
+documento.
+
+Então, não é possível saber que esse débito irá ser computado na Apuração? Sim,
+é possível. Clique na aba OUTRAS INFORMAÇÕES:
+
+6  Número 1 – 07/07/2025
+Clicando no botão de detalhamento, poderá ver o documento que aguarda
+processamento.
+
+Se desejar ver os dados do documento que gerou, clique novamente no
+detalhamento.
+
+7  Número 1 – 07/07/2025
+Após os 10 minutos de processamento, será visto na aba APURAÇÃO um novo
+preenchimento. Haverá a indicação do valor do débito de sua operação de venda
+como DÉBITO PROCESSADO.
+
+Ao se detalhar os débitos processados, pode-se visualizar a situação do débito. À
+medida que ele houver a extinção, cada forma será espelhada nessa visão do AA:
+
+Da mesma forma como o AA recebeu os dados da operação na visão do
+FORNECEDOR, também se alimentou os dados da apuração do ADQUIRENTE.
+
+Ao se acessar a visão da apuração do adquirente, não haverá dados na aba
+APURAÇÃO até que o contribuinte (FORNECEDOR) tenha seu débito processado e
+
+8  Número 1 – 07/07/2025
+os créditos apropriados. Mas, da mesma forma como ocorreu com o fornecedor, o
+adquirente terá informações sobre os créditos ainda não apropriados na aba
+OUTRAS INFORMAÇÕES.
+
+Pode-se detalhar os créditos básicos para se conhecer a origem do crédito que
+aguarda apropriação. Lembre-se que os créditos somente serão apropriados
+quando os débitos correspondentes forem EXTINTOS.
+Nesse momento, o ADQUIRENTE já pode recolher o valor correspondente ao
+crédito se desejar. No entanto, essa é uma ação do ADQUIRENTE. Para sua
+empresa, não é possível gerar esse documento e simular o pagamento.
+
+9  Número 1 – 07/07/2025
+Assim, cumpre-se o primeiro objetivo deste PASSO A PASSO. Simulou-se uma
+operação de venda e se observou seus reflexos no AA.
+
+Reforça-se a sugestão de se fazer apenas um documento e navegar pelo AA para se
+familiarizar com esses primeiros conceitos e características do sistema.
+
+10  Número 1 – 07/07/2025
+2. Simular uma Pagamento Integral da Operação de Venda
+
+Após o processamento do documento fiscal, ao se entrar novamente no AA, a
+apuração terá a seguinte aparência:
+
+Observe que agora já apareceram valores de débitos1. O saldo a pagar registra que
+há débitos não extintos (no caso, integralmente). Surge o ícone “$” para a geração
+do DARF.
+IMPORTANTE: a geração do DARF não significa que houve a simulação do
+pagamento. Para isto, é necessário usar o simulador de pagamentos.
+Para se compreender melhor o significado dos títulos, pode-se colocar o mouse
+sobre a palavra. Observe que RESULTADO DA OPERAÇÃO não é o valor dos débitos
+do período. O RESULTADO DA OPERAÇÃO representa “a diferença entre os valores
+dos débitos e créditos apropriados no período de apuração...”:
+
+1 As telas foram extraídas ao longo de diversos testes, por isso, os valores podem variar. O objetivo
+aqui é demostrar as funcionalidades. Seguindo seu documento, verá a correspondência dos valores
+às diversas regras de negócio.
+
+11  Número 1 – 07/07/2025
+Então, entre novamente na apuração da sua empresa. Já verá os dados do débito
+processado:
+
+Uma vez que o débito está processado, o pagamento já pode ser simulado. A
+primeira etapa é gerar o Darf. A geração pode ser feita na tela inicial:
+
+Ou na tela da apuração:
+
+Ao clicar no botão GERAR DARF, poderá definir o valor a ser pago (poderá gerar um
+documento ATÉ o máximo do saldo devedor):
+
+12                       Número 1 – 07/07/2025
+Nesse primeiro teste, sugere-se que se seja feita a geração pelo valor total:
+
+Ao confirmar aparecerá um resumo do pagamento. Na sequência, confirme
+novamente. Será gerado o número do documento fiscal. Esse número deve ser
+copiado.
+
+13  Número 1 – 07/07/2025
+Uma vez copiado esse número, retorna-se aos simuladores, na página inicial do
+Portal TRIBUTOS SOBRE BENS E SERVIÇOS:
+
+Escolhe-se o simulador de pagamento:
+
+A partir do número de documento gerado, efetua-se o pagamento:
+
+Pronto. O pagamento foi simulado.
+
+Retorne para o AA de sua empresa. Tanto o resultado como o saldo a pagar estarão
+com valor ZERO.
+
+14  Número 1 – 07/07/2025
+Ao detalhar a apuração, observa-se que o status do débito aparece como
+“EXTINTO”. Além disso, percebe-se que o pagamento foi utilizado para extinguir o
+débito.
+
+Uma vez aberta essa visão, poder-se-á detalhar os pagamentos (ou qualquer forma
+de extinção), clicando-se no detalhamento da forma de extinção (observe que
+nesse exemplo foram feitos dois pagamentos):
+
+15  Número 1 – 07/07/2025
+Ao retornar para a tela inicial da Apuração, os pagamentos utilizados para quitação
+da CBS estarão identificados na linha vinculada a Pagamentos pelo contribuinte,
+reduzindo o saldo do Resultado da Apuração, que neste exemplo é zero.
+
+Pela coluna Ações, é possível a visualização do detalhamento dos pagamentos
+utilizados na Apuração.
+
+16  Número 1 – 07/07/2025
+Ao clicar no detalhamento, abrirá a janela abaixo com a listagem de todos os
+pagamentos realizados pelo contribuinte naquela apuração específica.
+
+Com mais um nível de detalhamento, é possível identificar os dados do valor DARF
+pago, bem como o Resumo do pagamento.
+
+Para cada pagamento, estarão disponibilizadas as informações abaixo, de forma
+que será facilmente possível de identificar quando um valor pago não foi
+completamente utilizado na Apuração.
+
+17  Número 1 – 07/07/2025
+Ainda com relação ao Demonstrativo é possível executar um novo detalhamento,
+o qual demonstrará os dados da Nota Fiscal vinculada a operação e novamente os
+dados de todo o débito com as vinculações de pagamentos, recolhimentos, split
+ocorridas e processadas pela Apuração até o momento da pesquisa.
+
+18  Número 1 – 07/07/2025
+19  Número 1 – 07/07/2025
+3. Simular uma Operação de Compra da sua Empresa
+
+Agora que se fará a simulação de uma operação de compra da sua empresa. A
+primeira etapa é fazer um documento fiscal de venda, com o auxílio do simulador
+de documentos da Reforma Tributária. Proceda da mesma forma como fez para
+gerar o documento de venda (ver item 1).
+A diferença está no CNPJ do fornecedor. Agora o CNPJ da sua empresa será o do
+ADQUIRENTE (<dest>). No fornecedor, lembre-se de inserir um CNPJ de uma das
+empresas que vinculou a este ambiente de produção restrita.
+Não se esqueça de colocar a data de emissão do documento e um valor da CBS.
+Uma vez que tenha feito o envio do documento (observe a marcação de “ENVIADO
+COM SUCESSO” no simulador de documentos.
+Vá para o AA e selecione o seu CNPJ. Provavelmente, irá aparecer uma tela com a
+seguinte aparência:
+
+Se fez exatamente os procedimentos dos itens 1 e 2 não há resultado a pagar
+atualmente. Entre na apuração:
+
+20  Número 1 – 07/07/2025
+Nota-se que o RESULTADO DA APURAÇÃO é igual a ZERO. Isso ocorre porque, ainda
+que o débito seja de R$ 1400,50, houve seu pagamento (a sua empresa fez o
+pagamento – PCONT – no item 2).
+
+Mas, uma compra acabou de ser feita... por que não aparece o crédito para a sua
+empresa ainda? O crédito só é apropriado quando o débito correspondente é
+extinto. Isso é fundamental dentro da apuração.
+
+Ainda que não esteja apropriado, pode-se verificar sua expectativa na aba OUTRAS
+INFORMAÇÕES (no caso foi uma compra de R$ 203,00):
+
+Observe-se que os créditos estão com indicação de “passíveis de recolhimento
+pelo adquirente”.
+
+21  Número 1 – 07/07/2025
+4. Simular um Recolhimento Integral de CBS em uma compra
+    Realizada
+
+Continuando o exemplo do objetivo acima, mostra-se como se pode apropriar os
+créditos de uma venda sem depender do fornecedor. Pode detalhar o crédito não
+apropriado:
+
+Percebe-se que já há um botão para a geração do DARF para posterior simulação
+do pagamento. Mas, pode voltar a tela apenas para perceber que há ícones de
+pagamento ao lado do botão de detalhamento. O botão de pagamento só fica ativo
+quando o crédito ainda não corresponder a um débito extinto – ou seja, houver para
+aquela operação um crédito a apropriar.
+
+Assim, caso deseje receber aqueles créditos ONLINE pode fazer o recolhimento.
+
+Poderá pagar os documentos individualmente ou pagar os dois ao mesmo tempo.
+Mas, lembre-se que recomendamos que, nesse primeiro teste, trabalhe apenas
+com um documento para cada passo.
+
+22  Número 1 – 07/07/2025
+Ao gerar o Darf, aparecerá a tela:
+
+O sistema trará o valor máximo que pode ser recolhido. O mínimo é de R$ 10,00.
+Pode-se escolher um valor qualquer entre R$ 10,00 e o total indicado. Ao se clicar
+no botão GERAR DARF, aparecerá o documento:
+
+Note-se que o documento indica o CNPJ do fornecedor e o número do documento
+fiscal. Os recolhimentos feitos pelos adquirentes (RAD) sempre são vinculados a
+OPERAÇÕES. Não podem ser utilizados para outros débitos.
+
+Uma vez gerado o documento, utilize o SIMULADOR DE PAGAMENTOS (ver item 2).
+
+Sendo o pagamento realizado com sucesso, volte para o AA. O que aconteceu?
+Dois efeitos:
+
+    1. O RESULTADO DA APURAÇÃO PASSOU A CREDOR
+
+23                                  Número 1 – 07/07/2025
+    2. Na aba APURAÇÃO, os créditos aparecem como APROPRIADOS
+Pode-se detalhar para se chegar aos motivos da apropriação:
+
+24  Número 1 – 07/07/2025
+Assim, sua empresa, na condição de ADQUIRENTE, APROPRIOU o valor extinto da
+CBS.
+
+Se pesquisar a situação do FORNECEDOR, verá que houve a extinção do valor da
+CBS que sua empresa recolheu. Na apuração de seu fornecedor assim aparecerá:
+
+25  Número 1 – 07/07/2025
+Os débitos correspondentes foram imediatamente processados e extintos. Neste
+exemplo, temos duas operações por isso não está integralmente extinto o débito.
+
+                                                   ***
+Assim terminamos este passo a passo.
+Reforçamos a sugestão de construir testes paulatinamente. Na sequência de
+testes, sugere-se que se façam as mesmas operações, mas repetindo-as. Ou seja,
+duas operações de venda e de compra.
+Pode-se então, fazer pagamentos parciais. Um pagamento do contribuinte e um do
+adquirente.
+Enfim, sua imaginação é o mais importante nesse processo.
+Lembre-se de ir anotando o que pretende fazer para comparar com os resultados.
+Compare suas expectativas com os resultados – assim fica mais fácil discutir
+eventuais divergências.
+
+26  Número 1 – 07/07/2025
+

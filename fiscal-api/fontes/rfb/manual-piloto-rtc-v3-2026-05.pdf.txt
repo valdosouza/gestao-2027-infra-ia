@@ -1,0 +1,515 @@
+                                                                                             RTC – Projeto Piloto
+
+Reforma Tributária sobre Consumo RTC – GLOSSÁRIO
+                   Versão III – Maio/2026
+
+                                                                                                                 1
+                                                                                 RTC – Glossário
+
+                                               EXPEDIENTE
+                SECRETÁRIO ESPECIAL DA RECEITA FEDERAL DO BRASIL
+
+                                    Robinson Sakiyama Barreirinhas
+SUBSECRETÁRIA-GERAL DA SECRETARIA ESPECIAL RECEITA FEDERAL DO BRASIL
+
+                                           Adriana Gomes Rêgo
+
+          GERENTE DO PROGRAMA – REFORMA TRIBUTÁRIA DO CONSUMO
+                                         Marcos Hubner Flores
+
+                                RESPONSÁVEIS PELA ELABORAÇÃO
+           Maira Simão Bonfante – COGEA (Coordenação-Geral de Atendimento)
+
+                         André Osmir Fiorelli (Equipe Apuração Assistida)
+
+                                                                                                                 2
+                                                                                      RTC – Glossário
+
+INTRODUÇÃO
+
+         Em 20/12/2023, foi aprovada a Emenda Constitucional nº 132 que define as bases do novo
+Imposto sobre Valor Agregado (IVA) no Brasil.
+
+         O IVA tem como um de seus principais fundamentos a não cumulatividade. Esse é o
+princípio segundo o qual o tributo devido em uma etapa da cadeia produtiva pode ser deduzido do
+valor do tributo devido na etapa seguinte, ou seja, o que já foi pago em etapa anterior não deve ser
+pago novamente. Significa que o tributo é pago somente sobre o valor agregado em cada etapa,
+evitando assim a cumulatividade.
+
+         De forma simplificada, em uma operação de compra e venda, há dois agentes em polos
+distintos: o fornecedor e o adquirente. Regra geral, quem vende (fornecedor) deve pagar o tributo e
+quem compra (adquirente) tem o direito de se creditar desse valor. Isso significa que o adquirente
+poderá abater este crédito dos tributos que ele próprio vier a apurar em operações futuras atuando
+como fornecedor, resultando no pagamento de tributo apenas sobre o valor agregado naquela
+etapa.
+
+         Com a Reforma Tributária do Consumo (RTC), foram criados dois tributos:
+
+     CBS (Contribuição sobre Bens e Serviços) – responsabilidade da União.
+     IBS (Imposto sobre Bens e Serviços) – responsabilidade de Estados e Municípios.
+
+         Esses tributos irão substituir o PIS, COFINS e IPI. O PIS e a COFINS serão extintos aos poucos
+e o IPI será mantido apenas para produtos da Zona Franca de Manaus. A Lei Complementar (LC)
+nº 214/2025 regulamenta a criação da CBS e do IBS.
+
+         Além dos impostos que compõem o IVA, a LC 214/2025, também instituiu o Imposto Seletivo
+(IS). Este imposto tem por finalidade desestimular o consumo de produtos e serviços prejudiciais à
+saúde e ao meio ambiente, conhecido popularmente como o Imposto do Pecado.
+
+                                         Principais benefícios da Reforma
+
+         A nova tributação traz vantagens para a sociedade, seguindo princípios como:
+
+     Simplicidade: unifica as legislações do ICMS (Estados), ISS (Municípios) e outras normas em
+         uma única para o IBS, reduzindo a complexidade atual.
+
+     Transparência: o valor do tributo será destacado na nota fiscal, facilitando o entendimento
+         do que está sendo pago.
+
+     Justiça tributária: o tributo será cobrado no destino (onde o produto é consumido), e não na
+         origem (onde é produzido). Além disso, haverá isenção para itens da cesta básica e
+         devolução de parte dos impostos (cashback) para famílias de baixa renda.
+                                                                                                                        3
+                                                                                      RTC – Glossário
+
+     Não-cumulatividade: evita que o tributo seja cobrado em várias etapas da produção. Assim,
+         há uma cobrança justa e uniforme.
+
+     Cooperação: a nova regra reduz a chamada “Guerra Fiscal” entre os estados e municípios e
+         melhora a relação entre governos e contribuintes.
+
+     Sustentabilidade: o Imposto Seletivo (IS) terá alíquotas maiores para produtos que causam
+         danos ao meio ambiente, desestimulando seu consumo e produção.
+
+                                 Mudança na forma de apurar e pagar tributos
+
+         A Reforma Tributária traz uma grande mudança na forma como os tributos serão apurados
+e pagos, substituindo o modelo atual chamado lançamento por homologação. Hoje, o contribuinte:
+
+          Realiza suas atividades (compra, vende etc.),
+          Calcula os tributos devidos,
+          Preenche declarações,
+          Confessa o valor ao fisco,
+          Faz o pagamento,
+          E fica por até 5 anos sujeito a revisão da Receita Federal.
+
+         Com a nova sistemática:
+
+          O documento fiscal (como a nota fiscal) será suficiente para declarar a dívida,
+             substituindo as declarações manuais.
+
+          O próprio fisco fará os cálculos com base nos documentos emitidos.
+          O contribuinte receberá a informação de quanto deve pagar, sem precisar fazer toda a
+
+             apuração.
+          A apuração será mais simples, automática e em tempo real.
+          A extinção do débito poderá ocorrer de forma imediata.
+          O contribuinte não precisará mais fazer tantas declarações. Bastará emitir os
+
+             documentos fiscais corretamente.
+          Caso precise corrigir algo, é só emitir um novo documento fiscal.
+
+         Resumindo: o sistema tributário será muito mais ágil e simples. O contribuinte terá menos
+obrigações e o governo assumirá mais responsabilidade no cálculo dos tributos. Isso reduz erros,
+burocracia e custo.
+
+                                     A transição dos sistemas de tributação
+
+         A transição para o novo modelo tributário será gradual e concluída apenas em 2033. A CBS
+terá uma transição mais curta, enquanto Estados e Municípios terão mais tempo para o IBS. A partir
+de 2026, os tributos atuais (IPI, PIS e Cofins, ICMS e ISS) irão conviver com CBS e IBS, mas com
+
+                                                                                                                        4
+                                                                                      RTC – Glossário
+
+alíquotas reduzidas (0,9% de CBS e 0,1% de IBS). Será apenas um destaque em nota fiscal, sem
+impacto no valor da operação. Esse valor não será somado ao total da operação, não haverá
+pagamento de valores. A informação da CBS e do IBS será para que os contribuintes consigam se
+adaptar ao novo modelo.
+
+         Em 2027, CBS e IBS passam a vigorar. PIS e Cofins serão extintos e o IPI ficará restrito à Zona
+Franca de Manaus.
+
+         A partir de 2029, a alíquota do IBS aumentará progressivamente, enquanto ICMS e ISS serão
+reduzidos na mesma proporção.
+
+         Em 2033, a substituição dos tributos antigos pelo novo modelo será completa.
+
+                              GLOSSÁRIO
+
+                                     A
+
+Administração Tributária (AT) : Órgãos públicos responsáveis por definir e controlar as obrigações
+fiscais dos contribuintes. Na esfera federal, o órgão responsável pela administração tributária é a
+Receita Federal (RFB).
+
+Adquirente: Quem participa como “cliente” de um contribuinte de CBS. É a pessoa/empresa que
+compra um bem ou serviço. É o adquirente quem recebe os créditos dos tributos, se ele também
+for contribuinte da CBS.
+
+                                               Art. 3º Para fins desta Lei Complementar, consideram-se:
+                                               (...)
+                                               IV - adquirente:
+                                               a) aquele obrigado ao pagamento ou a qualquer outra forma de contraprestação
+                                               pelo fornecimento de bem ou serviço;
+
+API: Application Programming Interface (Interface de Programação de Aplicativos). É uma ponte
+entre sistemas, um agente intermediário que facilita a integração de diversos sistemas. Ela permite
+que sistemas se comuniquem de uma forma segura e organizada, sem que um precise “saber”
+como o outro funciona por dentro. A API facilita a vida do usuário de um sistema ou aplicativo.
+
+API Key (chave): código único usado para autenticar e autorizar um usuário, desenvolvedor ou
+aplicativo.
+
+Apuração Assistida (AA): É um sistema desenvolvido pela Receita Federal para verificar e apurar o
+resultado das operações de um contribuinte de forma precisa e transparente, garantindo maior
+confiabilidade no processo do levantamento da CBS. É um sistema que “assiste/ajuda o
+contribuinte”.
+
+                                                                                                                        5
+                                                                                      RTC – Glossário
+
+                                     B
+
+Bilhete de Passagem Eletrônico (BP-e): Documento fiscal eletrônico para serviços de transporte
+coletivo rodoviário intermunicipal e interestadual. Ele tem como objetivo a implantação de um
+modelo nacional de documento fiscal eletrônico para substituir a atual de emissão do documento
+em papel. Terá validade jurídica garantida pela assinatura digital de quem emite o documento,
+simplificando as obrigações acessórias dos contribuintes e permitindo o acompanhamento em
+tempo real das operações comerciais pelo Fisco.
+
+Bilhete de Passagem Eletrônico Transporte Metropolitano (BP-e TM): Documento fiscal
+eletrônico para serviços de transporte metropolitano (dentro do município).
+
+Body/Payload: O corpo da requisição ou resposta, contendo os dados reais enviados (como JSON
+ou XML). Termo relacionado à API.
+
+                                     C
+
+CadÚnico: Cadastro Único para Programas Sociais do Governo Federal.
+
+Calculadora: Ferramenta que auxilia os contribuintes na emissão dos documentos fiscais e no
+cumprimento de suas obrigações. É a ferramenta para o cálculo automático da CBS, do IBS e do IS
+conforme as regras estabelecidas pela RTC.
+
+Cashback: Devolução personalizada dos valores relativos a CBS e IBS a famílias de baixa renda ou
+que estejam em situação de extrema pobreza cadastradas no CadÚnico.
+
+CBS: Contribuição sobre Bens e Serviços – tributo de responsabilidade federal.
+
+cClassTrib: Código da Classificação Tributária. São os códigos que definem com mais detalhes o
+tipo de tributação da CBS, IBS e IS envolvida em uma operação. Determina exatamente qual é a
+operação que está sendo realizada.
+
+CIB: Cadastro Imobiliário Brasileiro – Será obrigatório a partir de 2026. O Cadastro Imobiliário
+Brasileiro (CIB) faz parte do Sistema Nacional de Gestão de Informações Territoriais (Sinter). O
+cadastro agregará informações cadastrais de imóveis rurais e urbanas, públicos ou privados,
+inscritos nos respectivos cadastros de origem, como o Cadastro Nacional de Imóveis Rurais
+(CNIR), administrado pelo Incra, e o cadastro de imóveis urbanos administrados pelas prefeituras
+municipais.
+
+CNPJ: Cadastro Nacional da Pessoa Jurídica.
+
+Conclusão do Período de Apuração: É o fim do período de apuração (cálculo/conferência) dos
+tributos. Momento em que se encerram as possibilidades de ajuste. Pode ocorrer por um pedido de
+
+                                                                                                                        6
+                                                                                      RTC – Glossário
+
+ressarcimento do saldo credor do período anterior, pela confirmação do contribuinte ou pela sua
+ausência de manifestação.
+
+Conhecimento de Transporte Eletrônico (CT-e): Documento fiscal eletrônico para operações de
+transporte de cargas. Ele tem a função de documentar, para fins fiscais, uma prestação de serviço
+de transporte de cargas realizada por qualquer modal (Rodoviário, Aéreo, Ferroviário, Aquaviário e
+Dutoviário). Sua validade jurídica é garantida pela assinatura digital de quem emite o documento
+(garantia de autoria e de integridade) e pela recepção e autorização de uso, pelo Fisco.
+
+Conhecimento de Transporte Eletrônico Outros Serviços (CT-eOS): Documento fiscal eletrônico
+para transporte por fretamento e de excesso de bagagem.
+
+Conhecimento de Transporte Simplificado (CT-e Simplificado): Documento fiscal eletrônico
+para operações de transporte de cargas que pode ser consolidado por município de destino.
+
+Contribuinte: Todo aquele que deve apurar a CBS.
+
+CPF: Cadastro de Pessoa Física.
+
+Crédito Apropriado: Valor recolhido que se tornou disponível para uso, podendo ser utilizado para
+quitação de débitos.
+
+Crédito Básico: Crédito normal obtido através de operações de compras feitas entre contribuintes
+da CBS/IBS.
+
+Crédito não Apropriado: Valor recolhido que ainda não está disponível para utilização porque não
+passou por todas as etapas formais de liberação.
+
+Crédito Presumido: Crédito sem garantia em pagamento. Representa uma exceção à regra da RTC.
+São usados, por exemplo, quando um produtor rural pessoa física, que não é contribuinte da
+CBS/IBS, vende produtos a uma empresa. Nessa situação, a empresa tem direito ao crédito de
+CBS/IBS. O objetivo é evitar que o produtor rural perca competitividade e clientes.
+
+Crédito Utilizado: Crédito apropriado que foi utilizado para extinguir débitos.
+
+CST: Código de Situação Tributária. São os códigos que definem o tipo de tributação da CBS, IBS e
+IS envolvida em uma operação. Agrupa um determinado conjunto de operações que guardam
+semelhança entre si.
+
+                                     D
+
+DARF: Documento de Arrecadação de Receitas Federais. É o boleto usado para pagar tributos
+                                                                                                                        7
+                                                                                      RTC – Glossário
+
+federais.
+
+DERE: Declaração de Regimes Específicos. Declaração eletrônica instituída pela RTC para
+abranger fatos geradores específicos dentro do novo sistema tributário. Seu objetivo é que o
+contribuinte informe de forma clara e organizada os dados sobre a apuração de IBS e CBS quando
+forem recolhidos por regimes específicos de tributação. Os regimes específicos são tratamentos
+tributários diferenciados aplicados a setores que, devido à sua natureza ou modelo de negócio, não
+se encaixam na tributação padrão.
+
+Destinatário: Para quem foi fornecido o bem ou serviço, podendo ser ou não ser o adquirente.
+
+Devoluções: É o retorno de valores para os contribuintes. No contexto da RTC, poderão ser por
+restituição, ressarcimento ou transferência.
+
+Documento Fiscal: Documento eletrônico padronizado que registra as operações de venda ou
+prestação de serviços, permitindo que a Administração Tributária acompanhe e calcule
+automaticamente os tributos devidos em tempo real.
+
+DPS: Declaração de Prestação de Serviços. Informações fornecidas pelos prestadores de serviço
+para a autorização da NFS-e.
+
+                                     E
+
+Endpoint: endereço específico (URL) onde a API recebe requisições e fornece acesso a um recurso.
+
+Encerramento: Último dia do período de apuração mensal.
+
+ERP: Enterprise Resource Planning (Planejamento de Recursos Empresariais) é um sistema de
+software que integra e automatiza os principais processos de uma empresa, como finanças, RH,
+vendas, logística e emissão de documentos fiscais, em uma única plataforma centralizada.
+
+Eventos: Fatos ou ocorrências com impacto na apuração dos tributos. São essenciais para a
+apuração correta dos tributos.
+
+                                     F
+
+Fornecedor: Quem vende o produto ou o serviço. Nem sempre será o contribuinte, como no caso
+no produtor rural.
+
+Fornecimento: Entrega/disponibilização de bem material ou a prestação/disponibilização do
+serviço.
+
+                                               Art. 3º Para fins desta Lei Complementar, consideram-se:
+
+                                                                                                                        8
+                                                                                      RTC – Glossário
+
+                                               (...)
+                                               II - fornecimento:
+                                               a) entrega ou disponibilização de bem material;
+                                               (...)
+                                               c) prestação ou disponibilização de serviço;
+
+                                     G
+
+Guia de Transporte de Valores (GTV-e): Documento fiscal eletrônico para o transporte de valores.
+
+                                     H
+
+Header (cabeçalho): Informações adicionais enviadas na requisição/resposta, como tipo de
+conteúdo ou tokens. Termo relacionado à API.
+
+                                     I
+
+IBS: Imposto sobre Bens e Serviços – tributo de responsabilidade dos Estados, Distrito Federal e
+Municípios.
+
+ICMS: Imposto sobre Operações relativas à Circulação de Mercadorias e sobre Prestações de
+Serviços de Transporte Interestadual e Intermunicipal e de Comunicação. É de competência dos
+Estados e do Distrito Federal.
+
+Imposto Seletivo (IS): Imposto de competência da União e terá alíquotas específicas ou
+diferenciadas para os produtos danosos ou com impactos ambientais.
+
+ISS: Imposto sobre Serviços de Qualquer Natureza. É de competência dos Municípios e do Distrito
+Federal.
+
+IVA: Imposto sobre Valor Agregado. Tributo que será aplicado ao consumo de bens e serviços e
+incidirá apenas sobre o valor agregado em cada fase de produção ou prestação de serviços. Assim,
+evita-se a cobrança em cascata, que ocorre quando o imposto é cobrado várias vezes ao longo da
+cadeia produtiva. No Brasil, a aplicação do IVA será dual, abrangendo dois tributos distintos,
+administrados por diferentes entes federativos (CBS e IBS).
+
+                                                                                                                        9
+                                                                                      RTC – Glossário
+
+                                     J
+
+JSON: Java Script Object Notation. É um formato de texto usado na web para trocar informações
+entre sistemas, aplicativos e serviços. Um arquivo JSON é usado para armazenar e transmitir dados
+estruturados de forma simples, organizada e legível tanto para humanos quanto para máquinas.
+
+                                     L
+
+                                     M
+
+Manifesto Eletrônico de Documentos Fiscais (MDFe): Projeto que tem como objetivo implantar
+um modelo nacional de documento fiscal eletrônico para substituir a atual de emissão do
+documento em papel. Terá validade jurídica garantida pela assinatura digital de quem emite o
+documento, simplificando as obrigações acessórias dos contribuintes e permitindo o
+acompanhamento em tempo real das operações comerciais pelo Fisco.O MDFe deverá ser emitido
+por empresas prestadoras de serviço de transporte para prestações com mais de um
+conhecimento de transporte ou pelas demais empresas nas operações, cujo transporte seja
+realizado em veículos próprios, arrendados, ou mediante contratação de transportador autônomo
+de cargas, com mais de uma nota fiscal.
+
+                                     N
+
+NBS: Nomenclatura Brasileira de Serviços.
+
+NCM: Nomenclatura Comum do Mercosul.
+
+Nota Fiscal Eletrônica (NFe): Documento fiscal eletrônico para operações de circulação de
+mercadorias entre pessoas jurídicas e vendas no eCommerce para pessoas físicas.
+
+Nota Fiscal de Energia Elétrica Eletrônica (NF3e): Documento fiscal eletrônico para serviços de
+fornecimento de energia elétrica, em substituição à tradicional conta de energia elétrica. Ele tem
+como objetivo a implantação de um modelo nacional de documento fiscal eletrônico para
+substituir a emissão da Nota Fiscal/Conta de Energia Elétrica. Terá validade jurídica garantida pela
+assinatura digital de quem emite o documento, simplificando as obrigações acessórias dos
+contribuintes e permitindo o acompanhamento da emissão em tempo real pelo Fisco.
+
+                                                                                                                        10
+                                                                                      RTC – Glossário
+
+Nota Fiscal do Consumidor Eletrônica (NFC-e): Conhecida como nota fiscal do varejo, é o
+documento fiscal eletrônico para operações comerciais que envolvem o consumidor final (pessoa
+física), que não é contribuinte direto dos tributos sobre o consumo.
+
+Nota Fiscal de Serviço de Comunicação Eletrônica (NFCom): Documento fiscal eletrônico para
+as transações de serviços de comunicação e telecomunicações, como planos de telefonia,
+internet, TV por assinatura.
+
+Nota Fiscal de Serviço Eletrônica (NFS-e): Documento fiscal eletrônico para documentar as
+operações de prestação de serviços.
+
+Nota Fiscal de Serviço Eletrônica de Exploração de Via (NFS-e Via): NFS-e com propósito
+específico de formalizar as operações de prestação de serviço de exploração de via.
+
+                                     O
+
+Operação Onerosa: Qualquer fornecimento com contraprestação. Exemplos: operações de
+compra e venda, locação ou prestação de serviços.
+
+                                     P
+
+PA: Período de Apuração.
+Pagamento não utilizado: Valor pago pelo contribuinte, integral ou parcialmente, que não foi
+aproveitado na apuração mensal.
+PCONT: Pagamento feito pelo Contribuinte.
+PER/DCOMP: Pedido Eletrônico de Restituição/Declaração de Compensação. Será gerado
+automaticamente quando o contribuinte fizer um pedido de restituição ou de ressarcimento de
+valores de CBS a partir do botão localizado na funcionalidade da Apuração Assistida (AA).
+Período de Ajuste: Período para possível correção de valores de créditos e débitos de um
+contribuinte. São os 15 (quinze) dias após o mês de apuração.
+PIX: O pagamento das devoluções, sejam ressarcimento ou transferência, será realizado na conta
+PIX do contribuinte, que deve estar ativa e ter como chave o CNPJ/CPF do contribuinte.
+
+                                     Q
+
+                                                                                                                        11
+                                                                                      RTC – Glossário
+
+                                     R
+
+RAD: Recolhimento realizado pelo Adquirente.
+
+Recolhimento não utilizado: Valor recolhido pelo adquirente, integral ou parcialmente, que não
+foi aproveitado na apuração mensal.
+Ressarcimento: É um conceito presente atualmente na sistemática do IPI, PIS e Cofins não
+cumulativos, que tem como base a não-cumulatividade dos tributos. Ele ocorre sempre a pedido
+do contribuinte, de forma facultativa. Em relação à CBS, é solicitado diretamente no ambiente da
+Apuração Assistida (AA) quando existir saldo a recuperar ao final de determinado período de
+apuração (quando os créditos superam os débitos). Pode ser solicitado o valor total ou parcial.
+Restituição: Também é um conceito já existente em relação aos tributos arrecadados pela Receita
+Federal e ocorre quando há pagamento indevido ou a maior. Ocorre também sempre a pedido do
+contribuinte, de forma facultativa. Em relação à CBS, quando a Apuração Assistida identificar saldo
+disponível do pagamento ou recolhimento, será apresentado ao contribuinte botão específico para
+permitir ao contribuinte o pedido da restituição por meio da geração automática de PER/DCOMP
+(Pedido Eletrônico de Restituição). Não haverá a necessidade do uso do sistema PERDCOMP Web
+pelo contribuinte.
+Exemplo de pagamento indevido: pagamento em duplicidade.
+
+Exemplo de pagamento a maior: o contribuinte devia R$100,00 e pagou R$120,00 (R$ 20,00 é
+crédito passível de pedido de restituição).
+
+Resultado do Período: Diferença entre os valores dos débitos e créditos apropriados no período
+de apuração para um contribuinte.
+
+RFB: Receita Federal do Brasil.
+
+ROC: Registro de Operações de Consumo. É uma etapa do processamento dos documentos fiscais
+eletrônicos pelo sistema.
+
+RTC: Reforma Tributária sobre o Consumo.
+
+                                     S
+
+Saldo a pagar: Resultado da apuração menos os valores extintos por split payment, recolhimento
+pelo adquirente e pagamento pelo responsável após o encerramento do período de apuração.
+
+Simulador: é um dos sistemas disponibilizados no "Portal da Reforma Tributária do Consumo"
+(Portal RTC). Foi criado para viabilizar os testes pelos desenvolvedores/servidores/contribuintes
+
+                                                                                                                        12
+                                                                                      RTC – Glossário
+
+participantes do Projeto Piloto dos sistemas da RTC.
+SINTER: Sistema Nacional de Gestão de Informações Territoriais – integra as bases de dados
+cadastrais, geoespaciais, fiscais e jurídicas de imóveis urbanos, rurais, públicos e privados do
+território nacional. Seu propósito é consolidar o Cadastro Imobiliário Brasileiro (CIB).
+Split Payment (Recolhimento na Liquidação Financeira): É uma das modalidades de extinção do
+débito tributário. O termo “Split Payment” em inglês significa “pagamento repartido” ou
+“pagamento segregado”. Refere-se à separação automática dos valores dos tributos pelos
+provedores de serviços de pagamento eletrônico e instituições operadoras de sistemas de
+pagamentos. Isso acontecerá no exato momento da liquidação financeira de uma operação. A
+separação acontece com base nas informações constantes do documento fiscal eletrônico, entre
+o valor da operação (produto ou serviço) e o montante devido a título de tributos.
+
+                                     T
+
+Tomador de Serviços: Na NFS-e, trata-se do próprio adquirente.
+Transferência: É um novo conceito trazido pela RTC. Ocorre quando há pagamento a maior em
+razão do Split Payment, RAD ou pagamento pelo contribuinte do saldo devedor da apuração. Ela é
+automática e não precisa de pedido do contribuinte para acontecer. O pagamento da transferência
+deve ocorrer em até três dias úteis. Todo esse batimento será realizado de forma automática pela
+Apuração Assistida.
+Tributo: É um tipo de pagamento obrigatório que todas as pessoas e empresas fazem ao governo
+(municipal, estadual ou federal) para que ele possa funcionar e prestar serviços à população.
+Existem vários tipos de tributos, como os impostos, as taxas e as contribuições.
+
+                                     U
+
+                                     V
+
+                                    W
+
+Webhook: endereço específico (URL) para onde a API retorna informações.
+
+                                                                                                                        13
+                                                                                      RTC – Glossário
+
+                                     X
+
+XML: eXtensible Markup Language ou Linguagem de Marcação Extensível. É um formato de arquivo
+digital estruturado para organizar, armazenar e transportar dados de forma padronizada. Ele pode
+ser lido por humanos e máquinas.
+
+                                     Z
+
+                                                                                                                        14
+

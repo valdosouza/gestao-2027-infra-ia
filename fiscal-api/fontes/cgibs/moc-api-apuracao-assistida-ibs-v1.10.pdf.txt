@@ -1,0 +1,2005 @@
+            Projeto
+API de Integração com
+  a Apuração Assistida
+
+             do IBS
+
+Manual de Orientação ao Contribuinte
+
+Padrões Técnicos de Integração
+
+Versão 1.10 – Setembro/2026
+Manual de Orientação ao Contribuinte
+
+Sumário
+
+Controle de Versões ........................................................................................ 4
+Histórico de Alterações / Cronograma ........................................................... 4
+1 Introdução ................................................................................................ 5
+2 Conceitos Fundamentais ........................................................................ 5
+
+   2.1. Operação ......................................................................................... 5
+   2.2. Lançamentos de Movimentação ..................................................... 5
+   2.3. Movimentações Financeiras ........................................................... 6
+   2.4. Processamento Diário ..................................................................... 6
+   2.5. Arquivo Diferencial (Delta) .............................................................. 6
+   2.6. Arquivo Manual ............................................................................... 7
+   2.7. Disponibilização das Informações.................................................. 7
+3 Portal do Contribuinte ............................................................................. 7
+   3.1. Finalidade ........................................................................................ 7
+   3.2. Acesso ao Portal ............................................................................. 8
+   3.3. Credenciais de Acesso.................................................................... 9
+   3.4. Habilitação ..................................................................................... 10
+   3.5. Arquivos da Apuração .................................................................. 11
+   3.6. Consulta de Solicitações .............................................................. 12
+   3.7. Nova Solicitação............................................................................ 13
+   3.8. Restrições Operacionais ............................................................... 14
+4 Integração por APIs ............................................................................... 15
+   4.1. Finalidade ...................................................................................... 15
+   4.2. Modelo de Integração .................................................................... 15
+   4.3. Convenções Gerais ....................................................................... 16
+   4.4. Autenticação.................................................................................. 17
+   4.5. APIs disponibilizadas pela Apuração Assistida ........................... 17
+5 Especificações Técnicas disponíveis das API .................................... 17
+   5.1. Habilitação do Contribuinte .......................................................... 18
+
+                                                                                                         2
+   5.2. Notificação de Disponibilização de Arquivos (Webhook) ............ 19
+   5.3. Obter Arquivo ................................................................................ 20
+   5.4. Listagem de Solicitações de Arquivos ......................................... 20
+   5.5. Arquivos de Apuração – Nova Solicitação ................................... 22
+   5.6. Cancelamento de Solicitação........................................................ 23
+   5.7. Consulta de Dados de uma operação........................................... 24
+   5.8. Consulta de um Documento Fiscal Específico............................. 24
+   5.9. Desabilitação ................................................................................. 24
+   5.10. Consulta de Saldo...................................................................... 24
+   5.11. Emissão do Documento de Arrecadação como Adquirente .... 25
+   5.12. Consulta itens do Documento de Arrecadação ........................ 25
+   5.13. Emissão do Documento de Arrecadação em .pdf .................... 25
+6 Perguntas Frequentes ........................................................................... 25
+ANEXO I - “Obter Arquivo”........................................................................... 26
+Especificação Técnica — API Conta Corrente Fiscal ................................. 26
+1. Objetivo ....................................................................................................... 26
+2. Legenda da Estrutura ................................................................................ 26
+3. Estrutura do Payload — Response........................................................... 26
+   3.1 Mapeamento de Campos ..................................................................... 26
+   3.2 Exemplo de Payload (Response) ......................................................... 28
+   3.3 Regra de Fatiamento de Arquivo .......................................................... 29
+   4. Notas de Rodapé / Pendências .............................................................. 29
+5. Observações Gerais................................................................................... 29
+ANEXO II - “Obter Arquivo”........................................................................... 30
+Desenvolvimento — API Conta Corrente Fiscal .......................................... 30
+Passo 1 — Entenda a estrutura geral ........................................................... 30
+Passo 2 — Entenda o bloco header e a lista operações............................. 31
+Passo 3 — Entenda a sistemática incremental............................................ 32
+Passo 4 — Entenda o fatiamento de arquivos ............................................. 32
+Passo 5 — Preencha os campos vazios com zero ...................................... 32
+Passo 6 — Trate o campo MOV como texto (provisório)............................ 32
+Passo 7 — Exemplo didático: Cenário 1 (Aquisição).................................. 33
+
+                                                                                                         3
+Arquivo 1 (cenario1_aquisicao_arquivo1.json) — operacoes[0].
+extrato_cc.lista, linhas 1 a 9 .......................................................................... 33
+
+       Arquivo 2 (cenario1_aquisicao_arquivo2.json) — linhas 10 a 13 (mesma
+       operação dentro de operações; header e hash do extrato próprios deste
+       arquivo) ........................................................................................ 36
+
+Passo 8 — Exemplo didático: Cenário 2 (Fornecimento) ........................... 38
+       Arquivo único (cenario2_fornecimento.json) .................................... 39
+
+Passo 9 — Pendências a resolver na próxima versão. ............................... 44
+Observação sobre os dados de exemplo..................................................... 44
+
+Controle de Versões
+
+Versão  Publicação     Descrição
+
+1.00 Julho de 2026     MINUTA - Publicação da MOC.
+
+1.10 Setembro de 2026 Primeira versão oficial publicada, sucedendo a minuta disponibilizada no
+                                    ambiente do projeto piloto, em julho de 2026.
+
+                                    Inclusão de capítulo referente à disponibilização de Perguntas Frequentes
+                                    (FAQ).
+
+Histórico de Alterações / Cronograma
+
+Versão                 Histórico de atualizações (MINUTA)            Implantação                               Implantação
+                                                                         Teste                                  Produção
+
+1.10 Conjunto de funcionalidades e API disponibilizadas na Etapa1    28/09/2026 Implementação
+          deste Projeto com informações nos arquivos em Homologação                           Futura
+
+        Conjunto de funcionalidades e API disponibilizadas na Etapa 2 Implementação Implementação
+
+        deste Projeto                                                Futura                                       Futura
+
+        Conjunto de funcionalidades e API disponibilizadas na Etapa 3 Implementação Implementação
+
+        deste Projeto                                                Futura                                       Futura
+
+        Conjunto de funcionalidades e API disponibilizadas na Etapa 4 Implementação Implementação
+
+        deste Projeto                                                Futura                                       Futura
+
+                                                                                                               4
+1 Introdução
+
+Este Manual de Orientação ao Contribuinte (MOC) apresenta os padrões técnicos para
+integração entre os sistemas dos contribuintes e a Apuração Assistida do IBS, por meio
+das Interfaces de Programação de Aplicações (APIs) disponibilizadas pelo Comitê Ges-
+tor do IBS (CGIBS).
+O documento descreve os procedimentos para habilitação do contribuinte, autenticação,
+recebimento de notificações, solicitação e obtenção de arquivos de apuração, bem como
+as especificações técnicas das APIs disponibilizadas.
+Além das interfaces de integração, são apresentados os principais conceitos, regras
+operacionais e requisitos necessários para utilização dos serviços.
+
+2 Conceitos Fundamentais
+
+Este capítulo apresenta os principais conceitos utilizados na disponibilização das
+informações da Apuração Assistida do IBS por meio do Portal do Contribuinte e das APIs
+de integração.
+
+2.1. Operação
+
+As informações disponibilizadas pela Apuração Assistida são organizadas por operação.
+Uma operação corresponde ao fornecimento de bens ou serviços, sob a perspectiva do
+fornecedor, ou à aquisição, sob a perspectiva do adquirente.
+Cada operação possui um ciclo de vida próprio e, durante esse período, poderá receber
+diversos lançamentos de movimentação.
+
+2.2. Lançamentos de Movimentação
+
+Os lançamentos de movimentação representam os eventos registrados para uma
+operação ao longo do seu ciclo de vida.
+O primeiro lançamento corresponde ao registro da própria operação (Fornecimento ou
+Aquisição). Os lançamentos subsequentes representam os demais eventos
+processados na Apuração Assistida, tais como apropriações de crédito, utilizações de
+crédito, pagamentos, cancelamentos, devoluções, extinções de débito e outros
+previstos nas regras de negócio.
+Cada lançamento é registrado individualmente, preservando o histórico da operação.
+
+                                                                                                         5
+2.3. Movimentações Financeiras
+
+Cada lançamento de movimentação gera uma ou mais movimentações financeiras.
+As movimentações financeiras representam os reflexos do lançamento sobre os campos
+financeiros relacionados a crédito e débito daquela operação.
+Dependendo da regra de negócio aplicada, um lançamento poderá gerar
+movimentações em um ou mais dos seguintes campos:
+
+    • Débito em Aberto;
+    • Débito Extinto;
+    • Crédito a Apropriar;
+    • Crédito Não Utilizado;
+    • Crédito Utilizado;
+    • Recurso Financeiro a Transferir;
+    • Recurso Financeiro Disponível para Transferência.
+
+2.4. Processamento Diário
+
+Após o encerramento de cada dia, a Apuração Assistida executa o Processamento
+Diário.
+Durante esse processamento são identificados os lançamentos de movimentação
+registrados para cada operação ao longo do dia e geradas as respectivas
+movimentações financeiras.
+As informações produzidas nesse processamento são disponibilizadas aos contribuintes
+por meio do Arquivo Diferencial (Delta).
+
+2.5. Arquivo Diferencial (Delta)
+
+O Arquivo Diferencial (Delta) é gerado automaticamente após a conclusão do
+Processamento Diário.
+Cada arquivo pode conter uma ou mais operações.
+Para cada operação são disponibilizados os lançamentos de movimentação registrados
+no Processamento Diário correspondente, juntamente com as respectivas
+movimentações financeiras geradas.
+Assim, uma mesma operação poderá constar em diferentes Arquivos Diferenciais ao
+longo do seu ciclo de vida, sempre que novos lançamentos forem processados.
+
+                                                                                                         6
+2.6. Arquivo Manual
+
+O Arquivo Manual possui a mesma estrutura do Arquivo Diferencial.
+A diferença está no critério de seleção das informações. Enquanto o Arquivo Diferencial
+contém os lançamentos registrados em um único Processamento Diário, o Arquivo
+Manual reúne os lançamentos compreendidos no período informado pelo contribuinte
+na solicitação.
+
+2.7. Disponibilização das Informações
+
+As informações da Apuração Assistida são disponibilizadas ao contribuinte por meio de
+arquivos eletrônicos.
+Cada arquivo contém uma ou mais operações. Para cada operação são disponibilizados
+os lançamentos de movimentação compreendidos no período de geração do arquivo e
+as respectivas movimentações financeiras.
+Os arquivos podem ser obtidos:
+
+    • por meio do Portal do Contribuinte, mediante consulta e download; ou
+    • por meio das APIs de integração, para consumo automatizado pelos sistemas
+
+         do contribuinte.
+Para os contribuintes habilitados, a disponibilização de novos Arquivos Diferenciais ou
+de Arquivos Manuais é comunicada automaticamente por meio de Webhook.
+
+3 Portal do Contribuinte
+
+3.1. Finalidade
+
+O Portal do Contribuinte é o canal disponibilizado pelo CGIBS para acesso às
+informações da Apuração Assistida do IBS.
+Por meio do Portal, o contribuinte pode consultar, solicitar e realizar o download dos
+arquivos disponibilizados pela Apuração Assistida, bem como gerenciar os recursos
+necessários para utilização das APIs de integração.
+O Portal pode ser utilizado como alternativa às APIs de integração, permitindo que
+contribuintes que não implementem uma comunicação automatizada acessem
+manualmente as mesmas informações disponibilizadas pelos serviços de integração.
+As APIs de integração destinam-se aos contribuintes que desejam automatizar o
+consumo dessas informações por meio de seus próprios sistemas.
+
+                                                                                                         7
+3.2. Acesso ao Portal
+
+O acesso ao Portal do Contribuinte é realizado mediante autenticação pelo GOV.BR.
+
+Figura 01 – Tela inicial do Portal.
+Após a autenticação, o usuário deverá selecionar o contribuinte para o qual possui
+autorização de acesso.
+
+Figura 02 – Seleção de contribuinte no canto superior direito.
+A partir desse momento, serão disponibilizadas as funcionalidades do Portal
+correspondentes ao contribuinte selecionado.
+
+                                                                                                         8
+Figura 03 – Tela com informações de saldos da Apuração do IBS.
+
+3.3. Credenciais de Acesso
+
+As credenciais de acesso, que são geradas exclusivamente pelo Portal, são utilizadas
+para autenticação das chamadas às APIs da Apuração Assistida.
+Para gerá-las, o contribuinte deverá acessar o menu Credenciais de Acesso e
+selecionar a opção Gerar Credenciais.
+Serão geradas as seguintes credenciais:
+
+    • Client ID;
+    • Client Secret.
+Essas duas informações estão disponíveis apenas no momento da geração. Após esse
+momento, não serão mais visualizadas no Portal. Assim, sugere-se cópia e
+armazenamento desses campos.
+A geração de um novo par de credenciais invalida automaticamente o par anteriormente
+emitido.
+
+                                                                                                         9
+Figura 04 – Geração das credenciais.
+
+Figura 05 – Credenciais geradas.
+
+3.4. Habilitação
+
+A habilitação permite ao contribuinte receber automaticamente os Arquivos Diferenciais
+(Delta) gerados após cada Processamento Diário.
+
+                                                                                                        10
+Durante a habilitação, deverá ser informado o endereço HTTPS (Webhook) utilizado
+para o recebimento das notificações de disponibilização dos arquivos.
+Opcionalmente, poderá ser informado um token de segurança, que será enviado nas
+notificações realizadas pela Apuração Assistida.
+Após a habilitação, o contribuinte passa a:
+
+    • receber notificações automáticas de disponibilização dos Arquivos Diferenciais;
+    • utilizar as APIs disponibilizadas pelo serviço.
+Contudo, a qualquer momento, o contribuinte poderá cancelar o recebimento de
+arquivos (desabilitação).
+Para a primeira etapa deste projeto, há a opção Enviar Notificação com os nomes
+dos arquivos que foram gerados. O objetivo é simular o processamento diário com o
+envio do Webhook contendo as informações dos arquivos gerados.
+
+Figura 06 – Exemplo de configuração.
+
+3.5. Arquivos da Apuração
+
+O menu Arquivos da Apuração permite consultar, solicitar e realizar o download dos
+arquivos disponibilizados pela Apuração Assistida.
+As solicitações podem ser dos seguintes tipos:
+
+    • Diferencial (Delta), gerada automaticamente após cada Processamento Diário
+         para contribuintes habilitados;
+
+    • Manual, gerada mediante solicitação do contribuinte.
+                                                                                                        11
+As solicitações permanecem registradas no Portal para acompanhamento de seu
+processamento.
+
+Figura 07 – Consulta das solicitações.
+
+3.6. Consulta de Solicitações
+
+O Portal permite consultar as solicitações realizadas utilizando filtros como: CNPJ;
+período; situação da solicitação.
+Para cada solicitação são apresentadas informações como: data e hora da solicitação;
+período solicitado; tipo de solicitação; quantidade de operações; quantidade de arquivos
+gerados; situação; ações disponíveis.
+As situações possíveis são: Solicitada; Gerada; Enviada; Cancelada; Expirada.
+Quando houver arquivos disponíveis, será possível visualizar os arquivos vinculados e
+realizar seu download.
+
+                                                                                                        12
+Figura 08 – Resultado da consulta.
+
+Figura 09 – Arquivos vinculados.
+
+3.7. Nova Solicitação
+
+O contribuinte poderá solicitar manualmente a geração de arquivos referentes a um
+período específico.
+A solicitação deverá informar: CNPJ; período inicial; período final.
+
+                                                                                                        13
+O período informado deverá estar integralmente compreendido em uma única
+competência.
+Após o envio da solicitação, ela permanecerá na situação Solicitada até a execução do
+próximo Processamento Diário.
+
+Figura 10 – Nova solicitação.
+
+3.8. Restrições Operacionais
+
+Aplicam-se às solicitações manuais as seguintes restrições:
+    • máximo de duas solicitações por dia para cada contribuinte;
+    • máximo de duas solicitações por competência em um mesmo dia;
+    • não são permitidas solicitações com períodos sobrepostos.
+
+Os arquivos permanecem disponíveis para download durante o prazo informado na
+notificação de disponibilização. Após esse prazo, serão removidos e a solicitação
+correspondente passará para a situação Expirada.
+Quando o volume de informações ultrapassar o limite máximo por arquivo, os dados
+serão distribuídos em múltiplos arquivos.
+O Consumo Indevido dos serviços disponibilizados via Portal ou API caracteriza-se por
+solicitações repetidas que possam afetar a disponibilidade de tais serviços. Se
+detectado o Consumo Indevido, o contribuinte poderá ficar suspenso de enviar novas
+solicitações (via Portal ou API) por um tempo determinado.
+
+                                                                                                        14
+4 Integração por APIs
+
+4.1. Finalidade
+
+As APIs de integração permitem que os sistemas dos contribuintes consumam de forma
+automatizada as informações disponibilizadas pela Apuração Assistida do IBS.
+Por meio dessas APIs, é possível receber notificações, consultar solicitações, obter
+arquivos e utilizar os demais serviços disponibilizados pela Apuração Assistida.
+As funcionalidades disponibilizadas pelas APIs correspondem às funcionalidades
+disponíveis no Portal do Contribuinte, diferenciando-se apenas pela forma de acesso.
+
+4.2. Modelo de Integração
+
+A integração entre os sistemas do contribuinte e a Apuração Assistida ocorre de forma
+assíncrona.
+Após a conclusão do Processamento Diário ou do processamento de uma solicitação
+manual, os arquivos são disponibilizados ao contribuinte. Para os contribuintes
+habilitados, essa disponibilização é comunicada automaticamente por meio de
+Webhook, permitindo que a aplicação cliente consulte a solicitação correspondente e
+obtenha os arquivos gerados.
+A Figura 4-1 apresenta o fluxo geral da integração.
+
+                                                                                                        15
+Figura 4-1 – Fluxo Geral da Integração da Apuração Assistida
+A estrutura dos arquivos e as regras para sua geração, disponibilização e
+processamento são apresentadas nos capítulos abaixo.
+
+4.3. Convenções Gerais
+
+As APIs da Apuração Assistida observam as seguintes convenções:
+    • comunicação por meio do protocolo HTTPS;
+    • utilização do formato JSON nas mensagens de requisição e resposta, quando
+         aplicável;
+    • codificação UTF-8;
+    • versionamento explícito das APIs;
+    • autenticação exigida pelo serviço;
+    • utilização de Webhook para notificação da disponibilização de arquivos aos
+         contribuintes habilitados;
+    • registro das chamadas para fins de rastreabilidade.
+
+As convenções específicas de cada serviço são apresentadas na documentação de
+cada API.
+
+                                                                                                        16
+4.4. Autenticação
+
+Para autenticação as APIs utilizam as credenciais de acesso geradas no Portal do
+Contribuinte.
+
+Os procedimentos para geração, renovação e gerenciamento dessas credenciais estão
+descritos no item 3.3 – Credenciais de Acesso.
+
+Cada especificação de API indicará quando a autenticação for obrigatória.
+
+4.5. APIs disponibilizadas pela Apuração Assistida
+
+A Tabela 4-1 apresenta as APIs disponibilizadas pela Apuração Assistida, organizadas
+por etapa de implantação.
+
+Etapa                API                              Finalidade               Já possui especi-
+   1                                                                           ficação técnica?
+   1   Habilitação do Contribu-   Habilitar o contribuinte para utilização da
+                     inte                             integração.                       Sim
+                                                                                        Sim
+       Notificação de Disponibi-   Notificar a disponibilização de arquivos
+          lização de Arquivos           gerados na Apuração Assistida.                  Sim
+                (Webhook)
+                                   Realizar o download de um arquivo ge-                Sim
+1      Obter Arquivo                 rado pelo processamento diário, po-                Sim
+                                                                                        Sim
+2      Consulta de Solicitações   dendo ser um diferencial ou manual (so-              Não
+                                            licitado pelo contribuinte).               Não
+2      Nova Solicitação                                                                Não
+                                  Consultar solicitações e os arquivos vin-
+2      Cancelamento de Solici-                          culados.                       Não
+                   tação                                                               Não
+                                  Solicitar a geração de arquivos para um
+3      Consulta de Operação                     período específico.                    Não
+                                                                                       Não
+3      Consulta de Documento      Cancelar solicitações ainda não proces-
+                   Fiscal                                sadas.
+
+3      Desabilitação              Consultar informações de uma operação
+                                                      específica.
+4      Consulta de Saldo
+                                  Consultar informações de um documento
+4      Emissão de Documento                       fiscal específico.
+            de Arrecadação
+                                   Desabilitar a integração do contribuinte
+4      Consulta de Itens do Do-     para recebimento de arquivos. Atual-
+       cumento de Arrecadação
+                                            mente, apenas via Portal.
+4      Emissão do Documento       Consultar saldos da Apuração Assistida
+       de Arrecadação em PDF
+                                         ao final de uma competência.
+                                  Solicitar a emissão do documento de ar-
+                                  recadação, a partir de uma lista de docu-
+
+                                      mentos fiscais de certo fornecedor.
+                                   Consultar os itens vinculados ao docu-
+
+                                              mento de arrecadação.
+                                   Obter o documento de arrecadação em
+                                   formato PDF. Emissão disponível tanto
+                                  para o Adquirente como para o Fornece-
+
+                                                           dor.
+
+A especificação técnica de cada API é apresentada nos capítulos seguintes.
+
+5 Especificações Técnicas disponíveis das API
+
+                                                                                                        17
+* A título de exemplo, nas especificações das respostas, foi utilizado o token do
+contribuinte.
+
+5.1. Habilitação do Contribuinte
+
+Proposta de rota e assinatura
+POST /v1/aassist/habilitar
+
+Cabeçalhos da Requisição (Headers)
+
+ Parâmetro       Tipo       Obrigatório               Descrição
+   ClientID      String          Sim       Identificação do contribuinte
+                 String          Sim
+ClientSecret                                   Senha do contribuinte
+
+Corpo da Requisição (Body)
+
+  Parâmetro      Tipo       Obrigatório                Descrição
+QueroHabilitar   String          Sim       Indica a ação desejada: HAB
+
+WebhookURL       String     Sim                         (habilitar)
+                                                  URL HTTPS para
+TokenContrib     String     Não            recebimento de notificações
+
+                                                Token de segurança
+                                            fornecido pelo contribuinte
+
+Exemplo de requisição
+
+Headers:
+
+{
+ “clientid”: “cksisrufjfpfjfh948$-dnkbdidbdgdcsip13”,
+ “clientsecret”: “lsdudbdhd83645ksb$#@idkdldça8%”
+
+}
+body
+
+ “queroHabilitar” : “HAB”,
+ "webhookUrl": "https://cliente.exemplo.br/webhook/apuracao",
+ “tokenContrib” : “jerfhd7394j40tnfh3*#gd@l-8&h1cxsdgfkfjdd”
+}
+
+Resposta da API (Response)
+
+Parâmetro        Tipo                  Descrição
+
+    Habilitado     String   Indica se foi habilitado ou o
+DataHabilitacao  Datetime       motivo do insucesso
+
+                            Data e hora da habilitação
+
+Exemplo de resposta
+
+{
+ "habilitado": "HABILITADO",
+ "dataHabilitacao": "2026-01-14T10:30:00"
+
+}
+
+                                                                          18
+5.2. Notificação de Disponibilização de Arquivos (Webhook)
+
+Proposta de rota e assinatura
+POST {webhookUrl cadastrada}
+
+Cabeçalhos da Resposta (Headers)
+
+Parâmetro     Tipo                      Descrição
+
+TokenContrib  String          Token de segurança do
+                                      contribuinte
+
+Exemplo de Header com Token definido pelo Contribuinte.
+
+Corpo da Resposta (Body)      Tipo                 Descrição
+                              String
+                 Parâmetro                Indica o tipo: manual ou
+             TipoSolicitacao                       diferencial
+
+    SituacaoSolicitacao         String       Situação: solicitada,
+              CNPJ              String  gerada, enviada, cancelada
+                               Inteiro
+         IDSolicitacao        Datetime            ou expirada
+       DataSolicitacao        Datetime
+      DataTransacaoIni        Datetime      CNPJ do contribuinte
+     DataTransacaoFim          Inteiro
+        QtdOperacoes           Inteiro        Número interno da
+     QtdArqVinculados           Date               solicitação
+ DataValidadeSolicitacao        Lista
+                               Inteiro   Data e hora da solicitação
+            Arquivos            String
+  Arquivos[].Arquivo_Id                   Data e hora de início da
+Arquivos[].Arquivo_Nome                             transação
+
+                                            Data e hora de fim da
+                                                    transação
+
+                                         Quantidade de operações
+                                                 da solicitação
+
+                                          Quantidade de arquivos
+                                                   vinculados
+
+                                             Data de validade da
+                                                   solicitação
+
+                                         Lista de arquivos gerados
+                                              para a solicitação
+
+                                           Número sequencial do
+                                                arquivo gerado
+
+                                         Nome do arquivo gerado
+
+Exemplo de notificação
+
+Header:
+
+{
+
+ “tokenContrib”: “jerfhd7394j40tnfh3*#gd@l-8&h1cxsdgfkfjdd”,
+}
+body
+{
+
+ "tipoSolic": "DIFERENCIAL",
+ "sitSolic": "GERADA",
+ "cnpj": "12345678000190",
+ “idSolic”: “121416”,
+ "dataHoraSolic": "2026-01-14T01:30:00Z",
+ "dataHoraTransIni": "2026-01-13T00:00:00Z",
+
+                                                                                                        19
+ "dataHoraTransFim": "2026-01-13T23:59:59:999Z",
+ “qtdOperSolic”: “15036”,
+ “qtdArqVincul”: “2”,
+ "dataValidSolic": "2026-04-14T01:00:00Z" 90 dias
+ "arquivos": [
+
+   {
+     "idArq": 1709,
+     "nomeArq": "aassist_2026-01_13_detalhada_1709_parte001.zip"
+     },
+
+   {
+     "idArq": 1710,
+     "nomeArq": "aassist_2026-01_13_detalhada_1710_parte002.zip"
+     }
+
+ ]
+}
+
+5.3. Obter Arquivo
+
+Ver Anexos I (Especificação Técnica) e II (Desenvolvimento)
+
+5.4. Listagem de Solicitações de Arquivos
+
+Proposta de rota e assinatura
+
+GET /v1/aassist/solicitacao/listar/{data_solic_ini}&{data_solic_fim}&{sit_solic}
+
+Cabeçalhos da Requisição (Headers)
+
+ Parâmetro     Tipo    Obrigatório             Descrição
+   ClientID    String       Sim     Identificação do contribuinte
+               String       Sim
+ClientSecret                            Senha do contribuinte
+
+Parâmetros de Entrada
+
+  Parâmetro    Tipo    Obrigatório              Descrição
+DataSolicIni   Date         Sim       Data inicial da solicitação
+DataSolicFim   Date         Sim        Data final da solicitação
+
+SituacaoSolic  String       Sim        Situação da solicitação:
+                                     solicitada, gerada, enviada,
+                                    cancelada, expirada ou todas
+
+Exemplo de requisição
+
+Headers:
+
+{
+ “clientId”: “cksisrufjfpfjfh948$-dnkbdidbdgdcsip13”,
+ “clientSecret”: “lsdudbdhd83645ksb$#@idkdldça8%”
+
+}
+
+Corpo da Resposta (Body)
+                                                                                                        20
+             Parâmetro           Tipo               Descrição
+                 Itens           Lista
+                                 String       Lista de solicitações
+    Itens[].TipoSolicitacao              Tipo da solicitação: manual
+                                 String
+ Itens[].SituacaoSolicitacao                      ou diferencial
+                                 String       Situação: solicitada,
+           Itens[].CNPJ         Inteiro  gerada, enviada, cancelada
+      Itens[].IDSolicitacao    Datetime
+    Itens[].DataSolicitacao    Datetime            ou expirada
+   Itens[].DataTransacaoIni    Datetime      CNPJ do contribuinte
+                                Inteiro     Identificador interno da
+  Itens[].DataTransacaoFim      Inteiro
+     Itens[].QtdOperacoes        Date               solicitação
+                                 Lista    Data e hora da solicitação
+  Itens[].QtdArqVinculados      Inteiro    Data e hora de início da
+Itens[].DataValidadeSolicitac
+                                 String              transação
+                   ao                        Data e hora de fim da
+         Itens[].Arquivos
+                                                     transação
+Itens[].Arquivos[].Arquivo_Id             Quantidade de operações
+Itens[].Arquivos[].Arquivo_N               Quantidade de arquivos
+
+                 ome                                vinculados
+                                              Data de validade da
+
+                                                    solicitação
+
+                                          Lista de arquivos gerados
+
+                                            Número sequencial do
+                                                 arquivo gerado
+
+                                          Nome do arquivo gerado
+
+Exemplo de resposta
+
+Header:
+
+{
+
+ “tokenContrib”: “jerfhd7394j40tnfh3*#gd@l-8&h1cxsdgfkfjdd”,
+}
+{
+
+ "itens":
+ [
+
+   { "tipoSolic": "DIFERENCIAL",
+          "sitSolic": "GERADA",
+          "cnpj": "12345678000190",
+          “idSolic”: “121416”,
+          "dataHoraSolic": "2026-01-14T01:30:00Z",
+          "dataHoraTransIni": "2026-01-13T00:00:00Z",
+          "dataHoraTransFim": "2026-01-13T23:59:59:999Z",
+          “qtdOperSolic”: “15036”,
+          “qtdArqVincul”: “2”,
+          "dataValidSolic": "2026-04-14T01:00:00Z" 90 dias
+          "arquivos": [
+          {
+
+     "idArq": 1709,
+     "nome": "aassist_2026-01_13_detalhada_1709_parte001.zip"
+     },
+
+          {
+     "idArq": 1710,
+     "nome": "aassist_2026-01_13_detalhada_1710_parte002.zip"
+     }
+
+                     ]
+}
+
+                                                                                                        21
+{ "tipoSolic": "MANUAL",
+         "sitSolic": "GERADA",
+         "cnpj": "12345678000190",
+         “idSolic”: “121417”,
+         "dataHoraSolic": "2026-01-13T10:30:00Z",
+         "dataHoraTransIni": "2026-01-01T00:00:00Z",
+         "dataHoraTransFim": "2026-01-12T23:59:59:999Z",
+         “qtdOperSolic”: “36017”,
+         “qtdArqVincul”: “3”,
+         "dataValidSolic": "2026-04-13T01:00:00Z" 90 dias
+         "arquivos": [
+         {
+
+    "idArq": 1711,
+    "nome": "aassist_2026-01_13_detalhada_1711_parte001.zip"
+     },
+
+         {
+    "idArq": 1712,
+    "nome": "aassist_2026-01_13_detalhada_1712_parte002.zip"
+     }
+
+         {
+    "idArq": 1713,
+    "nome": "aassist_2026-01_13_detalhada_1713_parte003.zip"
+     }
+
+                     ]
+   }
+]}
+
+5.5. Arquivos de Apuração – Nova Solicitação
+
+Proposta de rota e assinatura
+
+GET /v1/aassist/solicitacao/incluir
+
+Cabeçalhos da Requisição (Headers)
+
+ Parâmetro        Tipo      Obrigatório             Descrição
+   ClientID       String         Sim     Identificação do contribuinte
+                  String         Sim
+ClientSecret                                 Senha do contribuinte
+
+Corpo da Requisição (Body)
+
+     Parâmetro    Tipo      Obrigatório             Descrição
+        CNPJ      String         Sim         CNPJ do contribuinte
+                  Date           Sim     Data de início da transação
+DataTransacaoIni
+DataTransacaoFi   Date           Sim      Data de fim da transação
+
+           m
+
+Exemplo de requisição
+
+Headers:
+
+{
+ “clientId”: “cksisrufjfpfjfh948$-dnkbdidbdgdcsip13”,
+ “clientSecret”: “lsdudbdhd83645ksb$#@idkdldça8%”
+
+                                                                                                        22
+}
+{
+
+ "cnpj": "12345678000190",
+ "dataTransacaoIni": "2026-01-13",
+ "dataTransacaoFim": "2026-01-15"
+}
+
+Cabeçalhos da Resposta (Headers)
+
+  Parâmetro   Tipo                          Descrição
+TokenContrib  String
+                                    Token de segurança do
+                                            contribuinte
+
+Corpo da Resposta (Body)              Tipo                 Descrição
+                                      String
+                 Parâmetro            String  Tipo da solicitação: manual ou
+             TipoSolicitacao         Inteiro               diferencial
+          SituacaoSolicitacao       Datetime
+                                    Datetime      Situação da solicitação:
+               IDSolicitacao                                solicitada
+            DataTransacaoIni
+           DataTransacaoFim                        Identificador interno da
+                                                           solicitação
+Resultado                           String
+                                                  Data e hora de início da
+                                                           transação
+
+                                                   Data e hora de fim da
+                                                           transação
+
+                                               Indica se houve sucesso ou
+                                                   não; em caso de erro,
+                                                     apresenta o motivo
+
+Exemplo de resposta
+
+Header:
+
+{
+
+ “tokenContrib”: “jerfhd7394j40tnfh3*#gd@l-8&h1cxsdgfkfjdd”,
+}
+{
+
+ "tipoSolicitacao": "MANUAL",
+ "sitSolicitacao": "SOLICITADA",
+ "IdSolicitacao": "178397",
+ "dataHoraTransacaoIni": "2026-01-13T00:00:00Z",
+ "dataHoraTransacaoFim": "2026-01-15T23:59:59:999Z",
+ "resultado": "SUCESSO",
+}
+
+5.6. Cancelamento de Solicitação
+
+Proposta de rota e assinatura
+DELETE /v1/aassist/solicitacao/cancelamento/{IdSolic}
+
+Cabeçalhos da Requisição (Headers)
+                                                                                                        23
+ Parâmetro     Tipo         Obrigatório             Descrição
+   ClientID    String            Sim     Identificação do contribuinte
+               String            Sim
+ClientSecret                                 Senha do contribuinte
+
+Parâmetros de Entrada
+
+ Parâmetro     Tipo         Obrigatório              Descrição
+IDSolicitacao  Inteiro           Sim     Número interno da solicitação
+
+                                                       incluída
+
+Exemplo de requisição
+
+Headers:
+
+{
+ “clientid”: “cksisrufjfpfjfh948$-dnkbdidbdgdcsip13”,
+ “clientsecret”: “lsdudbdhd83645ksb$#@idkdldça8%”
+
+}
+{
+
+ "IdSolicitacao": "178397",
+}
+
+Corpo da Resposta (Body)
+
+                 Parâmetro  Tipo                    Descrição
+                 Resultado  String
+                                         Indica se houve sucesso ou
+Exemplo de resposta                         não; em caso de erro,
+                                              apresenta o motivo
+
+Header:{
+
+ “tokenContrib”: “jerfhd7394j40tnfh3*#gd@l-8&h1cxsdgfkfjdd”,
+}
+{
+
+ "resultado": "SUCESSO",
+}
+
+5.7. Consulta de Dados de uma operação
+
+Especificação técnica e respectiva implementação conforme cronograma.
+
+5.8. Consulta de um Documento Fiscal Específico
+
+Especificação técnica e respectiva implementação conforme cronograma.
+
+5.9. Desabilitação
+
+Especificação técnica e respectiva implementação conforme cronograma.
+
+5.10. Consulta de Saldo
+
+Especificação técnica e respectiva implementação conforme cronograma.
+
+                                                                        24
+5.11. Emissão do Documento de Arrecadação como Adquirente
+
+Especificação técnica e respectiva implementação conforme cronograma.
+
+5.12. Consulta itens do Documento de Arrecadação
+
+Especificação técnica e respectiva implementação conforme cronograma.
+
+5.13. Emissão do Documento de Arrecadação em .pdf
+
+Especificação técnica e respectiva implementação conforme cronograma.
+
+6 Perguntas Frequentes
+
+As dúvidas relacionadas às APIs de Integração com a Apuração Assistida do IBS são
+analisadas e, quando pertinentes, incorporadas às Perguntas Frequentes (FAQ)
+disponíveis no Portal de Serviços do CGIBS. As respostas também podem subsidiar
+atualizações deste MOC.
+Neste momento, o atendimento de dúvidas relacionadas às APIs está disponível
+exclusivamente às empresas participantes do projeto piloto.
+As Perguntas Frequentes estarão disponíveis no Portal de Serviços do CGIBS.
+
+                                                                                                        25
+                                 ANEXO I - “Obter Arquivo”
+
+           Especificação Técnica — API Conta Corrente Fiscal
+
+1. Objetivo
+
+Estruturar o retorno da consulta ao Conta Corrente Fiscal da Operação. O documento
+tem um único nó raiz, header, que traz o cabeçalho de controle do arquivo gerado e,
+dentro dele, a lista de operações — um cabeçalho identificador por operação (ID,
+CHAVE_ACESSO, etc.), cada um com seu extrato de lançamentos (extrato_cc).
+
+Nota: as regras de negócio fornecidas descrevem o conteúdo do payload de retorno
+(Response).
+
+2. Legenda da Estrutura
+
+ Sigla Significado
+
+G          Grupo (agrupamento de campos)
+
+E          Elemento simples
+
+LG         Lista de Grupos (vetor de objetos)
+
+N          Tipo numérico
+
+C          Tipo caractere/texto
+
+Ocorr.     Ocorrência mínima - máxima (0-1 = opcional único; 1-1 = obrigatório único; 0-N = opcional
+           múltiplo)
+
+3. Estrutura do Payload — Response
+
+3.1 Mapeamento de Campos
+
+# Ní-      Campo                 Descrição             El  Tipo  Oc     Tama-        Observações do Campo
+                                                                         nho
+    ve                                                 e         orr      —    Único nó raiz do documento. Sem-
+                                                                               pre existirá e será sempre um único
+        l                                                        .        —
+                                                                          —                      registro.
+10         header                Cabeçalho de con- G       —     1-1
+                                                                          —           Sempre existe e é único.
+                                 trole do arquivo ge-                     —
+                                                                               Domínio: "diferencial(delta)" (envio
+                                 rado (metadados                                incremental) | "solicitação manual"
+                                                                                 (reenvio de período anterior não
+                                 da geração)
+                                                                                      mais disponível) | "outro".
+21         nomearquivo           Nome do arquivo E         C     1-1           Formato AAAA-MM-DD HH:MM:SS.
+
+                                 gerado                                         Mesmo nível hierárquico dos cam-
+                                                                                pos acima; agrupa os três campos
+31         tiposolicitacao       Tipo de solicitação E     C     1-1
+                                                                                                  26
+                                 que originou o ar-
+
+                                 quivo
+
+41           datageracao         Data em que o ar- E C (data/hora) 1-1
+51
+           parametrosgera-       quivo foi gerado
+                   cao
+                                 Parâmetros utiliza- G     —     1-1
+
+                                 dos na geração do
+                     arquivo                                                   seguintes.
+
+62    datainicial    Data inicial do perí- E C (data/hora) 1-1             —   Formato AAAA-MM-DD HH:MM:SS.
+
+                     odo que abrange
+
+                     os eventos infor-
+
+                     mados no arquivo
+
+72    datafinal      Data final do perí- E C (data/hora) 1-1               —   Formato AAAA-MM-DD HH:MM:SS.
+
+                     odo que abrange
+
+                     os eventos infor-
+
+                     mados no arquivo
+
+82    qtdoperacoes   Número de opera- E                            N  1-1  —   Corresponde à quantidade de itens
+                     ções contidas no
+                                                                               da lista operações, abaixo.
+                            arquivo
+
+91    operacoes      Lista das opera-      L                       —  1-   —   Filho direto de header — a quanti-
+
+                     ções (contas cor- G                              N        dade de operações que segue é
+
+                     rentes fiscais) con-                                      definida por qtdoperacoes. Cada
+
+                     tidas neste arquivo                                       item traz o cabeçalho da Conta
+
+                                                                               Corrente daquela operação.
+
+10 2  ID             Número que identi- E                          N  1-1  —   Único por item da lista; campo obri-
+
+                     fica o Conta Cor-                                         gatório.
+
+                     rente da Operação
+
+11 2 CHAVE_ACESSO Chave de acesso E                                C  1-1  44  Único por item da lista; campo obri-
+                                               do documento fis-
+                                               cal que inaugurou               gatório.
+                                                o conta corrente
+                                               fiscal da operação
+
+12 2  DTH_EMISSAO    Data de emissão E C (data/hora) 1-1                   —   Formato AAAA-MM-DD
+
+                     do documento fis-                                         HH:MM:SS.sss +HH:MM. Obrigató-
+
+                     cal que inaugurou                                         rio.
+
+                     o conta corrente
+
+13 2 DTH_AUTORIZA- Data de autoriza- E C (data/hora) 1-1                   —   Mesmo formato do campo acima.
+                                                                                             Obrigatório.
+      CAO            ção do documento
+
+                     fiscal que inaugu-
+
+                     rou o conta cor-
+
+                     rente
+
+14 2 CNPJ_FORNECE- CNPJ8 (raiz) do E                               C  1-1  8   Obrigatório.
+
+      DOR            fornecedor da ope-
+
+                     ração
+
+15 2  CNPJ_ADQUI-     CNPJ8 (raiz) do E                            C  0-1  8   Pode não existir ou ter um registro.
+          RENTE      adquirente da ope-
+
+                             ração
+
+16 2  extrato_cc     Agrupamento dos G                             —  0-1  —   Pode não existir. Única estrutura in-
+
+                     lançamentos reali-                                        terna hoje (poderá haver 'alertas' no
+
+                     zados no conta                                            futuro).
+
+                     corrente fiscal da
+
+                     operação
+
+17 3  hash           Hash (SHA1) verifi- E                         C  1-1  40  Composto pelo lançamento cor-
+                       cador da integri-
+                      dade de todos os                                         rente + todos os demais existentes.
+                       lançamentos do
+                             extrato                                           Ver Pendência 1.
+
+18 3  lista          Lançamentos reali- L                          —  1-   —   Cada vetor é uma linha de lança-
+
+                     zados no conta        G                          N        mento. Sistemática incremental (li-
+
+                     corrente fiscal da                                        nha nova complementa, não altera
+
+                     operação                                                  anteriores).
+
+19 4  ID             Identificador da li- E                        N  1-1  —   Sempre presente e único por linha.
+
+                     nha de lançamento
+
+20 4  DTH_LANCTO     Data da linha de E C (data/hora) 1-1                  —   Sempre presente e único por linha.
+
+                     lançamento
+
+21 4  MOV            Tipo de movimen- E                            N  1-1  —p  Código da tabela de correspondên-
+                             tação
+                                                                               cia. Ver Pendência 2 — usar texto
+
+                                                                               de descrição enquanto a tabela não
+
+                                                                               existe.
+
+22 4  RECURSO_FI-    Valor já disponível E                         N  1-1  —   Vazio na origem = preencher com
+
+      NANCEIRO_DIS- para ressarcimento                                         0.
+
+      PONI-          do fornecedor
+
+      VEL_PARA_TRAN
+
+      SFERENCIA
+
+23 4  RECURSO_FI-    Valor pendente de E                           N  1-1  —   Vazio na origem = preencher com
+
+      NAN-           ressarcimento                                             0.
+
+      CEIRO_A_TRANS (aguarda extinção
+
+      FERIR          do débito)
+
+                                                                                         27
+24 4  CRE-           Valor de crédito      E  N  1-1                       —  Vazio na origem = preencher com
+
+      DITO_A_PRO- potencial pendente                                          0.
+
+      PRIAR          de apropriação
+
+                     (aguarda extinção
+
+                     do débito)
+
+25 4  CRE-           Valor de crédito      E  N  1-1                       —  Vazio na origem = preencher com
+
+      DITO_NAO_UTILI- apropriado disponí-                                     0.
+
+      ZADO           vel para compen-
+
+                     sação
+
+26 4 CREDITO_UTILI- Valor de crédito uti- E   N  1-1                       —  Vazio na origem = preencher com
+
+      ZADO           lizado por compen-                                       0.
+
+                     sação
+
+27 4  DE-            Valor do débito em E     N  1-1                       —  Vazio na origem = preencher com
+
+      BITO_EM_ABERT  aberto                                                   0.
+
+      O
+
+28 4  DEBITO_EX-     Valor do débito ex- E    N  1-1                       —  Vazio na origem = preencher com
+
+      TINTO          tinto                                                    0.
+
+3.2 Exemplo de Payload (Response)
+
+   {
+     "header": {
+      "nomearquivo": "36588366_part1.json",
+      "tiposolicitacao": "diferencial(delta)",
+      "datageracao": "2026-01-17 12:30:00",
+      "parametrosgeracao": {
+        "datainicial": "2026-01-17 00:00:00",
+        "datafinal": "2026-01-17 23:59:59",
+        "qtdoperacoes": 1
+      },
+      "operacoes": [
+        {
+          "ID": 36588366,
+          "CHAVE_ACESSO": "352601UDTOIUJD33JJ66556000010000121010000125",
+          "DTH_EMISSAO": "2026-01-17 11:17:49.000 +00:00",
+          "DTH_AUTORIZACAO": "2026-01-17 12:24:25.000 +00:00",
+          "CNPJ_FORNECEDOR": "UDTOIUJD33JJ66",
+          "CNPJ_ADQUIRENTE": "6S13AHKM6DA768",
+          "extrato_cc": {
+           "hash": "d6b7972418e22822a106881c62f275e01c51a141",
+           "lista": [
+             {
+               "ID": 37363032,
+               "DTH_LANCTO": "2026-01-17 12:24:25.000 +00:00",
+               "MOV": "COMPENSAÇÃO COM CRÉDITOS POR AQUISIÇÃO",
+               "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0.0,
+
+                                                                                  28
+               "RECURSO_FINANCEIRO_A_TRANSFERIR": 0.0,
+               "CREDITO_A_PROPRIAR": 0.0,
+               "CREDITO_NAO_UTILIZADO": 0.0,
+               "CREDITO_UTILIZADO": 0.0,
+               "DEBIT
+
+Estrutura conforme o modelo de JSON fornecido como anexo, já com o bloco header
+incluído e operações aninhado dentro dele. O tamanho do hash do extrato_cc acima foi
+ajustado para 40 caracteres para refletir o formato SHA1 indicado na regra de negócio
+— ver Pendência 1.
+
+3.3 Regra de Fatiamento de Arquivo
+Quando o extrato de uma mesma operação é entregue em mais de um arquivo (fatiado):
+
+    • Os campos de header que descrevem o próprio arquivo (nomearquivo, tiposoli-
+         citacao, datageracao e parametrosgeracao) são específicos de cada arquivo —
+         não se repetem de forma idêntica entre as fatias.
+
+    • Dentro de operações, os campos de identificação de cada operação (ID,
+         CHAVE_ACESSO, DTH_EMISSAO, DTH_AUTORIZACAO, CNPJ_FORNECE-
+         DOR, CNPJ_ADQUIRENTE) devem permanecer idênticos em todos os arquivos
+         que fatiam a mesma operação.
+
+    • O campo extrato_cc.lista traz apenas o recorte (fatia) de lançamentos corres-
+         pondente àquele arquivo.
+
+    • O campo extrato_cc.hash reflete o estado acumulado de todos os lançamentos
+         existentes até aquele momento para o conta corrente (não somente os lança-
+         mentos daquele arquivo específico).
+
+    • qtdoperacoes deve sempre corresponder à quantidade de itens presentes em
+         operações naquele arquivo.
+
+4. Notas de Rodapé / Pendências
+    1. Algoritmo de hash não definido: ainda não está definido o algoritmo que vai de-
+         terminar o hash do extrato_cc. Os valores de hash usados nos exemplos desta
+         especificação e nos arquivos JSON de cenário são ilustrativos. (O campo
+         hash_operacao foi removido da especificação e não faz mais parte do payload.)
+    2. Tabela de correspondência do campo MOV não definida: ainda não foi criada a
+         tabela de referência de código x movimentação que será preenchida no campo
+         MOV. Enquanto essa tabela não existir, o campo é preenchido com o texto de
+         descrição da movimentação (conforme instruído).
+
+5. Observações Gerais
+    • Todos os campos numéricos vazios na regra de negócio de origem devem ser
+         preenchidos com 0 na correspondência para a API.
+
+                                                                                                        29
+    • Nomenclatura de variáveis, chaves e arrays no JSON devem refletir exatamente
+         os nomes definidos na regra de negócio (ex.: DEBITO_ESTORNADO, ex-
+         trato_cc).
+
+    • IDs, chaves de acesso, CNPJs, datas, nomes de arquivo e hashes usados nos
+         exemplos e nos arquivos de cenário (ver Manual Passo a Passo) são dados fic-
+         tícios, gerados apenas para fins ilustrativos e de padronização — devem ser
+         substituídos pelos valores reais de produção.
+
+                      ANEXO II - “Obter Arquivo”
+
+            Desenvolvimento — API Conta Corrente Fiscal
+
+Essa parte explica, de forma didática, como a especificação técnica se traduz em
+payload JSON, usando os dois cenários de negócio fornecidos como exemplo.
+
+Passo 1 — Entenda a estrutura geral
+
+Todo retorno da API tem um único nó raiz: header. Não existe mais um agrupamento
+operação solto na raiz do documento — ele foi reestruturado como a lista operações,
+filha de header.
+O header é o cabeçalho de controle do próprio arquivo gerado (metadados de geração).
+Dentro dele fica a lista operações: um item por operação, cada um trazendo o cabeçalho
+daquela Conta Corrente e, dentro dele, o extrato de lançamentos (extrato_cc). O campo
+qtdoperacoes (dentro de parametrosgeracao) indica quantos itens existem em
+operações — por isso operações precisam estar aninhado dentro de header, e não solto
+ao lado dele.
+Dentro de cada item de operações existe (por enquanto) apenas uma estrutura filha:
+extrato_cc, que guarda a lista de lançamentos daquele conta corrente. O extrato pode
+não existir ainda (conta corrente recém-aberto sem lançamentos) ou existir com um
+único agrupamento contendo a lista de lançamentos.
+
+   header (1-1)
+   ├── nomearquivo
+   ├── tiposolicitacao
+   ├── datageracao
+   ├── parametrosgeracao (1-1)
+   │ ├── datainicial
+   │ ├── datafinal
+   │ └── qtdoperacoes
+   └── operacoes (1-N)
+
+                                                                                                        30
+      ├── ID
+      ├── CHAVE_ACESSO
+      ├── DTH_EMISSAO
+      ├── DTH_AUTORIZACAO
+      ├── CNPJ_FORNECEDOR
+      ├── CNPJ_ADQUIRENTE (0-1)
+      └── extrato_cc (0-1)
+
+         ├── hash
+         └── lista (1-N)
+
+             ├── ID
+             ├── DTH_LANCTO
+             ├── MOV
+             ├── RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA
+             ├── RECURSO_FINANCEIRO_A_TRANSFERIR
+             ├── CREDITO_A_PROPRIAR
+             ├── CREDITO_NAO_UTILIZADO
+             ├── CREDITO_UTILIZADO
+             ├── DEBITO_EM_ABERTO
+             └── DEBITO_EXTINTO
+
+A tabela completa de campos, tipos e ocorrências está no documento Especificação
+Técnica da API Conta Corrente Fiscal.
+
+Passo 2 — Entenda o bloco header e a lista operações
+
+O header não descreve a operação fiscal em si, e sim o arquivo que está sendo
+entregue. Ele é preenchido a cada geração de arquivo, mesmo quando dois arquivos
+pertencem à mesma operação (ver Passo 4 — Fatiamento). A lista operações, por sua
+vez, é onde ficam os dados de cada operação (Conta Corrente) contida naquele arquivo.
+
+Campo                          Preenchimento
+
+nomearquivo                    Nome do arquivo gerado; sempre existe e é único.
+
+tiposolicitacao                "diferencial(delta)" (envio incremental) | "solicitação manual" (reenvio de período
+                               anterior não mais disponível) | "outro".
+
+datageracao                    Data em que o arquivo foi gerado (AAAA-MM-DD HH:MM:SS).
+
+parametrosgeracao.datainicial  Data inicial do período que abrange os eventos informados no arquivo.
+
+parametrosgeracao.datafinal    Data final do período que abrange os eventos informados no arquivo.
+
+parametrosgeracao.qtdoperacoes Número de operações contidas no arquivo — corresponde à quantidade de
+                                                 grupamentos operações.
+
+                                                                                                      31
+Campo         Preenchimento
+operacoes     Lista das operações contidas no arquivo.
+
+Passo 3 — Entenda a sistemática incremental
+
+Cada linha de lista é um lançamento novo e imutável: uma vez publicada, uma linha não
+é alterada. Toda movimentação nova (aquisição de crédito, apropriação, utilização,
+cancelamento, devolução, extinção etc.) gera uma nova linha, que complementa o
+extrato existente — nunca reescreve uma linha anterior.
+
+Isso significa que o saldo de cada campo (ex.: CREDITO_NAO_UTILIZADO) é obtido
+somando os valores de todas as linhas da lista até o momento, e não lendo um “saldo
+atual” isolado.
+
+Passo 4 — Entenda o fatiamento de arquivos
+
+Quando o volume de lançamentos de uma operação é grande, o extrato pode ser
+entregue “fatiado” em mais de um arquivo JSON. Nesse caso:
+
+    • Os campos de header que descrevem o próprio arquivo (nomearquivo, tiposoli-
+         citacao, datageracao e parametrosgeracao) são específicos de cada arquivo —
+         mudam a cada geração de arquivo.
+
+    • Dentro de operações, os dados de identificação da operação (ID,
+         CHAVE_ACESSO, DTH_EMISSAO, DTH_AUTORIZACAO, CNPJ_FORNECE-
+         DOR, CNPJ_ADQUIRENTE) são repetidos de forma idêntica em todos os arqui-
+         vos daquela operação.
+
+    • Cada arquivo traz apenas o recorte de extrato_cc.lista correspondente à fatia
+         compreendida pelo período dos dados.
+
+    • O campo extrato_cc.hash reflete o total acumulado de lançamentos até aquele
+         ponto (e não apenas os da fatia local), servindo de checagem de integridade.
+
+    • qtdoperacoes deve sempre bater com a quantidade de grupamentos de opera-
+         ções naquele arquivo.
+
+O Cenário 1 (Aquisição), abaixo, ilustra esse fatiamento.
+
+Passo 5 — Preencha os campos vazios com zero
+
+Sempre que a regra de negócio não define um valor para um dos sete campos de
+
+movimentação                                            financeira
+
+(RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA,
+
+RECURSO_FINANCEIRO_A_TRANSFERIR,                        CREDITO_A_PROPRIAR,
+
+CREDITO_NAO_UTILIZADO, CREDITO_UTILIZADO, DEBITO_EM_ABERTO,
+
+DEBITO_EXTINTO), o campo correspondente no JSON deve ser preenchido com 0, e
+
+não omitido.
+
+Passo 6 — Trate o campo MOV como texto (provisório)
+
+O campo MOV deveria conter um código numérico, ligado a uma tabela de
+correspondência entre código e descrição da movimentação. Essa tabela ainda não
+
+                                                                                                        32
+existe (ver Pendência 2 na especificação técnica). Enquanto isso, o campo é preenchido
+com o texto da descrição da movimentação, exatamente como aparece na regra de
+negócio (ex.: “Aquisição”, “Extinção por Compensação”).
+
+Passo 7 — Exemplo didático: Cenário 1 (Aquisição)
+
+Regra de negócio (fatiada em dois arquivos: o primeiro até as duas movimentações de
+cancelamento; o segundo a partir da devolução, inclusive, até o final):
+
+# Descrição                      Déb.    Déb.     Créd. a    Créd.  Créd.     Rec. fin. a  Rec. fin. disp.
+                                 aberto  extinto  apropriar                   transferir   transf.
+                                                             não util. util.
+
+1 Aquisição                                       4000
+
+2 Apropriação de Crédito                          -3000      3000
+
+3 Complemento de Aquisição                        1500
+
+4 Apropriação de Crédito                          -1500      1500
+
+5 Utilização de Crédito                                      -2000  2000
+
+6 Utilização de Crédito                                      -1000  1000
+
+7 Utilização de Crédito                                      -500   500
+
+8 Cancelamento - Estorno de                                  -1000
+       Crédito Não Utilizado
+
+9 Cancelamento - Abertura        500
+
+de Débito p/ Adquirente
+
+— (fim do arquivo 1 / início do
+       arquivo 2)
+
+10 Devolução - Estorno de                         -1000
+       Crédito a apropriar
+
+11 Devolução - Abertura de       2000
+       Débito p/ Adquirente
+
+12 Extinção por Compensação -500         500
+
+13 Extinção por Recolhimento -2000       2000
+
+Arquivo 1 (cenario1_aquisicao_arquivo1.json) — operacoes[0].
+extrato_cc.lista, linhas 1 a 9
+
+                                                                                           33
+{
+ "header": {
+   "nomearquivo": "91000001_aquisicao_part1.json",
+   "tiposolicitacao": "diferencial(delta)",
+   "datageracao": "2026-02-11 10:05:00",
+   "parametrosgeracao": {
+     "datainicial": "2026-02-10 00:00:00",
+     "datafinal": "2026-02-10 23:59:59",
+     "qtdoperacoes": 1
+   },
+   "operacoes": [
+     {
+      "ID": 91000001,
+      "CHAVE_ACESSO": "35260212345678000199550010000000011780001990",
+      "DTH_EMISSAO": "2026-02-10 09:15:00.000 +00:00",
+      "DTH_AUTORIZACAO": "2026-02-10 09:18:32.000 +00:00",
+      "CNPJ_FORNECEDOR": "12345678",
+      "CNPJ_ADQUIRENTE": "98765432",
+      "extrato_cc": {
+        "hash": "c7f73ef4f0d1ed7342a9ab915e8663f7b219e6c1",
+        "lista": [
+          {
+           "ID": 91010001,
+           "DTH_LANCTO": "2026-02-10 09:20:00.000 +00:00",
+           "MOV": "Aquisicao",
+           "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+           "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+           "CREDITO_A_PROPRIAR": 4000,
+           "CREDITO_NAO_UTILIZADO": 0,
+           "CREDITO_UTILIZADO": 0,
+           "DEBITO_EM_ABERTO": 0,
+           "DEBITO_EXTINTO": 0
+          },
+          {
+           "ID": 91010002,
+           "DTH_LANCTO": "2026-02-10 09:25:00.000 +00:00",
+           "MOV": "Apropriacao de Credito",
+           "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+           "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+           "CREDITO_A_PROPRIAR": -3000,
+           "CREDITO_NAO_UTILIZADO": 3000,
+           "CREDITO_UTILIZADO": 0,
+           "DEBITO_EM_ABERTO": 0,
+           "DEBITO_EXTINTO": 0
+          },
+          {
+           "ID": 91010003,
+           "DTH_LANCTO": "2026-02-10 09:30:00.000 +00:00",
+           "MOV": "Complemento de Aquisicao",
+
+                                                                                                      34
+ "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+ "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+ "CREDITO_A_PROPRIAR": 1500,
+ "CREDITO_NAO_UTILIZADO": 0,
+ "CREDITO_UTILIZADO": 0,
+ "DEBITO_EM_ABERTO": 0,
+ "DEBITO_EXTINTO": 0
+},
+{
+ "ID": 91010004,
+ "DTH_LANCTO": "2026-02-10 09:35:00.000 +00:00",
+ "MOV": "Apropriacao de Credito",
+ "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+ "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+ "CREDITO_A_PROPRIAR": -1500,
+ "CREDITO_NAO_UTILIZADO": 1500,
+ "CREDITO_UTILIZADO": 0,
+ "DEBITO_EM_ABERTO": 0,
+ "DEBITO_EXTINTO": 0
+},
+{
+ "ID": 91010005,
+ "DTH_LANCTO": "2026-02-10 09:40:00.000 +00:00",
+ "MOV": "Utilizacao de Credito",
+ "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+ "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+ "CREDITO_A_PROPRIAR": 0,
+ "CREDITO_NAO_UTILIZADO": -2000,
+ "CREDITO_UTILIZADO": 2000,
+ "DEBITO_EM_ABERTO": 0,
+ "DEBITO_EXTINTO": 0
+},
+{
+ "ID": 91010006,
+ "DTH_LANCTO": "2026-02-10 09:45:00.000 +00:00",
+ "MOV": "Utilizacao de Credito",
+ "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+ "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+ "CREDITO_A_PROPRIAR": 0,
+ "CREDITO_NAO_UTILIZADO": -1000,
+ "CREDITO_UTILIZADO": 1000,
+ "DEBITO_EM_ABERTO": 0,
+ "DEBITO_EXTINTO": 0
+},
+{
+ "ID": 91010007,
+ "DTH_LANCTO": "2026-02-10 09:50:00.000 +00:00",
+ "MOV": "Utilizacao de Credito",
+ "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+
+                                                                                               35
+               "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+               "CREDITO_A_PROPRIAR": 0,
+               "CREDITO_NAO_UTILIZADO": -500,
+               "CREDITO_UTILIZADO": 500,
+               "DEBITO_EM_ABERTO": 0,
+               "DEBITO_EXTINTO": 0
+             },
+             {
+               "ID": 91010008,
+               "DTH_LANCTO": "2026-02-10 09:55:00.000 +00:00",
+               "MOV": "Cancelamento - Estorno de Credito Nao Utilizado",
+               "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+               "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+               "CREDITO_A_PROPRIAR": 0,
+               "CREDITO_NAO_UTILIZADO": -1000,
+               "CREDITO_UTILIZADO": 0,
+               "DEBITO_EM_ABERTO": 0,
+               "DEBITO_EXTINTO": 0
+             },
+             {
+               "ID": 91010009,
+               "DTH_LANCTO": "2026-02-10 10:00:00.000 +00:00",
+               "MOV": "Cancelamento - Abertura de Debito para Adquirente",
+               "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+               "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+               "CREDITO_A_PROPRIAR": 0,
+               "CREDITO_NAO_UTILIZADO": 0,
+               "CREDITO_UTILIZADO": 0,
+               "DEBITO_EM_ABERTO": 500,
+               "DEBITO_EXTINTO": 0
+             }
+           ]
+          }
+        }
+      ]
+     }
+   }
+
+Arquivo 2 (cenario1_aquisicao_arquivo2.json) — linhas 10 a 13
+(mesma operação dentro de operações; header e hash do extrato
+próprios deste arquivo)
+
+   {
+     "header": {
+      "nomearquivo": "91000001_aquisicao_part2.json",
+      "tiposolicitacao": "diferencial(delta)",
+      "datageracao": "2026-02-16 09:00:00",
+
+                                                                                                        36
+"parametrosgeracao": {
+ "datainicial": "2026-02-15 00:00:00",
+ "datafinal": "2026-02-15 23:59:59",
+ "qtdoperacoes": 1
+
+},
+"operacoes": [
+
+ {
+   "ID": 91000001,
+   "CHAVE_ACESSO": "35260212345678000199550010000000011780001990",
+   "DTH_EMISSAO": "2026-02-10 09:15:00.000 +00:00",
+   "DTH_AUTORIZACAO": "2026-02-10 09:18:32.000 +00:00",
+   "CNPJ_FORNECEDOR": "12345678",
+   "CNPJ_ADQUIRENTE": "98765432",
+   "extrato_cc": {
+     "hash": "7efa7e32bbfa1bc7a4da40dee3ebf6e04ec20200",
+     "lista": [
+      {
+        "ID": 91010010,
+        "DTH_LANCTO": "2026-02-15 08:30:00.000 +00:00",
+        "MOV": "Devolucao - Estorno de Credito a apropriar",
+        "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+        "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+        "CREDITO_A_PROPRIAR": -1000,
+        "CREDITO_NAO_UTILIZADO": 0,
+        "CREDITO_UTILIZADO": 0,
+        "DEBITO_EM_ABERTO": 0,
+        "DEBITO_EXTINTO": 0
+      },
+      {
+        "ID": 91010011,
+        "DTH_LANCTO": "2026-02-15 08:35:00.000 +00:00",
+        "MOV": "Devolucao - Abertura de Debito para Adquirente",
+        "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+        "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+        "CREDITO_A_PROPRIAR": 0,
+        "CREDITO_NAO_UTILIZADO": 0,
+        "CREDITO_UTILIZADO": 0,
+        "DEBITO_EM_ABERTO": 2000,
+        "DEBITO_EXTINTO": 0
+      },
+      {
+        "ID": 91010012,
+        "DTH_LANCTO": "2026-02-15 08:40:00.000 +00:00",
+        "MOV": "Extincao por Compensacao",
+        "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+        "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+        "CREDITO_A_PROPRIAR": 0,
+        "CREDITO_NAO_UTILIZADO": 0,
+        "CREDITO_UTILIZADO": 0,
+
+                                                                                                   37
+           "DEBITO_EM_ABERTO": -500,
+           "DEBITO_EXTINTO": 500
+          },
+          {
+           "ID": 91010013,
+           "DTH_LANCTO": "2026-02-15 08:45:00.000 +00:00",
+           "MOV": "Extincao por Recolhimento",
+           "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+           "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+           "CREDITO_A_PROPRIAR": 0,
+           "CREDITO_NAO_UTILIZADO": 0,
+           "CREDITO_UTILIZADO": 0,
+           "DEBITO_EM_ABERTO": -2000,
+           "DEBITO_EXTINTO": 2000
+          }
+        ]
+      }
+     }
+   ]
+ }
+}
+
+Passo 8 — Exemplo didático: Cenário 2 (Fornecimento)
+
+Regra de negócio (arquivo único, com todas as linhas de lançamento):
+
+Data  Descrição                         Déb. Déb.     Créd. a     Créd.  Créd. Rec. fin. a  Rec. fin. disp.
+                                                                  não    util. transferir   transf.
+                                        aberto extinto apropriar  util.
+
+01/04/2026 Fornecimento                 3000
+
+04/04/2026 Complemento de               1500
+                   Fornecimento
+                                        1000
+05/04/2026 Complemento de
+                   Fornecimento         -1000  1000
+
+06/04/2026 RAD provisionado
+
+06/04/2026 Estorno de RAD               1000   -1000
+
+06/04/2026 Extinção por compensação -1000      1000
+
+06/04/2026 Transferência p/ Fornecedor                                                      1000
+                   por Excesso
+
+06/04/2026 SPLIT provisionado           -3000  3000
+
+                                                                                                  38
+Data  Descrição                        Déb. Déb.     Créd. a     Créd.          Créd. Rec. fin. a  Rec. fin. disp.
+                                                                 não            util. transferir   transf.
+                                       aberto extinto apropriar  util.
+
+06/04/2026 Estorno de SPLIT            3000   -3000
+                   provisionado
+                                       -3000  3000
+06/04/2026 Extinção por SPLIT
+
+11/04/2026 Cancelamento - Estorno de   -1500
+                   Débito em aberto
+
+12/04/2026 Cancelamento - SPLIT a                                               3000
+                   transferir
+
+14/04/2026 Devolução - Crédito a                     500
+                   apropriar                                              1000
+
+14/04/2026 Devolução - Apropriação de
+                   Crédito
+
+15/04/2026 Transferência para                                                   -3000              3000
+                   Fornecedor
+
+16/04/2026 Apropriação de crédito                    -500        500
+
+Arquivo único (cenario2_fornecimento.json)
+
+   {
+      "header": {
+         "nomearquivo": "92000001_fornecimento.json",
+         "tiposolicitacao": "solicitação manual",
+         "datageracao": "2026-04-17 08:00:00",
+         "parametrosgeracao": {
+             "datainicial": "2026-04-01 00:00:00",
+             "datafinal": "2026-04-16 23:59:59",
+             "qtdoperacoes": 1
+         },
+         "operacoes": [
+             {
+                "ID": 92000001,
+                "CHAVE_ACESSO": "35260211222333000188550010000000011330001880",
+                "DTH_EMISSAO": "2026-04-01 08:00:00.000 +00:00",
+                "DTH_AUTORIZACAO": "2026-04-01 08:05:00.000 +00:00",
+                "CNPJ_FORNECEDOR": "11222333",
+                "CNPJ_ADQUIRENTE": "44555666",
+                "extrato_cc": {
+                   "hash": "6b7c79d50ecd98d5363f4d0dd39c6e18c8b7d4e2",
+                   "lista": [
+
+                                                                                                        39
+{
+   "ID": 92010001,
+   "DTH_LANCTO": "2026-04-01 08:10:00.000 +00:00",
+   "MOV": "Fornecimento",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 3000,
+   "DEBITO_EXTINTO": 0
+
+},
+{
+
+   "ID": 92010002,
+   "DTH_LANCTO": "2026-04-04 08:00:00.000 +00:00",
+   "MOV": "Complemento de Fornecimento",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 1500,
+   "DEBITO_EXTINTO": 0
+},
+{
+   "ID": 92010003,
+   "DTH_LANCTO": "2026-04-05 08:00:00.000 +00:00",
+   "MOV": "Complemento de Fornecimento",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 1000,
+   "DEBITO_EXTINTO": 0
+},
+{
+   "ID": 92010004,
+   "DTH_LANCTO": "2026-04-06 08:00:00.000 +00:00",
+   "MOV": "RAD provisionado",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": -1000,
+   "DEBITO_EXTINTO": 1000
+},
+
+                                                                                         40
+{
+   "ID": 92010005,
+   "DTH_LANCTO": "2026-04-06 09:00:00.000 +00:00",
+   "MOV": "Estorno de RAD",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 1000,
+   "DEBITO_EXTINTO": -1000
+
+},
+{
+
+   "ID": 92010006,
+   "DTH_LANCTO": "2026-04-06 10:00:00.000 +00:00",
+   "MOV": "Extincao por compensacao",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": -1000,
+   "DEBITO_EXTINTO": 1000
+},
+{
+   "ID": 92010007,
+   "DTH_LANCTO": "2026-04-06 11:00:00.000 +00:00",
+   "MOV": "Transferencia para Fornecedor por Excesso",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 1000,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 0,
+   "DEBITO_EXTINTO": 0
+},
+{
+   "ID": 92010008,
+   "DTH_LANCTO": "2026-04-06 12:00:00.000 +00:00",
+   "MOV": "SPLIT provisionado",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": -3000,
+   "DEBITO_EXTINTO": 3000
+},
+
+                                                                                         41
+{
+   "ID": 92010009,
+   "DTH_LANCTO": "2026-04-06 13:00:00.000 +00:00",
+   "MOV": "Estorno de SPLIT provisionado",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 3000,
+   "DEBITO_EXTINTO": -3000
+
+},
+{
+
+   "ID": 92010010,
+   "DTH_LANCTO": "2026-04-06 14:00:00.000 +00:00",
+   "MOV": "Extincao por SPLIT",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": -3000,
+   "DEBITO_EXTINTO": 3000
+},
+{
+   "ID": 92010011,
+   "DTH_LANCTO": "2026-04-11 08:00:00.000 +00:00",
+   "MOV": "Cancelamento - Estorno de Debito em aberto",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": -1500,
+   "DEBITO_EXTINTO": 0
+},
+{
+   "ID": 92010012,
+   "DTH_LANCTO": "2026-04-12 08:00:00.000 +00:00",
+   "MOV": "Cancelamento - SPLIT a transferir",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 3000,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 0,
+   "DEBITO_EXTINTO": 0
+},
+
+                                                                                         42
+{
+   "ID": 92010013,
+   "DTH_LANCTO": "2026-04-14 09:00:00.000 +00:00",
+   "MOV": "Devolucao - Credito a apropriar",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 500,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 0,
+   "DEBITO_EXTINTO": 0
+
+},
+{
+
+   "ID": 92010014,
+   "DTH_LANCTO": "2026-04-14 09:05:00.000 +00:00",
+   "MOV": "Devolucao - Apropriacao de Credito",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 1000,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 0,
+   "DEBITO_EXTINTO": 0
+},
+{
+   "ID": 92010015,
+   "DTH_LANCTO": "2026-04-15 08:00:00.000 +00:00",
+   "MOV": "Transferencia para Fornecedor",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 3000,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": -3000,
+   "CREDITO_A_PROPRIAR": 0,
+   "CREDITO_NAO_UTILIZADO": 0,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 0,
+   "DEBITO_EXTINTO": 0
+},
+{
+   "ID": 92010016,
+   "DTH_LANCTO": "2026-04-16 08:00:00.000 +00:00",
+   "MOV": "Apropriacao de credito",
+   "RECURSO_FINANCEIRO_DISPONIVEL_PARA_TRANSFERENCIA": 0,
+   "RECURSO_FINANCEIRO_A_TRANSFERIR": 0,
+   "CREDITO_A_PROPRIAR": -500,
+   "CREDITO_NAO_UTILIZADO": 500,
+   "CREDITO_UTILIZADO": 0,
+   "DEBITO_EM_ABERTO": 0,
+   "DEBITO_EXTINTO": 0
+}
+
+                                                                                         43
+                   ]
+                }
+             }
+         ]
+      }
+   }
+
+Passo 9 — Pendências a resolver na próxima versão.
+
+    1. Definir o algoritmo de geração do hash do extrato_cc (formato SHA1).
+    2. Criar a tabela de correspondência código x descrição para o campo MOV e mi-
+
+         grar o preenchimento de texto livre para código.
+
+Observação sobre os dados de exemplo
+
+Os valores de nomearquivo, datageracao, parametrosgeracao, ID, CHAVE_ACESSO,
+DTH_EMISSAO, DTH_AUTORIZACAO, CNPJ_FORNECEDOR,
+CNPJ_ADQUIRENTE, hash e DTH_LANCTO usados nos JSONs deste manual são
+fictícios, criados apenas para tornar os exemplos válidos e consistentes — as tabelas
+de negócio originais não especificavam esses valores, apenas a descrição da
+movimentação e os valores financeiros. O campo hash_operacao foi removido da
+especificação e não aparece mais.
+
+                                                                                                        44
+

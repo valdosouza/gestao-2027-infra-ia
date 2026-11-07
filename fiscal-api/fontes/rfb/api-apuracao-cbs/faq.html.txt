@@ -1,0 +1,63 @@
+Dúvidas Frequentes 
+ Documentação da apuração CBS 
+ Dúvidas frequentes sobre as APIs da Apuração Assistida
+ 1. Qual é a sequência para consumir a API assíncrona?
+ A sequência é:
+ Obter o token OAuth2 (Client Credentials).
+ Acionar o endpoint da API com Authorization: Bearer <token> e {cnpj} (8 dígitos). urlRetorno HTTPS é opcional.
+ Aguardar a notificação no webhook , se urlRetorno foi informada, ou consultar a situação da solicitação.
+ Quando situacao=CONCLUIDA , consultar o endpoint de download com o tiqueteSolicitacao para obter a urlAssinada .
+ Baixar o arquivo com HTTP GET diretamente na urlAssinada , sem Bearer Token e sem cabeçalhos adicionais.
+ 2. A urlRetorno (Url do webhook) é obrigatória?
+ Não.Se não houver webhook, a urlRetorno deve ser enviada vazia ( "" ).
+Nesse caso, a solicitação é processada normalmente, porém sem notificação por webhook, e o acompanhamento deve ser feito pelo endpoint de situação.
+ Se a urlRetorno for informada, a API valida sua disponibilidade com uma chamada HEAD no momento da abertura da solicitação. Se o endpoint não responder adequadamente, a solicitação é rejeitada.
+ 3. O webhook de retorno possui mecanismo de validação de origem (autenticação, assinatura digital, mTLS ou cabeçalho específico)?
+ Quando urlRetorno for informada, o webhook de retorno não utiliza autenticação adicional, assinatura digital, mTLS ou cabeçalho específico de origem.
+ 4. Qual é o método, formato de codificação e payload que o webhook pode receber?
+ Quando urlRetorno for informada, o webhook pode receber:
+ Método: POST 
+ Formato: JSON 
+ Codificação: UTF-8 
+ Payload:
+ Sucesso: tiqueteSolicitacao e situacao 
+ Erro: codigoErro e mensagemErro 
+ 5. Como saber se a solicitação foi concluída?
+ Com urlRetorno informada: pela notificação no webhook.
+ Sem urlRetorno (enviada como "" ): consultando o endpoint de situação com o tiqueteSolicitacao : Consultar a situação da solicitação .
+ 6. Como obter o arquivo de retorno de uma solicitação de API assíncrona?
+ Quando situacao=CONCLUIDA , consulte o endpoint de link de download com o tiqueteSolicitacao : Consultar a urlAssinada para download .
+ 7. Como baixar o arquivo da urlAssinada ?
+ Faça HTTP GET diretamente na urlAssinada , sem Bearer Token e sem cabeçalhos adicionais de autenticação.
+ 8. Por que utilizar a urlAssinada (S3 pre-signed URL), em vez de expor o download HTTP direto pela API?
+ A urlAssinada adota o modelo de acesso temporário do S3, trazendo vantagens de segurança e operação:
+ Acesso temporário: a URL expira automaticamente.
+ Escopo restrito: acesso apenas ao objeto autorizado.
+ Sem exposição de credenciais: não exige compartilhamento de chaves de storage.
+ Maior escalabilidade: o arquivo é entregue pelo storage, não pela API.
+ Melhor desempenho e custo: reduz consumo de CPU, memória e banda da aplicação.
+ Observação: a urlAssinada também usa HTTP/HTTPS; o diferencial é a assinatura S3 com expiração .
+ 9. Qual é o formato, a codificação e por quanto tempo o arquivo retornado fica disponível?
+ Formato: JSON 
+ Codificação: UTF-8 
+ O arquivo fica disponível por até 48 horas após o aviso de pronto, respeitando urlAssinadaExpiraEm quando presente.
+ 10. Os campos de data/hora seguem qual padrão?
+ String (date-time ISO 8601) .
+ 11. Qual é o tempo máximo de processamento após a abertura da solicitação?
+ Até 240 minutos (4 horas) .
+Se esse limite for excedido, a solicitação passa para status de erro.
+ 12. Qual é o limite de consumo do endpoint de solicitação (ex.: débitos ou créditos)?
+ Até 4 chamadas por dia por credencial e por API . A cota é reiniciada diariamente à meia-noite ( 00:00 ).
+ 13. Como funciona a regra de retorno de até 8 dias das APIs assíncronas?
+ Se já existir solicitação concluída nos últimos 3 meses , a API retorna inclusões/atualizações desde a última consulta concluída sem erro , limitando o recorte aos últimos 8 dias .
+ Exemplo: 
+ Data da solicitação atual: 29/09/2026 10:00:00 
+ Última consulta concluída: 10/09/2026 10:00:00 
+ Mesmo com intervalo maior, o retorno virá apenas com alterações dos últimos 8 dias (de 22/09/2026 00:00:00 a 29/09/2026 10:00:00 ).
+ Se não houver consulta concluída nos últimos 3 meses , a busca começa no 1º dia do mês corrente .
+ 14. Quais cuidados de segurança são recomendados?
+ Usar HTTPS no webhook ( urlRetorno ), quando informado;
+ Tratar urlAssinada como segredo temporário;
+ Não registrar tokens ou URLs assinadas em logs;
+ Validar urlAssinadaExpiraEm antes do download;
+ Restringir o recebimento do webhook às faixas oficiais de IP de origem (allowlist em firewall/WAF/gateway), quando urlRetorno for utilizada.

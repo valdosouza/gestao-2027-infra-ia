@@ -1,0 +1,339 @@
+                                                                                         RTC – Projeto Piloto
+
+    Reforma Tributária sobre Consumo (RTC) -
+Comunicado sobre o Ambiente de Produção Beta
+
+               (versão 1 – 26/12/2025)
+
+                                                                                                             1
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+                                                       EXPEDIENTE
+                              SECRETÁRIO ESPECIAL DA RECEITA FEDERAL DO BRASIL
+
+                                                Robinson Sakiyama Barreirinhas
+             SUBSECRETÁRIA-GERAL DA SECRETARIA ESPECIAL RECEITA FEDERAL DO BRASIL
+
+                                                      Adriana Gomes Rêgo
+___________________________________________________________________________________
+
+      GERENTE DO PROGRAMA PARA IMPLEMENTAÇÃO DA REFORMA TRIBUTÁRIA DO CONSUMO
+                                                     Marcos Hubner Flores
+
+                                ORGANIZAÇÃO E COMPILAÇÃO DAS INFORMAÇÕES
+                                                       André Luis Theresa
+
+                                                                                                                        2
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+ASSUNTO
+
+Ambiente de Produção Beta para simulação e testes relacionados à Contribuição sobre Bens e Serviços
+(CBS), que poderá ser acessado pelos contribuintes a partir de 12 de janeiro de 2026 até dezembro de 2026.
+
+1 - Introdução
+
+A Lei Complementar nº 214, de 2025, regulamentando a Emenda Constitucional nº 132, estabeleceu que a
+Contribuição sobre Bens e Serviços (CBS) terá início de vigência em 1º de janeiro de 2026.
+
+O Comunicado Conjunto RFB/CGIBS1, de 02/12/2026, orienta os contribuintes quanto às obrigações
+principais e acessórias em relação aos fatos geradores que ocorrerão no ano de 2026.
+
+Neste Comunicado, será apresentado o Ambiente de Produção Beta, que poderá ser acessado pelos
+contribuintes a partir de 12/01/2026 para a simulação e testes relacionados à CBS.
+
+2 – Sobre o Ambiente de Produção Beta em 2026
+
+O Ambiente de Produção Beta é um espaço tecnológico que replica as funcionalidades do sistema
+definitivo, em caráter de simulação. Ele permite aos contribuintes validarem processos, sistemas e
+integrações, sem gerar obrigações tributárias principais (sem necessidade de efetivo pagamento da
+CBS) em 2026.
+
+Para acompanhar o início da obrigatoriedade de emissão de documentos fiscais com destaque da CBS e do
+IBS, definido nas notas técnicas específicas, o Ambiente de Produção Beta estará disponível e acessível
+para todos os contribuintes a partir de 12/01/2026 até dezembro de 2026.
+
+2.1 - O Ambiente de Produção Beta utilizará os Documentos Fiscais Eletrônicos (DF-e) reais emitidos
+
+O Ambiente de Produção Beta, sem prejuízo ao objetivo de viabilizar simulações e testes, estará conectado
+aos sistemas de produção dos autorizadores de Documentos Fiscais Eletrônicos (DF-e). Portanto, os DFes
+autorizados em produção, com destaque de CBS conforme Notas Técnicas2 de cada documento, serão
+automaticamente carregados no Ambiente de Produção Beta.
+
+2.2 - Documentos Fiscais Eletrônicos (DF-e) que sensibilizarão a Apuração Assistida no Ambiente de
+Produção Beta
+
+A partir de 02/01/2026, apenas os Documentos Fiscais Eletrônicos (DF-e) listados abaixo e que tiverem
+os Códigos de Situação Tributária (CST) e Classificações Tributárias (cClassTrib) indicados a seguir,
+passarão a ser processados no Ambiente de Produção Beta e usados nas simulações da Apuração
+
+1 Comunicado Conjunto RFB/CGIBS, de 2/12/2026, disponível em: https://www.gov.br/receitafederal/pt-br/acesso-a-
+informacao/acoes-e-programas/programas-e-atividades/reforma-consumo/orientacoes-2026
+
+2Notas técnicas disponíveis em: https://www.gov.br/nfse/pt-br/biblioteca/documentacao-tecnica e
+https://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=04BIflQt1aY=
+
+                                                                                                                        3
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+Assistida (que poderão ser acessadas a partir de 12/01/2026).
+
+2.2.1 - Documentos Fiscais Eletrônicos (DF-e):
+    • Nota Fiscal Eletrônica – NF-e (modelo 55);
+    • Nota Fiscal de Consumidor Eletrônica – NFC-e (modelo 65);
+    • Conhecimento de Transporte Eletrônico – CT-e (modelo 57);
+    • Conhecimento de Transporte Eletrônico - Outros Serviços - CT-e OS (modelo 67);
+    • Nota Fiscal de Serviço Eletrônica – NFS-e;
+              o Sem novos fatos geradores (locação de imóveis, por exemplo.)
+    • Nota Fiscal Fatura de Serviços de Comunicação Eletrônica – NFCom (modelo 62);
+    • Nota Fiscal de Energia Elétrica Eletrônica – NF3e (modelo 66); e
+    • Bilhete de Passagem Eletrônico – BP-e (modelo 63).
+
+2.2.2 - Códigos de Situação Tributária (CST):
+         • CST 000 – Situações tributadas integralmente pelo IBS e CBS; e
+         • CST 200 – Alíquota reduzida.
+
+2.2.3 - Classificações Tributárias (cClassTrib):
+              • Regime regular; e
+              • Regimes diferenciados
+
+No decorrer do ano de 2026, os documentos fiscais, CSTs, cClassTribs, eventos e as Declarações dos
+Regimes Específicos – DeRE não relacionados acima serão disponibilizados progressivamente no Ambiente
+de Produção Beta.
+
+2.3 - A simulação de pagamentos, de pedidos de ressarcimento e de cashback no Ambiente de
+Produção Beta
+
+2.3.1 - Simulação de Pagamentos
+
+Considerando que o ano de 2026 será o ano de teste da CBS e do IBS, o contribuinte que emitir
+documentos fiscais, inclusive a Declaração de Regimes Específicos (DeRE), observando as normas e
+notas vigentes estará dispensado de recolhimento do IBS e da CBS.
+
+Também estarão dispensados de recolhimento do IBS e da CBS os contribuintes para os quais não haja
+obrigação acessória definida.
+
+Assim, não está sendo considerada a existência de pagamentos reais em 2026, com exceção dos casos
+de não cumprimento das obrigações acessórias. Ao ser identificado o não cumprimento de obrigação
+
+                                                                                                                        4
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+acessória, a Receita Federal do Brasil (RFB) poderá notificar os contribuintes, oferecendo um prazo
+para a autorregularização. Decorrido o prazo sem que o descumprimento de obrigação acessória tenha
+sido sanado, a RFB poderá efetivar o lançamento de ofício e a cobrança dos tributos devidos, com a
+consequente necessidade de efetivação de pagamentos reais. O débito decorrente do lançamento de
+ofício não será objeto de tratamento pela Apuração Assistida.
+
+Desse modo, para permitir uma adequada e completa preparação pelos contribuintes que cumprirem as
+obrigações acessórias e, por isso, não estarão obrigados ao pagamento efetivo em 2026, o Ambiente de
+Produção Beta viabilizará, com previsão para maio de 2026, a realização de pagamentos simulados, que
+serão processados pela Apuração Assistida juntamente com os débitos decorrentes dos DFes reais
+emitidos pelas empresas.
+
+2.3.2 - Simulação de Pedidos de Ressarcimento
+
+Como em 2026 haverá a dispensa de pagamentos reais, a simulação dos créditos de CBS a serem
+processados na Apuração Assistida decorrerá dos pagamentos simulados viabilizados pelo Ambiente
+de Produção Beta.
+
+Assim, não obstante os débitos de CBS utilizados pela Apuração Assistida serem aqueles destacados nos
+Documentos Fiscais Eletrônicos – DFes reais, os pagamentos serão apenas simulados. Ou seja, não haverá
+efetivo pagamento.
+
+Dessa forma, os resultados da imputação dos créditos aos débitos pela Apuração Assistida, em cada
+período de apuração, terão caráter exclusivamente de simulação. Eventuais saldos devedores não serão
+exigíveis nem os saldos credores eventualmente resultantes poderão ser efetivamente ressarcidos.
+
+No entanto, será disponibilizada funcionalidade para simular o pedido de ressarcimento para o
+eventual saldo credor de determinado período de apuração apontado na Apuração Assistida, que,
+portanto, não terá validade jurídica mas apenas caráter de simulação. Ou seja, créditos não serão
+efetivamente ressarcidos ao contribuinte.
+
+2.3.3 - Simulação de devoluções de CBS a destinatários de devolução personalizada (cashback)
+
+Durante o ano de 2026 também será disponibilizada possibilidade de simulações de devoluções de CBS a
+destinatários de devolução personalizada (cashback);
+
+No entanto, transferências, pedidos de ressarcimento ou cashback serão apenas simulados e, portanto,
+não serão efetivamente pagos aos contribuintes e cidadãos.
+
+3 – Interação dos contribuintes com o Ambiente de Produção Beta
+
+3.1 - Portal de Tributos sobre Bens e Serviços
+
+O acesso aos serviços digitais do Ambiente de Produção Beta se dará por meio do Portal de Tributos sobre
+Bens e Serviços.
+
+                                                                                                                        5
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+O Portal é a plataforma eletrônica unificada, com gestão compartilhada entre o Comitê Gestor do IBS
+(CGIBS) e RFB possibilitando uma melhor experiência de uso aos contribuintes, inclusive o login e
+concessão de procuração únicos para os serviços da CBS e do IBS e estará disponível em
+https://consumo.tributos.gov.br.
+
+Pelo Portal, os contribuintes terão acesso aos diversos serviços digitais relacionados à reforma tributária
+sobre o consumo de bens e serviços, como a Calculadora de Tributos, Apuração Assistida de CBS, consulta
+ao Ressarcimento de CBS, Transferências de CBS, Cashback de CBS, canal de atendimento da CBS (Receita
+Atende), e demais serviços que RFB e CGIBS disponibilizarem-no futuro.
+
+Para acessar os serviços autenticados do Portal é necessário possuir conta gov.br de nível prata ou ouro.
+Saiba mais sobre níveis da conta gov.br em <https://www.gov.br/governodigital/pt-br/identidade/conta-gov-
+br/niveis-da-conta-govbr>.
+
+O acesso ao Ambiente de Produção Beta por usuários que não sejam representantes legais da pessoa
+jurídica exigirá a concessão de autorização de acesso (procuração digital), conforme será oportunamente
+definido e divulgado.
+
+3.2 - APIs
+
+Também estarão disponíveis no Ambiente de Produção Beta as primeiras APIs que permitirão o
+acompanhamento e a verificação da Apuração Assistida (AA) da Contribuição sobre Bens e Serviços (CBS).
+
+Serão inicialmente disponibilizadas as seguintes APIs:
+    1. Consultar débitos de CBS do mês corrente;
+    2. Concluir apuração de CBS do mês anterior.
+    3. Consultar créditos de CBS do mês corrente;
+    4. Consultar pagamentos de CBS do mês corrente;
+    5. Consultar pagamentos de CBS a fornecedores do mês corrente;
+
+O cronograma de disponibilização das APIs será definido ao longo de 2026.
+
+4 – Módulos do Ambiente de Produção Beta
+
+4.1 - Apuração Assistida
+
+Essa funcionalidade tem por objetivo operacionalizar a não-cumulatividade, a confissão de dívida e
+constituição do crédito tributário da CBS eventualmente resultante em um período de apuração, de acordo
+com as diretrizes da Reforma Tributária.
+
+A imputação dos pagamentos e créditos apropriados aos débitos apurados se dá de forma contínua ao longo
+do período de apuração. Após a conclusão do período de apuração, é disponibilizado o resultado final da
+
+                                                                                                                        6
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+Apuração Assistida, seja com saldos devedores ou credores. Os valores credores poderão, a critério do
+contribuinte, ser objeto de pedidos de ressarcimento ou transferidos para o período de apuração seguinte
+para a compensação de débitos desse novo período.
+
+Os débitos, os créditos e as imputações podem ser consultados pelo contribuinte a partir de relatórios
+disponibilizados nesse módulo ou por APIs, conforme tratado no tópico 3.2.
+
+No entanto, em 2026, como ano de testes, não serão gerados débitos ou créditos com efeitos jurídicos
+reais referentes à CBS e ao IBS.
+
+4.1.1 - Apuração Assistida e os contribuintes optantes pelo Simples Nacional
+
+De acordo com a Lei Complementar nº 214/2025, o contribuinte optante pelo Simples Nacional, em
+regra, não possui direito à apropriação de créditos da CBS, uma vez que o regime do Simples adota
+sistemática própria de tributação, com recolhimento unificado e alíquotas diferenciadas.
+
+No entanto, para fins de simulação e transparência, a Apuração Assistida exibirá os resultados como
+se o contribuinte estivesse optado pelo regime regular da CBS.
+
+A Apuração Assistida considerará os débitos de CBS na forma como contidos nos documentos fiscais
+emitidos, portanto, não necessariamente serão os valores devidos caso o contribuinte opte pelo regime
+regular de CBS e IBS.
+
+A simulação tem caráter exclusivamente informativo e tem como objetivo:
+    • Permitir que o contribuinte visualize o impacto econômico da sistemática de créditos da CBS;
+    • Facilitar a comparação entre o regime do Simples Nacional e o regime regular;
+    • Apoiar uma análise sobre as vantagens de eventual mudança de regime, quando legalmente
+         possível.
+
+Importante destacar:
+    • A simulação não altera o enquadramento atual do contribuinte no Simples Nacional;
+    • Os valores exibidos não geram direito a crédito, nem produzem efeitos tributários;
+    • Qualquer alteração de regime dependerá de opção formal, observância dos requisitos legais e dos
+         prazos previstos em lei.
+
+4.2 - Devoluções (Ressarcimentos e Transferências)
+
+4.2.1 - Ressarcimento
+
+Quando existir saldo credor ao final do período de apuração da CBS, o contribuinte poderá pedir
+ressarcimento. O ressarcimento ocorre mediante pedido do contribuinte no módulo Apuração Assistida. O
+valor do pedido pode ser total ou parcial, limitado ao montante do saldo dos créditos passíveis de
+ressarcimento.
+
+Se não houver solicitação de ressarcimento ou se a solicitação for parcial, o valor remanescente do saldo a
+                                                                                                                        7
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+recuperar constituirá crédito do contribuinte, o qual poderá ser utilizado para compensação ou
+ressarcimento em períodos de apuração posteriores
+
+O que será possível testar no Ambiente de Produção Beta, em caráter de simulação:
+    • Consulta a créditos ressarcíveis (disponível para ressarcimento) e não ressarcíveis (não disponível
+         para ressarcimento) de determinada apuração (data de saldo de crédito);
+    • Consulta a detalhamento dos créditos ressarcíveis por base legal de determinada apuração (data de
+         saldo de crédito);
+    • Solicitar ressarcimento no ambiente da Apuração Assistida, com a consequente geração automática
+         de Pedido de Ressarcimento eletrônico (PER/DCOMP) para cada base legal de forma simulada;
+    • Consulta a solicitações de Ressarcimento de CBS.
+
+4.2.2 - Transferência
+
+Outra modalidade de devolução é a Transferência, que é de identificação automática pela Apuração
+Assistida e decorre de excesso de:
+
+              • Recolhimento na liquidação financeira (split payment);
+              • Recolhimento pelo adquirente (RAD);
+              • Pagamento pelo contribuinte do saldo devedor da apuração (PCONT).
+
+Diferentemente do Ressarcimento, a Transferência não depende de pedido do contribuinte, ocorre de forma
+automática e se dá em até 3 dias úteis do pagamento ou recolhimento em excesso identificado.
+
+O que será possível testar no Ambiente de Produção Beta:
+    • Consulta a transferências simuladas em determinado CNPJ por período, situação e outros filtros;
+    • Consulta a detalhamento de uma transferência simulada.
+
+4.3. Cashback
+
+Funcionalidade responsável pela apuração da devolução personalizada (Cashback) de CBS para pessoas
+integrantes de família de baixa renda cadastradas no CadÚnico.
+
+4.4. Calculadora de Tributos
+
+A Calculadora é um motor de cálculo que embarca o conteúdo normativo da Reforma Tributária do
+Consumo. É a ferramenta oficial para o cálculo automático da CBS e do IS, conforme as regras da Lei
+Complementar nº 214/2025 e das notas técnicas pactuadas entre União, Estados e Municípios.
+
+Desenvolvida como uma solução de código aberto, promove transparência, auditabilidade e previsibilidade.
+Seu código-fonte é público, gratuito e pode ser executado fora do ambiente da Administração Tributária,
+com autonomia, sigilo e liberdade de integração.
+
+A lógica da Calculadora segue os princípios de compliance by design e compliance by default, assegurando
+que os documentos fiscais já sejam gerados em conformidade.
+
+                                                                                                                        8
+                                                RTC – Comunicado Ambiente de Produção Beta
+
+A Calculadora está integrada à arquitetura da Plataforma CBS e a mesma versão do componente é utilizada
+tanto pela Administração Tributária quanto pelos contribuintes.
+Sugere-se fortemente que os contribuintes promovam a integração da Calculadora ao seu ERP.
+Informações detalhadas sobre esse módulo, assim como o link para download da Calculadora Offline, estão
+disponíveis no endereço: https://piloto-cbs.tributos.gov.br/servico/calculadora-consumo/calculadora.
+4.5. Canal de Atendimento - Receita Atende
+As dúvidas relacionadas ao Ambiente de Produção Beta ou sobre as operações de crédito e débito, cadastro
+e demais assuntos relacionados à Reforma Tributária do Consumo, bem como eventuais relatos de erro nos
+sistemas e sugestões de melhoria dos módulos, deverão ser reportados por meio do Receita Atende,
+ambiente de atendimento certificado.
+Este canal de atendimento é exclusivo para pessoas jurídicas contribuintes da CBS e/ou do IS e não
+abrange as empresas do MEI e as pessoas físicas, que num primeiro momento serão atendidas pelo nosso
+Assistente Virtual.
+O atendimento prestado pela Receita Federal no âmbito da Reforma Tributária do Consumo é exclusivo
+para a CBS, o Imposto Seletivo e o IPI.
+Inicialmente, não haverá atendimento presencial sobre a CBS nas Unidades de Atendimento da RFB.
+5 – Disposições Finais
+Este Comunicado não cria obrigações, mas apresenta as características e funcionalidades do Ambiente de
+Produção Beta que estará disponível para testes e simulações pelos contribuintes no período entre
+12/01/2026 e dezembro de 2026. As atualizações serão comunicadas futuramente pela Receita Federal.
+
+                                               Brasília, 26 de dezembro de 2025.
+                                                 RECEITA FEDERAL DO BRASIL
+
+                                                                                                                        9
+

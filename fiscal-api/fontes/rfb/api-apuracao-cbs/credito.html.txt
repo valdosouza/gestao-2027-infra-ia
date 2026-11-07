@@ -1,0 +1,322 @@
+Créditos CBS 
+ Documentação da apuração CBS 
+ Índice
+ Objetivo
+ Histórico de versão
+ Regras de retorno
+ Endpoint da api
+ Estrutura principal do JSON do arquivo de retorno(download via urlAssinada)
+ Exemplo do JSON de retorno (download via urlAssinada)
+ Consultar créditos em operações de consumo (CBS)
+ 1. Objetivo
+ Retorna os créditos de Contribuição sobre Bens e Serviços (CBS) incluídos ou atualizados entre a data consulta e a data da última consulta anterior.
+ Esta API funciona em modo assíncrono. Para orientações de uso, consulte as Regras Comuns às APIs Assíncronas da Apuração de CBS: regras de APIs assíncronas 
+ 2. Histórico de versão
+ Data 
+ Versão 
+ Descrição 
+ 03/09/2026 
+ 1.0 
+ Versão inicial 
+ 17/09/2026 
+ 1.1 
+ Correção dos dados retornados(seção 5). Ajustes nos exemplos de chamada. 
+ 14/10/2026 
+ 1.2 
+ Atualizar o payload de notificação enviado ao webhook. Atualizar o fluxo de obtenção e download do arquivo de retorno por meio da `urlAssinada`. Atualizar seção 5 
+ 3. Regras de retorno
+ Para solicitações com consulta concluída nos últimos 3 meses, são retornadas as inclusões e atualizações desde a data de atualização da solicitação concluída mais recente, limitada aos últimos 8 dias. Quando não há consulta concluída nesse período, a busca começa no 1º dia do mês corrente.
+ 4. Endpoint da api
+ URL de Produção: 
+ https://api.receitafederal.gov.br/apuracao-cbs/v2/creditos/{cnpj} 
+ 4.1 Campos de Entrada
+ Campo 
+ Formato 
+ Descrição 
+ cnpj 
+ String (8) 
+ CNPJ base informado no path. 
+ 4.2 Header
+ Campo 
+ Formato 
+ Descrição 
+ Content-Type String application/json 
+ 4.3 Request Body
+ Campo 
+ Formato 
+ Descrição 
+ urlRetorno 
+ String 
+ Opcional. URL do webhook para receber a notificação de retorno. Quando não houver webhook, informar "" (string vazia). 
+ 4.4 Acionar o endpoint
+ Substitua $TOKEN pelo valor de access_token .
+ Substitua {cnpj} pelo CNPJ base com 8 dígitos .
+ Opcionalmente, informe no corpo uma urlRetorno (URL do webhook) acessível por HTTP ou HTTPS para receber a notificação de conclusão da solicitação ou de erro no processamento. Sem esse campo, consulte a situação da solicitação para acompanhar o processamento.
+ Exemplo de chamada (com variável TOKEN)
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/creditos/{cnpj}' \
+ --header "Authorization: Bearer $TOKEN" \
+ --header 'Content-Type: application/json' \
+ --data '{ "urlRetorno": "https://cliente.exemplo.com/webhooks/apuracao-cbs" }'
+ Exemplo com dados fictícios
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/creditos/12345678' \
+ --header 'Content-Type: application/json' \
+ --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dadoFicticio.assinaturaFicticia' \
+ --data '{ "urlRetorno": "https://cliente.exemplo.com/webhooks/apuracao-cbs" }'
+ Exemplo de chamada (sem webhook)
+ curl --location --request POST 'https://api.receitafederal.gov.br/apuracao-cbs/v2/creditos/{cnpj}' \
+ --header "Authorization: Bearer $TOKEN" \
+ --header 'Content-Type: application/json' \
+ --data '{"urlRetorno":""}'
+ 4.5 Campos Retornados
+ Campo 
+ Formato 
+ Descrição 
+ tiqueteSolicitacao 
+ String 
+ Em caso de sucesso, tíquete gerado na requisição. 
+ tEASegundos 
+ Integer (segundos) 
+ Em caso de sucesso, tempo estimado para atendimento da solicitação, em segundos. O valor -1 indica que não foi possível obter uma estimativa. 
+ codigoErro 
+ String 
+ Em caso de erro - Identifica o erro ocorrido durante a requisição. Retornado apenas em caso de erro. 
+ mensagemErro 
+ String 
+ Em caso de erro - Mensagem descritiva do erro ocorrido durante a requisição. Retornado apenas em caso de erro. 
+ Exemplo de retorno em caso de sucesso (HTTP 201)
+ {
+ "tiqueteSolicitacao": "692b7b25-44cb-4415-8625-2b9522dd7933.B5E08D55",
+ "tEASegundos": 120
+}
+ Exemplos de retorno em caso de erro
+ Requisição inválida (HTTP 400): 
+ {
+ "codigoErro": "REQUISICAO_INVALIDA",
+ "mensagemErro": "corpo da requisição inválido"
+}
+ Não autorizado (HTTP 401): 
+ {
+ "codigoErro": "NAO_AUTORIZADO",
+ "mensagemErro": "consumidor não autorizado para este NI"
+}
+ Erro interno (HTTP 500): 
+ {
+ "codigoErro": "ERRO_INTERNO",
+ "mensagemErro": "erro interno ao processar solicitação"
+}
+ Exemplo de objeto enviado para urlRetorno(webhook) em caso de sucesso (HTTP 2xx)
+ {
+ "tiqueteSolicitacao":"48d88a3c-eff9-4489-8e3a-cde8d878d3f7.1E0CE7A4",
+ "situacao": "CONCLUIDA" 
+ } 
+ 5. Estrutura principal do JSON do arquivo de retorno(download via urlAssinada)
+ Campo 
+ Nível 
+ Card. 
+ Formato 
+ Descrição 
+ tiqueteSolicitacao 
+ 1 
+ 1:1 
+ string 
+ Tíquete da solicitação. 
+ ni 
+ 1 
+ 1:1 
+ String (8) 
+ Ni base do contribuinte. 
+ niConsumidor 
+ 1 
+ 1:1 
+ String (14) 
+ Inscrição no CPF ou CNPJ do usuário detentor da credencial de acesso, ou seja, quem está consumindo o serviço. 
+ geradoEm 
+ 1 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de geração do arquivo. 
+ apuracao 
+ 1 
+ 0:N 
+ array 
+ Lista de apurações. 
+ apuracao[].pa 
+ 2 
+ 1:1 
+ date (mm/aaaa) 
+ Período de apuração. 
+ apuracao[].creditos 
+ 2 
+ 1:N 
+ array 
+ Lista de créditos da apuração. 
+ apuracao[].creditos[].origem 
+ 3 
+ 1:1 
+ integer 
+ Origem do crédito:
+ 0 = NORMAL
+ 20 = DEVOLUCAO_POR_PCONT
+ 21 = DEVOLUCAO_POR_RAD
+ 22 = DEVOLUCAO_POR_CREDITO
+ 30 = CANCELAMENTO_CREDITO
+ 31 = CANCELAMENTO_RAD
+ 32 = CANCELAMENTO_PCONT
+ 50 = PERECIMENTO_TRANSPORTE_FOB
+ 51 = PERECIMENTO_TRANSPORTE_CIF
+ 52 = DEVOLUCAO_PERECIMENTO_TRANSPORTE_CIF_POR_PCONT
+ 53 = DEVOLUCAO_PERECIMENTO_TRANSPORTE_CIF_POR_RAD
+ 54 = DEVOLUCAO_PERECIMENTO_TRANSPORTE_CIF_POR_CREDITO
+ 55 = NOTA_CREDITO_MULTA_JUROS
+ apuracao[].creditos[].documento 
+ 3 
+ 1:1 
+ integer 
+ Tipo do documento:
+ 55 = NF-e — Nota Fiscal Eletrônica
+ 57 = CT-e — Conhecimento de Transporte Eletrônico
+ 62 = NFCOM — Nota Fiscal Fatura de Serviços de Comunicação Eletrônica
+ 63 = BP-e — Bilhete de Passagem Eletrônico
+ 64 = GTV-e — Guia de Transporte de Valores Eletrônica
+ 65 = NFC-e — Nota Fiscal de Consumidor Eletrônica
+ 66 = NF3-e — Nota Fiscal de Energia Elétrica Eletrônica
+ 67 = CT-e OS — Conhecimento de Transporte Eletrônico para Outros Serviços
+ 91 = NFS-e — Nota Fiscal de Serviço Eletrônica
+ 92 = NFS-e Via — Nota Fiscal de Serviço Eletrônica de Exploração de Vias
+ 93 = BP-e TM — Bilhete de Passagem Eletrônico Transporte Metropolitano
+ 94 = DERE — Declaração de Regimes Específicos
+ 97 = CT-e Simplificado — Conhecimento de Transporte Eletrônico Simplificado
+ apuracao[].creditos[].chave 
+ 3 
+ 0:1 
+ String (100) 
+ Chave do documento fiscal. 
+ apuracao[].creditos[].emissao 
+ 3 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de emissão. 
+ apuracao[].creditos[].registro 
+ 3 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora de registro. 
+ apuracao[].creditos[].atualizacao 
+ 3 
+ 1:1 
+ String (date-time ISO 8601) 
+ Data/hora da última atualização. 
+ apuracao[].creditos[].cbs 
+ 3 
+ 1:1 
+ object 
+ Grupo de valores CBS. 
+ apuracao[].creditos[].cbs.excedentes 
+ 4 
+ 0:1 
+ number (18,2) 
+ Valor excedente - valor não processado por inconsistência em relação ao documento vinculado. 
+ apuracao[].creditos[].cbs.apurado 
+ 4 
+ 1:1 
+ number (18,2) 
+ Valor apurado - Valor processado a partir do documento e origem. 
+ apuracao[].creditos[].cbs.apropriacao 
+ 4 
+ 1:1 
+ object 
+ Grupo de apropriação. 
+ apuracao[].creditos[].cbs.apropriacao.inapropriavel 
+ 5 
+ 0:1 
+ number (18,2) 
+ Valor inapropriável - parte do valor apurado que, em razão de eventos posteriores, não pode ser mais apropriado. 
+ apuracao[].creditos[].cbs.apropriacao.suspenso 
+ 5 
+ 0:1 
+ number (18,2) 
+ Valor suspenso - parte do valor apurado que, em razão da classificação tributária (cClassTrib), tem exigibilidade suspensa e, portanto, não pode ser apropriado. 
+ apuracao[].creditos[].cbs.apropriacao.prescrito 
+ 5 
+ 0:1 
+ number (18,2) 
+ Valor prescrito - parte do valor apurado que, em razão da prescrição não pode ser apropriado. 
+ apuracao[].creditos[].cbs.apropriacao.aApropriar 
+ 5 
+ 0:1 
+ number (18,2) 
+ Valor a apropriar - parte do valor apurado que ainda não foi apropriado, ou seja, ainda não está disponível para ser utilizado. 
+ apuracao[].creditos[].cbs.apropriacao.apropriado 
+ 5 
+ 0:1 
+ number (18,2) 
+ Valor apropriado - parte do valor apurado que já foi apropriado, ou seja, é passível de utilização. 
+ apuracao[].creditos[].cbs.apropriacao.utilizacao 
+ 5 
+ 1:1 
+ object 
+ Grupo de utilização. 
+ apuracao[].creditos[].cbs.apropriacao.utilizacao.inutilizavel 
+ 6 
+ 0:1 
+ number (18,2) 
+ Valor inutilizável - parte do valor apropriado que, em razão de eventos posteriores, não pode ser mais utilizado. 
+ apuracao[].creditos[].cbs.apropriacao.utilizacao.utilizado 
+ 6 
+ 0:1 
+ number (18,2) 
+ Valor utilizado - parte do valor apropriado que já foi utilizado para compensar débitos. 
+ apuracao[].creditos[].cbs.apropriacao.utilizacao.restabelecido 
+ 6 
+ 0:1 
+ number (18,2) 
+ Valor restabelecido - parte do valor apropriado, previamente utilizado, que em razão de eventos posteriores volta a estar disponível para utilização. 
+ apuracao[].creditos[].cbs.apropriacao.utilizacao.naoUtilizado 
+ 6 
+ 1:1 
+ object 
+ Grupo de não utilizado. 
+ apuracao[].creditos[].cbs.apropriacao.utilizacao.naoUtilizado.saldoCredor
+ 7 
+ 1:1 
+ number (18,2) 
+ Saldo credor - parte do valor apropriado que ainda não foi utilizado e está disponível. 
+ apuracao[].creditos[].cbs.apropriacao.utilizacao.naoUtilizado.pedidoRessarcimento
+ 7 
+ 0:1 
+ number (18,2) 
+ Pedido de ressarcimento - parte do valor apropriado que foi objeto de pedido de ressarcimento. 
+ Observação: Com exceção dos campos apurado e saldoCredor , os demais campos de valor não serão exibidos se o resultado for igual a zero.
+ Se não houver créditos que atendam à janela de consulta, o campo apuracao será retornado como uma lista vazia ( [] ). Valores numéricos zero marcados como opcionais não são incluídos no JSON; os objetos apropriacao , utilizacao e naoUtilizado são incluídos mesmo quando seus valores são zero.
+ 6. Exemplo do JSON de retorno (download via urlAssinada)
+ {
+ "tiqueteSolicitacao": "48d88a3c-eff9-4489-8e3a-cde8d878d3f7.1E0CE7A4",
+ "ni": "12345678",
+ "niConsumidor": "12345678",
+ "geradoEm": "2026-08-26T16:00:00Z",
+ "apuracao": [
+ {
+ "pa": "08/2026",
+ "creditos": [
+ {
+ "origem": 0,
+ "documento": 1,
+ "chave": "string",
+ "emissao": "2026-08-01T00:00:00Z",
+ "registro": "2026-08-01T00:00:00Z",
+ "atualizacao": "2026-08-01T00:00:00Z",
+ "cbs": {
+ "apurado": 15,
+ "apropriacao": {
+ "utilizacao": {
+ "naoUtilizado": {
+ "saldoCredor": 0
+ }
+ }
+ }
+ }
+ }
+ ]
+ }
+ ]
+}

@@ -1,0 +1,91 @@
+Regras Comuns de Solicitação e Retorno das APIs assíncronas 
+ Documentação da apuração CBS 
+ Índice
+ Objetivo
+ Histórico de versão
+ Pré-requisitos
+ Processamento assíncrono e fluxo da solicitação
+ Status de processamento e comportamento do webhook
+ Endpoint da api
+ Restrições
+ Regras Comuns de Solicitação e Retorno das APIs assíncronas
+ 1. Objetivo
+ Descreve o fluxo comum de integração para apis assíncronas da apuração de CBS.
+ 2. Histórico de versão
+ Data 
+ Versão 
+ Descrição 
+ 03/09/2026 
+ 1.0 
+ Versão inicial. 
+ 14/10/2026 
+ 1.1 
+ Atualizar o payload de notificação enviado ao webhook. Atualizar o fluxo de obtenção e download do arquivo de retorno por meio da `urlAssinada`. 
+ 3. Pré-requisitos
+ Para consumir as API assincronas é necessário:
+ Credenciais válidas para o estabelecimento matriz;
+ Token obtido por meio da API de autenticação;
+ Opcionalmente, uma URL de webhook válida e acessível publicamente para receber o retorno da API.
+Quando não houver webhook, enviar urlRetorno como "" (string vazia).
+ O manual com orientações para geração de credenciais e obtenção do token de acesso pode ser obtido em:
+ https://arquivos.receitafederal.gov.br → Documentos > Técnicos > Receita Integra .
+ 4. Processamento assíncrono e fluxo da solicitação
+ As APIs deste conjunto operam em modo assíncrono .
+Por isso, a requisição de abertura não retorna o arquivo final imediatamente .
+ Como funciona
+ O cliente envia uma requisição POST para a API desejada.
+ O campo urlRetorno (url do webhook) é opcional :
+ com webhook: informar uma URL HTTPS válida;
+ sem webhook: enviar urlRetorno como "" (string vazia).
+ Quando urlRetorno for informada, a API valida a disponibilidade do endpoint com uma chamada HEAD :
+ se o endpoint não responder adequadamente, a solicitação é rejeitada com erro;
+ se responder, a solicitação segue para processamento.
+ Se a abertura for aceita ( HTTP 201 ), a API retorna o tiqueteSolicitacao .
+ A solicitação é processada de forma assíncrona.
+ Ao final do processamento:
+ com webhook informado, a API envia notificação para a urlRetorno ;
+ sem webhook, o cliente deve consultar o endpoint de situação.
+ O payload de notificação (quando enviado) pode ser:
+ Sucesso: tiqueteSolicitacao e situacao ;
+ Erro: codigoErro e mensagemErro .
+ Quando a situação for CONCLUIDA , o cliente deve consultar o endpoint de download para obter a urlAssinada e baixar o arquivo de retorno:
+ Consultar link para download do arquivo de retorno .
+ A consulta de situação pode ser usada a qualquer momento, informando o tiqueteSolicitacao :
+ Consultar a situação da solicitação .
+ 5. Status de processamento e comportamento do webhook
+ Enquanto estiver em processamento:
+ o arquivo final ainda não estará disponível para download;
+ se urlRetorno foi informada, o cliente pode aguardar a notificação no webhook; sem webhook ( urlRetorno="" ), deve consultar o endpoint de situação da solicitação para verificar se ela foi concluída.
+ Tempo esperado de processamento
+ Tempo limite de processamento: até 240 minutos (4 horas) .
+Se esse limite for excedido, a solicitação passará para o status de erro.
+ 5.1 Recomendações de segurança para webhook
+ Para reduzir o risco de interceptação, falsificação e processamento indevido das notificações, o cliente deve:
+ Usar HTTPS: disponibilizar a urlRetorno exclusivamente com HTTPS. Não desabilitar a validação do certificado TLS.
+ Restringir o endpoint: utilizar uma rota dedicada ao recebimento das notificações, sem expor outras funções administrativas no mesmo endereço.
+ Proteger a urlAssinada : tratar a URL Assinada como um segredo temporário, pois ela autoriza o download durante o período de validade de 48 horas. Não gravá-la em logs, mensagens de erro, métricas, histórico do navegador ou ferramentas de rastreamento; transmiti-la e armazená-la somente em canais protegidos.
+ Validar a expiração: conferir urlAssinadaExpiraEm , quando presente, antes do download. Baixar o arquivo somente quando a notificação indicar sucesso e descartar a URL após o uso ou a expiração.
+ Manter auditoria sem dados sensíveis: registrar, no mínimo, o tiqueteSolicitacao , o horário, o resultado do processamento e um identificador de correlação. Mascarar tokens, URLs pré-assinadas, credenciais e dados pessoais nos logs.
+ Quando informar uma urlRetorno , o cliente deve mantê-la disponível durante todo o período esperado de processamento e utilizar a consulta ao endpoint de situação da solicitação como mecanismo de contingência, caso a notificação não seja recebida. A validação por HEAD , realizada na abertura da solicitação, confirma apenas que o endereço informado está acessível; ela não substitui mecanismos de autenticação nem a validação do conteúdo enviado no POST .
+ 5.2 Faixas de IP de origem (segurança adicional)
+ Como camada adicional de segurança, recomenda-se restringir o recebimento do webhook às faixas oficiais de IP de origem do ambiente emissor da API.
+ Diretriz de implementação
+ Aplicar allowlist de IP/CIDR no firewall, WAF ou gateway de API.
+ Manter regras separadas por ambiente (produção restrita e produção), quando aplicável.
+ Revisar periodicamente as faixas publicadas oficialmente.
+ Faixas de IP autorizadas
+ Utilizar as faixas oficiais divulgadas para cada ambiente.
+ Produção: 189.9.61.23/32 
+ 6. Resumo da sequência para consumir a API assíncrona:
+ Obter o token OAuth2 (Client Credentials).
+ Acionar o endpoint da API com Authorization: Bearer <token> e {cnpj} (8 dígitos); informe urlRetorno HTTPS se desejar receber notificações. Sem webhook, enviar urlRetorno como "" (string vazia).
+ Aguardar o webhook , se urlRetorno foi informada, ou consultar a situação da solicitação.
+ Quando situacao=CONCLUIDA , consultar o endpoint de download com o tiqueteSolicitacao para obter a urlAssinada .
+ Baixar o arquivo com HTTP GET direto na urlAssinada , sem Bearer Token e sem headers adicionais.
+ Codificação do arquivo retornado: UTF-8 .
+ Formato do arquivo retornado: JSON .
+ Se a notificação não for recebida no webhook, utilize a consulta de situação como contingência:
+ Consultar a situação da solicitação .
+ 7. Restrições
+ Limite de consumo do endpoint de abertura: 4 chamadas por dia por api .
+ O arquivo de retorno fica disponível por 48 horas após o aviso de pronto.

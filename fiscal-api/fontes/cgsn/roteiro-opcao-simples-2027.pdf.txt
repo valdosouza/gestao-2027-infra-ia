@@ -1,0 +1,333 @@
+    Roteiro da Opção pelo
+Simples Nacional para o ano
+
+               de 2027
+
+                                            Secretaria-Executiva do Comitê Gestor do Simples Nacional
+                                                                                Publicado em 21 de agosto de 2026
+                                                                                                     Versão de 07/10/2026
+SUMÁRIO
+
+1. Objetivo deste documento                                                          3
+
+2. Opção das empresas que estão em atividade, mas ainda não são optantes do Simples
+
+Nacional                                                                             4
+
+2.1. Acesso ao sistema                                                               4
+
+2.2. Análise prévia                                                                  4
+
+2.3. Confirmação do pedido de opção                                                  5
+
+2.3.1. Regularizar as pendências                                                     5
+
+2.3.2. Contestação/Impugnação ao Termo de Indeferimento                              6
+
+2.3.3. Cancelamento da opção                                                         6
+
+3. Orientações para empresas em início de atividade                                  7
+
+3.1. Acesso ao Módulo Administração Tributária - MAT                                 7
+
+3.2. Opção via MAT para empresas em início de atividades                             7
+
+3.3. Como selecionar a opção pelo Simples no MAT                                     8
+
+3.4. Cancelamento do pedido de opção em início de atividades                         8
+
+4. Apuração e recolhimento do IBS e da CBS “por fora” do Simples Nacional            9
+
+4.1. Opção pelo regime regular da CBS e IBS em 2026                                  9
+
+4.1.1. Condição para optar pelo regime regular de IBS/CBS no Simples Nacional        9
+
+4.2. Opção pelo regime regular da CBS e IBS no Simples Nacional após 2026            10
+
+                                                                                        2
+1. Objetivo deste documento
+
+     Neste roteiro, serão apresentadas, de forma resumida, as informações essenciais para a opção
+     pelo Simples Nacional. Ele se divide em três partes:
+     • Orientações para empresas não optantes já em atividade e para empresas excluídas, mesmo
+
+       que essa exclusão tenha efeito apenas em 2027.
+
+     • Orientações para empresas em início de atividade.
+
+     • Informações sobre apuração e recolhimento do IBS e da CBS “por fora” do Simples Nacional.
+
+ Atenção!
+
+ Não houve alteração na opção pelo SIMEI. Essa deverá ser realizada no decorrer do mês de janeiro
+ de 2027, até o dia 29/01/2027 (último dia útil).
+
+ Importante esclarecer que todo MEI é optante pelo Simples Nacional. Dessa forma, quando ocorre a
+ exclusão do Simples Nacional, o desenquadramento do MEI também é realizado automaticamente.
+ Para retornar à condição de MEI, não basta regularizar as pendências, faz-se necessário que os
+ requisitos para ingresso no Simples Nacional também sejam atendidos.
+
+ Ao solicitar a opção pelo Simei em janeiro/2027, se o contribuinte ainda não for optante pelo Simples
+ Nacional, o sistema criará para ele, automaticamente, uma solicitação de opção para o Simples.
+ Portanto, deve ser solicitada apenas a opção pelo Simei, mesmo que ainda não seja optante
+ pelo Simples.
+
+Voltar ao Sumário                                                                                       3
+2. Opção das empresas que estão em atividade, mas ainda não
+    são optantes do Simples Nacional
+
+     2.1. Acesso ao sistema
+           A opção deverá ser formalizada no Portal do Simples Nacional na internet ou pelo e-CAC, no
+           período de 1º (primeiro) de setembro a 15 (quinze) de outubro de 2026 e produzirá efeitos a
+           partir do 01/01/2027.
+           O sistema de opção pelo Simples Nacional poderá ser utilizado por:
+                    • Empresas que já se encontram em atividade; porém, ainda não são optantes do
+                         Simples Nacional; ou
+                    • Empresas excluídas do Simples Nacional, mesmo que a exclusão tenha ocorrido
+                         em 2026 e o seu efeito ocorra apenas em 2027.
+           Atenção! para empresas novas, verificar item 3. Orientações para empresas em início de
+           atividade.
+
+     2.2. Análise prévia
+           Antes de confirmar a opção pelo Simples Nacional, o sistema realizará uma análise prévia
+           para verificar se existem pendências que possam impedir o ingresso no Simples Nacional.
+                    • Se não houver irregularidades, basta confirmar a solicitação para que o pedido
+                         seja aprovado.
+                    • Havendo pendências, a empresa tem a possibilidade de regularizá-las antes de
+                         confirmar a solicitação de opção, mas é importante esclarecer que:
+                         a. Se o contribuinte não gravar o pedido de opção, terá o risco de, ao refazer a
+                             análise prévia, surgirem novas pendências.
+
+                         b. Se as pendências forem regularizadas e uma nova análise continuar apontando
+                             irregularidades, isso significa que o sistema ainda não recebeu ou processou a
+                             informação da regularização (por exemplo, para pendências vinculadas a
+                             Estados, Distrito Federal e Municípios, a atualização depende do envio de uma
+                             atualização pelo respectivo ente ao sistema de opção).
+
+                         Atenção!
+                              • A análise prévia é atualizada apenas uma vez por dia, quando o
+                                 usuário/contribuinte realizar o primeiro acesso ao sistema de opção.
+
+Voltar ao Sumário                                                                                            4
+                        • Recomenda-se que a empresa confirme o pedido de ingresso no Simples
+                           mesmo existindo pendências, para que não haja o risco de:
+
+                           - surgirem novas pendências numa nova análise nos dias seguintes;
+
+                           - perder o prazo de opção que, em 2026, terminará em 15/10/2026.
+
+2.3. Confirmação do pedido de opção
+
+     Ao confirmar a solicitação de opção:
+
+              • Se o pedido for aprovado (opção deferida): produzirá efeitos a partir de
+                   01/01/2027.
+
+              • Se o pedido não for aprovado (opção indeferida): o Termo de Indeferimento (TI)
+                   será gerado e disponibilizado imediatamente. Uma vez gerado o TI, considera-se
+                   dada a ciência e a contagem do prazo para apresentação da contestação ou
+                   regularização das pendências será iniciado.
+
+     Atenção! Uma vez gerado o Termo, tanto de deferimento quanto de indeferimento, mesmo
+     que surjam novas pendências, eles não serão alterados, em nome da segurança jurídica. Ou
+     seja, eles são uma “fotografia” da situação existente no momento da opção.
+
+     Haverá um TI para cada ente que apontar irregularidades.
+
+     Exemplo: se houver irregularidades na Receita Federal e em dois Estados, serão emitidos três
+     TI (um emitido pela Receita Federal e outros dois emitidos pelos Estados que apontaram as
+     pendências).
+
+     A Receita Federal encaminhará uma mensagem por meio do Domicílio Tributário Eletrônico
+     do Simples Nacional (DTE-SN) apenas para lembrar o contribuinte sobre os Termos gerados
+     e onde poderão ser consultados. A leitura desta mensagem não será considerada para prazo
+     de ciência, uma vez que esta ocorre no momento do indeferimento, com a geração do(s) TI.
+
+     A empresa poderá tomar uma das seguintes providências:
+
+              • Até o dia 30/10/2026: regularizar as pendências impeditivas (ver item 2.3.1.
+                   Regularizar as pendências) e/ou:
+
+              • Contestar/Impugnar o TI (ver item 2.3.2, Contestação ou Impugnação ao Termo
+                   de Indeferimento).
+
+ 2.3.1. Regularizar as pendências
+           A empresa somente será optante pelo Simples se todas as pendências listadas em todos
+           os Termos de Indeferimento emitidos forem regularizadas dentro do prazo acima
+           mencionado.
+
+Voltar ao Sumário                                                                                  5
+         O acompanhamento da opção pode ser realizado por meio do serviço
+         "Acompanhamento da Opção pelo Simples Nacional", disponível no Portal do Simples
+         ou no Portal e-CAC, e será atualizada apenas uma vez por dia, quando o usuário realizar
+         o primeiro acesso ao sistema.
+
+         Se as pendências forem regularizadas e o resultado da consulta ao acompanhamento da
+         solicitação continuar apontando irregularidades, significa que o sistema ainda não recebeu
+         ou processou a informação da regularização. Por exemplo, para pendências vinculadas a
+         Estados, Distrito Federal e Municípios, a atualização depende do envio dessa informação
+         pelo respectivo Ente da Federação ao sistema de opção.
+
+2.3.2. Contestação/Impugnação ao Termo de Indeferimento
+
+         A empresa poderá contestar (impugnar) o TI se discordar do indeferimento, apresentando
+         uma impugnação.
+
+         Para TI emitido pela Receita Federal: a impugnação deverá ser apresentada em até 20
+         (vinte) dias úteis da emissão do Termo. A empresa deverá proceder conforme
+         orientações disponíveis em https://www.gov.br/pt-br/servicos/impugnar-indeferimento-
+         pelo-simples
+
+         Para os Termos emitidos pelos demais entes, a empresa deve observar, para cada Termo
+         de Indeferimento, o prazo e orientações para contestação informados em cada Termo
+         emitido, conforme estabelecido nos dispositivos legais relativos aos processos
+         administrativos fiscais de cada ente federativo.
+
+         A contestação de um determinado Termo de Indeferimento somente será considerada
+         realizada se dirigida ao ente que apontou a(s) irregularidade(s) e obedecidas as
+         orientações constantes no respectivo Termo.
+
+2.3.3. Cancelamento da opção
+
+         A solicitação de opção para o ano de 2027, tenha sido ela aprovada ou não aprovada,
+         poderá ser cancelada a partir de 03/11/2026 até o dia 20/12/2026 em caráter irretratável.
+         Ou seja, uma vez cancelada, não será possível, para o mesmo período de apuração,
+         realizar uma nova opção. O cancelamento deverá ser realizado no portal do Simples
+         Nacional, na aplicação “Cancelamento da Solicitação de Opção pelo Simples Nacional”.
+
+         Atenção!
+
+         Recomendamos acompanhar as atualizações no Portal do Simples Nacional para obter
+         informações mais recentes.
+
+Voltar ao Sumário                                                                                    6
+3. Orientações para empresas em início de atividade
+
+3.1. Acesso ao Módulo Administração Tributária - MAT
+
+     Com a implementação do Módulo Administração Tributária (MAT), a partir de 01/12/2025 a
+     nova empresa deve formalizar sua intenção de optar pelo Simples Nacional no exato momento
+     que solicitar a inscrição do CNPJ. O acesso ao MAT é efetuado diretamente pelo
+     Acompanhamento ao Protocolo Redesim.
+
+     Caso a opção não seja realizada no MAT no momento da inscrição do CNPJ, a empresa
+     somente poderá solicitar o ingresso no Simples Nacional no próximo período regular de
+     opção, conforme as regras aplicáveis às empresas já constituídas).
+
+     Recomenda-se a consulta às Perguntas Frequentes disponíveis na Página do MAT na
+     Internet.
+
+     Atenção! Situação especial para o período de 01/09 até 15/10/2026:
+
+     Se nesse período uma empresa nova acessar o MAT para inscrição no CNPJ e, por qualquer
+     motivo, não solicitar a opção pelo Simples Nacional como empresa em início de atividades,
+     poderá fazer a opção como empresa constituída. Em 2026, o prazo vai até o dia 15/10/2026
+     (ver item 2. Opção das empresas que estão em atividade, mas ainda não são optantes pelo
+     Simples Nacional).
+
+3.2. Opção via MAT para empresas em início de atividades
+
+A opção realizada no momento da inscrição do CNPJ:
+
+• Se aprovada (deferida): produzirá efeitos a partir da data de inscrição do CNPJ.
+
+• Se não aprovada (indeferida): será emitido e disponibilizado imediatamente o
+    Termo de Indeferimento, listando irregularidades existentes. A empresa poderá,
+    dentro dos prazos discriminados abaixo, tomar uma das seguintes providências:
+
+    a. Em até 30 (trinta) dias contados da data de inscrição no CNPJ: regularizar
+        a situação, caso concorde com o(s) motivo(s) da vedação, solucionando as
+        pendências que impedem o ingresso no Simples. A empresa somente será
+        optante a partir da data da inscrição no CNPJ se todas as pendências listadas
+        forem regularizadas dentro do prazo mencionado.
+
+    b. Em até 20 (vinte) dias úteis contados da data de inscrição no CNPJ:
+        Contestar (impugnar) a decisão se discordar do indeferimento, apresentando
+        uma impugnação. A empresa deverá proceder conforme orientações
+        disponíveis em https://www.gov.br/pt-br/servicos/impugnar-indeferimento-pelo-
+        simples
+
+Voltar ao Sumário                                                                               7
+3.3. Como selecionar a opção pelo Simples no MAT
+
+     A escolha do regime tributário Simples Nacional no MAT é realizada por um botão similar a
+     um “interruptor”, que por padrão aparece desligado. Para optar pelo Simples Nacional é
+     necessário que o botão seja acionado para ficar “ligado”.
+
+3.4. Cancelamento do pedido de opção em início de atividades
+
+     Não será possível cancelar o pedido de opção pelo Simples Nacional realizado como empresa
+     em início de atividades.
+
+     A situação da empresa no Simples Nacional é informada no ato da inscrição do CNPJ e poderá
+     ser acompanhada diretamente no Portal do Simples, por meio da aplicação específica
+     "Acompanhamento da Opção pelo Simples Nacional".
+
+     Não é necessária nova opção. Em caso de regularização, a aprovação é automática.
+
+Voltar ao Sumário                                                                                8
+4. Apuração e recolhimento do IBS e da CBS “por fora” do
+    Simples Nacional
+
+       Atenção! Para detalhes sobre esse assunto, ver o Manual da Opção pelo Regime Regular do
+       IBS e da CBS no Simples Nacional, disponível Portal do Simples Nacional (clique aqui).
+
+     4.1. Opção pelo regime regular da CBS e IBS em 2026
+
+           As empresas optantes pelo Simples Nacional, por padrão, terão o IBS (Imposto sobre Bens
+           e Serviços) e a CBS (Contribuição sobre Bens e Serviços) apurados “por dentro” do Simples
+           Nacional e recolhidos em DAS.
+
+           Se a empresa desejar recolher esses tributos “por fora” do Simples, deverá optar pelo regime
+           regular de apuração e recolhimento de IBS e CBS.
+
+           A opção pelo regime de apuração do IBS e CBS estará disponível nos meses de setembro e
+           março de cada ano.
+
+           Atenção! Excepcionalmente em 2026, o prazo para optar pelo regime regular será entre
+           01/09/2026 e 30/10/2026.
+
+           A opção produzirá efeitos no semestre civil imediatamente seguinte ao semestre na qual a
+           opção foi realizada:
+
+                    • Opção realizada entre 01/09 e 30/10/2026 ➔ os efeitos da opção ocorrerão a
+                         partir de 1º de janeiro do ano-calendário seguinte.
+
+                    • Opção realizada no mês de março ➔ os efeitos da opção ocorrerão a partir de 1º
+                         de julho do mesmo ano-calendário.
+
+       4.1.1. Condição para optar pelo regime regular de IBS/CBS no Simples Nacional
+                 Primeiramente, a empresa deverá avaliar se o regime regular de apuração do IBS e da
+                 CBS (por fora do Simples) é a melhor opção para sua empresa. Além disso:
+
+                 • Deverá ser optante pelo Simples Nacional.
+
+                 • Quem não é optante pelo Simples Nacional, deverá fazer a opção entre 01/09 até
+                     30/10/2026 (ver item 2. Opção das empresas que estão em atividade, mas ainda não
+                     são optantes pelo Simples Nacional). Neste caso, mesmo que a opção pelo Simples
+                     Nacional não seja aprovada, se tiver convicção que entrará no regime, por
+                     regularização ou contestação, poderá fazer opção pelo regime regular de IBS e CBS
+                     até o prazo final em 30/10/2026.
+
+                 • Por fim, deverá acessar o Portal do Simples Nacional e escolher o sistema de opção
+                     pelo regime regular para optantes do Simples Nacional.
+
+Voltar ao Sumário                                                                                        9
+4.2. Opção pelo regime regular da CBS e IBS no Simples Nacional após 2026
+     O contribuinte poderá fazer opção em março e setembro de cada ano. Também poderá
+     renunciar a essa condição nesses dois meses.
+     Exemplos:
+              • Uma empresa que não optou pelo regime regular em 2026, poderá optar durante
+                   o mês de março/2027, com efeito a partir do segundo semestre de 2027.
+              • Uma empresa optou pelo regime regular em 2026, poderá renunciar a essa
+                   condição durante o mês de março/2027, com efeito a partir do segundo semestre
+                   de 2027.
+     Importante! Uma vez realizada a opção, a ausência de renúncia ao regime regular de
+     apuração do IBS e da CBS nos próximos períodos implica na manutenção do referido regime.
+     Ou seja, caso queira se manter no regime híbrido, não será necessário solicitar novamente no
+     semestre seguinte.
+
+     SECRETARIA-EXECUTIVA DO COMITÊ GESTOR DO SIMPLES NACIONAL
+
+Voltar ao Sumário                                                                                  10
+

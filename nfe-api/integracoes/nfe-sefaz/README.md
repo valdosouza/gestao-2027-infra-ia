@@ -168,3 +168,27 @@ Os itens abaixo são o resumo; o fechamento item a item (status + fonte com linh
     **974: o CNPJ do responsável técnico tem de ser o CADASTRADO para o emitente** (P 01/05/2025) — no PR o uso do sistema é pedido pelo
     ESTABELECIMENTO no UPD com a Setes como fornecedora; CSRT (975) H 19/01 · P 23/02/2026; `hashCSRT` = Base64(SHA-1(CSRT + chave)).
 23. **A reforma alarga códigos**: cStat 3–4 dígitos e nProt 15 ou 17 (NT 2025.002 §5.1; o PL_010f já aceita).
+
+---
+
+## Acrescentado em 2026-11-07 (versões mais novas que o ERP Desktop já tinha baixado)
+
+O acervo estava defasado em relação ao que o ERP Desktop baixou entre 27 e 31/10/2026 do Portal NF-e. Estas NTs foram trazidas no mesmo padrão de
+nome (`nt-AAAA-NNN-vX-YY.pdf` + `.txt` em UTF-8). A origem de cada uma é a lista de NTs do Portal NF-e (`https://www.nfe.fazenda.gov.br/portal/listaConteudo.aspx?tipoConteudo=04BIflQt1aY=`); o detalhe do
+que cada NT traz e as datas de produção estão em `../../../fiscal-api/fontes/ORIGENS-ERP-DESKTOP.md`. A visão geral dos acervos está em
+`../../../fiscal-api/fontes/INDEX.md`. **Atenção:** a NT 2026.008 passou da v1.00 para a v1.01 e a 2025.002 da v1.52 para a v1.53; as versões antigas continuam aqui.
+
+| Arquivo | Documento | Bytes | SHA-256 (16) |
+|---|---|---|---|
+| `nt/nt-2014-002-v1-40.pdf` | NT 2014.002 v1.40 — Web Service de Distribuição DF-e (NSU) | 897.753 | 156dcb170e205c07 |
+| `nt/nt-2020-001-v1-60.pdf` | NT 2020.001 v1.60 — Manifestação do destinatário | 1.026.288 | f610878ad5470808 |
+| `nt/nt-2023-002-v1-02.pdf` | NT 2023.002 v1.02 — fim da autorização assíncrona (rejeição 129, produção 05/04/2027) e da inutilização em AC, BA e SP (produção 11/11/2026); publicada em 27/10/2026 | 557.310 | e375b487fdb38c0f |
+| `nt/nt-2024-001-v1-20.pdf` | NT 2024.001 v1.20 — CRT 4 (MEI) e regras de CFOP/CSOSN do MEI | 1.186.076 | fc5e648cac11ed84 |
+| `nt/nt-2025-002-v1-53.pdf` | NT 2025.002-RTC v1.53 — devolução com a chave referenciada no cabeçalho ou no item; publicada em 30/10/2026 | 2.133.453 | d62445d7429806b0 |
+| `nt/nt-2026-002-v1-11.pdf` | NT 2026.002 v1.11 — DANFE simplificado tipo 2, contingência off-line (tpEmis 9); BA02-35/VC02-40/I08-180 em produção em 14/12/2026 | 752.233 | 72c033b2c7490710 |
+| `nt/nt-2026-005-v1-00.pdf` | NT 2026.005 v1.00 — Simples Nacional (CRT 1/2/4): tpRegimeIBSCBS, cAtivSN, gTribSN/gIBSSN/gCBSSN; publicada em 30/10/2026, produção 16/11/2026 | 502.258 | 5219882256663336 |
+| `nt/nt-2026-006-v1-00.pdf` | NT 2026.006 v1.00 — vínculo NF-e × transação financeira (split payment) | 767.681 | 47a65abde315fed1 |
+| `nt/nt-2026-006-v1-01.pdf` | NT 2026.006 v1.01 — vínculo NF-e × split payment (só datas); publicada em 30/10/2026 | 769.687 | 2c5770b54d19b66f |
+| `nt/nt-2026-007-v1-11.pdf` | NT 2026.007 v1.11 — contribuinte exclusivo de IBS/CBS (só datas); publicada em 30/10/2026 | 782.491 | b13006ce48488111 |
+| `nt/nt-2026-008-v1-01.pdf` | NT 2026.008 v1.01 — valor líquido do produto; retira o item "Composição do valor do produto com IBS e CBS"; produção 16/11/2026 | 462.671 | 8134a3f1f4606502 |
+

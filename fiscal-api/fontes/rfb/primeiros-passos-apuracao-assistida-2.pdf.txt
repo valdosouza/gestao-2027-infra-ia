@@ -1,0 +1,163 @@
+   APURAÇÃO ASSISTIDA
+
+                   PRIMEIROS PASSOS
+                               2
+
+1  Número 2 – 08/07/2025
+OBJETIVOS:
+
+    1. Simular o aproveitamento de créditos
+    2. Simular a utilização do PCONT pela ordem cronológica
+
+2  Número 2 – 08/07/2025
+1. Simular o aproveitamento de créditos
+
+Uma das formas de extinção do débito da CBS é a utilização de créditos básicos.
+Para se simular esta operação, propõe-se a seguinte sequência:
+
+    a) A partir de uma operação de compra, faz-se um RAD (isso gera um crédito
+         automaticamente)
+
+    b) Na sequência, faz-se uma operação de venda e se observa o funcionamento
+         do AA
+
+PASSOS:
+1º) Simule uma operação de compra
+Se tiver dúvidas sobre como gerar essa operação, consulte o item 3 das simulações
+do dia 07/jul. Neste exemplo, far-se-á segundo o seguinte esquema, em que XYZ é
+a sua empresa:
+
+Uma vez gerado o documento da venda de ABC para XYZ, o AA trará a seguinte
+apuração para XYZ (sua empresa):
+
+Detalhando, vá à aba OUTRAS INFORMAÇÕES (afinal, seu fornecedor ABC não
+extinguiu a CBS que devia):
+
+3  Número 2 – 08/07/2025
+Como feito anteriormente, na condição de adquirente, vamos recolher o “valor
+passível de recolhimento”. Para isso, detalhamos os créditos básicos não
+apropriados:
+
+Clicando no botão em destaque acima, fazemos o RAD – recolhimento pelo
+adquirente (faremos o pagamento no valor integral):
+
+4  Número 2 – 08/07/2025
+Será gerado o DARF, com o detalhamento da operação. Lembre-se que sempre o
+recolhimento pelo adquirente (RAD) é vinculado a uma operação. Perceba que o
+DFe identifica a operação e o documento traz o CNPJ do fornecedor:
+
+Com o número do documento, fazemos o recolhimento no Simulador de
+Pagamentos. Assim saia do AA e utilize o simulador de pagamentos, a partir do
+“SIMULAR OPERAÇÕES DE CONSUMO”:
+
+Uma vez realizada a simulação, retorne para o AA. Observe que o AA indica um
+saldo credor (isso ocorre de forma online):
+
+Na APURAÇÃO, há a indicação de créditos apropriados na apuração corrente. O
+significado prático é que são créditos que poderão ser utilizados caso haja
+operações que gerem débitos de CBS:
+
+5  Número 2 – 08/07/2025
+Agora simularemos uma operação de venda que tenha gerado exatamente R$
+1.500,00 de CBS. O que se espera?
+Simule, com a utilização do “SIMULAR OPERAÇÕES DE CONSUMO”, no portal da
+Reforma Tributária., a operação. Coloque seu CNPJ como fornecedor, escolha um
+adquirente e como vCBS coloque exatamente o mesmo valor dos créditos que
+dispõe.
+Retorne para sua apuração. Se fizer isso bem rapidamente, seu débito ainda não
+estará processado e assim aparecerá:
+
+Esperando completar os 10 min para processamento, o débito é processado e o
+resumo muda (não esqueça de dar um “refresh” na tela para ver isto ocorrer):
+
+6  Número 2 – 08/07/2025
+Ao detalhar a apuração, verá que o débito está processado e que os créditos de CBS
+apropriados foram utilizados. Assim, o resultado da apuração passou a zero. Neste
+exemplo, fica claro que o débito foi extinto por créditos apropriados na apuração
+corrente:
+
+Assim, percebe-se como os créditos básicos são utilizados pelo AA para fazer a
+apuração.
+
+Antes de passar para a próxima simulação, recomenda-se experimentar o botão
+EXPORTAR EXTRATOS.
+
+2. Simular a utilização do PCONT pela ordem cronológica
+
+Para simularmos as regras de extinção dos débitos da CBS, começaremos com a
+utilização de pagamentos feitos pelo próprio contribuinte. Estes pagamentos são
+aproveitados em ordem cronológica dos débitos.
+
+Assim, geraremos duas operações de venda. É IMPORTANTE LEMBRAR DE
+COLOCAR AS DATAS ADEQUADAS NO XML. O AA considera a ordem de emissão do
+documento como a referência para antiguidade.
+
+Operação 1 – 07/07/2025, com CBS de R$ 500,00
+
+Operação 2 – 08/07/2025, com CBS de R$ 250,00
+
+7                                              Número 2 – 08/07/2025
+Operação 1 (atenção ao campo dhEmi):
+
+Operação 2
+Após enviar os documentos, entre no AA. Após o processamento dos débitos, terá
+a seguinte visão na APURAÇÃO (por que não aproveitar e explorar os extratos?):
+
+Detalhando os débitos, percebe-se que foram gerados por duas operações de
+venda:
+
+8  Número 2 – 08/07/2025
+Do total dos débitos processados, percebe-se que R$ 500,00 são referentes a uma
+operação de 07/07 e R$ 250,00 de uma operação de 08/07.
+Agora, faremos um pagamento (PCONT) de R$ 400,00. O que ocorre? Simule o
+pagamento, clicando no botão GERAR DARF da tela anterior:
+
+Faremos um pagamento parcial (R$ 400,00):
+
+9  Número 2 – 08/07/2025
+Após simular o pagamento, o que ocorre? Observe a APURAÇÃO no AA. O saldo a
+pagar passou de R$ 750,00 para R$ 350,00:
+
+Mas, como esses R$ 400,00 foram utilizados? Que operações dos débitos foram
+extintas? Detalhe a apuração e descubra. Vamos começar analisando a partir dos
+débitos:
+
+Detalhando:  Número 2 – 08/07/2025
+10
+Nessa visão, consegue-se perceber o total processado (R$ 750,00), o saldo a pagar
+(R$ 350,00) e o saldo a pagar de cada operação. Observe que os R$ 400,00 foram
+integralmente utilizados na operação do dia 07/07 – por isso seu saldo devedor é de
+R$ 100,00.
+
+Pode detalhar a operação que restou R$ 100,00 de saldo a pagar. Terá os dados das
+operações que foram extintas e sua situação:
+
+OUTRA OPÇÂO: detalhar a partir dos pagamentos efetuados pelo contribuinte:
+
+11  Número 2 – 08/07/2025
+Nesse caso, o detalhamento leva a outra visão. Serão apresentados os pagamentos
+realizados pelo contribuinte (no caso, apenas 1):
+
+Ao se detalhar o pagamento, visualiza-se os débitos (com a indicação das
+operações) que foram extintos:
+
+As duas formas de visualização levaram à mesma conclusão. O pagamento feito
+pelo fornecedor – o PCONT – é utilizado em ordem cronológica.
+
+Ah... não se esqueça de explorar os extratos. Eles nos auxiliam a perceber o
+conjunto das operações e nos permitem avaliar que dados gostaríamos de ter para
+análise.
+
+                                                   ***
+
+12  Número 2 – 08/07/2025
+Esperamos que estes dois exemplos tenham auxiliado a compreender mais um
+pouquinho do AA.
+
+Seja inventivo. Aproveite o ambiente de teste. TESTE, DISCUTA, SUGIRA.
+
+Assim, juntos iremos construir um sistema melhor para toda a sociedade. Quem
+sabe seja um passo para, como diz a canção, dias melhores para sempre.
+
+13  Número 2 – 08/07/2025
+

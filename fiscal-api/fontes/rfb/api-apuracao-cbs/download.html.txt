@@ -1,0 +1,90 @@
+Download Arquivo de Retorno 
+ Documentação da apuração CBS 
+ Índice
+ Objetivo
+ Histórico de versão
+ Regras de retorno
+ Endpoint da api
+ Consultar link para download do arquivo de retorno
+ 1. Objetivo
+ Permite consultar o link temporário ( urlAssinada ) para download do arquivo de retorno de uma solicitação assíncrona.
+ 2. Histórico de versão
+ Data 
+ Versão 
+ Descrição 
+ 13/10/2026 
+ 1.0 
+ Versão inicial 
+ 3. Regras de retorno
+ O endpoint retorna urlAssinada para download temporário do arquivo.
+ Quando disponível, retorna também urlAssinadaExpiraEm .
+ A URL assinada deve ser consumida por GET , sem Bearer Token e sem headers adicionais.
+ Após expiração da URL assinada, é necessário gerar novo link consultando novamente o endpoint de download.
+ 4. Endpoint da api
+ URL de Produção Restrita: 
+ https://api.receitafederal.gov.br/apuracao-cbs-prr/v2/download/{tiqueteSolicitacao} 
+ URL de Produção: 
+ https://api.receitafederal.gov.br/apuracao-cbs/v2/download/{tiqueteSolicitacao} 
+ 4.1 Campos de entrada
+ Campo 
+ Formato 
+ Descrição 
+ tiqueteSolicitacao 
+ String 
+ Tíquete da solicitação. 
+ 4.2 Header
+ Campo 
+ Formato 
+ Descrição 
+ Authorization 
+ String 
+ Bearer <token de acesso> 
+ Accept 
+ String 
+ application/json 
+ 4.3 Método e exemplo de requisição
+ Método: GET 
+ curl --location --request GET 'https://api.receitafederal.gov.br/apuracao-cbs/v2/download/{tiqueteSolicitacao}' \
+ --header 'Authorization: Bearer <access_token>' \
+ --header 'Accept: application/json'
+ Exemplo com dados fictícios (Produção): 
+ curl --location --request GET 'https://api.receitafederal.gov.br/apuracao-cbs/v2/download/TQ-20260925-00000001' \
+ --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dadoFicticio.assinaturaFicticia' \
+ --header 'Accept: application/json'
+ 4.4 Possíveis respostas
+ HTTP 
+ Quando ocorre 
+ Resposta 
+ 200 OK 
+ Solicitação concluída e arquivo disponível. 
+ JSON com urlAssinada e, quando disponível, urlAssinadaExpiraEm . 
+ 401 Unauthorized 
+ Token, tíquete ou identificação do consumidor inválidos. 
+ JSON com codigoErro=NAO_AUTORIZADO e mensagemErro . 
+ 404 Not Found 
+ Solicitação inexistente ou arquivo indisponível (por exemplo, processamento ainda não concluído ou download já realizado). 
+ JSON com codigoErro=ARQUIVO_INDISPONIVEL e mensagemErro . 
+ 500 Internal Server Error 
+ Erro interno ao consultar o download. 
+ JSON com codigoErro=ERRO_INTERNO e mensagemErro . 
+ 4.5 Exemplos de retorno
+ Sucesso (HTTP 200): 
+ {
+ "urlAssinada": "https://storage.exemplo.gov.br/arquivo-retorno?X-Amz-Algorithm=AWS4-HMAC-SHA256&...",
+ "urlAssinadaExpiraEm": "2026-09-27T14:30:00Z"
+}
+ Não autorizado (HTTP 401): 
+ {
+ "codigoErro": "NAO_AUTORIZADO",
+ "mensagemErro": "consumidor inválido"
+}
+ Arquivo indisponível (HTTP 404): 
+ {
+ "codigoErro": "ARQUIVO_INDISPONIVEL",
+ "mensagemErro": "Arquivo de retorno indisponível"
+}
+ Erro interno (HTTP 500): 
+ {
+ "codigoErro": "ERRO_INTERNO",
+ "mensagemErro": "erro interno ao processar solicitação"
+}

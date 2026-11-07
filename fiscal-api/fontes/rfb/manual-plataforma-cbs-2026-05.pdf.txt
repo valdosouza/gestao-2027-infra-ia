@@ -1,0 +1,1187 @@
+                                                                             RTC – Projeto Piloto
+
+Reforma Tributária do Consumo (RTC)
+       Manual Plataforma da CBS
+            Versão Maio/2026
+
+                                                                                                 1
+                                                                   Manual Plataforma CBS
+
+                                          EXPEDIENTE
+
+               SECRETÁRIO ESPECIAL DA RECEITA FEDERAL DO BRASIL
+
+                               Robinson Sakiyama Barreirinhas
+SUBSECRETÁRIA-GERAL DA SECRETARIA ESPECIAL RECEITA FEDERAL DO BRASIL
+
+                                      Adriana Gomes Rêgo
+
+        GERENTE DO PROGRAMA – REFORMA TRIBUTÁRIA DO CONSUMO
+                                Juliano Brito da Justa Neves
+
+GERENTE SUBSTITUTO DO PROGRAMA – REFORMA TRIBUTÁRIA DO CONSUMO
+                                    Marcos Hubner Flores
+
+                           RESPONSÁVEIS PELA ELABORAÇÃO
+                           Ana Carolina de Souza Rigueira Ribeiro
+
+                                 Ana Jandira Monteiro Soares
+                                       André Luis Theresa
+                                       André Osmir Fiorelli
+                                       Ariel Bolzan Witczak
+
+                                Daniela Godoy de Vasconcellos
+                                     Letícia Murta Tedesco
+                                       Levi Braga Carvalho
+
+                                  Luiza Rodrigues Guimarães
+                                     Maira Simão Bonfante
+
+                                Monica Reis de Lossio e Seiblitz
+                             Natália Gabriela Valente dos Santos
+
+                                        Rafael Borba Brito
+                                    Roberto Kappel Castilho
+                                   Thaíse de Andrade Cunha
+
+                                                                                                           2
+        Manual Plataforma CBS
+
+ÍNDICE
+
+Considerações iniciais sobre a Reforma Tributária do Consumo ...................................................... 4
+Considerações iniciais sobre a Plataforma CBS no Ambiente Beta .................................................5
+Portal Nacional da Tributação sobre Bens e Serviços ............................................................................... 6
+Autorização de Acesso ............................................................................................................................................8
+Documentos Fiscais .............................................................................................................................................10
+API – Application Programming Interface ....................................................................................................12
+Calculadora de Tributos .......................................................................................................................................14
+Apuração Assistida .................................................................................................................................................23
+Simulação de pagamento CBS ..........................................................................................................................37
+Atendimento CBS ....................................................................................................................................................40
+Consulta Ressarcimento e Transferência CBS ..........................................................................................47
+
+        3
+                                                                             Manual Plataforma CBS
+
+O presente Manual foi elaborado com o objetivo de auxiliar os contribuintes a entender o novo
+fluxo da tributação e conhecer as funcionalidades da Plataforma CBS. Cabe ressaltar que
+tanto os atos normativos quanto os sistemas da RTC ainda estão em fase de construção e
+desenvolvimento, motivo pelo qual o Ambiente é chamado de Beta. Portanto, alterações são
+previstas e serão realizadas no intuito de trazer ainda mais facilidades e melhorias para os
+contribuintes.
+
+CONSIDERAÇÕES INICIAIS SOBRE A REFORMA TRIBUTÁRIA DO CONSUMO
+
+A Reforma Tributária do Consumo (RTC) modifica estruturalmente o sistema tributário brasileiro
+com a finalidade de o tornar mais simples, transparente, cooperativo, justo e moderno. Um dos
+principais destaques é a criação do Imposto sobre Valor Adicionado (IVA), que será aplicado ao
+consumo de bens e serviços, gerando débitos e créditos em cada fase da produção ou prestação
+de serviço, o que resultará na incidência apenas sobre o valor agregado em cada uma delas.
+
+No Brasil, a aplicação do IVA será dual, abrangendo dois tributos distintos, administrados por
+diferentes entes federativos. Nesse contexto, foram instituídos os seguintes tributos:
+
+     Contribuição Social sobre Bens e Serviços (CBS), administrada pela União. Ela substituirá
+         PIS, COFINS e, parcialmente, o IPI (mantido apenas para produtos fabricados fora da Zona
+         Franca de Manaus (ZFM), que também sejam produzidos na ZFM).
+
+     Imposto sobre Bens e Serviços (IBS), administrado pelos estados e municípios por meio de
+         um Comitê Gestor. Ele substaituirá o ICMS e o ISS.
+
+Além da CBS e do IBS, também teremos o Imposto Seletivo (IS). Sua finalidade é desestimular o
+consumo de produtos e serviços prejudiciais à saúde ou ao meio ambiente, conhecido
+popularmente como o Imposto do Pecado.
+
+A transição entre o modelo atual e o novo modelo tributário será feita de forma progressiva com
+implementação total apenas em 2033. Porém, a CBS terá uma transição mais curta.
+
+Durante todo o ano de 2026, os tributos atuais (IPI, ICMS, ISS, PIS e Cofins) convivem com a CBS e
+o IBS. No entanto, as alíquotas dos novos tributos são reduzidas e o seu destaque nos documentos
+fiscais emitidos é apenas declaratório. Há a informação do novo tributo, mas ele não é somado ao
+valor total da operação. O destaque permitirá que os contribuintes se adaptem ao novo modelo.
+Ou seja, em 2026 CBS e IBS devem ser destacados nos documentos fiscais emitidos, mas não
+há o pagamento destes tributos.
+
+A RTC trouxe a mudança na lógica atual do lançamento dos tributos por homologação. Na
+sistemática vigente o contribuinte pratica seus atos econômicos e jurídicos, faz suas compras e
+vendas, apura os valores devidos diante dessas atividades, identifica os tributos, faz a sua
+declaração e, assim, constitui os créditos tributários por meio de confissão. Após a constituição do
+
+                                                                                                                        4
+                                                                             Manual Plataforma CBS
+
+crédito tributário vem o pagamento. E, durante 5 anos, o contribuinte fica à espera de uma possível
+atuação da Receita Federal para saber se o valor confessado foi confirmado ou não.
+Com a RTC, será possível aproximar todos esses passos, inclusive desobrigando o contribuinte de
+muitas dessas etapas. A preocupação do contribuinte será realizar a sua atividade emitindo o
+respectivo documento fiscal. A grande mudança é que o documento fiscal passará a ser a
+confissão de dívida. Essa função não será mais das declarações para os tributos CBS e IBS.
+
+A partir dos documentos fiscais, a Receita Federal consegue auxiliar o contribuinte a calcular o
+tributo devido em cada documento fiscal e a apurar a soma de débitos e créditos de CBS. Haverá a
+informação de quanto ele deve pagar efetivamente. A extinção do crédito tributário poderá ser
+realizada em tempo real. Não será necessário esperar o final da apuração para identificar possíveis
+créditos a favor do contribuinte.
+
+É importante destacar que em 29 de abril de 2026 foi publicado o Decreto nº 12.955, que
+regulamenta a CBS. Nele estão estabelecidas normas gerais, definições e as diretrizes da
+aplicação da CBS.
+
+CONSIDERAÇÕES INICIAIS SOBRE A PLATAFORMA CBS NO AMBIENTE BETA
+
+Neste cenário de profundas transformações no sistema tributário brasileiro, a Receita Federal
+disponibiliza a Plataforma da CBS em Ambiente Beta.
+
+A Plataforma CBS disponível no Ambiente Beta, que pode ser acessada entre 13 de janeiro de 2026
+até dezembro de 2026, é um espaço tecnológico projetado para replicar as funcionalidades do
+sistema definitivo da CBS, mas em caráter de simulação. O sistema definitivo estará vigente a
+partir de 2027.
+
+O principal objetivo do Ambiente Beta é permitir que os contribuintes:
+     validem seus processos internos,
+     testem seus sistemas e integrações com as novas regras da CBS e
+     adaptem-se ao novo modelo tributário sem gerar obrigações tributárias principais, ou seja,
+         sem necessidade de pagamento efetivo da CBS em 2026.
+
+A Plataforma da CBS está conectada aos sistemas dos autorizadores de Documentos Fiscais
+Eletrônicos (DF-e). Isso significa que os DF-e reais emitidos pelas empresas serão
+automaticamente carregados na Plataforma da CBS e, havendo destaque de CBS conforme as
+Notas Técnicas, serão tratados pela Apuração Assistida. O tratamento acontecerá conforme
+cronograma de implantação de cada tipo de evento dos DF-e que será desenvolvido durante o ano
+de 2026. Contudo, os pagamentos, pedidos de ressarcimento e devoluções de Cashback serão
+apenas simulados, sem validade jurídica nem efeitos financeiros reais.
+
+                                                                                                                        5
+                                                                             Manual Plataforma CBS
+
+PORTAL NACIONAL DA TRIBUTAÇÃO SOBRE BENS E SERVIÇOS
+O Portal Nacional da Tributação sobre Bens e Serviços é o ambiente por meio do qual os usuários
+podem acessar os serviços digitais relacionados aos tributos incidentes sobre o consumo de bens
+e serviços, como a CBS e o IBS.
+Acesso
+Acesse o Portal pelo seu navegador de internet, no endereço https://consumo.tributos.gov.br. Ele
+pode ser acessado por computadores (desktop) ou dispositivos móveis como tablets e celulares.
+
+Autenticação
+Alguns serviços precisam que o usuário seja identificado por meio de autenticação digital. Para se
+autenticar, entre com sua conta gov.br, pressionando o botão “Entrar com gov.br” localizado no
+canto superior direito da tela.
+
+Utilize o método de entrada preferido para se autenticar (CPF e senha, conta bancária, certificado
+digital...). Todos os métodos são aceitos. Se tiver dúvidas sobre como utilizar a sua conta gov.br,
+acesse https://www.gov.br/conta para saber mais.
+
+                                                                                                                        6
+                                                                             Manual Plataforma CBS
+
+Representação
+Alguns serviços digitais, como a Apuração Assistida de CBS, são exclusivos para pessoas inscritas
+no Cadastro Nacional de Pessoas Jurídicas (CNPJ). Se você não utiliza certificado digital de pessoa
+jurídica (e-CNPJ), ou se você é um procurador digital de uma entidade, será necessário representar
+esta outra pessoa para acessar esses serviços.
+Para representar alguém, pressione seu nome, localizado no canto superior direito da tela.
+
+Em seguida, na janela que abrirá:
+    1. Preencha o CPF ou CNPJ de quem deseja representar;
+    2. Selecione o tipo de representação;
+    3. Pressione o botão “Representar”.
+
+O representante no CNPJ (responsável indicado na inscrição do CNPJ) e procuradores digitais
+previamente autorizados podem representar outras pessoas.
+Utilize o serviço “Minhas Autorizações” de Acesso para gerenciar suas autorizações, podendo
+consultar, aceitar, rejeitar ou conceder autorizações de acesso.
+
+                                                                                                                        7
+                                                                             Manual Plataforma CBS
+
+Navegação
+Para navegar pelos serviços do Portal, pressione o botão de menu, localizado no canto superior
+esquerdo da tela, ao lado do título do Portal. Um menu de serviços será exibido.
+
+Os serviços digitais estarão agrupados por perfil de usuário. Navegue entre os serviços para
+contribuintes, serviços para consumidores, entre outros.
+Os principais serviços estarão também destacados no formato de ícones, agrupados por abas, na
+página inicial do Portal.
+Se tiver alguma dificuldade em encontrar o serviço, utilize a ferramenta de busca disponível na
+parte superior do portal, para pesquisar o serviço desejado.
+AUTORIZAÇÃO DE ACESSO
+A Autorização de Acesso, nova versão do sistema de procurações eletrônicas da Receita Federal, é
+o procedimento pelo qual o contribuinte permite que outras pessoas designadas atuem em seu
+nome nos portais da RFB.
+Nessa nova versão, a autorização só passa a valer após a confirmação de quem irá atuar como
+representante. Quem concede a autorização de acesso aos serviços poderá cancelá-la a qualquer
+momento.
+Como conceder a Autorização de Acesso?
+
+    1. Entre no site da Receita Federal e clique na opção Serviços.
+
+                                                                                                                        8
+                                                                             Manual Plataforma CBS
+
+    2. O usuário será direcionado à página do Portal de Serviços da Receita. Na aba Negócios,
+         clique em Controle de Acesso.
+
+    3. Em seguida, clique em Minhas Autorizações de Acesso. Caso queira, basta seguir os passos
+         e conceder autorização para que outra pessoa acesse os portais da RFB em nome da sua
+         empresa.
+
+Os serviços que estão relacionados à Reforma Tributária são:
+                 Minhas Apurações Assistidas de CBS
+                 Simular Pagamento de DARF de CBS
+                 Consultar Transferências de CBS
+                 Consultar Ressarcimento de CBS
+                 Atendimento sobre CBS
+                 Gerar Credencial de Acesso para API
+
+                                                                                                                        9
+                                                                             Manual Plataforma CBS
+
+Como acessar as Autorizações de Acesso em que sou a pessoa representante?
+    1. Na página Minhas Autorizações de Acesso, clique na seta ao lado do nome da pessoa que
+         está logada.
+
+DOCUMENTOS FISCAIS
+No novo modelo da RTC, o Documento Fiscal Eletrônico (DF-e) ganha um papel central, passando
+a ser a confissão de dívida e a principal fonte de dados para as Administrações Tributárias.
+Adaptação dos DF-e Existentes
+Os documentos fiscais já utilizados foram adaptados para incluir novos campos (tags) que
+contemplam a tributação da CBS, IBS e IS, bem como informações de CST (Código de Situação
+Tributária) e cClassTrib (Código da Classificação Tributária).
+Em maio de 2026 estão sendo carregados nos sistemas os seguintes documentos fiscais
+eletrônicos:
+
+     CT-e
+     NF-e
+     NFS-e
+     CT-e Simplificado
+     CT-e OS
+     NFCom
+     BP-e
+     BP-e TM
+
+                                                                                                                        10
+                                                                             Manual Plataforma CBS
+
+     NFC-e
+     NF3-e
+
+Preenchimento, Campos e Dados dos Documentos Fiscais
+
+A Apuração Assistida recepciona os dados conforme informados nos DF-e. Se houver dúvida sobre
+Notas Técnicas ou emissão de documentos fiscais, procure o órgão emissor.
+Segue link com atalhos para os principais sites:
+https://www.gov.br/receitafederal/pt-br/assuntos/empresas-e-negocios/dfe
+
+Locação de Bens Móveis ou Imóveis
+
+A locação de bens móveis ou imóveis será declarada através do emissor nacional da Nota Fiscal de
+Serviço Eletrônica (NFS-e), mesmo que a locação ocorra em município que possui emissor próprio
+de NFS-e, pois os emissores municipais de NFS-e abrangem apenas as operações sujeitas a
+Imposto Sobre Serviço (ISS). A NFS-e nacional ainda não contempla a locação de móveis ou
+imóveis.
+
+A opção pelo recolhimento do IBS e da CBS com base na receita bruta recebida nos contratos de
+locação, cessão onerosa ou arrendamento de bem imóvel observará regras distintas, de acordo
+com a finalidade do contrato e poderá ser por meio do documento fiscal. No entanto, é necessário
+aguardar a regulamentação das regras e procedimentos.
+
+Nota Fiscal de Cancelamento
+
+Dados dos documentos fiscais de cancelamento/devolução ainda não alimentam a Apuração
+Assistida.
+
+NF Cartórios
+
+Esclarecimentos e orientações aos notários e registradores sobre a incidência da CBS e do IBS
+sobre a atividade notarial e de registro, especialmente no que se refere ao período de transição e
+às obrigações acessórias previstas para o exercício de 2026, constam na Nota Técnica publicada
+em conjunto pela Associação dos Notários e Registradores do Brasil (ANOREG/BR), Confederação
+Nacional de Notários e Registradores (CNR), os Institutos Membros, Colégio Notarial do Brasil
+(CNB/CF), Instituto de Registro Imobiliário do Brasil (IRIB), Associação Nacional dos Registradores
+de Pessoas Naturais (ARPEN/BR), Instituto de Registro de Títulos e Documentos e de Pessoas
+Jurídicas do Brasil (IRTDPJ/BR), Instituto de Estudos de Protesto de Títulos do Brasil (IEPTB/BR)
+e Registro de Imóveis do Brasil (RIB/BR).
+
+                                                                                                                        11
+                                                                             Manual Plataforma CBS
+
+Nota Fiscal Complementar (a partir de maio/2026)
+
+Nota de débito - perda em estoque (a partir de maio/2026)
+
+Nota de débito - anulação de crédito por saídas imunes/isentas (a partir de maio/2026)
+
+Nota de débito - multa e juros (a partir de maio/2026)
+
+Nota de débito - pagamento antecipado (a partir de maio/2026)
+
+IMPORTANTE: as notas que passam a estar disponíveis em maio/2026 estão detalhadas na
+seção Apuração Assistida deste Manual.
+
+API - APPLICATION PROGRAMMING INTERFACE
+
+Application Programming Interface ou, em português, Interface de Programação de Aplicação (API)
+para a Apuração Assistida tem o objetivo de permitir que os contribuintes possam receber as
+informações em formato legível por máquina, viabilizando o cruzamento de dados e a validação da
+apuração por meio de seus sistemas.
+
+As APIs que serão disponibilizadas, gradativamente e de forma gratuita, são:
+
+     Consultar Débitos de CBS do Mês Corrente
+     Consultar Créditos de CBS do Mês Corrente;
+     Consultar Pagamentos de CBS do Mês Corrente;
+     Consultar Pagamentos de CBS a Fornecedores do Mês Corrente;
+     Concluir Apuração de CBS do Mês Anterior.
+
+Neste momento, estão disponíveis a API Consultar Débitos de CBS e a API para obter dados
+atualizados sobre tributos (atuais e retroativos). Outra API já disponibilizada é a da Calculadora de
+Tributos, para ser integrada com os sistemas emissores de documentos fiscais, ERPs, softwares
+contábeis e demais soluções tecnológicas utilizadas pelos contribuintes e pelo mercado.
+
+Glossário
+
+     API Key (chave): código único usado para autenticar e autorizar um usuário, desenvolvedor
+         ou aplicativo.
+
+     Endpoint: endereço específico (URL) onde a API recebe requisições e fornece acesso a um
+         recurso.
+
+     Header (cabeçalho): Informações adicionais enviadas na requisição/resposta, como tipo de
+         conteúdo ou tokens.
+
+     Body/Payload: O corpo da requisição ou resposta, contendo os dados reais enviados (como
+                                                                                                                        12
+                                                                             Manual Plataforma CBS
+
+         JSON ou XML).
+     Webhook: endereço específico (URL) para onde a API retorna informações.
+
+Como gerenciar acesso
+
+     Utilize o serviço “Gerar Credencial” disponível no Portal Nacional da Tributação sobre
+         Consumo (https://consumo.tributos.gov.br)
+
+     É necessário autenticar-se com a conta gov.br e, se for representante no CNPJ ou
+         procurador, representar o contribuinte desejado.
+
+     As credenciais (ClientId e ClientSecret) serão necessárias para realizar a autenticação no
+         uso das API.
+
+Como consultar a Apuração de Débitos de CBS
+
+A API gera a lista de débitos do mês corrente (mês da consulta), do mês anterior (período de ajuste)
+e dos débitos de períodos mais antigos, processados no mês corrente (débitos extemporâneos).
+
+Passo 1: Autenticar (token)
+
+     Faça a chamada para o endpoint abaixo, informando o clientID e clientSecret gerados para
+         sua empresa ou procurador.
+
+     A chave de acesso (token) gerada permite solicitar e baixar arquivos por até 1 hora. Após
+         esse tempo, uma nova autenticação precisa ser realizada.
+
+     Endpoint: https://api.receitafederal.gov.br/token
+     Entradas: [user] clientID e clientSecret.
+     Retorno: chave de acesso (token).
+
+Passo 2: Solicitar (Tíquete)
+
+     Faça a chamada para o endpoint abaixo, informando a inscrição no CNPJ (apenas os 8
+         primeiros dígitos), chave de acesso (token) e webhook (URL), onde receberá o retorno da
+         chamada.
+
+     O acesso ao endpoint é restrito a 2 chamadas por dia. Chamada é cada tentativa que o
+         sistema faz de buscar o arquivo para download. Se a chamada der certo, o tíquete será
+         usado. Caso dê errado, haverá o consumo de uma chamada sem a utilização do tíquete.
+
+     Excedido o número máximo de chamadas (dois tíquetes por dia), a API retornará o erro 429:
+         “Too many requests”.
+
+     Endpoint:https://api.receitafederal.gov.br/rtc/apuracao-cbs/v1/{cnpj}
+     Entradas:[endpoint] inscrição no CNPJ (8 dígitos);[header] chave de acesso (token); e[body]
+
+         webhook (URL).
+     Retorno: tíquete da solicitação.
+
+                                                                                                                        13
+                                                                             Manual Plataforma CBS
+
+Passo 3: Baixar (download)
+
+     Faça a chamada para o endpoint abaixo, informando o tíquete gerado no passo anterior e a
+         chave de acesso (token).
+
+     O acesso ao endpoint é restrito a 8 chamadas por dia, sendo permitido um único acesso por
+         tíquete.
+
+     Endpoint: https://api.receitafederal.gov.br/rtc/download/v1/{tiquete}
+     Entradas: [endpoint] tíquete; e [header] chave de acesso (token).
+     Retorno: arquivo JSON com a relação de débitos de CBS.
+
+Não há limites de usuários via API na Apuração Assistida, mas cada CNPJ poderá realizar duas
+consultas por dia.
+
+Depois de a empresa conseguir a chave de acesso (token) e o TíqueteDownload, ela fará uma última
+chamada para um novo endpoint e, enfim, conseguirá baixar o arquivo com a lista de débitos
+daquela apuração. O arquivo ficará disponível para download por 24 horas. Durante esse período,
+será possível baixar o arquivo quantas vezes ela quiser.
+
+CALCULADORA DE TRIBUTOS
+
+ A Calculadora de Tributos é o motor de cálculo oficial da Reforma Tributária. Ela incorpora regras
+ e parâmetros normativos para o cálculo de CBS, IBS e Imposto Seletivo, conforme a Lei
+ Complementar nº 214 de 2025 e as notas técnicas pactuadas entre União, Estados e Municípios.
+
+ O motor é disponibilizado em código-fonte aberto e pode ser executado localmente, com banco
+ de dados embarcado, para integração com sistemas de emissão e escrituração. A mesma versão
+ utilizada pela Administração Tributária é disponibilizada à sociedade, com versionamento e
+ histórico de alterações.
+
+ A Calculadora, quando executada localmente, opera fora do ambiente da Administração
+ Tributária, sem realizar coleta de dados, sem telemetria e sem transmissão automática de
+ informações sobre as operações simuladas ou processadas, permanecendo o processamento
+ restrito ao ambiente de execução do usuário. Essa característica assegura autonomia de uso e
+ preserva o sigilo das informações tratadas, pois os dados inseridos para cálculo e os resultados
+ obtidos não são enviados à Administração Tributária.
+
+ A Calculadora promove a transição do modelo tradicional de autodeclaração para uma lógica
+ cooperada, na qual a conformidade tributária é induzida pela própria ferramenta. As regras são
+ aplicadas automaticamente, com mínima necessidade de intervenção manual.
+
+ O cálculo é orientado por matriz de decisão baseada nos códigos CST e cClassTrib,
+
+                                                                                                                        14
+                                                                            Manual Plataforma CBS
+
+complementados por parâmetros da operação, como objeto da operação, local (UF e município),
+data do fato gerador e classificação do bem ou serviço (NCM ou NBS). O resultado inclui valores
+calculados, memória de cálculo e referência normativa associada.
+
+Sempre que houver atualização de alíquota, regra de cálculo ou parametrização normativa, a
+Administração Tributária entrega automaticamente essas alterações aos contribuintes por meio
+do mecanismo de atualização da Calculadora, garantindo que os sistemas estejam
+permanentemente alinhados à legislação vigente.
+
+A Calculadora integra a arquitetura da Plataforma RTC e pode ser acessada por duas interfaces:
+
+ simulador web, para uso humano;
+ API, para consumo por sistemas.
+
+As duas interfaces utilizam o mesmo motor de cálculo. No simulador e na API, o motor retorna,
+além do valor do tributo, a memória de cálculo e a referência normativa associada aos principais
+passos do enquadramento, de modo a permitir verificação do resultado e reprodução de
+ocorrências.
+As atualizações de regras, tabelas e parâmetros são publicadas nos canais oficiais do projeto,
+com versionamento, para manter alinhamento entre contribuintes e o componente e
+Administração Tributária.
+
+Único motor de cálculo, duas formas de acesso:
+
+     Simulador de Cálculo Online (interface humano–máquina)
+
+O simulador disponibiliza uma interface web acessível por computador, celular ou tablet. Indicado
+para uso de contribuintes, advogados, contadores, consultores e demais interessados,
+permitindo a simulação de operações de consumo por meio da entrada manual dos dados e da
+visualização estruturada dos resultados, incluindo memória de cálculo, enquadramento tributário
+e base legal aplicada, constituindo uma camada de apresentação voltada à compreensão
+humana.
+
+     Interface de Integração via API (interface máquina–máquina)
+
+Esse mesmo motor de cálculo também por ser acessado por meio de chamadas de máquina a
+máquina, utilizando APIs padronizadas. Essa forma de acesso é destinada à integração com
+sistemas emissores de documentos fiscais, ERPs, softwares contábeis e demais soluções
+tecnológicas utilizadas pelos contribuintes e pelo mercado.
+
+Para esse fim, são disponibilizados manuais técnicos e documentação para desenvolvedores, que
+                                                                                                                      15
+                                                                            Manual Plataforma CBS
+
+orientam programadores quanto:
+     aos endpoints disponíveis;
+     aos formatos de entrada e saída;
+     aos códigos de retorno.
+
+O que é possível utilizar?
+
+A Calculadora opera offline, com banco de dados embarcado, e oferece:
+     Geração da memória de cálculo;
+     Indicação da referência normativa associada;
+     Integração com sistemas emissores via API local;
+     Recursos de compartilhamento de simulações (importar, exportar, URL e QR Code);
+     Geração de relatório em PDF, com dados de entrada, resultado e memória de cálculo.
+
+Funcionalidades
+     Simulador online;
+     Cálculo automático dos tributos;
+     Identificação do tratamento tributário por item;
+     Indicação da alíquota, base de cálculo e valor calculado;
+     Aplicação de regimes diferenciados e benefícios fiscais;
+     Orientações sobre crédito da etapa anterior (manutenção ou estorno) e possibilidade de
+         apropriação de crédito;
+     Geração da memória de cálculo e base legal;
+     Capacidade de compartilhamento dos dados da operação via exportação de arquivo JSON,
+         URL ou QR Code.
+
+Dados Abertos
+     Tabelas de alíquotas e referências legais;
+     Regras de regimes diferenciados e benefícios fiscais;
+     Matriz CST × cClassTrib com efeitos tributários;
+     Documentação técnica (Swagger).
+
+Integração com os sistemas dos Contribuintes
+
+Não há APIs públicas para cálculo online.
+
+A integração ocorre por meio do módulo offline, que permite:
+     Execução local via APIs internas;
+     Conexão com sistemas emissores (ERPs);
+     Acesso ao simulador embarcado e à documentação.
+
+                                                                                                                      16
+                                                                            Manual Plataforma CBS
+
+O contribuinte não opera dois sistemas. Ele não acessa um aplicativo da Receita Federal para
+simular tributos e depois transfere os dados ao ERP. A Calculadora é chamada automaticamente
+pelo sistema do contribuinte, sem qualquer intervenção direta. Seu uso é invisível: atua de forma
+silenciosa, contínua e integrada ao fluxo operacional, garantindo conformidade sem alterar a
+experiência do usuário.
+Exemplo de utilização do Simulador de Cálculo Online
+O simulador de cálculo online permite simular uma operação de consumo específica para
+visualizar o tratamento tributário aplicável antes da emissão do documento fiscal e,
+adicionalmente, apoiar desenvolvedores na validação do comportamento do motor de cálculo,
+inclusive para conferir se a integração foi implementada de acordo com a documentação técnica.
+Para acessar o exemplo clique aqui ou utilize o QRCode a seguir:
+
+                                                                                                                      17
+                                                                            Manual Plataforma CBS
+
+No exemplo apresentado, simula-se uma operação envolvendo bem sujeito à redução de 60%
+prevista no Anexo V da Lei Complementar nº 214 de 2025, referente ao fornecimento de guincho
+para transporte de cadeira de rodas (NCM 8425.31.10), com enquadramento na Situação
+Tributária CST 200 (alíquota reduzida) e na Classificação Tributária cClassTrib 200031,
+considerando o local da operação em Porto Alegre/RS e o valor da base de cálculo de R$
+10.000,00.
+
+Após clicar em Calcular, o simulador processa os dados e apresenta o resultado do cálculo de
+forma estruturada, indicando, para cada tributo, a alíquota aplicável, o percentual de redução
+legal, o valor devido e o total da operação; no caso exemplificado, o sistema retornou a aplicação
+
+                                                                                                                      18
+                                                                            Manual Plataforma CBS
+
+da redução de 60%, com cálculo de CBS, IBS Estadual e IBS Municipal, além do total dos tributos
+incidentes. O exemplo demonstra o uso do simulador para validar o enquadramento tributário,
+verificar a memória de cálculo e subsidiar análises técnicas, jurídicas e operacionais, com base
+no mesmo motor de cálculo disponibilizado à sociedade e utilizado pela Administração Tributária.
+Recursos do Simulador de Cálculo Online
+A barra de recursos do simulador, habilitada após a realização do cálculo, reúne funções voltadas
+a reproduzir, compartilhar e documentar uma simulação, permitindo reutilizar o mesmo conjunto
+de dados de entrada e o resultado obtido em outros contextos, como suporte, capacitação,
+validação técnica, integração e reporte de bugs. Esses recursos viabilizam o registro de cenários
+para fins de treinamento e facilitam a análise técnica e a reprodução de ocorrências.
+
+Recursos de compartilhamento
+Os recursos de compartilhamento permitem transportar ou referenciar uma simulação para que
+terceiros consultem as entradas e as saídas do cálculo, sem necessidade de refazer o
+preenchimento manual, favorecendo suporte, capacitação e reprodução de ocorrências
+(simplifica o reporte de bugs).
+
+    Exportar: gera um arquivo da simulação contendo os dados informados e os resultados do
+       cálculo, para envio a terceiros ou arquivamento local.
+
+    Importar: carrega no simulador um arquivo previamente exportado, restaurando o cenário
+       completo. Gera um endereço de acesso ao cenário, para compartilhamento do
+       preenchimento e do resultado e permitindo visualizar entradas e saídas exatamente como
+       registradas, o que facilita a reprodução de comportamento e a análise de falhas pelas
+                                                                                                                      19
+                                                                            Manual Plataforma CBS
+
+       equipes de desenvolvimento.
+    URL: gera um link para acesso direto à simulação, permitindo compartilhar o cenário
+
+       simulado por canais digitais.
+    QR Code: gera um código QR associado ao link da simulação, facilitando o
+
+       compartilhamento e a abertura em dispositivos móveis.
+
+Relatório (PDF)
+
+O recurso de PDF gera um relatório com os dados informados na simulação e o resultado do
+cálculo, incluindo elementos necessários para registro e comunicação técnica, como
+identificação do enquadramento tributário e a memória de cálculo, quando aplicável. O PDF é
+indicado para documentação de casos, instrução de demandas de suporte e organização de
+evidências de simulações realizadas.
+Assistente de Emissão
+
+O Assistente de Emissão reúne funcionalidades voltadas ao uso da Calculadora em apoio aos
+processos de emissão de documentos fiscais, com duas capacidades complementares:
+
+    Assistente Gerador: gera os blocos XML, já preenchidos com os resultados do cálculo, no
+       formato correspondente ao modelo de documento fiscal selecionado pelo contribuinte,
+       para incorporação no documento fiscal pelo sistema emissor.
+
+    Assistente Validador: verifica um arquivo XML à luz das regras aplicáveis, identificando
+       inconsistências antes do envio para autorização.
+
+Memória de cálculo
+
+Representação estruturada dos elementos considerados pela Calculadora de Tributos para obter
+o resultado de uma simulação, com indicação dos parâmetros informados e das regras aplicadas
+pelo motor de cálculo.
+
+No simulador, a memória de cálculo pode ser consultada por meio do ícone de informações
+(“Info”) exibido ao lado de cada tributo no quadro de resultados, permitindo verificar o
+detalhamento do cálculo e o fundamento utilizado para o valor apresentado.
+
+                                                                                                                      20
+                                                                             Manual Plataforma CBS
+
+ Integração com os sistemas dos Contribuintes (orientação para desenvolvedores)
+ A integração da Calculadora de Tributos em ERPs, sistemas contábeis e emissores de DF-e ocorre
+ por interface máquina a máquina (API), com base no mesmo motor de cálculo disponibilizado no
+ simulador web, de modo que entradas equivalentes produzam saídas equivalentes.
+ Importante: não há API pública hospedada para cálculo remoto. A integração sistêmica ocorre
+ por meio do componente offline, executado no ambiente do integrador, que expõe API local para
+ consumo máquina a máquina.
+ A documentação técnica oficial consolida os artefatos necessários para integração, incluindo
+ guia de integração, documentação da API em Swagger, scripts de exemplo e o download do
+ componente offline para execução em ambiente próprio.
+Documentação Oficial: https://consumo.tributos.gov.br/servico/calcular-tributos-
+consumo/calculadora/documentacao
+Conteúdo disponível na documentação oficial:
+
+      Guia de integração com ERP: orientação passo a passo, com exemplos práticos para
+                                                                                                                        21
+                                                                             Manual Plataforma CBS
+
+          integração.
+          Disponível em: https://consumo.tributos.gov.br/servico/calcular-tributos-
+          consumo/calculadora/documentacao/guia-integracao
+
+      Documentação da API (Swagger): referência dos endpoints, formatos de entrada e saída, e
+          códigos de retorno HTTP.
+          Disponível em: https://consumo.tributos.gov.br/servico/calcular-tributos-
+          consumo/api/swagger-ui/index.html
+
+      Scripts Python para integração: exemplos prontos para conectar um ERP à Calculadora.
+          Disponível em: https://consumo.tributos.gov.br/servico/calcular-tributos-
+          consumo/calculadora/documentacao
+
+      Download da Calculadora offline: componente para instalação local e consumo via API em
+          ambiente do integrador.
+          Disponível em: https://consumo.tributos.gov.br/servico/calcular-tributos-
+          consumo/calculadora/calculadora-offline/calculadora-offline-instrucoes
+
+Instruções de instalação (Calculadora offline)
+
+A documentação de instalação da Calculadora offline orienta a preparar um ambiente local para
+executar o componente no próprio computador ou infraestrutura do integrador, de forma a
+viabilizar o consumo por sistemas como ERP. Em linhas gerais, o procedimento consiste em baixar
+o componente no portal, iniciar a execução local conforme a alternativa escolhida (por exemplo,
+empacotamento disponibilizado no próprio portal) e, em seguida, acessar os serviços expostos no
+ambiente local: a API fica disponível em http://localhost:8080/api, enquanto a interface web local
+pode ser acessada em http://localhost após a execução.
+
+Disponível em: https://piloto-cbs.tributos.gov.br/servico/calculadora-
+consumo/calculadora/calculadora-offline/calculadora-offline-instrucoes
+
+Opções de execução do componente offline: WSL, Docker e Java 21
+
+A Calculadora offline é disponibilizada para execução local em alternativas que atendem diferentes
+ambientes de TI, com duas distribuições principais no portal: imagem Docker e componente Java
+(JAR).
+
+     WSL (Windows Subsystem for Linux)
+         Opção aplicável a ambientes Windows quando se pretende operar com um subsistema
+         Linux. Em cenários de integração e testes, o WSL costuma ser adotado para viabilizar um
+                                                                                                                        22
+                                                                             Manual Plataforma CBS
+
+         ambiente Linux no Windows, inclusive para execução de ferramentas que assumem esse
+         runtime.
+
+     Docker
+         Opção indicada quando se pretende executar a Calculadora em contêiner, com
+         empacotamento padronizado do runtime e dependências. O objetivo é reduzir variações de
+         ambiente entre máquinas e facilitar a instalação e a execução local, inclusive em cenários
+         de integração com ERP. A existência da distribuição “imagem Docker” no portal formaliza
+         esse caminho como alternativa de instalação.
+
+     Java 21 (execução do JAR)
+
+         Opção indicada quando se pretende executar o componente como aplicação Java local,
+         sem contêiner. Nesse caso, o pré-requisito é dispor de ambiente compatível com Java 21
+         para executar o arquivo .jar disponibilizado no portal (“componente java (JAR)”). Essa
+         alternativa atende, em regra, ambientes Windows, macOS e Linux, conforme a
+         disponibilidade do Java no sistema.
+
+Após a instalação e execução do componente offline, o acesso ocorre por endereços locais,
+incluindo a API no ambiente localhost, conforme instruções publicadas no portal.
+
+APURAÇÃO ASSISTIDA
+
+A Apuração Assistida (AA) é o sistema que operacionaliza a não-cumulatividade e a confissão de
+dívida da CBS, constituindo o crédito tributário. Ele foi criado para que os contribuintes possam
+consultar os débitos e créditos de CBS gerados por suas operações de consumo. Além disso, ele
+terá várias outras funcionalidades que serão futuramente implementadas como a emissão de
+DARF para pagamento e a solicitação de ressarcimentos.
+
+O que será possível visualizar?
+
+Atualmente, é possível verificar os débitos dos seguintes documentos fiscais:
+
+     Nota Fiscal Eletrônica – NF-e (modelo 55):
+    o Finalidade 01 – Normal
+    o Finalidade 02 - Complementar
+    o Finalidade 06 - Nota de débito
+    o Tipo 02 - Anulação de crédito por saídas imunes/isentas
+    o Tipo 04 – Multa e Juros por atraso
+    o Tipo 06 – Pagamento antecipado
+    o Tipo 07 - Perda em estoque (perda, roubo ou furto)
+     Nota Fiscal de Consumidor Eletrônica – NFC-e (modelo 65)
+
+                                                                                                                        23
+                                                                             Manual Plataforma CBS
+
+     Conhecimento de Transporte Eletrônico – CT-e (modelo 57)
+     Conhecimento de Transporte Eletrônico simplificado – CT-e (modelo 57)
+     Conhecimento de Transporte Eletrônico - Outros Serviços - CT-e OS (modelo 67)
+     Nota Fiscal de Serviço Eletrônica – NFS-e - sem novos fatos geradores (locação de imóveis,
+
+         por exemplo)
+     Nota Fiscal Fatura de Serviços de Comunicação Eletrônica – NFCom (modelo 62)
+     Nota Fiscal de Energia Elétrica Eletrônica – NF3e (modelo 66)
+     Bilhete de Passagem Eletrônico – BP-e (modelo 63)
+     Bilhete de Passagem Eletrônico de Transporte Metropolitano - BPe TM (modelo 63)
+Importante! Gradativamente, mais documentos fiscais serão colocados à disposição dos
+contribuintes.
+Informações básicas da Apuração Assistida
+
+Período de Apuração: Jan/2026 - definido pela data de emissão dos DFe (Documentos Fiscais
+Eletrônicos).
+Apuração “em Andamento”: se refere ao período entre 01/01/2026 e 31/01/2026;
+Apuração “Período de Ajuste”: se refere ao período entre 01/02/2026 e 25/02/2026;
+Apuração “Concluída”: se refere ao período de 26/02/2026 em diante.
+Intenção de solicitar ressarcimento: aplicação disponibilizada e informação detalhada na seção
+Consulta Ressarcimento e Transferência CBS.
+Saldo atualizado: após a conclusão de uma apuração, podem ocorrer, por exemplo, novos
+débitos, utilização de créditos de períodos subsequentes, devoluções que afetem a apuração
+concluída. Esses valores são carregados na aba “Saldo Atualizado”.
+
+                                                                                                                        24
+                                         Manual Plataforma CBS
+
+Descrição das Contas da aba “Resultado”
+
+O que é possível verificar:
+
+Débitos: valores de CBS destacados nos DFe. Nessa conta é possível visualizar os documentos
+ordenados e já processados nas operações em que a empresa figurou como fornecedora.
+
+Redutores de Débitos: valores de débitos que tiveram origem em um documento fiscal emitido,
+mas que a operação não ocorreu efetivamente. Exemplo: operação cancelada e débitos
+suspensos.
+
+Nesse momento, essa conta não terá informação a ser exibida já que a Apuração Assistida ainda
+não tratará de cancelamento/devolução.
+
+Créditos de CBS apropriados:
+
+     valores dos débitos da CBS que tenham sido destacados no documento fiscal de aquisição
+         e extintos por qualquer das modalidades previstas no art. 27 da Lei nº 214 de 2025; ou
+
+     valores de crédito presumido, nas hipóteses previstas na Lei Complementar nº 214 de 2025.
+
+Nesse momento, essa conta não terá informação a ser exibida já que não haverá pagamento de
+débitos e, portanto, não haverá créditos apropriados.
+
+Redutores de créditos de CBS apropriados: valores estornados de crédito, previstos na na Lei
+Complementar nº 214 de 2025. Exemplo: estorno de crédito apropriado caso o bem adquirido
+
+                                                                                                                        25
+                                                                             Manual Plataforma CBS
+
+venha a perecer, deteriorar-se ou ser objeto de roubo, furto ou extravio.
+Pagamentos Utilizados: valores que foram pagos por Split Payment, Recolhimento do Adquirente
+e Pagamento pelo Contribuinte e utilizados para extinguir os débitos do período de apuração.
+Os pagamentos poderão ser simulados (veja as informações detalhadas na seção Simulação de
+pagamento CBS).
+Descrição das Contas da aba “Saldo Atualizado”
+
+O Saldo Atualizado só é ativado após a conclusão da apuração mensal. Isso significa que, para
+fatos geradores ocorridos em janeiro/2026, o Saldo Atualizado só conterá informações a partir de
+25/02/2026.
+Observa-se que a primeira linha da Conta Saldo Atualizado é justamente o “Resultado da Apuração
+até a Conclusão”. A partir dessa linha, os registros são de fatos posteriores à conclusão.
+O que é possível verificar:
+Débitos: valores de CBS destacados nos DFe, processados após a conclusão da apuração.
+
+                                                                                                                        26
+                                                                             Manual Plataforma CBS
+
+Redutores de Débitos: valores de débitos que tiveram origem em um documento fiscal emitido,
+mas que a operação não ocorreu efetivamente, processados após a conclusão da apuração.
+Redutores de créditos de CBS apropriados: valores estornados de crédito, previstos na Lei
+Complementar nº 214 de 2025, e processados após a conclusão da apuração. Exemplo: estorno
+de crédito apropriado caso o bem adquirido venha a perecer, deteriorar-se ou ser objeto de roubo,
+furto ou extravio.
+Pagamentos Utilizados: valores que foram pagos por Split Payment, Recolhimento do Adquirente
+e Pagamento pelo Contribuinte e utilizados para extinguir os débitos do período de apuração,
+processados após a conclusão da apuração.
+Pedido de Ressarcimento: valores que foram objeto de pedido de ressarcimento.
+Saldo credor a ser enviado para apuração subsequente: valores que não foram objeto de pedido
+de ressarcimento e portanto, serão utilizados para extinguir débitos de outras apurações conforme
+art. 53 da Lei Complementar nº 214 de 2025.
+Descrição das Contas da aba “Outras Informações”
+
+O que é possível verificar:
+Débitos aguardando processamento: refere-se aos débitos que foram recepcionados e estão
+aguardando a ordenação por ordem cronológica da emissão. Nessa conta é possível visualizar os
+documentos em que o contribuinte figurou como fornecedor e que estão aguardando o
+processamento. Nesse momento, a ordenação ocorrerá a cada 10 minutos e considerará a data da
+emissão do DFe.
+
+                                                                                                                        27
+                                                                             Manual Plataforma CBS
+
+Créditos acumulados passíveis de apropriação: são créditos gerados pelas aquisições
+realizadas pelo próprio contribuinte. Nessa conta é possível visualizar os documentos em que o
+contribuinte figurou como adquirente. Esses créditos serão passíveis de apropriação, pois os
+débitos da operação ainda não estão extintos.
+
+Créditos inapropriáveis: são registros de créditos que estavam na situação ‘a apropriar’, cuja
+operação foi cancelada/devolvida. Nesse momento, essa conta não terá informações a serem
+exibidas, pois a Apuração Assistida ainda não tratará de cancelamento/devolução.
+
+Pagamentos/Recolhimentos não utilizados: valores de pagamentos simulados não utilizados.
+
+Split Payment não utilizados: nesse momento, essa conta não terá informações a serem exibidas.
+
+Nota Complementar
+
+Esse documento fiscal é utilizado quando se faz necessário acrescentar valores em uma nota fiscal
+anteriormente emitida. Serve para documentar, por exemplo, diferenças de preço, correção para
+maior do valor de tributos ou para apontar diferença de quantidades de mercadorias.
+
+Dentre as características da nota complementar, é importante ressaltar:
+     Dados do emitente e destinatário são iguais aos da nota original;
+     O campo “Finalidade da emissão” deve informar a opção “2 – NF-e Complementar”;
+     É um documento fiscal que exige documento referenciado. No caso, a Nota Complementar
+         faz referência à chave da Nota Fiscal original.
+     Somente são informados os valores de acréscimos.
+
+Assim, se um campo da nota indicava o valor de R$ 100,00 e o valor correto era de R$ 125,00, então
+na NF-e Complementar desse campo deverá ter o valor de R$ 25,00.
+
+No Apuração Assistida, a partir da tela dos Débitos Processados, pode-se detalhar cada operação
+de consumo. Dentre elas, estão as Notas complementares. Nos dados da operação constarão os
+seguintes campos:
+
+Finalidade: Nota complementar
+Documento Fiscais Associados: Notas de fornecimento.
+
+                                                                                                                        28
+                                                                             Manual Plataforma CBS
+
+Notas de Débito de Perda em Estoque
+Essa nota de débito é utilizada quando uma mercadoria deixa de existir ou de ser comercializada.
+Isso acontece, por exemplo, nos casos de perecimento, perda, roubo ou furto.
+Se quem perdeu o estoque havia apropriado créditos desses produtos, será necessário estornar os
+créditos apropriados ou passíveis de apropriação desses produtos, conforme prevê o art. 48 do
+Decreto 12.955/2026.
+Uma vez emitido esse documento, será lançado um débito na apuração da contribuinte. É
+importante observar que a Nota de Débito de Perda em Estoque gera efeitos apenas para o emissor
+da nota.
+
+                                                                                                                        29
+                                                                             Manual Plataforma CBS
+
+Na nota emitida, pode haver ou não referência a um documento fiscal (quando se sabe exatamente
+qual o documento fiscal do produto que pereceu, deve-se fazer a referência na Nota de Débito).
+Na Apuração Assistida, ao se detalhar os débitos processados, essas notas de débito serão
+listadas e poderão ser detalhadas. No detalhamento, constará a Finalidade “Nota de Débito – Perda
+em Estoque”. Se houver referência, no final do detalhamento aparecerá o documento fiscal
+referenciado.
+
+Notas de Débito de Anulação de Crédito por Saídas Imunes/Isentas
+Na Apuração Assistida, ao se detalhar os débitos processados, na finalidade da nota está descrito
+“Nota de débito – Anulação de crédito por saídas imunes ou isentas”.
+
+                                                                                                                        30
+                                                                             Manual Plataforma CBS
+
+Notas de Débito de Multa e Juros
+Para tratar os acréscimos moratórios (multa e juros) recebidos pelo fornecedor do adquirente
+quando este faz um pagamento com atraso, é necessário complementar a base de cálculo da CBS.
+Esses valores são incluídos no período de apuração de recebimento.
+Essa nota de débito conterá apenas os encargos moratórios. No momento da emissão, deve-se
+referenciar a nota fiscal original, mas jamais deve ser incluído o valor de CBS da nota fiscal original.
+O adquirente, nessa situação, poderá aproveitar o crédito de CBS, de acordo com as regras do
+regime regular.
+
+                                                                                                                        31
+                    Manual Plataforma CBS
+
+Para o fornecedor:
+
+                    32
+                    Manual Plataforma CBS
+
+Para o adquirente:
+
+Notas de Débito de Pagamento Antecipado
+Há situações em que o produto é pago (total ou parcialmente) antes da entrega. Essas
+antecipações de pagamento constituem o momento de ocorrência do fato gerador. Ou seja, deve-
+se apurar a CBS devida para essa operação de antecipação. E, para seu registro, deve-se fazer uma
+nota de débito por pagamento antecipado.
+Sendo o débito reconhecido, o crédito também poderá ser apropriado pelo adquirente, tão logo
+esse débito seja extinto.
+Importante: quando houver a entrega da mercadoria ou do serviço não haverá nova tributação,
+desde que corresponda ao que foi antecipado.
+Para que haja a correspondência, a nota de fornecimento deverá referenciar a nota de débito do
+pagamento antecipado. Além do destaque para a finalidade “Nota de Débito – Pagamento
+Antecipado”, haverá também o registro da Nota de Fornecimento, como documento fiscal
+associado.
+
+                                                                                                                        33
+                            Manual Plataforma CBS
+
+Na apuração do fornecedor:
+
+                            34
+                            Manual Plataforma CBS
+
+Na apuração do adquirente:
+
+Evento de perecimento, perda, roubo ou furto durante a modalidade FOB
+
+Nas operações de consumo, em que o adquirente é o responsável pelo transporte, considera-se o
+fato gerador na saída do estabelecimento do fornecedor. Por isso, considera-se, para fins
+tributários, que a operação foi concluída e, na ocorrência de perecimento, perda, roubo ou furto, a
+responsabilidade recai sobre o adquirente.
+
+Assim, o adquirente terá que registrar esse evento para estornar a CBS que, porventura, tenha sido
+                                                                                                                        35
+                                                                             Manual Plataforma CBS
+
+creditada anteriormente. Por isso, ao realizar o evento, é fundamental fazer a referência à nota
+fiscal da operação.
+Como a operação já foi efetivada, esse evento afeta tão somente a apuração do emitente
+(adquirente dos produtos perdidos).
+
+Arrecadação de CBS em 2026
+     Em 2026, não haverá geração de documentos de arrecadação para pagamento efetivo
+         por parte dos contribuintes, uma vez que a arrecadação da CBS e do IBS está dispensada
+         para quem cumprir as obrigações acessórias.
+     A partir de maio/2026, os contribuintes poderão testar na Plataforma CBS a emissão
+         simulada de DARF (para fornecedor e adquirente), a impressão de DARF (sem QR Code ou
+         código de barras para pagamento real) e o envio dessas simulações para a Apuração
+         Assistida.
+
+                                                                                                                        36
+                                                                             Manual Plataforma CBS
+
+SIMULAÇÃO DE PAGAMENTO CBS
+A partir de 19/05/2026, já é possível realizar a emissão e a Simulação de Pagamento de DARF para
+extinção de débitos da Contribuição sobre Bens e Serviços na Plataforma CBS. É possível emitir e
+simular o pagamento do DARF e visualizar o impacto do pagamento na apuração.
+Para acessar a funcionalidade, no Menu, selecione a opção Contribuinte:
+
+Depois selecione a opção Apuração:
+
+                                                                                                                        37
+                                                                             Manual Plataforma CBS
+
+Na tela seguinte será exibido o menu Simular Pagamento de DARF de CBS:
+Outra opção é, na tela inicial do Portal, selecionar Simular Pagamento de DARF de CBS:
+
+                                                                                                                        38
+                              Manual Plataforma CBS
+
+Selecionar o card Pagamento:
+
+Informar o Número do DARF obtido a partir da Apuração e clicar em Pagar:
+
+Importante: A simulação de pagamento poderá ser feita também por Procurador.
+Em alguns minutos o pagamento simulado vai aparecer na sua Apuração.
+
+                                                                                                                        39
+                                                                             Manual Plataforma CBS
+
+ATENDIMENTO CBS
+Os contribuintes da CBS poderão contar com o atendimento especializado da Receita Federal
+sobre questões envolvendo o novo modelo de tributação. Neste período inicial de implementação
+da Plataforma CBS, o atendimento humanizado estará disponível apenas para os CNPJ
+contribuintes da CBS. As pessoas físicas e as empresas do MEI poderão solucionar as suas dúvidas
+por meio do BotRTC, um canal que utiliza a Inteligência Artificial (IA) para responder as questões
+gerais sobre a RTC.
+Acesso ao Portal Nacional de Tributação de Bens e Serviços
+O Portal Nacional de Tributação de Bens e Serviços pode ser acessado por meio do endereço
+eletrônico: https://consumo.tributos.gov.br/
+O acesso permite que empresas realizem solicitações de atendimento relacionadas à CBS de
+forma totalmente digital.
+Após acessar o atendimento digital:
+1. Clique no menu “hambúrguer” (ícone com três linhas) localizado na lateral esquerda da página;
+2. Selecione a opção Contribuinte;
+3. Em seguida, clique em Atendimento CBS.
+
+                                                                                                                        40
+                                                                             Manual Plataforma CBS
+
+Na tela de Atendimento Digital, o contribuinte terá acesso a duas funcionalidades principais:
+ Criar uma Solicitação
+ Consultar uma Solicitação
+
+Para registrar um novo atendimento:
+1. Clique na opção Criar uma Solicitação;
+2. Selecione o card correspondente ao Atendimento CBS;
+3. Será exibido um modal informativo com orientações iniciais sobre o preenchimento do
+
+    formulário.
+
+Importante: o Atendimento Digital realizado não substitui o Processo de Consulta, conforme
+disposto na Instrução Normativa RFB nº 2.058 de 2021.
+
+                                                                                                                        41
+                                                                             Manual Plataforma CBS
+
+Preenchimento do Formulário
+Preencha todos os campos indicados no formulário e descreva sua dúvida de forma clara,
+objetiva e detalhada.
+
+Relato de erros de sistema
+Caso a solicitação seja para relatar erro ou instabilidade no sistema, é importante anexar os prints
+(telas) do erro. Os arquivos devem permitir identificar o navegador utilizado, data e hora da
+ocorrência do erro.
+Anexação de Arquivos
+Será possível anexar até 5 arquivos nas solicitações de atendimento. Os arquivos devem auxiliar na
+identificação da dúvida ou amparar a análise da solicitação.
+
+                                                                                                                        42
+                                                                             Manual Plataforma CBS
+
+Ao final do preenchimento da solicitação de atendimento, será exibida uma tela de resumo com
+todos os dados informados. Caso necessário, é possível retornar às etapas anteriores para corrigir
+informações ou substituir anexos.
+Após a conferência, basta finalizar o envio da solicitação.
+
+                                                                                                                        43
+                                                                             Manual Plataforma CBS
+
+Como Consultar uma Solicitação?
+Para acompanhar solicitações já registradas, clique na opção Consultar uma Solicitação. Será
+exibida uma lista com todas as solicitações de atendimento cadastradas pelo contribuinte.
+
+                                                                                                                        44
+                                                                             Manual Plataforma CBS
+
+Situações do Atendimento
+Cada solicitação de atendimento poderá apresentar um dos seguintes status:
+
+     Aguardando atendimento: indica que a solicitação ainda não foi distribuída para análise;
+     Em atendimento: indica que a solicitação foi distribuída para um servidor(a) e está em
+
+         análise;
+     Aguardando atendimento especializado: após análise inicial e identificada a necessidade
+
+         de encaminhamento para uma área especializada;
+                                                                                                                        45
+                                                                             Manual Plataforma CBS
+
+     Encerrado/concluído: a solicitação foi analisada e finalizada. A resposta pode ser
+         consultada diretamente no módulo “Consultar uma solicitação”.
+
+O BotRTC
+Ele poderá ser acessado diretamente pelo assistente virtual no site da Receita Federal, o LEO, ou
+pelo próprio Portal Nacional de Tributação de Bens e Serviços.
+O BotRTC foi pensado para responder perguntas sobre conceitos básicos da Reforma Tributária.
+Ele não prestará atendimentos em relação a casos concretos dos contribuintes. Também não
+receberá petições formais, não decidirá sobre direitos e não substituirá processos administrativos.
+A ferramenta não acessa nem disponibiliza dados sigilosos. O bot não possui nenhuma integração
+com os sistemas da Receita Federal. As respostas são dadas baseadas exclusivamente nos
+documentos inseridos na sua base de conhecimento, sem a utilização de informações externas.
+
+                                                                                                                        46
+                                                                             Manual Plataforma CBS
+
+CONSULTAS RESSARCIMENTO E TRANSFERÊNCIA CBS
+Os contribuintes da CBS poderão consultar seus Ressarcimentos e suas Transferências de CBS no
+portal da Reforma Tributária:
+
+                                                                                                                        47
+                                                                             Manual Plataforma CBS
+
+É importante mencionar que os representantes e procuradores também poderão consultar essas
+telas através da função “Representar”, que surge ao clicar no menu superior direito do Portal da
+Reforma Tributária.
+Consultar ressarcimentos de CBS
+Os contribuintes da CBS poderão simular pedidos de ressarcimento de créditos de CBS, consultar
+valores disponíveis para restituição e consultar seus pedidos de ressarcimento e os respectivos
+PER/DCOMP gerados automaticamente para cada grupo de crédito. Importante frisar que se trata
+de simulação, já que não há pagamentos reais de CBS em 2026. Veja um exemplo da tela gerada
+ao clicar na consulta de Ressarcimento de CBS:
+
+É possível filtrar por data dos saldos dos créditos e pesquisar diretamente por número de
+PER/DCOMP.
+
+                                                                                                                        48
+                                                                             Manual Plataforma CBS
+
+Utilizando os Filtros Avançados, a consulta pode ser realizada pela data de transmissão (data do
+envio da solicitação pelo Portal), por detentor do crédito e por número da solicitação (número que
+consta no recibo da solicitação).
+Há, também, uma nova funcionalidade: Intenção de Ressarcimento. Ela permite aos
+contribuintes reservar créditos de um período, evitar que sejam usados automaticamente na
+compensação futura e garante a possibilidade de solicitar ressarcimento integral.
+A Intenção de Ressarcimento é opcional e ativada durante a apuração. Cabe ressaltar que ela não
+substitui o pedido formal de ressarcimento.
+Consultar transferências de CBS
+Os contribuintes da CBS também poderão consultar, a partir de suas apurações, valores a serem
+transferidos pela Receita Federal no âmbito da CBS. A geração de transferências ao contribuinte
+não necessita de solicitação e o pagamento será realizado em até 3 (três) dias úteis. É possível
+identificar automaticamente valores pagos a maior. Importante frisar que se trata de simulação, já
+que não há pagamentos reais de CBS em 2026.
+A pesquisa pode ser feita utilizando os filtros separadamente ou combinados, com opção de
+inclusão dos filtros avançados para refinar a busca. A tabela de resultados completa pode ser
+obtida exportando o arquivo CSV. Algumas colunas podem ser suprimidas em função do tamanho
+do dispositivo utilizado:
+
+                                                                                                                        49
+                                                                             Manual Plataforma CBS
+
+Tanto nas consultas de ressarcimento quanto nas consultas de transferências de CBS, o menu
+localizado no canto superior direito da tela oferece as seguintes opções:
+
+     Exportar o resultado da consulta em formato CSV;
+     Imprimir o recibo da solicitação de ressarcimento de CBS;
+     Personalizar as colunas exibidas na consulta.
+Os valores de transferência demonstrados na tela serão denominados:
+     Em processamento: somatório dos valores das transferências identificadas e ainda em
+
+         processo de creditamento;
+     Creditadas: somatório dos valores das transferências creditadas na conta vinculada à
+
+         chave PIX do CNPJ/CPF e
+     Não transferidas: somatório dos valores das transferências não creditadas pelos motivos
+
+         “Devolvida” e “Bloqueada”.
+Além disso, será possível filtrar os intervalos de pesquisa das transferências por:
+
+     Mês de apuração da CBS (mm/aaaa) – período de apuração da CBS em que foi
+         identificado excesso de pagamento que deu origem à transferência;
+
+     Data de início da transferência (dd/mm/aaaa) – data da identificação do excesso de
+         pagamento que deu origem à transferência;
+                                                                                                                        50
+                                                                          Manual Plataforma CBS
+
+ Data de arrecadação (dd/mm/aaaa) – data de arrecadação do pagamento que originou a
+    transferência e
+
+ Data de creditamento (dd/mm/aaaa) – data em que foi creditada a transferência na conta
+    vinculada a chave PIX do CNPJ/ CPF.
+
+                                                                                                                   51
+

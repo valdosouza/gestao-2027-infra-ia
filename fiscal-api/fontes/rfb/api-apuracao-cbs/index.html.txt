@@ -1,0 +1,11 @@
+Documentação da apuração CBS 
+ API Apuração Assistida
+ Documentação da apuração CBS
+ Guias de integração, consultas assíncronas e estruturas de retorno.
+ Regras Comuns de Solicitação e Retorno das APIs assíncronas Fluxo comum, webhook, segurança e restrições 
+ Consultar débitos em operações de consumo (CBS) Retorna os débitos de Contribuição sobre Bens e Serviços (CBS) incluídos ou atualizados entre a data consulta e a data da última consulta anterior 
+ Consultar créditos em operações de consumo (CBS) Retorna os créditos de Contribuição sobre Bens e Serviços (CBS) incluídos ou atualizados entre a data consulta e a data da última consulta anterior 
+ Consultar pagamentos de CBS Pagamentos de CBS que extinguem os débitos do contribuinte, compreendendo: o pagamento do próprio contribuinte e o recolhimento de seus adquirentes 
+ Consultar recolhimentos de CBS Recolhimentos de CBS na condição de adquirente, compreendendo o recolhimento pelo adquirente (RAD) 
+ Consultar situação da solicitação Permite consultar a situação do processamento da solicitação realizada por meio da API assíncrona 
+ Dúvidas Frequentes Dúvidas frequentes sobre as APIs da Apuração Assistida

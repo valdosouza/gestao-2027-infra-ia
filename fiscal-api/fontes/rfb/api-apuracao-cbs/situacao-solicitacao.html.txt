@@ -1,0 +1,82 @@
+Situação da solicitação 
+ Documentação da apuração CBS 
+ Índice
+ Objetivo
+ Histórico de versão
+ Regras de retorno
+ Endpoint da api
+ Consultar situação da solicitação
+ 1. Objetivo
+ Permite consultar a situação do processamento da solicitação realizada por meio da API assíncrona
+ 2. Histórico de versão
+ Data 
+ Versão 
+ Descrição 
+ 03/09/2026 
+ 1.0 
+ Versão inicial 
+ 17/09/2026 
+ 1.1 
+ Ajustes nos exemplos de chamada 
+ 14/10/2026 
+ 1.2 
+ Alteração no payload de retorno 
+ 3. Regras de retorno
+ O endpoint retorna a situação atual da solicitação associada ao tiqueteSolicitacao .
+ Quando situacao=ERRO ou situacao=EXPIRADA , são retornados codigoErro e mensagemErro .
+ 4. Endpoint da api
+ URL de Produção: 
+ https://api.receitafederal.gov.br/apuracao-cbs/v2/situacao/{tiqueteSolicitacao} 
+ 4.1 Campos de entrada
+ Campo 
+ Formato 
+ Descrição 
+ tiqueteSolicitacao 
+ String 
+ Tíquete da solicitação. 
+ 4.2 Header
+ Campo 
+ Formato 
+ Descrição 
+ Authorization 
+ String 
+ Bearer <token de acesso> 
+ 4.3 Método e exemplo de requisição
+ Método: GET 
+ curl --location --request GET 'https://api.receitafederal.gov.br/apuracao-cbs/v2/situacao/{tiqueteSolicitacao}' \
+ --header 'Authorization: Bearer <access_token>' \
+ --header 'Accept: application/json'
+ Exemplo com dados fictícios (Produção): 
+ curl --location --request GET 'https://api.receitafederal.gov.br/apuracao-cbs/v2/situacao/{tiqueteSolicitacao}' \
+ --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dadoFicticio.assinaturaFicticia' \
+ --header 'Accept: application/json'
+ 4.4 Campos retornados
+ Campo 
+ Formato 
+ Descrição 
+ situacao 
+ String 
+ PENDENTE , EM_PROCESSAMENTO , CONCLUIDA , ERRO ou EXPIRADA - Situação da solicitação 
+ codigoErro 
+ String 
+ Retornado quando situacao=ERRO ou situacao=EXPIRADA . Código técnico da falha. 
+ mensagemErro 
+ String 
+ Retornado quando situacao=ERRO ou situacao=EXPIRADA . Descrição legível da falha. 
+ 4.5 Exemplos de retorno
+ Sucesso (HTTP 200): 
+ {
+ "situacao": "CONCLUIDA"
+}
+ Solicitação expirada (HTTP 200): 
+ {
+ "situacao": "EXPIRADA",
+ "codigoErro": "EXPIRADA",
+ "mensagemErro": "Tempo limite de processamento excedido (240 minutos)."
+}
+ Erro (HTTP 400/401/404/500): 
+ {
+ "situacao": "ERRO",
+ "codigoErro": "ERRO_INTERNO",
+ "mensagemErro": "Ocorreu um erro interno ao processar a solicitacao."
+}
