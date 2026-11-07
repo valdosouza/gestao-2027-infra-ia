@@ -11,6 +11,7 @@
 
 ## Comece aqui
 
+- **Reforma tributária (referência compartilhada, método)** — `../fiscal-api/01-REFORMA-BASE-DE-CALCULO-E-TRANSICAO.md`, `../fiscal-api/02-REFORMA-CONTA-POR-DENTRO-PRECO-FINAL.md` e `../fiscal-api/03-REFORMA-NFSE-IBSCBS.md`: fatos oficiais, conta "por dentro" (IBS/CBS dentro do preço) com vetores de teste e obrigatoriedade da NFS-e; levantados em 07/11/2026 na frente do ERP Desktop.
 - **`prompt_fase1_fundacao.md`** — prompt executável da Fase 1 (23 decisões registradas, fechado em 2026-07-05)
   - Escopo: monorepo, design system `Setes*`, i18n (easy_localization + `tb_user_has_preference`), tema por institution (`tb_institution_theme`), responsividade weberpsetes, auth multi-institution, shell web com menus via `GET /api/core/menus`, módulos Super e Sistema, fábrica de cadastros por composição + genéricos
   - Fora de escopo: apps Android (`budget_sales`, `stock_count`, `budget_autocenter`, `erp_authorization`), iOS, refresh token
