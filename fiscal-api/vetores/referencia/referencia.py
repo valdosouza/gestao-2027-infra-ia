@@ -9,6 +9,13 @@ instantes ISO em UTC (AAAA-MM-DDTHH:MM:SSZ). Cada função cita o ID da regra (R
 """
 from decimal import Decimal as D, ROUND_HALF_UP
 import itertools
+import json
+import os
+
+# As DATAS vêm do calendário único (fiscal-api/calendario/fatos.json); esta referência não guarda data própria.
+_CAMINHO_CALENDARIO = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'calendario', 'fatos.json')
+with open(_CAMINHO_CALENDARIO, encoding='utf-8') as _f:
+    _CAL = json.load(_f)
 
 
 def r2(x):
@@ -98,18 +105,21 @@ def gtribsn_presente(op_simp_nac, reg_ap_ibscbs_sn):
 # RF-CAL-03, RF-CAL-04 — a partir de que competência a declaração de IBS/CBS é obrigatória (a obrigação legal)
 # --------------------------------------------------------------------------------------------------------------
 def obrigatoria_a_partir_de(documento, regime, grupo_nfse=None):
-    """documento: 'NFe' | 'NFCe' | 'NFSe'; regime: 'normal' | 'simples'; grupo_nfse: 'd' (serviços da alínea d) | 'demais'.
-    Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º. O MEI é dispensado de destacar IBS/CBS e fica fora."""
-    if regime == 'simples':
-        return '2027-01-01'
-    if documento in ('NFe', 'NFCe'):
-        return '2026-08-03'
-    if documento == 'NFSe':
-        if grupo_nfse == 'd':
-            return '2026-10-01'
-        if grupo_nfse == 'demais':
-            return '2026-12-01'
-    raise ValueError('combinação sem regra')
+    """documento: 'NFe' | 'NFCe' | 'NFSe' | ...; regime: 'normal' | 'simples'; grupo_nfse: 'd' (serviços da alínea d) | 'demais'.
+    Ato Conjunto RFB/CGIBS 4/2026, art. 1º e § 1º, lido do calendário (obrigatoriedade). O MEI é dispensado de destacar
+    IBS/CBS e fica fora. As entradas com condição (monofásicos, não contribuinte do ICMS) não entram neste caso geral."""
+    achadas = []
+    for e in _CAL['obrigatoriedade']:
+        if e.get('condicao') or e['regime'] != regime:
+            continue
+        if e['documento'] not in (documento, '*'):
+            continue
+        if e.get('grupoNFSe') not in (None, grupo_nfse):
+            continue
+        achadas.append(e['aPartirDe'])
+    if len(achadas) != 1:
+        raise ValueError('combinação sem regra única no calendário: %r' % ((documento, regime, grupo_nfse),))
+    return achadas[0]
 
 
 def obrigatoria(documento, regime, competencia, grupo_nfse=None):
@@ -119,13 +129,8 @@ def obrigatoria(documento, regime, competencia, grupo_nfse=None):
 # --------------------------------------------------------------------------------------------------------------
 # RF-NFS-02, RF-NFS-03 — qual pacote XSD a autoridade aceita (calendário da nfse-api: layout-calendar.ts)
 # --------------------------------------------------------------------------------------------------------------
-_LINHAS_LEIAUTE = [
-    # (documento, ambiente, validFrom UTC, leiaute, versão)
-    ('DPS', 'H', '2000-01-01T00:00:00Z', 'xsd-20260209', '1.01'),
-    ('DPS', 'H', '2026-10-20T21:10:00Z', 'xsd-20261020', '1.01'),
-    ('DPS', 'P', '2000-01-01T00:00:00Z', 'xsd-20260209', '1.01'),
-    ('EVENT', 'H', '2000-01-01T00:00:00Z', 'xsd-20260209', '1.01'),
-    ('EVENT', 'P', '2000-01-01T00:00:00Z', 'xsd-20260209', '1.01'),
+_LINHAS_LEIAUTE = [  # (documento, ambiente, validFrom UTC, leiaute, versão), lidas do calendário (leiaute)
+    (e['documento'], e['ambiente'], e['validFrom'], e['leiaute'], e['versao']) for e in _CAL['leiaute']
 ]
 
 

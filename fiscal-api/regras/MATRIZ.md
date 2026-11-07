@@ -15,7 +15,7 @@
 | 3 | **E0855 já tem resposta empírica**: em H, a NFS-e de optante do Simples com competência 11/2026 e sem o grupo foi **autorizada** (nota 8015, 01/11/2026). O legado tinha isto como pergunta aberta ao fisco. | NFS-07, CAL-04 | O legado atualiza o `03`, o plano §11.15 e a RETOMADA; confirmar em produção quando a NT 009 chegar lá |
 | 4 | A pendência da **D-IB12** da web ("conferir se no DAS `vTotNF = vLiq`") se fecha: Anexo VI, E1555, diz `vTotNF = vLiq` quando IBS e CBS são apurados no Simples; 2026 confirmado em H. | PRC-08 | A web fecha a pendência com a citação da regra |
 | 5 | **A web não tem motor de IBS/CBS para a NF-e** (D-E17: pré-requisito de qualquer NF-e em produção). O legado é a única implementação de preço final, conta "por dentro", Simples e devolução. | PRC-01 a PRC-05, SN-13, DEV-01 a DEV-03 | Transformar essas regras em vetores de teste neutros; a web as implementa contra os mesmos vetores |
-| 6 | **Duas constantes de data de obrigação**: `D-EM9` no legado (data de emissão) e `ibscbsObligationStart` na web (D-IB13, competência). | CAL-03, CAL-04 | Uma fonte só: o calendário de fatos com data (próxima peça) |
+| 6 | **Duas constantes de data de obrigação**: `D-EM9` no legado (data de emissão) e `ibscbsObligationStart` na web (D-IB13, competência). | CAL-03, CAL-04 | **Calendário criado** (`../calendario/fatos.json`, 55 fatos): falta cada lado adotá-lo com um teste de contrato que leia o JSON |
 | 7 | A **armadilha do leiaute** (dois pacotes `versao="1.01"` incompatíveis) a web conhece e tratou (calendário por data); no legado o ACBr tem `ProVersaoNT` e `HomVersaoNT` fixos. | NFS-02, NFS-03 | Na NFSE.E4, P3, escolher o leiaute por data e ambiente de forma explícita |
 | 8 | **ME/EPP do Simples emite NFS-e pelo ambiente nacional desde 01/11/2026.** A web já emite pela Sefin Nacional (produção desde 29/09/2026); os 3 emissores do legado usam o Padrão Nacional; os 2 com provedor municipal não emitiram em 2026. | SN-12 | Sem ação para os 3; os 2 migram se voltarem a emitir |
 | 9 | O **acervo de fontes** era duplicado (16 arquivos idênticos) e a web estava com versões antigas de NTs. | — | Feito em 07/11/2026: [`../fontes/INDEX.md`](../fontes/INDEX.md) |
@@ -28,7 +28,7 @@
 |---|---|---|---|
 | RF-CAL-01 | D · I (alíquotas por data e regime, Decisão Nº 8, r1348 a r1353; `[AliquotasIBSCBS]`) · T (regressão de 2026 sem diferença) · 2027 não homologado | — (a Calculadora entrega; D-IB11) | Vetores devem cobrir 31/12/2026 contra 01/01/2027 |
 | RF-CAL-02 | I (mecanismo `[AliquotasIBSCBS]` no `atualizacao.ini`; valor a publicar de 15 a 22/12) | ? (o catálogo vem da Calculadora, D-IB5) | Conferir o prazo do Senado |
-| RF-CAL-03 | D · I (D-EM9: o grupo vai pela data de emissão; Decisões Nº 8 e 9) | D · I (D-IB2 e D-IB13: obrigação por competência; IB-2 publicada em 15/10) | Duas constantes de data: unificar (divergência 6) |
+| RF-CAL-03 | D · I (D-EM9: o grupo vai pela data de emissão; Decisões Nº 8 e 9) | D · I (D-IB2 e D-IB13: obrigação por competência; IB-2 publicada em 15/10) | Duas constantes de data: o calendário (FT-OBR-01 a FT-OBR-14) é a fonte; adoção pendente nos dois lados (divergência 6) |
 | RF-CAL-04 | D (D-EM51) · NF-e I (Decisão Nº 9) · NFS-e não implementada | D · I · H (D-IB2, D-IB13; E0855 não recusou em H, D-IB114) | Alinhados |
 | RF-CAL-05 | L | L (D-IB2) | Só documentação |
 | RF-CAL-06 | L | ? | Só documentação |

@@ -58,4 +58,6 @@ Resultado em 07/11/2026: **69 verificações, 0 falhas.** Os 8 vetores do docume
 
 ## O que falta
 
-Vetores para as regras que ainda não têm (calendário de alíquotas por data, `pCredSN` pelo mês da operação, devolução com o crédito do art. 379 quando a apuração existir, classificação pelo Anexo VIII) e o **calendário único de fatos com data**, que alimenta tanto os vetores de obrigatoriedade e de leiaute quanto as duas constantes de data hoje separadas no legado e na web.
+Vetores para as regras que ainda não têm (alíquotas por data, `pCredSN` pelo mês da operação, devolução com o crédito do art. 379 quando a apuração existir, classificação pelo Anexo VIII).
+
+**Calendário:** os vetores de obrigatoriedade e de leiaute **leem o calendário único** (`../calendario/fatos.json`); a referência não guarda data própria. Regerados a partir dele, os vetores saíram idênticos aos que já estavam publicados.

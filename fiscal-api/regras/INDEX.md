@@ -28,5 +28,5 @@ CAL 8 · BC 5 · PRC 8 · SN 13 · DEV 4 · CLS 5 · NFS 9 · NFE 4 — **56 reg
 ## O que vem depois (peças combinadas)
 
 1. ~~**Vetores de teste neutros**~~ — **feito em 07/11/2026**: [`../vetores/INDEX.md`](../vetores/INDEX.md), 6 arquivos JSON com 100 casos para **15 das 56 regras** (a coluna "Vetor" do catálogo aponta para cada um), lidos pelo teste do Delphi e pelo da web; verificação 69/69. Faltam vetores para as demais regras.
-2. **Calendário único de fatos com data** (leiaute por ambiente e data, alíquotas por ano, obrigatoriedade por documento e regime), para acabar com as duas constantes de data (divergência 6 da matriz).
+2. ~~**Calendário único de fatos com data**~~ — **feito em 07/11/2026**: [`../calendario/INDEX.md`](../calendario/INDEX.md), 55 fatos (obrigatoriedade, leiaute, transição por ano e marcos), verificados contra o catálogo; os vetores de obrigatoriedade e de leiaute já leem daí. Falta cada lado adotar o calendário com um teste de contrato (divergência 6 da matriz).
 3. **Fichas de implementação** por entrega, cada uma dizendo a regra (ID), a decisão de produto, o arquivo e a função onde mora em cada lado, os testes e o critério de pronto.
