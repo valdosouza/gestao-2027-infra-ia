@@ -521,6 +521,26 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   fraca vê primeiro "senha muito comum". LIMITE CONHECIDO — a tela nem mostra o campo de senha nessa conta. Sem código novo. Recusado: (b)
   inverter a ordem no fluxo do cadastro.
 - **Fila da Onda 3 ZERADA** (D-EA36…D-EA42).
+- **D-EA43** (Valdo, 2026-11-07 — fecha a **Q-EA43** = (a), literal: *"Sim, subir (a)"*) — o piso de tempo das recusas sobe de 400 ms para
+  **700 ms** no login (`LOGIN_REFUSAL_FLOOR_MS`) e nas rotas públicas de senha (`PASSWORD_RESET_RESPONSE_FLOOR_MS` — troca pelo código, que
+  calcula dois scrypt na conta existente, e o pedido do código, que divide a mesma peça): acima do p99 de UMA conferência scrypt no peso
+  vigente medida no dev (496 ms — H8). Valor revisto pela medição no servidor real (D-EA17/H11). Revê a letra da D-EA35 (400 ms provisório).
+  Limite conhecido: com muitas conferências ao mesmo tempo (20 juntas = p99 3,3 s no dev) a conta existente passa do piso e o tempo volta a
+  distinguir. Recusado: (b) a conta inexistente calcular um scrypt falso (contraria a D-EA9/H7 e gasta CPU com quem ataca).
+- **D-EA44** (Valdo, 2026-11-07 — fecha a **Q-EA44** = (a), literal: *"Sim, contar (a)"*) — o pré-filtro do login soma às falhas JÁ
+  gravadas as tentativas EM ANDAMENTO da conta (contagem em memória do processo, do pré-filtro ao fim do julgamento): soma ≥ 10 = a recusa
+  única, SEM calcular o scrypt (motivo interno `rajada` no log da D-EA11). Fecha o ADV-O4-01 (30 erradas paralelas numa conta limpa
+  calculavam 30 scrypt; agora 10). Limite conhecido: com várias instâncias, o teto vale por instância. Recusado: (b) limite conhecido.
+- **D-EA45** (Valdo, 2026-11-07 — fecha a **Q-EA45** = (a), literal: *"Limite conhecido (a)"*) — LIMITE CONHECIDO até a medição no
+  servidor real (D-EA17/H11): (1) o oráculo de tempo sob carga que o PRÓPRIO atacante provoca (12 palpites simultâneos ao mesmo e-mail: conta
+  existente 2,3–3,5 s × inexistente 0,7 s — ADV-O4-02; o `it.failing` `[LIMITE CONHECIDO — D-EA45]` do `adversarial-onda4-gate.test.ts`
+  fixa a semântica); (2) a fila do pool do libuv sem teto, compartilhada com `fs`/DNS — muitas conferências espalhadas por várias contas
+  atrasam o login de todos (socrático, HIGH 1). Na H11, medir também com carga e reavaliar. Recusados: (b) teto de scrypt simultâneos no
+  processo com recusa neutra acima (o número só sai da medição; sob ataque recusaria o dono); (c) rever o piso.
+- **D-EA46** (Valdo, 2026-11-07 — fecha a **Q-EA46** = (a), literal: *"Sim, conferir (a)"*) — a troca pelo código lê SEM trava (autocommit)
+  se a conta tem código ABERTO, no prazo e não esgotado ANTES dos dois scrypt; sem ele, a recusa neutra sai SEM calcular e sem gravar
+  (none/used/expired/exhausted nunca contam erro — a regra do julgamento); o piso de 700 ms esconde a diferença; o julgamento de verdade
+  segue sob a trava. Fecha o ADV-O4-03. Recusado: (b) limite conhecido. **Fila da Onda 4 ZERADA** (D-EA43…D-EA46).
 - **Gate do DELTA da Onda 3 (2026-11-06; 3a4cdb5..onda3 · e7119c6..onda3)**: socrático **0,80 ✅** · adversarial **0,84 ✅** (só LOW).
   Provado fora do jest: as 65.536 unidades UTF-16 em 5 formas de senha dão o MESMO branco, `invalid-char` e ORDEM de problemas em node e no
   Dart VM; o gerador reproduz a lista byte a byte. **Corrigidos** (cabem nas decisões): U+2028/U+2029 entram no `invalid-char` (D-EA39 —
@@ -581,6 +601,43 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   o `CLAUDE.md` do `onda4\setes-api`; conferir se o `main` do setes-api andou (juntar na `onda4` se sim — a junção `node_modules/fiscal-api`
   não existe mais no setes-api); executar o desenho acima (1→6), suíte inteira, medição H8 → Q-EA43 ao Valdo (uma pergunta, palavras
   simples) → gates (dois agentes) → "vai" (sem banco: a coluna `password` varchar(100) já cabe) → Onda 4 publicada → A2 da auth-api.
+
+- **2026-11-07 — EXECUTADO em worktree (`onda4\setes-api`, branch `onda4`, commit LOCAL `ed04a05`; nada de banco)**: passos 1→6 do
+  desenho acima. Desvios do desenho, achados na execução:
+  - **Reconferência sob a trava MORREU no login** (achado da prova H9): 3 logins certos simultâneos numa conta MD5 — o 1º regrava, os
+    outros acham o hash trocado e reconferiam o scrypt SOB a trava; com o pool do libuv cheio a linha ficava presa por segundos e 10 de
+    100 logins certos estouraram a espera de 5 s (1205 = recusa da senha CERTA). Agora o hash travado ≠ o conferido devolve `stale`: nada
+    gravado, a trava é solta e a conferência se repete FORA dela contra o hash travado (até `LOGIN_STALE_ROUNDS` = 3 rodadas; esgotado =
+    recusa neutra de contenção, sem falha gravada). Na troca pelo código o caso é inalcançável (o HMAC do código amarra o hash travado).
+  - **Conhecimento negativo (Node v21.7.3)**: o scrypt chamado sem `maxmem` (ou com peso que o Node recusa) LANÇA na hora e deixa um erro
+    PRESO na fila do OpenSSL — a PRÓXIMA leitura de chave PEM (a do JWT) falha com `ERR_OSSL_EVP_MEMORY_LIMIT_EXCEEDED`. A peça nunca chega
+    lá (peso pela lista aceita + `maxmem` = o dobro); teste em processo separado.
+  - A troca pelo código não alarma hash fora das formas (só o login alarma — a mesma conta).
+  - Testes: `password-scrypt-d-ea9.test.ts` (H1–H4, H6, H7, H10 + cercas), H5/H6 da troca no `auth-password-reset-q-pv38.test.ts`; a suíte
+    grava no peso leve `N=2^14,p=1` (`test-setup/scrypt-weight.ts`).
+  - **H9** (`scripts/prove-scrypt-migration.ts`, schema descartável): 10 MD5 + 10 scrypt vigente + 5 scrypt de peso antigo, 3 certos + 1
+    errado por conta em paralelo = 100 logins em 18 s, zero erro, zero deadlock, 15 regravações (uma por conta), `password_set_at` intacto;
+    troca de senha × migração em paralelo: 10/10 senhas novas preservadas; `setes_central` intacta.
+  - **H8** (`scripts/measure-scrypt.ts`, máquina do dev i7-8550U, serviços FORA do ar): peso vigente `p=3` — sozinho p50 390 ms · p99
+    496 ms; 20 juntos p99 3,3 s; +128 MiB de pico; 6 verificações/s (cabe nos 5/s de 300 req/min por IP). `p=2`: p99 287 ms · `p=1`:
+    p99 159 ms. (A pré-medição de 01/11 deu 1,3 s com os serviços no ar — a máquina carregada pesa 3×.) **O piso das recusas (400 ms) fica
+    ABAIXO do p99 do scrypt** → Q-EA43 → **D-EA43** (piso 700 ms; commit `e7bc3d3`).
+  - **Gates (2026-11-07, dois agentes separados)**: socrático **0,72 ✅** · adversarial **0,78 ✅** (sem HIGH/CRITICAL; teste
+    `src/__tests__/adversarial-onda4-gate.test.ts`). Corrigidos na sessão (cabem nas decisões): falha do scrypt (ENOMEM etc.) virava 500
+    só para conta existente → a MESMA recusa neutra com alarme, no login e na troca (`5be34b9`); parâmetros do scrypt exigidos CANÔNICOS
+    como o base64 (ADV-O4-05, `8d71664`); teste do esgotamento do `stale`; documentação. Suíte inteira: 3164 verdes, 2 falhas já
+    corrigidas (teste antigo que esperava MD5; teste novo rodando no meio da edição).
+  - **Fila nova (uma por vez ao Valdo)**: **Q-EA44** rajada de palpites simultâneos passa inteira pelo pré-filtro do bloqueio (30 erradas
+    paralelas numa conta limpa = 10 falhas gravadas, mas 30 scrypt — ADV-O4-01; rec. contar as tentativas EM ANDAMENTO por conta na
+    memória antes do cálculo); **Q-EA45** o oráculo de tempo sob carga que o PRÓPRIO atacante cria (12 palpites simultâneos: conta
+    existente 2,3–3,5 s × inexistente 0,7 s — ADV-O4-02) e a fila do pool do libuv sem teto (socrático, HIGH 1: alavanca de negação de
+    serviço antes da autenticação) — opções: limite conhecido até a H11 × teto de scrypt simultâneos no processo com recusa neutra acima;
+    **Q-EA46** a troca pelo código paga dois scrypt antes de saber se há código aberto (ADV-O4-03; rec. ler sem trava se há código aberto
+    e não esgotado antes, o piso esconde a diferença).
+  - **Para outras frentes (registro, sem decisão aqui)**: onde mora a peça da senha na A2 (frente auth-api — biblioteca comum no molde de
+    `fiscal-api/access` × só na auth-api); versão do Node do servidor (deploy — o v21.7.3 do dev está fora de suporte; o conhecimento
+    negativo do OpenSSL é dela); confirmar com o grupo do sync que nada lê `tb_user.password` em MD5 (regra dos dois grupos: não
+    investigado daqui); a H11 é tarefa do roteiro do deploy (D-EA18 já decidiu publicar com o peso provisório).
 
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
