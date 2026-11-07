@@ -540,6 +540,48 @@ tempo real da transação do consume (D-RS6). Nenhuma onda daqui deve ligar `tru
   apagadas. **Próximo: Onda 4** (scrypt no lugar do MD5 — D-EA9 com o peso provisório da D-EA18; plano de testes H1–H10 no §P.5 item 3),
   com o "sim" do Valdo; depois a A2 da auth-api (§7.7 do `prompt_frente_auth_api.md`).
 
+### P.14 ⏯ Onda 4 (scrypt) — desenho e ponto de retomada (2026-11-07; Valdo: "Sim, começar"; NADA de código ainda)
+
+- **Onde**: worktree `D:\Gestao2027\onda4\setes-api` (branch `onda4`, a partir do `main` **48cddd6**, `.env` copiado) + irmãs destacadas
+  `onda4\{sql, fiscal-api (main, build), nfse-api}` só para as cercas — `npm ci` disparado nas três (conferir que terminou). ⚠️ Ao remover,
+  apagar ANTES a junção `nfse-api\node_modules\fiscal-api` (`cmd /c rmdir`); o setes-api agora usa o pacote `vendor/fiscal-api-1.0.0.tgz`
+  (DEPLOY.E1.P1), sem junção.
+- **Quem grava/confere senha hoje** (conferido 2026-11-07): `@shared/auth/password` (`md5Password`, `passwordMatches` — SÍNCRONA);
+  escritores `users.service` (l. 139, 180), `institutions.service` (l. 104), `auth.service` `changePassword` (`md5(newPassword)` → `judgePasswordResetCode`),
+  `super-password-reset.ts` (`hashInitialPassword` + o teste `/^[0-9A-F]{32}$/` na l. 165 — sai); leitores `auth.service` l. 160 (sob a trava,
+  só quando o hash mudou), l. 212 (pré-veredito fora da trava), l. 591 (igual à atual — HOJE SOB A TRAVA). Testes que usam essas peças: ~40
+  ocorrências em 13 arquivos (os fixtures montam hash por `md5Password` — continuam valendo como LEGADO).
+- **Desenho proposto (cumpre D-EA9/D-EA18 e H1–H10)**:
+  1. Peça `@shared/auth/password`: `hashPassword(plain): Promise<string>` (scrypt ASSÍNCRONO do `crypto` — nunca `scryptSync`: 1,3 s
+     segurando o laço de eventos parariam a API inteira), sal 16 bytes, chave 32 bytes, formato `scrypt$N=32768,r=8,p=3$<sal b64>$<hash b64>`
+     (≈ 92 caracteres ≤ 100); `checkPassword(plain, stored): Promise<{ ok, needsRehash, form: 'scrypt'|'md5'|'invalid' }>` — MD5 legado
+     (32 hex) por `timingSafeEqual` com `needsRehash` quando bate; scrypt com os parâmetros DO VALOR GRAVADO, `needsRehash` quando bate e os
+     parâmetros ≠ vigentes; parâmetros fora da lista ACEITA (N ∈ {2^14…2^17}, r = 8, p ∈ 1…4) ou forma desconhecida = `invalid` (recusa
+     neutra + alarme, nunca cálculo); parâmetros VIGENTES numa constante só (`SCRYPT_CURRENT`); `maxmem` explícito (o teste fixa por quê).
+     `md5Password` fica só para conferir/montar o LEGADO (cerca: nenhum escritor o chama).
+  2. Escritores → `await hashPassword(...)` FORA de transação (o hash nunca sob a trava nem com conexão do pool presa).
+  3. Login: pré-veredito `await checkPassword` fora da trava (só depois do pré-filtro — conta bloqueada e e-mail inexistente não calculam);
+     se certo e `needsRehash`, o hash NOVO também é calculado FORA da trava; sob a trava: hash travado = lido → usa o pré-veredito (mudou →
+     reconfere, caminho raro); admitido + `needsRehash` → `UPDATE … SET password = ? WHERE id = ? AND password = <lido>` (compare-and-set, SEM
+     `password_set_at` — não derruba sessão; repositório novo `rehashPassword`), na MESMA transação. A regravação mata o código de
+     recuperação aberto (HMAC amarrado ao hash — H5, linha no roteiro de deploy).
+  4. Troca pelo código: o hash da nova (`hashPassword`) e o "igual à atual" (`checkPassword` contra o hash lido ANTES da trava) calculados
+     FORA da trava; sob a trava, hash travado = lido → usa o pré-cálculo; mudou → reconfere (raro). Custo: 2 scrypt por tentativa da troca —
+     contido pelo limite por e-mail (10/15 min) e por IP; registrar no gate.
+  5. Script do Super: `await hashPassword`; o teste "32 hex" sai; o ato confere a forma nova.
+  6. Testes H1–H10 (§P.5 item 3), cerca H6 (nenhum `createHash('md5')`/`md5Password` em escritor), prova H9 em schema descartável
+     (`scripts/prove-scrypt-migration.ts`: 10 MD5 + 10 scrypt em logins paralelos), medição H8 (`scripts/measure-scrypt.ts`: p50/p95/p99 +
+     pico de memória com 20 logins paralelos).
+- **⚠️ QUESTÃO a levar ao Valdo DEPOIS da medição H8 (Q-EA43, ainda não perguntada)**: o piso das recusas do login é 400 ms (D-EA35,
+  provisório) e o da recuperação também; com o scrypt `p=3` (≈ 1,3 s no dev) a conta EXISTENTE com senha errada responde em ~1,3 s e a
+  INEXISTENTE em 0,4 s — o tempo diria quem tem cadastro (H7/H8 exigem o piso ACIMA do p99 do scrypt). Opções a apresentar com os números:
+  (a) piso do login (e da troca pelo código) acima do p99 medido no dev, revisto na medição do servidor (D-EA17); (b) a conta inexistente
+  calcula um scrypt falso (contraria a letra da D-EA9/H7 "conta inexistente NÃO calcula hash falso"); rec. provável (a).
+- **⏯ Retomar (sessão nova)**: ler `D:\Gestao2027\CLAUDE.md`, este §P.14, o §P.5 item 3 (H1–H11), D-EA9/D-EA17/D-EA18/D-EA35 nas Decisões e
+  o `CLAUDE.md` do `onda4\setes-api`; conferir se o `main` do setes-api andou (juntar na `onda4` se sim — a junção `node_modules/fiscal-api`
+  não existe mais no setes-api); executar o desenho acima (1→6), suíte inteira, medição H8 → Q-EA43 ao Valdo (uma pergunta, palavras
+  simples) → gates (dois agentes) → "vai" (sem banco: a coluna `password` varchar(100) já cabe) → Onda 4 publicada → A2 da auth-api.
+
 ## ⚠️ Questões pendentes (Rodada 0) — uma por vez, com recomendação
 
 - ✅ **Q-EA1 → D-EA1 (2026-10-31, (a)).** Texto original: **Q-EA1 — limite por conta no login: valores.** Problema: sem teto por conta, 18 000 palpites/h por IP. Opções: (a) **10 erradas em 15
