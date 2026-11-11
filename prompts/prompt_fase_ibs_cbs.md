@@ -2000,6 +2000,9 @@ da D-IB99, 110+ do leiaute)**:
 | **A-IB121** | A conferência D-IB28 (a) confere também o GRUPO: `exigeGrupoIbsCbs` do par NFS-e × cClassTrib da Calculadora × `ind_gIBSCBS` do CST no IT; divergência tira a linha da NFS-e (o fisco decide o grupo pela Calculadora — E0961). Par sem o campo booleano = estrutura mudada, carga recusada |
 | **A-IB122** | Indicador DESCONHECIDO (NULL) = recusado com o MESMO motivo `cst-without-group` (o 422 diz "ainda não foi carregado"; omissão e selo não distinguem) — e, pela D-IB120, ele não chega a um setes-api no ar enquanto o CST tiver cClassTrib vivo |
 
+→ ✅ **A-IB120, A-IB121 e A-IB122 RATIFICADAS** (Valdo 2026-11-11, "a"). A regra da A-IB121 (Calculadora prevalece sobre o IT no grupo)
+vale também para o ERP Desktop quando ele classificar serviços (D-IB123/regra fiscal dos dois ERPs).
+
 - ✅ **Q-IB120 → D-IB120 (Valdo 2026-11-01, "Sim, recusar").** Texto original: **o boot RECUSA subir com CST de indicador desconhecido?** —
   (a) recusar quando um CST com indicador NULL ainda tem cClassTrib com linha viva (não superada); (b) manter o alerta + a conferência no
   checklist. Rec.: (a).
@@ -2016,6 +2019,10 @@ história do cClassTrib copiadas) **28/28** — 73 aplicado sem a carga = o boot
   `SET requires_ibscbs_group = 'Sem grupo'` é TRUNCADO para `'S'` antes do CHECK e passa (vale para todo CHAR(1) com CHECK; a rotina do Super
   grava em STRICT). (a) registrar no PADROES §11 regra 11 e exigir `STRICT_ALL_TABLES` global no servidor de produção na Onda 4; (b) alargar
   as colunas de domínio. **Rec.: (a)** (questão da Onda 4; não trava a D-IB113).
+  - ✅ **Q-IB121 → D-IB121** (Valdo, 2026-11-03, pela orquestradora da governança de projetos — B4 da fila única; literal: *"Exigir modo
+    estrito (Recomendado)"*) — **(a)**: registrar no PADROES §11 regra 11 e exigir `STRICT_ALL_TABLES` global no servidor de produção na
+    Onda 4 do deploy; vale para todos os serviços do ERP web. Descartada: (b) alargar as colunas de domínio. Execução: passo da Onda 4
+    (deploy) na árvore de cada serviço, pela governança.
 
 **Limites conhecidos registrados (sem decisão)**: ADV-IB113-03 — carga que vire um CST de `S` para `N` com um faturamento já aberto: a nota
 congela pelo retrato da transação (o mesmo limite da D-IB70; a consequência agora seria E0859/E0961 — só numa mudança oficial do IT que a
@@ -2317,6 +2324,11 @@ corrigido → **re-prova 0,86 ✅**:
 - **Assunção A-IB4 (sem decisão — confirmar com o Valdo quando oportuno)**: o opSimpNac **4 "pendente"** segue ACEITO se gravado por outra via
   (sincronizador/NT 009 — `emitterRegimeAt` lê 1–4), mas a tela do estabelecimento só grava 1/2/3 e a mensagem não promete o 4. Gravar o 4 pela
   tela é mudança de produto, fora desta frente.
+  → ✅ **D-IB123** (Valdo 2026-11-11, "a" da pergunta reformulada — REGRA FISCAL DOS DOIS ERPs): os dois sistemas OFERECEM "4 – Optante
+  pendente" (NT 009) no cadastro do estabelecimento (sistema agnóstico, D-IB122); a NFS-e manda `opSimpNac` 4 só quando o leiaute da NT 009
+  vigorar no ambiente (calendário por pacote, D-IB110); antes disso a emissão RECUSA com mensagem clara (nunca troca por outro valor). No
+  ERP Desktop depende do ACBr novo/fork (mesma fila da EM-3 Parte B) — levar à frente do ERP Desktop (ficha
+  `Docs\ReformaTributaria\Emissao2027\ficha-nfse-p2-ibscbs-servico.md`) e ao catálogo fiscal único da Infra-IA.
 - **Para a D-IB11 (quando o cálculo do regular nascer — sem ação agora)**: o faturamento hoje não lê o opSimpNac (recusa qualquer 2/3); quando
   2/3 forem suportados, decidir se o `issueInvoice` também confere o opSimpNac (a linha 3 deixada por quem saiu do Simples).
 
@@ -2360,6 +2372,8 @@ evento E; EXPLAIN da consulta nova).
   última nota viva custa 1 leitura na varredura (10 mil = 61 ms; 100 mil = ~1 s; no dev: 0 — uma pendente cancelada costuma ser refaturada e
   REVIVE na mesma PK); (2) se o sincronizador gravar `deleted='S'` na PK de uma nota do ERP web (a colisão de ids da Q-SY12, grupo do sync), a nota
   sai da fronteira e ela RECUA — mesmo limite da Q-SY12, não investigado aqui (fronteira dos grupos).
+  → ✅ **A-IB5 RATIFICADA** (Valdo 2026-11-11, "a"): o limite (1) fica como limite conhecido; o (2) deixou de existir pela D-SY28 do grupo do
+  sync (o sincronizador nunca toca nota com evento na web) — a execução da D-SY28 deve ter teste que prove a fronteira estável.
 - Provas: `tsc` limpo · setes-api **138/138 suítes, 2204 testes** (+ 2 suítes ao vivo opt-in: **11/11**) · prova OK · app `flutter analyze` sem
   aviso, **651 verdes**. Commits LOCAIS `ib99`: api **95181b9** · sql **b98274c** · app **6a69090**. Regra PADROES §9 regra 14 (d) reescrita
   ("a leitura que decide sob trava parte do FATO que a define, pelo índice dele").
@@ -2408,3 +2422,9 @@ sistema."* (o rascunho do §14.7 vira o texto final) · D-IB105: *"Este estabele
 DD/MM/AAAA que só vale para o Simples Nacional. O faturamento a partir dessa data será recusado até essa opção ser excluída ou trocada."*
 (DD/MM/AAAA = data da 1ª linha futura 2/3). **Retomar por aqui**: executar a
 D-IB105 na `ib99` → merge do `main` → suíte + gates → janela.
+
+### 14.9 Rodada 7 — D-IB122: pergunta ao contador vira opção de configuração (Valdo 2026-11-11)
+
+| Decisão | O que fixa |
+|---|---|
+| **D-IB122** (Valdo 2026-11-11, literal: *"Perguntas para o contador nao devem ser consideradas como esperando respostas e sim utilizadas para criar opcoes de configuracoes, pois cada cliente usando o sistema tera um enquadramento diferente, estamos desenvolvendo o sistema agnostico em relacao a clientes, apesar de ter alguns como referencia"*) | Nenhum passo do ERP web espera resposta do contador. Cada pergunta "ao contador" vira OPÇÃO de configuração por cliente/estabelecimento (Framework de Configurações ou peça datada própria), com o enquadramento da Setes só como caso de referência. Aplica-se a: **P-IBS-1** (opção pelo regime regular — já é configuração datada, D-IB99/D-IB100); **P-IBS-2** (NBS e classificação de cada serviço — já é cadastro por serviço; a Setes preenche os dela); **P-IBS-3** (competência = dia do faturamento ou outra regra — vira opção); **P-IBS-4** (total da NFS-e maior que o título — vira opção de tratamento); **P-IBS-5** (opção pela raiz do CNPJ ou por estabelecimento; MEI) — vira opção/regra configurável. Os passos IBS.E7.P1, IBS.E9.P1 e IBS.E9.P2 deixam de ter "decisão a tomar" do contador: passam a "desenhar a opção" (guardião antes do DDL) |

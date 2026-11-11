@@ -120,3 +120,11 @@ Se `Infra-IA/setes-sync/CONTRATOS_SYNC.md` estiver acessível, usar como fonte d
 - Não alterar código sem apresentar o diagnóstico antes
 - Não rodar migrations ou tocar em banco de produção
 - Não ativar endpoints com SET_ON='N' (NFS-e e Carta de Correção aguardam patch 04)
+
+## Decisões da fila de 2026-11-11 (Valdo)
+
+- **D-SY33** (Valdo 2026-11-11, "a" — fecha a P-IMPL-1): as rotas `/api/test` do setes-sync NÃO existem em produção — só montam em
+  desenvolvimento (gate por `NODE_ENV`, com teste que prova a ausência em produção). Pré-requisito do DEPLOY.E1.P2 do setes-sync.
+- **D-SY34** (Valdo 2026-11-11, "a" — fecha a P-SYNC-5): os dois gates (revisar-riscos-sistemicos + testar-adversarial) rodam sobre o
+  setes-sync das Ondas 1–6 ANTES da primeira implantação; achado HIGH/CRITICAL vira correção com teste jest. (Lembrete do Valdo no mesmo dia:
+  nada do Gestão 2027 nem da sincronia está em produção.)

@@ -249,7 +249,12 @@ São 19 telas na onda + `terminals` + `merchandise`. Fora (D-CF1): `interface-co
   - **exceção nomeada com motivo** = toda tela do §5.2 ainda não coberta; cada bloco seguinte tira as suas; no fecho a lista é VAZIA;
   - quando o repositório `auth-api` existir (A2), a varredura do lado API o lê também (repositório irmão, como a cerca de privilégios já
     lê a nfse-api e o app) — D-CF6;
-  - a confirmar nos gates: onde mora a lista de exceções; como a varredura atribui o campo da peça compartilhada a N catálogos (D-CF3);
+  - **D-CF8** (Valdo 2026-11-11, "a" — fecha a P-CAMPO-1): a cerca NASCE no bloco 0 com a lista de exceções nomeadas (tela + motivo),
+    que encolhe a cada bloco até VAZIA no fecho; a lista mora num arquivo de teste do setes-api (`src/test-setup/`), ao lado da cerca de
+    privilégios, no mesmo molde;
+  - **D-CF9** (Valdo 2026-11-11, "a" — fecha a P-CAMPO-3): o catálogo só tem o que o usuário VÊ ou DIGITA — `id` gerado pela API fica de
+    fora da comparação; código digitado (como o `id` do CFOP) entra;
+  - a confirmar nos gates: como a varredura atribui o campo da peça compartilhada a N catálogos (D-CF3);
     linha técnica do catálogo que a tela não mostra (ex.: `id` gerado pela API × `id` digitado como no CFOP).
 - **Bloco A — cadastros com pouco faltando**: service-list, price-lists, salesmen, tax-rules. Catálogos novos por `npm run fields:gen`
   (seed novo em `sql/`, interface por `i18n_key` — nunca id fixo, lição do seed 40v1); tax-rules aplica a config aba a aba com

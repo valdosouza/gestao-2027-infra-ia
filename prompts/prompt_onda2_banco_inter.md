@@ -538,6 +538,8 @@ consistente, a reconciliação pode dizer "não achou" cedo demais → entra com
   existe no detalhe? (Rec.: coluna/badge na lista na próxima passada de UX — hoje o operador não
   descobre dinheiro na conta sem título baixado sem abrir boleto por boleto.)
 - **Q-I6** Onda 4: `trust proxy` + limitador próprio do webhook + fila compartilhada entre instâncias.
+  → ✅ **D-I29** (Valdo 2026-11-11, "a"): na Onda 4, junto da URL pública, o webhook ganha limitador próprio e fila ÚNICA compartilhada entre
+  as instâncias (no banco); `trust proxy` já decidido (D-RS2). Descartado começar com processo único para o webhook.
   (Rec.: sim, junto com a URL pública.)
 - **Q-I7** confirmar D-I23 para o GET redigido (a seção Canal API do app já trata `webhookPath` nulo).
 - **Q-I8** DELETE do canal: apagar os segredos junto (hoje ficam no disco e o PUT seguinte revive o

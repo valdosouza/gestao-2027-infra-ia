@@ -2684,7 +2684,8 @@ nfse-api (cópia do main) contra o núcleo FINAL **65 suítes, 949 passaram, 185
   ambiente — identidade nacional, precedente da UNIQUE da `access_key`). Obrigações: a **NE-5** (1º escritor da família) traduz o 1062 DESSA
   chave em 409 tipado (o valor duplicado é o Id do próprio CNPJ do chamador — não vaza linha alheia); a frente do **grupo de estabelecimentos**
   diz se um CNPJ pode viver em duas institutions (até lá, o caso é teste em H com CNPJ de cliente ou CNPJ re-implantado). Nenhuma mudança na
-  001 publicada pela D-NE168.
+  001 publicada pela D-NE168. → ✅ **Respondido em 2026-11-03** (Valdo, pela governança de projetos, B2 da fila única: *"Não, nunca"*):
+  um CNPJ NUNCA vive em duas institutions; registro na nota do fim de `prompt_frente_grupo_estabelecimentos.md`.
 - **D-NE170** (Valdo, 2026-10-31 — fecha a **Q-NE170** = (a), literal: *"View do núcleo (a)"*) — o ERP lê o AMBIENTE do modelo 55 por uma
   VIEW PUBLICADA da habilitação por modelo no núcleo (`environment`, `cutover_at` de `tb_establishment_issuer`, molde D-F15/D-F32 — fundível,
   PADROES §11.3), lida pelo setes-api JUNTO da view de faixas, VIVA no momento de cunhar o nNF (nunca cache, nunca cópia). Uma fonte só para o
@@ -2901,6 +2902,14 @@ estrita) e conferir no log do boot as sondas novas; (4) limpeza das worktrees `s
   NÃO recusam `NO_BACKSLASH_ESCAPES`/`ANSI_QUOTES` (o único lugar que mexe no `sql_mode` no setes-api é a carga do catálogo IBS/CBS). Com o
   servidor nesse modo, as APIs fiscais não sobem, mas o ERP web seguiria gravando com o escape quebrado. Estender a mesma regra a eles? —
   pertence às frentes do setes-api e do setes-sync (o grupo do sync é separado — regra dos dois grupos).
+  → ✅ **D-NE176** (Valdo 2026-11-11, "a"): SIM, nos DOIS — setes-api e setes-sync adotam a mesma regra do núcleo (D-NE174/D-NE175: somar o
+  estrito, recusar `NO_BACKSLASH_ESCAPES`/`ANSI_QUOTES` em toda conexão nova e não subir com o servidor torto). Execução = passo novo em cada
+  frente (setes-api e setes-sync), cada um no seu grupo.
+- **Q-NE177** → ✅ **D-NE177** (Valdo 2026-11-11, "a", depois de pedir o impacto para 1000 clientes simultâneos): LIMITE DA TOPOLOGIA — o
+  produto não roda atrás de proxy de banco que reaproveita conexões entre clientes (ProxySQL/MaxScale); quem quiser um abre frente própria.
+  Escala = mais processos × pool de 20 (subir `max_connections`, padrão 151) e, se preciso, o thread pool do próprio MariaDB
+  (`thread_handling=pool-of-threads`), que não desfaz os invariantes de sessão. Descartada (b) reaplicar a cada uso: custo por requisição, o
+  proxy prende a conexão ao ver `SET` de sessão (perde o ganho) e reabre o risco do retorno atrasado do mysql2 (D-NE175).
 - Achado LOW (gate adversarial): DATETIME zero em `DEFAULT` de migration passa num servidor sem `NO_ZERO_DATE` — fora da D-NE174 (os outros
   modos do servidor ficam); o MySQL 8 já traz `NO_ZERO_DATE` (D-NE165 confere na F3).
 - ⚠️ Incidente registrado: um agente do gate adversarial exibiu, na saída das ferramentas DELE (local, nesta máquina), o valor de
@@ -2946,3 +2955,10 @@ servidor torto).
   trocar a chave é operação própria (re-cifrar o A1); (b) **Q-NE176** — setes-api e setes-sync no MESMO servidor não recusam
   `NO_BACKSLASH_ESCAPES`/`ANSI_QUOTES` (frentes deles); (c) **Q-NE177** — proxy que reaproveita conexões desfaria os invariantes de sessão (F3).
 - ⏯ **Próximo da família NF-e**: Rodada 0 da NE-3 (§15.5). A janela da D-NE172 está FECHADA.
+
+### Decisão da fila de 2026-11-11 — dono dos totais da NF-e (P-NFE-1)
+
+- **D-NE178** (Valdo 2026-11-11, "a" — fecha a P-NFE-1; insumo da Rodada 0 da NE-6/NE-4): o ERP CONGELA os ITENS (snapshot de cada item com
+  os seus valores) e o VALOR FINAL da nota (`vNF`); a nfe-api CALCULA os demais totais do `ICMSTot` pela SOMA dos snapshots dos itens e
+  CONFERE que o `vNF` bate (divergência = recusa local antes da SEFAZ, com motivo). Regra única, igual à conta que a SEFAZ valida e à do
+  ACBr no ERP Desktop (regra fiscal dos dois ERPs). Descartada (b): o ERP gravar as 29 colunas de total.

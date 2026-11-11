@@ -894,3 +894,16 @@ worktree) · prova da 074 **34/34** · app `flutter analyze` limpo · suíte com
 - **A-TM9 RATIFICADA** (Valdo, 2026-10-31, literal: *"Ratificar"*) — lista de apoio `/api/terminals/lookup` = só vivos E ativos (padrão
   "ativo" da casa); lista da tela = todos os vivos com o selo "Inativo". **Frente do terminal SEM questão aberta** (D-TM23…D-TM29 +
   A-TM6…A-TM10 ratificadas); sobram só os contratos com o grupo do sync (§10.6, com o `X-Sync-Holder` da D-TM25).
+
+- **Nota da fila de decisões (2026-11-11, D-SY28 do grupo do sync — `setes-sync/MAPA_INDEXACAO.md` pendência 6)**: o Valdo decidiu que
+  cada TERMINAL tem seus controles, entre eles a SÉRIE de nota associada (por modelo), para cada terminal gerenciar as suas notas sem
+  disputar número (terminal 0 = a retaguarda, D-OI11: servidor do ERP Desktop no estabelecimento D, web no W). Entra no desenho de `tb_terminal` (ou peça ligada a ele) — guardião antes do DDL.
+- **D-TM30** (Valdo 2026-11-11, fecha a D-SY36 do grupo do sync; literal: *"essa determinação de terminal 0 … aqui vai complicar, vamos
+  identificar tudo no cadastro do terminal … não importa o número desde que cada terminal esteja com as propriedades certas para os
+  controles certos"*): o NÚMERO do terminal deixa de carregar significado. Papel e controles são PROPRIEDADES do cadastro do terminal
+  (`tb_terminal` ou peça ligada): quem é a retaguarda (pode mandar cadastro) × PDV/app (só movimento), a série de nota por modelo (D-SY28),
+  e o que mais o controle exigir. A web que emite num estabelecimento D é um terminal registrado com as suas propriedades (série própria);
+  ninguém disputa número. **Revê a regra "terminal 0 = retaguarda" da D-OI11** (governança, `entradas/prompt_opcoes_de_integracao.md`) e o
+  "0 é só da web"/"o setes-sync recusa o 0" (D-TM9/D-TM16) naquilo em que o número decide papel: o número segue só como identidade (o par
+  pedido × terminal da D-OI12 continua). Os ~140 literais `terminal = 0` (D-TM16) passam a ler a propriedade, não o número. Guardião antes
+  do DDL; levar à governança para reconciliar a D-OI11.

@@ -188,6 +188,10 @@ tudo numa institution.
 - **D-SY4**: a fórmula da comissão por produto (legado combina vendedor + item conforme o modo; setes-api substitui) é decisão
   da FRENTE DE COMISSÃO e vem ANTES da D-SY3; até lá o flag fora do domínio é inofensivo (comissão = alíquota do vendedor
   para todos). Pesa na D-PR9 (comissão na grade de preço) da frente de produtos.
+  → **D-SY35** (Valdo 2026-11-11, "a" + acréscimo — fecha a D28 da fila): a frente de comissão abre ANTES de o 1º cliente que usa comissão
+  por produto ser implantado na web (até lá o flag segue travado); e ela PARTE DO PIPELINE DE COMISSÃO DO ERP DESKTOP — *"é isso que
+  estamos fazendo, migrando o sistema ERP Desktop para a web"*: levantar no Gestao2016 (corpus `D:\Gestao2016\Infra-IA\Gestao\` primeiro)
+  os modos `CLB_CALC_COM_VDA`, a combinação vendedor × item e onde a comissão nasce e se compensa, e reproduzir na web como peças.
 - **D-SY5**: indEscala real — o sincronizador manda `INDESCALA` (S/N; fora disso `''`), e o setes-sync grava vazio/ausente
   como NULL ("não informado"; antes o default `'S'` inventava "relevante"). Patch 10 + `merchandise.ts` + teste
   `src/__tests__/merchandise.body.test.ts`. Produtos já sincronizados: reenvio (Primeira carga → Produtos, sem período).
@@ -556,10 +560,13 @@ Sessão própria do grupo do sync (pedida pela sessão de produtos). Regra dos d
 
 **A-SY1 (a ratificar)** — a chave INEXISTENTE (401) tem o mesmo efeito da inativa (403): sincronia inativa até "Ativar sincronia".
 Implementado como "qualquer 401" (inclusive sem corpo do setes-sync) — ver Q-SY19.
+→ ✅ **RATIFICADA** (Valdo, 2026-11-03, pela orquestradora da governança de projetos — B7 da fila única, item 1/10; literal: *"Sim,
+confirmo"*).
 
 **Q-SY15 — serviço em categoria `'P'` (e mercadoria em `'S'`) no setes-sync, depois do reenvio.** **(a)** depois do reenvio de todos os
 clientes sincronizados, `/service` e `/merchandise` recusam com 409 `CATEGORY_KIND_MISMATCH` (a natureza só se acerta na origem; hoje a
 recusa estaciona o registro — ver Q-SY18) **(Recomendado)** · (b) só aviso no log · (c) não conferir.
+→ ✅ **D-SY15 = (a)** (Valdo 2026-11-11, "a").
 
 **Q-SY16 — reset da conversão (Passo 0) em cliente já sincronizado.** O generator volta a 0: ids recomeçam do 1 e caem em ids vivos na web
 com outro significado (o `/category` faz upsert pelo id e move a subárvore); as categorias que a reconversão não reproduz ficam VIVAS na
@@ -568,12 +575,14 @@ web; o reset volta sempre que a natureza de um grupo muda no legado; o `DELETE F
 linha que deixou de ser produzida vira `DELETED='S'` (viaja como soft delete) e o generator segue do MAX (nenhum id reusado)
 **(Recomendado)** · (b) manter o reset da D7 + Primeira carga obrigatória, registrando o DELETE como exceção do §3.1 e aceitando as
 órfãs vivas na web.
+→ ✅ **D-SY16 = (a)** (Valdo 2026-11-11, "a").
 
 **Q-SY17 — forma de pagamento tem dois escritores.** O setes-api (`@shared/payment-types`) cria a mesma linha central comparando
 `description = ?` na colação `_ci` (funde acentos: 'CARTÃO' = 'CARTAO') e sem trava nomeada; o setes-sync compara binário e cria dentro da
 transação do pedido com `FOR UPDATE` (dois pedidos com a mesma forma NOVA ao mesmo tempo = 1213 → 500 → pedido estacionado). **(a)** a
 MESMA trava `setes_central.tb_payment_types` e a MESMA comparação nos dois, com a resolução antes da transação do pedido no sync (como a
 D-SY10) **(Recomendado)** · (b) limite conhecido.
+→ ✅ **D-SY17 = (a)** (Valdo 2026-11-11, "a").
 
 **Q-SY18 — erro transitório estaciona o registro para sempre.** O sincronizador grava `SRC_LOG` em todo não-200 (só a recusa da chave
 escapa) e a fila só pega `SRC_LOG` vazio: 409 `RESOURCE_BUSY`, `CATEGORY_NOT_SYNCED`/`PARENT_NOT_SYNCED` fora de ordem, 1205/1213 (hoje
@@ -581,21 +590,26 @@ escapa) e a fila só pega `SRC_LOG` vazio: 409 `RESOURCE_BUSY`, `CATEGORY_NOT_SY
 1205/1213 para 409 `RESOURCE_BUSY` e o sincronizador trata uma lista FECHADA de códigos transitórios como "não marca o `SRC_LOG`, para a
 tabela neste ciclo, tenta no próximo" — o mesmo mecanismo da D-SY13 (cuidado: dependência que nunca chega viraria nova tentativa a cada
 ciclo) **(Recomendado)** · (b) manter o estacionamento + UPDATE manual.
+→ ✅ **D-SY18 = (a)** (Valdo 2026-11-11, "a"; absorve a P-SYNC-3 da Rodada 4).
 
 **Q-SY19 — qualquer 401 desliga a sincronia (A-SY1).** Um proxy/basic auth do Plesk ou uma URL errada respondendo 401 deixa TODOS os
 sincronizadores e PDVs inativos; a volta é um clique em cada máquina (a mensagem do "Ativar" já manda conferir chave e URL). **(a)** manter
 qualquer 401 enquanto a Q-SY18 não existir — a alternativa hoje estaciona TODO registro do ciclo, o que é pior **(Recomendado)** · (b) só
 401 com o corpo do setes-sync (`{ok:false}` com `SYNC_KEY_*`); 401 de terceiro = transitório (depende da Q-SY18).
+→ ✅ **D-SY19** (Valdo 2026-11-11, "a" da pergunta reformulada com a D-SY18 já decidida): até a D-SY18 ficar pronta, qualquer 401 desliga; COM
+a D-SY18 pronta (na mesma entrega), só desliga o 401 com o corpo do setes-sync (`SYNC_KEY_*`); 401 de terceiro entra na lista de transitórios.
 
 **Q-SY20 — janela de transição da medida.** O executável antigo resolve a medida pela DESCRIÇÃO: quando ela não casa com a central, nasce
 uma linha com abreviação NULL (inclusive a "UND" do fallback antigo), invisível à dedupe por abreviação do setes-api e do executável novo
 — o vínculo velho fica no lookup do cliente. **(a)** servidor e executável novos no MESMO dia + conferência, depois do reenvio, das linhas
 `abbreviation IS NULL` criadas no intervalo (`setes_central.tb_measure`) **(Recomendado)** · (b) o servidor trata o `nameMeasure` 'UND' do
 executável antigo como abreviação.
+→ ✅ **D-SY20 = (a)** (Valdo 2026-11-11, "a").
 
 **Q-SY21 (sem urgência) — revive de linha central soft-deletada (D17).** Quando o Super corrigir um dado central (ex.: "KILOGRAA") pelo
 soft delete sem criar a substituta, o próximo envio do legado o revive. **(a)** soft delete central = correção/fusão: o sync não revive —
 usa a viva da mesma chave ou cria **(Recomendado)** · (b) manter o revive.
+→ ✅ **D-SY21 = (a)** (Valdo 2026-11-11, "a").
 
 **Q-SY22 — duas medidas do MESMO Firebird com a mesma abreviação** (achado MEDIUM do gate adversarial — consequência da D-SY10; com a
 chave por descrição só acontecia com descrição idêntica). Ex.: UNIDADE/UND viva e UNIDADE VELHA/und com `DELETED='S'`: dividem a linha
@@ -603,12 +617,15 @@ central e o vínculo, e o ÚLTIMO `/measure` decide o `active` — se o excluíd
 (`assertCatalogItemLinked` do setes-api dá 422) e o `/merchandise` não religa. Semântica fixada em teste até a decisão. **(a)** o Delphi não
 manda o `deleted='S'` de medida cuja abreviação também pertence a uma medida VIVA do mesmo Firebird (quem aposenta se adapta)
 **(Recomendado)** · (b) o `/measure` com `deleted='S'` nunca desativa o vínculo da medida (a central é compartilhada) · (c) aceitar.
+→ ✅ **D-SY22 = (a)** (Valdo 2026-11-11, "a").
 A consulta das medidas de mesma abreviação entrou no roteiro (Fase 1).
 
 **Q-SY23 — cache de 5 min da chave × guarda da web (D-PR41 revista).** Desligada a chave, a web libera na hora a criação de produto
 (lê o banco) enquanto o setes-sync ainda aceita o legado por até 5 min no MESMO espaço de id: a colisão do §9.1 reabre nessa janela.
 **(a)** tirar o cache da chave válida (é uma leitura pela UNIQUE `api_key` por requisição) **(Recomendado)** · (b) a guarda da web espera
 5 min depois de desligar · (c) aceitar (limite conhecido de hoje).
+→ ✅ **D-SY23 = (a)** (Valdo 2026-11-11, "a"). **Rodada B7 FECHADA** (A-SY1 + D-SY15…D-SY23): as que mudam código viram passos da
+PROD.E3 (setes-sync e sincronizador) antes da implantação do patch 11.
 
 ### 10.7 ⏯ Ponto de retomada (salvo 2026-10-18, a pedido do Valdo: "salve tudo para recomeçarmos depois")
 

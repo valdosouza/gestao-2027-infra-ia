@@ -110,6 +110,8 @@ Delphi mas **não tinha endpoint em nenhuma das 6 ondas** — não estava na ord
 de prioridade D8. Fica para a Rodada 4 — precisa de endpoint `/invoice-rectification/sincronize`
 novo (DDL: confirmar se `tb_invoice` aceita retificação como sub-registro ou
 tabela própria).
+→ ✅ **D-SY29** (Valdo 2026-11-11, "a" — fecha a D25 da fila e a P-SYNC-1): a CC-e mora em TABELA PRÓPRIA ligada à nota, uma linha por
+carta (sequência, texto, data, protocolo do fisco) — evento da nota, servirá também à nfe-api; guardião + revisar-ddl antes do DDL.
 
 ## ⚠️ Pendências para a Rodada 4 do prompt (decisões do Valdo — NÃO bloqueiam)
 
@@ -128,6 +130,8 @@ fallbacks descritos, mas a decisão definitiva é arquitetural:
 3. **tb_stock_statement com PK só `id` AUTO_INCREMENT**: ids locais de institutions
    diferentes podem colidir fisicamente. Correção = PK composta (id, institution,
    terminal) — DDL.
+   → ✅ **D-SY30** (Valdo 2026-11-11, "a" — fecha a D24 da fila e a P-SYNC-4): PK composta (id, institution, terminal) AGORA, na próxima
+   rodada do sync (migration no setes-api, deploy casado com o setes-sync); revisar-ddl antes.
 4. ~~**order-stock-adjust sem `direction` (sentido Entrada/Saída)**~~ —
    **RESOLVIDO 2026-08-09** (Valdo): não precisava de DDL nova — a 1ª letra do
    `TB_NOTA_FISCAL.NFL_TIPO` da própria nota já dá o sentido (`EI`/`EX` =
@@ -153,11 +157,22 @@ fallbacks descritos, mas a decisão definitiva é arquitetural:
    uma nota cancelada na web sem saber (id = pedido); (b) legado × web disputam o MAX+1 do
    mesmo modelo/série. Candidatos: o sync não toca nota que tem evento na web (respeita a
    história) e/ou série própria da web; no sentido inverso (D16) o evento C precisa viajar.
+   → ✅ **D-SY28** (Valdo 2026-11-11, "a", com acréscimo — fecha a D26 da fila e a P-NOTA-1): (1) o sync NUNCA toca nota que tem evento
+   na web (emissão/cancelamento pela web); (2) a numeração é separada POR TERMINAL: cada terminal tem seus controles, entre eles a SÉRIE
+   de nota associada (por modelo), e cada terminal gerencia as suas notas sem disputar número com outro. ⚠️ Pela D-OI11
+   (governança, `entradas/prompt_opcoes_de_integracao.md`) o terminal 0 é a RETAGUARDA — servidor do ERP Desktop (estabelecimento D) ou
+   a web (estabelecimento W) —, PDVs e apps ≥ 1; "web = terminal 0" (D-SY14) vale só no W. → **Revisto no mesmo dia (D-SY36 = D-TM30 da frente do terminal)**: o número
+   do terminal não carrega significado — papel (retaguarda × PDV/app) e série por modelo são PROPRIEDADES do cadastro do terminal; a web que
+   emite num estabelecimento D é um terminal registrado com a sua série. Generaliza a "série própria da web" (D-PR44) para NF-e e NFS-e. A série por terminal entra no
+   desenho da frente `tb_terminal` (guardião antes do DDL).
 7. **`tb_order_service.open_lock` é LEGADO desde a migration 047 da setes-api (2026-09-09)**: o
    ciclo da Ordem de Serviço mora em `tb_service_order` (tabela que o sync NUNCA grava — é assim
    que o pedido de serviço PURO sincronizado nunca vira OS). O `/order-service/sincronize` ainda
    escreve `open_lock` (NULL) no INSERT — tarefa deste projeto: remover a coluna do INSERT; depois
    a setes-api dropa a coluna (deploy casado — precedente `tb_cashier.tb_user_id`).
+8. **Cidade pelo código IBGE (B8 / P-SYNC-2)** → ✅ **D-SY26** (Valdo 2026-11-11, "a"; número pula 24/25, reservados às Q-SY24/Q-SY25): o pacote de endereço passa a indexar a cidade
+   pelo código IBGE (`setes_central.tb_city.ibge`), nunca pelo id de cidade do Firebird (colide entre clientes). Quem aposenta se adapta:
+   Delphi manda o IBGE, setes-sync resolve a cidade por ele. Trava o 2º cliente com sincronizador (SYNC.E9.P3).
 
 ## Precedente do padrão "código externo"
 

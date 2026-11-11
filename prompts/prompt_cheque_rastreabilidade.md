@@ -414,3 +414,10 @@ custódia "pagava" a venda de outro cliente e o caixa ganhava um 2º crédito do
 (`settleOneTitle` herda a operação do título). Agora a leitura do título traz `operation` (JOIN
 `tb_financial_bills`, FOR UPDATE) e **P só existe contra título a PAGAR** → 422
 `CHECK_TITLE_NOT_PAYABLE`. Detalhe e prova em `prompt_cancelamento_nota.md` §10.15.
+
+## Decisão da fila de 2026-11-11 (Valdo)
+
+- **D-CH3** (Valdo 2026-11-11, "a" — fecha a P-FIN-1): o cheque cujo RECEBIMENTO (R) foi estornado ganha estado próprio na LISTA —
+  "Recebimento estornado" (`voided`), com filtro e sem ações. Hoje o `LAST_CHECK_STATE_SQL` cai no `ELSE 'custody'` quando o X aponta para
+  um R; passa a devolver `voided`, alinhado ao `effectiveState()` da peça (D11). Sem DDL. NÃO confundir com o cheque que voltou da
+  factoring (eventos T "retornado com reembolso" / F "retornado bom"), que segue movimentável como está.

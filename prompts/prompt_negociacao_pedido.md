@@ -586,3 +586,10 @@ quando surge linha de erro sob um campo (screenshot antes de clicar).
 
 Resultado: os quatro caminhos novos da tela (§11) e o D-N6 (§12) provados ponta a ponta
 com login real e conferidos no MySQL. Nada pendente na negociação. Código NÃO commitado.
+
+## Decisão da fila de 2026-11-11 (Valdo) — collation do schema do cliente
+
+- **D-N7** (Valdo 2026-11-11, "a" — fecha a P-FIN-6): PROJETO PRÓPRIO para unificar a collation do schema do cliente numa só (a das
+  migrations novas, `utf8mb4_unicode_ci`), ANTES da 1ª implantação (nada está em produção — momento mais barato). Inclui baseline/sql
+  canônicos, migration de conversão com prova em schema descartável e revisão do PADROES_BANCO; depois dele o `COLLATE` explícito da D-N2
+  deixa de ser exigido. Cuidado: colunas `utf8mb4_bin` deliberadas (ex.: views com COLLATE bin, D-NE62/068) ficam como estão.

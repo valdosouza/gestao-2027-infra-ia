@@ -128,6 +128,7 @@ instância do `setes-sync` para a D4. Publicação e virada com o legado em para
 - **Q4** — Onda 2: o webhook do Inter exige URL pública **antes** da Onda 4; publicar a API cedo
   (só o endpoint do webhook) ou reordenar 4 antes de 2?
 - **Q5** — Onda 4: quem é o titular do domínio `setesgestao.com.br` e o DNS já está sob controle?
+  → ✅ **RESPONDIDA** (Valdo 2026-11-11, "a"): o domínio é da Setes e o Valdo controla o DNS — DEPLOY.E1.P1 sem decisão pendente.
 - **Q6** — Onda 4: virada big-bang ou a Setes roda web e legado em paralelo por N meses?
   (a D4 sugere paralelo, mas o sentido web→Firebird não existe — o que nascer na web **não
   volta** para o legado)
@@ -809,6 +810,7 @@ paralelo).
   o cheque em custódia: o cheque é PORTADOR da dívida; a baixa por regra é dinheiro que ENTROU
   conforme o combinado, e desfazê-la é ato do financeiro com rastro próprio. Conhecimento negativo:
   comentário no plano de cancelamento + teste.
+- ⚠️ **REVISTA em 2026-11-11 pela D-B7** (`prompt_boleto_emitido.md`): a config vai para a interface `bank-slips`.
 - **D29 (Q-P1 / Q9)** — **MANTER** `auto_bank_slip` na interface `billing`: é política da EMPRESA sobre
   o nascimento do título, e `resolveTitleAutomationConfig` é a fonte ÚNICA de qual chave governa —
   mover um dia é trocar uma linha. Limite conhecido registrado no código: cliente que contratar OS
@@ -930,6 +932,10 @@ trilha **17 OK · 7 PENDENTE · 0 FALHA** (rodada 3× no dia, inclusive com a re
   devolvendo-as `retryable` sem esperar; (c) manter e aceitar até ~18 min por bloco. Depende do
   timeout do LB da SaveInCloud — conhecer ANTES de fixar. **Rec.: (b)** — é a mesma contenção, e a
   prova do lote não pode depender de quem segura o lock.
+  → ✅ **DECIDIDA (b)** (Valdo, 2026-11-03, pela orquestradora da governança de projetos — B5 da fila única; literal: *"Abortar no 1º
+  ocupado (Recomendado)"*): no 1º `RESOURCE_BUSY` vindo do lock da institution, o lote aborta o resto do bloco e devolve as ordens
+  `retryable`, sem esperar. Não depende do timeout do LB da SaveInCloud (W4 da fila segue como ação do Valdo, só para conhecer o número).
+  Descartadas: (a) pular a passada extra depois de N s; (c) aceitar até ~18 min por bloco. A frente numera a decisão ao retomar.
 - **Q-R5.2** (D27/app) — operador sai da tela (ou fecha a aba do navegador) no meio dos blocos: PARAR
   de enviar os blocos seguintes (hoje: para se o bloc fechar; o que já rodou fica na aba Faturadas)
   ou SEGUIR até o fim sem relatório? Barreira modal com progresso "bloco i de n" evita a pergunta na
@@ -939,11 +945,13 @@ trilha **17 OK · 7 PENDENTE · 0 FALHA** (rodada 3× no dia, inclusive com a re
 - **Q-R5.3** (D23, visibilidade) — na recusa por fatos divergentes, mostrar QUAL competência/contrato
   divergiu (a OS mistura fatos de N contratos; contrato excluído nem aparece na lista)? **Rec.: sim**,
   em `fields[]` do relatório (uma linha por competência: mês, contrato, dia, forma) — zero DDL.
+  → ✅ **(a) sim** (Valdo 2026-11-11, "a"). COB.E5.P1 sem decisão pendente.
 - **Q-R5.4** (D23, regra) — fatos congelados DIVERGENTES na mesma OS (contrato editado entre meses não
   faturados): (a) recusar, como hoje (o lote não escolhe pelo usuário; saída = override no lote ou
   cancelar a OS e reinjetar); (b) faturar pela competência mais RECENTE; (c) a rotina abrir OS
   separada quando as condições mudam. **Rec.: (a)** — é a consequência honesta da D23, e a Q-R5.3
   tira o beco.
+  → ✅ **(a) recusar** (Valdo 2026-11-11, "a").
 - **Q-R5.5** (pré-existente) — `monthly-run` e `DELETE /service-orders/:id` sem privilégio de ação:
   criar privilégios (ex.: COBRANCA para a rotina; CANCELAR já existe, id 7) ou aceitar que qualquer
   usuário com a interface abre a cobrança do mês? **Rec.: rotina sob FATURAR (id 5) e DELETE da OS

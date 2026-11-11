@@ -99,3 +99,16 @@ VALUES ('E', 'TB_USUARIO', 'CADASTRO', 'Usuario do sistema (autor das operacoes)
 6. Nenhum registro encalhado: cascata segura o envio do usuário até o colaborador sincronizar; movimentos sem referência viajam com fallback ✅
 7. 20/20 testes verdes + MAPA_INDEXACAO e CONTRATOS_SYNC atualizados no mesmo commit ✅
 8. **Pendente da compilação**: smoke do ciclo completo no Firebird dev (usuário com/sem colaborador, pedido reenviado corrigindo autor)
+
+## Fim das redes de transição (P-ENT-2 — Valdo, 2026-11-11)
+
+- **D-SY31** (Valdo 2026-11-11: *"nao existe executaveis antigos, apenas este"*): não há executável antigo do sincronizador em campo — as
+  redes de transição MORREM: o fallback do autor (menor usuário do institution quando falta o bloco `user`, Q5 acima) e a tradução do
+  status antigo do pedido ('S' → 'F', NOTA.E5.P1). O destino do movimento SEM autor (ex.: PDV cujo usuário não tem CPF) é a pergunta
+seguinte da mesma rodada (ver D-SY32 abaixo). Execução =
+  ENT.E6.P1 e NOTA.E5.P1 do setes-sync.
+- **D-SY32** (Valdo 2026-11-11, por analogia: *"hoje temos um cliente chamado consumidor final … tudo sem autor vira … coringa"*):
+  movimento que chega SEM autor identificável grava com um AUTOR CORINGA fixo por estabelecimento (usuário "Sincronização / autor não
+  identificado", sem credencial — mesmo molde do usuário `kind='SYNC'`), no mesmo espírito do cliente "consumidor final"; registra aviso.
+  Nunca o usuário mais antigo, nunca recusa. (Autor = quem fez a operação; o cliente da venda segue as regras próprias, com o
+  consumidor final quando não há CPF.)

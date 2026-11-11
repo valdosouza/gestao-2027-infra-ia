@@ -121,3 +121,12 @@ Delphi: aguarda compilação do Valdo. Verificação governamental: fase futura 
    comparando razão social; CPF apenas com Serpro (pago). Não entra agora — a proteção do
    histórico de terceiros já está garantida pelo desenho (graduação só via externalCode do
    próprio registro; conflito nunca mescla).
+
+## Convergência da entity compartilhada (D27 / P-ENT-1 — Valdo, 2026-11-11)
+
+5. **D-SY27** (Valdo 2026-11-11, "a" — fecha a D27 da fila e a P-ENT-1; revê a regra "entity existente é imutável no sync" de 2026-08-14):
+   quando o sync acha a entity pelo CPF/CNPJ, PREENCHE só o que está VAZIO na cadeia central; o que chega DIFERENTE do gravado vira
+   divergência registrada em `setes_central.tb_sync_conflict` para revisão humana — nunca sobrescreve. Coerente com a D-PV66 do setes-api
+   (cadastro de CNPJ existente cria só o vínculo). Execução = ENT.E5.P2.
+   **Ideia futura (Valdo, só registro, sem passo)**: usar essa lista de divergências para pedir ao PRÓPRIO cliente (dono do cadastro) que
+   confirme o dado certo por e-mail ou WhatsApp.

@@ -568,6 +568,14 @@ da virada (`requireCutover`) NÃO é licença: segue barrando o super.
   a cadeia (razão social, IE/IM, endereços) da mesma entity — inclusive a de um EMITENTE de OUTRA institution, cujo CNPJ alguém cadastre
   como cliente. Fora do alvo desta onda (decisão anterior da Fase 3); registrado para rodada própria (com o guardião), ligado à frente do
   grupo (D-GE1/D-GE21: a institution enxerga só o próprio dado + o compartilhado por consulta).
+  - ✅ **Q-PV29 → D-PV66** (Valdo, 2026-11-03, pela orquestradora da governança de projetos — B3 da fila única; literal: *"Quando alguem
+    tentar cadastrar um cnpj/cpf que ja exista no setes_central, o preenchimento sera automatico, fazendo apenas um vinculo e aguardando os
+    dados especificos do customer, provider, etc"*) — **ao cadastrar um papel para um CNPJ/CPF que JÁ EXISTE no `setes_central`, o
+    preenchimento é automático a partir da entity existente; o cadastro cria SÓ O VÍNCULO e fica aguardando os dados específicos do papel
+    (customer, provider…).** Leitura da orquestradora, a confirmar na rodada da frente: a cadeia da entity (razão social, IE/IM, endereços)
+    NÃO é reescrita pelo cadastro do papel — acaba o last-write-wins global. A pergunta da fila era "quando tratar" (rodada própria antes
+    do grupo × dentro da onda 0 do grupo); o Valdo respondeu com a regra, e a execução vira passo da árvore do setes-api na governança, sem
+    rodada própria. Dependências: D-GE1/D-GE21; B2 da fila (um CNPJ nunca vive em duas institutions, 2026-11-03).
 
 - **Q-PV30 — trilha do vínculo e da delegação** (o vínculo é a LICENÇA e agora é editado por quem não é Super): hoje a trilha é o log
   (`added`/`removed` + autor nas duas portas e na concessão de privilégio — feito no gate). (a) tabela de eventos append-only (quem,
@@ -2381,7 +2389,7 @@ Depois da janela: tarefa própria da D-PV63 (UNIQUE) e passo 4a (campos em todas
   o par segue exigido sem config (não sai e não vira "sobrando"); a retirada acontece nas interfaces SEM consumidor do CONFIGURAR (ex.:
   `billing`). Executada: setes-api (`softDeleteInterfaceConfig` + `removeInterfaceConfig` + `retiredConfigure` no DELETE e no Swagger),
   app (a tela Interfaces tira o par quando a API diz que saiu); provada em banco descartável (última config → `N/S`; sobra config ou campo →
-  fica; id 11 com outro nome → intocado). Próximo número: D-PV66 · A-PV28 · Q-PV70.
+  fica; id 11 com outro nome → intocado). Próximo número: D-PV68 (a D-PV67 foi usada em 2026-11-11, fim do arquivo) · A-PV28 · Q-PV70 (a D-PV66 fecha a Q-PV29, registrada junto dela na §7 em 2026-11-03).
 - **A-PV14 — RATIFICADA (Valdo, 2026-10-20; integridade do catálogo, não acesso — convive com a D-PV24)** — a guarda vale também para o super: ela protege o DADO do catálogo, não a
   permissão de quem edita.
 - ⏳ **Q-PV19** — a resposta veio repetida como "Q-PV17 - a"; a confirmar. **A-PV12** — o Valdo pediu para relembrar; a ratificar.
@@ -2413,3 +2421,10 @@ descartável e NÃO aplicado; script da D-PV20 gerado e NÃO aplicado)**: aguard
 documentado do operador — UPDATE do hash em `setes_central.tb_user` numa sessão administrativa, registrado com data/motivo como exceção
 explícita (PADROES §3.1) **(Recomendado)** · (b) um 2º usuário super de reserva, com senha guardada fora do sistema · (c) nada (aceitar o
 risco). Nenhuma trava a publicação da `sem-recuperacao-senha`.
+
+### Decisão avulsa da fila (2026-11-11) — dois gravadores do estabelecimento (D22)
+
+- **D-PV67** (Valdo 2026-11-11, "a" — fecha a D22 da fila única): a cadeia fiscal do estabelecimento, gravada pela tela do Super
+  (`institutions`) e pela do admin (`establishment`), ganha CONTROLE DE VERSÃO otimista — o salvar leva a versão lida; versão diferente =
+  409 com código próprio e a tela pede para recarregar, sem sobrescrever. Vale para as duas portas (peça única no `@shared/entity`/
+  establishment); molde reaproveitável para outros cadastros com mais de um gravador.

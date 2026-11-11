@@ -693,3 +693,15 @@ rodadas 3–5) SÓ com o retorno do grupo do sync E o meu "vai", pelo roteiro do
 manual; app = `flutter run` na :5051; prova em H só em instância de ensaio). 3) O CHECK de forma (rascunho provado) só depois do acordo com o
 grupo do sync. NÃO ler setes-sync nem sincronizador (tarefa separada). Atualize a cadeia (INDICE_CENTRAL, CLAUDE.md da raiz, memória).
 ```
+
+### §10 P-121 respondida — o acordo com o grupo do sync (Valdo, 2026-11-11)
+
+- **D-CJ30** (Valdo 2026-11-11, "a" — fecha a P-121, a parte "decisão" da D-CJ21): a forma CANÔNICA vale para os DOIS grupos — CNPJ =
+  14 caracteres, maiúsculos, sem pontuação, 12 alfanuméricos + 2 dígitos (DV ASCII−48). O sincronizador passa a ENVIAR nessa forma
+  (convertendo o que o ERP Desktop guarda — quem aposenta se adapta) e o setes-sync recusa o que não estiver nela; o CHECK binário de forma
+  no central (D-CJ4) entra quando o lado do sync estiver pronto. Como o Firebird guarda o CNPJ hoje deixa de ser pergunta: é o inventário
+  da tarefa CNPJ.E1.P1 do setes-sync. Fica em aberto só a P-123 (o sentinela "0" do CNPJ vazio na coluna central) e a P-122 (o "vai" da 2ª
+  janela, depois do lado do sync).
+- **D-CJ31** (Valdo 2026-11-11, "a" — fecha a P-123 e a parte pendente da D-CJ5): o sentinela `'0'` SAI junto com o CHECK de forma — a
+  coluna central perde o `DEFAULT '0'`, o CHECK recusa `'0'` (sem a tolerância da D-CJ5) e o sincronizador nunca envia `'0'`; empresa sem
+  CNPJ segue pelo caminho do cadastro sem documento (`tb_no_doc`). Conferir de novo, antes do DDL, que nenhuma linha viva tem `'0'`.

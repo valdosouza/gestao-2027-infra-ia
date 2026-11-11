@@ -204,6 +204,13 @@ o `LIMIT 1` da migration 043 em schema com legado multi-estabelecimento · como 
 institutions num schema — e o registro "1 Firebird = 1 estabelecimento" de `setes-sync/verificacao-comissao-margem-mercadoria.md:132,167` ·
 `PRO_CODMHA` (não viaja hoje — "1 chave = 1 institution").
 
+→ **D-GE25** (Valdo 2026-11-11, "a" — fecha a P-101 e a P-TERM-1 na parte de decisão): um banco do ERP Desktop com N lojas (`Gb_CodMha`) =
+UM GRUPO na web, com UMA chave de sincronia por banco, ligada ao grupo. Cadastros do grupo (produto, categoria, papéis/clientes) sobem UMA vez,
+para o grupo; movimentos (pedido, nota, financeiro, estoque, caixa) sobem com o código da loja de origem e uma tabela de correspondência
+"loja do ERP Desktop → institution do grupo" decide o destino. Revê o registro "1 chave = 1 institution". Quem escreve hoje
+`tb_service.tb_service_tax_rule_id`, papéis, `tb_order_cost` e privilégios, o `establishment_code` e o `LIMIT 1` da 043 viram LEVANTAMENTO
+da frente do sync (não pergunta). Descartada (b) chave por loja com cadastros repetidos.
+
 ## 8. Fora de escopo
 
 Matriz como conceito (fato da RFB sem regra) · grupo econômico com vários clientes Setes · consolidação contábil entre filiais ·
@@ -415,6 +422,10 @@ tabelas do grupo + vínculo da filial) · D-PR24 (onda 1 de produtos com 4 regra
 - **D-GE11**: o regime do EMITENTE (`simples_regime`, `simples_assessment`, `simples_total_tax_aliquot`, `special_tax_regime`, `cnae`) sai de
   `tb_entity_tax` para a peça do estabelecimento que a frente IBS/CBS já prevê (`tb_establishment_tax_regime`, D-IB7/D-IB66) — **coordenar com
   aquela frente; pré-requisito da onda 2**. `tb_entity_tax` fica só com o fiscal do PAPEL.
+  → **D-GE24** (Valdo 2026-11-11, "a" — fecha a P-103; a D-IB100 deixou de criar `tb_establishment_tax_regime`): os fatos do EMITENTE vão
+  para uma PEÇA PRÓPRIA do estabelecimento, nascida nesta frente (não na frente IBS/CBS), SEPARADA de `tb_establishment_ibscbs_assessment`
+  (D-IB100); se é datada pela competência decide o guardião no DDL (skill guardiao-conceitual + revisar-ddl). Descartadas: manter em
+  `tb_entity_tax` e juntar na peça da opção do IBS/CBS.
 - **D-GE12**: configurações e campos configuráveis (`tb_institution_has_config`/`_field`) seguem POR ESTABELECIMENTO e são CLONADOS da
   fundadora quando a filial nasce.
 - **D-GE13**: vínculo serviço × regra de ISS = **`tb_institution_has_service`** (estabelecimento × serviço → `tb_service_tax_rule_id`) com FK
@@ -458,6 +469,11 @@ tabelas do grupo + vínculo da filial) · D-PR24 (onda 1 de produtos com 4 regra
 
 **Nota da frente do terminal (2026-10-31 — D-TM24, `prompt_frente_terminal.md` §10.10)**: o UNIQUE do terminal L é POR ESTABELECIMENTO;
 num grupo, um mesmo servidor/Firebird que atende N estabelecimentos aparece como N linhas L (D-TM8 × D-TM17). A onda 0/1 do grupo confere
-"uma fonte por grupo" no PAREAMENTO (uuid da base do L) — item a levar para o escopo dela. Também pendente para esta frente (D-NE169,
+"uma fonte por grupo" no PAREAMENTO (uuid da base do L) — item a levar para o escopo dela. → **D-GE26** (Valdo 2026-11-11, "a" — fecha a
+P-104): a conferência entra na ONDA 1 do grupo (GRUPO.E4.P5), não na onda 0; com a D-GE25 ela confere "uma chave/uma base por grupo". Também pendente para esta frente (D-NE169,
 `prompt_onda_nfe_sefaz.md` §15.9.7): dizer se um mesmo CNPJ pode viver em duas institutions.
+→ ✅ **Respondido pelo Valdo em 2026-11-03** (pela orquestradora da governança de projetos, B2 da fila única; literal: *"Não, nunca"*):
+**um mesmo CNPJ NUNCA vive em duas institutions** — um CNPJ = um estabelecimento. Lembrete do contexto dado na pergunta: a passagem do
+ERP Desktop para a web é feita no mesmo estabelecimento (origem dos cadastros D → W, D-OI10 na governança), não criando um segundo. A
+frente do grupo numera esta decisão (D-GE…) quando abrir a próxima rodada; a nfe-api pode travar pela dupla CNPJ + série (D-NE169).
 

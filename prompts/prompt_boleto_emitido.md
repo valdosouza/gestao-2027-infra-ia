@@ -397,3 +397,13 @@ mostra/esconde o campo de dias, mensagem "Informe os dias para protesto" pela
 ponte do Framework de Mensagens, criação e exclusão completas na tela.
 
 Testes: `bank-charge-agreements.test.ts` (9). Suíte final: **556/556**.
+
+## Decisões da fila de 2026-11-11 (Valdo)
+
+- **D-B6** (Valdo 2026-11-11, "a" — fecha a P-FIN-2): o nosso número NUNCA se repete na mesma carteira — UNIQUE no banco
+  (carteira × nosso número, revisar-ddl antes) e o cadastro da carteira RECUSA editar `our_number_next` para trás (abaixo do maior já
+  emitido).
+- **D-B7** (Valdo 2026-11-11, "a" — fecha a P-FIN-3; REVÊ a D29 do `prompt_primeiro_cliente_setes.md`): a config `auto_bank_slip` sai da
+  interface `billing` e passa às configurações da interface `bank-slips` (escopo I); todo faturamento (pedido e OS) lê dali. Quem tem a tela
+  de Boletos ajusta — some o 403 de quem fatura só pela OS. Seed de migração do valor (sem perder o que estiver gravado) + skill do
+  Framework de Configurações.

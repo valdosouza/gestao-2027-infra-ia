@@ -5957,3 +5957,26 @@ conferido (HEAD esperado) antes do deploy, sem compilar o núcleo na máquina de
   de teste por seed, no lugar de emprestar o admin real *(Rec.: sim, em tarefa própria)*; Q-F234 — a suíte ao vivo exige a nfse-api de produção
   parada ou o real sai da vigilância *(Rec.: manter a vigilância e rodar com a produção parada)*; Q-F235 — aposentar o script `migrate:setes`/o
   ato da virada *(Rec.: sim, em tarefa própria)*.
+
+### 23.12 P-DEP-1 respondida — motor do banco da SaveInCloud (Valdo, 2026-11-11)
+
+- **Resposta do Valdo** (cópia da tela do servidor): **MariaDB 10.11.3** (`Server type: MariaDB`, `Server version: 10.11.3-MariaDB`),
+  conexão local por socket UNIX, **charset padrão do servidor `utf8mb3`**. Fecha P-DEP-1, P-FIN-4, P-DEPLOY-1 e a parte "motor e versão"
+  da W4 (o timeout do balanceador segue como ação do Valdo — só para conhecer o número, Q-R5.1 já não depende dele).
+- **Efeito**: a cadeia de migrations do setes-api e do `fiscal_api` (sintaxe MariaDB ≥ 10.3: `ADD COLUMN IF NOT EXISTS`, `FOR UPDATE WAIT`,
+  `DROP COLUMN IF EXISTS`) vale no motor real; não há prova de MySQL 8 a fazer. DEPLOY.E1.P2 (fiscal-api, nfse-api) e DEPLOY.E1.P1
+  (nfe-api) deixam de estar impedidos pela pergunta — viram "provar no 10.11 em modo estrito" (D-NE165, D-IB121).
+- **⚠️ Conferir no deploy**: o padrão do servidor é `utf8mb3`; todo `CREATE DATABASE`/tabela e a conexão do driver precisam declarar
+  `utf8mb4` explicitamente (senão nome com emoji/caractere de 4 bytes quebra e a colação muda). Entra no roteiro da Onda 4 como conferência.
+- **P-DEP-2 respondida** (Valdo, 2026-11-11, "a"): XML fiscais e chave-mestra (`FISCAL_MASTER_KEYS`) ficam no DISCO do próprio servidor da
+  SaveInCloud, com a cópia de segurança da SaveInCloud. O `FiscalStorage` de produção começa como disco local (backend trocável depois);
+  DEPLOY.E2.P1 e DEPLOY.E3.P1 do fiscal-api ficam sem decisão pendente (rotação e cópia da chave seguem como passo do deploy).
+- **P-FAMILIA-1 respondida → D-F233** (Valdo, 2026-11-11, "a"): o A1 da MATRIZ serve às FILIAIS quando a RAIZ do CNPJ (8 primeiros
+  caracteres, inclusive alfanumérica) é a mesma. NF-e: vale (a SEFAZ aceita); NFS-e (ADN/Sefin): só liga depois de PROVA EM H de que o
+  fisco nacional aceita certificado de outro CNPJ da mesma raiz. O certificado segue cadastrado por estabelecimento; a filial APONTA para o
+  da matriz (sem cópia do segredo). Revê a exigência "mesmo CNPJ no certificado e no estabelecimento" do núcleo; liga com a D-CJ24 (raiz
+  conferida antes do pedido) e com a frente do grupo (D-GE25). Guardião antes do DDL do apontamento.
+- **D5 da fila respondida → D-F234** (Valdo, 2026-11-11, "a"): regra de TODAS as telas fiscais (nfse-api, nfe-api e app) — corpo de página
+  HTML devolvido pelo fisco NUNCA é exibido nem vai na resposta ao app; a tela mostra só o código (status/código do fisco) e uma frase
+  neutra em português; o corpo fica só no registro técnico (log/arquivo), sem dado pessoal. Corrige a tentativa antiga de H que hoje mostra
+  o 403 em HTML na seção "No fisco".
